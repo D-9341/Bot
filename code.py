@@ -54,8 +54,6 @@ async def general(ctx, amount = 1):
 
     await ctx.send(embed = emb)
 
-forbidden_words = ['дебил', 'су', 'лох']
-
 @client.command(pass_context = True)
 async def send_nudes(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
@@ -76,10 +74,7 @@ async def pm(ctx, member: discord.Member, amount = 1):
     await ctx.channel.purge(limit = amount)
     
     await member.send(f'почему я не могу писать своё сообщение?!')
-
-
-
-                    
+    
 #member joined the server
 @client.event
 async def on_member_join(member):
@@ -135,29 +130,6 @@ async def time(ctx, amount = 1):
     
     await ctx.author.send(embed = emb)
 
-#альтернатива Groovy
-@client.command()
-async def join(ctx):
-    global voice
-    channel = ctx.message.author.voice.channel
-    voice = get(client.voice_clients, guild = ctx.guild)
-
-    if voice and voice.is_connected():
-        await voice.move_to(channel)
-    else:
-        voice = await channel.connect()
-        await ctx.send(f'successfully connected to {channel}')
-
-@client.command()
-async def leave(ctx):
-    channel = ctx.message.author.voice.channel
-    voice = get(client.voice_clients, guild = ctx.guild)
-
-    if voice and voice.is_connected():
-        await voice.disconnect()
-    else:
-        voice = await channel.connect()
-        await ctx.send(f'disconnected from {channel}')
 
 #проверка на подключение
 @client.event
@@ -232,7 +204,7 @@ async def clear_error(ctx, error):
         await ctx.send(f'{ctx.author.name}, нет аргумента!')
 
 #connect
-token = os.environ.get('BOT_TOKEN')
+token = 'Njk0MTcwMjgxMjcwMzEyOTkx.XoHukg.CFM3nPx-S2bHXK62fU0je4JTpLY'
 
 client.run(token)
 
