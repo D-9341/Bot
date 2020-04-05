@@ -232,7 +232,7 @@ async def clear_error(ctx, error):
         await ctx.send(f'{ctx.author.name}, нет аргумента!')
 
 #connect
-token = 'Njk0MTcwMjgxMjcwMzEyOTkx.XoHukg.CFM3nPx-S2bHXK62fU0je4JTpLY'
+token = 'Njk0MTcwMjgxMjcwMzEyOTkx.XopE1g.xFFLFp7-Ur3oXEzLW9ygfE8Fqp4'
 
 client.run(token)
 
