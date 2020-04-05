@@ -12,6 +12,6 @@ client = commands.Bot(command_prefix = "cephalon/")
 async def ping(ctx):
     await ctx.send(f'pong!')
 
-token = 'Njk0MTcwMjgxMjcwMzEyOTkx.XopILA.BOCOCF8XSeqsgHtzzZOE0wSB1yQ'
+token = os.environ.get('BOT_TOKEN')
 
 client.run(token)
