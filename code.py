@@ -167,7 +167,8 @@ async def clear_error(ctx, error):
         await ctx.send(f'{ctx.author.name}, нет аргумента!')
 
 @client.command()
-async def ping(ctx):
+async def ping(ctx, amount = 1):
+    await ctx.channel.purge(limit = amount)
     await ctx.send(f'pong!')
 
 token = os.environ.get('BOT_TOKEN')
