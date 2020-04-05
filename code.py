@@ -8,6 +8,30 @@ from discord.utils import get
 client = commands.Bot(command_prefix = "cephalon/")
 #like cephalon/support
 
+#альтернатива Groovy
+@client.command()
+async def join(ctx):
+    global voice
+    channel = ctx.message.author.voice.channel
+    voice = get(client.voice_clients, guild = ctx.guild)
+
+    if voice and voice.is_connected():
+        await voice.move_to(channel)
+    else:
+        voice = await channel.connect()
+        await ctx.send(f'successfully connected to {channel}')
+
+@client.command()
+async def leave(ctx):
+    channel = ctx.message.author.voice.channel
+    voice = get(client.voice_clients, guild = ctx.guild)
+
+    if voice and voice.is_connected():
+        await voice.disconnect()
+    else:
+        voice = await channel.connect()
+        await ctx.send(f'disconnected from {channel}')
+
 @client.command(pass_context = True)
 async def general(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
