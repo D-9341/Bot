@@ -89,6 +89,7 @@ async def support(ctx, amount = 1):
     emb.add_field(name = "{}hello".format("cephalon/"), value = "бот приветствует написавшего сообщение")
     emb.add_field(name = "{}time".format("cephalon/"), value = "показывает время")
     emb.add_field(name = '{}say'.format('cephalon/'), value = 'пишет сообщение от лица бота, пишите в двойных ковычках')
+    emb.add_field(name = '{}ping'.format('cephalon/'), value = 'pong!')
     await ctx.send(embed = emb)
 
 @client.command(pass_context = True)
