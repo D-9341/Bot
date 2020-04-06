@@ -4,9 +4,40 @@ import os
 import discord
 from discord.ext import commands
 from discord.utils import get
-#
+
 client = commands.Bot(command_prefix = "cephalon/")
 #like cephalon/support
+
+@client.event
+async def on_message(message):
+    if message.author.bot == False:
+        with open('users.json', 'r') as f:
+            users = json.load(f)
+
+        await update_data(users, message.author)
+        await add_experience(users, message.author, 5)
+        await level_up(users,message.author, message)
+
+        with open('users.json', 'w') as f:
+            json.dump(users, f)
+
+async def update_data(users, user):
+    if not f'{user.id}' in users:
+        users[f'{user.id}'] = {}
+        users[f'{user.id}']['experience'] = 0
+        users[f'{user.id}']['level'] = 1
+
+
+async def add_experience(users, user, exp):
+    users[f'{user.id}']['experience'] += exp
+
+async def level_up(users, user, message):
+    experience = users[f'{user.id}']['experience']
+    lvl_start = users[f'{user.id}']['level']
+    lvl_end = int(experience ** (1/4))
+    if lvl_start < lvl_end:
+        await message.channel.send(f'{user.mention} повысил свой уровень до {lvl_end}')
+        users.[f'{user.id}']['level'] = lvl_end
 
 #альтернатива Groovy
 @client.command()
@@ -31,6 +62,7 @@ async def leave(ctx):
     else:
         voice = await channel.connect()
         await ctx.send(f'disconnected from {channel}')
+
 
 @client.command(pass_context = True)
 async def general(ctx, amount = 1):
@@ -67,14 +99,11 @@ async def pm(ctx, member: discord.Member, amount = 1):
 async def on_member_join(member):
     with open('users.json', 'r') as f:
         users = json.load(f)
- 
- 
+
     await update_data(users, member)
- 
-   
+
     with open('users.json', 'w') as f:
         json.dump(users, f)
-
 
     channel = client.get_channel(693929823030214658)
 
@@ -164,14 +193,12 @@ async def ban(ctx , member: discord.Member, *, reason = None):
 #message delete
 @client.command(pass_context = True)
 @commands.has_permissions(administrator = True)
-
 async def clear(ctx, amount : int):
     await ctx.channel.purge(limit = amount)
 
 
 #command delete
 @client.command(pass_context = True)
-
 async def hello(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
 
@@ -190,11 +217,9 @@ async def clear_error(ctx, error):
     if isinstance(error, commands.MissingRequiredArgument):
         await ctx.send(f'{ctx.author.name}, нет аргумента!')
 
-@client.command()
-async def ping(ctx, amount = 1):
-    await ctx.channel.purge(limit = amount)
-    await ctx.send(f'pong!')
-
-token = os.environ.get('BOT_TOKEN')
+#connect
+token = 'Njk0MTcwMjgxMjcwMzEyOTkx.XopILA.BOCOCF8XSeqsgHtzzZOE0wSB1yQ'
 
 client.run(token)
+
+#потом, когда приеду к нормальному компу, буду фиксить все баги и дорабатывать сая
