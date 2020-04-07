@@ -8,6 +8,24 @@ from discord.utils import get
 client = commands.Bot(command_prefix = "cephalon/")
 #like cephalon/support
 
+#получение роли по эмодзи
+@client.event
+async def on_raw_reaction_add(payload):
+    if message_id == 697162136761139331:
+        guild_if = payload.guild_id
+        guild = discord.utils.find(lambda g: g.id == guild_id, client.guilds)
+
+        if payload.emoji.name == 'strashilka':
+            role = discord.utils.get(guild.roles, name = 'Discord(А)')
+        elif payload.emoji.name == 'durka':
+            role = discord.utils.get(guild.roles, name = 'YouTube(А)')
+
+        if role is not None:
+            member = discord.utils.find(lambda m : m.id == payload.user_id, guild.members)
+            if member is not None:
+                await member.add_roles(role)
+
+
 #альтернатива Groovy
 @client.command()
 async def join(ctx):
