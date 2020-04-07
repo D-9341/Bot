@@ -11,8 +11,9 @@ client = commands.Bot(command_prefix = "cephalon/")
 #получение роли по эмодзи
 @client.event
 async def on_raw_reaction_add(payload):
+    message_id = payload.message_id
     if message_id == 697162136761139331:
-        guild_if = payload.guild_id
+        guild_id = payload.guild_id
         guild = discord.utils.find(lambda g: g.id == guild_id, client.guilds)
 
         if payload.emoji.name == 'strashilka':
@@ -203,7 +204,7 @@ async def ping(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
     await ctx.send(f'pong!')
 
-token = os.environ.get('BOT_TOKEN')
+token = 'Njk0MTcwMjgxMjcwMzEyOTkx.XozXcQ.UNVYe9_FdjKc8MBNXBXOadn0dvA'
 
 client.run(token)
 
