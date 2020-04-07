@@ -204,7 +204,7 @@ async def ping(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
     await ctx.send(f'pong!')
 
-token = 'Njk0MTcwMjgxMjcwMzEyOTkx.XozXcQ.UNVYe9_FdjKc8MBNXBXOadn0dvA'
+token = os.environ.get('BOT_TOKEN')
 
 client.run(token)
 
