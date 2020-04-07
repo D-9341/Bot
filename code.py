@@ -4,7 +4,7 @@ import os
 import discord
 from discord.ext import commands
 from discord.utils import get
-
+#
 client = commands.Bot(command_prefix = "cephalon/")
 #like cephalon/support
 
@@ -25,6 +25,46 @@ async def on_raw_reaction_add(payload):
             member = discord.utils.find(lambda m : m.id == payload.user_id, guild.members)
             if member is not None:
                 await member.add_roles(role)
+
+    if message_id == 695687657275260949:
+        guild_id = payload.guild_id
+        guild = discord.utils.find(lambda g: g.id == guild_id, client.guilds)
+
+        if payload.emoji.name == 'hubrt':
+            role = discord.utils.get(guild.roles, name = 'Пробивший дно')  
+
+                if role is not None:
+            member = discord.utils.find(lambda m : m.id == payload.user_id, guild.members)
+            if member is not None:
+                await member.add_roles(role)          
+
+async def on_raw_reaction_remove(payload):
+    message_id = payload.message_id
+    if message_id == 697162136761139331:
+        guild_id = payload.guild_id
+        guild = discord.utils.find(lambda g: g.id == guild_id, client.guilds)
+
+        if payload.emoji.name == 'strashilka':
+            role = discord.utils.get(guild.roles, name = 'Discord(А)')
+        elif payload.emoji.name == 'durka':
+            role = discord.utils.get(guild.roles, name = 'YouTube(А)')
+
+        if role is not None:
+            member = discord.utils.find(lambda m : m.id == payload.user_id, guild.members)
+            if member is not None:
+                await member.add_remove(role)
+
+        if message_id == 695687657275260949:
+        guild_id = payload.guild_id
+        guild = discord.utils.find(lambda g: g.id == guild_id, client.guilds)
+
+        if payload.emoji.name == 'hubrt':
+            role = discord.utils.get(guild.roles, name = 'Пробивший дно')
+
+                if role is not None:
+            member = discord.utils.find(lambda m : m.id == payload.user_id, guild.members)
+            if member is not None:
+                await member.add_remove(role)
 
 
 #альтернатива Groovy
