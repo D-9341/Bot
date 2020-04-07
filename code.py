@@ -52,7 +52,7 @@ async def on_raw_reaction_remove(payload):
         if role is not None:
             member = discord.utils.find(lambda m : m.id == payload.user_id, guild.members)
             if member is not None:
-                await member.add_remove(role)
+                await member.remove_roles(role)
 
         if message_id == 695687657275260949:
         guild_id = payload.guild_id
@@ -64,7 +64,7 @@ async def on_raw_reaction_remove(payload):
                 if role is not None:
             member = discord.utils.find(lambda m : m.id == payload.user_id, guild.members)
             if member is not None:
-                await member.add_remove(role)
+                await member.remove_roles(role)
 
 
 #альтернатива Groovy
