@@ -69,7 +69,8 @@ async def on_member_join(member):
     channel = client.get_channel(693929823030214658)
 
     role = discord.utils.get(member.guild.roles, id = 693933516294979704)
-    role1 = discord.utils.get(member.guild.roles, id = 693933511412940800)
+    role1 = discord.utils.get(member.guild.roles, id = 693933510523879454)
+    role2 = discord.utils.get(member.guild.roles, id = 693933513459892245)
 
     await member.add_roles(role, role1)
     await channel.send(embed = discord.Embed(description = f'{member.name} has entered the facility'))
