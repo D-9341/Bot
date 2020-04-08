@@ -1,4 +1,3 @@
-import time
 import datetime
 import json
 import os
@@ -102,7 +101,7 @@ async def on_command_error(ctx, error):
 async def pm(ctx, member: discord.Member, amount = 1):
     await ctx.channel.purge(limit = amount)
     
-    await member.send(f'почему я не могу писать своё сообщение?!')
+    await member.send(f'адмант лох')
     
 #member joined the server
 @client.event
@@ -221,12 +220,7 @@ async def clear_error(ctx, error):
 
 @client.command()
 async def ping(ctx):
-    time_1 = time.perf_counter()
-    await ctx.trigger_typing()
-    time_2 = time.perf_counter()
-    ping = round((time_2-time_1)*1000)
-    await ctx.send(f"Pong! {ping}"))
-
+    await ctx.send(f'Pong!')
 token = os.environ.get('BOT_TOKEN')
 
 client.run(token)
