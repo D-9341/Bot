@@ -10,9 +10,9 @@ client = commands.Bot(command_prefix = "cephalon/")
 
 #проверка подключения
 @client.command()
-async def test(ctx, amount = 1)
-await ctx.channel.purge(limit = amount)
-await ctx.send(f'Bot online')
+async def test(ctx, amount = 1):
+    await ctx.channel.purge(limit = amount)
+    await ctx.send(f'Bot online')
 
 #получение роли по эмодзи
 @client.event
