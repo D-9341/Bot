@@ -4,7 +4,7 @@ import os
 import discord
 from discord.ext import commands
 from discord.utils import get
-#
+
 client = commands.Bot(command_prefix = "cephalon/")
 #like cephalon/support
 
@@ -24,7 +24,7 @@ async def on_raw_reaction_add(payload):
         if role is not None:
             member = discord.utils.find(lambda m : m.id == payload.user_id, guild.members)
             if member is not None:
-                await member.add_roles(role)         
+                await member.add_roles(role)
 
 async def on_raw_reaction_remove(payload):
     message_id = payload.message_id
@@ -40,7 +40,7 @@ async def on_raw_reaction_remove(payload):
         if role is not None:
             member = discord.utils.find(lambda m : m.id == payload.user_id, guild.members)
             if member is not None:
-                await member.add_remove(role)
+                await member.remove_roles(role)
 
 #альтернатива Groovy
 @client.command()
@@ -219,7 +219,7 @@ async def ping(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
     await ctx.send(f'pong!')
 
-token = os.environ.get('BOT_TOKEN')
+token = os.environ.get(BOT_TOKEN)
 
 client.run(token)
 
