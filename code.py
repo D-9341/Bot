@@ -8,6 +8,12 @@ from discord.utils import get
 client = commands.Bot(command_prefix = "cephalon/")
 #like cephalon/support
 
+#проверка подключения
+@client.command()
+async def test(ctx, amount = 1)
+await ctx.channel.purge(limit = amount)
+await ctx.send(f'Bot online')
+
 #получение роли по эмодзи
 @client.event
 async def on_raw_reaction_add(payload):
@@ -147,8 +153,6 @@ async def time(ctx, amount = 1):
 #проверка на подключение
 @client.event
 async def on_ready():
-    print("successfully connected")
-
     await client.change_presence(status = discord.Status.online, activity = discord.Game('cephalon/support'))
 
 
