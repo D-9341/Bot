@@ -218,12 +218,11 @@ async def clear_error(ctx, error):
     if isinstance(error, commands.MissingRequiredArgument):
         await ctx.send(f'{ctx.author.name}, нет аргумента!')
 
-async def ping(ctx):
-    # Get the latency of the bot
-    latency = bot.latency  # Included in the Discord.py library
-    # Send it to the user
-    await ctx.send(latency)
-    
+@client.command()
+async def ping(ctx, amount = 1):
+    await ctx.channel.purge(limit = amount)
+    await ctx.send(f'Pong!')
+
 token = os.environ.get('BOT_TOKEN')
 
 client.run(token)
