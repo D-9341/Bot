@@ -12,7 +12,7 @@ client = commands.Bot(command_prefix = "cephalon/")
 @client.command()
 async def test(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
-    await ctx.send(f'Bot online')
+    await ctx.send(f'Bot online!')
 
 #получение роли по эмодзи
 @client.event
@@ -101,7 +101,7 @@ async def on_command_error(ctx, error):
 async def pm(ctx, member: discord.Member, amount = 1):
     await ctx.channel.purge(limit = amount)
     
-    await member.send(f'адмант лох')
+    await member.send(f'адамант лох')
     
 #member joined the server
 @client.event
@@ -219,14 +219,10 @@ async def clear_error(ctx, error):
         await ctx.send(f'{ctx.author.name}, нет аргумента!')
 
 async def ping(ctx):
-    '''
-    This text will be shown in the help command
-    '''
-
     # Get the latency of the bot
     latency = bot.latency  # Included in the Discord.py library
     # Send it to the user
-    await ctx.send(f'Pong!' latency)
+    await ctx.send(latency)
     
 token = os.environ.get('BOT_TOKEN')
 
