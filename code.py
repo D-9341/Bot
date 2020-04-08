@@ -33,8 +33,8 @@ async def on_raw_reaction_add(payload):
         if payload.emoji.name == 'hubrt':
             role = discord.utils.get(guild.roles, name = 'Пробивший дно')  
 
-                if role is not None:
-            member = discord.utils.find(lambda m : m.id == payload.user_id, guild.members)
+            if role is not None:
+                member = discord.utils.find(lambda m : m.id == payload.user_id, guild.members)
             if member is not None:
                 await member.add_roles(role)          
 
@@ -52,20 +52,7 @@ async def on_raw_reaction_remove(payload):
         if role is not None:
             member = discord.utils.find(lambda m : m.id == payload.user_id, guild.members)
             if member is not None:
-                await member.remove_roles(role)
-
-        if message_id == 695687657275260949:
-        guild_id = payload.guild_id
-        guild = discord.utils.find(lambda g: g.id == guild_id, client.guilds)
-
-        if payload.emoji.name == 'hubrt':
-            role = discord.utils.get(guild.roles, name = 'Пробивший дно')
-
-                if role is not None:
-            member = discord.utils.find(lambda m : m.id == payload.user_id, guild.members)
-            if member is not None:
-                await member.remove_roles(role)
-
+                await member.add_remove(role)
 
 #альтернатива Groovy
 @client.command()
@@ -244,7 +231,7 @@ async def ping(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
     await ctx.send(f'pong!')
 
-token = os.environ.get('BOT_TOKEN')
+token = os.environ.get(BOT_TOKEN)
 
 client.run(token)
 
