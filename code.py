@@ -1,3 +1,4 @@
+import time
 import datetime
 import json
 import os
@@ -221,7 +222,11 @@ async def clear_error(ctx, error):
 @client.command()
 async def ping(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
-    await ctx.send(f'Pong! {bot.latency}')
+    time_1 = time.perf_counter()
+    await ctx.trigger_typing()
+    time_2 = time.perf_counter()
+    ping = round((time_2-time_1) * 1000)
+    await ctx.send(f'Pong! {ping}')
 
 token = os.environ.get('BOT_TOKEN')
 
