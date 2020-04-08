@@ -221,7 +221,7 @@ async def clear_error(ctx, error):
 @client.command()
 async def ping(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
-    await ctx.send(f'pong!')
+    await ctx.send('Pong! {0}'.format(round(bot.latency, 1)))
 
 token = os.environ.get('BOT_TOKEN')
 
