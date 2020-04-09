@@ -72,7 +72,7 @@ async def leave(ctx):
         voice = await channel.connect()
         await ctx.send(f'disconnected from {channel}')
 
-
+#general
 @client.command(pass_context = True)
 async def general(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
@@ -118,7 +118,6 @@ async def on_member_join(member):
 #help command
 @client.command(pass_context = True)
 @commands.has_permissions(administrator = True)
-
 async def support(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
     emb = discord.Embed(title = "Команды")
@@ -135,7 +134,6 @@ async def support(ctx, amount = 1):
 
 @client.command(pass_context = True)
 @commands.has_permissions(administrator = True)
-
 async def time(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
     
@@ -161,7 +159,6 @@ async def on_ready():
 #kick
 @client.command(pass_context = True)
 @commands.has_permissions(administrator = True)
-
 async def kick(ctx , member: discord.Member, *, reason = None):
     emb = discord.Embed(title = 'Kick', colour = discord.Color.green())
     await ctx.channel.purge(limit = 1)
@@ -177,7 +174,6 @@ async def kick(ctx , member: discord.Member, *, reason = None):
 #ban
 @client.command(pass_context = True)
 @commands.has_permissions(administrator = True)
-
 async def ban(ctx , member: discord.Member, *, reason = None):
     emb = discord.Embed(title = 'Ban', colour = discord.Color.red())
     await ctx.channel.purge(limit = 1)
@@ -198,19 +194,17 @@ async def clear(ctx, amount : int):
     await ctx.channel.purge(limit = amount)
 
 
-#command delete
+#hello
 @client.command(pass_context = True)
 async def hello(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
-
     author = ctx.message.author
     await ctx.send(f"Приветствую, {author.mention}")
 
+#say
 @client.command(pass_context = True)
-
 async def say(ctx, arg, amount = 1):
     await ctx.channel.purge(limit = amount)
-
     await ctx.send(arg)
 
 @clear.error
@@ -218,9 +212,9 @@ async def clear_error(ctx, error):
     if isinstance(error, commands.MissingRequiredArgument):
         await ctx.send(f'{ctx.author.name}, нет аргумента!')
 
+#pong!
 @client.command()
-async def ping(ctx, amount = 1):
-    await ctx.channel.purge(limit = amount)
+async def ping(ctx):
     await ctx.send(f'Pong! {round(client.latency * 1000)} ms')
 
 token = os.environ.get('BOT_TOKEN')
