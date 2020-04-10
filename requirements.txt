@@ -4,4 +4,3 @@ aiohttp
 websockets
 chardet
 youtube-dl
-$ ffmpeg -i input.mp4 output.avi
