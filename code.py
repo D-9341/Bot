@@ -1,3 +1,4 @@
+import youtube
 import datetime
 import json
 import os
@@ -51,26 +52,33 @@ async def on_raw_reaction_remove(payload):
 #альтернатива Groovy
 @client.command()
 async def join(ctx):
-    global voice
     channel = ctx.message.author.voice.channel
-    voice = get(client.voice_clients, guild = ctx.guild)
+    voice = get(bot.voice_clients, guild=ctx.guild)
 
     if voice and voice.is_connected():
         await voice.move_to(channel)
     else:
         voice = await channel.connect()
-        await ctx.send(f'successfully connected to {channel}')
+
+    await voice.disconnect()
+
+    if voice and voice.is_connected():
+        await voice.move_to(channel)
+    else:
+        voice = await channel.connect()
+
+    await ctx.send(f"Successfully connected to {channel}")
 
 @client.command()
 async def leave(ctx):
     channel = ctx.message.author.voice.channel
-    voice = get(client.voice_clients, guild = ctx.guild)
+    voice = get(bot.voice_clients, guild=ctx.guild)
 
     if voice and voice.is_connected():
         await voice.disconnect()
+        await ctx.send(f"Disconnected from {channel}")
     else:
-        voice = await channel.connect()
-        await ctx.send(f'disconnected from {channel}')
+        await ctx.send("Don't think I am in a voice channel")
 
 #general
 @client.command(pass_context = True)
