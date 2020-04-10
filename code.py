@@ -215,7 +215,7 @@ async def clear_error(ctx, error):
 #pong!
 @client.command()
 async def ping(ctx):
-    await ctx.send(f'Pong! `{(client.latency)} ms`')
+    await ctx.send(f'Pong! `{(client.latency * 1000)} ms`')
 
 token = os.environ.get('BOT_TOKEN')
 
