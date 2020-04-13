@@ -49,8 +49,6 @@ async def on_raw_reaction_remove(payload):
             if member is not None:
                 await member.remove_roles(role)
 
-players = {}
-
 #альтернатива Groovy
 @client.command()
 async def join(ctx):
@@ -75,12 +73,46 @@ async def leave(ctx):
         pass
 
 client.command()
-async def play(ctx, url):
-    guild = ctx.message.guild
-    voice_client = guild.voice_client
-    player = await voice_client.create_ytdl_player(url)
-    players[guild.id] = player
-    player.start()
+async def play(ctx, url : str):
+    song_there = os.path.isfile('song.mp3')
+
+    try:
+        if song_there:
+            os.remove('song.mp3')
+            print('[log] ДАННЫЕ УДАЛЕНЫ')
+
+    except PermissionError:
+        print('[log] не удалось удалить данные')
+
+    await ctx.send('Ща скачаю, падажжи')
+
+    voice = get(client.voice_clients, guild = ctx.guild)
+    ydl_opts = {
+        'format' : 'bestaudio/best',
+        'postprocessors' : [{
+            'key' : 'FFmpegExtractAudio',
+            'preferredcodec' : 'mp3',
+            'preferredquality' : '192'
+            }]
+    }
+
+
+    with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+        print('[log] Загрузка...')
+        ydl.download([url])
+
+    for file in os.listdir('./'):
+        if file.endswith('.mp3'):
+            name = file
+            print('[log] Переименовываю: {file}')
+            os.rename(file, 'song.mp3')
+
+    voice.play(discord.FFmpegPCMAudio('song.mp3'), after = lambda e: print(f'[log] {name}, время на прослушивание музыки кончилось'))
+    voice.source = discord.PCMVolumeTransformer(voice.source)
+    voice.source.volume = 0.07
+
+    song_name = name.rsplit('-', 2)
+    await ctx.send(f'Сейчас играет: {song_name[0]}')
 
 
 #general
@@ -89,7 +121,7 @@ async def general(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
     emb = discord.Embed(title ='Здраствуйте!')
 
-    emb.add_field(name ='/', value = 'Сервер SPELL - это сервер где происходит общение. Также, на сервере есть уникальный бот, написанный одним из создателей сервера. От лица всего админ состава надеюсь, что мы произведём хорошое впечатление на вас!')
+    emb.add_field(name ='-', value = 'Сервер SPELL - это сервер где происходит общение. Также, на сервере есть уникальный бот, написанный одним из создателей сервера. От лица всего админ состава надеюсь, что мы произведём хорошое впечатление на вас!')
 
     await ctx.send(embed = emb)
 
@@ -99,7 +131,7 @@ async def send_nudes(ctx, amount = 1):
     emb = discord.Embed(title = 'Внимание!')
 
     emb.add_field(name = '/'.format('/'), value = f'тебе пытались послать нудесы, однако я лох, и я не могу их отправить')
-    
+
     await ctx.author.send(embed = emb)
 
 #я не знаю что это
@@ -111,9 +143,9 @@ async def on_command_error(ctx, error):
 @client.command()
 async def pm(ctx, member: discord.Member, amount = 1):
     await ctx.channel.purge(limit = amount)
-    
+
     await member.send(f'адамант лох')
-    
+
 #member joined the server
 @client.event
 async def on_member_join(member):
@@ -133,7 +165,7 @@ async def support(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
     emb = discord.Embed(title = "Команды")
 
-    emb.add_field(name = 'Инфо'.format('/'), value = "Cy, или же сай - бот, написанный сасиска") 
+    emb.add_field(name = 'Инфо'.format('/'), value = "Cy, или же сай - бот, написанный сасиска")
     emb.add_field(name = "{}clear".format("cephalon/"), value = "очистка чата, доступна только администраторам")
     emb.add_field(name = "{}ban".format("cephalon/"), value = "бан игрока, доступна только администраторам" )
     emb.add_field(name = "{}kick".format("cephalon/"), value = "кик игрока, доступна только администраторам")
@@ -147,7 +179,7 @@ async def support(ctx, amount = 1):
 @commands.has_permissions(administrator = True)
 async def time(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
-    
+
     emb = discord.Embed(title = 'Time', description = 'Точное время' , colour = discord.Color.orange(), url = 'https://www.timeserver.ru')
 
     emb.set_author(name = client.user.name, icon_url = client.user.avatar_url)
@@ -155,7 +187,7 @@ async def time(ctx, amount = 1):
 
     now_date = datetime.datetime.now()
     emb.add_field(name = 'Time', value = 'Time : {}'.format(now_date))
-    
+
     await ctx.author.send(embed = emb)
 
 
@@ -194,7 +226,7 @@ async def ban(ctx , member: discord.Member, *, reason = None):
     emb.set_author(name = member.name, icon_url = member.avatar_url)
     emb.add_field(name = '-', value =  'Banned user : {}'.format(member.mention))
     emb.set_footer(text = 'Был забанен администратором {}'.format(ctx.author.name), icon_url = ctx.author.avatar_url)
-    
+
     await ctx.send(embed = emb)
 
 
@@ -227,6 +259,7 @@ async def clear_error(ctx, error):
 @client.command()
 async def ping(ctx):
     await ctx.send(f'Pong! `{round(client.latency * 1000)} ms`')
+
 
 
 token = os.environ.get('BOT_TOKEN')
