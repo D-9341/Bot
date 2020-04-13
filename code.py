@@ -1,3 +1,4 @@
+import youtube_dl
 import datetime
 import json
 import os
@@ -48,30 +49,38 @@ async def on_raw_reaction_remove(payload):
             if member is not None:
                 await member.remove_roles(role)
 
+players = {}
+
 #альтернатива Groovy
 @client.command()
 async def join(ctx):
-    global voice
-    channel = ctx.message.author.voice.channel
-    voice = get(client.voice_clients, guild = ctx.guild)
-
-    if voice and voice.is_connected():
-        await voice.move_to(channel)
+    if ctx.author.voice and ctx.author.voice.channel:
+        channel = ctx.author.voice.channel
     else:
-        voice = await channel.connect()
-        await ctx.send(f'successfully connected to {channel}')
+        await ctx.send("You are not connected to a voice channel")
+        return
+    global vc
+    try:
+        vc=await channel.connect()
+    except:
+        TimeoutError
 
 @client.command()
 async def leave(ctx):
-    channel = ctx.message.author.voice.channel
-    voice = get(client.voice_clients, guild = ctx.guild)
+    try:
+        if vc.is_connected():
+            await vc.disconnect()
+    except:
+        TimeoutError
+        pass
 
-    if voice and voice.is_connected():
-        await voice.disconnect()
-    else:
-        voice = await channel.connect()
-        await ctx.send(f'disconnected from {channel}')
-
+client.command()
+async def play(ctx, url):
+    guild = ctx.message.guild
+    voice_client = guild.voice_client
+    player = await voice_client.create_ytdl_player(url)
+    players[server.id] = player
+    player.start()
 
 
 #general
@@ -201,7 +210,7 @@ async def clear(ctx, amount : int):
 async def hello(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
     author = ctx.message.author
-    await ctx.send(f"Приветствую, {author.mention}")
+    await ctx.send(f'👋')
 
 #say
 @client.command(pass_context = True)
@@ -219,7 +228,8 @@ async def clear_error(ctx, error):
 async def ping(ctx):
     await ctx.send(f'Pong! `{round(client.latency * 1000)} ms`')
 
-token = os.environ.get('BOT_TOKEN')
+
+token = ('Njk0MTcwMjgxMjcwMzEyOTkx.Xo1jyQ.T-xqA1OmLybPLXRzyFEsyUPsy3Y')
 
 client.run(token)
 
