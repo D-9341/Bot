@@ -57,7 +57,7 @@ async def join(ctx):
     if ctx.author.voice and ctx.author.voice.channel:
         channel = ctx.author.voice.channel
     else:
-        await ctx.send("You are not connected to a voice channel")
+        await ctx.send("Ты в канал то зайди")
         return
     global vc
     try:
@@ -79,7 +79,7 @@ async def play(ctx, url):
     guild = ctx.message.guild
     voice_client = guild.voice_client
     player = await voice_client.create_ytdl_player(url)
-    players[server.id] = player
+    players[guild.id] = player
     player.start()
 
 
