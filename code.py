@@ -229,7 +229,7 @@ async def ping(ctx):
     await ctx.send(f'Pong! `{round(client.latency * 1000)} ms`')
 
 
-token = ('Njk0MTcwMjgxMjcwMzEyOTkx.Xo1jyQ.T-xqA1OmLybPLXRzyFEsyUPsy3Y')
+token = os.environ.get('BOT_TOKEN')
 
 client.run(token)
 
