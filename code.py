@@ -205,7 +205,7 @@ async def hello(ctx, amount = 1):
 
 #say
 @client.command(pass_context = True)
-async def say(ctx, arg, amount = 1):
+async def say(ctx, *, arg, amount = 1):
     await ctx.channel.purge(limit = amount)
     await ctx.send(arg)
 
