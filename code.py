@@ -13,7 +13,7 @@ client = commands.Bot(command_prefix = "cephalon/")
 @client.command()
 async def test(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
-    await ctx.send(f'Bot online!')
+    await ctx.send(f'Cephalon online!')
 
 #получение роли по эмодзи
 @client.event
@@ -29,7 +29,7 @@ async def on_raw_reaction_add(payload):
             role = discord.utils.get(guild.roles, name = 'YouTube(А)')
 
         if role is not None:
-            member = discord.utils.find(lambda m : m.id == payload.user_id, guild.members)
+            member = discord.utils.find(lambda m: m.id == payload.user_id, guild.members)
             if member is not None:
                 await member.add_roles(role)
 
@@ -45,7 +45,7 @@ async def on_raw_reaction_remove(payload):
             role = discord.utils.get(guild.roles, name = 'YouTube(А)')
 
         if role is not None:
-            member = discord.utils.find(lambda m : m.id == payload.user_id, guild.members)
+            member = discord.utils.find(lambda m: m.id == payload.user_id, guild.members)
             if member is not None:
                 await member.remove_roles(role)
 
@@ -125,7 +125,7 @@ async def general(ctx, amount = 1):
 
     await ctx.send(embed = emb)
 
-@client.command(pass_context = True)
+@client.command()
 async def send_nudes(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
     emb = discord.Embed(title = 'Внимание!')
@@ -141,10 +141,9 @@ async def on_command_error(ctx, error):
 
 #personal messages
 @client.command()
-async def pm(ctx, member: discord.Member, amount = 1):
+async def pm(ctx, arg, member: discord.Member, amount = 1):
     await ctx.channel.purge(limit = amount)
-
-    await member.send(f'адамант лох')
+    await member.send(f'Адамант лох')
 
 #member joined the server
 @client.event
@@ -259,9 +258,6 @@ async def clear_error(ctx, error):
 @client.command()
 async def ping(ctx):
     await ctx.send(f'Pong! `{round(client.latency * 1000)} ms`')
-
-
-
 token = os.environ.get('BOT_TOKEN')
 
 client.run(token)
