@@ -56,7 +56,7 @@ async def on_raw_reaction_remove(payload):
             if member is not None:
                 await member.remove_roles(role)
 
-#альтернатива Groovy
+#альтернатива Groovy(которая сука не работает)
 @client.command()
 async def join(ctx):
     if ctx.author.voice and ctx.author.voice.channel:
@@ -121,26 +121,6 @@ async def play(ctx, url : str):
     song_name = name.rsplit('-', 2)
     await ctx.send(f'Сейчас играет: {song_name[0]}')
 
-
-#general
-@client.command(pass_context = True)
-async def general(ctx, amount = 1):
-    await ctx.channel.purge(limit = amount)
-    emb = discord.Embed(title ='Здраствуйте!')
-
-    emb.add_field(name ='-', value = 'Сервер SPELL - это сервер где происходит общение. Также, на сервере есть уникальный бот, написанный одним из создателей сервера. От лица всего админ состава надеюсь, что мы произведём хорошое впечатление на вас!')
-
-    await ctx.send(embed = emb)
-
-@client.command()
-async def send_nudes(ctx, amount = 1):
-    await ctx.channel.purge(limit = amount)
-    emb = discord.Embed(title = 'Внимание!')
-
-    emb.add_field(name = '/'.format('/'), value = f'тебе пытались послать нудесы, однако я лох, и я не могу их отправить')
-
-    await ctx.author.send(embed = emb)
-
 #я не знаю что это
 @client.event
 async def on_command_error(ctx, error):
@@ -165,11 +145,11 @@ async def on_member_join(member):
     await channel.send(embed = discord.Embed(description = f'{member.name} has entered the facility', colour = discord.Color.orange()))
 
 #help command
-@client.command(pass_context = True)
+@client.command()
 @commands.has_permissions(administrator = True)
 async def support(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
-    emb = discord.Embed(title = "Команды")
+    emb = discord.Embed(title = "Команды", colour = discord.Color.orange())
 
     emb.add_field(name = 'Инфо'.format('/'), value = "Cy, или же сай - бот, написанный сасиска")
     emb.add_field(name = "{}clear".format("cephalon/"), value = "очистка чата, доступна только администраторам")
@@ -177,12 +157,11 @@ async def support(ctx, amount = 1):
     emb.add_field(name = "{}kick".format("cephalon/"), value = "кик игрока, доступна только администраторам")
     emb.add_field(name = "{}hello".format("cephalon/"), value = "бот приветствует написавшего сообщение")
     emb.add_field(name = "{}time".format("cephalon/"), value = "показывает время")
-    emb.add_field(name = '{}say'.format('cephalon/'), value = 'пишет сообщение от лица бота, пишите в двойных ковычках')
+    emb.add_field(name = '{}say'.format('cephalon/'), value = 'пишет сообщение от лица бота')
     emb.add_field(name = '{}ping'.format('cephalon/'), value = 'pong!')
     await ctx.send(embed = emb)
 
-@client.command(pass_context = True)
-@commands.has_permissions(administrator = True)
+@client.command()
 async def time(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
 
@@ -196,17 +175,13 @@ async def time(ctx, amount = 1):
 
     await ctx.author.send(embed = emb)
 
-
 #проверка на подключение
 @client.event
 async def on_ready():
     await client.change_presence(status = discord.Status.online, activity = discord.Game('cephalon/support'))
 
-
-
-
 #kick
-@client.command(pass_context = True)
+@client.command()
 @commands.has_permissions(administrator = True)
 async def kick(ctx , member: discord.Member, *, reason = None):
     emb = discord.Embed(title = 'Kick', colour = discord.Color.green())
@@ -221,7 +196,7 @@ async def kick(ctx , member: discord.Member, *, reason = None):
     await ctx.send(embed = emb)
 
 #ban
-@client.command(pass_context = True)
+@client.command()
 @commands.has_permissions(administrator = True)
 async def ban(ctx , member: discord.Member, *, reason = None):
     emb = discord.Embed(title = 'Ban', colour = discord.Color.red())
@@ -235,13 +210,11 @@ async def ban(ctx , member: discord.Member, *, reason = None):
 
     await ctx.send(embed = emb)
 
-
 #message delete
-@client.command(pass_context = True)
+@client.command()
 @commands.has_permissions(administrator = True)
 async def clear(ctx, amount : int):
     await ctx.channel.purge(limit = amount)
-
 
 #hello
 @client.command(pass_context = True)
@@ -251,7 +224,7 @@ async def hello(ctx, amount = 1):
     await ctx.send(f'👋')
 
 #say
-@client.command(pass_context = True)
+@client.command()
 async def say(ctx, *, arg, amount = 1):
     await ctx.channel.purge(limit = amount)
     await ctx.send(arg)
@@ -268,5 +241,3 @@ async def ping(ctx):
 token = os.environ.get('BOT_TOKEN')
 
 client.run(token)
-
-#потом, когда приеду к нормальному компу, буду фиксить все баги и дорабатывать сая
