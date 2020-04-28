@@ -11,7 +11,7 @@ client = commands.Bot(command_prefix = "cephalon/")
 #like cephalon/support
 
 @client.event
-async def on_message(message):
+async def on_message(message, member : discord.Member):
     if 'discord.gg' in message.content.lower():
         await message.delete()
         await message.channel.send(f'пашол нахуй со своей рекламой, {ctx.author.name}')
