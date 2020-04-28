@@ -14,7 +14,7 @@ client = commands.Bot(command_prefix = "cephalon/")
 async def on_message(message):
     if 'discord.gg' in message.content.lower():
         await message.delete()
-        await message.channel.send('пашол нахуй со своей рекламой')
+        await message.channel.send('пашол нахуй со своей рекламой, {0}'.format(ctx.author.name))
     await client.process_commands(message)
 
 @client.command()
