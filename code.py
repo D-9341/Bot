@@ -15,6 +15,7 @@ async def on_message(message):
     if 'discord.gg' in message.content.lower():
         await message.delete()
         await message.channel.send('пашол нахуй со своей рекламой')
+    await client.process_commands(message)
 
 @client.command()
 async def coinflip(ctx, amoun = 1):
