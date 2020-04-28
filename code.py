@@ -10,6 +10,12 @@ from discord.utils import get
 client = commands.Bot(command_prefix = "cephalon/")
 #like cephalon/support
 
+@client.command()
+async def coinflip(ctx):
+    choices = ['Орёл', 'Решка']
+    rancoin = random.choice(choices)
+    await ctx.send(rancoin)
+
 #проверка подключения
 @client.command()
 async def test(ctx, amount = 1):
