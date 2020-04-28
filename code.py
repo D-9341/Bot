@@ -11,14 +11,14 @@ client = commands.Bot(command_prefix = "cephalon/")
 #like cephalon/support
 
 @client.event
-async def on_message(message, member : discord.Member):
+async def on_message(ctx, message):
     if 'discord.gg' in message.content.lower():
         await message.delete()
         await message.channel.send(f'пашол нахуй со своей рекламой, {ctx.author.name}')
     await client.process_commands(message)
 
 @client.command()
-async def coinflip(ctx, amoun = 1):
+async def coinflip(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
     choices = ['Орёл', 'Решка']
     rancoin = random.choice(choices)
