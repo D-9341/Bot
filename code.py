@@ -24,19 +24,18 @@ async def on_message(message):
     with open('users.json', 'w') as f:
         json.dump(users, f)
 
-@client.event
 async def update_data(users, user):
     if not f'{user.id}' in users:
         users[f'{user.id}'] = {}
         users[f'{user.id}']['experience'] = 0
         users[f'{user.id}']['level'] = 1
  
-@client.event
+
 async def add_experience(users, user, exp):
     users[f'{user.id}']['experience'] += exp
     
     
-@client.event
+
 async def level_up(users, user, message):
     experience = users[f'{user.id}']['experience']
     lvl_start = users[f'{user.id}']['level']
