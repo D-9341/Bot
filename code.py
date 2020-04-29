@@ -47,7 +47,7 @@ async def level_up(users, user, message):
         users[f'{user.id}']['level'] = lvl_end
 
 @client.event
-async def on_message(message):
+async def on_message(ctx, message):
     if 'discord.gg' in message.content.lower():
         author = ctx.message.author
         await message.delete()
