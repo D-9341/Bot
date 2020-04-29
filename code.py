@@ -1,3 +1,4 @@
+import asyncio
 import random
 import youtube_dl
 import datetime
@@ -7,14 +8,14 @@ import discord
 from discord.ext import commands
 from discord.utils import get
 
-client = commands.Bot(command_prefix = "cephalon/")
+client = commands.Bot(command_prefix = commands.when_mentioned_or("cephalon/"))
 #like cephalon/support
 
 @client.event
-async def on_message(message):
+async def on_message(ctx, message, member: discord.Member):
     if 'discord.gg' in message.content.lower():
         await message.delete()
-        await message.channel.send(f'пашол нахуй со своей рекламой')
+        await message.channel.send(f'пашол нахуй со своей рекламой, {member.mention}')
     await client.process_commands(message)
 
 @client.command()
