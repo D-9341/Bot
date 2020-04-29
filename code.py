@@ -151,11 +151,10 @@ async def on_member_join(member):
     role2 = discord.utils.get(member.guild.roles, id = 693933513459892245)
 
     await member.add_roles(role, role1, role2)
-    await channel.send(embed = discord.Embed(description = f'{member.name} has entered the facility', colour = discord.Color.orange()))
+    await channel.send(embed = discord.Embed(description = f'{member.name} has entered the facility, 👋', colour = discord.Color.orange()))
 
 #help command
 @client.command()
-@commands.has_permissions(administrator = True)
 async def support(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
     emb = discord.Embed(title = "Команды", colour = discord.Color.orange())
@@ -165,9 +164,11 @@ async def support(ctx, amount = 1):
     emb.add_field(name = "{}ban".format("cephalon/"), value = "бан игрока, доступна только администраторам" )
     emb.add_field(name = "{}kick".format("cephalon/"), value = "кик игрока, доступна только администраторам")
     emb.add_field(name = "{}hello".format("cephalon/"), value = "бот приветствует написавшего сообщение")
-    emb.add_field(name = "{}time".format("cephalon/"), value = "показывает время")
+    emb.add_field(name = "{}time".format("cephalon/"), value = "показывает время по гринвичу")
     emb.add_field(name = '{}say'.format('cephalon/'), value = 'пишет сообщение от лица бота')
     emb.add_field(name = '{}ping'.format('cephalon/'), value = 'pong!')
+    emb.add_field(name = '{}coinflip'.format('cephalon/'), value = 'подкидывает монетку')
+    emb.add_field(name = 'жыж', value = 'также, для написания команд необязательно писать префикс, можно пингануть бота')
     await ctx.send(embed = emb)
 
 @client.command()
