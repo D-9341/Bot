@@ -192,7 +192,7 @@ async def on_ready():
 @client.command()
 @commands.has_permissions(administrator = True)
 async def kick(ctx , member: discord.Member, *, reason = None):
-    emb = discord.Embed(title = 'Kick', colour = discord.Color.green())
+    emb = discord.Embed(title = 'Kick', colour = discord.Color.orange())
     await ctx.channel.purge(limit = 1)
 
     await member.kick(reason = reason)
