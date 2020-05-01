@@ -11,8 +11,9 @@ from discord.utils import get
 client = commands.Bot(command_prefix = commands.when_mentioned_or("cephalon/"))
 #like cephalon/support
 
-@client.event
-async def gaystvo(ctx, arg):
+@client.command()
+async def gaystvo(ctx, *, arg, amount = 1):
+    await ctx.channel.purge(limit = amount)
     await ctx.send('@everyone' + arg)
 
 #система уровней
