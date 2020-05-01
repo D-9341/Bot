@@ -11,6 +11,10 @@ from discord.utils import get
 client = commands.Bot(command_prefix = commands.when_mentioned_or("cephalon/"))
 #like cephalon/support
 
+@client.event
+async def gaystvo(ctx, arg):
+    await ctx.send('@everyone' + arg)
+
 #система уровней
 @client.event
 async def on_message(message):
