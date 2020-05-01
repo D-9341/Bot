@@ -14,7 +14,7 @@ client = commands.Bot(command_prefix = commands.when_mentioned_or("cephalon/"))
 @client.command()
 async def gaystvo(ctx, *, arg, amount = 1):
     await ctx.channel.purge(limit = amount)
-    await ctx.send('@everyone' + arg)
+    await ctx.send('@everyone' , arg)
 
 #система уровней
 @client.event
