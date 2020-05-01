@@ -219,7 +219,7 @@ async def support(ctx, amount = 1):
     emb.add_field(name = '{}say'.format('cephalon/'), value = 'пишет сообщение от лица бота')
     emb.add_field(name = '{}ping'.format('cephalon/'), value = 'pong!')
     emb.add_field(name = '{}coinflip'.format('cephalon/'), value = 'подкидывает монетку')
-    emb.add_field(name = '{}gaystvo'.format('cephalon/'), value = 'как cephalon/say, но пингует @everyone'
+    emb.add_field(name = '{}gaystvo'.format('cephalon/'), value = 'как cephalon/say, но пингует @everyone')
     emb.add_field(name = 'жыж', value = 'также, для написания команд необязательно писать префикс, можно пингануть бота')
     await ctx.send(embed = emb)
 
