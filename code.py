@@ -15,7 +15,7 @@ client = commands.Bot(command_prefix = commands.when_mentioned_or("cephalon/"))
 @commands.has_permissions(administrator = True)
 async def bioplumbus(ctx, *, member : discord.Member, arg, amount = 1):
     await ctx.channel.purge(limit = amount)
-    emb = discord.Embed(title = ctx.author.avatar_url, colour = discord.Color.orange())
+    emb = discord.Embed(colour = discord.Color.orange())
     
     emb.add_field(name = arg)
     
