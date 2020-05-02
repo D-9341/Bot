@@ -13,7 +13,7 @@ client = commands.Bot(command_prefix = commands.when_mentioned_or("cephalon/"))
 
 @client.event
 async def when_mentioned(ctx):
-    await ctx.send(сам ты вампирская подстилка ёпта)
+    await ctx.send('сам ты вампирская подстилка ёпта')
 
 @client.command()
 @commands.has_permissions(administrator = True)
