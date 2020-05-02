@@ -202,7 +202,7 @@ async def on_member_join(member):
     role2 = discord.utils.get(member.guild.roles, id = 693933513459892245)
 
     await member.add_roles(role, role1, role2)
-    await channel.send(embed = discord.Embed(description = f'{member.name} has entered the facility, 👋', colour = discord.Color.orange()))
+    await channel.send(embed = discord.Embed(description = f'{member.name} has entered the facility, 👋', colour = discord.Color.orange(), emb.set_footer(text = 'Cephalon Cy')))
 
 #help command
 @client.command()
@@ -220,19 +220,20 @@ async def support(ctx, amount = 1):
     emb.add_field(name = '{}coinflip'.format('cephalon/'), value = 'подкидывает монетку')
     emb.add_field(name = '{}gaystvo'.format('cephalon/'), value = 'как cephalon/say, но пингует @everyone')
     emb.add_field(name = 'жыж', value = 'также, для написания команд необязательно писать префикс, можно пингануть бота')
+    emb.set_footer(text = 'Cephalon Cy')
     await ctx.send(embed = emb)
 
 @client.command()
 async def time(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
 
-    emb = discord.Embed(title = 'Time', description = 'Точное время' , colour = discord.Color.orange(), url = 'https://www.timeserver.ru')
+    emb = discord.Embed(title = 'Time', colour = discord.Color.orange(), url = 'https://www.timeserver.ru')
 
     emb.set_author(name = client.user.name, icon_url = client.user.avatar_url)
-    emb.set_footer(text = ctx.author.name, icon_url = ctx.author.avatar_url)
+    emb.set_footer(text = 'Cephalon Cy')
 
     now_date = datetime.datetime.now()
-    emb.add_field(name = 'Time', value = 'Time : {}'.format(now_date))
+    emb.add_field(name = 'Time : {}'.format(now_date))
 
     await ctx.author.send(embed = emb)
 
@@ -251,8 +252,8 @@ async def kick(ctx , member: discord.Member, *, reason = None):
     await member.kick(reason = reason)
 
     emb.set_author(name = member.name, icon_url = member.avatar_url)
-    emb.add_field(name = '-', value =  'Kicked user : {}'.format(member.mention))
-    emb.set_footer(text = 'Был кикнут администратором {}'.format(ctx.author.name), icon_url = ctx.author.avatar_url)
+    emb.add_field(name = 'Kicked user : {}'.format(member.mention))
+    emb.set_footer(text = 'Cephalon Cy')
 
     await ctx.send(embed = emb)
 
@@ -266,8 +267,8 @@ async def ban(ctx , member: discord.Member, *, reason = None):
     await member.ban(reason = reason)
 
     emb.set_author(name = member.name, icon_url = member.avatar_url)
-    emb.add_field(name = '-', value =  'Banned user : {}'.format(member.mention))
-    emb.set_footer(text = 'Был забанен администратором {}'.format(ctx.author.name), icon_url = ctx.author.avatar_url)
+    emb.add_field(name = 'Banned user : {}'.format(member.mention))
+    emb.set_footer(text = 'Cephalon Cy')
 
     await ctx.send(embed = emb)
 
