@@ -12,8 +12,10 @@ client = commands.Bot(command_prefix = commands.when_mentioned_or("cephalon/"))
 #like cephalon/support
 
 @client.event
-async def when_mentioned(ctx):
-    await ctx.send('сам ты вампирская подстилка ёпта')
+async def on_message(message):
+    if 'Cy' in message.content.lower():
+        await ctx.send('{author.name}, u')
+    
 
 @client.command()
 @commands.has_permissions(administrator = True)
