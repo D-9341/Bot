@@ -11,15 +11,9 @@ from discord.utils import get
 client = commands.Bot(command_prefix = commands.when_mentioned_or("cephalon/"))
 #like cephalon/support
 
-@client.command()
-@commands.has_permissions(administrator = True)
-async def bioplumbus(ctx, *, member : discord.Member, arg, amount = 1):
-    await ctx.channel.purge(limit = amount)
-    emb = discord.Embed(title = 'сука', colour = discord.Color.orange())
-    
-    emb.add_field(name = 'ёпта', value = arg)
-    
-    await ctx.send(embed = emb)
+@client.event
+async def when_mentioned(ctx):
+    await ctx.send(сам ты вампирская подстилка ёпта)
 
 @client.command()
 @commands.has_permissions(administrator = True)
