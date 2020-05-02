@@ -235,7 +235,7 @@ async def time(ctx, amount = 1):
     now_date = datetime.datetime.now()
     emb.add_field(name = 'Time : {}'.format(now_date))
 
-    await ctx.author.send(embed = emb)
+    await ctx.send(embed = emb)
 
 #проверка на подключение
 @client.event
@@ -251,8 +251,7 @@ async def kick(ctx , member: discord.Member, *, reason = None):
 
     await member.kick(reason = reason)
 
-    emb.set_author(name = member.name, icon_url = member.avatar_url)
-    emb.add_field(name = 'Kicked user : {}'.format(member.mention))
+    emb.add_field(name = 'Kicked {}'.format(member.mention))
     emb.set_footer(text = 'Cephalon Cy')
 
     await ctx.send(embed = emb)
@@ -266,8 +265,7 @@ async def ban(ctx , member: discord.Member, *, reason = None):
 
     await member.ban(reason = reason)
 
-    emb.set_author(name = member.name, icon_url = member.avatar_url)
-    emb.add_field(name = 'Banned user : {}'.format(member.mention))
+    emb.add_field(name = 'Banned {}'.format(member.mention))
     emb.set_footer(text = 'Cephalon Cy')
 
     await ctx.send(embed = emb)
