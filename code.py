@@ -59,7 +59,7 @@ async def level_up(users, user, message):
         users[f'{user.id}']['level'] = lvl_end
 
 @client.event
-async def on_message(ctx, message):
+async def on_message(message):
     if 'discord.gg' in message.content.lower():
         await message.delete()
         await message.channel.send('пашол нахуй со своей рекламой')
