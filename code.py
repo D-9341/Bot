@@ -11,11 +11,10 @@ from discord.utils import get
 client = commands.Bot(command_prefix = commands.when_mentioned_or("cephalon/"))
 #like cephalon/support
 
-@client.event
-async def on_message(message, user, users):
-    if 'Cy' in message.content.lower():
-        await ctx.send('{user.mention}, u')
-    
+@client.command()
+@commands.has_permissions(administrator = True)
+async def info(ctx, amount = 1):
+    await ctx.send('Cephalon online, Ping equals `{round(client.latency * 1000)} ms`')
 
 @client.command()
 @commands.has_permissions(administrator = True)
@@ -71,12 +70,6 @@ async def coinflip(ctx, amount = 1):
     choices = ['Орёл', 'Решка']
     rancoin = random.choice(choices)
     await ctx.send(rancoin)
-
-#проверка подключения
-@client.command()
-async def test(ctx, amount = 1):
-    await ctx.channel.purge(limit = amount)
-    await ctx.send(f'Cephalon online!')
 
 #получение роли по эмодзи
 @client.event
@@ -223,7 +216,6 @@ async def support(ctx, amount = 1):
     emb.add_field(name = "{}hello".format("cephalon/"), value = "бот приветствует написавшего сообщение")
     emb.add_field(name = "{}time".format("cephalon/"), value = "показывает время по гринвичу")
     emb.add_field(name = '{}say'.format('cephalon/'), value = 'пишет сообщение от лица бота')
-    emb.add_field(name = '{}ping'.format('cephalon/'), value = 'pong!')
     emb.add_field(name = '{}coinflip'.format('cephalon/'), value = 'подкидывает монетку')
     emb.add_field(name = '{}gaystvo'.format('cephalon/'), value = 'как cephalon/say, но пингует @everyone')
     emb.add_field(name = 'жыж', value = 'также, для написания команд необязательно писать префикс, можно пингануть бота')
@@ -301,11 +293,7 @@ async def say(ctx, *, arg, amount = 1):
 async def clear_error(ctx, error):
     if isinstance(error, commands.MissingRequiredArgument):
         await ctx.send(f'{ctx.author.name}, нет аргумента!')
-
-#pong!
-@client.command()
-async def ping(ctx):
-    await ctx.send(f'Pong! `{round(client.latency * 1000)} ms`')
+    
 token = os.environ.get('BOT_TOKEN')
 
 client.run(token)
