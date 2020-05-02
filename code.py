@@ -62,7 +62,7 @@ async def level_up(users, user, message):
 async def on_message(message):
     if 'discord.gg' in message.content.lower():
         await message.delete()
-        await message.channel.send(f'пашол нахуй со своей рекламой')
+        await message.channel.send(f'пашол нахуй со своей рекламой, {}'.format(ctx.author.send))
     await client.process_commands(message)
 
 @client.command()
@@ -220,7 +220,7 @@ async def support(ctx, amount = 1):
     emb.add_field(name = '{}coinflip'.format('cephalon/'), value = 'подкидывает монетку')
     emb.add_field(name = '{}gaystvo'.format('cephalon/'), value = 'как cephalon/say, но пингует @everyone')
     emb.add_field(name = 'жыж', value = 'также, для написания команд необязательно писать префикс, можно пингануть бота')
-    emb.set_footer(text = 'Cephalon Cy')
+    emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
     await ctx.send(embed = emb)
 
 @client.command()
@@ -230,7 +230,7 @@ async def time(ctx, amount = 1):
     emb = discord.Embed(title = 'Time', colour = discord.Color.orange(), url = 'https://www.timeserver.ru')
 
     emb.set_author(name = client.user.name, icon_url = client.user.avatar_url)
-    emb.set_footer(text = 'Cephalon Cy')
+    emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
 
     now_date = datetime.datetime.now()
     emb.add_field(name = 'GMT 0 Time is ', value = '{}'.format(now_date))
@@ -252,7 +252,7 @@ async def kick(ctx , member: discord.Member, *, reason = None):
     await member.kick(reason = reason)
 
     emb.add_field(name = 'Kicked ', value = '{}'.format(member.mention))
-    emb.set_footer(text = 'Cephalon Cy')
+    emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
 
     await ctx.send(embed = emb)
 
@@ -266,7 +266,7 @@ async def ban(ctx , member: discord.Member, *, reason = None):
     await member.ban(reason = reason)
 
     emb.add_field(name = 'Banned ', value = '{}'.format(member.mention))
-    emb.set_footer(text = 'Cephalon Cy')
+    emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
 
     await ctx.send(embed = emb)
 
