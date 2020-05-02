@@ -17,7 +17,7 @@ async def bioplumbus(ctx, *, member : discord.Member, arg, amount = 1):
     await ctx.channel.purge(limit = amount)
     emb = discord.Embed(title = ctx.author.avatar_url, colour = discord.Color.orange())
     
-    emb.add_field(value = (arg))
+    emb.add_field(name = arg)
     
     await ctx.send(embed = emb)
 
