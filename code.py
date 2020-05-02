@@ -62,7 +62,7 @@ async def level_up(users, user, message):
 async def on_message(message):
     if 'discord.gg' in message.content.lower():
         await message.delete()
-        await message.channel.send(f'пашол нахуй со своей рекламой, {}'.format(ctx.author.send))
+        await message.channel.send('пашол нахуй со своей рекламой, {}'.format(ctx.author.send))
     await client.process_commands(message)
 
 @client.command()
