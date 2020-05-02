@@ -12,9 +12,9 @@ client = commands.Bot(command_prefix = commands.when_mentioned_or("cephalon/"))
 #like cephalon/support
 
 @client.event
-async def on_message(message):
+async def on_message(message, user, users):
     if 'Cy' in message.content.lower():
-        await ctx.send('{author.name}, u')
+        await ctx.send('{user.mention}, u')
     
 
 @client.command()
