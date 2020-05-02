@@ -90,6 +90,21 @@ async def on_raw_reaction_add(payload):
             if member is not None:
                 await member.add_roles(role)
 
+@client.event
+async def on_raw_reaction_add(payload):
+    message_if = payload.message_id
+    if message_id == 695687657275260949:
+        guild_id = payload.guild_id
+        guild = discord.utils.find(lambda g: g.id == guild_id, client.guild)
+        
+        if payload.emoji.name == 'tobi_pesda':
+            role = discord.utils.get(guild.roles, name = 'Пробивший дно')
+            
+        if role is not None:
+            member = discord.utils.find(lambda m: m.id == payload.user_id, guild.members)
+            if member is not None:
+                await member.add_roles(role)
+                
 async def on_raw_reaction_remove(payload):
     message_id = payload.message_id
     if message_id == 697162136761139331:
@@ -106,6 +121,20 @@ async def on_raw_reaction_remove(payload):
             if member is not None:
                 await member.remove_roles(role)
 
+async def on_raw_reaction_remove(payload):
+    message_id = payload.message_id
+    if message_id == 695687657275260949:
+        guild_id = payload.guild_id
+        guild = discord.utils.find(lambda g: g.id == guild_id, client.guilds)
+
+        if payload.emoji.name == 'tobi_pesda':
+            role = discord.utils.get(guild.roles, name = 'Пробивший дно')
+
+        if role is not None:
+            member = discord.utils.find(lambda m: m.id == payload.user_id, guild.members)
+            if member is not None:
+                await member.remove_roles(role)                
+                
 #альтернатива Groovy(которая сука не работает)
 @client.command()
 async def join(ctx):
