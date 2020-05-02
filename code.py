@@ -14,6 +14,7 @@ client = commands.Bot(command_prefix = commands.when_mentioned_or("cephalon/"))
 @client.command()
 @commands.has_permissions(administrator = True)
 async def info(ctx, amount = 1):
+    await ctx.channel.purge(limit = amount)
     await ctx.send(f'Cephalon online, Ping equals `{round(client.latency * 1000)} ms`')
 
 @client.command()
