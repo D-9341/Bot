@@ -233,7 +233,7 @@ async def time(ctx, amount = 1):
     emb.set_footer(text = 'Cephalon Cy')
 
     now_date = datetime.datetime.now()
-    emb.add_field(name = 'Time : {}'.format(now_date))
+    emb.add_field(name = 'GMT 0 Time is ', value = '{}'.format(now_date))
 
     await ctx.send(embed = emb)
 
@@ -246,12 +246,12 @@ async def on_ready():
 @client.command()
 @commands.has_permissions(administrator = True)
 async def kick(ctx , member: discord.Member, *, reason = None):
-    emb = discord.Embed(title = 'Kick', colour = discord.Color.orange())
     await ctx.channel.purge(limit = 1)
+    emb = discord.Embed(title = 'Kick', colour = discord.Color.orange())
 
     await member.kick(reason = reason)
 
-    emb.add_field(name = 'Kicked {}'.format(member.mention))
+    emb.add_field(name = 'Kicked ', value = '{}'.format(member.mention))
     emb.set_footer(text = 'Cephalon Cy')
 
     await ctx.send(embed = emb)
@@ -260,12 +260,12 @@ async def kick(ctx , member: discord.Member, *, reason = None):
 @client.command()
 @commands.has_permissions(administrator = True)
 async def ban(ctx , member: discord.Member, *, reason = None):
-    emb = discord.Embed(title = 'Ban', colour = discord.Color.red())
     await ctx.channel.purge(limit = 1)
+    emb = discord.Embed(title = 'Ban', colour = discord.Color.red())
 
     await member.ban(reason = reason)
 
-    emb.add_field(name = 'Banned {}'.format(member.mention))
+    emb.add_field(name = 'Banned ', value = '{}'.format(member.mention))
     emb.set_footer(text = 'Cephalon Cy')
 
     await ctx.send(embed = emb)
