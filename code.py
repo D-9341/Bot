@@ -13,6 +13,16 @@ client = commands.Bot(command_prefix = commands.when_mentioned_or("cephalon/"))
 
 @client.command()
 @commands.has_permissions(administrator = True)
+async def bioplumbus(ctx, *, member : discord.Member, arg, amount = 1):
+    await ctx.channel.purge(limit = amount)
+    emb = discord.Embed(title = ctx.author.avatar_url, colour = discord.Color.orange())
+    
+    emb.add_field(value = (arg))
+    
+    await ctx.send(embed = emb)
+
+@client.command()
+@commands.has_permissions(administrator = True)
 async def gaystvo(ctx, *, arg, amount = 1):
     await ctx.channel.purge(limit = amount)
     await ctx.send('@everyone ' + arg)
