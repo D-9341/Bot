@@ -207,7 +207,7 @@ async def on_command_error(ctx, error):
 
 #personal messages
 @client.command()
-async def pm(ctx, member: discord.Member, amount = 1, arg):
+async def pm(ctx, arg, member: discord.Member, amount = 1):
     await ctx.channel.purge(limit = amount)
     await member.send(arg)
 
