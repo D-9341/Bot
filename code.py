@@ -60,14 +60,7 @@ async def level_up(users, user, message):
 
 @client.event
 async def on_message(message):
-    if 'discord.gg' in message.content.lower():
-        await message.delete()
-        await message.channel.send('пашол нахуй со своей рекламой')
-    await client.process_commands(message)
-
-@client.event
-async def on_message(message):
-    if 'http' in message.content.lower():
+    if 'http' or 'discord.gg' in message.content.lower():
         await message.delete()
         await message.channel.send('пашол нахуй со своей рекламой')
     await client.process_commands(message)
