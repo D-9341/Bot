@@ -60,7 +60,7 @@ async def level_up(users, user, message):
 
 @client.event
 async def on_message(message):
-    if 'discord.gg' in message.content.lower():
+    if 'discord.gg' or 'https' in message.content.lower():
         await message.delete()
         await message.channel.send('пашол нахуй со своей рекламой')
     await client.process_commands(message)
@@ -207,9 +207,9 @@ async def on_command_error(ctx, error):
 
 #personal messages
 @client.command()
-async def pm(ctx, arg, member: discord.Member, amount = 1):
+async def pm(ctx, member: discord.Member, amount = 1):
     await ctx.channel.purge(limit = amount)
-    await member.send(arg)
+    await member.send('Адамант сука')
 
 #member joined the server
 @client.event
@@ -264,7 +264,7 @@ async def time(ctx, amount = 1):
     now_date = datetime.datetime.now()
     emb.add_field(name = 'GMT 0 Time is ', value = '{}'.format(now_date))
 
-    await ctx.send(embed = emb)
+    await ctx.author.send(embed = emb)
 
 #проверка на подключение
 @client.event
