@@ -60,11 +60,18 @@ async def level_up(users, user, message):
 
 @client.event
 async def on_message(message):
-    if 'http' or 'discord.gg' in message.content.lower():
+    if 'http' in message.content.lower():
         await message.delete()
         await message.channel.send('пашол нахуй со своей рекламой')
     await client.process_commands(message)
-    
+
+@client.event
+async def on_message(message):
+    if 'discord.gg' in message.content.lower():
+        await message.delete()
+        await message.channel.send('пашол нахуй со своей рекламой')
+    await client.process_commands(message)   
+ 
 @client.command()
 async def coinflip(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
