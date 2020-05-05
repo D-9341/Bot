@@ -18,7 +18,7 @@ async def embed(ctx, arg, *, amount = 1):
     emb = discord.Embed(title = 'N/a', colour = discord.Color.orange())
     emb.add_field(description = arg)
     emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-    await ctx.send (embed = emb)
+    await ctx.send(embed = emb)
 
 @client.command()
 @commands.has_permissions(administrator = True)
