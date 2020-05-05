@@ -16,7 +16,7 @@ client = commands.Bot(command_prefix = commands.when_mentioned_or("cephalon/"))
 async def embed(ctx, arg, *, amount = 1):
     await ctx.channel.purge(limit = amount)
     emb = discord.Embed(title = 'N/a', colour = discord.Color.orange())
-    emb.add_field(name = arg)
+    emb.add_field(name = 'N/a', value = arg)
     emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
     await ctx.send(embed = emb)
 
