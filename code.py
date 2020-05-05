@@ -13,6 +13,15 @@ client = commands.Bot(command_prefix = commands.when_mentioned_or("cephalon/"))
 
 @client.command()
 @commands.has_permissions(administrator = True)
+async def embed(ctx, arg, amount = 1):
+    await ctx.channel.purge(limit = amount)
+    emb = discord.Embed(title = f'{client.user.name}', colour = discord.Color.orange())
+    emb.add_field(description = arg)
+    emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+    await ctx.send (embed = emb)
+
+@client.command()
+@commands.has_permissions(administrator = True)
 async def info(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
     await ctx.send(f'Cephalon online, Ping equals `{round(client.latency * 1000)} ms`')
