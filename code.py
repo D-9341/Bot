@@ -130,12 +130,12 @@ async def on_raw_reaction_remove(payload):
 @client.event
 async def on_reaction_add(reaction, user):
     channel = 707492082209652827
-    await channel.send(channel, '**{}** Добавил {} к сообщению ```{}```'.format(user.name, reaction.emoji, reaction.message.content))
+    await channel.send('**{}** Добавил {} к сообщению ```{}```'.format(user.name, reaction.emoji, reaction.message.content))
 
 @client.event
 async def on_reaction_remove(reaction, user):
     channel = 707492082209652827
-    await channel.send(channel, '**{}** Удалил {} у сообщения ```{}```'.format(user.name, reaction.emoji, reaction.message.content))
+    await channel.send('**{}** Удалил {} у сообщения ```{}```'.format(user.name, reaction.emoji, reaction.message.content))
     
 #альтернатива Groovy(которая, сука не работает)
 @client.command()
