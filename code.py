@@ -126,16 +126,6 @@ async def on_raw_reaction_remove(payload):
             member = discord.utils.find(lambda m: m.id == payload.user_id, guild.members)
             if member is not None:
                 await member.remove_roles(role)        
- 
-@client.event
-async def on_reaction_add(reaction, member: discord.Member):
-    channel = 707492082209652827
-    await channel.send('*{}* Добавил {} к сообщению ```{}```'.format(member.name, reaction.emoji, reaction.message.content))
-
-@client.event
-async def on_reaction_remove(reaction, member: discord.Member):
-    channel = 707492082209652827
-    await channel.send('*{}* Удалил {} у сообщения ```{}```'.format(member.name, reaction.emoji, reaction.message.content))
     
 #альтернатива Groovy(которая, сука не работает)
 @client.command()
