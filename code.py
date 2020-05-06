@@ -132,11 +132,6 @@ async def on_reaction_add(reaction, user):
     channel = 707492082209652827
     await ctx.send(channel, '**{}** Добавил {} к сообщению ```{}```'.format(user.name, reaction.emoji, reaction.message.content)
 
-@client.event
-async def on_reaction_add(reaction, user):
-    channel = 707492082209652827
-    await ctx.send(channel, '**{}** Добавил {} к сообщению ```{}```'.format(user.name, reaction.emoji, reaction.message.content)
-
 #альтернатива Groovy(которая, сука не работает)
 @client.command()
 async def join(ctx):
