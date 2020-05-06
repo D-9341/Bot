@@ -130,12 +130,12 @@ async def on_raw_reaction_remove(payload):
 @client.event
 async def on_reaction_add(reaction, ctx, member: discord.Member):
     channel = 707492082209652827
-    await ctx.send('**{}** Добавил {} к сообщению ```{}```'.format(member.name, reaction.emoji, reaction.message.content))
+    await client.send_message('**{}** Добавил {} к сообщению ```{}```'.format(member.name, reaction.emoji, reaction.message.content))
 
 @client.event
 async def on_reaction_remove(reaction, ctx, member: discord.Member):
     channel = 707492082209652827
-    await ctx.send('**{}** Удалил {} у сообщения ```{}```'.format(member.name, reaction.emoji, reaction.message.content))
+    await client.send_message('**{}** Удалил {} у сообщения ```{}```'.format(member.name, reaction.emoji, reaction.message.content))
     
 #альтернатива Groovy(которая, сука не работает)
 @client.command()
