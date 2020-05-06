@@ -10,7 +10,7 @@ from discord.utils import get
 
 client = commands.Bot(command_prefix = commands.when_mentioned_or("cephalon/"))
 client.remove_command('help')
-#like cephalon/support
+#like cephalon/help
 
 @client.command()
 @commands.has_permissions(administrator = True)
@@ -128,14 +128,14 @@ async def on_raw_reaction_remove(payload):
                 await member.remove_roles(role)        
  
 @client.event
-async def on_reaction_add(reaction, user):
+async def on_reaction_add(reaction):
     channel = 707492082209652827
-    await channel.send('**{}** Добавил {} к сообщению ```{}```'.format(user.name, reaction.emoji, reaction.message.content))
+    await channel.send('**{}** Добавил {} к сообщению ```{}```'.format(member.name, reaction.emoji, reaction.message.content))
 
 @client.event
-async def on_reaction_remove(reaction, user):
+async def on_reaction_remove(reaction):
     channel = 707492082209652827
-    await channel.send('**{}** Удалил {} у сообщения ```{}```'.format(user.name, reaction.emoji, reaction.message.content))
+    await channel.send('**{}** Удалил {} у сообщения ```{}```'.format(member.name, reaction.emoji, reaction.message.content))
     
 #альтернатива Groovy(которая, сука не работает)
 @client.command()
