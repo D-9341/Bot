@@ -115,7 +115,38 @@ async def on_raw_reaction_remove(payload):
             member = discord.utils.find(lambda m: m.id == payload.user_id, guild.members)
             if member is not None:
                 await member.remove_roles(role)               
-                
+           
+        
+@client.event
+async def on_raw_reaction_add(payload):
+    message_id = payload.message_id
+    if message_id == 707496056505761802:
+        guild_id = payload.guild_id
+        guild = discord.utils.find(lambda g: g.id == guild_id, client.guilds)
+
+        if payload.emoji.name == 'strashilka':
+            role = discord.utils.get(guild.roles, name = 'Пробивший дно')
+
+        if role is not None:
+            member = discord.utils.find(lambda m: m.id == payload.user_id, guild.members)
+            if member is not None:
+                await member.add_roles(role)
+
+@client.event
+async def on_raw_reaction_remove(payload):
+    message_id = payload.message_id
+    if message_id == 707496056505761802:
+        guild_id = payload.guild_id
+        guild = discord.utils.find(lambda g: g.id == guild_id, client.guilds)
+
+        if payload.emoji.name == 'strashilka':
+            role = discord.utils.get(guild.roles, name = 'Пробивший дно')
+
+        if role is not None:
+            member = discord.utils.find(lambda m: m.id == payload.user_id, guild.members)
+            if member is not None:
+                await member.remove_roles(role)        
+ 
 #альтернатива Groovy(которая сука не работает)
 @client.command()
 async def join(ctx):
@@ -139,7 +170,7 @@ async def leave(ctx):
         TimeoutError
         pass
 
-client.command()
+@client.command()
 async def play(ctx, url : str):
     song_there = os.path.isfile('song.mp3')
 
