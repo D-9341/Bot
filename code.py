@@ -69,13 +69,6 @@ async def level_up(users, user, message):
 
 @client.event
 async def on_message(message):
-    if 'http' in message.content.lower():
-        await message.delete()
-        await message.channel.send('пашол нахуй со своей рекламой')
-    await client.process_commands(message)
-
-@client.event
-async def on_message(message):
     if 'discord.gg' in message.content.lower():
         await message.delete()
         await message.channel.send('пашол нахуй со своей рекламой')
@@ -120,7 +113,8 @@ async def on_raw_reaction_add(payload):
             member = discord.utils.find(lambda m: m.id == payload.user_id, guild.members)
             if member is not None:
                 await member.add_roles(role)
-                
+
+@client.event
 async def on_raw_reaction_remove(payload):
     message_id = payload.message_id
     if message_id == 697162136761139331:
@@ -137,6 +131,7 @@ async def on_raw_reaction_remove(payload):
             if member is not None:
                 await member.remove_roles(role)
 
+@client.event
 async def on_raw_reaction_remove(payload):
     message_id = payload.message_id
     if message_id == 695687657275260949:
@@ -223,6 +218,7 @@ async def on_command_error(ctx, error):
 
 #personal messages
 @client.command()
+@commands.has_permissions(administrator = True)
 async def pm(ctx, member: discord.Member, amount = 1):
     await ctx.channel.purge(limit = amount)
     await member.send('Адамант сука')
@@ -251,18 +247,17 @@ async def on_member_join(member):
 
 #help command
 @client.command()
+@commands.has_permissions(administrator = True)
 async def support(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
-    emb = discord.Embed(title = "Команды", colour = discord.Color.orange())
+    emb = discord.Embed(title = "Меню команд для администраторов", colour = discord.Color.orange())
 
     emb.add_field(name = 'Инфо'.format('/'), value = "Cy, или же сай - бот, написанный сасиска")
-    emb.add_field(name = "{}clear".format("cephalon/"), value = "очистка чата, доступна только администраторам")
-    emb.add_field(name = "{}ban".format("cephalon/"), value = "бан игрока, доступна только администраторам" )
-    emb.add_field(name = "{}kick".format("cephalon/"), value = "кик игрока, доступна только администраторам")
-    emb.add_field(name = "{}hello".format("cephalon/"), value = "бот приветствует написавшего сообщение")
+    emb.add_field(name = "{}clear".format("cephalon/"), value = "очистка чата")
+    emb.add_field(name = "{}ban".format("cephalon/"), value = "бан игрока")
+    emb.add_field(name = "{}kick".format("cephalon/"), value = "кик игрока")
     emb.add_field(name = "{}time".format("cephalon/"), value = "показывает время по гринвичу")
     emb.add_field(name = '{}say'.format('cephalon/'), value = 'пишет сообщение от лица бота')
-    emb.add_field(name = '{}coinflip'.format('cephalon/'), value = 'подкидывает монетку')
     emb.add_field(name = '{}gaystvo'.format('cephalon/'), value = 'как cephalon/say, но пингует @everyone')
     emb.add_field(name = '{}embed'.format('cephalon/'), value = 'как cephalon/say, но пишет через эмбед')
     emb.add_field(name = 'жыж', value = 'также, для написания команд необязательно писать префикс, можно пингануть бота')
@@ -322,15 +317,9 @@ async def ban(ctx , member: discord.Member, *, reason = None):
 async def clear(ctx, amount : int):
     await ctx.channel.purge(limit = amount)
 
-#hello
-@client.command(pass_context = True)
-async def hello(ctx, amount = 1):
-    await ctx.channel.purge(limit = amount)
-    author = ctx.message.author
-    await ctx.send(f'👋')
-
 #say
 @client.command()
+@commands.has_permissions(administrator = True)
 async def say(ctx, *, arg, amount = 1):
     await ctx.channel.purge(limit = amount)
     await ctx.send(arg)
