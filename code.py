@@ -31,42 +31,7 @@ async def info(ctx, amount = 1):
 async def gaystvo(ctx, *, arg, amount = 1):
     await ctx.channel.purge(limit = amount)
     await ctx.send('@everyone ' + arg)
-
-#система уровней
-@client.event
-async def on_message(message):
-    if message.author.bot == False:
-        with open('users.json', 'r') as f:
-            users = json.load(f)
- 
- 
-        await update_data(users, message.author)
-        await add_experience(users, message.author, 5)
-        await level_up(users, message.author, message)
-   
-   
-        with open('users.json', 'w') as f:
-            json.dump(users, f)
- 
-
-async def update_data(users, user):
-    if not f'{user.id}' in users:
-        users[f'{user.id}'] = {}
-        users[f'{user.id}']['experience'] = 0
-        users[f'{user.id}']['level'] = 1
-
-async def add_experience(users, user, exp):
-    users[f'{user.id}']['experience'] += exp
-
-
-async def level_up(users, user, message):
-    experience = users[f'{user.id}']['experience']
-    lvl_start = users[f'{user.id}']['level']
-    lvl_end = int(experience ** (1/4))
-    if lvl_start < lvl_end:
-        await message.channel.send(f'{user.mention} повысил свой уровень до {lvl_end}')
-        users[f'{user.id}']['level'] = lvl_end
-
+    
 @client.event
 async def on_message(message):
     if 'discord.gg' in message.content.lower():
@@ -170,48 +135,6 @@ async def leave(ctx):
         TimeoutError
         pass
 
-@client.command()
-async def play(ctx, url : str):
-    song_there = os.path.isfile('song.mp3')
-
-    try:
-        if song_there:
-            os.remove('song.mp3')
-            print('[log] ДАННЫЕ УДАЛЕНЫ')
-
-    except PermissionError:
-        print('[log] не удалось удалить данные')
-
-    await ctx.send('Ща скачаю, падажжи')
-
-    voice = get(client.voice_clients, guild = ctx.guild)
-    ydl_opts = {
-        'format' : 'bestaudio/best',
-        'postprocessors' : [{
-            'key' : 'FFmpegExtractAudio',
-            'preferredcodec' : 'mp3',
-            'preferredquality' : '192'
-            }]
-    }
-
-
-    with youtube_dl.YoutubeDL(ydl_opts) as ydl:
-        print('[log] Загрузка...')
-        ydl.download([url])
-
-    for file in os.listdir('./'):
-        if file.endswith('.mp3'):
-            name = file
-            print('[log] Переименовываю: {file}')
-            os.rename(file, 'song.mp3')
-
-    voice.play(discord.FFmpegPCMAudio('song.mp3'), after = lambda e: print(f'[log] {name}, время на прослушивание музыки кончилось'))
-    voice.source = discord.PCMVolumeTransformer(voice.source)
-    voice.source.volume = 0.07
-
-    song_name = name.rsplit('-', 2)
-    await ctx.send(f'Сейчас играет: {song_name[0]}')
-
 #я не знаю что это
 @client.event
 async def on_command_error(ctx, error):
@@ -227,16 +150,6 @@ async def pm(ctx, member: discord.Member, amount = 1):
 #member joined the server
 @client.event
 async def on_member_join(member):
-    with open('users.json', 'r') as f:
-        users = json.load(f)
- 
- 
-    await update_data(users, member)
- 
-   
-    with open('users.json', 'w') as f:
-        json.dump(users, f)
-    
     channel = client.get_channel(693929823030214658)
 
     role = discord.utils.get(member.guild.roles, id = 693933516294979704)
