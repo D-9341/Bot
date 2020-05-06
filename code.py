@@ -9,6 +9,7 @@ from discord.ext import commands
 from discord.utils import get
 
 client = commands.Bot(command_prefix = commands.when_mentioned_or("cephalon/"))
+client.remove_command('help')
 #like cephalon/support
 
 @client.command()
@@ -126,6 +127,16 @@ async def on_raw_reaction_remove(payload):
             if member is not None:
                 await member.remove_roles(role)        
  
+@client.event
+async def on_reaction_add(reaction, user):
+    channel = 707492082209652827
+    await ctx.send(channel, '**{}** Добавил {} к сообщению ```{}```'.format(user.name, reaction.emoji, reaction.message.content)
+
+@client.event
+async def on_reaction_remove(reaction, user):
+    channel = 707492082209652827
+    await ctx.send(channel, '**{}** Удалил {} у сообщения ```{}```'.format(user.name, reaction.emoji, reaction.message.content)
+
 #альтернатива Groovy(которая сука не работает)
 @client.command()
 async def join(ctx):
@@ -176,7 +187,7 @@ async def on_member_join(member):
 #help command
 @client.command()
 @commands.has_permissions(administrator = True)
-async def support(ctx, amount = 1):
+async def help(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
     emb = discord.Embed(title = "Меню команд для администраторов", colour = discord.Color.orange())
 
@@ -184,6 +195,7 @@ async def support(ctx, amount = 1):
     emb.add_field(name = "{}clear".format("cephalon/"), value = "очистка чата")
     emb.add_field(name = "{}ban".format("cephalon/"), value = "бан игрока")
     emb.add_field(name = "{}kick".format("cephalon/"), value = "кик игрока")
+    emb.add_field(name = '{}mute'.format('cephalon/'), value = 'мут игрока')
     emb.add_field(name = "{}time".format("cephalon/"), value = "показывает время по гринвичу")
     emb.add_field(name = '{}say'.format('cephalon/'), value = 'пишет сообщение от лица бота')
     emb.add_field(name = '{}gaystvo'.format('cephalon/'), value = 'как cephalon/say, но пингует @everyone')
@@ -209,7 +221,7 @@ async def time(ctx, amount = 1):
 #проверка на подключение
 @client.event
 async def on_ready():
-    await client.change_presence(status = discord.Status.online, activity = discord.Game('cephalon/support'))
+    await client.change_presence(status = discord.Status.online, activity = discord.Game('cephalon/help'))
 
 #kick
 @client.command()
