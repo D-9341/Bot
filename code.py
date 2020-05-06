@@ -128,12 +128,12 @@ async def on_raw_reaction_remove(payload):
                 await member.remove_roles(role)        
  
 @client.event
-async def on_reaction_add(reaction):
+async def on_reaction_add(reaction, member: discord.Member):
     channel = 707492082209652827
     await channel.send('**{}** Добавил {} к сообщению ```{}```'.format(member.name, reaction.emoji, reaction.message.content))
 
 @client.event
-async def on_reaction_remove(reaction):
+async def on_reaction_remove(reaction, member: discord.Member):
     channel = 707492082209652827
     await channel.send('**{}** Удалил {} у сообщения ```{}```'.format(member.name, reaction.emoji, reaction.message.content))
     
