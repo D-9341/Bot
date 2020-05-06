@@ -130,8 +130,13 @@ async def on_raw_reaction_remove(payload):
 @client.event
 async def on_reaction_add(reaction, user):
     channel = 707492082209652827
-    await ctx.send(channel, '**{}** Добавил {} к сообщению ```{}```'.format(user.name, reaction.emoji, reaction.message.content)
+    await channel.send(channel, '**{}** Добавил {} к сообщению ```{}```'.format(user.name, reaction.emoji, reaction.message.content))
 
+@client.event
+async def on_reaction_remove(reaction, user):
+    channel = 707492082209652827
+    await channel.send(channel, '**{}** Удалил {} у сообщения ```{}```'.format(user.name, reaction.emoji, reaction.message.content))
+    
 #альтернатива Groovy(которая, сука не работает)
 @client.command()
 async def join(ctx):
@@ -179,6 +184,11 @@ async def on_member_join(member):
     await member.add_roles(role, role1, role2)
     await channel.send(embed = discord.Embed(description = f'{member.name} has entered the facility, 👋', colour = discord.Color.orange()))
 
+@client.event
+async def on_member_remove(member):
+    channel = client.get_channel(693929823030214658)
+    await channel.send(embed = discord.Embed(description = f'{member.name} has exited the facility...', colour = discord.Color.red()))
+    
 #help command
 @client.command()
 @commands.has_permissions(administrator = True)
