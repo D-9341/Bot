@@ -13,6 +13,20 @@ client = commands.Bot(command_prefix = commands.when_mentioned_or("cephalon/"))
 
 @client.command()
 @commands.has_permissions(administrator = True)
+async def mute(ctx, member: discord.Member, amount = 1):
+    await ctx.channel.purge(limit = amount)
+    emb = discord.Embed(title = 'Mute', colour = discord.Color.red())
+
+    role = discord.utils.get(ctx.message.guild.roles, name = 'Muted')
+    await member.add_roles(role)
+    
+    emb.add_field(name = 'Muted ', value = '{}'.format(member.mention))
+    emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+
+    await ctx.send(embed = emb)
+
+@client.command()
+@commands.has_permissions(administrator = True)
 async def embed(ctx, *, arg, amount = 1):
     await ctx.channel.purge(limit = amount)
     emb = discord.Embed(title = ctx.author.name, colour = discord.Color.orange())
