@@ -62,14 +62,16 @@ async def coinflip(ctx, amount = 1):
 @client.event
 async def on_raw_reaction_add(payload):
     message_id = payload.message_id
-    if message_id == 707555244854345798:
+    if message_id == 707895081956278335:
         guild_id = payload.guild_id
         guild = discord.utils.find(lambda g: g.id == guild_id, client.guilds)
 
-        if payload.emoji.name == '300bucks':
-            role = discord.utils.get(guild.roles, name = 'Discord(А)')
-        elif payload.emoji.name == 'omegalul':
-            role = discord.utils.get(guild.roles, name = 'YouTube(А)')
+        if payload.emoji.name == 'Discord':
+            role = discord.utils.get(guild.roles, name = '🌼Анонсы DISCORD')
+        elif payload.emoji.name == 'YouTube':
+            role = discord.utils.get(guild.roles, name = '🍁Анонсы YOUTUBE')
+        elif payload.emoji.name == 'Meropriyatya':
+            role = discord.utils.get(guild.roles, name = '🍀Анонсы Мероприятий')
 
         if role is not None:
             member = discord.utils.find(lambda m: m.id == payload.user_id, guild.members)
@@ -79,14 +81,16 @@ async def on_raw_reaction_add(payload):
 @client.event
 async def on_raw_reaction_remove(payload):
     message_id = payload.message_id
-    if message_id == 707555244854345798:
+    if message_id == 707895081956278335:
         guild_id = payload.guild_id
         guild = discord.utils.find(lambda g: g.id == guild_id, client.guilds)
 
-        if payload.emoji.name == '300bucks':
-            role = discord.utils.get(guild.roles, name = 'Discord(А)')
-        elif payload.emoji.name == 'omegalul':
-            role = discord.utils.get(guild.roles, name = 'YouTube(А)')
+        if payload.emoji.name == 'Discord':
+            role = discord.utils.get(guild.roles, name = '🌼Анонсы DISCORD')
+        elif payload.emoji.name == 'YouTube':
+            role = discord.utils.get(guild.roles, name = '🍁Анонсы YOUTUBE')
+        elif payload.emoji.name == 'Meropriyatya':
+            role = discord.utils.get(guild.roles, name = '🍀Анонсы Мероприятий')
 
         if role is not None:
             member = discord.utils.find(lambda m: m.id == payload.user_id, guild.members)
