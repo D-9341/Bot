@@ -62,40 +62,6 @@ async def coinflip(ctx, amount = 1):
 @client.event
 async def on_raw_reaction_add(payload):
     message_id = payload.message_id
-    if message_id == 707947639592976404:
-        guild_id = payload.guild_id
-        guild = discord.utils.find(lambda g: g.id == guild_id, client.guilds)
-
-        if payload.emoji.name == 'Discord':
-            role = discord.utils.get(guild.roles, id = 693933514198089838)
-        elif payload.emoji.name == 'YouTube':
-            role = discord.utils.get(guild.roles, id = 707890231550148650)
-
-        if role is not None:
-            member = discord.utils.find(lambda m: m.id == payload.user_id, guild.members)
-            if member is not None:
-                await member.add_roles(role)
-
-@client.event
-async def on_raw_reaction_remove(payload):
-    message_id = payload.message_id
-    if message_id == 707947639592976404:
-        guild_id = payload.guild_id
-        guild = discord.utils.find(lambda g: g.id == guild_id, client.guilds)
-
-        if payload.emoji.name == 'Discord':
-            role = discord.utils.get(guild.roles, id = 693933514198089838)
-        elif payload.emoji.name == 'YouTube':
-            role = discord.utils.get(guild.roles, id = 707890231550148650)
-
-        if role is not None:
-            member = discord.utils.find(lambda m: m.id == payload.user_id, guild.members)
-            if member is not None:
-                await member.remove_roles(role) 
-
-@client.event
-async def on_raw_reaction_add(payload):
-    message_id = payload.message_id
     if message_id == 707496056505761802:
         guild_id = payload.guild_id
         guild = discord.utils.find(lambda g: g.id == guild_id, client.guilds)
