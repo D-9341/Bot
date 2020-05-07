@@ -28,7 +28,7 @@ async def mute(ctx, member: discord.Member, amount = 1):
 async def embed(ctx, *, arg, amount = 1):
     await ctx.channel.purge(limit = amount)
     emb = discord.Embed(title = ctx.author.name, colour = discord.Color.orange())
-    emb.set_author(icon_url = ctx.author.avatar_url)
+    emb.set_author(name = ctx.author.avatar_url)
     emb.add_field(name = 'SPELL', value = arg)
     emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
     await ctx.send(embed = emb)
