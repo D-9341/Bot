@@ -14,7 +14,7 @@ client.remove_command('help')
 
 @client.command()
 @commands.has_permissions(administrator = True)
-async def edit(ctx, channel: discord.Channel, *, message_id):
+async def edit(ctx, *, message_id):
     try:
         message = await client.get_message(channel, message_id)
     except discord.NotFound as e:
