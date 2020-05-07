@@ -67,11 +67,11 @@ async def on_raw_reaction_add(payload):
         guild = discord.utils.find(lambda g: g.id == guild_id, client.guilds)
 
         if payload.emoji.name == 'Discord':
-            role = discord.utils.get(guild.roles, name = '🌼Анонсы DISCORD')
-        elif payload.emoji.name == 'YouTube':
-            role = discord.utils.get(guild.roles, name = '🍁Анонсы YOUTUBE')
-        elif payload.emoji.name == 'Meropriyatya':
-            role = discord.utils.get(guild.roles, name = '🍀Анонсы Мероприятий')
+            role = discord.utils.get(guild.roles, name = 'Анонсы DISCORD')
+        if payload.emoji.name == 'YouTube':
+            role = discord.utils.get(guild.roles, name = 'Анонсы YOUTUBE')
+        if payload.emoji.name == 'Meropriyatya':
+            role = discord.utils.get(guild.roles, name = 'Анонсы Мероприятий')
 
         if role is not None:
             member = discord.utils.find(lambda m: m.id == payload.user_id, guild.members)
@@ -86,11 +86,11 @@ async def on_raw_reaction_remove(payload):
         guild = discord.utils.find(lambda g: g.id == guild_id, client.guilds)
 
         if payload.emoji.name == 'Discord':
-            role = discord.utils.get(guild.roles, name = '🌼Анонсы DISCORD')
-        elif payload.emoji.name == 'YouTube':
-            role = discord.utils.get(guild.roles, name = '🍁Анонсы YOUTUBE')
-        elif payload.emoji.name == 'Meropriyatya':
-            role = discord.utils.get(guild.roles, name = '🍀Анонсы Мероприятий')
+            role = discord.utils.get(guild.roles, name = 'Анонсы DISCORD')
+        if payload.emoji.name == 'YouTube':
+            role = discord.utils.get(guild.roles, name = 'Анонсы YOUTUBE')
+        if payload.emoji.name == 'Meropriyatya':
+            role = discord.utils.get(guild.roles, name = 'Анонсы Мероприятий')
 
         if role is not None:
             member = discord.utils.find(lambda m: m.id == payload.user_id, guild.members)
