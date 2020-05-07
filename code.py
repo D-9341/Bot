@@ -14,18 +14,6 @@ client.remove_command('help')
 
 @client.command()
 @commands.has_permissions(administrator = True)
-async def edit(ctx, *, message_id):
-    try:
-        message = await client.get_message(channel, message_id)
-    except discord.NotFound as e:
-        await ctx.send('кто')
-        raise e
-    await ctx.send('чё изменить то?')
-    new_text = await client.wait_for_message(author = ctx.message.author, channel = ctx.message.channel)
-    await client.edit_message(message, new_text.content)
-
-@client.command()
-@commands.has_permissions(administrator = True)
 async def mute(ctx, member: discord.Member, amount = 1):
     await ctx.channel.purge(limit = amount)
     emb = discord.Embed(title = 'Mute', colour = discord.Color.red())
@@ -170,9 +158,9 @@ async def on_command_error(ctx, error):
 #personal messages
 @client.command()
 @commands.has_permissions(administrator = True)
-async def pm(ctx, member: discord.Member, amount = 1):
+async def pm(ctx, arg, *, member: discord.Member, amount = 1):
     await ctx.channel.purge(limit = amount)
-    await member.send('Адамант сука')
+    await member.send(arg)
 
 #member joined the server
 @client.event
