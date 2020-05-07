@@ -70,7 +70,7 @@ async def on_raw_reaction_add(payload):
             role = discord.utils.get(guild.roles, name = 'Анонсы DISCORD')
         elif payload.emoji.name == 'YouTube':
             role = discord.utils.get(guild.roles, name = 'Анонсы YOUTUBE')
-        elif payload.emoji.name == 'Meropriyatya':
+        else:
             role = discord.utils.get(guild.roles, name = 'Анонсы Мероприятий')
 
         if role is not None:
@@ -89,7 +89,7 @@ async def on_raw_reaction_remove(payload):
             role = discord.utils.get(guild.roles, name = 'Анонсы DISCORD')
         elif payload.emoji.name == 'YouTube':
             role = discord.utils.get(guild.roles, name = 'Анонсы YOUTUBE')
-        elif payload.emoji.name == 'Meropriyatya':
+        else:
             role = discord.utils.get(guild.roles, name = 'Анонсы Мероприятий')
 
         if role is not None:
