@@ -14,6 +14,18 @@ client.remove_command('help')
 
 @client.command()
 @commands.has_permissions(administrator = True)
+async def edit(ctx, channel: discord.Channel, *, message_id):
+    try:
+        message = await client.get_message(channel, message_id)
+    except discord.NotFound as e:
+        await ctx.send('кто')
+        raise e
+    await ctx.send('чё изменить то?')
+    new_text = await bot.wait_for_message(author = ctx.message.author, channel = ctx.message.channel)
+    await bot.edit_message(message, new_text.content)
+
+@client.command()
+@commands.has_permissions(administrator = True)
 async def mute(ctx, member: discord.Member, amount = 1):
     await ctx.channel.purge(limit = amount)
     emb = discord.Embed(title = 'Mute', colour = discord.Color.red())
