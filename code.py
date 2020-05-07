@@ -68,9 +68,9 @@ async def on_raw_reaction_add(payload):
 
         if payload.emoji.name == 'Discord':
             role = discord.utils.get(guild.roles, id = '693933514198089838')
-        elif payload.emoji.name == 'YouTube':
+        if payload.emoji.name == 'YouTube':
             role = discord.utils.get(guild.roles, id = '707890231550148650')
-        else:
+        if payload.emoji.name == 'Meropriyatya'
             role = discord.utils.get(guild.roles, id = '693933513459892245')
 
         if role is not None:
@@ -87,9 +87,9 @@ async def on_raw_reaction_remove(payload):
 
         if payload.emoji.name == 'Discord':
             role = discord.utils.get(guild.roles, id = '693933514198089838')
-        elif payload.emoji.name == 'YouTube':
+        if payload.emoji.name == 'YouTube':
             role = discord.utils.get(guild.roles, id = '707890231550148650')
-        else:
+        if payload.emoji.name == 'Meropriyatya'
             role = discord.utils.get(guild.roles, id = '693933513459892245')
 
         if role is not None:
