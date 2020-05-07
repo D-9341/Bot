@@ -62,7 +62,7 @@ async def coinflip(ctx, amount = 1):
 @client.event
 async def on_raw_reaction_add(payload):
     message_id = payload.message_id
-    if payload.message_id == 707919456948715541:
+    if payload.message_id == 707947639592976404:
         guild_id = payload.guild_id
         guild = discord.utils.find(lambda g: g.id == guild_id, client.guilds)
         
@@ -77,7 +77,7 @@ async def on_raw_reaction_add(payload):
 
 @client.event
 async def on_raw_reaction_remove(payload):
-    if payload.message_id == 707919456948715541:
+    if payload.message_id == 707947639592976404:
         guild_id = payload.guild_id
         guild = discord.utils.find(lambda g: g.id == guild_id, client.guilds)
         
@@ -89,7 +89,6 @@ async def on_raw_reaction_remove(payload):
         if role is not None:
             member = discord.utils.find(lambda m: m.id == payload.user_id, guild.members)
             await member.remove_roles(role)
-
 
 @client.event
 async def on_raw_reaction_add(payload):
