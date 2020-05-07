@@ -21,8 +21,8 @@ async def edit(ctx, *, message_id):
         await ctx.send('кто')
         raise e
     await ctx.send('чё изменить то?')
-    new_text = await bot.wait_for_message(author = ctx.message.author, channel = ctx.message.channel)
-    await bot.edit_message(message, new_text.content)
+    new_text = await client.wait_for_message(author = ctx.message.author, channel = ctx.message.channel)
+    await client.edit_message(message, new_text.content)
 
 @client.command()
 @commands.has_permissions(administrator = True)
