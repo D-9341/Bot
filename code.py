@@ -65,7 +65,6 @@ async def on_raw_reaction_add(payload):
     if message_id == 707907223178706966:
         guild_id = payload.guild_id
         guild = discord.utils.find(lambda g: g.id == guild_id, client.guilds)
-
         if payload.emoji.name == 'Discord':
             role = discord.utils.get(guild.roles, name = 'Анонсы DISCORD')
         elif payload.emoji.name == 'YouTube':
@@ -82,7 +81,6 @@ async def on_raw_reaction_remove(payload):
     if message_id == 707907223178706966:
         guild_id = payload.guild_id
         guild = discord.utils.find(lambda g: g.id == guild_id, client.guilds)
-
         if payload.emoji.name == 'Discord':
             role = discord.utils.get(guild.roles, name = 'Анонсы DISCORD')
         elif payload.emoji.name == 'YouTube':
