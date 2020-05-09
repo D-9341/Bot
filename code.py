@@ -250,7 +250,7 @@ async def clear(ctx, amount : int):
 @commands.has_permissions(administrator = True)
 async def say(ctx, *, arg, amount = 1):
     await ctx.channel.purge(limit = amount)
-    await ctx.send(f'written by {ctx.author.name}' + arg)
+    await ctx.send(f'written by {ctx.author.name}: ' + arg)
 
 @clear.error
 async def clear_error(ctx, error):
