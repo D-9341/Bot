@@ -42,7 +42,7 @@ async def info(ctx, amount = 1):
 @commands.has_permissions(administrator = True)
 async def gaystvo(ctx, *, arg, amount = 1):
     await ctx.channel.purge(limit = amount)
-    await ctx.send('@everyone ' + arg)
+    await ctx.send(f'written by {ctx.author.name}: @everyone ' + arg)
     
 @client.event
 async def on_message(message):
