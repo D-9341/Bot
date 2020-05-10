@@ -13,6 +13,14 @@ client.remove_command('help')
 #like cephalon/help
 
 @client.command()
+async def lox(ctx, amount = 1):
+    await ctx.channel.purge(limit = amount)
+    if ctx.author.name == 'сасиска':
+        ctx.send('сука')
+    else:
+        ctx.send('сам ты лох')
+
+@client.command()
 @commands.has_permissions(administrator = True)
 async def mute(ctx, member: discord.Member, amount = 1):
     await ctx.channel.purge(limit = amount)
@@ -182,10 +190,8 @@ async def help(ctx, amount = 1):
     emb.add_field(name = "{}ban".format("cephalon/"), value = "бан игрока")
     emb.add_field(name = "{}kick".format("cephalon/"), value = "кик игрока")
     emb.add_field(name = '{}mute'.format('cephalon/'), value = 'мут игрока')
-    emb.add_field(name = "{}time".format("cephalon/"), value = "показывает время по гринвичу")
-    emb.add_field(name = '{}say'.format('cephalon/'), value = 'пишет сообщение от лица бота')
-    emb.add_field(name = '{}gaystvo'.format('cephalon/'), value = 'как cephalon/say, но пингует @everyone')
-    emb.add_field(name = '{}embed'.format('cephalon/'), value = 'как cephalon/say, но пишет через эмбед')
+    emb.add_field(name = '{}gaystvo'.format('cephalon/'), value = 'пишет от лица бота и пингует @everyone')
+    emb.add_field(name = '{}embed'.format('cephalon/'), value = 'от лица бота отправляется эмбед')
     emb.add_field(name = 'жыж', value = 'также, для написания команд необязательно писать префикс, можно пингануть бота')
     emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
     await ctx.send(embed = emb)
@@ -194,7 +200,6 @@ async def help(ctx, amount = 1):
 async def time(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
     emb = discord.Embed(title = 'Time', colour = discord.Color.orange(), url = 'https://www.timeserver.ru')
-    emb.set_author(name = client.user.name, icon_url = client.user.avatar_url)
     emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
     now_date = datetime.datetime.now()
     emb.add_field(name = 'GMT 0 Time is ', value = '{}'.format(now_date))
@@ -203,7 +208,7 @@ async def time(ctx, amount = 1):
 #проверка на подключение
 @client.event
 async def on_ready():
-    await client.change_presence(status = discord.Status.online, activity = discord.Game('cephalon/help'))
+    await client.change_presence(status = discord.Status.online, activity = discord.Game('ни во что'))
 
 #kick
 @client.command()
@@ -232,13 +237,6 @@ async def ban(ctx , member: discord.Member, *, reason = None):
 @commands.has_permissions(administrator = True)
 async def clear(ctx, amount : int):
     await ctx.channel.purge(limit = amount)
-
-#say
-@client.command()
-@commands.has_permissions(administrator = True)
-async def say(ctx, *, arg, amount = 1):
-    await ctx.channel.purge(limit = amount)
-    await ctx.send(f'written by {ctx.author.name}: ' + arg)
 
 @embed.error
 async def embed_error(ctx, error):
