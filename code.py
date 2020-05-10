@@ -16,9 +16,9 @@ client.remove_command('help')
 async def lox(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
     if ctx.author.name == 'сасиска':
-        ctx.send('сука')
+        await ctx.send('сука')
     else:
-        ctx.send('сам ты лох')
+        await ctx.send('сам ты лох')
 
 @client.command()
 @commands.has_permissions(administrator = True)
