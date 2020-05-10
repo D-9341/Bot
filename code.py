@@ -19,14 +19,6 @@ async def info(ctx, amount = 1):
     await ctx.send(f'Cephalon online, Ping equals `{round(client.latency * 1000)} ms`')
 
 @client.command()
-async def lox(ctx, amount = 1):
-    await ctx.channel.purge(limit = amount)
-    if ctx.author.name == 'сасиска':
-        await ctx.send('сука')
-    else:
-        await ctx.send('сам ты лох')
-
-@client.command()
 @commands.has_permissions(administrator = True)
 async def mute(ctx, member: discord.Member, amount = 1):
     await ctx.channel.purge(limit = amount)
@@ -51,7 +43,7 @@ async def embed(ctx, *, arg, amount = 1):
 async def gaystvo(ctx, *, arg, amount = 1):
     await ctx.channel.purge(limit = amount)
     if ctx.author.name == 'сасиска':
-        await ctx.send('@everyone ' + arg
+        await ctx.send('@everyone ' + arg)
     else:
         await ctx.send(f'written by {ctx.author.name}: @everyone ' + arg)
     
