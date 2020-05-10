@@ -54,7 +54,7 @@ async def on_message(message):
 @client.command()
 async def coinflip(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
-    choices = ['Орёл', 'Решка']
+    choices = ['Орёл!', 'Решка!']
     rancoin = random.choice(choices)
     await ctx.send(rancoin)
 
@@ -68,7 +68,6 @@ async def on_raw_reaction_add(payload):
 
         if payload.emoji.name == 'discordy':
             role = discord.utils.get(guild.roles, name = 'Discord анонсы')
-        
 
         if role is not None:
             member = discord.utils.find(lambda m: m.id == payload.user_id, guild.members)
@@ -178,7 +177,6 @@ async def on_member_remove(member):
 async def help(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
     emb = discord.Embed(title = "Меню команд для администраторов", colour = discord.Color.orange())
-
     emb.add_field(name = 'Инфо'.format('/'), value = "Cy, или же сай - бот, написанный сасиска")
     emb.add_field(name = "{}clear".format("cephalon/"), value = "очистка чата")
     emb.add_field(name = "{}ban".format("cephalon/"), value = "бан игрока")
@@ -195,15 +193,11 @@ async def help(ctx, amount = 1):
 @client.command()
 async def time(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
-
     emb = discord.Embed(title = 'Time', colour = discord.Color.orange(), url = 'https://www.timeserver.ru')
-
     emb.set_author(name = client.user.name, icon_url = client.user.avatar_url)
     emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-
     now_date = datetime.datetime.now()
     emb.add_field(name = 'GMT 0 Time is ', value = '{}'.format(now_date))
-
     await ctx.author.send(embed = emb)
 
 #проверка на подключение
@@ -217,12 +211,9 @@ async def on_ready():
 async def kick(ctx , member: discord.Member, *, reason = None):
     await ctx.channel.purge(limit = 1)
     emb = discord.Embed(title = 'Kick', colour = discord.Color.orange())
-
     await member.kick(reason = reason)
-
     emb.add_field(name = 'Kicked ', value = '{}'.format(member.mention))
     emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-
     await ctx.send(embed = emb)
 
 #ban
@@ -231,12 +222,9 @@ async def kick(ctx , member: discord.Member, *, reason = None):
 async def ban(ctx , member: discord.Member, *, reason = None):
     await ctx.channel.purge(limit = 1)
     emb = discord.Embed(title = 'Ban', colour = discord.Color.red())
-
     await member.ban(reason = reason)
-
     emb.add_field(name = 'Banned ', value = '{}'.format(member.mention))
     emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-
     await ctx.send(embed = emb)
 
 #message delete
@@ -252,10 +240,61 @@ async def say(ctx, *, arg, amount = 1):
     await ctx.channel.purge(limit = amount)
     await ctx.send(f'written by {ctx.author.name}: ' + arg)
 
+@embed.error
+async def embed_error(ctx, error):
+    if isinstance(error, commands.MissingRequiredArgument):
+        await ctx.send(f'{ctx.author.name}, чё сказать то?')
+
+    if isinstance(error, commands.MissingPermissions):
+        await ctx.send(f'{ctx.author.name}, u')
+
+@gaystvo.error
+async def gaystvo_error(ctx, error):
+    if isinstance(error, commands.MissingRequiredArgument):
+        await ctx.send(f'{ctx.author.name}, чё сказать то?')
+
+    if isinstance(error, commands.MissingPermissions):
+        await ctx.send(f'{ctx.author.name}, u')
+
+@mute.error
+async def mute_error(ctx, error):
+    if isinstance(error, commands.MissingRequiredArgument):
+        await ctx.send(f'{ctx.author.name}, кого мутить то?')
+
+    if isinstance(error, commands.MissingPermissions):
+        await ctx.send(f'{ctx.author.name}, u')
+
+@kick.error
+async def kick_error(ctx, error):
+    if isinstance(error, commands.MissingRequiredArgument):
+        await ctx.send(f'{ctx.author.name}, кого кикать то?')
+
+    if isinstance(error, commands.MissingPermissions):
+        await ctx.send(f'{ctx.author.name}, u')
+
+@ban.error
+async def ban_error(ctx, error):
+    if isinstance(error, commands.MissingRequiredArgument):
+        await ctx.send(f'{ctx.author.name}, кого банить то?')
+
+    if isinstance(error, commands.MissingPermissions):
+        await ctx.send(f'{ctx.author.name}, u')
+
+@say.error
+async def say_error(ctx, error):
+    if isinstance(error, commands.MissingRequiredArgument):
+        await ctx.send(f'{ctx.author.name}, чё сказать то?')
+
+    if isinstance(error, commands.MissingPermissions):
+        await ctx.send(f'{ctx.author.name}, u')
+
 @clear.error
 async def clear_error(ctx, error):
     if isinstance(error, commands.MissingRequiredArgument):
         await ctx.send(f'{ctx.author.name}, нет аргумента!')
+
+    if isinstance(error, commands.MissingPermissions):
+        await ctx.send(f'{ctx.author.name}, u')
     
 token = os.environ.get('BOT_TOKEN')
 
