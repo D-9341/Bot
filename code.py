@@ -278,14 +278,6 @@ async def ban_error(ctx, error):
     if isinstance(error, commands.MissingPermissions):
         await ctx.send(f'{ctx.author.name}, u')
 
-@say.error
-async def say_error(ctx, error):
-    if isinstance(error, commands.MissingRequiredArgument):
-        await ctx.send(f'{ctx.author.name}, чё сказать то?')
-
-    if isinstance(error, commands.MissingPermissions):
-        await ctx.send(f'{ctx.author.name}, u')
-
 @clear.error
 async def clear_error(ctx, error):
     if isinstance(error, commands.MissingRequiredArgument):
