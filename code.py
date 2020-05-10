@@ -13,6 +13,12 @@ client.remove_command('help')
 #like cephalon/help
 
 @client.command()
+@commands.has_permissions(administrator = True)
+async def info(ctx, amount = 1):
+    await ctx.channel.purge(limit = amount)
+    await ctx.send(f'Cephalon online, Ping equals `{round(client.latency * 1000)} ms`')
+
+@client.command()
 async def lox(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
     if ctx.author.name == 'сасиска':
@@ -35,23 +41,28 @@ async def mute(ctx, member: discord.Member, amount = 1):
 @commands.has_permissions(administrator = True)
 async def embed(ctx, *, arg, amount = 1):
     await ctx.channel.purge(limit = amount)
-    emb = discord.Embed(title = f'written by {ctx.author.name}', colour = discord.Color.orange())
+    emb = discord.Embed(title = f'{ctx.author.name}', colour = discord.Color.orange())
     emb.add_field(name = 'SPELL', value = arg)
     emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
     await ctx.send(embed = emb)
 
 @client.command()
 @commands.has_permissions(administrator = True)
-async def info(ctx, amount = 1):
-    await ctx.channel.purge(limit = amount)
-    await ctx.send(f'Cephalon online, Ping equals `{round(client.latency * 1000)} ms`')
-
-@client.command()
-@commands.has_permissions(administrator = True)
 async def gaystvo(ctx, *, arg, amount = 1):
     await ctx.channel.purge(limit = amount)
-    await ctx.send(f'written by {ctx.author.name}: @everyone ' + arg)
+    if ctx.author.name == 'сасиска':
+        await ctx.send('@everyone ' + arg
+    else:
+        await ctx.send(f'written by {ctx.author.name}: @everyone ' + arg)
     
+@client.command()
+@commands.has_permissions(administrator = True)
+async def say(ctx, *, arg, amount = 1):
+    await ctx.channel.purge(limit = amount)
+    if ctx.author.name == 'сасиска':
+        await ctx.send(arg)
+    else:
+        await ctx.send(f'written by {ctx.author.name}: ' + arg)
 @client.event
 async def on_message(message):
     if 'discord.gg' in message.content.lower():
@@ -190,6 +201,7 @@ async def help(ctx, amount = 1):
     emb.add_field(name = "{}ban".format("cephalon/"), value = "бан игрока")
     emb.add_field(name = "{}kick".format("cephalon/"), value = "кик игрока")
     emb.add_field(name = '{}mute'.format('cephalon/'), value = 'мут игрока')
+    emb.add_field(name = '{}say'.format('cephalon/'), value = 'пишет сообщение от лица бота. Всё.')
     emb.add_field(name = '{}gaystvo'.format('cephalon/'), value = 'пишет от лица бота и пингует @everyone')
     emb.add_field(name = '{}embed'.format('cephalon/'), value = 'от лица бота отправляется эмбед')
     emb.add_field(name = 'жыж', value = 'также, для написания команд необязательно писать префикс, можно пингануть бота')
