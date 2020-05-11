@@ -162,10 +162,9 @@ async def on_command_error(ctx, error):
 #personal messages
 @client.command()
 @commands.has_permissions(administrator = True)
-async def pm(ctx, arg, *, member: discord.Member, amount = 1):
+async def pm(ctx, member: discord.Member, amount = 1):
     await ctx.channel.purge(limit = amount)
-    msg = arg
-    await member.send(msg)
+    await member.send(f'Адамант сука')
 
 #member joined the server
 @client.event
