@@ -164,7 +164,8 @@ async def on_command_error(ctx, error):
 @commands.has_permissions(administrator = True)
 async def pm(ctx, arg, *, member: discord.Member, amount = 1):
     await ctx.channel.purge(limit = amount)
-    await member.send('Адамант сука')
+    msg = arg
+    await member.send(msg)
 
 #member joined the server
 @client.event
@@ -213,7 +214,7 @@ async def time(ctx, amount = 1):
 #проверка на подключение
 @client.event
 async def on_ready():
-    await client.change_presence(status = discord.Status.idle, activity = discord.Game('дебилов'))
+    await client.change_presence(status = discord.Status.idle, activity = discord.Game('Bigfoot'))
 
 #kick
 @client.command()
