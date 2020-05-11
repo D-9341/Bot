@@ -261,7 +261,7 @@ async def gaystvo_error(ctx, error):
 
 @say.error
 async def say_error(ctx, error):
-    if isinstance(errorm commands.MissingRequiredArgument):
+    if isinstance(error, commands.MissingRequiredArgument):
         await ctx.send(f'{ctx.author.name}, чё сказать то?')
     if isinstance(error, commands.MissingPermissions):
         await ctx.send(f'{ctx.author.name}, u')
