@@ -20,7 +20,7 @@ async def info(ctx, amount = 1):
 
 @client.event
 async def on_message(ctx, member: discord.Member):
-    if ctx.author.name == 'Rozentale':
+    if ctx.author.name == 'StakanDudka64':
         await author.send(f'ты лох')
 
 @client.command()
