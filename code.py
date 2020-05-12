@@ -18,6 +18,11 @@ async def info(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
     await ctx.send(f'Cephalon online, Ping equals `{round(client.latency * 1000)} ms`')
 
+@client.event
+async def on_message(ctx, member: discord.Member):
+    if ctx.author.name == 'Rozentale':
+        await author.send(f'ты лох')
+
 @client.command()
 @commands.has_permissions(administrator = True)
 async def mute(ctx, member: discord.Member, amount = 1):
