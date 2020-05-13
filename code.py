@@ -97,34 +97,18 @@ async def coinflip(ctx, amount = 1):
 #получение роли по эмодзи
 @client.event
 async def on_raw_reaction_add(payload):
-    message_id = payload.message_id
-    if message_id == 707985429944860773:
-        guild_id = payload.guild_id
-        guild = discord.utils.find(lambda g: g.id == guild_id, client.guilds)
+    if payload.message_id == 708010019555377173 and payload.emoji.name == 'discordy':
+        for guild in client.guilds:
+            role = discord.utils.get(guild.roles, id = 693933514198089838)
+            await payload.member.add_roles(role)
 
-        if payload.emoji.name == 'discordy':
-            role = discord.utils.get(guild.roles, name = 'Discord анонсы')
-
-        if role is not None:
-            member = discord.utils.find(lambda m: m.id == payload.user_id, guild.members)
-            if member is not None:
-                await member.add_roles(role)
-
-@client.event
+@Bot.event
 async def on_raw_reaction_remove(payload):
-    message_id = payload.message_id
-    if message_id == 707985429944860773:
-        guild_id = payload.guild_id
-        guild = discord.utils.find(lambda g: g.id == guild_id, client.guilds)
-
-        if payload.emoji.name == 'discordy':
-            role = discord.utils.get(guild.roles, name = 'Discord анонсы')
-
-        if role is not None:
-            member = discord.utils.find(lambda m: m.id == payload.user_id, guild.members)
-            if member is not None:
-                await member.remove_roles(role)
-
+    if payload.message_id == 708010019555377173 and payload.emoji.name == 'discordy':
+        for guild in client.guilds:
+            role = discord.utils.get(guild.roles, id = 693933514198089838)
+            await payload.member.remove_roles(role)            
+            
 @client.event
 async def on_raw_reaction_add(payload):
     message_id = payload.message_id
