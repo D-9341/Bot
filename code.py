@@ -102,7 +102,7 @@ async def on_raw_reaction_add(payload):
             role = discord.utils.get(guild.roles, id = 693933514198089838)
             await payload.member.add_roles(role)
 
-@Bot.event
+@client.event
 async def on_raw_reaction_remove(payload):
     if payload.message_id == 708010019555377173 and payload.emoji.name == 'discordy':
         for guild in client.guilds:
