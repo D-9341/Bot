@@ -19,6 +19,25 @@ async def info(ctx, amount = 1):
     await ctx.send(f'Cephalon online, Ping equals `{round(client.latency * 1000)} ms`')
 
 @client.command()
+@commands.has_permissions(administrator = True)
+async def zatka(ctx, amount = 1):
+    await ctx.channel.purge(limit = amount)
+    await ctx.send('Форма заявки для Набор кадров
+
+(1). ZATKA в STEAM.  ZATKA_KING8406 в Discord. возраст 14+  часовой пояс IL +0.
+
+(2). Интересующая игра: Discord
+
+(3). Опыт администрирования:
+Есть. 
+творческие: 
+Есть.
+технические навыки: нет.
+
+(4). Сколько часов готовы уделять работе [ 15+ в неделю ] 
+в какое время дня свободны 16:00 до 22:00+')
+                   
+@client.command()
 async def about(ctx, member:discord.Member, amount = 1):
     await ctx.channel.purge(limit = amount)
     emb = discord.Embed(title = f'Информация о {member.name}', colour = discord.Color.orange())
