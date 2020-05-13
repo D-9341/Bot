@@ -18,6 +18,17 @@ async def info(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
     await ctx.send(f'Cephalon online, Ping equals `{round(client.latency * 1000)} ms`')
 
+@client.command()
+async def about(ctx, member:discord.Member, amount = 1):
+    await ctx.channel.purge(limit = amount)
+    emb = discord.Embed(title = f'Информация о {member.name}', colour = discord.Color.orange())
+    emb.add_field(name = 'ID', value = member.id)
+    emb.add_field(name = 'Created', value = member.created_at.strftime("%a,%#d %B %Y, %I:%M %p UTC"), inline = False)
+    emb.add_field(name = 'Joined', value = member.joined_at, inline = False)
+    emb.set_thumbnail(url = member.avatar_url)
+    emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+    await ctx.send(embed = emb)
+    
 @client.event
 async def on_voice_state_update(member, before, after):
     if after.channel.id == 694212304165929101:
