@@ -12,40 +12,11 @@ client = commands.Bot(command_prefix = commands.when_mentioned_or('cephalon/'))
 client.remove_command('help')
 #like cephalon/help
 
-@client.event
-async def on_message(message):
-    with open('users.json','r') as f:
-        users = json.load(f)
-    async def update_data(users,user):
-        if not user in users:
-            users[user] = {}
-            users[user]['exp'] = 0
-            users[user]['lvl'] = 1
-    async def add_exp(users,user,exp):
-        users[user]['exp'] += exp
-    async def add_lvl(users,user):
-        exp = users[user]['exp']
-        lvl = users[user]['lvl']
-        if exp > lvl:
-            await message.channel.send(f'{message.author.mention} повысил свой уровень!')
-            users[user]['exp'] = 0
-            users[user]['lvl'] = lvl + 1
-    await update_data(users,str(message.author.id))
-    await add_exp(users,str(message.author.id),0.1)
-    await add_lvl(users,str(message.author.id))
-    with open('users.json','w') as f:
-        json.dump(users,f)
-
 @client.command()
 @commands.has_permissions(administrator = True)
 async def info(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
     await ctx.send(f'Cephalon online, Ping equals `{round(client.latency * 1000)} ms`')
-
-@client.command()
-async def lox(ctx):
-    if ctx.author.name == 'сасиска':
-        return
     
 @client.command()
 @commands.has_permissions(administrator = True)
