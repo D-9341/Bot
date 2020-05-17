@@ -43,6 +43,11 @@ async def info(ctx, amount = 1):
     await ctx.send(f'Cephalon online, Ping equals `{round(client.latency * 1000)} ms`')
 
 @client.command()
+async def lox(ctx):
+    if ctx.author.name == 'сасиска':
+        return
+    
+@client.command()
 @commands.has_permissions(administrator = True)
 async def zatka(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
