@@ -279,7 +279,7 @@ async def ban(ctx , member: discord.Member, *, reason = None):
 @client.command()
 @commands.has_permissions(administrator = True)
 async def clear(ctx, amount : int):
-    await ctx.channel.purge(limit = amount)
+    await ctx.channel.purge(limit = amount + 1)
 
 @embed.error
 async def embed_error(ctx, error):
