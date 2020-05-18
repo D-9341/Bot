@@ -263,7 +263,7 @@ async def embed_error(ctx, error):
         await ctx.send(f'{ctx.author.name}, чё сказать то?')
 
     if isinstance(error, commands.MissingPermissions):
-        await ctx.send(f'{ctx.author.name}, u')
+        await ctx.send(f'{ctx.author.name} пытался вызвать комманду Embed')
 
 @gaystvo.error
 async def gaystvo_error(ctx, error):
@@ -271,14 +271,14 @@ async def gaystvo_error(ctx, error):
         await ctx.send(f'{ctx.author.name}, чё сказать то?')
 
     if isinstance(error, commands.MissingPermissions):
-        await ctx.send(f'{ctx.author.name}, u')
+        await ctx.send(f'{ctx.author.name} пытался вызвать комманду Gaystvo')
 
 @say.error
 async def say_error(ctx, error):
     if isinstance(error, commands.MissingRequiredArgument):
         await ctx.send(f'{ctx.author.name}, чё сказать то?')
     if isinstance(error, commands.MissingPermissions):
-        await ctx.send(f'{ctx.author.name}, u')
+        await ctx.send(f'{ctx.author.name} пытался вызвать комманду Say')
         
 @mute.error
 async def mute_error(ctx, error):
@@ -286,7 +286,7 @@ async def mute_error(ctx, error):
         await ctx.send(f'{ctx.author.name}, кого мутить то?')
 
     if isinstance(error, commands.MissingPermissions):
-        await ctx.send(f'{ctx.author.name}, u')
+        await ctx.send(f'{ctx.author.name} пытался вызвать комманду Mute')
 
 @kick.error
 async def kick_error(ctx, error):
@@ -294,7 +294,7 @@ async def kick_error(ctx, error):
         await ctx.send(f'{ctx.author.name}, кого кикать то?')
 
     if isinstance(error, commands.MissingPermissions):
-        await ctx.send(f'{ctx.author.name}, u')
+        await ctx.send(f'{ctx.author.name} пытался вызвать комманду Kick')
 
 @ban.error
 async def ban_error(ctx, error):
@@ -302,7 +302,7 @@ async def ban_error(ctx, error):
         await ctx.send(f'{ctx.author.name}, кого банить то?')
 
     if isinstance(error, commands.MissingPermissions):
-        await ctx.send(f'{ctx.author.name}, u')
+        await ctx.send(f'{ctx.author.name} пытался вызвать комманду Ban')
 
 @clear.error
 async def clear_error(ctx, error):
@@ -310,7 +310,7 @@ async def clear_error(ctx, error):
         await ctx.send(f'{ctx.author.name}, нет аргумента!')
 
     if isinstance(error, commands.MissingPermissions):
-        await ctx.send(f'{ctx.author.name}, u')
+        await ctx.send(f'{ctx.author.name} пытался вызвать комманду Clear')
     
 token = os.environ.get('BOT_TOKEN')
 
