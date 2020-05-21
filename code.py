@@ -52,7 +52,7 @@ async def on_voice_state_update(member, before, after):
 @commands.has_permissions(administrator = True)
 async def mute(ctx, member: discord.Member, amount = 1):
     await ctx.channel.purge(limit = amount)
-    emb = discord.Embed(title = 'Mute', colour = discord.Color.red())
+    emb = discord.Embed(title = f'Mute by {ctx.author.name}', colour = discord.Color.red())
     role = discord.utils.get(ctx.message.guild.roles, name = 'Muted')
     await member.add_roles(role)
     emb.add_field(name = 'Muted ', value = '{}'.format(member.mention))
@@ -234,7 +234,7 @@ async def on_ready():
 @commands.has_permissions(administrator = True)
 async def kick(ctx , member: discord.Member, *, reason = None):
     await ctx.channel.purge(limit = 1)
-    emb = discord.Embed(title = 'Kick', colour = discord.Color.orange())
+    emb = discord.Embed(title = f'Kick by {ctx.author.name}', colour = discord.Color.orange())
     await member.kick(reason = reason)
     emb.add_field(name = 'Kicked ', value = '{}'.format(member.mention))
     emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
@@ -245,7 +245,7 @@ async def kick(ctx , member: discord.Member, *, reason = None):
 @commands.has_permissions(administrator = True)
 async def ban(ctx , member: discord.Member, *, reason = None):
     await ctx.channel.purge(limit = 1)
-    emb = discord.Embed(title = 'Ban', colour = discord.Color.red())
+    emb = discord.Embed(title = f'Ban by {ctx.author.name}', colour = discord.Color.red())
     await member.ban(reason = reason)
     emb.add_field(name = 'Banned ', value = '{}'.format(member.mention))
     emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
