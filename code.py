@@ -1,8 +1,6 @@
 import asyncio
 import random
-import youtube_dl
 import datetime
-import json
 import os
 import discord
 from discord.ext import commands
@@ -19,9 +17,9 @@ async def info(ctx, amount = 1):
     await ctx.send(f'Cephalon online, Ping equals `{round(client.latency * 1000)} ms`')
     
 @client.event
-async def on_message_delete(message, channel):
-    channel = channel.id(714175791033876490)
-    await ctx.channel.send(message.content + f' was deleted by {ctx.author.name}')
+async def on_raw_message_delete(payload):
+    channel = client.get_channel(714175791033876490)
+    await channel.send(message.content + f' was deleted, author - {ctx.author.name}')
     
 @client.command()
 @commands.has_permissions(administrator = True)
@@ -105,21 +103,7 @@ async def coinflip(ctx, amount = 1):
     rancoin = random.choice(choices)
     await ctx.send(rancoin)
 
-#получение роли по эмодзи
-@client.event
-async def on_raw_reaction_add(payload):
-    if payload.message_id == 708010019555377173 and payload.emoji.name == 'discordy':
-        for guild in client.guilds:
-            role = discord.utils.get(guild.roles, id = 693933514198089838)
-            await payload.member.add_roles(role)
-
-@client.event
-async def on_raw_reaction_remove(payload):
-    if payload.message_id == 708010019555377173 and payload.emoji.name == 'discordy':
-        for guild in client.guilds:
-            role = discord.utils.get(guild.roles, id = 693933514198089838)
-            await payload.member.remove_roles(role)            
-            
+#получение роли по эмодзи       
 @client.event
 async def on_raw_reaction_add(payload):
     message_id = payload.message_id
