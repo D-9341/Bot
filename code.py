@@ -18,6 +18,11 @@ async def info(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
     await ctx.send(f'Cephalon online, Ping equals `{round(client.latency * 1000)} ms`')
     
+@client.event
+async def on_message_delete(message):
+    channel = channel.id(714175791033876490)
+    await ctx.channel.send(message.content + f' was deleted by {ctx.author.name}')
+    
 @client.command()
 @commands.has_permissions(administrator = True)
 async def zatka(ctx, amount = 1):
