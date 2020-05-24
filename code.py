@@ -17,7 +17,7 @@ async def info(ctx, amount = 1):
     await ctx.send(f'Cephalon online, Ping equals `{round(client.latency * 1000)} ms`')
     
 @client.event
-async def on_raw_message_delete(payload):
+async def on_raw_message_delete(payload, message):
     channel = client.get_channel(714175791033876490)
     await channel.send(message.content + f' was deleted, author - {ctx.author.name}')
     
