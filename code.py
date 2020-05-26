@@ -20,11 +20,12 @@ async def info(ctx, amount = 1):
 @commands.has_permissions(administrator = True)
 async def delete(ctx, message, arg, amount = 1):
     await ctx.channel.purge(limit = amount)
-    message = client.get_message(arg)
-    await message.delete(message)
+    msg = client.get_message(arg)
+    await message.delete(msg)
+    await client.process_commands(message)
 
 @client.event
-async def on_raw_message_delete(ctx, payload):
+async def on_raw_message_delete(ctx):
     channel = client.get_channel(714175791033876490)
     await channel.send(f'```{ctx.content}``` was deleted, author - {ctx.author.name}')
     
