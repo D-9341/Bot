@@ -25,7 +25,7 @@ async def delete(ctx, message, arg, amount = 1):
     await client.process_commands(message)
 
 @client.event
-async def on_raw_message_delete(ctx):
+async def on_raw_message_delete(payload):
     channel = client.get_channel(714175791033876490)
     await channel.send(f'```{ctx.content}``` was deleted, author - {ctx.author.name}')
     
