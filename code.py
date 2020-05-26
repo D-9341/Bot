@@ -15,15 +15,7 @@ client.remove_command('help')
 async def info(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
     await ctx.send(f'Cephalon online, Ping equals `{round(client.latency * 1000)} ms`')
-    
-@client.command()
-@commands.has_permissions(administrator = True)
-async def delete(ctx, message, arg, amount = 1):
-    await ctx.channel.purge(limit = amount)
-    msg = client.get_message(arg)
-    await message.delete(msg)
-    await client.process_commands(message)
-
+  
 @client.event
 async def on_message_delete(ctx):
     channel = client.get_channel(714175791033876490)
