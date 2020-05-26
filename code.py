@@ -16,8 +16,15 @@ async def info(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
     await ctx.send(f'Cephalon online, Ping equals `{round(client.latency * 1000)} ms`')
     
+@client.command()
+@commands.has_permissions(administrator = True)
+async def delete(ctx, message, arg, amount = 1):
+    await ctx.channel.purge(limit = amount)
+    message = client.get_message(arg)
+    await message.delete(message)
+
 @client.event
-async def on_message_delete(ctx):
+async def on_raw_message_delete(ctx, payload):
     channel = client.get_channel(714175791033876490)
     await channel.send(f'```{ctx.content}``` was deleted, author - {ctx.author.name}')
     
