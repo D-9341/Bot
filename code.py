@@ -19,7 +19,7 @@ async def info(ctx, amount = 1):
 @client.event
 async def on_message_delete(message, channel):
     channel = client.get_channel(714175791033876490)
-    await channel.send(f'{message.content} was deleted, author - {ctx.author.name}')
+    await channel.send(f'message was deleted, author - {ctx.author.name}')
     
 @client.command()
 @commands.has_permissions(administrator = True)
