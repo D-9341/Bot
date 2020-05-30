@@ -21,6 +21,8 @@ async def on_message_delete(ctx):
     channel = client.get_channel(714175791033876490)
     if ctx.author.name != 'Groovy':
         await channel.send(f'```{ctx.content}``` was deleted, author - {ctx.author.mention}')
+    elif ctx.author.name != 'Cy':
+        await channel.send(f'```{ctx.content}``` was deleted, author - {ctx.author.mention}')
     
 @client.command()
 @commands.has_permissions(administrator = True)
