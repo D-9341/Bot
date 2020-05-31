@@ -15,12 +15,6 @@ client.remove_command('help')
 async def info(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
     await ctx.send(f'Cephalon online, Ping equals `{round(client.latency * 1000)} ms`')
-  
-@client.command()
-@commands.has_permissions(mention_everyone = True)
-async def ping(ctx, arg, amount = 1):
-    await ctx.channel.purge(limit = amount)
-    await ctx.send('@' + arg)
 
 @client.event
 async def on_message_delete(ctx):
@@ -39,7 +33,7 @@ async def about(ctx, member:discord.Member, amount = 1):
     await ctx.channel.purge(limit = amount)
     emb = discord.Embed(title = f'Информация о {member.name}', colour = discord.Color.orange())
     emb.add_field(name = 'ID', value = member.id)
-    emb.add_field(name = 'Created', value = member.created_at.strftime("%a,%#d %B %Y, %I:%M %p UTC"), inline = False)
+    emb.add_field(name = 'Created', value = member.created_at.strftime("%a, %#d %B %Y, %I:%M %p UTC"), inline = False)
     emb.add_field(name = 'Joined', value = member.joined_at, inline = False)
     emb.set_thumbnail(url = member.avatar_url)
     emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
@@ -97,8 +91,8 @@ async def say(ctx, *, arg, amount = 1):
         await ctx.send(f'written by {ctx.author.name}: ' + arg)
 
 @client.event
-async def on_message(message):
-    if 'discord.gg' in message.content.lower():
+async def on_message(ctx, message):
+    if 'discord.gg' in message.content.lower() and ctx.author.name != 'Cy':
         await message.delete()
         await message.channel.send('пашол нахуй со своей рекламой')
     await client.process_commands(message)   
@@ -199,7 +193,8 @@ async def on_member_remove(member):
 async def help(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
     emb = discord.Embed(title = "Меню команд для администраторов", colour = discord.Color.orange())
-    emb.add_field(name = 'Инфо'.format('/'), value = "Cy, или же сай - бот, написанный сасиска")
+    emb.add_field(name = 'Инфо', value = "Cy, или же сай - бот, написанный сасиска")
+    emb.add_field(name = '{}info'.format('cephalon/'), value = 'если бот пишет свой пинг, он работает, если не пишет - не работает')
     emb.add_field(name = "{}clear".format("cephalon/"), value = "очистка чата")
     emb.add_field(name = "{}ban".format("cephalon/"), value = "бан игрока")
     emb.add_field(name = "{}kick".format("cephalon/"), value = "кик игрока")
@@ -207,6 +202,12 @@ async def help(ctx, amount = 1):
     emb.add_field(name = '{}say'.format('cephalon/'), value = 'пишет сообщение от лица бота. Всё.')
     emb.add_field(name = '{}gaystvo'.format('cephalon/'), value = 'пишет от лица бота и пингует @everyone')
     emb.add_field(name = '{}embed'.format('cephalon/'), value = 'от лица бота отправляется эмбед')
+    emb.add_field(name = '{}pm'.format('cephalon/'), value = 'пишет выбраному участнику **Адамант сука**')
+    emb.add_field(name = '{}zatka'.format('cephalon/'), value = 'форма заявки набор кадров')
+    emb.add_field(name = '{}about'.format('cephalon/'), value = 'показывает инфу о человеке. В отличии от @Ayana#8911 пишет только необходимую инфу')
+    emb.add_field(name = '{}join'.format('cephalon/'), value = 'приказывает зайти боту в голосовой канал')
+    emb.add_field(name = '{}leave'.format('cephalon/'), value = 'приказывает боту выйти из голосового канала')
+    emb.add_field(name = 'фыв', value = 'Бот записывает все удалённые сообщения в #логи')
     emb.add_field(name = 'жыж', value = 'также, для написания команд необязательно писать префикс, можно пингануть бота')
     emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
     await ctx.send(embed = emb)
