@@ -19,7 +19,7 @@ async def info(ctx, amount = 1):
 @client.command()
 @commands.has_permissions(mention_everyone = True)
 async def ping(ctx, arg, amount = 1):
-    await cts.channel.purge(limit = amount)
+    await ctx.channel.purge(limit = amount)
     await ctx.send('@' + arg)
 
 @client.event
