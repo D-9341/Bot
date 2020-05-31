@@ -197,7 +197,7 @@ async def help(ctx, amount = 1):
     emb.add_field(name = '{}embed'.format('cephalon/'), value = 'от лица бота отправляется эмбед')
     emb.add_field(name = '{}pm'.format('cephalon/'), value = 'пишет выбраному участнику **Адамант сука**')
     emb.add_field(name = '{}zatka'.format('cephalon/'), value = 'форма заявки набор кадров')
-    emb.add_field(name = '{}about'.format('cephalon/'), value = 'показывает инфу о человеке. В отличии от @Ayana#8911 пишет только необходимую инфу')
+    emb.add_field(name = '{}about'.format('cephalon/'), value = 'показывает инфу о человеке. В отличии от @Ayana пишет только необходимую инфу')
     emb.add_field(name = '{}join'.format('cephalon/'), value = 'приказывает зайти боту в голосовой канал')
     emb.add_field(name = '{}leave'.format('cephalon/'), value = 'приказывает боту выйти из голосового канала')
     emb.add_field(name = 'фыв', value = 'Бот записывает все удалённые сообщения в #логи')
