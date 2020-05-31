@@ -89,13 +89,6 @@ async def say(ctx, *, arg, amount = 1):
         await ctx.send(arg)
     else:
         await ctx.send(f'written by {ctx.author.name}: ' + arg)
-
-@client.event
-async def on_message(ctx, message):
-    if 'discord.gg' in message.content.lower() and ctx.author.name != 'Cy':
-        await ctx.channel.purge(limit = 1)
-        await ctx.send('пашол нахуй со своей рекламой')
-    await client.process_commands(message)
     
 @client.command()
 async def coinflip(ctx, amount = 1):
