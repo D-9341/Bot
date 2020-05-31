@@ -91,7 +91,7 @@ async def say(ctx, *, arg, amount = 1):
         await ctx.send(f'written by {ctx.author.name}: ' + arg)
 
 @client.event
-async def on_message(messgae):
+async def on_message(message):
     if 'discord.gg' in message.content.lower() and message.author.name != 'Cy':
         await message.delete()
         await message.channel.send('пашол нахуй со своей рекламой')
