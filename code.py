@@ -16,13 +16,18 @@ async def info(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
     await ctx.send(f'Cephalon online, Ping equals `{round(client.latency * 1000)} ms`')
   
+@client.command()
+@commands.has_permissions(mention_everyone = True)
+async def ping(ctx, arg, amount = 1):
+    await cts.channel.purge(limit = amount)
+    await ctx.send('@' + arg)
+
 @client.event
 async def on_message_delete(ctx):
     channel = client.get_channel(714175791033876490)
     if ctx.author.name != 'Groovy':
         await channel.send(f'```{ctx.content}``` was deleted, author - {ctx.author.mention}')
 
-    
 @client.command()
 @commands.has_permissions(administrator = True)
 async def zatka(ctx, amount = 1):
@@ -69,7 +74,7 @@ async def mute(ctx, member: discord.Member, amount = 1):
 async def embed(ctx, *, arg, amount = 1):
     await ctx.channel.purge(limit = amount)
     emb = discord.Embed(title = f'{ctx.author.name}', colour = discord.Color.orange())
-    emb.add_field(name = 'SPELL', value = arg)
+    emb.add_field(name = None, value = arg)
     emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
     await ctx.send(embed = emb)
 
