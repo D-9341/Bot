@@ -68,7 +68,7 @@ async def mute(ctx, member: discord.Member, amount = 1):
 async def embed(ctx, *, arg, amount = 1):
     await ctx.channel.purge(limit = amount)
     emb = discord.Embed(title = f'{ctx.author.name}', colour = discord.Color.orange())
-    emb.add_field(name = 'SPELL', value = arg)
+    emb.add_field(name = f'**{(arg)}**')
     emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
     await ctx.send(embed = emb)
 
@@ -217,7 +217,7 @@ async def time(ctx, amount = 1):
 #проверка на подключение
 @client.event
 async def on_ready():
-    await client.change_presence(status = discord.Status.idle, activity = discord.Game('Bigfoot'))
+    await client.change_presence(status = discord.Status.idle, activity = discord.Game('Discord API'))
 
 #kick
 @client.command()
