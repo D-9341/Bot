@@ -14,13 +14,13 @@ client.remove_command('help')
 @commands.has_permissions(administrator = True)
 async def info(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
-    await ctx.send(f'Cephalon online, Ping equals `{round(client.latency * 1000)} ms`')
+    await ctx.send(f'Cy в сети, пинг равен `{round(client.latency * 1000)} ms`')
 
 @client.event
 async def on_message_delete(ctx):
     channel = client.get_channel(714175791033876490)
     if ctx.author.name != 'Groovy':
-        await channel.send(f'```{ctx.content}``` was deleted, author - {ctx.author.mention}')
+        await channel.send(f'```{ctx.content}``` было удалено, автор - {ctx.author.mention}')
 
 @client.command()
 @commands.has_permissions(administrator = True)
@@ -36,7 +36,7 @@ async def about(ctx, member:discord.Member, amount = 1):
     emb.add_field(name = 'Created', value = member.created_at.strftime("%a, %#d %B %Y, %I:%M %p UTC"), inline = False)
     emb.add_field(name = 'Joined', value = member.joined_at, inline = False)
     emb.set_thumbnail(url = member.avatar_url)
-    emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+    emb.set_footer(text = 'Cephalon Cy от сасиска#2472')
     await ctx.send(embed = emb)
     
 @client.event
@@ -56,11 +56,11 @@ async def on_voice_state_update(member, before, after):
 @commands.has_permissions(administrator = True)
 async def mute(ctx, member: discord.Member, amount = 1):
     await ctx.channel.purge(limit = amount)
-    emb = discord.Embed(title = f'Mute by {ctx.author.name}', colour = discord.Color.red())
+    emb = discord.Embed(title = f'Мут от {ctx.author.name}', colour = discord.Color.red())
     role = discord.utils.get(ctx.message.guild.roles, name = 'Muted')
     await member.add_roles(role)
-    emb.add_field(name = 'Muted ', value = '{}'.format(member.mention))
-    emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+    emb.add_field(name = 'В муте ', value = '{}'.format(member.mention))
+    emb.set_footer(text = 'Cephalon Cy от сасиска#2472')
     await ctx.send(embed = emb)
 
 @client.command()
@@ -68,8 +68,8 @@ async def mute(ctx, member: discord.Member, amount = 1):
 async def embed(ctx, *, arg, amount = 1):
     await ctx.channel.purge(limit = amount)
     emb = discord.Embed(title = f'{ctx.author.name}', colour = discord.Color.orange())
-    emb.add_field(name = f'**{(arg)}**')
-    emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+    emb.add_field(name = 'SPELL', value = arg)
+    emb.set_footer(text = 'Cephalon Cy от сасиска#2472')
     await ctx.send(embed = emb)
 
 @client.command()
@@ -79,7 +79,7 @@ async def gaystvo(ctx, *, arg, amount = 1):
     if ctx.author.name == 'сасиска':
         await ctx.send('@everyone ' + arg)
     else:
-        await ctx.send(f'written by {ctx.author.name}: @everyone ' + arg)
+        await ctx.send(f'было написано {ctx.author.name}: @everyone ' + arg)
     
 @client.command()
 @commands.has_permissions(administrator = True)
@@ -88,7 +88,7 @@ async def say(ctx, *, arg, amount = 1):
     if ctx.author.name == 'сасиска':
         await ctx.send(arg)
     else:
-        await ctx.send(f'written by {ctx.author.name}: ' + arg)
+        await ctx.send(f'было написано {ctx.author.name}: ' + arg)
     
 @client.command()
 async def coinflip(ctx, amount = 1):
@@ -134,7 +134,7 @@ async def join(ctx):
     if ctx.author.voice and ctx.author.voice.channel:
         channel = ctx.author.voice.channel
     else:
-        await ctx.send("Ты в канал то зайди")
+        await ctx.send("Ты должен быть в канале, чтобы использовать это.")
         return
     global vc
     try:
@@ -173,12 +173,12 @@ async def on_member_join(member):
     role2 = discord.utils.get(member.guild.roles, id = 693933514198089838)
 
     await member.add_roles(role, role1, role2)
-    await channel.send(embed = discord.Embed(description = f'{member.name} has entered the facility, 👋', colour = discord.Color.orange()))
+    await channel.send(embed = discord.Embed(description = f'{member.name} Зашёл в комплекс, 👋', colour = discord.Color.orange()))
 
 @client.event
 async def on_member_remove(member):
     channel = client.get_channel(693929823030214658)
-    await channel.send(embed = discord.Embed(description = f'{member.name} has exited the facility...', colour = discord.Color.red()))
+    await channel.send(embed = discord.Embed(description = f'{member.name} Вышел из комплекса...', colour = discord.Color.red()))
     
 #help command
 @client.command()
@@ -187,7 +187,7 @@ async def help(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
     emb = discord.Embed(title = "Меню команд для администраторов", colour = discord.Color.orange())
     emb.add_field(name = 'Инфо', value = "Cy, или же сай - бот, написанный сасиска")
-    emb.add_field(name = '{}info'.format('cephalon/'), value = 'если бот пишет свой пинг, он работает, если не пишет - не работает')
+    emb.add_field(name = '{}info'.format('cephalon/'), value = 'команда для определения, в сети ли бот')
     emb.add_field(name = "{}clear".format("cephalon/"), value = "очистка чата")
     emb.add_field(name = "{}ban".format("cephalon/"), value = "бан игрока")
     emb.add_field(name = "{}kick".format("cephalon/"), value = "кик игрока")
@@ -202,16 +202,17 @@ async def help(ctx, amount = 1):
     emb.add_field(name = '{}leave'.format('cephalon/'), value = 'приказывает боту выйти из голосового канала')
     emb.add_field(name = 'фыв', value = 'Бот записывает все удалённые сообщения в #логи, исключая Groovy')
     emb.add_field(name = 'жыж', value = 'также, для написания команд необязательно писать префикс, можно пингануть ~~@everyone~~ бота')
-    emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+    emb.add_field(name = 'ага', value = 'На данный момент, бот написан для меня неплохо. На самом деле, я писал его ради забавы. Но потом получилось то, что получилось. Поддержка бота прекращена на неопределённый срок. Все вопросы к автору бота.')
+    emb.set_footer(text = 'Cephalon Cy от сасиска#2472')
     await ctx.send(embed = emb)
 
 @client.command()
 async def time(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
-    emb = discord.Embed(title = 'Time', colour = discord.Color.orange(), url = 'https://www.timeserver.ru')
-    emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+    emb = discord.Embed(title = 'Время', colour = discord.Color.orange())
+    emb.set_footer(text = 'Cephalon Cy от сасиска#2472')
     now_date = datetime.datetime.now()
-    emb.add_field(name = 'GMT 0 Time is ', value = '{}'.format(now_date))
+    emb.add_field(name = 'Время по Гринвичу равняется ', value = '{}'.format(now_date))
     await ctx.author.send(embed = emb)
 
 #проверка на подключение
@@ -224,10 +225,10 @@ async def on_ready():
 @commands.has_permissions(administrator = True)
 async def kick(ctx , member: discord.Member, *, reason = None):
     await ctx.channel.purge(limit = 1)
-    emb = discord.Embed(title = f'Kick by {ctx.author.name}', colour = discord.Color.orange())
+    emb = discord.Embed(title = f'Кик от {ctx.author.name}', colour = discord.Color.orange())
     await member.kick(reason = reason)
-    emb.add_field(name = 'Kicked ', value = '{}'.format(member.mention))
-    emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+    emb.add_field(name = 'Кикнут ', value = '{}'.format(member.mention))
+    emb.set_footer(text = 'Cephalon Cy от сасиска#2472')
     await ctx.send(embed = emb)
 
 #ban
@@ -235,10 +236,10 @@ async def kick(ctx , member: discord.Member, *, reason = None):
 @commands.has_permissions(administrator = True)
 async def ban(ctx , member: discord.Member, *, reason = None):
     await ctx.channel.purge(limit = 1)
-    emb = discord.Embed(title = f'Ban by {ctx.author.name}', colour = discord.Color.red())
+    emb = discord.Embed(title = f'Бан от {ctx.author.name}', colour = discord.Color.red())
     await member.ban(reason = reason)
-    emb.add_field(name = 'Banned ', value = '{}'.format(member.mention))
-    emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+    emb.add_field(name = 'Забанен ', value = '{}'.format(member.mention))
+    emb.set_footer(text = 'Cephalon Cy от сасиска#2472')
     await ctx.send(embed = emb)
 
 #message delete
@@ -253,7 +254,7 @@ async def embed_error(ctx, error):
         await ctx.send(f'{ctx.author.mention}, чё сказать то?')
 
     if isinstance(error, commands.MissingPermissions):
-        await ctx.send(f'{ctx.author.mention} пытался вызвать комманду Embed')
+        await ctx.send(f'{ctx.author.mention} пытался вызвать комманду Embed. Хаха')
 
 @gaystvo.error
 async def gaystvo_error(ctx, error):
@@ -261,14 +262,14 @@ async def gaystvo_error(ctx, error):
         await ctx.send(f'{ctx.author.mention}, чё сказать то?')
 
     if isinstance(error, commands.MissingPermissions):
-        await ctx.send(f'{ctx.author.mention} пытался вызвать комманду Gaystvo')
+        await ctx.send(f'{ctx.author.mention} пытался вызвать комманду Gaystvo. Хаха')
 
 @say.error
 async def say_error(ctx, error):
     if isinstance(error, commands.MissingRequiredArgument):
         await ctx.send(f'{ctx.author.mention}, чё сказать то?')
     if isinstance(error, commands.MissingPermissions):
-        await ctx.send(f'{ctx.author.mention} пытался вызвать комманду Say')
+        await ctx.send(f'{ctx.author.mention} пытался вызвать комманду Say. Хаха')
         
 @mute.error
 async def mute_error(ctx, error):
@@ -276,7 +277,7 @@ async def mute_error(ctx, error):
         await ctx.send(f'{ctx.author.mention}, кого мутить то?')
 
     if isinstance(error, commands.MissingPermissions):
-        await ctx.send(f'{ctx.author.mention} пытался вызвать комманду Mute')
+        await ctx.send(f'{ctx.author.mention} пытался вызвать комманду Mute. Хаха')
 
 @kick.error
 async def kick_error(ctx, error):
@@ -284,7 +285,7 @@ async def kick_error(ctx, error):
         await ctx.send(f'{ctx.author.mention}, кого кикать то?')
 
     if isinstance(error, commands.MissingPermissions):
-        await ctx.send(f'{cctx.author.mention} пытался вызвать комманду Kick')
+        await ctx.send(f'{cctx.author.mention} пытался вызвать комманду Kick. Хаха')
 
 @ban.error
 async def ban_error(ctx, error):
@@ -292,7 +293,7 @@ async def ban_error(ctx, error):
         await ctx.send(f'{ctx.author.mention}, кого банить то?')
 
     if isinstance(error, commands.MissingPermissions):
-        await ctx.send(f'{ctx.author.mention} пытался вызвать комманду Ban')
+        await ctx.send(f'{ctx.author.mention} пытался вызвать комманду Ban. Хаха')
 
 @clear.error
 async def clear_error(ctx, error):
@@ -300,7 +301,7 @@ async def clear_error(ctx, error):
         await ctx.send(f'{ctx.author.mention}, нет аргумента!')
 
     if isinstance(error, commands.MissingPermissions):
-        await ctx.send(f'{ctx.author.mention} пытался вызвать комманду Clear')
+        await ctx.send(f'{ctx.author.mention} пытался вызвать комманду Clear. Хаха')
     
 token = os.environ.get('BOT_TOKEN')
 
