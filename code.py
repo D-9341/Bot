@@ -36,7 +36,7 @@ async def about(ctx, member:discord.Member, amount = 1):
     emb.add_field(name = 'Created', value = member.created_at.strftime("%a, %#d %B %Y, %I:%M %p UTC"), inline = False)
     emb.add_field(name = 'Joined', value = member.joined_at, inline = False)
     emb.set_thumbnail(url = member.avatar_url)
-    emb.set_footer(text = 'Cephalon Cy от сасиска#2472')
+    emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
     await ctx.send(embed = emb)
     
 @client.event
@@ -60,7 +60,7 @@ async def mute(ctx, member: discord.Member, amount = 1):
     role = discord.utils.get(ctx.message.guild.roles, name = 'Muted')
     await member.add_roles(role)
     emb.add_field(name = 'В муте ', value = '{}'.format(member.mention))
-    emb.set_footer(text = 'Cephalon Cy от сасиска#2472')
+    emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
     await ctx.send(embed = emb)
 
 @client.command()
@@ -69,7 +69,7 @@ async def embed(ctx, *, arg, amount = 1):
     await ctx.channel.purge(limit = amount)
     emb = discord.Embed(title = f'{ctx.author.name}', colour = discord.Color.orange())
     emb.add_field(name = 'SPELL', value = arg)
-    emb.set_footer(text = 'Cephalon Cy от сасиска#2472')
+    emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
     await ctx.send(embed = emb)
 
 @client.command()
@@ -203,7 +203,7 @@ async def help(ctx, amount = 1):
     emb.add_field(name = 'фыв', value = 'Бот записывает все удалённые сообщения в #логи, исключая Groovy')
     emb.add_field(name = 'жыж', value = 'также, для написания команд необязательно писать префикс, можно пингануть ~~@everyone~~ бота')
     emb.add_field(name = 'ага', value = 'На данный момент, бот написан для меня неплохо. На самом деле, я писал его ради забавы. Но потом получилось то, что получилось. Поддержка бота прекращена на неопределённый срок. Все вопросы к автору бота.')
-    emb.set_footer(text = 'Cephalon Cy от сасиска#2472')
+    emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
     await ctx.send(embed = emb)
 
 @client.command()
@@ -228,7 +228,7 @@ async def kick(ctx , member: discord.Member, *, reason = None):
     emb = discord.Embed(title = f'Кик от {ctx.author.name}', colour = discord.Color.orange())
     await member.kick(reason = reason)
     emb.add_field(name = 'Кикнут ', value = '{}'.format(member.mention))
-    emb.set_footer(text = 'Cephalon Cy от сасиска#2472')
+    emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
     await ctx.send(embed = emb)
 
 #ban
@@ -239,7 +239,7 @@ async def ban(ctx , member: discord.Member, *, reason = None):
     emb = discord.Embed(title = f'Бан от {ctx.author.name}', colour = discord.Color.red())
     await member.ban(reason = reason)
     emb.add_field(name = 'Забанен ', value = '{}'.format(member.mention))
-    emb.set_footer(text = 'Cephalon Cy от сасиска#2472')
+    emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
     await ctx.send(embed = emb)
 
 #message delete
