@@ -16,11 +16,6 @@ async def info(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
     await ctx.send(f'Cy в сети, пинг равен `{round(client.latency * 1000)} ms`')
 
-@client.event
-async def on_raw_message_delete(payload):
-    channel = client.get_channel(714175791033876490)
-    await channel.send(f'{ctx.content} было удалено.')
-
 @client.command()
 @commands.has_permissions(administrator = True)
 async def zatka(ctx, amount = 1):
@@ -67,7 +62,7 @@ async def mute(ctx, member: discord.Member, amount = 1):
 async def embed(ctx, *, arg, amount = 1):
     await ctx.channel.purge(limit = amount)
     emb = discord.Embed(title = f'{ctx.author.name}', colour = discord.Color.orange())
-    emb.add_field(name = 'SPELL', value = arg)
+    emb.add_field(name = 'Cephalon', value = arg)
     emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
     await ctx.send(embed = emb)
 
@@ -199,7 +194,7 @@ async def help(ctx, amount = 1):
     emb.add_field(name = '{}about'.format('cephalon/'), value = 'показывает инфу о человеке. В отличии от Ayana пишет только необходимую инфу')
     emb.add_field(name = '{}join'.format('cephalon/'), value = 'приказывает зайти боту в голосовой канал')
     emb.add_field(name = '{}leave'.format('cephalon/'), value = 'приказывает боту выйти из голосового канала')
-    emb.add_field(name = 'фыв', value = 'Бот записывает все удалённые сообщения в #логи, исключая Groovy')
+    emb.add_field(name = 'фыв', value = '~~Бот записывает все удалённые сообщения в #логи, исключая Groovy~~. **На доработке**')
     emb.add_field(name = 'жыж', value = 'также, для написания команд необязательно писать префикс, можно пингануть ~~@everyone~~ бота')
     emb.add_field(name = 'ага', value = 'На данный момент, бот написан для меня неплохо. На самом деле, я писал его ради забавы. Но потом получилось то, что получилось. Поддержка бота прекращена на неопределённый срок. Все вопросы к автору бота.')
     emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
