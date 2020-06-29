@@ -17,10 +17,9 @@ async def info(ctx, amount = 1):
     await ctx.send(f'Cy в сети, пинг равен `{round(client.latency * 1000)} ms`')
 
 @client.event
-async def on_raw_message_delete(ctx):
+async def on_raw_message_delete(payload):
     channel = client.get_channel(714175791033876490)
-    if ctx.author.name != 'Groovy':
-        await channel.send(f'```{ctx.content}``` было удалено, автор - {ctx.author.mention}')
+    await channel.send('что-то было удалено. что, я не знаю')
 
 @client.command()
 @commands.has_permissions(administrator = True)
