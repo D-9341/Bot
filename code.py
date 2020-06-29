@@ -241,10 +241,10 @@ async def ban(ctx , member: discord.Member, *, reason = None):
 async def clear(ctx, amount : int):
     if amount >= 100:
         input = int(input())
-            if input == 0:
-                await ctx.channel.purge(limit = amount + 1)
-            else:
-                ctx.send('очищение отменено')
+        if input == 0:
+            await ctx.channel.purge(limit = amount + 1)
+        else:
+            ctx.send('очищение отменено')
     else:
         ctx.channel.purge(limit = amount + 1)
 
