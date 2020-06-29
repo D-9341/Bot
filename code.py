@@ -239,7 +239,15 @@ async def ban(ctx , member: discord.Member, *, reason = None):
 @client.command()
 @commands.has_permissions(administrator = True)
 async def clear(ctx, amount : int):
-    await ctx.channel.purge(limit = amount + 1)
+    if amount >= 100:
+        input = int(input())
+        ctx.send('вы уверены в этом?(0/1)'):
+            if input == 0:
+                await ctx.channel.purge(limit = amount + 1)
+            else:
+                ctx.send('очищение отменено')
+    else:
+        ctx.channel.purge(limit = amount + 1)
 
 @embed.error
 async def embed_error(ctx, error):
