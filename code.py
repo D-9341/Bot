@@ -53,7 +53,7 @@ async def mute(ctx, member: discord.Member, amount = 1):
     emb = discord.Embed(title = f'Мут от {ctx.author.name}', colour = discord.Color.red())
     role = discord.utils.get(ctx.message.guild.roles, name = 'Muted')
     await member.add_roles(role)
-    emb.add_field(name = 'В муте ', value = '{}'.format(member.mention))
+    emb.add_field(name = 'В муте', value = '{}'.format(member.mention))
     emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
     await ctx.send(embed = emb)
 
@@ -220,7 +220,7 @@ async def kick(ctx , member: discord.Member, *, reason = None):
     await ctx.channel.purge(limit = 1)
     emb = discord.Embed(title = f'Кик от {ctx.author.name}', colour = discord.Color.orange())
     await member.kick(reason = reason)
-    emb.add_field(name = 'Кикнут ', value = '{}'.format(member.mention))
+    emb.add_field(name = 'Кикнут', value = '{}'.format(member.mention))
     emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
     await ctx.send(embed = emb)
 
@@ -231,7 +231,7 @@ async def ban(ctx , member: discord.Member, *, reason = None):
     await ctx.channel.purge(limit = 1)
     emb = discord.Embed(title = f'Бан от {ctx.author.name}', colour = discord.Color.red())
     await member.ban(reason = reason)
-    emb.add_field(name = 'Забанен ', value = '{}'.format(member.mention))
+    emb.add_field(name = 'Забанен', value = '{}'.format(member.mention))
     emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
     await ctx.send(embed = emb)
 
@@ -241,7 +241,6 @@ async def ban(ctx , member: discord.Member, *, reason = None):
 async def clear(ctx, amount : int):
     if amount >= 100:
         input = int(input())
-        ctx.send('вы уверены в этом?(0/1)'):
             if input == 0:
                 await ctx.channel.purge(limit = amount + 1)
             else:
