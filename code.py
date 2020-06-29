@@ -239,15 +239,8 @@ async def ban(ctx , member: discord.Member, *, reason = None):
 @client.command()
 @commands.has_permissions(administrator = True)
 async def clear(ctx, amount : int):
-    if amount >= 100:
-        input = int(input())
-        if input == 0:
-            await ctx.channel.purge(limit = amount + 1)
-        else:
-            await ctx.send('очищение отменено')
-    else:
-        await ctx.channel.purge(limit = amount + 1)
-
+    await ctx.channel.purge(limit = amount + 1)
+    
 @embed.error
 async def embed_error(ctx, error):
     if isinstance(error, commands.MissingRequiredArgument):
