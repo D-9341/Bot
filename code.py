@@ -6,7 +6,6 @@ import discord
 from discord.ext import commands
 from discord.utils import get
 
-
 client = commands.Bot(command_prefix = commands.when_mentioned_or('cephalon/'))
 client.remove_command('help')
 #like cephalon/help
