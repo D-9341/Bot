@@ -19,7 +19,7 @@ async def info(ctx, amount = 1):
 @client.event
 async def on_raw_message_delete(payload):
     channel = client.get_channel(714175791033876490)
-    await channel.send('что-то было удалено. что, я не знаю')
+    await channel.send(f'{message.content} было удалено.')
 
 @client.command()
 @commands.has_permissions(administrator = True)
