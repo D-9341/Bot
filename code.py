@@ -244,9 +244,9 @@ async def clear(ctx, amount : int):
         if input == 0:
             await ctx.channel.purge(limit = amount + 1)
         else:
-            ctx.send('очищение отменено')
+            await ctx.send('очищение отменено')
     else:
-        ctx.channel.purge(limit = amount + 1)
+        await ctx.channel.purge(limit = amount + 1)
 
 @embed.error
 async def embed_error(ctx, error):
