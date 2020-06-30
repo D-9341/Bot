@@ -238,10 +238,10 @@ async def ban(ctx , member: discord.Member, *, reason = None):
 #message delete
 @client.command()
 @commands.has_permissions(administrator = True)
-async def clear(ctx, amount : int, a : int):
+async def clear(ctx, amount : int, a : str):
     if amount >= 10:
-        await ctx.send(f'{ctx.author.mention}, вы собираетесь удалить {amount} сообщений. Вы уверены? (Y-0/N-1)')
-        if a == 0:
+        await ctx.send(f'{ctx.author.mention}, вы собираетесь удалить {amount} сообщений. Вы уверены? (Y/N)')
+        if a == Y:
             await ctx.channel.purge(limit = amount + 1)
         else:
             await ctx.send('очищение отменено')
