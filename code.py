@@ -240,10 +240,14 @@ async def ban(ctx , member: discord.Member, *, reason = None):
 @commands.has_permissions(administrator = True)
 async def clear(ctx, amount : int):
     if amount >= 10:
-        await ctx.send('вы собираетесь удалить более 10 сообщений. Вы уверены? (Y-0/N-1)')
-        a = int(input())
-        if a == 0:
+        await ctx.send(f'{ctx.author.mention}, вы собираетесь удалить {amount} сообщений. Вы уверены? (Y/N)')
+        a = str(input())
+        if a == Y:
             await ctx.channel.purge(limit = amount + 1)
+        else:
+            await ctx.send('очищение отменено')
+    else:
+        await ctx.channel.purge(limit = amount + 1)
     
 @about.error
 async def about_error(ctx, error):
