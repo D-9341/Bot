@@ -239,7 +239,7 @@ async def ban(ctx , member: discord.Member, *, reason = None):
 @client.command()
 @commands.has_permissions(administrator = True)
 async def clear(ctx, amount : int):
-    if amout >= 10:
+    if amount >= 10:
         await ctx.send('вы собираетесь удалить более 10 сообщений. Вы уверены? (Y-0/N-1)')
         a = int(input())
         if a == 0:
