@@ -241,6 +241,22 @@ async def ban(ctx , member: discord.Member, *, reason = None):
 async def clear(ctx, amount : int):
     await ctx.channel.purge(limit = amount + 1)
     
+@about.error
+async def about_error(ctx, error):
+    if isinstance(error, commands.MissingRequiredArgument):
+        await ctx.send(f'{ctx.author.mention}, о ком инфа то?')
+
+    if isinstance(error, commands.MissingPermissions):
+        await ctx.send(f'{ctx.author.mention} пытался вызвать комманду about. Хаха')
+    
+@pm.error
+async def pm_error(ctx, error):
+    if isinstance(error, commands.MissingRequiredArgument):
+        await ctx.send(f'{ctx.author.mention}, кому написать то?')
+
+    if isinstance(error, commands.MissingPermissions):
+        await ctx.send(f'{ctx.author.mention} пытался вызвать комманду Pm. Хаха')
+        
 @embed.error
 async def embed_error(ctx, error):
     if isinstance(error, commands.MissingRequiredArgument):
