@@ -37,7 +37,7 @@ async def about(ctx, member:discord.Member, amount = 1):
     emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
     await ctx.send(embed = emb)
     
-@Bot.event
+@client.event
 async def on_voice_state_update(member,before,after):
     if after.channel.id == 694212304165929101:
         mainCategory = discord.utils.get(after.guild.categories, id=693937532550774824)
