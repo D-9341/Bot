@@ -10,6 +10,14 @@ client = commands.Bot(command_prefix = commands.when_mentioned_or('cephalon/'))
 client.remove_command('help')
 #like cephalon/help
 
+#test commands space
+@client.event
+async def on_raw_reaction_add(payload):
+    if payload.message_id == 728252847136702525 and payload.emoji.name == 'moyai':
+        role = discord.utils.get(payload.guild.roles, id = 726053824917143612)
+        await payload.member.add_roles(role)
+#test commands space
+
 @client.command()
 @commands.has_permissions(administrator = True)
 async def info(ctx, amount = 1):
