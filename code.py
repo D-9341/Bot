@@ -13,7 +13,7 @@ client.remove_command('help')
 #test commands space
 @client.event
 async def on_raw_reaction_add(payload):
-    if payload.message_id == 728252847136702525 and payload.emoji.name == 'moyai':
+    if payload.message_id == 728252847136702525 and payload.emoji.name == 'i_':
         role = discord.utils.get(payload.guild.roles, id = 726053824917143612)
         await payload.member.add_roles(role)
 #test commands space
