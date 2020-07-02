@@ -40,11 +40,11 @@ async def about(ctx, member:discord.Member, amount = 1):
 async def on_voice_state_update(member, before, after):
     if after.channel.id == 694212304165929101:
         for guild in client.guilds:
-            maincategory = discord.utils.get(guild.categories, id = 693937532550774824)
-            userchannel = await guild.create_voice_channel(name = f'канал {member.name}', category = maincategory)
+            maincategory = discord.utils.get(after.guild.categories, id = 693937532550774824)
+            userchannel = await after.guild.create_voice_channel(name = f'канал {member.name}', category = maincategory)
             await userchannel.set_permissions(member, manage_channels = True)
             await member.move_to(userchannel)
-            def check(x,y,z):
+            def check(a,b,c):
                 return len(userchannel.members) == 0
             await client.wait_for('voice_state_update', check = check)
             await userchannel.delete()
