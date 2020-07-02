@@ -11,20 +11,7 @@ client.remove_command('help')
 #like cephalon/help
 
 #test commands space
-@client.event
-async def on_raw_reaction_add(payload):
-    message_id = payload.message_id
-    if message_id == 728302729813819532:
-        guild_id = payload.guild_id
-        guild = discord.utils.find(lambda g: g.id == guild_id, client.guilds)
 
-        if payload.emoji.name == 'naci':
-            role = discord.utils.get(guild.roles, id = 726053824917143612)
-
-        if role is not None:
-            member = discord.utils.find(lambda m: m.id == payload.user_id, guild.members)
-            if member is not None:
-                await member.add_roles(role)
 #test commands space
 
 @client.command()
