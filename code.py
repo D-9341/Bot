@@ -11,7 +11,6 @@ client.remove_command('help')
 #like cephalon/help
 
 #test commands space
-
 #test commands space
 
 @client.command()
