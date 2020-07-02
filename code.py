@@ -241,6 +241,8 @@ async def ban(ctx , member: discord.Member, *, reason = None):
 async def clear(ctx, amount : int):
     await ctx.channel.purge(limit = amount + 1)
     await ctx.send(f'удалено {amount} сообщений')
+    await asyncio.sleep(2)
+    await ctx.channel.purge(limit = 1)
     
 @about.error
 async def about_error(ctx, error):
