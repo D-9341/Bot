@@ -39,7 +39,7 @@ async def about(ctx, member:discord.Member, amount = 1):
     
 @client.event
 async def on_voice_state_update(member,before,after):
-    if after.channel.id == 694212304165929101:
+    if after.channel.name == 'Создать комнату':
         mainCategory = discord.utils.get(after.guild.categories, id=693937532550774824)
         channel2 = await after.guild.create_voice_channel(name=f"Комната {member.display_name}",category=mainCategory)
         await member.move_to(channel2)
