@@ -40,8 +40,7 @@ async def about(ctx, member:discord.Member, amount = 1):
 @client.event
 async def on_voice_state_update(member,before,after):
     if after.channel.id == 694212304165929101:
-        channel = discord.utils.get(guild.voice_channels, name = f'{member.name}')
-        await guild.channel_create(channel)
+        channel = await create_voice_channel(name = f'{member.name}', category = None)
         await member.move_to(channel)
         await channel.set_permissions(member,mute_members=True,move_members=True,manage_channels=True)
         def check(a,b,c):
