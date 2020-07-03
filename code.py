@@ -246,6 +246,12 @@ async def clear(ctx, amount : int):
     await ctx.channel.purge(limit = amount + 1)
     if amount == 1:
         await ctx.send(f'удалено {amount} сообщение')
+    elif amount == 2:
+        await ctx.send(f'удалено {amount} сообщения')
+    elif amount == 3:
+        await ctx.send(f'удалено {amount} сообщения')
+    elif amount == 4:
+        await ctx.send(f'удалено {amount} сообщения')
     else:
         await ctx.send(f'удалено {amount} сообщений')
     await asyncio.sleep(2)
