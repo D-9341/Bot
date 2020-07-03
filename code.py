@@ -46,7 +46,7 @@ async def on_voice_state_update(member,before,after):
         def check(a,b,c):
             return len(channel.members) == 0
         await client.wait_for('voice_state_update', check=check)
-        await channel2.delete()
+        await channel.delete()
     
 @client.command()
 @commands.has_permissions(administrator = True)
