@@ -11,7 +11,7 @@ client.remove_command('help')
 #like cephalon/help
 
 #test commands space
-@client.comamnd()
+@client.command()
 async def role_give(ctx, member):
     await ctx.channel.purge(limit = 1)
     role = discord.utils.get(guild.roles, name = 'Командир ВВС-"Израиль"')
