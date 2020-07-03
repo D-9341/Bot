@@ -65,7 +65,8 @@ async def mute(ctx, member: discord.Member, amount = 1):
 @commands.has_permissions(administrator = True)
 async def embed(ctx, *, arg, amount = 1):
     await ctx.channel.purge(limit = amount)
-    emb = discord.Embed(title = f'{ctx.author.avatar_url} {ctx.author.name}', colour = discord.Color.orange())
+    emb = discord.Embed(title = f'{ctx.author.name}', colour = discord.Color.orange())
+    emb.set_thumbnail(url = ctx.author.avatar_url)
     emb.add_field(name = 'Cephalon', value = arg)
     emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
     await ctx.send(embed = emb)
