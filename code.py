@@ -11,11 +11,7 @@ client.remove_command('help')
 #like cephalon/help
 
 #test commands space
-@client.event
-async def on_raw_message_delete(payload, message):
-    channel = client.get_channel(id = 714175791033876490)
-    if message.author != 'Groovy':
-        await channel.send(f'{message.content} было удалено, автор - {message.author.mention}')
+
 #test commands space
 
 @client.command()
