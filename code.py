@@ -25,18 +25,12 @@ async def info(ctx, amount = 1):
 async def zatka(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
     emb = discord.Embed(title = 'Форма заявки для Набор кадров', colour = discord.Color.orange())
-    emb.add_field(name = '(1). ZATKA в STEAM.', value = 'ZATKA_KING#8406 в Discord. возраст 14+  часовой пояс IL +0.')
-    emb.add_field(name = '(2). Интересующая управление', value = 'Discord')
-    emb.add_field(name = '(3). Опыт администрирования', value = 'Есть.')
-    emb.add_field(name = 'творческие', value = 'Есть.')
-    emb.add_field(name = 'технические навыки', value = 'нет')
-    emb.add_field(name = '(4). Сколько часов готовы уделять работе', value = '[ 15+ в неделю ]')
-    emb.add_field(name = 'в какое время дня свободны', value = '16:00 до 22:00')
     emd.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
     await ctx.send(embed = emb)
                    
                
 @client.command()
+@commands.has_permissions(administrator = True)
 async def about(ctx, member:discord.Member, amount = 1):
     await ctx.channel.purge(limit = amount)
     emb = discord.Embed(title = f'Информация о {member.name}', colour = discord.Color.orange())
