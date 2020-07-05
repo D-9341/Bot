@@ -24,9 +24,7 @@ async def info(ctx, amount = 1):
 @commands.has_permissions(administrator = True)
 async def zatka(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
-    emb = discord.Embed(title = 'Форма заявки для Набор кадров', colour = discord.Color.orange())
-    emd.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
-    await ctx.send(embed = emb)
+    await ctx.send('хаха')
                    
                
 @client.command()
