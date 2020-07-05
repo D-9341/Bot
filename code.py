@@ -11,7 +11,14 @@ client.remove_command('help')
 #like cephalon/help
 
 #test commands space
-
+@client.command()
+@commands.has_permissions(administrator = True)
+async def zatka(ctx, amount = 1):
+    await ctx.channel.purge(limit = amount)
+    emb = discord.Embed(title = 'Форма заявки для Набор кадров', colour = discord.Color.orange())
+    emb.add_field(name = '(1). ZATKA в STEAM.', value = 'ZATKA_KING8406 в Discord. возраст 14  часовой пояс IL 0.')
+    emd.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+    await ctx.send(embed = emb)
 #test commands space
 
 @client.command()
