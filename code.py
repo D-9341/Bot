@@ -15,16 +15,7 @@ client.remove_command('help')
 @commands.has_permissions(administrator = True)
 async def zatka(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
-    emb = discord.Embed(title = 'Форма заявки для Набор кадров', colour = discord.Color.orange())
-    emb.add_field(name = '(1). ZATKA в STEAM.', value = 'ZATKA_KING#8406 в Discord. возраст 14  часовой пояс IL 0.', inline = False)    
-    emb.add_field(name = '(2). Интересующая управление', value = 'Discord', inline = False)
-    emb.add_field(name = '(3). Опыт администрирования', value = 'Есть.', inline = False)
-    emb.add_field(name = 'творческие', value = 'Есть.', inline = False)
-    emb.add_field(name = 'технические навыки', value = 'нет', inline = False)
-    emb.add_field(name = '(4). Сколько часов готовы уделять работе', value = '15 в неделю', inline = False)
-    emb.add_field(name = 'в какое время дня свободны', value = '16 00 до 22 00', inline = False)
-    emd.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
-    await ctx.send(embed = emb)
+    await ctx.send('Форма заявки для Набор кадров (1). ZATKA в STEAM.  ZATKA_KING8406 в Discord. возраст 14 часовой пояс IL 0. (2). Интересующая игра: Discord (3). Опыт администрирования: Есть.  творческие:  Есть.технические навыки: нет. (4). Сколько часов готовы уделять работе [15 в неделю] в какое время дня свободны 16 00 до 22 00')
 #test commands space
 
 @client.command()
