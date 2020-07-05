@@ -22,30 +22,6 @@ async def info(ctx, amount = 1):
 
 @client.command()
 @commands.has_permissions(administrator = True)
-async def zatka(ctx, amount = 1):
-    await ctx.channel.purge(limit = amount)
-    emb = discord.Embed(title = f'{ctx.author.mention}, colour = discord.Color.orange())
-    emb.add_field(name = 'Форма заявки для Набор кадров', value = '
-
-(1). ZATKA в STEAM.  ZATKA_KING8406 в Discord. возраст 14+  часовой пояс IL +0.
-
-(2). Интересующая управление: Discord
-
-(3). Опыт администрирования:
-Есть. 
-творческие: 
-Есть.
-технические навыки: нет.
-
-(4). Сколько часов готовы уделять работе  15 в неделю 
-в какое время дня свободны 16 00 до 20 00')
-                  
-    emd.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
-    await ctx.send(embed = emb)
-                   
-               
-@client.command()
-@commands.has_permissions(administrator = True)
 async def about(ctx, member:discord.Member, amount = 1):
     await ctx.channel.purge(limit = amount)
     emb = discord.Embed(title = f'Информация о {member.name}', colour = discord.Color.orange())
@@ -214,7 +190,6 @@ async def help(ctx, amount = 1):
     emb.add_field(name = '{}gaystvo'.format('cephalon/'), value = 'пишет от лица бота и пингует @everyone')
     emb.add_field(name = '{}embed'.format('cephalon/'), value = 'от лица бота отправляется эмбед')
     emb.add_field(name = '{}pm'.format('cephalon/'), value = 'пишет выбраному участнику **Адамант сука**')
-    emb.add_field(name = '{}zatka'.format('cephalon/'), value = 'форма заявки набор кадров')
     emb.add_field(name = '{}about'.format('cephalon/'), value = 'показывает инфу о человеке. В отличии от Ayana пишет только необходимую инфу')
     emb.add_field(name = '{}join'.format('cephalon/'), value = 'приказывает зайти боту в голосовой канал')
     emb.add_field(name = '{}leave'.format('cephalon/'), value = 'приказывает боту выйти из голосового канала')
