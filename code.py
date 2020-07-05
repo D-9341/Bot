@@ -15,7 +15,7 @@ client.remove_command('help')
 @commands.has_permissions(administrator = True)
 async def zatka(ctx, *, amount = 1):
     await ctx.channel.purge(limit = amount)
-    emb = discord.Embed(title = 'Форма заявки для Набор кадров', colour = discord.Color.orange())
+    emb = discord.Embed(title = 'Форма заявки для Набор кадров')
     emb.add_field(name = '(1). ZATKA в STEAM.', value = 'ZATKA_KING#8406 в Discord. возраст 14  часовой пояс IL 0.', inline = False)    
     emb.add_field(name = '(2). Интересующая управление', value = 'Discord', inline = False)
     emb.add_field(name = '(3). Опыт администрирования', value = 'Есть.', inline = False)
