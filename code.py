@@ -18,7 +18,7 @@ client.remove_command('help')
 @commands.has_permissions(administrator = True)
 async def info(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
-    await ctx.send(f'Cy в сети, пинг равен `{round(client.latency * 1000)} ms`')
+    await ctx.send(f'Cy в сети, пинг равен `{round(client.latency * 1000)} ms`, это моя 422 версия')
 
 @client.command()
 @commands.has_permissions(administrator = True)
@@ -286,7 +286,7 @@ async def embed_error(ctx, error):
 @gaystvo.error
 async def gaystvo_error(ctx, error):
     if isinstance(error, commands.MissingRequiredArgument):
-        await ctx.send(f'{ctx.author.mention}, чё сказать то?')
+        await ctx.send(f'{ctx.author.mention}, ты так не шути')
 
     if isinstance(error, commands.MissingPermissions):
         await ctx.send(f'{ctx.author.mention} пытался пингануть @everyone. Ой')
