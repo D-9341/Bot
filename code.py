@@ -289,7 +289,7 @@ async def gaystvo_error(ctx, error):
         await ctx.send(f'{ctx.author.mention}, чё сказать то?')
 
     if isinstance(error, commands.MissingPermissions):
-        await ctx.send(f'{ctx.author.mention} пытался вызвать комманду Gaystvo. Хаха')
+        await ctx.send(f'{ctx.author.mention} пытался пингануть @everyone. Ой')
 
 @say.error
 async def say_error(ctx, error):
