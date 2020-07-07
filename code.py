@@ -18,7 +18,7 @@ client.remove_command('help')
 @commands.has_permissions(administrator = True)
 async def info(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
-    await ctx.send(f'Cy в сети, пинг равен `{round(client.latency * 1000)} ms`, это моя 422 версия')
+    await ctx.send(f'Cy в сети, пинг равен `{round(client.latency * 1000)} ms`, это моя 423 версия')
 
 @client.command()
 @commands.has_permissions(administrator = True)
@@ -256,7 +256,7 @@ async def clear(ctx, amount : int):
         await ctx.send(f'удалено {amount} сообщения')
     else:
         await ctx.send(f'удалено {amount} сообщений')
-    await asyncio.sleep(2)
+    await asyncio.sleep(1)
     await ctx.channel.purge(limit = 1)
     
 @about.error
