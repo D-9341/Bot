@@ -18,13 +18,13 @@ client.remove_command('help')
 @commands.has_permissions(administrator = True)
 async def info(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
-    await ctx.send(f'Cy в сети, пинг равен `{round(client.latency * 1000)} ms`, это моя 425 версия')
+    await ctx.send(f'Cy в сети, пинг равен `{round(client.latency * 1000)} ms`, это моя 427 версия')
 
 @client.command()
 @commands.has_permissions(administrator = True)
 async def zatka(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
-    await ctx.send('Форма заявки для Набор кадров (1). ZATKA в STEAM.  ZATKA_KING8406 в Discord. возраст 14 часовой пояс IL 0. (2). Интересующая игра: Discord (3). Опыт администрирования: Есть.  творческие:  Есть.технические навыки: нет. (4). Сколько часов готовы уделять работе [15 в неделю] в какое время дня свободны 16 00 до 22 00')
+    await ctx.send('Форма заявки для Набор кадров (1). ZATKA в STEAM.  ZATKA_KING#8406 в Discord. возраст 14 часовой пояс IL 0. (2). Интересующая игра: Discord (3). Опыт администрирования: Есть.  творческие:  Есть.технические навыки: нет. (4). Сколько часов готовы уделять работе [15 в неделю] в какое время дня свободны 16 00 до 22 00')
     
 @client.command()
 @commands.has_permissions(administrator = True)
@@ -42,7 +42,7 @@ async def about(ctx, member:discord.Member, amount = 1):
 @client.event
 async def on_voice_state_update(member, before, after):
     if after.channel.id == 694212304165929101:
-        #maincategory = discord.utils.get(guild.categories, id = 693937532550774824)
+        maincategory = discord.utils.get(guild.categories, id = 693937532550774824)
         userchannel = await guild.create_voice_channel(name = f'{member.name}', category = None)
         await userchannel.set_permissions(member, manage_channels = True)
         await member.move_to(userchannel)
@@ -200,7 +200,6 @@ async def help(ctx, amount = 1):
     emb.add_field(name = '{}join'.format('cephalon/'), value = 'приказывает зайти боту в голосовой канал')
     emb.add_field(name = '{}leave'.format('cephalon/'), value = 'приказывает боту выйти из голосового канала')
     emb.add_field(name = '{}zatka'.format('cephalon/'), value = 'Форма заявки для Набор кадров')
-    emb.add_field(name = 'фыв', value = '~~Бот записывает все удалённые сообщения в #логи, исключая Groovy~~. **На доработке**')
     emb.add_field(name = 'жыж', value = 'также, для написания команд необязательно писать префикс, можно пингануть ~~@everyone~~ бота')
     emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
     await ctx.send(embed = emb)
@@ -289,7 +288,7 @@ async def gaystvo_error(ctx, error):
         await ctx.send(f'{ctx.author.mention}, ты так не шути')
 
     if isinstance(error, commands.MissingPermissions):
-        await ctx.send(f'{ctx.author.mention} пытался пингануть @everyone. Ой')
+        await ctx.send(f'{ctx.author.mention} пытался пингануть \@everyone. Ой')
 
 @say.error
 async def say_error(ctx, error):
