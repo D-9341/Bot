@@ -12,9 +12,9 @@ client.remove_command('help')
 
 #test commands space
 @client.command()
-async def give(ctx, member : discord.Member, amount = 1):
+async def give(ctx, arg, member : discord.Member, amount = 1):
     await ctx.channel.purge(limit = amount)
-    role = discord.utils.get(ctx.message.guild.roles, name = 'Командир ВВС-"Израиль"')
+    role = discord.utils.get(ctx.message.guild.roles, name = role.mention)
     await member.add_roles(role)
 #test commands space
 
@@ -22,7 +22,7 @@ async def give(ctx, member : discord.Member, amount = 1):
 @commands.has_permissions(administrator = True)
 async def info(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
-    await ctx.send(f'Cy в сети, пинг равен `{round(client.latency * 1000)} ms`, это моя 429 версия')
+    await ctx.send(f'Cy в сети, пинг равен `{round(client.latency * 1000)} ms`, это моя 430 версия')
 
 @client.command()
 @commands.has_permissions(administrator = True)
