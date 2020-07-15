@@ -12,9 +12,9 @@ client.remove_command('help')
 
 #test commands space
 @client.command()
-async def give(ctx, member : discord.Member, amount = 1):
+async def give(ctx, *, member : discord.Member, amount = 1):
     await ctx.channel.purge(limit = amount)
-    role = discord.utils.get(ctx.message.guild.roles, name = role.mention)
+    role = discord.utils.get(ctx.message.guild.roles, name = role.name)
     await member.add_roles(role)
 #test commands space
 
