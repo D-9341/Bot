@@ -11,18 +11,14 @@ client.remove_command('help')
 #like cephalon/help
 
 #test commands space
-@client.command()
-async def give(ctx, *, member : discord.Member, amount = 1):
-    await ctx.channel.purge(limit = amount)
-    role = discord.utils.get(ctx.message.guild.roles, name = role.name)
-    await member.add_roles(role)
+
 #test commands space
 
 @client.command()
 @commands.has_permissions(administrator = True)
 async def info(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
-    await ctx.send(f'Cy в сети, пинг равен `{round(client.latency * 1000)} ms`, это моя 435 версия')
+    await ctx.send(f'Cy в сети, пинг равен `{round(client.latency * 1000)} ms`, это моя 437 версия')
 
 @client.command()
 @commands.has_permissions(administrator = True)
@@ -70,8 +66,8 @@ async def mute(ctx, member: discord.Member, amount = 1):
 @commands.has_permissions(administrator = True)
 async def embed(ctx, *, arg, amount = 1):
     await ctx.channel.purge(limit = amount)
-    emb = discord.Embed(title = f'{ctx.author.name}', colour = discord.Color.orange())
-    emb.set_thumbnail(url = ctx.author.avatar_url)
+    emb = discord.Embed(title = None, colour = discord.Color.orange())
+    emb.set_author(name = client.user.name, icon_url = client.user.avatar_url)
     emb.add_field(name = 'Cephalon', value = arg)
     emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
     await ctx.send(embed = emb)
