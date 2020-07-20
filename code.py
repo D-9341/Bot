@@ -18,7 +18,7 @@ client.remove_command('help')
 @commands.has_permissions(administrator = True)
 async def info(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
-    await ctx.send(f'Cy в сети, пинг равен `{round(client.latency * 1000)} ms`, это моя 437 версия')
+    await ctx.send(f'Cy в сети, пинг равен `{round(client.latency * 1000)} ms`, это моя 439 версия')
 
 @client.command()
 @commands.has_permissions(administrator = True)
@@ -76,19 +76,13 @@ async def embed(ctx, *, arg, amount = 1):
 @commands.has_permissions(administrator = True)
 async def gaystvo(ctx, *, arg, amount = 1):
     await ctx.channel.purge(limit = amount)
-    if ctx.author.name == 'сасиска':
-        await ctx.send('@everyone ' + arg)
-    else:
-        await ctx.send(f'было написано {ctx.author.name}: @everyone ' + arg)
+    await ctx.send('@everyone ' + arg)
     
 @client.command()
 @commands.has_permissions(administrator = True)
 async def say(ctx, *, arg, amount = 1):
     await ctx.channel.purge(limit = amount)
-    if ctx.author.name == 'сасиска':
-        await ctx.send(arg)
-    else:
-        await ctx.send(f'было написано {ctx.author.name}: ' + arg)
+    await ctx.send(arg)
     
 @client.command()
 async def coinflip(ctx, amount = 1):
