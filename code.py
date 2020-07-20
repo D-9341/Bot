@@ -211,7 +211,7 @@ async def help(ctx, amount = 1):
 @client.command()
 async def time(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
-    emb = discord.Embed(title = 'Время', colour = discord.Color.orange())
+    emb = discord.Embed(title = None, colour = discord.Color.orange())
     emb.set_footer(text = 'Cephalon Cy от сасиска#2472')
     now_date = datetime.datetime.now()
     emb.add_field(name = 'Время по Гринвичу равняется ', value = '{}'.format(now_date))
