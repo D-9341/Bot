@@ -11,14 +11,23 @@ client.remove_command('help')
 #like cephalon/help
 
 #test commands space
-
+@client.command()
+async def gaystvo_embed(ctx, *, arg, amount = 1):
+    await ctx.channel.purge(limit = amount)
+    await ctx.send('@everyone')
+    await asyncio.sleep(1)
+    emb = discord.Embed(title = None, colour = discord.Color.orange())
+    emb.set_author(name = ctx.author.name, icon_url = ctx.author.avatar_url)
+    emb.add_field(name = 'Cephalon', value = arg)
+    emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+    await ctx.send(embed = emb)
 #test commands space
 
 @client.command()
 @commands.has_permissions(administrator = True)
 async def info(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
-    await ctx.send(f'Cy в сети, пинг равен `{round(client.latency * 1000)} ms`, это моя 440 версия')
+    await ctx.send(f'Cy в сети, пинг равен `{round(client.latency * 1000)} ms`, это моя 441 версия')
 
 @client.command()
 @commands.has_permissions(administrator = True)
