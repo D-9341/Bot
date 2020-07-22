@@ -8,7 +8,7 @@ from discord.utils import get
 
 client = commands.Bot(command_prefix = commands.when_mentioned_or('cephalon/'))
 client.remove_command('help')
-
+ 
 #test commands space
 @client.command()
 async def gaystvo_embed(ctx, *, arg, amount = 1):
