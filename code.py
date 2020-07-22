@@ -10,7 +10,16 @@ client = commands.Bot(command_prefix = commands.when_mentioned_or('cephalon/'))
 client.remove_command('help')
  
 #test commands space
-
+@client.command()
+async def gaystvo_embed(ctx, *, arg, amount = 1):
+    await ctx.channel.purge(limit = amount)
+    await ctx.send('@everyone')
+    await asyncio.sleep(1)
+    emb = discord.Embed(title = None, colour = discord.Color.orange())
+    emb.set_author(name = ctx.author.name, icon_url = ctx.author.avatar_url)
+    emb.add_field(name = 'Cephalon', value = arg)
+    emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+    await ctx.send(embed = emb)
 #test commands space
 
 @client.command()
@@ -322,6 +331,6 @@ async def clear_error(ctx, error):
     if isinstance(error, commands.MissingPermissions):
         await ctx.send(f'{ctx.author.mention} пытался вызвать комманду Clear. Хаха')
     
-token = os.environ.get('BOT_TOKEN')
+t = os.environ.get('t')
 
-client.run(token)
+client.run(t)
