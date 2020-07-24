@@ -26,7 +26,7 @@ async def gaystvo_embed(ctx, *, arg, amount = 1):
 @commands.has_permissions(administrator = True)
 async def info(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
-    await ctx.send(f'Cy в сети, пинг равен `{round(client.latency * 1000)} ms`, это моя 441 версия')
+    await ctx.send(f'Cy в сети, пинг равен `{round(client.latency * 1000)} ms`, это моя 455 версия')
 
 @client.command()
 @commands.has_permissions(administrator = True)
