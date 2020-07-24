@@ -1,6 +1,4 @@
-discord.py[voice]
 discord.py
 aiohttp
 websockets
 chardet
-youtube_dl
