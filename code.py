@@ -17,7 +17,7 @@ client.remove_command('help')
 @commands.has_permissions(administrator = True)
 async def info(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
-    await ctx.send(f'Cy в сети, пинг равен `{round(client.latency * 1000)} ms`, это моя 458 версия')
+    await ctx.send(f'Cy в сети, пинг равен `{round(client.latency * 1000)} ms`, это моя 459 версия')
 
 @client.command()
 @commands.has_permissions(administrator = True)
@@ -156,11 +156,6 @@ async def leave(ctx):
         TimeoutError
         pass
 
-#ошибка стоп 00000
-@client.event
-async def on_command_error(ctx, error):
-    pass
-
 #personal messages
 @client.command()
 @commands.has_permissions(administrator = True)
@@ -263,6 +258,11 @@ async def clear(ctx, amount : int):
         await ctx.send(f'удалено {amount} сообщений')
     await asyncio.sleep(1)
     await ctx.channel.purge(limit = 1)
+    
+@client.event
+async def on_command_error(ctx, error):
+    if isinstance(error, commands.CommandNotFound):
+        await ctx.send(f'{ctx.author.mention}, и чё это за команда?')
     
 @about.error
 async def about_error(ctx, error):
