@@ -14,7 +14,7 @@ client.remove_command('help')
 async def gaystvo_embed(ctx, *, arg, amount = 1):
     await ctx.channel.purge(limit = amount)
     await ctx.send('@everyone')
-    await asyncio.sleep(1)
+    await asyncio.sleep(0,1)
     emb = discord.Embed(title = None, colour = discord.Color.orange())
     emb.set_author(name = ctx.author.name, icon_url = ctx.author.avatar_url)
     emb.add_field(name = 'Cephalon', value = arg)
