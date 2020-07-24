@@ -262,7 +262,7 @@ async def clear(ctx, amount : int):
 @client.event
 async def on_command_error(ctx, error):
     if isinstance(error, commands.CommandNotFound):
-        await ctx.send(f'{ctx.author.mention}, и чё это за команда?')
+        await ctx.send(f'{ctx.author.mention}, что за ' + arg + ' ?')
     
 @about.error
 async def about_error(ctx, error):
