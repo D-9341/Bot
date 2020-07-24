@@ -10,23 +10,14 @@ client = commands.Bot(command_prefix = commands.when_mentioned_or('cephalon/'))
 client.remove_command('help')
 
 #test commands space
-@client.command()
-async def gaystvo_embed(ctx, *, arg, amount = 1):
-    await ctx.channel.purge(limit = amount)
-    await ctx.send('@everyone')
-    await asyncio.sleep(0,1)
-    emb = discord.Embed(title = None, colour = discord.Color.orange())
-    emb.set_author(name = ctx.author.name, icon_url = ctx.author.avatar_url)
-    emb.add_field(name = 'Cephalon', value = arg)
-    emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
-    await ctx.send(embed = emb)
+
 #test commands space
 
 @client.command()
 @commands.has_permissions(administrator = True)
 async def info(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
-    await ctx.send(f'Cy в сети, пинг равен `{round(client.latency * 1000)} ms`, это моя 455 версия')
+    await ctx.send(f'Cy в сети, пинг равен `{round(client.latency * 1000)} ms`, это моя 458 версия')
 
 @client.command()
 @commands.has_permissions(administrator = True)
@@ -70,6 +61,18 @@ async def mute(ctx, member: discord.Member, amount = 1):
     emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
     await ctx.send(embed = emb)
 
+@client.command()
+@commands.has_permissions(administrator = True)
+async def gaystvo_embed(ctx, *, arg, amount = 1):
+    await ctx.channel.purge(limit = amount)
+    await ctx.send('@everyone')
+    await asyncio.sleep(0,1)
+    emb = discord.Embed(title = None, colour = discord.Color.orange())
+    emb.set_author(name = ctx.author.name, icon_url = ctx.author.avatar_url)
+    emb.add_field(name = 'Cephalon', value = arg)
+    emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+    await ctx.send(embed = emb)
+    
 @client.command()
 @commands.has_permissions(administrator = True)
 async def embed(ctx, *, arg, amount = 1):
@@ -202,6 +205,7 @@ async def help(ctx, amount = 1):
     emb.add_field(name = '{}join'.format('cephalon/'), value = 'приказывает зайти боту в голосовой канал')
     emb.add_field(name = '{}leave'.format('cephalon/'), value = 'приказывает боту выйти из голосового канала')
     emb.add_field(name = '{}zatka'.format('cephalon/'), value = 'Форма заявки для Набор кадров')
+    emb.add_field(name = '{}gaystvo_embed'.format('cephalon/'), value = 'Совмещает в себе команды gaystvo и embed')
     emb.add_field(name = 'жыж', value = 'также, для написания команд необязательно писать префикс, можно пингануть ~~@everyone~~ бота')
     emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
     await ctx.send(embed = emb)
@@ -275,6 +279,14 @@ async def pm_error(ctx, error):
 
     if isinstance(error, commands.MissingPermissions):
         await ctx.send(f'{ctx.author.mention} пытался вызвать комманду Pm. Хаха')
+        
+@gaystvo_embed.error
+async def gaystvo_embed_error(ctx, error):
+    if isinstance(error, commands.MissingRequiredArgument):
+        await ctx.send(f'{ctx.author.mention}, чё сказать то?')
+
+    if isinstance(error, commands.MissingPermissions):
+        await ctx.send(f'{ctx.author.mention} пытался вызвать комманду gaystvo_embed. Хаха')
         
 @embed.error
 async def embed_error(ctx, error):
