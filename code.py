@@ -260,9 +260,9 @@ async def clear(ctx, amount : int):
     await ctx.channel.purge(limit = 1)
     
 @client.event
-async def on_command_error(ctx, error, arg):
+async def on_command_error(ctx, error):
     if isinstance(error, commands.CommandNotFound):
-        await ctx.send(f'{ctx.author.mention}, что за ' + arg + ' ?')
+        await ctx.send(f'{ctx.author.mention}, какая это команда?)
     
 @about.error
 async def about_error(ctx, error):
