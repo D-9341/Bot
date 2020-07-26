@@ -14,26 +14,25 @@ client.remove_command('help')
 #test commands space
 
 @client.command()
-@commands.has_permissions(administrator = True)
 async def info(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
     await ctx.send(f'Cy в сети, пинг равен `{round(client.latency * 1000)} ms`')
 
 @client.command()
-@commands.has_permissions(administrator = True)
 async def zatka(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
     await ctx.send('Форма заявки для Набор кадров (1). ZATKA в STEAM.  ZATKA_KING#8406 в Discord. возраст 14 часовой пояс IL 0. (2). Интересующая игра: Discord (3). Опыт администрирования: Есть.  творческие:  Есть.технические навыки: нет. (4). Сколько часов готовы уделять работе [15 в неделю] в какое время дня свободны 16 00 до 22 00')
     
 @client.command()
-@commands.has_permissions(administrator = True)
+@commands.has_permissions(manage_roles = True)
 async def about(ctx, member:discord.Member, amount = 1):
+    roles = [role for role in member.roles]
     await ctx.channel.purge(limit = amount)
-    emb = discord.Embed(title = f'Информация о {member.name}', colour = discord.Color.orange())
+    emb = discord.Embed(title = f'Информация о {member.name}', colour = member.color)
     emb.add_field(name = 'ID', value = member.id)
     emb.add_field(name = 'Created', value = member.created_at.strftime("%a, %#d %B %Y, %I:%M %p UTC"), inline = False)
-    emb.add_field(name = 'Joined', value = member.joined_at, inline = False)
-    emb.add_field(name = 'Roles', value = member.roles, inline = False)
+    emb.add_field(name = 'Joined', value = member.joined_at.strftime("%a, %#d %B %Y, %I:%M %p UTC"), inline = False)
+    emb.add_field(name = 'Roles', value = ''.join([role.mention for role in Roles]), inline = False)
     emb.set_thumbnail(url = member.avatar_url)
     emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
     await ctx.send(embed = emb)
@@ -51,7 +50,7 @@ async def on_voice_state_update(member, before, after):
         await userchannel.delete()
     
 @client.command()
-@commands.has_permissions(administrator = True)
+@commands.has_permissions(mute_members = True)
 async def mute(ctx, member: discord.Member, amount = 1):
     await ctx.channel.purge(limit = amount)
     emb = discord.Embed(title = f'Мут от {ctx.author.name}', colour = discord.Color.red())
@@ -62,35 +61,35 @@ async def mute(ctx, member: discord.Member, amount = 1):
     await ctx.send(embed = emb)
 
 @client.command()
-@commands.has_permissions(administrator = True)
+@commands.has_permissions(mention_everyone = True)
 async def gaystvo_embed(ctx, *, arg, amount = 1):
     await ctx.channel.purge(limit = amount)
     await ctx.send('@everyone')
     await asyncio.sleep(0,1)
-    emb = discord.Embed(title = None, colour = discord.Color.orange())
+    emb = discord.Embed(title = None, colour = member.color)
     emb.set_author(name = ctx.author.name, icon_url = ctx.author.avatar_url)
     emb.add_field(name = 'Cephalon', value = arg)
     emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
     await ctx.send(embed = emb)
     
 @client.command()
-@commands.has_permissions(administrator = True)
+@commands.has_permissions(manage_messages = True)
 async def embed(ctx, *, arg, amount = 1):
     await ctx.channel.purge(limit = amount)
-    emb = discord.Embed(title = None, colour = discord.Color.orange())
+    emb = discord.Embed(title = None, colour = member.color)
     emb.set_author(name = ctx.author.name, icon_url = ctx.author.avatar_url)
     emb.add_field(name = 'Cephalon', value = arg)
     emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
     await ctx.send(embed = emb)
 
 @client.command()
-@commands.has_permissions(administrator = True)
+@commands.has_permissions(mention_everyone = True)
 async def gaystvo(ctx, *, arg, amount = 1):
     await ctx.channel.purge(limit = amount)
     await ctx.send('@everyone ' + arg)
     
 @client.command()
-@commands.has_permissions(administrator = True)
+@commands.has_permissions(manage_messages = True)
 async def say(ctx, *, arg, amount = 1):
     await ctx.channel.purge(limit = amount)
     await ctx.send(arg)
@@ -181,7 +180,7 @@ async def on_member_remove(member):
     
 #help command
 @client.command()
-@commands.has_permissions(administrator = True)
+@commands.has_permissions(manage_messages = True)
 async def help(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
     emb = discord.Embed(title = "Меню команд для администраторов", colour = discord.Color.orange())
@@ -220,7 +219,7 @@ async def on_ready():
 
 #kick
 @client.command()
-@commands.has_permissions(administrator = True)
+@commands.has_permissions(kick_members = True)
 async def kick(ctx , member: discord.Member, *, reason = None):
     await ctx.channel.purge(limit = 1)
     emb = discord.Embed(title = f'Кик от {ctx.author.name}', colour = discord.Color.orange())
@@ -231,7 +230,7 @@ async def kick(ctx , member: discord.Member, *, reason = None):
 
 #ban
 @client.command()
-@commands.has_permissions(administrator = True)
+@commands.has_permissions(ban_members = True)
 async def ban(ctx , member: discord.Member, *, reason = None):
     await ctx.channel.purge(limit = 1)
     emb = discord.Embed(title = f'Бан от {ctx.author.name}', colour = discord.Color.red())
@@ -242,7 +241,7 @@ async def ban(ctx , member: discord.Member, *, reason = None):
 
 #message delete
 @client.command()
-@commands.has_permissions(administrator = True)
+@commands.has_permissions(manage_messages = True)
 async def clear(ctx, amount : int):
     await ctx.channel.purge(limit = amount + 1)
     if amount == 1:
