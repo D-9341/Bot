@@ -168,7 +168,7 @@ async def leave(ctx):
 @commands.has_permissions(administrator = True)
 async def pm(ctx, member: discord.Member, amount = 1):
     await ctx.channel.purge(limit = amount)
-    await member.send(f'Адамант сука')
+    await member.send(f'сука киньте в камыши')
 
 @client.event
 async def on_member_join(member):
@@ -202,7 +202,7 @@ async def help(ctx, amount = 1):
     emb.add_field(name = '{}gaystvo'.format('cephalon/'), value = 'пишет от лица бота и пингует @everyone')
     emb.add_field(name = '{}embed'.format('cephalon/'), value = 'от лица бота отправляется эмбед')
     emb.add_field(name = '{}gaystvo_embed'.format('cephalon/'), value = 'Совмещает в себе команды gaystvo и embed')
-    emb.add_field(name = '{}pm'.format('cephalon/'), value = 'пишет выбраному участнику **Адамант сука**')
+    emb.add_field(name = '{}pm'.format('cephalon/'), value = 'пишет выбраному участнику **сука киньте в камыши**')
     emb.add_field(name = '{}about'.format('cephalon/'), value = 'показывает инфу о человеке.')
     emb.add_field(name = '{}join'.format('cephalon/'), value = 'приказывает зайти боту в голосовой канал')
     emb.add_field(name = '{}leave'.format('cephalon/'), value = 'приказывает боту выйти из голосового канала')
