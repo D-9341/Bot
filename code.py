@@ -22,7 +22,7 @@ async def info(ctx, amount = 1):
 @commands.has_permissions(manage_roles = True)
 async def about(ctx, member:discord.Member, amount = 1):
     await ctx.channel.purge(limit = amount)
-    if member.name == Cy:
+    if member.name == 'Cy':
         emb = discord.Embed(title = f'Информация обо мне? Вот:', colour = discord.Color.red())
         emb.add_field(name = 'ID', value = member.id)
         emb.add_field(name = 'Created', value = member.created_at.strftime("%a, %#d %B %Y, %I:%M %p UTC"), inline = False)
