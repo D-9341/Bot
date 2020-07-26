@@ -32,7 +32,7 @@ async def about(ctx, member:discord.Member, amount = 1):
     emb.add_field(name = 'ID', value = member.id)
     emb.add_field(name = 'Created', value = member.created_at.strftime("%a, %#d %B %Y, %I:%M %p UTC"), inline = False)
     emb.add_field(name = 'Joined', value = member.joined_at.strftime("%a, %#d %B %Y, %I:%M %p UTC"), inline = False)
-    emb.add_field(name = 'Roles', value = ' '.join{[role.mention for role in Roles]}, inline = False)
+    emb.add_field(name = 'Roles', value = ' '.format{[role.mention for role in Roles]}, inline = False)
     emb.set_thumbnail(url = member.avatar_url)
     emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
     await ctx.send(embed = emb)
