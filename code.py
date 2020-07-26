@@ -26,13 +26,11 @@ async def zatka(ctx, amount = 1):
 @client.command()
 @commands.has_permissions(manage_roles = True)
 async def about(ctx, member:discord.Member, amount = 1):
-    roles = [role for role in member.roles]
     await ctx.channel.purge(limit = amount)
     emb = discord.Embed(title = f'Информация о {member.name}', colour = member.color)
     emb.add_field(name = 'ID', value = member.id)
     emb.add_field(name = 'Created', value = member.created_at.strftime("%a, %#d %B %Y, %I:%M %p UTC"), inline = False)
     emb.add_field(name = 'Joined', value = member.joined_at.strftime("%a, %#d %B %Y, %I:%M %p UTC"), inline = False)
-    emb.add_field(name = 'Roles', value = ' '.format(role.mention for role in Roles), inline = False)
     emb.set_thumbnail(url = member.avatar_url)
     emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
     await ctx.send(embed = emb)
@@ -62,11 +60,11 @@ async def mute(ctx, member: discord.Member, amount = 1):
 
 @client.command()
 @commands.has_permissions(mention_everyone = True)
-async def gaystvo_embed(ctx, member: discord.Member, *, arg, amount = 1):
+async def gaystvo_embed(ctx, *, arg, amount = 1):
     await ctx.channel.purge(limit = amount)
     await ctx.send('@everyone')
     await asyncio.sleep(0,1)
-    emb = discord.Embed(title = None, colour = member.color)
+    emb = discord.Embed(title = None, colour = ctx.author.color)
     emb.set_author(name = ctx.author.name, icon_url = ctx.author.avatar_url)
     emb.add_field(name = 'Cephalon', value = arg)
     emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
@@ -74,9 +72,9 @@ async def gaystvo_embed(ctx, member: discord.Member, *, arg, amount = 1):
     
 @client.command()
 @commands.has_permissions(manage_messages = True)
-async def embed(ctx, member: discord.Member, *, arg, amount = 1):
+async def embed(ctx, *, arg, amount = 1):
     await ctx.channel.purge(limit = amount)
-    emb = discord.Embed(title = None, colour = member.color)
+    emb = discord.Embed(title = None, colour = ctx.author.color)
     emb.set_author(name = ctx.author.name, icon_url = ctx.author.avatar_url)
     emb.add_field(name = 'Cephalon', value = arg)
     emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
