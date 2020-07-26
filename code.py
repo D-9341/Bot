@@ -17,7 +17,7 @@ client.remove_command('help')
 @commands.has_permissions(administrator = True)
 async def info(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
-    await ctx.send(f'Cy в сети, пинг равен `{round(client.latency * 1000)} ms`, это моя 464 версия')
+    await ctx.send(f'Cy в сети, пинг равен `{round(client.latency * 1000)} ms`')
 
 @client.command()
 @commands.has_permissions(administrator = True)
@@ -143,7 +143,7 @@ async def join(ctx):
         return
     global vc
     try:
-        vc=await channel.connect()
+        vc = await channel.connect()
     except:
         TimeoutError
 
@@ -153,7 +153,6 @@ async def leave(ctx):
         if vc.is_connected():
             await vc.disconnect()
     except:
-        TimeoutError
         pass
 
 #personal messages
