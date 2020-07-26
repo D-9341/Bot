@@ -154,14 +154,12 @@ async def leave(ctx):
     except:
         pass
 
-#personal messages
 @client.command()
 @commands.has_permissions(administrator = True)
 async def pm(ctx, member: discord.Member, amount = 1):
     await ctx.channel.purge(limit = amount)
     await member.send(f'Адамант сука')
 
-#member joined the server
 @client.event
 async def on_member_join(member):
     channel = client.get_channel(693929823030214658)
