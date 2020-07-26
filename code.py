@@ -17,16 +17,13 @@ client.remove_command('help')
 async def info(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
     await ctx.send(f'Cy в сети, пинг равен `{round(client.latency * 1000)} ms`')
-
-@client.command()
-async def zatka(ctx, amount = 1):
-    await ctx.channel.purge(limit = amount)
-    await ctx.send('Форма заявки для Набор кадров (1). ZATKA в STEAM.  ZATKA_KING#8406 в Discord. возраст 14 часовой пояс IL 0. (2). Интересующая игра: Discord (3). Опыт администрирования: Есть.  творческие:  Есть.технические навыки: нет. (4). Сколько часов готовы уделять работе [15 в неделю] в какое время дня свободны 16 00 до 22 00')
     
 @client.command()
 @commands.has_permissions(manage_roles = True)
 async def about(ctx, member:discord.Member, amount = 1):
     await ctx.channel.purge(limit = amount)
+    if member is None:
+        member = ctx.author
     emb = discord.Embed(title = f'Информация о {member.name}', colour = member.color)
     emb.add_field(name = 'ID', value = member.id)
     emb.add_field(name = 'Created', value = member.created_at.strftime("%a, %#d %B %Y, %I:%M %p UTC"), inline = False)
@@ -194,7 +191,6 @@ async def help(ctx, amount = 1):
     emb.add_field(name = '{}about'.format('cephalon/'), value = 'показывает инфу о человеке. В отличии от Ayana пишет только необходимую инфу')
     emb.add_field(name = '{}join'.format('cephalon/'), value = 'приказывает зайти боту в голосовой канал')
     emb.add_field(name = '{}leave'.format('cephalon/'), value = 'приказывает боту выйти из голосового канала')
-    emb.add_field(name = '{}zatka'.format('cephalon/'), value = 'Форма заявки для Набор кадров')
     emb.add_field(name = 'жыж', value = 'также, для написания команд необязательно писать префикс, можно пингануть ~~@everyone~~ бота')
     emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
     await ctx.send(embed = emb)
