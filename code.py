@@ -10,7 +10,7 @@ client = commands.Bot(command_prefix = commands.when_mentioned_or('cephalon/'))
 client.remove_command('help')
 
 #test commands space
-#emb.add_field(name = f'Roles [{len(member.roles)}]', value=' '.join([role.mention for role in roles[1:]]))
+
 #test commands space
 
 @client.command()
