@@ -34,7 +34,7 @@ async def about(ctx, member:discord.Member = None, amount = 1):
     emb.add_field(name = 'Никнейм', value = member.nick)
     emb.add_field(name = 'Статус', value = member.status)
     emb.add_field(name = f'Роли [{len(member.roles)-1}]', value=' '.join([role.mention for role in member.roles[1:]]))
-    emb.add_field(name = 'Высшая Роль', value = member.top_role.color)
+    emb.add_field(name = 'Высшая Роль', value = member.top_role.name)
     emb.add_field(name = 'Бот?', value = member.bot)
     emb.set_thumbnail(url = member.avatar_url)
     emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
