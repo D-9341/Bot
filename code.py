@@ -33,6 +33,7 @@ async def about(ctx, member:discord.Member = None, amount = 1):
     emb.add_field(name = 'Name', value = member.name, inline = False)
     emb.add_field(name = 'Nickname', value = member.nick, inline = False)
     emb.add_field(name = 'Status', value = member.status, inline = False)
+    emb.add_field(name = 'Global Permissions', value = member.guild_permissions, inline = False)
     emb.set_thumbnail(url = member.avatar_url)
     emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
     await ctx.send(embed = emb)
