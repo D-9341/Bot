@@ -14,12 +14,14 @@ client.remove_command('help')
 #test commands space
 
 @client.command()
+@commands.cooldown(1, 10, commands.BucketType.default)
 async def info(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
     await ctx.send(f'Cy в сети, пинг равен `{round(client.latency * 1000)} ms`')
     
 @client.command()
 @commands.has_permissions(manage_roles = True)
+@commands.cooldown(1, 5, commands.BucketType.default)
 async def about(ctx, member:discord.Member = None, amount = 1):
     await ctx.channel.purge(limit = amount)
     if member == None:
@@ -38,6 +40,7 @@ async def about(ctx, member:discord.Member = None, amount = 1):
     
 @client.command()
 @commands.has_permissions(administrator = True)
+@commands.cooldown(1, 10, commands.BucketType.default)
 async def mute(ctx, member: discord.Member, amount = 1):
     await ctx.channel.purge(limit = amount)
     emb = discord.Embed(title = f'Мут от {ctx.author.name}', colour = member.color)
@@ -49,6 +52,7 @@ async def mute(ctx, member: discord.Member, amount = 1):
 
 @client.command()
 @commands.has_permissions(mention_everyone = True)
+@commands.cooldown(1, 20, commands.BucketType.default)
 async def gaystvo_embed(ctx, *, arg, amount = 1):
     await ctx.channel.purge(limit = amount)
     await ctx.send('@everyone')
@@ -61,6 +65,7 @@ async def gaystvo_embed(ctx, *, arg, amount = 1):
     
 @client.command()
 @commands.has_permissions(manage_messages = True)
+@commands.cooldown(1, 10, commands.BucketType.default)
 async def embed(ctx, *, arg, amount = 1):
     await ctx.channel.purge(limit = amount)
     emb = discord.Embed(title = None, colour = ctx.author.color)
@@ -70,18 +75,21 @@ async def embed(ctx, *, arg, amount = 1):
     await ctx.send(embed = emb)
 
 @client.command()
+@commands.cooldown(1, 20, commands.BucketType.default)
 @commands.has_permissions(mention_everyone = True)
 async def gaystvo(ctx, *, arg, amount = 1):
     await ctx.channel.purge(limit = amount)
     await ctx.send('@everyone ' + arg)
     
 @client.command()
+@commands.cooldown(1, 10, commands.BucketType.default)
 @commands.has_permissions(manage_messages = True)
 async def say(ctx, *, arg, amount = 1):
     await ctx.channel.purge(limit = amount)
     await ctx.send(arg)
     
 @client.command()
+@commands.cooldown(1, 10, commands.BucketType.default)
 async def coinflip(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
     choices = ['Орёл!', 'Решка!']
@@ -143,7 +151,7 @@ async def leave(ctx):
 
 @client.command()
 @commands.has_permissions(administrator = True)
-@commands.cooldown(1, 10, commands.BucketType.user)
+@commands.cooldown(1, 10, commands.BucketType.default)
 async def pm(ctx, member: discord.Member, amount = 1):
     await ctx.channel.purge(limit = amount)
     await member.send(f'сука киньте в камыши')
@@ -166,12 +174,13 @@ async def on_member_remove(member):
     
 #help command
 @client.command()
+@commands.cooldown(1, 10, commands.BucketType.default)
 @commands.has_permissions(manage_messages = True)
 async def help(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
     emb = discord.Embed(title = "Меню команд для администраторов", colour = discord.Color.orange())
     emb.add_field(name = 'Инфо', value = "Cy, или же сай - бот, написанный сасиска")
-    emb.add_field(name = '{}info'.format('cephalon/'), value = 'команда для определения, в сети ли бот')
+    emb.add_field(name = '{}info'.format('cephalon/'), value = 'команда для определения, в сети ли бот', inline = False)
     emb.add_field(name = "{}clear".format("cephalon/"), value = "очистка чата")
     emb.add_field(name = "{}ban".format("cephalon/"), value = "бан игрока")
     emb.add_field(name = "{}kick".format("cephalon/"), value = "кик игрока")
@@ -185,6 +194,7 @@ async def help(ctx, amount = 1):
     emb.add_field(name = '{}join'.format('cephalon/'), value = 'приказывает зайти боту в голосовой канал')
     emb.add_field(name = '{}leave'.format('cephalon/'), value = 'приказывает боту выйти из голосового канала')
     emb.add_field(name = 'жыж', value = 'также, для написания команд необязательно писать префикс, можно пингануть ~~@everyone~~ бота')
+    emb.add_field(name = 'жопа', value = 'у всех команд есть кд, для команд, пингующих @everyone - 20 секунд, для остальных 10, для about - 5')
     emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
     await ctx.send(embed = emb)
 
@@ -204,6 +214,7 @@ async def on_ready():
 
 #kick
 @client.command()
+@commands.cooldown(1, 10, commands.BucketType.default)
 @commands.has_permissions(kick_members = True)
 async def kick(ctx , member: discord.Member, *, reason = None):
     await ctx.channel.purge(limit = 1)
@@ -215,6 +226,7 @@ async def kick(ctx , member: discord.Member, *, reason = None):
 
 #ban
 @client.command()
+@commands.cooldown(1, 10, commands.BucketType.default)
 @commands.has_permissions(ban_members = True)
 async def ban(ctx , member: discord.Member, *, reason = None):
     await ctx.channel.purge(limit = 1)
@@ -226,6 +238,7 @@ async def ban(ctx , member: discord.Member, *, reason = None):
 
 #message delete
 @client.command()
+@commands.cooldown(1, 10, commands.BucketType.default)
 @commands.has_permissions(manage_messages = True)
 async def clear(ctx, amount : int):
     await ctx.channel.purge(limit = amount + 1)
