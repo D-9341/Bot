@@ -10,13 +10,7 @@ client = commands.Bot(command_prefix = commands.when_mentioned_or('cephalon/'))
 client.remove_command('help')
 
 #test commands space
-@client.command()
-async def role_info(ctx, amount = 1):
-    await ctx.channel.purge(limit = amount)
-    emb = discord.Embed(colour = role.color)
-    emb.add_field(name = 'Role Name', value = role.name)
-    emb.add_field(name = 'Role ID', valie = role.id)
-    await ctx.send(embed = emb)
+
 #test commands space
 
 @client.command()
