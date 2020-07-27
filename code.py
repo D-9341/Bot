@@ -37,7 +37,7 @@ async def about(ctx, member:discord.Member = None, amount = 1):
     await ctx.send(embed = emb)
     
 @client.command()
-@commands.has_permissions(administrator = True)
+@commands.has_permissions(administrator, mute_members = True)
 async def mute(ctx, member: discord.Member, amount = 1):
     await ctx.channel.purge(limit = amount)
     emb = discord.Embed(title = f'Мут от {ctx.author.name}', colour = member.color)
@@ -143,6 +143,7 @@ async def leave(ctx):
 
 @client.command()
 @commands.has_permissions(administrator = True)
+@commands.cooldown(1, 10, commands.BucketType.user)
 async def pm(ctx, member: discord.Member, amount = 1):
     await ctx.channel.purge(limit = amount)
     await member.send(f'сука киньте в камыши')
@@ -245,6 +246,8 @@ async def clear(ctx, amount : int):
 async def on_command_error(ctx, error):
     if isinstance(error, commands.CommandNotFound):
         await ctx.send(f'{ctx.author.mention}, чё это за команда?')
+    if isinstance(error, commands.CommandOnCooldown):
+        await ctx.send(f'{ctx.author.mention}, команда в кд, потерпи чутка!')
     
 @about.error
 async def about_error(ctx, error):
