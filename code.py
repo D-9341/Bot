@@ -156,7 +156,7 @@ async def leave(ctx):
 @commands.cooldown(1, 10, commands.BucketType.default)
 async def pm(ctx, member: discord.Member, amount = 1):
     await ctx.channel.purge(limit = amount)
-    await member.send(f'сука киньте в камыши')
+    await member.send(f'кок')
 
 @client.event
 async def on_member_join(member):
