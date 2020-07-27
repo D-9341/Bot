@@ -37,7 +37,7 @@ async def about(ctx, member:discord.Member = None, amount = 1):
     await ctx.send(embed = emb)
     
 @client.command()
-@commands.has_permissions(mute_members = True)
+@commands.has_permissions(administrator = True)
 async def mute(ctx, member: discord.Member, amount = 1):
     await ctx.channel.purge(limit = amount)
     emb = discord.Embed(title = f'Мут от {ctx.author.name}', colour = member.color)
