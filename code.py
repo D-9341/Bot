@@ -14,7 +14,6 @@ client.remove_command('help')
 #test commands space
 
 @client.command()
-@commands.cooldown(1, 10, commands.BucketType.default)
 async def info(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
     await ctx.send(f'Cy в сети, пинг равен `{round(client.latency * 1000)} ms`')
