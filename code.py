@@ -36,18 +36,6 @@ async def about(ctx, member:discord.Member = None, amount = 1):
     emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
     await ctx.send(embed = emb)
     
-@client.event
-async def on_voice_state_update(member, before, after):
-    if after.channel.id == 694212304165929101:
-        maincategory = discord.utils.get(guild.categories, id = 693937532550774824)
-        userchannel = await guild.create_voice_channel(name = f'{member.name}', category = None)
-        await userchannel.set_permissions(member, manage_channels = True)
-        await member.move_to(userchannel)
-        def check(a,b,c):
-            return len(userchannel.members) == 0
-        await client.wait_for('voice_state_update', check = check)
-        await userchannel.delete()
-    
 @client.command()
 @commands.has_permissions(mute_members = True)
 async def mute(ctx, member: discord.Member, amount = 1):
