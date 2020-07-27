@@ -33,7 +33,7 @@ async def about(ctx, member:discord.Member = None, amount = 1):
     emb.add_field(name = 'Name', value = member.name)
     emb.add_field(name = 'Nickname', value = member.nick)
     emb.add_field(name = 'Status', value = member.status)
-    emb.add_field(name = f'Roles [{len(member.roles)}]', value=' '.join([role.mention for role in member.roles]))
+    emb.add_field(name = f'Roles [{len(member.roles)}]', value=' '.join([role.mention for role in member.roles[1:]]))
     emb.add_field(name = 'Top Role', value = member.top_role.mention)
     emb.add_field(name = 'Bot?', value = member.bot)
     emb.set_thumbnail(url = member.avatar_url)
