@@ -20,32 +20,21 @@ async def info(ctx, amount = 1):
     
 @client.command()
 @commands.has_permissions(manage_roles = True)
-async def about(ctx, member:discord.Member, amount = 1):
+async def about(ctx, member:discord.Member = None, amount = 1):
     await ctx.channel.purge(limit = amount)
-    if member.name == 'Cy':
-        emb = discord.Embed(title = f'Информация обо мне? Вот:', colour = discord.Color.red())
-        emb.add_field(name = 'ID', value = member.id)
-        emb.add_field(name = 'Created', value = member.created_at.strftime("%a, %#d %B %Y, %I:%M %p UTC"), inline = False)
-        emb.add_field(name = 'Joined', value = member.joined_at.strftime("%a, %#d %B %Y, %I:%M %p UTC"), inline = False)
-        emb.add_field(name = 'Mention', value = member.mention, inline = False)
-        emb.add_field(name = 'Name', value = 'Cy', inline = False)
-        emb.add_field(name = 'Nickname', value = member.nick, inline = False)
-        emb.add_field(name = 'Status', value = member.status, inline = False)
-        emb.set_thumbnail(url = member.avatar_url)
-        emb.set_footer(text = 'Зачем вам эта информация?')
-        await ctx.send(embed = emb)
-    else:
-        emb = discord.Embed(title = f'Информация о {member.name}', colour = member.color)
-        emb.add_field(name = 'ID', value = member.id)
-        emb.add_field(name = 'Created', value = member.created_at.strftime("%a, %#d %B %Y, %I:%M %p UTC"), inline = False)
-        emb.add_field(name = 'Joined', value = member.joined_at.strftime("%a, %#d %B %Y, %I:%M %p UTC"), inline = False)
-        emb.add_field(name = 'Mention', value = member.mention, inline = False)
-        emb.add_field(name = 'Name', value = member.name, inline = False)
-        emb.add_field(name = 'Nickname', value = member.nick, inline = False)
-        emb.add_field(name = 'Status', value = member.status, inline = False)
-        emb.set_thumbnail(url = member.avatar_url)
-        emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
-        await ctx.send(embed = emb)
+    if member == None:
+        member = ctx.message.author
+    emb = discord.Embed(title = f'Информация о {member.name}', colour = member.color)
+    emb.add_field(name = 'ID', value = member.id)
+    emb.add_field(name = 'Created', value = member.created_at.strftime("%a, %#d %B %Y, %I:%M %p UTC"), inline = False)
+    emb.add_field(name = 'Joined', value = member.joined_at.strftime("%a, %#d %B %Y, %I:%M %p UTC"), inline = False)
+    emb.add_field(name = 'Mention', value = member.mention, inline = False)
+    emb.add_field(name = 'Name', value = member.name, inline = False)
+    emb.add_field(name = 'Nickname', value = member.nick, inline = False)
+    emb.add_field(name = 'Status', value = member.status, inline = False)
+    emb.set_thumbnail(url = member.avatar_url)
+    emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+    await ctx.send(embed = emb)
     
 @client.event
 async def on_voice_state_update(member, before, after):
