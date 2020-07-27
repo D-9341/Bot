@@ -40,7 +40,7 @@ async def about(ctx, member:discord.Member = None, amount = 1):
 @commands.has_permissions(mute_members = True)
 async def mute(ctx, member: discord.Member, amount = 1):
     await ctx.channel.purge(limit = amount)
-    emb = discord.Embed(title = f'Мут от {ctx.author.name}', colour = discord.Color.red())
+    emb = discord.Embed(title = f'Мут от {ctx.author.name}', colour = member.color)
     role = discord.utils.get(ctx.message.guild.roles, name = 'Muted')
     await member.add_roles(role)
     emb.add_field(name = 'В муте', value = '{}'.format(member.mention))
@@ -206,7 +206,7 @@ async def on_ready():
 @commands.has_permissions(kick_members = True)
 async def kick(ctx , member: discord.Member, *, reason = None):
     await ctx.channel.purge(limit = 1)
-    emb = discord.Embed(title = f'Кик от {ctx.author.name}', colour = discord.Color.orange())
+    emb = discord.Embed(title = f'Кик от {ctx.author.name}', colour = member.color)
     await member.kick(reason = reason)
     emb.add_field(name = 'Кикнут', value = '{}'.format(member.mention))
     emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
@@ -217,7 +217,7 @@ async def kick(ctx , member: discord.Member, *, reason = None):
 @commands.has_permissions(ban_members = True)
 async def ban(ctx , member: discord.Member, *, reason = None):
     await ctx.channel.purge(limit = 1)
-    emb = discord.Embed(title = f'Бан от {ctx.author.name}', colour = discord.Color.red())
+    emb = discord.Embed(title = f'Бан от {ctx.author.name}', colour = member.color)
     await member.ban(reason = reason)
     emb.add_field(name = 'Забанен', value = '{}'.format(member.mention))
     emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
