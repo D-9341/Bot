@@ -10,7 +10,14 @@ client = commands.Bot(command_prefix = commands.when_mentioned_or('cephalon/'))
 client.remove_command('help')
 
 #test commands space
-
+@client.command()
+async def ping(ctx, *, arg, amount = 1):
+    await ctx.channel.purge(limit = amount)
+    await ctx.send('@Muted')
+    await asyncio.sleep(0,1)
+    emb = discord.Embed(color = role.color)
+    emb.add_field(name = 'unspecified', value = arg)
+    await ctx.send (embed = emb)
 #test commands space
 
 @client.command()
@@ -59,7 +66,7 @@ async def gaystvo_embed(ctx, *, arg, amount = 1):
     await ctx.channel.purge(limit = amount)
     await ctx.send('@everyone')
     await asyncio.sleep(0,1)
-    emb = discord.Embed(title = None, colour = ctx.author.color)
+    emb = discord.Embed(colour = ctx.author.color)
     emb.set_author(name = ctx.author.name, icon_url = ctx.author.avatar_url)
     emb.add_field(name = 'Cephalon', value = arg)
     emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
@@ -70,7 +77,7 @@ async def gaystvo_embed(ctx, *, arg, amount = 1):
 @commands.cooldown(1, 10, commands.BucketType.default)
 async def embed(ctx, *, arg, amount = 1):
     await ctx.channel.purge(limit = amount)
-    emb = discord.Embed(title = None, colour = ctx.author.color)
+    emb = discord.Embed(colour = ctx.author.color)
     emb.set_author(name = ctx.author.name, icon_url = ctx.author.avatar_url)
     emb.add_field(name = 'Cephalon', value = arg)
     emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
