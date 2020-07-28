@@ -10,14 +10,7 @@ client = commands.Bot(command_prefix = commands.when_mentioned_or('cephalon/'))
 client.remove_command('help')
 
 #test commands space
-@client.command()
-async def image(ctx, *, arg, amount = 1):
-    await ctx.channel.purge(limit = amount)
-    emb = discord.Embed(colour = ctx.author.color)
-    emb.set_author(name = ctx.author.name, icon_url = ctx.author.avatar_url)
-    emb.set_image(url = arg)
-    emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
-    await ctx.send(embed = emb)
+
 #test commands space
 
 @client.command()
@@ -58,7 +51,18 @@ async def mute(ctx, member: discord.Member, amount = 1):
     emb.add_field(name = 'В муте', value = '{}'.format(member.mention))
     emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
     await ctx.send(embed = emb)
-
+    
+@client.command()
+@commands.has_permissions(manage_messages = True)
+@commands.cooldown(1, 5, commands.BucketType.default)
+async def image(ctx, *, arg, amount = 1):
+    await ctx.channel.purge(limit = amount)
+    emb = discord.Embed(colour = ctx.author.color)
+    emb.set_author(name = ctx.author.name, icon_url = ctx.author.avatar_url)
+    emb.set_image(url = arg)
+    emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+    await ctx.send(embed = emb)
+    
 @client.command()
 @commands.has_permissions(mention_everyone = True)
 @commands.cooldown(1, 20, commands.BucketType.default)
@@ -198,6 +202,7 @@ async def help(ctx, amount = 1):
     emb.add_field(name = '{}gaystvo'.format('cephalon/'), value = 'пишет от лица бота и пингует @everyone')
     emb.add_field(name = '{}embed'.format('cephalon/'), value = 'от лица бота отправляется эмбед')
     emb.add_field(name = '{}gaystvo_embed'.format('cephalon/'), value = 'Совмещает в себе команды gaystvo и embed')
+    emb.add_field(name = '{}image'.format('cephalon/'), value = 'бот может прикрепить изображение, в аргумент нужно указа ссылку')
     emb.add_field(name = '{}about'.format('cephalon/'), value = 'показывает инфу о человеке.')
     emb.add_field(name = '{}join'.format('cephalon/'), value = 'приказывает зайти боту в голосовой канал')
     emb.add_field(name = '{}leave'.format('cephalon/'), value = 'приказывает боту выйти из голосового канала')
@@ -267,8 +272,20 @@ async def clear(ctx, amount : int):
 async def on_command_error(ctx, error):
     if isinstance(error, commands.CommandNotFound):
         await ctx.send(f'{ctx.author.mention}, чё это за команда?')
+        
     if isinstance(error, commands.CommandOnCooldown):
         await ctx.send(f'{ctx.author.mention}, команда в кд, потерпи чутка!')
+    
+@image.error
+async def image_error(ctx, error):
+    if isinstance(error, commands.MissingRequiredArgument):
+        await ctx.send(f'{ctx.author.mention}, чё прикрепить то?')
+        
+    if isinstance(error, commands.MissingPermissions):
+        await ctx.send(f'{ctx.author.mention} пытался вызвать команду image. Хаха')
+        
+    if isinstance(error, commands.BadArgument):
+        await ctx.send(f'{ctx.author.mention}, это не ссылка!')
     
 @about.error
 async def about_error(ctx, error):
@@ -314,6 +331,7 @@ async def gaystvo_error(ctx, error):
 async def say_error(ctx, error):
     if isinstance(error, commands.MissingRequiredArgument):
         await ctx.send(f'{ctx.author.mention}, чё сказать то?')
+            
     if isinstance(error, commands.MissingPermissions):
         await ctx.send(f'{ctx.author.mention} пытался вызвать комманду Say. Хаха')
         
