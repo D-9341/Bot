@@ -191,7 +191,6 @@ async def help(ctx, amount = 1):
     emb.add_field(name = '{}gaystvo'.format('cephalon/'), value = 'пишет от лица бота и пингует @everyone')
     emb.add_field(name = '{}embed'.format('cephalon/'), value = 'от лица бота отправляется эмбед')
     emb.add_field(name = '{}gaystvo_embed'.format('cephalon/'), value = 'Совмещает в себе команды gaystvo и embed')
-    emb.add_field(name = '{}pm'.format('cephalon/'), value = 'пишет выбраному участнику **сука киньте в камыши**')
     emb.add_field(name = '{}about'.format('cephalon/'), value = 'показывает инфу о человеке.')
     emb.add_field(name = '{}join'.format('cephalon/'), value = 'приказывает зайти боту в голосовой канал')
     emb.add_field(name = '{}leave'.format('cephalon/'), value = 'приказывает боту выйти из голосового канала')
@@ -203,7 +202,7 @@ async def help(ctx, amount = 1):
 @client.command()
 async def time(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
-    emb = discord.Embed(title = None, colour = discord.Color.orange())
+    emb = discord.Embed(colour = discord.Color.orange())
     emb.set_footer(text = 'Cephalon Cy от сасиска#2472')
     now_date = datetime.datetime.now()
     emb.add_field(name = 'Время по Гринвичу равняется ', value = '{}'.format(now_date))
