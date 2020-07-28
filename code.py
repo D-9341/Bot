@@ -11,11 +11,11 @@ client.remove_command('help')
 
 #test commands space
 @client.command()
-async def image(ctx, amount = 1):
+async def image(ctx, *, arg, amount = 1):
     await ctx.channel.purge(limit = amount)
-    emb = discord.Embed(colour = member.color)
+    emb = discord.Embed(colour = ctx.author.color)
     emb.set_author(name = ctx.author.name, icon_url = ctx.author.avatar_url)
-    emb.set_image(url = 'https://cdn.discordapp.com/attachments/626809309174562858/737627137296564244/909ef42.png')
+    emb.set_image(url = arg)
     emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
     await ctx.send(embed = emb)
 #test commands space
