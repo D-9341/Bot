@@ -10,8 +10,8 @@ client = commands.Bot(command_prefix = commands.when_mentioned_or('cephalon/'))
 client.remove_command('help')
 
 #test commands space
-@client.commad()
-async def photo(ctx, *, arg, amount = 1):
+@client.command()
+async def image(ctx, *, arg, amount = 1):
     await ctx.channel.purge(limit = amount)
     emb = discord.Embed(colour = member.color)
     emb.set_author(name = ctx.author.name, icon_url = ctx.author.avatar_url)
