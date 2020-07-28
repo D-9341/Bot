@@ -55,7 +55,7 @@ async def mute(ctx, member: discord.Member, amount = 1):
 @client.command()
 @commands.has_permissions(manage_messages = True)
 @commands.cooldown(1, 5, commands.BucketType.default)
-async def image(ctx, *, arg, amount = 1):
+async def image(ctx, *, arg: str, amount = 1):
     await ctx.channel.purge(limit = amount)
     emb = discord.Embed(colour = ctx.author.color)
     emb.set_author(name = ctx.author.name, icon_url = ctx.author.avatar_url)
@@ -284,7 +284,7 @@ async def image_error(ctx, error):
     if isinstance(error, commands.MissingPermissions):
         await ctx.send(f'{ctx.author.mention} пытался вызвать команду image. Хаха')
         
-    if isinstance(error, commands.UserInputError):
+    if isinstance(error, commands.BadArgument):
         await ctx.send(f'{ctx.author.mention}, это не ссылка!')
     
 @about.error
@@ -366,6 +366,9 @@ async def clear_error(ctx, error):
 
     if isinstance(error, commands.MissingPermissions):
         await ctx.send(f'{ctx.author.mention} пытался вызвать комманду Clear. Хаха')
+        
+    if isinstance(error, commands.BadArgument):
+        await ctx.send(f'{ctx.author.mention}, это не число!')
     
 t = os.environ.get('t')
 
