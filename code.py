@@ -10,12 +10,7 @@ client = commands.Bot(command_prefix = commands.when_mentioned_or('cephalon/'))
 client.remove_command('help')
 
 #test commands space
-@client.command()
-@commands.has_permissions(manage_roles = True)
-async def take(ctx, arg, member:discord.Member, amount = 1):
-    await ctx.channel.purge(limit = amount)
-    role = discord.utils.get(ctx.message.guild.roles, name = arg)
-    await member.remove_roles(role)
+
 #test commands space
 
 @client.command()
@@ -63,6 +58,13 @@ async def give(ctx, arg, member:discord.Member, amount = 1):
     await ctx.channel.purge(limit = amount)
     role = discord.utils.get(ctx.message.guild.roles, name = arg)
     await member.add_roles(role)
+    
+@client.command()
+@commands.has_permissions(manage_roles = True)
+async def take(ctx, arg, member:discord.Member, amount = 1):
+    await ctx.channel.purge(limit = amount)
+    role = discord.utils.get(ctx.message.guild.roles, name = arg)
+    await member.remove_roles(role)
     
 @client.command()
 @commands.has_permissions(manage_messages = True)
@@ -218,6 +220,8 @@ async def help(ctx, amount = 1):
     emb.add_field(name = '{}about'.format('cephalon/'), value = 'показывает инфу о человеке.')
     emb.add_field(name = '{}join'.format('cephalon/'), value = 'приказывает зайти боту в голосовой канал')
     emb.add_field(name = '{}leave'.format('cephalon/'), value = 'приказывает боту выйти из голосового канала')
+    emb.add_field(name = '{}give'.format('cephalon/'), value = 'выдаёт роль, писать в формате: give (выдаваемая роль) (пинг пользователя)', inline = False)
+    emb.add_field(name = '{}take'.format('cephalon/'), value = 'забирает роль, писать в формате: take (забираемая роль) (пинг пользователя)', inline = False)
     emb.add_field(name = 'жыж', value = 'также, для написания команд необязательно писать префикс, можно пингануть ~~@everyone~~ бота')
     emb.add_field(name = 'жопа', value = 'у всех команд есть кд, для команд, пингующих @everyone - 20 секунд, для остальных 10, для about - 5, для coinflip - 5 раз в 10 секунд')
     emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
