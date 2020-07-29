@@ -90,7 +90,7 @@ async def gaystvo_embed(ctx, *, arg, arg1, arg2, arg3, amount = 1):
 @client.command()
 @commands.has_permissions(manage_messages = True)
 @commands.cooldown(1, 10, commands.BucketType.default)
-async def embed(ctx, *, arg, arg1, arg2, arg3, amount = 1):
+async def embed(ctx, arg, arg1, arg2, arg3, *, amount = 1):
     await ctx.channel.purge(limit = amount)
     emb = discord.Embed(colour = ctx.author.color)
     emb.set_author(name = ctx.author.name, icon_url = ctx.author.avatar_url)
