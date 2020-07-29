@@ -75,7 +75,7 @@ async def take(ctx, arg, member: discord.Member, amount = 1):
 @client.command()
 @commands.has_permissions(mention_everyone = True)
 @commands.cooldown(1, 20, commands.BucketType.default)
-async def gaystvo_embed(ctx, *, arg, arg1, arg2, arg3, amount = 1):
+async def gaystvo_embed(ctx, arg, arg1, arg2, arg3, *, amount = 1):
     await ctx.channel.purge(limit = amount)
     await ctx.send('@everyone')
     await asyncio.sleep(0,1)
