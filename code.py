@@ -66,7 +66,7 @@ async def take(ctx, arg, member:discord.Member, amount = 1):
     role = discord.utils.get(ctx.message.guild.roles, name = arg)
     await member.remove_roles(role)
     emb = discord.Embed(colour = member.color)
-    emb.add_field('{ctx.author.mention} забрал роль ({arg}) у {member.mention}')
+    emb.add_field(f'{ctx.author.mention} забрал роль ({arg}) у {member.mention}')
     emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
     await ctx.send(embed = emb)
     
