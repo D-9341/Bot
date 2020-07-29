@@ -25,6 +25,8 @@ async def about(ctx, member:discord.Member = None, amount = 1):
     await ctx.channel.purge(limit = amount)
     if member == None:
         member = ctx.message.author
+    if member.color == None:
+        member.color = discord.Color.orange()
     emb = discord.Embed(title = f'Информация о {member.name}', colour = member.color)
     emb.add_field(name = 'ID', value = member.id)
     emb.add_field(name = 'Создан', value = member.created_at.strftime("%a, %#d %B %Y, %I:%M %p UTC"), inline = False)
