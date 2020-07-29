@@ -58,6 +58,7 @@ async def give(ctx, arg, member:discord.Member, amount = 1):
     await ctx.channel.purge(limit = amount)
     role = discord.utils.get(ctx.message.guild.roles, name = arg)
     await member.add_roles(role)
+    await ctx.send(f'{ctx.author.mention} дал {arg} {member.mention}')
     
 @client.command()
 @commands.has_permissions(manage_roles = True)
