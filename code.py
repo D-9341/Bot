@@ -65,10 +65,7 @@ async def take(ctx, arg, member:discord.Member, amount = 1):
     await ctx.channel.purge(limit = amount)
     role = discord.utils.get(ctx.message.guild.roles, name = arg)
     await member.remove_roles(role)
-    emb = discord.Embed(colour = member.color)
-    emb.add_field(f'{ctx.author.mention} забрал роль ({arg}) у {member.mention}')
-    emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
-    await ctx.send(embed = emb)
+    await ctx.send(f'{ctx.author.mention} забрал {arg} у {member.mention}')
     
 @client.command()
 @commands.has_permissions(manage_messages = True)
