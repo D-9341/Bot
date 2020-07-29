@@ -89,7 +89,6 @@ async def gaystvo_embed(ctx, *, arg, arg1, arg2, arg3, amount = 1):
     
 @client.command()
 @commands.has_permissions(manage_messages = True)
-@commands.cooldown(1, 10, commands.BucketType.default)
 async def embed(ctx, arg, arg1, arg2, arg3, *, amount = 1):
     await ctx.channel.purge(limit = amount)
     emb = discord.Embed(colour = ctx.author.color)
@@ -213,7 +212,7 @@ async def help(ctx, amount = 1):
     emb.add_field(name = '{}mute'.format('cephalon/'), value = 'мут игрока')
     emb.add_field(name = '{}say'.format('cephalon/'), value = 'пишет сообщение от лица бота. Всё.')
     emb.add_field(name = '{}gaystvo'.format('cephalon/'), value = 'пишет от лица бота и пингует @everyone')
-    emb.add_field(name = '{}embed'.format('cephalon/'), value = 'от лица бота отправляется эмбед. Прочтите #инструкции-cy-бот , чтобы узнать подробнее.')
+    emb.add_field(name = '{}embed'.format('cephalon/'), value = 'от лица бота отправляется эмбед. Прочтите #cy-бот , чтобы узнать подробнее.')
     emb.add_field(name = '{}gaystvo_embed'.format('cephalon/'), value = 'Совмещает в себе команды gaystvo и embed')
     emb.add_field(name = '{}about'.format('cephalon/'), value = 'показывает инфу о человеке.')
     emb.add_field(name = '{}join'.format('cephalon/'), value = 'приказывает зайти боту в голосовой канал')
