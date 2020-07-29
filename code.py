@@ -11,7 +11,7 @@ client.remove_command('help')
 
 #test commands space
 @client.command()
-async def emb(ctx, arg, arg1, *, amount = 1):
+async def emb(ctx, arg, arg1:str, *, amount = 1):
     await ctx.channel.purge(limit = amount)
     if arg1 == None:
         emb = discord.Embed(colour = ctx.author.color)
