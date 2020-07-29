@@ -290,14 +290,6 @@ async def on_command_error(ctx, error):
     if isinstance(error, commands.CommandOnCooldown):
         await ctx.send(f'{ctx.author.mention}, команда в кд, потерпи чутка!')
     
-@image.error
-async def image_error(ctx, error):
-    if isinstance(error, commands.MissingRequiredArgument):
-        await ctx.send(f'{ctx.author.mention}, чё прикрепить то?')
-        
-    if isinstance(error, commands.MissingPermissions):
-        await ctx.send(f'{ctx.author.mention} пытался вызвать команду image. Хаха')
-    
 @about.error
 async def about_error(ctx, error):
     if isinstance(error, commands.MissingRequiredArgument):
