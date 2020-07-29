@@ -16,7 +16,8 @@ async def emb(ctx, arg, arg1:str, *, amount = 1):
     if arg1 == None:
         emb = discord.Embed(colour = ctx.author.color)
         emb.set_author(name = ctx.author.name, icon_url = ctx.author.avatar_url)
-        emb.add_field(name = arg, value = None)
+        emb.add_field(name = 'Cephalon', value = arg)
+        emb.set_image(url = arg1)
         emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
         await ctx.send(embed = emb)
 #test commands space
