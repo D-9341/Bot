@@ -11,10 +11,11 @@ client.remove_command('help')
 
 #test commands space
 @client.command()
-async def give(ctx, arg, member:discord.Member, amount = 1):
+@commands.has_permissions(manage_roles = True)
+async def take(ctx, arg, member:discord.Member, amount = 1):
     await ctx.channel.purge(limit = amount)
     role = discord.utils.get(ctx.message.guild.roles, name = arg)
-    await member.add_roles(role)
+    await member.remove_roles(role)
 #test commands space
 
 @client.command()
@@ -55,6 +56,13 @@ async def mute(ctx, member: discord.Member, amount = 1):
     emb.add_field(name = 'В муте', value = '{}'.format(member.mention))
     emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
     await ctx.send(embed = emb)
+    
+@client.command()
+@commands.has_permissions(manage_roles = True)
+async def give(ctx, arg, member:discord.Member, amount = 1):
+    await ctx.channel.purge(limit = amount)
+    role = discord.utils.get(ctx.message.guild.roles, name = arg)
+    await member.add_roles(role)
     
 @client.command()
 @commands.has_permissions(manage_messages = True)
