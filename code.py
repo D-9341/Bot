@@ -54,21 +54,21 @@ async def mute(ctx, member: discord.Member, amount = 1):
     
 @client.command()
 @commands.has_permissions(manage_roles = True)
-async def give(ctx, arg, *, member:discord.Member, amount = 1):
+async def give(ctx, *, arg, member:discord.Member, amount = 1):
     await ctx.channel.purge(limit = amount)
     role = discord.utils.get(ctx.message.guild.roles, name = arg)
     await member.add_roles(role)
     channel = client.get_channel(714175791033876490)
-    await ctx.channel.send(f'{ctx.author.mention} дал {arg} {member.mention}')
+    await channel.send(f'{ctx.author.mention} дал {arg} {member.mention}')
     
 @client.command()
 @commands.has_permissions(manage_roles = True)
-async def take(ctx, arg, *, member:discord.Member, amount = 1):
+async def take(ctx, *, arg, member:discord.Member, amount = 1):
     await ctx.channel.purge(limit = amount)
     role = discord.utils.get(ctx.message.guild.roles, name = arg)
     await member.remove_roles(role)
     channel = client.get_channel(714175791033876490)
-    await ctx.channel.send(f'{ctx.author.mention} забрал {arg} у {member.mention}')
+    await channel.send(f'{ctx.author.mention} забрал {arg} у {member.mention}')
     
 @client.command()
 @commands.has_permissions(manage_messages = True)
