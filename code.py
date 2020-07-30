@@ -200,12 +200,12 @@ async def on_member_join(member):
 @client.event
 async def on_member_join(member, guild):
     channel = client.get_channel(693929823030214658)
-    await channel.send(embed = discord.Embed(description = f'{member.name} Зашёл в {guild.name}, 👋', colour = discord.Color.orange()))
+    await channel.send(embed = discord.Embed(description = f'{member.name} Has entered the facility, 👋', colour = discord.Color.orange()))
 
 @client.event
 async def on_member_remove(member, guild):
     channel = client.get_channel(693929823030214658)
-    await channel.send(embed = discord.Embed(description = f'{member.name} Вышел из {guild.name}...', colour = discord.Color.red()))
+    await channel.send(embed = discord.Embed(description = f'{member.name} Has exited the facility...', colour = discord.Color.red()))
     
 #help command
 @client.command()
