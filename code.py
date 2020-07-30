@@ -74,7 +74,7 @@ async def take(ctx, arg, member: discord.Member, amount = 1):
     
 @client.command()
 @commands.has_permissions(manage_messages = True)
-async def image(ctx, arg = None, arg1 = None, *, amount = 1):
+async def image(ctx, arg, arg1, *, amount = 1):
     await ctx.channel.purge(limit = amount)
     emb = discord.Embed(colour = ctx.author.color)
     emb.set_author(name = ctx.author.name, icon_url = ctx.author.avatar_url)
