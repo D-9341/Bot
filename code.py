@@ -222,7 +222,7 @@ async def help(ctx, amount = 1):
     emb.add_field(name = '{}mute'.format('cephalon/'), value = 'мут игрока')
     emb.add_field(name = '{}say'.format('cephalon/'), value = 'пишет сообщение от лица бота. Всё.')
     emb.add_field(name = '{}gaystvo'.format('cephalon/'), value = 'пишет от лица бота и пингует @everyone')
-    emb.add_field(name = '{}embed'.format('cephalon/'), value = 'от лица бота отправляется эмбед. Прочтите #cy-бот , чтобы узнать подробнее.')
+    emb.add_field(name = '{}embed'.format('cephalon/'), value = 'от лица бота отправляется эмбед. Прочтите #инструкции-cy-бот , чтобы узнать подробнее.')
     emb.add_field(name = '{}gaystvo_embed'.format('cephalon/'), value = 'Совмещает в себе команды gaystvo и embed')
     emb.add_field(name = '{}image'.format('cephalon/'), value = 'бот может прикрепить изображение, в аргумент нужно указать ссылку')
     emb.add_field(name = '{}about'.format('cephalon/'), value = 'показывает инфу о человеке.')
