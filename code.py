@@ -198,12 +198,12 @@ async def on_member_join(member):
     await member.add_roles(role, role1, role2)
     
 @client.event
-async def on_member_join(member):
+async def on_member_join(member, guild):
     channel = client.get_channel(693929823030214658)
     await channel.send(embed = discord.Embed(description = f'{member.name} Зашёл в {guild.name}, 👋', colour = discord.Color.orange()))
 
 @client.event
-async def on_member_remove(member):
+async def on_member_remove(member, guild):
     channel = client.get_channel(693929823030214658)
     await channel.send(embed = discord.Embed(description = f'{member.name} Вышел из {guild.name}...', colour = discord.Color.red()))
     
