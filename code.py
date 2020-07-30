@@ -7,7 +7,7 @@ from discord.ext import commands
 from discord.utils import get
 
 client = commands.Bot(command_prefix = commands.when_mentioned_or('cephalon/'))
-
+client.remove_command('help')
 
 #test commands space
 
@@ -212,7 +212,7 @@ async def on_member_remove(member):
 @client.command()
 @commands.cooldown(1, 10, commands.BucketType.default)
 @commands.has_permissions(manage_messages = True)
-async def helpo(ctx, amount = 1):
+async def help(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
     emb = discord.Embed(title = "Меню команд для администраторов", colour = discord.Color.orange())
     emb.add_field(name = 'Инфо', value = "Cy, или же сай - бот, написанный сасиска")
@@ -225,6 +225,7 @@ async def helpo(ctx, amount = 1):
     emb.add_field(name = '{}gaystvo'.format('cephalon/'), value = 'пишет от лица бота и пингует @everyone')
     emb.add_field(name = '{}embed'.format('cephalon/'), value = 'от лица бота отправляется эмбед. Прочтите #cy-бот , чтобы узнать подробнее.')
     emb.add_field(name = '{}gaystvo_embed'.format('cephalon/'), value = 'Совмещает в себе команды gaystvo и embed')
+    emb.add_field(name = '{}image'.format('cephalon/'), value = 'бот может прикрепить изображение, в аргумент нужно указать ссылку')
     emb.add_field(name = '{}about'.format('cephalon/'), value = 'показывает инфу о человеке.')
     emb.add_field(name = '{}join'.format('cephalon/'), value = 'приказывает зайти боту в голосовой канал')
     emb.add_field(name = '{}leave'.format('cephalon/'), value = 'приказывает боту выйти из голосового канала')
