@@ -19,7 +19,6 @@ async def info(ctx, amount = 1):
     await ctx.send(f'Cy в сети, пинг равен `{round(client.latency * 1000)} ms`')
     
 @client.command()
-@commands.has_permissions(manage_roles = True)
 @commands.cooldown(1, 5, commands.BucketType.default)
 async def about(ctx, member:discord.Member = None, amount = 1):
     await ctx.channel.purge(limit = amount)
@@ -55,7 +54,7 @@ async def mute(ctx, member: discord.Member, amount = 1):
     await ctx.send(embed = emb)
     
 @client.command()
-@commands.has_permissions(manage_roles = True)
+@commands.has_permissions(manage_channels = True)
 async def give(ctx, arg, member: discord.Member, amount = 1):
     await ctx.channel.purge(limit = amount)
     role = discord.utils.get(ctx.message.guild.roles, name = arg)
@@ -64,7 +63,7 @@ async def give(ctx, arg, member: discord.Member, amount = 1):
     await channel.send(f'{ctx.author.mention} дал {role} {member.mention}')
     
 @client.command()
-@commands.has_permissions(manage_roles = True)
+@commands.has_permissions(manage_channels = True)
 async def take(ctx, arg, member: discord.Member, amount = 1):
     await ctx.channel.purge(limit = amount)
     role = discord.utils.get(ctx.message.guild.roles, name = arg)
@@ -210,7 +209,7 @@ async def on_member_remove(member):
 #help command
 @client.command()
 @commands.cooldown(1, 10, commands.BucketType.default)
-@commands.has_permissions(manage_messages = True)
+@commands.has_permissions(kick_members = True)
 async def help(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
     emb = discord.Embed(title = "Меню команд для администраторов", colour = discord.Color.orange())
