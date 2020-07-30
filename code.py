@@ -73,6 +73,17 @@ async def take(ctx, arg, member: discord.Member, amount = 1):
     await channel.send(f'{ctx.author.mention} забрал {role} у {member.mention}')
     
 @client.command()
+@commands.has_permissions(manage_messages = True)
+async def image(ctx, *, arg = None, arg1 = None amount = 1):
+    await ctx.channel.purge(limit = amount)
+    emb = discord.Embed(colour = ctx.author.color)
+    emb.set_author(name = ctx.author.name, icon_url = ctx.author.avatar_url)
+    emb.set_image(url = arg)
+    emb.set_image(url = arg1)
+    emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+    await ctx.send(embed = emb)
+    
+@client.command()
 @commands.has_permissions(mention_everyone = True)
 @commands.cooldown(1, 20, commands.BucketType.default)
 async def gaystvo_embed(ctx, arg, arg1, arg2, arg3, *, amount = 1):
