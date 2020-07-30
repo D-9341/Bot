@@ -7,7 +7,7 @@ from discord.ext import commands
 from discord.utils import get
 
 client = commands.Bot(command_prefix = commands.when_mentioned_or('cephalon/'))
-client.remove_command('help')
+
 
 #test commands space
 
@@ -212,7 +212,7 @@ async def on_member_remove(member):
 @client.command()
 @commands.cooldown(1, 10, commands.BucketType.default)
 @commands.has_permissions(manage_messages = True)
-async def help(ctx, amount = 1):
+async def helpo(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
     emb = discord.Embed(title = "Меню команд для администраторов", colour = discord.Color.orange())
     emb.add_field(name = 'Инфо', value = "Cy, или же сай - бот, написанный сасиска")
