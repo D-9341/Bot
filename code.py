@@ -24,8 +24,6 @@ async def about(ctx, member:discord.Member = None, amount = 1):
     await ctx.channel.purge(limit = amount)
     if member == None:
         member = ctx.message.author
-    if member.color == None:
-        colour = discord.Color.orange()
     emb = discord.Embed(title = f'Информация о {member.name}', colour = member.color)
     emb.add_field(name = 'ID', value = member.id)
     emb.add_field(name = 'Создан', value = member.created_at.strftime("%a, %#d %B %Y, %I:%M %p UTC"), inline = False)
@@ -34,7 +32,7 @@ async def about(ctx, member:discord.Member = None, amount = 1):
     emb.add_field(name = 'Имя', value = member.name)
     emb.add_field(name = 'Никнейм', value = member.nick)
     emb.add_field(name = 'Статус', value = member.status)
-    emb.add_field(name = f'Роли [{len(member.roles)-1}]', value=' '.join([role.name for role in member.roles]))
+    emb.add_field(name = f'Роли [{len(member.roles)}]', value=' '.join([role.name for role in member.roles]))
     emb.add_field(name = 'Высшая Роль', value = member.top_role.mention, inline = False)
     emb.add_field(name = 'Бот?', value = member.bot)
     emb.set_thumbnail(url = member.avatar_url)
