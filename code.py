@@ -16,7 +16,7 @@ async def guild_info(ctx, amount = 1):
     emb = discord.Embed(colour = discord.Color.orange())
     emb.add_field(name = 'ID сервера', value = guild.id)
     emb.add_field(name = 'Уровень сервера', value = guild.premium_tier)
-    emb.add_field(name = 'Кто бустит сервер', value = guild.premium_subscribers)
+    emb.add_field(name = 'Кто бустит сервер', value = {len(guild.premium_subscribers)})
     emb.add_field(name = 'Сколько человек на сервере?', value = guild.member_count)
     emb.add_field(name = 'Когда сервер был создан?', value = guild.created_at)
     emb.set_thumbnail(url = guild.icon_url)
