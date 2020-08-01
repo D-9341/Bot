@@ -12,8 +12,9 @@ client.owner_id = 338714886001524737
 
 
 #test commands space
-@client.event
-async def on_guild_join(ctx, guild):
+@client.command(aliases = ['Guild', 'GUILD'])
+@commands.cooldown(1, 5, commands.BucketType.default)
+async def guiud(ctx, guild):
     emb = discord.Embed(title = 'Дарова жопы!', colour = discord.Color.orange())
     emb.add_field(name = 'ID сервера', value = guild.id)
     emb.add_field(name = 'Уровень сервера', value = guild.premium_tier)
