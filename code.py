@@ -13,7 +13,7 @@ client.owner_id = 338714886001524737
 #test commands space
 @client.command(aliases = ['Guild', 'GUILD'])
 @commands.cooldown(1, 5, commands.BucketType.default)
-async def guild(ctx, guild, amount = 1):
+async def guildinfo(guild, ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
     emb = discord.Embed(colour = discord.Color.orange())
     emb.add_field(name = 'ID сервера', value = guild.id)
