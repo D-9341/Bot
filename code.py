@@ -8,7 +8,6 @@ from discord.utils import get
 
 client = commands.Bot(command_prefix = commands.when_mentioned_or('cy/'))
 client.remove_command('help')
-client.owner_id = 338714886001524737
 
 #test commands space
 @client.command(aliases = ['Guild', 'GUILD'])
