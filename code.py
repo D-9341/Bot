@@ -98,15 +98,15 @@ async def image(ctx, arg, *, amount = 1):
 @client.command(aliases = ['emb_g'])
 @commands.has_permissions(mention_everyone = True)
 @commands.cooldown(1, 20, commands.BucketType.default)
-async def gaystvo_embed(ctx, arg, arg1, arg2, arg3, *, amount = 1):
+async def gaystvo_embed(ctx, d, t, img, f, *, amount = 1):
     await ctx.channel.purge(limit = amount)
     await ctx.send('@everyone')
     await asyncio.sleep(0,1)
     emb = discord.Embed(colour = ctx.author.color)
     emb.set_author(name = ctx.author.name, icon_url = ctx.author.avatar_url)
-    emb.add_field(name = arg, value = arg1)
-    emb.set_image(url = arg2)
-    emb.set_thumbnail(url = arg3)
+    emb.add_field(name = d, value = t)
+    emb.set_image(url = img)
+    emb.set_thumbnail(url = f)
     emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
     await ctx.send(embed = emb)
     
@@ -118,7 +118,7 @@ async def embed(ctx, d, t, img, fu, *, amount = 1):
     emb.set_author(name = ctx.author.name, icon_url = ctx.author.avatar_url)
     emb.add_field(name = d, value = t)
     emb.set_image(url = img)
-    emb.set_thumbnail(url = fu)
+    emb.set_thumbnail(url = f)
     emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
     await ctx.send(embed = emb)
 
