@@ -112,13 +112,13 @@ async def gaystvo_embed(ctx, arg, arg1, arg2, arg3, *, amount = 1):
     
 @client.command(aliases = ['Embed', 'EMBED', 'emb' , 'Emb', 'EMB'])
 @commands.has_permissions(manage_messages = True)
-async def embed(ctx, d&, t&, img&, fu&, *, amount = 1):
+async def embed(ctx, d, t, img, fu, *, amount = 1):
     await ctx.channel.purge(limit = amount)
     emb = discord.Embed(colour = ctx.author.color)
     emb.set_author(name = ctx.author.name, icon_url = ctx.author.avatar_url)
-    emb.add_field(name = d&, value = t&)
-    emb.set_image(url = img&)
-    emb.set_thumbnail(url = fu&)
+    emb.add_field(name = d, value = t)
+    emb.set_image(url = img)
+    emb.set_thumbnail(url = fu)
     emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
     await ctx.send(embed = emb)
 
