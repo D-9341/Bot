@@ -17,7 +17,6 @@ async def guild_info(ctx, guild : discord.Guild = None, amount = 1):
     await ctx.channel.purge(limit = amount)
     emb = discord.Embed(titile = f'Информация о {guild}', colour = discord.Color.orange())
     emb.add_field(name = 'ID сервера', value = guild.id)
-    emb.add_field(name = f'Роли [{len(member.roles)-1}]', value = ' '.join([role.mention for role in guild.roles[1:]]))
     emb.add_field(name = 'Уровень сервера', value = guild.premium_tier)
     emb.add_field(name = 'Кто бустит сервер', value = guild.premium_subscribers)
     emb.add_field(name = 'Кто владеет сервером?', value = guild.owner.name, inline = False)
