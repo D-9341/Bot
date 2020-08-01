@@ -10,13 +10,19 @@ client = commands.Bot(command_prefix = commands.when_mentioned_or('cy/'))
 client.remove_command('help')
 
 #test commands space
-@client.command()
-async def guild_info(ctx, amount = 1):
+@client.command(aliases = ['guild', 'Guild', 'GUILD'])
+@commands.cooldown(1, 5, commands.BucketType.default)
+async def guild_info(ctx, guild : discord.Guild = None, amount = 1):
+    guild = ctx.guild if not guild else guild
     await ctx.channel.purge(limit = amount)
-    emb = discord.Embed(colour = discord.Color.orange())
+    emb = discord.Embed(titile = f'Информация о {guild}', colour = discord.Color.orange())
     emb.add_field(name = 'ID сервера', value = guild.id)
+    emb.add_field(name = f'Роли [{len(member.roles)-1}]', value = ' '.join([role.mention for role in guild.roles[1:]]))
+    emb.add_field(name = 'Уровень сервера', value = guild.premium_tier)
+    emb.add_field(name = 'Кто бустит сервер', value = guild.premium_subscribers)
+    emb.add_field(name = 'Кто владеет сервером?', value = guild.owner.name, inline = False)
     emb.add_field(name = 'Сколько человек на сервере?', value = guild.member_count)
-    emb.add_field(name = 'Когда сервер был создан?', value = guild.created_at)
+    emb.add_field(name = 'Когда сервер был создан?', value = guild.created_at.strftime("%a, %#d %B %Y, %I:%M %p UTC"), inline = False)
     emb.set_thumbnail(url = guild.icon_url)
     emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
     await ctx.send(embed = emb)
