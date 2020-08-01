@@ -21,12 +21,12 @@ async def owner_only(ctx, amount = 1):
         await ctx.send('Вы не можете использовать эту команду, так как вы не имеете доступа к моему коду!')
 #test commands space
 
-@client.command()
+@client.command(aliases = ['Info', 'INFO'])
 async def info(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
     await ctx.send(f'Cy в сети, пинг равен `{round(client.latency * 1000)} ms`')
     
-@client.command()
+@client.command(aliases = ['me', 'Me', 'ME', 'About', 'ABOUT'])
 @commands.cooldown(1, 5, commands.BucketType.default)
 async def about(ctx, member:discord.Member = None, amount = 1):
     await ctx.channel.purge(limit = amount)
@@ -47,7 +47,7 @@ async def about(ctx, member:discord.Member = None, amount = 1):
     emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
     await ctx.send(embed = emb)
     
-@client.command()
+@client.command(aliases = ['Mute', 'MUTE'])
 @commands.has_permissions(administrator = True)
 @commands.cooldown(1, 10, commands.BucketType.default)
 async def mute(ctx, member: discord.Member, amount = 1):
@@ -59,7 +59,7 @@ async def mute(ctx, member: discord.Member, amount = 1):
     emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
     await ctx.send(embed = emb)
     
-@client.command()
+@client.command(aliases = ['Give', 'GIVE'])
 @commands.has_permissions(manage_channels = True)
 async def give(ctx, arg, member: discord.Member, amount = 1):
     await ctx.channel.purge(limit = amount)
@@ -68,7 +68,7 @@ async def give(ctx, arg, member: discord.Member, amount = 1):
     channel = client.get_channel(714175791033876490)
     await channel.send(f'{ctx.author.mention} дал {role} {member.mention}')
     
-@client.command()
+@client.command(aliases = ['Take', 'TAKE'])
 @commands.has_permissions(manage_channels = True)
 async def take(ctx, arg, member: discord.Member, amount = 1):
     await ctx.channel.purge(limit = amount)
@@ -77,7 +77,7 @@ async def take(ctx, arg, member: discord.Member, amount = 1):
     channel = client.get_channel(714175791033876490)
     await channel.send(f'{ctx.author.mention} забрал {role} у {member.mention}')
     
-@client.command()
+@client.command(aliases = ['img&'])
 @commands.has_permissions(manage_messages = True)
 async def image(ctx, arg, *, amount = 1):
     await ctx.channel.purge(limit = amount)
@@ -87,7 +87,7 @@ async def image(ctx, arg, *, amount = 1):
     emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
     await ctx.send(embed = emb)
     
-@client.command()
+@client.command(aliases = ['emb_g'])
 @commands.has_permissions(mention_everyone = True)
 @commands.cooldown(1, 20, commands.BucketType.default)
 async def gaystvo_embed(ctx, arg, arg1, arg2, arg3, *, amount = 1):
@@ -102,7 +102,7 @@ async def gaystvo_embed(ctx, arg, arg1, arg2, arg3, *, amount = 1):
     emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
     await ctx.send(embed = emb)
     
-@client.command()
+@client.command(aliases = ['Embed', 'EMBED', 'emb' , 'Emb', 'EMB'])
 @commands.has_permissions(manage_messages = True)
 async def embed(ctx, arg, arg1, arg2, arg3, *, amount = 1):
     await ctx.channel.purge(limit = amount)
@@ -114,21 +114,21 @@ async def embed(ctx, arg, arg1, arg2, arg3, *, amount = 1):
     emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
     await ctx.send(embed = emb)
 
-@client.command()
+@client.command(aliases = ['Gaystvo', 'GAYSTVO'])
 @commands.cooldown(1, 20, commands.BucketType.default)
 @commands.has_permissions(mention_everyone = True)
 async def gaystvo(ctx, *, arg, amount = 1):
     await ctx.channel.purge(limit = amount)
     await ctx.send('@everyone ' + arg)
     
-@client.command()
+@client.command(aliases = ['Say', 'SAY'])
 @commands.cooldown(1, 10, commands.BucketType.default)
 @commands.has_permissions(manage_messages = True)
 async def say(ctx, *, arg, amount = 1):
     await ctx.channel.purge(limit = amount)
     await ctx.send(arg)
     
-@client.command()
+@client.command(aliases = ['c', 'C', 'coin', 'Coin', 'COIN', 'Coinflip', 'COINFLIP'])
 @commands.cooldown(5, 10, commands.BucketType.default)
 async def coinflip(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
@@ -168,7 +168,7 @@ async def on_raw_reaction_remove(payload):
                 await member.remove_roles(role)        
     
 #бесполезное говно
-@client.command()
+@client.command(aliases = ['Join', 'JOIN'])
 async def join(ctx):
     if ctx.author.voice and ctx.author.voice.channel:
         channel = ctx.author.voice.channel
@@ -181,7 +181,7 @@ async def join(ctx):
     except:
         TimeoutError
 
-@client.command()
+@client.command(aliases = ['Leave', 'LEAVE'])
 async def leave(ctx):
     try:
         if vc.is_connected():
@@ -214,28 +214,28 @@ async def on_member_remove(member, guild):
     await channel.send(embed = discord.Embed(description = f'{member.name} Has exited the facility...', colour = discord.Color.red()))
     
 #help command
-@client.command()
+@client.command(aliases = ['Help', 'HELP'])
 @commands.cooldown(1, 10, commands.BucketType.default)
 @commands.has_permissions(kick_members = True)
 async def help(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
     emb = discord.Embed(title = "Меню команд для администраторов", colour = discord.Color.orange())
     emb.add_field(name = 'Инфо', value = "Cy, или же сай - бот, написанный сасиска")
-    emb.add_field(name = '{}info'.format('cephalon/'), value = 'команда для определения, в сети ли бот', inline = False)
-    emb.add_field(name = "{}clear".format("cephalon/"), value = "очистка чата")
-    emb.add_field(name = "{}ban".format("cephalon/"), value = "бан игрока")
-    emb.add_field(name = "{}kick".format("cephalon/"), value = "кик игрока")
-    emb.add_field(name = '{}mute'.format('cephalon/'), value = 'мут игрока')
-    emb.add_field(name = '{}say'.format('cephalon/'), value = 'пишет сообщение от лица бота. Всё.')
-    emb.add_field(name = '{}gaystvo'.format('cephalon/'), value = 'пишет от лица бота и пингует @everyone')
-    emb.add_field(name = '{}embed'.format('cephalon/'), value = 'от лица бота отправляется эмбед. Прочтите #инструкции-cy-бот , чтобы узнать подробнее.')
-    emb.add_field(name = '{}gaystvo_embed'.format('cephalon/'), value = 'Совмещает в себе команды gaystvo и embed')
-    emb.add_field(name = '{}image'.format('cephalon/'), value = 'бот может прикрепить изображение, в аргумент нужно указать ссылку')
-    emb.add_field(name = '{}about'.format('cephalon/'), value = 'показывает инфу о человеке.')
-    emb.add_field(name = '{}join'.format('cephalon/'), value = 'приказывает зайти боту в голосовой канал')
-    emb.add_field(name = '{}leave'.format('cephalon/'), value = 'приказывает боту выйти из голосового канала')
-    emb.add_field(name = '{}give'.format('cephalon/'), value = 'выдаёт роль, писать в формате: give ("выдаваемая роль"(кавычки обязательны для ролей с пробелами)) (пинг пользователя)', inline = False)
-    emb.add_field(name = '{}take'.format('cephalon/'), value = 'забирает роль, писать в формате: take ("забираемая роль"(кавычки обязательны для ролей с пробелами)) (пинг пользователя)', inline = False)
+    emb.add_field(name = '{}info'.format('cy/'), value = 'команда для определения, в сети ли бот', inline = False)
+    emb.add_field(name = "{}clear".format("cy/"), value = "очистка чата")
+    emb.add_field(name = "{}ban".format("cy/"), value = "бан игрока")
+    emb.add_field(name = "{}kick".format("cy/"), value = "кик игрока")
+    emb.add_field(name = '{}mute'.format('cy/'), value = 'мут игрока')
+    emb.add_field(name = '{}say'.format('cy/'), value = 'пишет сообщение от лица бота. Всё.')
+    emb.add_field(name = '{}gaystvo'.format('cy/'), value = 'пишет от лица бота и пингует @everyone')
+    emb.add_field(name = '{}embed'.format('cy/'), value = 'от лица бота отправляется эмбед. Прочтите #инструкции-cy-бот , чтобы узнать подробнее.')
+    emb.add_field(name = '{}gaystvo_embed'.format('cy/'), value = 'Совмещает в себе команды gaystvo и embed')
+    emb.add_field(name = '{}image'.format('cy/'), value = 'бот может прикрепить изображение, в аргумент нужно указать ссылку')
+    emb.add_field(name = '{}about'.format('cy/'), value = 'показывает инфу о человеке.')
+    emb.add_field(name = '{}join'.format('cy/'), value = 'приказывает зайти боту в голосовой канал')
+    emb.add_field(name = '{}leave'.format('cy/'), value = 'приказывает боту выйти из голосового канала')
+    emb.add_field(name = '{}give'.format('cy/'), value = 'выдаёт роль, писать в формате: give ("выдаваемая роль"(кавычки обязательны для ролей с пробелами)) (пинг пользователя)', inline = False)
+    emb.add_field(name = '{}take'.format('cy/'), value = 'забирает роль, писать в формате: take ("забираемая роль"(кавычки обязательны для ролей с пробелами)) (пинг пользователя)', inline = False)
     emb.add_field(name = 'жыж', value = 'также, для написания команд необязательно писать префикс, можно пингануть ~~@everyone~~ бота')
     emb.add_field(name = 'жопа', value = 'у всех команд есть кд, для команд, пингующих @everyone - 20 секунд, для остальных 10, для about - 5, для coinflip - 5 раз в 10 секунд')
     emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
@@ -256,7 +256,7 @@ async def on_ready():
     await client.change_presence(status = discord.Status.idle, activity = discord.Game('Discord API'))
 
 #kick
-@client.command()
+@client.command(aliases = ['Kick', 'KICK'])
 @commands.cooldown(1, 10, commands.BucketType.default)
 @commands.has_permissions(kick_members = True)
 async def kick(ctx , member: discord.Member, *, reason = None):
@@ -268,7 +268,7 @@ async def kick(ctx , member: discord.Member, *, reason = None):
     await ctx.send(embed = emb)
 
 #ban
-@client.command()
+@client.command(aliases = ['Ban', 'BAN'])
 @commands.cooldown(1, 10, commands.BucketType.default)
 @commands.has_permissions(ban_members = True)
 async def ban(ctx , member: discord.Member, *, reason = None):
@@ -280,7 +280,7 @@ async def ban(ctx , member: discord.Member, *, reason = None):
     await ctx.send(embed = emb)
 
 #message delete
-@client.command()
+@client.command(aliases = ['Clear', 'CLEAR'])
 @commands.cooldown(1, 10, commands.BucketType.default)
 @commands.has_permissions(manage_messages = True)
 async def clear(ctx, amount : int):
