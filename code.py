@@ -9,8 +9,14 @@ from discord.utils import get
 client = commands.Bot(command_prefix = commands.when_mentioned_or('cephalon/'))
 client.remove_command('help')
 
-#test commands space
 
+#test commands space
+@cleint.command()
+async def owner_only(ctx, amount = 1):
+    if client.owner.id == ctx.author.id:
+        await ctx.send('Да, ты мой создатель, дарова')
+    else:
+        await ctx.send('Ты не мой создатель, ты не можешь использовать эту команду')
 #test commands space
 
 @client.command()
