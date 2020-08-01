@@ -8,6 +8,7 @@ from discord.utils import get
 
 client = commands.Bot(command_prefix = commands.when_mentioned_or('cephalon/'))
 client.remove_command('help')
+client.owner.id = 338714886001524737
 
 
 #test commands space
