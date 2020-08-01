@@ -6,7 +6,7 @@ import discord
 from discord.ext import commands
 from discord.utils import get
 
-client = commands.Bot(command_prefix = commands.when_mentioned_or('cephalon/'))
+client = commands.Bot(command_prefix = commands.when_mentioned_or('cy/'))
 client.remove_command('help')
 client.owner_id = 338714886001524737
 
@@ -18,7 +18,7 @@ async def owner_only(ctx, amount = 1):
     if client.owner_id == ctx.author.id:
         await ctx.send('Да, ты мой создатель, дарова')
     else:
-        await ctx.send('Ты не мой создатель, ты не можешь использовать эту команду')
+        await ctx.send('Вы не можете использовать эту команду, так как вы не имеете доступа к моему коду!')
 #test commands space
 
 @client.command()
