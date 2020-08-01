@@ -11,7 +11,7 @@ client.remove_command('help')
 
 #test commands space
 @client.command()
-async def guild_info(ctx, guild, amount = 1):
+async def guild_info(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
     emb = discord.Embed(colour = discord.Color.orange())
     emb.add_field(name = 'ID сервера', value = guild.id)
