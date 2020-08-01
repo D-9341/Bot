@@ -14,8 +14,9 @@ client.owner_id = 338714886001524737
 #test commands space
 @client.command(aliases = ['Guild', 'GUILD'])
 @commands.cooldown(1, 5, commands.BucketType.default)
-async def guiud(ctx, guild):
-    emb = discord.Embed(title = 'Дарова жопы!', colour = discord.Color.orange())
+async def guild(ctx, guild, amount = 1):
+    await ctx.channel.purge(limit = amount)
+    emb = discord.Embed(colour = discord.Color.orange())
     emb.add_field(name = 'ID сервера', value = guild.id)
     emb.add_field(name = 'Уровень сервера', value = guild.premium_tier)
     emb.add_field(name = 'Кто бустит сервер', value = guild.premium_subscribers)
