@@ -13,7 +13,8 @@ client.remove_command('help')
 #test commands space
 @client.command()
 async def owner_only(ctx, amount = 1):
-    if client.owner.id == ctx.author.id:
+    await ctx.channel.purge(limit = amount)
+    if owner.id == ctx.author.id:
         await ctx.send('Да, ты мой создатель, дарова')
     else:
         await ctx.send('Ты не мой создатель, ты не можешь использовать эту команду')
