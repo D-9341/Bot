@@ -8,14 +8,14 @@ from discord.utils import get
 
 client = commands.Bot(command_prefix = commands.when_mentioned_or('cephalon/'))
 client.remove_command('help')
-client.owner.id = 338714886001524737
+client.owner_id = 338714886001524737
 
 
 #test commands space
 @client.command()
 async def owner_only(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
-    if owner.id == ctx.author.id:
+    if client.owner_id == ctx.author.id:
         await ctx.send('Да, ты мой создатель, дарова')
     else:
         await ctx.send('Ты не мой создатель, ты не можешь использовать эту команду')
