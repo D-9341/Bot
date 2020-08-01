@@ -12,13 +12,18 @@ client.owner_id = 338714886001524737
 
 
 #test commands space
-@client.command()
-async def owner_only(ctx, amount = 1):
-    await ctx.channel.purge(limit = amount)
-    if client.owner_id == ctx.author.id:
-        await ctx.send('Да, ты мой создатель, дарова')
-    else:
-        await ctx.send('Вы не можете использовать эту команду, так как вы не имеете доступа к моему коду!')
+@client.event
+async def on_guild_join(ctx, guild):
+    emb = discord.Embed(title = 'Дарова жопы!' colour = discord.Color.orange())
+    emb.add_field(name = 'ID сервера', value = guild.id)
+    emb.add_field(name = 'Уровень сервера', value = guild.premium_tier)
+    emb.add_field(name = 'Кто бустит сервер', value = guild.premium_subscribers)
+    emb.add_field(name = 'Кто владеет сервером?', value = guild.owner.name)
+    emb.add_field(name = 'Сколько человек на сервере?', value = guild.member_count)
+    emb.add_field(name = 'Когда сервер был создан?', value = guild.created_at)
+    emb.set_thumbnail(url = client.avatar_url)
+    emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+    await ctx.send(embed = emb)
 #test commands space
 
 @client.command(aliases = ['Info', 'INFO'])
