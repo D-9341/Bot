@@ -246,7 +246,6 @@ async def help(ctx, amount = 1):
     emb.add_field(name = '{}give'.format('cy/'), value = 'Выдаёт роль, писать в формате: give ("выдаваемая роль"(кавычки обязательны для ролей с пробелами)) (пинг пользователя)', inline = False)
     emb.add_field(name = '{}take'.format('cy/'), value = 'Забирает роль, писать в формате: take ("забираемая роль"(кавычки обязательны для ролей с пробелами)) (пинг пользователя)', inline = False)
     emb.add_field(name = 'жыж', value = 'Также, для написания команд необязательно писать префикс, можно пингануть бота.')
-    emb.add_field(name = 'жопа', value = 'У всех команд есть кд, для команд, пингующих @everyone - 20 секунд, для остальных 10, для about - 5, для coinflip - 5 раз в 10 секунд.')
     emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
     await ctx.send(embed = emb)
 
