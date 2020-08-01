@@ -11,7 +11,7 @@ client.remove_command('help')
 
 
 #test commands space
-@cleint.command()
+@client.command()
 async def owner_only(ctx, amount = 1):
     if client.owner.id == ctx.author.id:
         await ctx.send('Да, ты мой создатель, дарова')
