@@ -23,7 +23,7 @@ async def info(ctx, amount = 1):
 async def guild(ctx, guild : discord.Guild = None, amount = 1):
     guild = ctx.guild if not guild else guild
     await ctx.channel.purge(limit = amount)
-    emb = discord.Embed(titile = f'Информация о {guild}', colour = discord.Color.orange())
+    emb = discord.Embed(titile = f'Информация о {guild}', colour = discord.Color.orange(), timestamp = ctx.message.created_at)
     emb.add_field(name = 'ID сервера', value = guild.id)
     emb.add_field(name = 'Уровень сервера', value = guild.premium_tier)
     emb.add_field(name = 'Люди, бустящие сервер', value = guild.premium_subscribers)
@@ -40,7 +40,7 @@ async def about(ctx, member:discord.Member = None, amount = 1):
     await ctx.channel.purge(limit = amount)
     if member == None:
         member = ctx.message.author
-    emb = discord.Embed(title = f'Информация о {member.name}', colour = member.color)
+    emb = discord.Embed(title = f'Информация о {member.name}', colour = member.color, timestamp = ctx.message.created_at)
     emb.add_field(name = 'ID', value = member.id)
     emb.add_field(name = 'Создан', value = member.created_at.strftime("%a, %#d %B %Y, %I:%M %p UTC"), inline = False)
     emb.add_field(name = 'Вошёл', value = member.joined_at.strftime("%a, %#d %B %Y, %I:%M %p UTC"), inline = False)
