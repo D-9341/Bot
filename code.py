@@ -10,7 +10,17 @@ client = commands.Bot(command_prefix = commands.when_mentioned_or('cy/'))
 client.remove_command('help')
 
 #test commands space
-
+@client.event
+async def on_voice_state_update(member,before,after):
+    if after.channel.id == 739518627115565159:
+        mainCategory = discord.utils.get(after.channel.guild.categories, id=693937532550774824)
+        channel2 = await after.guild.create_voice_channel(name=f"Комната {member.display_name}",category=mainCategory)
+        await member.move_to(channel2)
+        await channel2.set_permissions(member,mute_members=True,move_members=True,manage_channels=True)
+        def check(a,b,c):
+            return len(channel2.members) == 0
+        await Bot.wait_for('voice_state_update', check=check)
+        await channel2.delete()
 #test commands space
 
 @client.command(aliases = ['Info', 'INFO'])
@@ -29,7 +39,6 @@ async def guild(ctx, guild : discord.Guild = None, amount = 1):
     emb.add_field(name = 'Люди, бустящие сервер', value = guild.premium_subscribers)
     emb.add_field(name = 'Владелец сервера', value = guild.owner.mention, inline = False)
     emb.add_field(name = 'Количество человек на сервере', value = guild.member_count)
-    emb.add_field(name = f'Роли [{len(member.roles)-1}]', value=' '.join([role.mention for role in guild.roles[1:]]))
     emb.add_field(name = 'Дата создания сервера', value = guild.created_at.strftime("%a, %#d %B %Y, %I:%M %p UTC"), inline = False)
     emb.set_thumbnail(url = guild.icon_url)
     emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
