@@ -10,17 +10,7 @@ client = commands.Bot(command_prefix = commands.when_mentioned_or('cy/'))
 client.remove_command('help')
 
 #test commands space
-@client.event
-async def on_voice_state_update(member,before,after, guild : discord.Guild):
-    if after.channel.id == 739518627115565159:
-        mainCategory = discord.utils.get(after.channel.guild.categories, id=693937532550774824)
-        channel2 = await guild.create_voice_channel(name=f"Комната {member.display_name}",category=mainCategory)
-        await member.move_to(channel2)
-        await channel2.set_permissions(member,mute_members=True,move_members=True,manage_channels=True)
-        def check(a,b,c):
-            return len(channel2.members) == 0
-        await client.wait_for('voice_state_update', check=check)
-        await channel2.delete()
+
 #test commands space
 
 @client.command(aliases = ['Info', 'INFO'])
@@ -184,6 +174,19 @@ async def on_raw_reaction_remove(payload):
             member = discord.utils.find(lambda m: m.id == payload.user_id, guild.members)
             if member is not None:
                 await member.remove_roles(role)        
+    
+a = ['discord.gg', 'https://']
+@client.event
+async def on_message(message):
+    if message.author == client.user:
+        return
+    else:
+        content = message.content.split()
+        for word in content:
+            if word in a:
+                await message.delete()
+                await message.channel.send('НАХУЙ со своей рекламой иди')
+    await client.process_commands(message)
     
 #бесполезное говно
 @client.command(aliases = ['Join', 'JOIN'])
