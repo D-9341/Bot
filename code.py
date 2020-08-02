@@ -1,4 +1,3 @@
-import nekos
 import asyncio
 import random
 import datetime
@@ -11,18 +10,7 @@ client = commands.Bot(command_prefix = commands.when_mentioned_or('cy/'))
 client.remove_command('help')
 
 #test commands space
-Arguments = ['feet', 'yuri', 'trap', 'futanari', 'hololewd', 'lewdkemo', 'solog', 'feetg', 'cum', 'erokemo', 'les', 'wallpaper', 'lewdk', 'ngif', 'tickle', 'lewd', 'feed', 'gecg', 'eroyuri', 'eron', 'cum_jpg', 'bj', 'nsfw_neko_gif', 'solo', 'kemonomimi', 'nsfw_avatar', 'gasm', 'poke', 'anal', 'slap', 'hentai', 'avatar', 'erofeet', 'holo', 'keta', 'blowjob', 'pussy', 'tits', 'holoero', 'lizard', 'pussy_jpg', 'pwankg', 'classic', 'kuni', 'waifu', 'pat', '8ball', 'kiss', 'femdom', 'neko', 'spank', 'cuddle', 'erok', 'fox_girl', 'boobs', 'random_hentai_gif', 'smallboobs', 'hug', 'ero', 'smug', 'goose', 'baka', 'woof']
-def is_nsfw():
-    async def predicate(ctx):
-        return ctx.channel.is_nsfw()
-    return commands.check(predicate)
 
-@client.command()
-@is_nsfw()
-async def lewd(ctx):
-    emb = discord.Embed(colour = discord.Color.orange())
-    emb.set_image(url = nekos.img('cum'))
-    await ctx.send(embed = emb)
 #test commands space
 
 @client.command(aliases = ['Info', 'INFO'])
