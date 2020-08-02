@@ -174,19 +174,6 @@ async def on_raw_reaction_remove(payload):
             if member is not None:
                 await member.remove_roles(role)        
     
-a = ['discord.gg']
-@client.event
-async def on_message(message):
-    if message.author == client.user:
-        return
-    else:
-        content = message.content.split()
-        for word in content:
-            if word in a:
-                await message.delete()
-                await message.channel.send('НАХУЙ со своей рекламой иди')
-    await client.process_commands(message)
-    
 #бесполезное говно
 @client.command(aliases = ['Join', 'JOIN'])
 async def join(ctx):
