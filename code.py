@@ -113,7 +113,6 @@ async def gaystvo_embed(ctx, d, t, img, f, *, amount = 1):
 @client.command(aliases = ['Embed', 'EMBED', 'emb' , 'Emb', 'EMB'])
 @commands.has_permissions(manage_messages = True)
 async def embed(ctx, d, t, img, fu, *, amount = 1):
-    await ctx.channel.purge(limit = amount)
     emb = discord.Embed(colour = ctx.author.color)
     emb.set_author(name = ctx.author.name, icon_url = ctx.author.avatar_url)
     emb.add_field(name = d, value = t)
