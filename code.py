@@ -12,7 +12,9 @@ client.remove_command('help')
 #test commands space
 @client.command
 async def edit(ctx, arg, arg1, *, amount = 1):
-    pass
+    await ctx.channel.purge(limit = amount)
+    await fetch_message(arg)
+    await message.edit(arg1)
 #test commands space
 
 @client.command(aliases = ['Info', 'INFO'])
@@ -25,7 +27,7 @@ async def info(ctx, amount = 1):
 async def guild(ctx, guild : discord.Guild = None, amount = 1):
     guild = ctx.guild if not guild else guild
     await ctx.channel.purge(limit = amount)
-    emb = discord.Embed(titile = f'Информация о {guild}', colour = discord.Color.orange(), timestamp = datetime.utcnow())
+    emb = discord.Embed(titile = f'Информация о {guild}', colour = discord.Color.orange(), timestamp = ctx.message.created_at)
     emb.add_field(name = 'ID сервера', value = guild.id)
     emb.add_field(name = 'Уровень сервера', value = guild.premium_tier)
     emb.add_field(name = 'Люди, бустящие сервер', value = guild.premium_subscribers)
