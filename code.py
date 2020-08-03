@@ -29,7 +29,6 @@ async def guild(ctx, guild : discord.Guild = None, amount = 1):
     emb.add_field(name = 'Люди, бустящие сервер', value = guild.premium_subscribers)
     emb.add_field(name = 'Владелец сервера', value = guild.owner.mention, inline = False)
     emb.add_field(name = 'Количество человек на сервере', value = guild.member_count)
-    emb.add_field(name = 'Роли', value = guild.roles)
     emb.add_field(name = 'Дата создания сервера', value = guild.created_at.strftime("%a, %#d %B %Y, %I:%M %p UTC"), inline = False)
     emb.set_thumbnail(url = guild.icon_url)
     emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
