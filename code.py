@@ -10,9 +10,6 @@ client = commands.Bot(command_prefix = commands.when_mentioned_or('cy/'))
 client.remove_command('help')
 
 #test commands space
-@client.command
-async def edit(ctx, arg, arg1, *, amount = 1):
-    await ctx.channel.purge(limit = amount)
 
 #test commands space
 
