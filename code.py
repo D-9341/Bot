@@ -201,7 +201,6 @@ async def leave(ctx):
 
 @client.command()
 @commands.has_permissions(administrator = True)
-@commands.cooldown(1, 10, commands.BucketType.default)
 async def pm(ctx, member: discord.Member, amount = 1):
     await ctx.channel.purge(limit = amount)
     await member.send(f'Адамант сука')
