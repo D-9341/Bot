@@ -17,8 +17,6 @@ async def play(ctx, url : str):
     try:
         if song_there:
             os.remove('song.mp3')
-        except PermissionError:
-            print('зачем')
             
     voice = get(client.voice_clients, guild = ctx.guild)
     ydl_opt = {
