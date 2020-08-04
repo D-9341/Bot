@@ -98,7 +98,7 @@ async def mute(ctx, member: discord.Member, amount = 1):
         emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
         await ctx.send(embed = emb)
     else:
-        await ctx.send('Извините, но вы не можете замутить моего создателя!')
+        await ctx.send(f'Извините, {ctx.author.mention}, но вы не можете замутить моего создателя!')
         
 @client.command(aliases = ['Give', 'GIVE'])
 @commands.has_permissions(manage_channels = True)
@@ -310,7 +310,7 @@ async def kick(ctx , member: discord.Member, *, reason = None):
         emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
         await ctx.send(embed = emb)
     else:
-        await ctx.send('Извините, но вы не можете кикнуть моего создателя!')
+        await ctx.send(f'Извините, {ctx.author.mention}, но вы не можете кикнуть моего создателя!')
 #ban
 @client.command(aliases = ['Ban', 'BAN'])
 @commands.cooldown(1, 10, commands.BucketType.default)
@@ -324,7 +324,7 @@ async def ban(ctx , member: discord.Member, *, reason = None):
         emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
         await ctx.send(embed = emb)
     else:
-        await ctx.send('Извините, но вы не можете забанить моего создателя!')
+        await ctx.send(f'Извините, {ctx.author.mention}, но вы не можете забанить моего создателя!')
         
 #message delete
 @client.command(aliases = ['Clear', 'CLEAR'])
