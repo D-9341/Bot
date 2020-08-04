@@ -12,10 +12,10 @@ client.remove_command('help')
 #test commands space
 @client.command()
 async def edit(ctx):
-    first_embed = discord.Embed(title = '1')
-    new_embed = discord.Embed(title = '2')
+    first_embed = discord.Embed(title = '1', colour = discord.Color.orange())
+    new_embed = discord.Embed(title = '2', colour = discord.Color.orange())
     msg = await ctx.send(first_embed)
-    await asincio.sleep(10)
+    await asyncio.sleep(3)
     await msg.edit(new_embed)
 #test commands space
 
