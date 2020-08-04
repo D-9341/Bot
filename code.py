@@ -13,12 +13,12 @@ client.remove_command('help')
 #test commands space
 @client.command()
 async def play(ctx, url : str):
-    song_there = os.path.isfile('song.mp3')
+    song_there = os.path.exists('song.mp3')
     try:
         if song_there:
             os.remove('song.mp3')
             
-    voice = get(client.voice_clients, guild = ctx.guild)
+    voices = get(client.voice_clients, guild = ctx.guild)
     ydl_opt = {
         'format' : 'bestaudio/best',
         'postprocessors' : [{
@@ -33,9 +33,9 @@ async def play(ctx, url : str):
         if file.endswith('mp3'):
             name = file
             os.rename(file, 'song.mp3')
-    voice.play(discord.FFmpegPCMAudio('song.mp3'), after = lambda e: print('ты лох'))
-    voice.source = discord.PCMVolumeTransformer(voice.source)
-    voice.source.volume = 0.07
+    voices.play(discord.FFmpegPCMAudio('song.mp3'), after = lambda e: print('ты лох'))
+    voices.source = discord.PCMVolumeTransformer(voice.source)
+    voices.source.volume = 0.07
     nname = name.rsplit('-', 2)
     await ctx.send(f'сейчас играет {song.name[0]}')
 #test commands space
@@ -214,8 +214,6 @@ async def join(ctx):
     try:
         vc = await channel.connect()
         await change_voice_state(self_deaf = True)
-    except:
-        TimeoutError
 
 @client.command(aliases = ['Leave', 'LEAVE'])
 async def leave(ctx):
