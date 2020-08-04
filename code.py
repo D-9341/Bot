@@ -13,8 +13,8 @@ client.remove_command('help')
 @client.command()
 async def edit(ctx, arg, arg1, *, amount = 1):
     await ctx.channel.purge(limit = amount)
-    m = client.get_message(arg)
-    await client.edit_message(m, arg1)
+    m = await fetch_message(id = arg)
+    await client.edit_message(m, content = arg1)
 #test commands space
 
 @client.command(aliases = ['Info', 'INFO'])
