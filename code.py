@@ -10,11 +10,7 @@ client = commands.Bot(command_prefix = commands.when_mentioned_or('cy/'))
 client.remove_command('help')
 
 #test commands space
-@client.command()
-async def edit(ctx):
-    msg = await ctx.send('1')
-    await asyncio.sleep(3)
-    await msg.edit('2')
+
 #test commands space
 
 @client.command(aliases = ['Info', 'INFO'])
