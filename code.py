@@ -10,7 +10,7 @@ client = commands.Bot(command_prefix = commands.when_mentioned_or('cy/'))
 client.remove_command('help')
 
 #test commands space
-@client.command
+@client.command()
 async def edit(ctx):
     first_embed = discord.Embed(description = '1')
     new_embed = discord.Embed(description = '2')
