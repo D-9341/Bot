@@ -14,9 +14,8 @@ client.remove_command('help')
 @client.command()
 async def play(ctx, url : str):
     song_there = os.path.exists('song.mp3')
-    try:
-        if song_there:
-            os.remove('song.mp3')
+    if song_there = True:
+        os.remove('song.mp3')
             
     voices = get(client.voice_clients, guild = ctx.guild)
     ydl_opt = {
