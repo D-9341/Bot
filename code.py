@@ -86,7 +86,7 @@ async def about(ctx, member:discord.Member = None, amount = 1):
     await ctx.send(embed = emb)
     
 @client.command(aliases = ['Mute', 'MUTE'])
-@commands.has_permissions(mute_members = True)
+@commands.has_permissions(manage_channels = True)
 @commands.cooldown(1, 10, commands.BucketType.default)
 async def mute(ctx, member: discord.Member, amount = 1):
     await ctx.channel.purge(limit = amount)
