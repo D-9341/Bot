@@ -1,4 +1,3 @@
-import youtube
 import asyncio
 import random
 import datetime
