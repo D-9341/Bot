@@ -12,8 +12,8 @@ client.remove_command('help')
 #test commands space
 @client.command()
 async def edit(ctx):
-    first_embed = discord.Embed(description = '1')
-    new_embed = discord.Embed(description = '2')
+    first_embed = discord.Embed(title = '1')
+    new_embed = discord.Embed(title = '2')
     msg = await ctx.send(first_embed)
     await asincio.sleep(10)
     await msg.edit(new_embed)
