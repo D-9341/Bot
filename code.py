@@ -188,6 +188,8 @@ async def join(ctx):
     try:
         vc = await channel.connect()
         await change_voice_state(self_deaf = True)
+    except:
+        TimeoutError
 
 @client.command(aliases = ['Leave', 'LEAVE'])
 async def leave(ctx):
