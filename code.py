@@ -9,6 +9,7 @@ from discord.utils import get
 
 client = commands.Bot(command_prefix = commands.when_mentioned_or('cy/'))
 client.remove_command('help')
+client.owner_id = 338714886001524737
 
 #test commands space
 @client.command()
@@ -89,13 +90,16 @@ async def about(ctx, member:discord.Member = None, amount = 1):
 @commands.cooldown(1, 10, commands.BucketType.default)
 async def mute(ctx, member: discord.Member, amount = 1):
     await ctx.channel.purge(limit = amount)
-    emb = discord.Embed(title = f'Мут от {ctx.author.name}', colour = member.color)
-    role = discord.utils.get(ctx.message.guild.roles, name = 'Muted')
-    await member.add_roles(role)
-    emb.add_field(name = 'В муте', value = '{}'.format(member.mention))
-    emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
-    await ctx.send(embed = emb)
-    
+    if member.id != client.owner_id:
+        emb = discord.Embed(title = f'Мут от {ctx.author.name}', colour = member.color)
+        role = discord.utils.get(ctx.message.guild.roles, name = 'Muted')
+        await member.add_roles(role)
+        emb.add_field(name = 'В муте', value = '{}'.format(member.mention))
+        emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+        await ctx.send(embed = emb)
+    else:
+        await ctx.send('Извините, но вы не можете замутить моего создателя!')
+        
 @client.command(aliases = ['Give', 'GIVE'])
 @commands.has_permissions(manage_channels = True)
 async def give(ctx, arg, member: discord.Member, amount = 1):
@@ -299,24 +303,29 @@ async def on_ready():
 @commands.has_permissions(kick_members = True)
 async def kick(ctx , member: discord.Member, *, reason = None):
     await ctx.channel.purge(limit = 1)
-    emb = discord.Embed(title = f'Кик от {ctx.author.name}', colour = member.color)
-    await member.kick(reason = reason)
-    emb.add_field(name = 'Кикнут', value = '{}'.format(member.mention))
-    emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
-    await ctx.send(embed = emb)
-
+    if member.id != client.owner_id:
+        emb = discord.Embed(title = f'Кик от {ctx.author.name}', colour = member.color)
+        await member.kick(reason = reason)
+        emb.add_field(name = 'Кикнут', value = '{}'.format(member.mention))
+        emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+        await ctx.send(embed = emb)
+    else:
+        await ctx.send('Извините, но вы не можете кикнуть моего создателя!')
 #ban
 @client.command(aliases = ['Ban', 'BAN'])
 @commands.cooldown(1, 10, commands.BucketType.default)
 @commands.has_permissions(ban_members = True)
 async def ban(ctx , member: discord.Member, *, reason = None):
     await ctx.channel.purge(limit = 1)
-    emb = discord.Embed(title = f'Бан от {ctx.author.name}', colour = member.color)
-    await member.ban(reason = reason)
-    emb.add_field(name = 'Забанен', value = '{}'.format(member.mention))
-    emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
-    await ctx.send(embed = emb)
-
+    if member.id != client.owner_id:
+        emb = discord.Embed(title = f'Бан от {ctx.author.name}', colour = member.color)
+        await member.ban(reason = reason)
+        emb.add_field(name = 'Забанен', value = '{}'.format(member.mention))
+        emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+        await ctx.send(embed = emb)
+    else:
+        await ctx.send('Извините, но вы не можете забанить моего создателя!')
+        
 #message delete
 @client.command(aliases = ['Clear', 'CLEAR'])
 @commands.cooldown(1, 10, commands.BucketType.default)
