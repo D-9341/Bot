@@ -1,3 +1,4 @@
+import youtube
 import asyncio
 import random
 import datetime
@@ -10,7 +11,35 @@ client = commands.Bot(command_prefix = commands.when_mentioned_or('cy/'))
 client.remove_command('help')
 
 #test commands space
-
+@client.command()
+async def play(ctx, url : str):
+    song_there = os.path.exists('song.mp3')
+    try:
+        if song_there:
+            os.remove('song.mp3')
+    except PermissionError:
+        print('лох')
+            
+    voices = get(client.voice_clients, guild = ctx.guild)
+    ydl_opt = {
+        'format' : 'bestaudio/best',
+        'postprocessors' : [{
+            'key' : 'FFmpegExtractAudio',
+            'prefferedcodec' : 'mp3',
+            'prefferedquality' : '192'
+        }],
+    }
+    with youtube_dl.YoutubeDL(ydl_opt) as ydl:
+        ydl.download([url])
+    for file in os.listdir('./'):
+        if file.endswith('mp3'):
+            name = file
+            os.rename(file, 'song.mp3')
+    voices.play(discord.FFmpegPCMAudio('song.mp3'), after = lambda e: print('ты лох'))
+    voices.source = discord.PCMVolumeTransformer(voice.source)
+    voices.source.volume = 0.07
+    nname = name.rsplit('-', 2)
+    await ctx.send(f'сейчас играет {song.name[0]}')
 #test commands space
 
 @client.command(aliases = ['Info', 'INFO'])
