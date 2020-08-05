@@ -72,7 +72,7 @@ async def mute(ctx, member: discord.Member, arg, amount = 1):
             emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
             await ctx.send(embed = emb)
             await asyncio.sleep(arg)
-            await member.remove_roles(mrole)
+            await member.remove_roles(role)
             emb1 = discord.Embed(title = f'Размут {member.name}', colour = member.color)
             emb1.add_field(name = 'Размучен по истечению времени', value = f'{member.mention}')
             emb1.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
