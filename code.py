@@ -67,7 +67,7 @@ async def mute(ctx, member: discord.Member, time : int, amount = 1):
         if role is not None:
             await member.add_roles(role)
             emb = discord.Embed(title = f'Мут от {ctx.author.name}', colour = member.color)
-            emb.add_field(name = 'В муте', value = '{}'.format(member.mention))
+            emb.add_field(name = 'В муте', value = f'{member.mention}')
             emb.add_field(name = 'Время мута', value = time)
             emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
             await ctx.send(embed = emb)
@@ -254,7 +254,7 @@ async def help(ctx, amount = 1):
     emb.add_field(name = "{}clear".format('cy/'), value = 'Очистка чата.')
     emb.add_field(name = "{}ban".format('cy/'), value = 'Бан игрока.')
     emb.add_field(name = "{}kick".format('cy/'), value = 'Кик игрока.')
-    emb.add_field(name = '{}mute'.format('cy/'), value = 'Мут игрока.')
+    emb.add_field(name = '{}mute'.format('cy/'), value = 'Мут игрока. Пример: cy/mute @StakanDudka64 10 (время измеряется в минутах). По прошествии времени мут автоматически слетает.')
     emb.add_field(name = '{}say'.format('cy/'), value = 'Пишет сообщение от лица бота. Всё.')
     emb.add_field(name = '{}gaystvo'.format('cy/'), value = 'Пишет от лица бота и пингует @everyone')
     emb.add_field(name = '{}embed'.format('cy/'), value = 'От лица бота отправляется эмбед. Прочтите #инструкции-cy-бот , чтобы узнать подробнее.')
