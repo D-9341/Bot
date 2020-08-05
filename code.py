@@ -71,7 +71,7 @@ async def mute(ctx, member: discord.Member, amount = 1):
             emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
             await ctx.send(embed = emb)
         else:
-            await ctx.send('Для использования этой команды нужно создать роль Muted')
+            await ctx.send('Я не смог найти подходящую для этой команды роль. Роль должна называться Muted')
     else:
         await ctx.send(f'Извините, {ctx.author.mention}, но вы не можете замутить моего создателя!')
         
