@@ -60,7 +60,7 @@ async def about(ctx, member:discord.Member = None, amount = 1):
 @client.command(aliases = ['Mute', 'MUTE'])
 @commands.has_permissions(manage_channels = True)
 @commands.cooldown(1, 10, commands.BucketType.default)
-async def mute(ctx, member: discord.Member, arg, amount = 1):
+async def mute(ctx, member: discord.Member, time : int, amount = 1):
     await ctx.channel.purge(limit = amount)
     if member.id != client.owner_id:
         role = discord.utils.get(ctx.message.guild.roles, name = 'Muted')
@@ -68,14 +68,15 @@ async def mute(ctx, member: discord.Member, arg, amount = 1):
             await member.add_roles(role)
             emb = discord.Embed(title = f'Мут от {ctx.author.name}', colour = member.color)
             emb.add_field(name = 'В муте', value = '{}'.format(member.mention))
-            emb.add_field(name = 'Время мута', value = arg)
+            emb.add_field(name = 'Время мута', value = time)
             emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
             await ctx.send(embed = emb)
-            await asyncio.sleep(arg)
+            await asyncio.sleep(time)
+            emb = discord.Embed(title = f'Размут {member.name}', colour = member.color)
+            emb.add_field(name = 'Размучен по истечению времени', value = member.mention)
+            emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+            await ctx.send(embed = emb)
             await member.remove_roles(role)
-            emb1 = discord.Embed(title = f'Размут {member.name}', colour = member.color)
-            emb1.add_field(name = 'Размучен по истечению времени', value = f'{member.mention}')
-            emb1.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
         else:
             await ctx.send(f'{ctx.author.mention} Я не смог найти подходящую для этой команды роль. Роль должна называться Muted')
     else:
