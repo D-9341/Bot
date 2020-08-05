@@ -81,7 +81,7 @@ async def mute(ctx, member: discord.Member, time : int, amount = 1):
                 await ctx.send(embed = emb)
                 await member.remove_roles(mrole)
             else:
-                await ctx.send(f'{ctx.author.mention}, Я не могу снять мут у {member.name} из-за того, что роль Muted была удалена/отредактирована!')
+                await ctx.send(f'{ctx.author.mention}, Я не могу снять мут у {member.mention} из-за того, что роль Muted была удалена/отредактирована!')
         else:
             await ctx.send(f'{ctx.author.mention}, Я не смог найти подходящую для этой команды роль. Роль должна называться Muted')
     else:
