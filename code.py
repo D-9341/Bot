@@ -71,7 +71,7 @@ async def mute(ctx, member: discord.Member, time : int, amount = 1):
             emb.add_field(name = 'Время мута', value = time)
             emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
             await ctx.send(embed = emb)
-            await asyncio.sleep(time)
+            await asyncio.sleep(time*60)
             mrole = discord.utils.get(ctx.message.guild.roles, name = 'Muted')
             if mrole is not None:
                 emb = discord.Embed(title = f'Размут {member.name}', colour = member.color)
