@@ -72,6 +72,7 @@ async def mute(ctx, member: discord.Member, arg, amount = 1):
             emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
             await ctx.send(embed = emb)
             await asyncio.sleep(arg)
+            role = discord.utils.get(ctx.message.guild.roles, name = 'Muted')
             if role is not None:
                 await member.remove_roles(role)
                 emb1 = discord.Embed(title = f'Размут {member.name}', colour = member.color)
@@ -80,7 +81,7 @@ async def mute(ctx, member: discord.Member, arg, amount = 1):
             else:
                 await ctx.send(f'{ctx.author.mention}, Я не могу снять мут у {member.name} из-за того, что роль Muted была удалена/отредактирована!')
         else:
-            await ctx.send('Я не смог найти подходящую для этой команды роль. Роль должна называться Muted')
+            await ctx.send(f'{ctx.author.mention} Я не смог найти подходящую для этой команды роль. Роль должна называться Muted')
     else:
         await ctx.send(f'Извините, {ctx.author.mention}, но вы не можете замутить моего создателя!')
         
