@@ -63,12 +63,15 @@ async def about(ctx, member:discord.Member = None, amount = 1):
 async def mute(ctx, member: discord.Member, amount = 1):
     await ctx.channel.purge(limit = amount)
     if member.id != client.owner_id:
-        emb = discord.Embed(title = f'Мут от {ctx.author.name}', colour = member.color)
         role = discord.utils.get(ctx.message.guild.roles, name = 'Muted')
-        await member.add_roles(role)
-        emb.add_field(name = 'В муте', value = '{}'.format(member.mention))
-        emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
-        await ctx.send(embed = emb)
+        if role is not None:
+            await member.add_roles(role)
+            emb = discord.Embed(title = f'Мут от {ctx.author.name}', colour = member.color)
+            emb.add_field(name = 'В муте', value = '{}'.format(member.mention))
+            emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+            await ctx.send(embed = emb)
+        else:
+            await ctx.send('Для использования этой команды нужно создать роль Muted')
     else:
         await ctx.send(f'Извините, {ctx.author.mention}, но вы не можете замутить моего создателя!')
         
