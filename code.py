@@ -12,15 +12,7 @@ client.remove_command('help')
 client.owner_id = 338714886001524737
 
 #test commands space
-@client.command(aliases = ['.rap'])
-@commands.cooldown(1, 5, commands.BucketType.default)
-async def rap(ctx, amount = 1):
-    await ctx.channel.purge(limit = amount)
-    emb = discord.Embed(colour = ctx.author.color, timestamp = ctx.message.created_at)
-    emb.set_author(name = ctx.author.name, icon_url = ctx.author.avatar_url)
-    emb.set_image(url = 'https://thumbs.gfycat.com/MessyCarefreeHousefly-size_restricted.gif')
-    emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
-    await ctx.send(embed = emb)
+
 #test commands space
 
 @client.command(aliases = ['Info', 'INFO'])
@@ -41,6 +33,16 @@ async def guild(ctx, guild : discord.Guild = None, amount = 1):
     emb.add_field(name = 'Количество человек на сервере', value = guild.member_count)
     emb.add_field(name = 'Дата создания сервера', value = guild.created_at.strftime("%a, %#d %B %Y, %I:%M %p UTC"), inline = False)
     emb.set_thumbnail(url = guild.icon_url)
+    emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+    await ctx.send(embed = emb)
+    
+@client.command(aliases = ['.rap'])
+@commands.cooldown(1, 5, commands.BucketType.default)
+async def rap(ctx, amount = 1):
+    await ctx.channel.purge(limit = amount)
+    emb = discord.Embed(colour = ctx.author.color, timestamp = ctx.message.created_at)
+    emb.set_author(name = ctx.author.name, icon_url = ctx.author.avatar_url)
+    emb.set_image(url = 'https://thumbs.gfycat.com/MessyCarefreeHousefly-size_restricted.gif')
     emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
     await ctx.send(embed = emb)
     
@@ -260,22 +262,23 @@ async def help(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
     emb = discord.Embed(title = "Меню команд для администраторов", colour = discord.Color.orange())
     emb.add_field(name = 'Инфо', value = 'Cy, или же сай - бот, написанный сасиска#2472')
-    emb.add_field(name = '{}info'.format('cy/'), value = 'Команда для определения, в сети ли бот', inline = False)
-    emb.add_field(name = "{}clear".format('cy/'), value = 'Очистка чата.')
-    emb.add_field(name = "{}ban".format('cy/'), value = 'Бан игрока.')
-    emb.add_field(name = "{}kick".format('cy/'), value = 'Кик игрока.')
-    emb.add_field(name = '{}mute'.format('cy/'), value = 'Мут игрока. Пример: cy/mute @StakanDudka64 10 (время измеряется в минутах). По прошествии времени мут автоматически слетает.')
-    emb.add_field(name = '{}say'.format('cy/'), value = 'Пишет сообщение от лица бота. Всё.')
-    emb.add_field(name = '{}gaystvo'.format('cy/'), value = 'Пишет от лица бота и пингует @everyone')
-    emb.add_field(name = '{}embed'.format('cy/'), value = 'От лица бота отправляется эмбед. Прочтите #инструкции-cy-бот , чтобы узнать подробнее.')
-    emb.add_field(name = '{}gaystvo_embed'.format('cy/'), value = 'Совмещает в себе команды gaystvo и embed.')
-    emb.add_field(name = '{}image'.format('cy/'), value = 'Бот может прикрепить изображение, в аргумент нужно указать ссылку.')
-    emb.add_field(name = '{}about'.format('cy/'), value = 'Показывает информацию о человеке.')
-    emb.add_field(name = '{}guild'.format('cy/'), value = 'Показывает информацию о сервере.')
-    emb.add_field(name = '{}join'.format('cy/'), value = 'Бот заходит в голосовой канал.')
-    emb.add_field(name = '{}leave'.format('cy/'), value = 'Бот выходит из голосового канала.')
-    emb.add_field(name = '{}give'.format('cy/'), value = 'Выдаёт роль, писать в формате: give ("выдаваемая роль"(кавычки обязательны для ролей с пробелами)) (пинг пользователя)', inline = False)
-    emb.add_field(name = '{}take'.format('cy/'), value = 'Забирает роль, писать в формате: take ("забираемая роль"(кавычки обязательны для ролей с пробелами)) (пинг пользователя)', inline = False)
+    emb.add_field(name = 'cy/info', value = 'Команда для определения, в сети ли бот', inline = False)
+    emb.add_field(name = 'cy/clear', value = 'Очистка чата.')
+    emb.add_field(name = 'cy/rap', value = '.rap')
+    emb.add_field(name = 'cy/ban', value = 'Бан игрока.')
+    emb.add_field(name = 'cy/kick', value = 'Кик игрока.')
+    emb.add_field(name = 'cy/mute', value = 'Мут игрока. Пример: cy/mute @StakanDudka64 10 (время измеряется в минутах). По прошествии времени мут автоматически слетает.')
+    emb.add_field(name = 'cy/say', value = 'Пишет сообщение от лица бота. Всё.')
+    emb.add_field(name = 'cy/gaystvo', value = 'Пишет от лица бота и пингует @everyone')
+    emb.add_field(name = 'cy/embed', value = 'От лица бота отправляется эмбед. Прочтите #инструкции-cy-бот , чтобы узнать подробнее.')
+    emb.add_field(name = 'cy/gaystvo_embed', value = 'Совмещает в себе команды gaystvo и embed.')
+    emb.add_field(name = 'cy/image', value = 'Бот может прикрепить изображение, в аргумент нужно указать ссылку.')
+    emb.add_field(name = 'cy/about', value = 'Показывает информацию о человеке.')
+    emb.add_field(name = 'cy/guild', value = 'Показывает информацию о сервере.')
+    emb.add_field(name = 'cy/join', value = 'Бот заходит в голосовой канал.')
+    emb.add_field(name = 'cy/leave', value = 'Бот выходит из голосового канала.')
+    emb.add_field(name = 'cy/give', value = 'Выдаёт роль, писать в формате: give ("выдаваемая роль"(кавычки обязательны для ролей с пробелами)) (пинг пользователя)', inline = False)
+    emb.add_field(name = 'cy/take', value = 'Забирает роль, писать в формате: take ("забираемая роль"(кавычки обязательны для ролей с пробелами)) (пинг пользователя)', inline = False)
     emb.add_field(name = 'Послесловие', value = 'Также, для написания команд необязательно писать префикс, можно пингануть бота.')
     emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
     await ctx.send(embed = emb)
@@ -286,7 +289,7 @@ async def time(ctx, amount = 1):
     emb = discord.Embed(colour = discord.Color.orange())
     emb.set_footer(text = 'Cephalon Cy от сасиска#2472')
     now_date = datetime.datetime.now()
-    emb.add_field(name = 'Время по Гринвичу равняется ', value = '{}'.format(now_date))
+    emb.add_field(name = 'Время по Гринвичу равняется ', value = now_date)
     await ctx.author.send(embed = emb)
 
 #проверка на подключение
@@ -303,7 +306,7 @@ async def kick(ctx , member: discord.Member, *, reason = None):
     if member.id != client.owner_id:
         emb = discord.Embed(title = f'Кик от {ctx.author.name}', colour = member.color)
         await member.kick(reason = reason)
-        emb.add_field(name = 'Кикнут', value = '{}'.format(member.mention))
+        emb.add_field(name = 'Кикнут', value = member.mention)
         emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
         await ctx.send(embed = emb)
     else:
@@ -317,7 +320,7 @@ async def ban(ctx , member: discord.Member, *, reason = None):
     if member.id != client.owner_id:
         emb = discord.Embed(title = f'Бан от {ctx.author.name}', colour = member.color)
         await member.ban(reason = reason)
-        emb.add_field(name = 'Забанен', value = '{}'.format(member.mention))
+        emb.add_field(name = 'Забанен', value = member.mention)
         emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
         await ctx.send(embed = emb)
     else:
