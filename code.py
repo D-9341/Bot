@@ -267,7 +267,7 @@ async def help(ctx, amount = 1):
     emb.add_field(name = 'cy/rap', value = '.rap')
     emb.add_field(name = 'cy/ban', value = 'Бан игрока.')
     emb.add_field(name = 'cy/kick', value = 'Кик игрока.')
-    emb.add_field(name = 'cy/mute', value = 'Мут игрока. Пример: cy/mute @StakanDudka64 10 (время измеряется в минутах). По прошествии времени мут автоматически слетает.')
+    emb.add_field(name = 'cy/mute', value = 'Мут игрока. Пример: cy/mute @StakanDudka64 10 (время измеряется в минутах). По прошествии времени мут автоматически слетает.', inline = False)
     emb.add_field(name = 'cy/say', value = 'Пишет сообщение от лица бота. Всё.')
     emb.add_field(name = 'cy/gaystvo', value = 'Пишет от лица бота и пингует @everyone')
     emb.add_field(name = 'cy/embed', value = 'От лица бота отправляется эмбед. Прочтите #инструкции-cy-бот , чтобы узнать подробнее.')
