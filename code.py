@@ -12,9 +12,9 @@ client.remove_command('help')
 client.owner_id = 338714886001524737
 
 #test commands space
-@client.command()
+@client.command(aliases = ['.rap'])
 @commands.cooldown(1, 5, commands.BucketType.default)
-async def .rap(ctx, amount = 1):
+async def rap(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
     emb = discord.Embed(colour = ctx.author.color, timestamp = ctx.message.created_at)
     emb.set_author(name = ctx.author.name, icon_url = ctx.author.avatar_url)
