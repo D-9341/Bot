@@ -12,7 +12,15 @@ client.remove_command('help')
 client.owner_id = 338714886001524737
 
 #test commands space
-
+@client.command()
+@commands.cooldown(1, 5, commands.BucketType.default)
+async def .rap(ctx, amount = 1):
+    await ctx.channel.purge(limit = amount)
+    emb = discord.Embed(colour = ctx.author.color, timestamp = ctx.message.created_at)
+    emb.set_author(name = ctx.author.name, icon_url = ctx.author.avatar_url)
+    emb.set_image(url = 'https://thumbs.gfycat.com/MessyCarefreeHousefly-size_restricted.gif')
+    emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+    await ctx.send(embed = emb)
 #test commands space
 
 @client.command(aliases = ['Info', 'INFO'])
