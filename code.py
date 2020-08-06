@@ -391,8 +391,11 @@ async def say_error(ctx, error):
 @mute.error
 async def mute_error(ctx, error):
     if isinstance(error, commands.MissingRequiredArgument):
-        await ctx.send(f'{ctx.author.mention}, кого мутить то?')
-
+        await ctx.send(f'{ctx.author.mention}, кого и на сколько мутить то?')
+        
+    if isinstance(error, commands.BadArgument):
+        await ctx.send(f'{ctx.author.mention}, проверьте правильность написания команды')
+                       
     if isinstance(error, commands.MissingPermissions):
         await ctx.send(f'{ctx.author.mention} пытался вызвать комманду Mute. Хаха')
 
