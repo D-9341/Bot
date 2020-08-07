@@ -289,6 +289,7 @@ async def help(ctx, amount = 1):
     emb.add_field(name = 'cy/image', value = 'Бот может прикрепить изображение, в аргумент нужно указать ссылку.')
     emb.add_field(name = 'cy/about', value = 'Показывает информацию о человеке.')
     emb.add_field(name = 'cy/guild', value = 'Показывает информацию о сервере.')
+    emb.add_field(name = 'cy/pm', value = 'Пишет участнику любой написанный текст. Формат - cy/pm @пинг "сообщение"')
     emb.add_field(name = 'cy/join', value = 'Бот заходит в голосовой канал.')
     emb.add_field(name = 'cy/leave', value = 'Бот выходит из голосового канала.')
     emb.add_field(name = 'cy/give', value = 'Выдаёт роль, писать в формате: give ("выдаваемая роль"(кавычки обязательны для ролей с пробелами)) (пинг пользователя)', inline = False)
