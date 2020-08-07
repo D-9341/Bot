@@ -343,7 +343,7 @@ async def ban(ctx , member: discord.Member, *, reason = None):
 #message delete
 @client.command(aliases = ['Clear', 'CLEAR'])
 @commands.cooldown(1, 10, commands.BucketType.default)
-@commands.has_permissions(manage_messages = True)
+@commands.has_permissions(mention_everyone = True)
 async def clear(ctx, amount : int):
     await ctx.channel.purge(limit = amount + 1)
     if amount == 1:
