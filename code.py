@@ -67,6 +67,21 @@ async def about(ctx, member:discord.Member = None, amount = 1):
     emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
     await ctx.send(embed = emb)
     
+@client.command(aliases = ['Unmute', 'UNMUTE']
+@commands.has_permissions(manage_channels = True)
+async def unmute(ctx, member : discord.Member, amount = 1):
+    await ctx.channel.purge(limit = amount)
+    role = discord.utils.get(ctx.message.guild.roles, name = 'Muted')
+    if role is not None:
+        await member.remove_roles(role)
+        emb = discord.Embed(title = f'Принудительное снятие роли у {member.name}', colour = member.color, timestamp = ctx.message.created_at)
+        emb.add_field(name = 'Снял мут', value = ctx.author.mention)
+        emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+        await ctx.send(embed = emb)
+    else:
+        await ctx.send(f'{ctx.author.mention}, Я не могу снять мут у {member.mention} из-за того, что роль Muted была удалена/отредактирована!')
+        
+    
 @client.command(aliases = ['Mute', 'MUTE'])
 @commands.has_permissions(manage_channels = True)
 @commands.cooldown(1, 10, commands.BucketType.default)
@@ -85,7 +100,6 @@ async def mute(ctx, member: discord.Member, time : int, amount = 1):
             mrole = discord.utils.get(ctx.message.guild.roles, name = 'Muted')
             if mrole is not None:
                 await ctx.send(f'{member.mention}')
-                await asyncio.sleep(0,1)
                 emb = discord.Embed(colour = member.color, timestamp = ctx.message.created_at)
                 emb.add_field(name = 'Размучен по истечению времени', value = member.mention)
                 emb.add_field(name = 'Время мута в минутах составляло', value = time)
@@ -133,7 +147,6 @@ async def image(ctx, arg, *, amount = 1):
 async def gaystvo_embed(ctx, d, t, img, f, *, amount = 1):
     await ctx.channel.purge(limit = amount)
     await ctx.send('@everyone')
-    await asyncio.sleep(0,1)
     emb = discord.Embed(colour = ctx.author.color)
     emb.set_author(name = ctx.author.name, icon_url = ctx.author.avatar_url)
     emb.add_field(name = d, value = t)
