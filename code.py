@@ -252,14 +252,12 @@ async def pm(ctx, member: discord.Member, arg, amount = 1):
 
 @client.event
 async def on_member_join(member):
+    channel = client.get_channel(693929823030214658)
     role = discord.utils.get(member.guild.roles, id = 693933516294979704)
     role1 = discord.utils.get(member.guild.roles, id = 693933510523879454)
     role2 = discord.utils.get(member.guild.roles, id = 693933514198089838)
-    await member.add_roles(role, role1, role2)
-    
-@client.event
-async def on_member_join(member):
-    channel = client.get_channel(693929823030214658)
+    if role is not None:
+        await member.add_roles(role, role1, role2)
     await channel.send(embed = discord.Embed(description = f'{member.name} Has entered the facility, 👋', colour = discord.Color.orange()))
 
 @client.event
