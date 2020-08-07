@@ -67,7 +67,7 @@ async def about(ctx, member:discord.Member = None, amount = 1):
     emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
     await ctx.send(embed = emb)
     
-@client.command(aliases = ['Unmute', 'UNMUTE']
+@client.command(aliases = ['Unmute', 'UNMUTE'])
 @commands.has_permissions(manage_channels = True)
 async def unmute(ctx, member : discord.Member, amount = 1):
     await ctx.channel.purge(limit = amount)
