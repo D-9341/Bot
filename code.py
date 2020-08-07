@@ -74,7 +74,7 @@ async def unmute(ctx, member : discord.Member, amount = 1):
     role = discord.utils.get(ctx.message.guild.roles, name = 'Muted')
     if role is not None:
         await member.remove_roles(role)
-        emb = discord.Embed(title = f'Принудительное снятие роли у {member.name}', colour = member.color, timestamp = ctx.message.created_at)
+        emb = discord.Embed(title = f'Принудительное снятие мута у {member.name}', colour = member.color, timestamp = ctx.message.created_at)
         emb.add_field(name = 'Снял мут', value = ctx.author.mention)
         emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
         await ctx.send(embed = emb)
