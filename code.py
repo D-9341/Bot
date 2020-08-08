@@ -150,7 +150,7 @@ async def take(ctx, arg, member: discord.Member, amount = 1):
     await channel.send(f'{ctx.author.mention} забрал @{role} у {member.mention}')
     
 @client.command(aliases = ['img&'])
-@commands.has_permissions(manage_messages = True)
+@commands.has_permissions(manage_channels = True)
 async def image(ctx, arg, *, amount = 1):
     await ctx.channel.purge(limit = amount)
     emb = discord.Embed(colour = ctx.author.color)
@@ -174,7 +174,7 @@ async def gaystvo_embed(ctx, d, t, img, f, *, amount = 1):
     await ctx.send(embed = emb)
     
 @client.command(aliases = ['Embed', 'EMBED', 'emb' , 'Emb', 'EMB'])
-@commands.has_permissions(manage_messages = True)
+@commands.has_permissions(manage_channels = True)
 async def embed(ctx, d, t, img, f, *, amount = 1):
     await ctx.channel.purge(limit = amount)
     emb = discord.Embed(colour = ctx.author.color)
@@ -194,7 +194,7 @@ async def gaystvo(ctx, *, arg, amount = 1):
     
 @client.command(aliases = ['Say', 'SAY'])
 @commands.cooldown(1, 10, commands.BucketType.default)
-@commands.has_permissions(manage_messages = True)
+@commands.has_permissions(manage_channels = True)
 async def say(ctx, *, arg, amount = 1):
     await ctx.channel.purge(limit = amount)
     await ctx.send(arg)
