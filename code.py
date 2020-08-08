@@ -12,7 +12,47 @@ client.remove_command('help')
 client.owner_id = 338714886001524737
 
 #test commands space
+@client.command()
+async def play(ctx, url : str):
+    song_there = os.path.isfile('song.mp3')
 
+    try:
+        if song_there:
+            os.remove('song.mp3')
+            print('[log] ДАННЫЕ УДАЛЕНЫ')
+
+    except PermissionError:
+        print('[log] не удалось удалить данные')
+
+    await ctx.send('Ща скачаю, падажжи')
+
+    voice = get(client.voice_clients, guild = ctx.guild)
+    ydl_opts = {
+        'format' : 'bestaudio/best',
+        'postprocessors' : [{
+            'key' : 'FFmpegExtractAudio',
+            'preferredcodec' : 'mp3',
+            'preferredquality' : '192'
+            }]
+    }
+
+
+    with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+        print('[log] Загрузка...')
+        ydl.download([url])
+
+    for file in os.listdir('./'):
+        if file.endswith('.mp3'):
+            name = file
+            print('[log] Переименовываю: {file}')
+            os.rename(file, 'song.mp3')
+
+    voice.play(discord.FFmpegPCMAudio('song.mp3'), after = lambda e: print(f'[log] {name}, время на прослушивание музыки кончилось'))
+    voice.source = discord.PCMVolumeTransformer(voice.source)
+    voice.source.volume = 0.07
+
+    song_name = name.rsplit('-', 2)
+    await ctx.send(f'Сейчас играет: {song_name[0]}')
 #test commands space
 
 @client.command(aliases = ['Info', 'INFO'])
