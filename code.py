@@ -25,7 +25,7 @@ async def info(ctx, amount = 1):
 async def remind(ctx, arg, time:int, *, amount = 1):
     await ctx.channel.purge(limit = amount)
     emb = discord.Embed(title = None, colour = ctx.author.color, timestamp = ctx.message.created_at)
-    emb.add_field(name = 'Напомню через', value = f'{time} минут')
+    emb.add_field(name = 'Напомню через', value = f'{time} минут(у, ы)')
     emb.add_field(name = 'О чём напомню?', value = arg)
     emb.add_field(name = 'Кому?', value = ctx.author.mention)
     emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
@@ -33,9 +33,8 @@ async def remind(ctx, arg, time:int, *, amount = 1):
     await asyncio.sleep(time*60)
     await ctx.send(f'{ctx.author.mention}')
     emb = discord.Embed(title = 'Напоминание', colour = ctx.author.color)
-    emb.add_field(name = 'Напомнил через', value = f'{time} минут')
+    emb.add_field(name = 'Напомнил через', value = f'{time} минут(у, ы)')
     emb.add_field(name = 'Напоминаю о', value = arg)
-    emb.add_field(name = 'Кому напоминаю', value = ctx.author.mention)
     emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
     await ctx.send(embed = emb) 
    
