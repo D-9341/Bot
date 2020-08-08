@@ -15,7 +15,7 @@ client.owner_id = 338714886001524737
 @client.command()
 async def remind(ctx, arg, time:int, *, member:discord.Member = None, amount = 1):
     await ctx.channel.purge(limit = amount)
-    emb = discord.Embed(title = None, colour = member.color, timestamp = ctx.created_at)
+    emb = discord.Embed(title = None, colour = member.color, timestamp = ctx.message.created_at)
     emb.add_field(name = 'Напомню через', value = time)
     emb.add_field(name = 'О чём напомню?', value = arg)
     emb.add_field(name = 'Кому?', value = ctx.author.mention)
