@@ -13,7 +13,7 @@ client.owner_id = 338714886001524737
 
 #test commands space
 @client.command()
-async def remind(ctx, arg, *, member:discord.Member = None, time:int, amount = 1):
+async def remind(ctx, arg, time:int, *, member:discord.Member = None, amount = 1):
     await ctx.channel.purge(limit = amount)
     emb = discord.Embed(title = None, colour = member.color, timestamp = ctx.created_at)
     emb.add_field(name = 'Напомню через', value = time)
