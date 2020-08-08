@@ -31,6 +31,7 @@ async def remind(ctx, arg, time:int, *, amount = 1):
     emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
     await ctx.send(embed = emb)
     await asyncio.sleep(time*60)
+    await ctx.send(f'{ctx.author.mention}')
     emb = discord.Embed(title = 'Напоминание', colour = ctx.author.color)
     emb.add_field(name = 'Напомнил через', value = f'{time} минут')
     emb.add_field(name = 'Напоминаю о', value = arg)
