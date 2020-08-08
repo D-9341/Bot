@@ -12,7 +12,22 @@ client.remove_command('help')
 client.owner_id = 338714886001524737
 
 #test commands space
-
+@client.command()
+async def remind(ctx, arg, *, member:discord.Member = None, time:int, amount = 1):
+    await ctx.channel.purge(limit = amount)
+    emb = discord.Embed(title = None, colour = member.color, timestamp = ctx.created_at)
+    emb.add_field(name = 'Напомню через', value = time)
+    emb.add_field(name = 'О чём напомню?', value = arg)
+    emb.add_field(name = 'Кому?', value = ctx.author.mention)
+    emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+    await ctx.send(embed = emb)
+    await asyncio.sleep(time*60)
+    emb = discord.Embed(title = 'Напоминание', colour = member.color)
+    emb.add_field(name = 'Напомнил через', value = time)
+    emb.add_field(name = 'Напоминаю о', value = arg)
+    emb.add_field(name = 'Кому напоминаю', value = ctx.author.mention)
+    emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+    await ctx.send(embed = emb)
 #test commands space
 
 @client.command(aliases = ['Info', 'INFO'])
