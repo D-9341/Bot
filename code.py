@@ -12,22 +12,7 @@ client.remove_command('help')
 client.owner_id = 338714886001524737
 
 #test commands space
-@client.command()
-async def remind(ctx, arg, time:int, *, amount = 1):
-    await ctx.channel.purge(limit = amount)
-    emb = discord.Embed(title = None, colour = ctx.author.color, timestamp = ctx.message.created_at)
-    emb.add_field(name = 'О чём напомню?', value = arg)
-    emb.add_field(name = 'Напомню через', value = f'{time} минут')
-    emb.add_field(name = 'Кому?', value = ctx.author.mention)
-    emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
-    await ctx.send(embed = emb)
-    await asyncio.sleep(time*60)
-    emb = discord.Embed(title = 'Напоминание', colour = ctx.author.color)
-    emb.add_field(name = 'Напоминаю о', value = arg)
-    emb.add_field(name = 'Напомнил через', value = f'{time'} минут)
-    emb.add_field(name = 'Кому напоминаю', value = ctx.author.mention)
-    emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
-    await ctx.send(embed = emb)
+
 #test commands space
 
 @client.command(aliases = ['Info', 'INFO'])
@@ -35,6 +20,24 @@ async def info(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
     await ctx.send(f'Cy в сети, пинг равен `{round(client.latency * 1000)} ms`')
     
+@client.command()
+@commands.cooldown(1, 5, commands.BucketType.default)
+async def remind(ctx, arg, time:int, *, amount = 1):
+    await ctx.channel.purge(limit = amount)
+    emb = discord.Embed(title = None, colour = ctx.author.color, timestamp = ctx.message.created_at)
+    emb.add_field(name = 'Напомню через', value = f'{time} минут')
+    emb.add_field(name = 'О чём напомню?', value = arg)
+    emb.add_field(name = 'Кому?', value = ctx.author.mention)
+    emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+    await ctx.send(embed = emb)
+    await asyncio.sleep(time*60)
+    emb = discord.Embed(title = 'Напоминание', colour = ctx.author.color)
+    emb.add_field(name = 'Напомнил через', value = f'{time} минут')
+    emb.add_field(name = 'Напоминаю о', value = arg)
+    emb.add_field(name = 'Кому напоминаю', value = ctx.author.mention)
+    emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+    await ctx.send(embed = emb) 
+   
 @client.command(aliases = ['Guild', 'GUILD'])
 @commands.cooldown(1, 5, commands.BucketType.default)
 async def guild(ctx, guild : discord.Guild = None, amount = 1):
@@ -295,6 +298,7 @@ async def help(ctx, amount = 1):
     emb.add_field(name = 'cy/kick', value = 'Кик игрока.')
     emb.add_field(name = 'cy/mute', value = 'Мут игрока. Пример: cy/mute @StakanDudka64 10 (время измеряется в минутах). По прошествии времени мут автоматически слетает.', inline = False)
     emb.add_field(name = 'cy/unmute', value = 'Размут игрока.')
+    emb.add_field(name = 'cy/remind', value = 'Может напомнить вам что угодно, даже suck some dick. Формат - cy/remind "suck some dick" 10')
     emb.add_field(name = 'cy/say', value = 'Пишет сообщение от лица бота. Всё.')
     emb.add_field(name = 'cy/gaystvo', value = 'Пишет от лица бота и пингует @everyone')
     emb.add_field(name = 'cy/embed', value = 'От лица бота отправляется эмбед. Прочтите #инструкции-cy-бот , чтобы узнать подробнее.')
