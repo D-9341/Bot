@@ -120,7 +120,7 @@ async def give(ctx, arg, member: discord.Member, amount = 1):
     role = discord.utils.get(ctx.message.guild.roles, name = arg)
     await member.add_roles(role)
     channel = client.get_channel(714175791033876490)
-    await channel.send(f'{ctx.author.mention} дал {role} {member.mention}')
+    await channel.send(f'{ctx.author.mention} дал @{role} {member.mention}')
     
 @client.command(aliases = ['Take', 'TAKE'])
 @commands.has_permissions(manage_channels = True)
@@ -129,7 +129,7 @@ async def take(ctx, arg, member: discord.Member, amount = 1):
     role = discord.utils.get(ctx.message.guild.roles, name = arg)
     await member.remove_roles(role)
     channel = client.get_channel(714175791033876490)
-    await channel.send(f'{ctx.author.mention} забрал {role} у {member.mention}')
+    await channel.send(f'{ctx.author.mention} забрал @{role} у {member.mention}')
     
 @client.command(aliases = ['img&'])
 @commands.has_permissions(manage_messages = True)
@@ -302,7 +302,7 @@ async def time(ctx, amount = 1):
     emb = discord.Embed(colour = discord.Color.orange())
     emb.set_footer(text = 'Cephalon Cy от сасиска#2472')
     now_date = datetime.datetime.now()
-    emb.add_field(name = 'Время по Гринвичу равняется ', value = now_date)
+    emb.add_field(name = 'Время по Гринвичу равняется', value = now_date)
     await ctx.author.send(embed = emb)
 
 #проверка на подключение
