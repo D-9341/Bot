@@ -12,21 +12,7 @@ client.remove_command('help')
 client.owner_id = 338714886001524737
 
 #test commands space
-@client.event
-async def on_message(message):
-	guild = message.guild
-	channel = client.get_channel(714175791033876490)
-	if channel is None:
-		await client.process_commands(message)
-		return
-	if not message.author.bot:
-		emb = discord.Embed(colour = discord.Color.orange(), timestamp = datetime.datetime.utcnow(), description = f'in {message.channel.mention}:\n{message.content}')
-		emb.set_author(name = message.author, icon_url = message.author.avatar_url)
-		emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
-		if len(message.attachments) > 0:
-			embed.set_image(url = message.attachments[0].url)
-		await channel.send(embed = emb)
-		await client.process_commands(message)
+
 #test commands space
 
 @client.command(aliases = ['Info', 'INFO'])
@@ -296,7 +282,25 @@ async def on_member_join(member):
 async def on_member_remove(member):
     channel = client.get_channel(693929823030214658)
     await channel.send(embed = discord.Embed(description = f'{member.name} Has exited the facility...', colour = discord.Color.red()))
-    
+   
+@client.event
+async def on_message(message):
+	guild = message.guild
+	channel = client.get_channel(714175791033876490)
+	if channel is None:
+		await client.process_commands(message)
+		return
+	if not message.author.bot:
+		emb = discord.Embed(colour = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
+		emb.set_author(name = message.author, icon_url = message.author.avatar_url)
+		emb.add_field(name = 'В канале', value = message.channel.mention)
+		emb.add_field(name = 'Было написано', value = message.content)
+		emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+		if len(message.attachments) > 0:
+			embed.set_image(url = message.attachments[0].url)
+		await channel.send(embed = emb)
+		await client.process_commands(message)
+	
 #help command
 @client.command(aliases = ['Help', 'HELP'])
 @commands.cooldown(1, 10, commands.BucketType.default)
