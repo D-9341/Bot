@@ -12,18 +12,7 @@ client.remove_command('help')
 client.owner_id = 338714886001524737
 
 #test commands space
-@client.event
-async def on_message_edit(before, after):
-    channel = client.get_channel(714175791033876490)
-    if channel is None:
-        return
-    if not before.author.bot:
-        emb = discord.Embed(title = 'Сообщение было изменено', colour = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
-        emb.set_author(name = before.author.name, icon_url = before.author.avatar_url)
-        emb.add_field(name = 'Было', value = before.content)
-        emb.add_field(name = 'Стало', value = after.content)
-        emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
-        await channel.send(embed = emb)
+
 #test commands space
 
 @client.command(aliases = ['Info', 'INFO'])
@@ -309,6 +298,19 @@ async def on_message(message):
         emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
         await channel.send(embed = emb)
         await client.process_commands(message)
+    
+@client.event
+async def on_message_edit(before, after):
+    channel = client.get_channel(714175791033876490)
+    if channel is None:
+        return
+    if not before.author.bot:
+        emb = discord.Embed(title = 'Сообщение было изменено', colour = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
+        emb.set_author(name = before.author.name, icon_url = before.author.avatar_url)
+        emb.add_field(name = 'Было', value = before.content)
+        emb.add_field(name = 'Стало', value = after.content)
+        emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+        await channel.send(embed = emb)
     
 #help command
 @client.command(aliases = ['Help', 'HELP'])
