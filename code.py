@@ -383,17 +383,15 @@ async def ban(ctx , member: discord.Member, *, reason = None):
 async def clear(ctx, amount : int):
     await ctx.channel.purge(limit = amount + 1)
     if amount == 1:
-        await ctx.send(f'удалено {amount} сообщение')
+        await ctx.send(f'удалено {amount} сообщение', delete_after = 1)
     elif amount == 2:
-        await ctx.send(f'удалено {amount} сообщения')
+        await ctx.send(f'удалено {amount} сообщения', delete_after = 1)
     elif amount == 3:
-        await ctx.send(f'удалено {amount} сообщения')
+        await ctx.send(f'удалено {amount} сообщения', delete_after = 1)
     elif amount == 4:
-        await ctx.send(f'удалено {amount} сообщения')
+        await ctx.send(f'удалено {amount} сообщения', delete_after = 1)
     else:
-        await ctx.send(f'удалено {amount} сообщений')
-    await asyncio.sleep(1)
-    await ctx.channel.purge(limit = 1)
+        await ctx.send(f'удалено {amount} сообщений', delete_after = 1)
     
 @client.event
 async def on_command_error(ctx, error):
