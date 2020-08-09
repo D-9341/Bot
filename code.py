@@ -13,7 +13,7 @@ client.owner_id = 338714886001524737
 
 #test commands space
 @client.event
-async def on_message_edit(message, before, after):
+async def on_message_edit(before, after):
     guild = message.guild
     channel = client.get_channel(714175791033876490)
     if channel is None:
