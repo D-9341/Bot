@@ -12,7 +12,21 @@ client.remove_command('help')
 client.owner_id = 338714886001524737
 
 #test commands space
-
+@client.event
+async def on_message(message):
+    guild = message.guild
+    channel = client.get_channel(714175791033876490)
+    if channel is None:
+        await client.process_commands(message)
+        return
+    if not message.author.bot:
+        emb = discord.Embed(colour = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
+        emb.set_author(name = message.author, icon_url = message.author.avatar_url)
+        emb.add_field(name = 'В канале', value = message.channel.mention)
+        emb.add_field(name = 'Было написано', value = message.content)
+        emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+        await channel.send(embed = emb)
+        await client.process_commands(message)
 #test commands space
 
 @client.command(aliases = ['Info', 'INFO'])
@@ -241,7 +255,6 @@ async def on_raw_reaction_remove(payload):
 #бесполезное говно
 @client.command(aliases = ['Join', 'JOIN'])
 async def join(ctx):
-	await ctx.channel.purge(limit = 1)
     if ctx.author.voice and ctx.author.voice.channel:
         channel = ctx.author.voice.channel
     else:
@@ -256,7 +269,6 @@ async def join(ctx):
 
 @client.command(aliases = ['Leave', 'LEAVE'])
 async def leave(ctx):
-	await ctx.channel.purge(limit = 1)
     try:
         if vc.is_connected():
             await vc.disconnect()
