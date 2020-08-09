@@ -19,7 +19,7 @@ async def on_message_edit(before, after):
         return
     if not before.author.bot:
         emb = discord.Embed(title = 'Сообщение было изменено', colour = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
-        emb.set_author(name = before.author.name, icon_url = before.author.name)
+        emb.set_author(name = before.author.name, icon_url = before.author.avatar_url)
         emb.add_field(name = 'Было', value = before.content)
         emb.add_field(name = 'Стало', value = after.content)
         emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
