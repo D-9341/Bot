@@ -23,7 +23,7 @@ async def on_message_edit(before, after):
         emb.add_field(name = 'Было', value = before.content)
         emb.add_field(name = 'Стало', value = after.content)
         emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
-        await ctx.send(embed = emb)
+        await channel.send(embed = emb)
 #test commands space
 
 @client.command(aliases = ['Info', 'INFO'])
