@@ -20,7 +20,7 @@ async def on_message_edit(message, before, after):
         await client.Process_commands(message)
         return
     if not message.author.bot:
-        emb = discord.Embed(title = 'Сообщение было изменено' colour = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
+        emb = discord.Embed(title = 'Сообщение было изменено', colour = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
         emb.set_author(name = message.author, icon_url = message.author.avatar_url)
         emb.add_field(name = 'Было', value = before.message.content)
         emb.add_field(name = 'Стало', value = after.message.content)
