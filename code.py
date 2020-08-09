@@ -21,9 +21,9 @@ async def info(ctx, amount = 1):
     await ctx.send(f'Cy в сети, пинг равен `{round(client.latency * 1000)} ms`')
     
 @client.command()
-@commands.cooldown(1, 5, commands.BucketType.default)
+@commands.cooldown(5, 5, commands.BucketType.default)
 async def remind(ctx, arg, time:int, *, amount = 1):
-    await ctx.channel.purge(limit = amount)
+    await ctx.delete()
     emb = discord.Embed(title = None, colour = ctx.author.color, timestamp = ctx.message.created_at)
     emb.add_field(name = 'Напомню через', value = f'{time} минут(у, ы)')
     emb.add_field(name = 'О чём напомню?', value = arg)
