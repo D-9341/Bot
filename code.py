@@ -36,7 +36,7 @@ async def info(ctx):
     
 @client.command()
 @commands.cooldown(1, 5, commands.BucketType.default)
-async def remind(ctx, arg, time:int, *):
+async def remind(ctx, arg, time:int,):
     await ctx.channel.purge(limit = 1)
     emb = discord.Embed(title = None, colour = ctx.author.color, timestamp = ctx.message.created_at)
     emb.add_field(name = 'Напомню через', value = f'{time} минут(у, ы)')
@@ -165,7 +165,7 @@ async def take(ctx, arg, member: discord.Member):
     
 @client.command(aliases = ['img&'])
 @commands.has_permissions(manage_channels = True)
-async def image(ctx, arg, *):
+async def image(ctx, arg):
     await ctx.channel.purge(limit = 1)
     emb = discord.Embed(colour = ctx.author.color)
     emb.set_author(name = ctx.author.name, icon_url = ctx.author.avatar_url)
@@ -176,7 +176,7 @@ async def image(ctx, arg, *):
 @client.command(aliases = ['emb_g'])
 @commands.has_permissions(mention_everyone = True)
 @commands.cooldown(1, 20, commands.BucketType.default)
-async def gaystvo_embed(ctx, d, t, img, f, *):
+async def gaystvo_embed(ctx, d, t, img, f):
     await ctx.channel.purge(limit = 1)
     await ctx.send('@everyone')
     emb = discord.Embed(colour = ctx.author.color)
@@ -189,7 +189,7 @@ async def gaystvo_embed(ctx, d, t, img, f, *):
     
 @client.command(aliases = ['Embed', 'EMBED', 'emb' , 'Emb', 'EMB'])
 @commands.has_permissions(manage_channels = True)
-async def embed(ctx, d, t, img, f, *):
+async def embed(ctx, d, t, img, f):
     await ctx.channel.purge(limit = 1)
     emb = discord.Embed(colour = ctx.author.color)
     emb.set_author(name = ctx.author.name, icon_url = ctx.author.avatar_url)
@@ -346,11 +346,11 @@ async def on_ready():
 @client.command(aliases = ['Kick', 'KICK'])
 @commands.cooldown(1, 10, commands.BucketType.default)
 @commands.has_permissions(kick_members = True)
-async def kick(ctx , member: discord.Member, *, reason = None):
+async def kick(ctx , member: discord.Member):
     await ctx.channel.purge(limit = 1)
     if member.id != client.owner_id:
         emb = discord.Embed(title = f'Кик от {ctx.author.name}', colour = member.color)
-        await member.kick(reason = reason)
+        await member.kick(reason = None)
         emb.add_field(name = 'Кикнут', value = member.mention)
         emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
         await ctx.send(embed = emb)
@@ -360,7 +360,7 @@ async def kick(ctx , member: discord.Member, *, reason = None):
 @client.command(aliases = ['Ban', 'BAN'])
 @commands.cooldown(1, 10, commands.BucketType.default)
 @commands.has_permissions(ban_members = True)
-async def ban(ctx, reason, member: discord.Member, *):
+async def ban(ctx, reason, member: discord.Member):
     await ctx.channel.purge(limit = 1)
     if member.id != client.owner_id:
         emb = discord.Embed(title = f'Бан от {ctx.author.name}', colour = member.color)
