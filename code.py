@@ -12,7 +12,21 @@ client.remove_command('help')
 client.owner_id = 338714886001524737
 
 #test commands space
-
+@client.event
+async def on_message(message):
+	guild = message.guild
+	log_channel = discord.utils.get(guild.channels, name="логи")
+	if log_channel is None:
+		await client.process_commands(message)
+		return
+	if not message.author.bot:
+		emb=discord.Embed(colour = discord.Color.orange(), timestamp = datetime.datetime.utcnow(), description = f"in {message.channel.mention}:\n{}")
+		emb.set_author(name = message.author, icon_url = message.author.avatar_url)
+		emb.set_footer(text = message.author.id)
+		if len(message.attachments) > 0:
+			embed.set_image(url = message.attachments[0].url)
+		await log_channel.send(embed = emb)
+		await client.process_commands(message)
 #test commands space
 
 @client.command(aliases = ['Info', 'INFO'])
