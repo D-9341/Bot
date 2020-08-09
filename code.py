@@ -17,7 +17,7 @@ async def on_message_edit(before, after):
     channel = client.get_channel(714175791033876490)
     if channel is None:
         return
-    if not ctx.author.bot:
+    if not before.message.author.bot:
         emb = discord.Embed(title = 'Сообщение было изменено', colour = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
         emb.set_author(name = before.message.author.name, icon_url = before.message.author.name)
         emb.add_field(name = 'Было', value = before.message.content)
