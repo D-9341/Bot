@@ -14,14 +14,12 @@ client.owner_id = 338714886001524737
 #test commands space
 @client.event
 async def on_message_edit(before, after):
-    guild = message.guild
     channel = client.get_channel(714175791033876490)
     if channel is None:
-        await client.Process_commands(message)
         return
-    if not message.author.bot:
+    if not ctx.author.bot:
         emb = discord.Embed(title = 'Сообщение было изменено', colour = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
-        emb.set_author(name = message.author, icon_url = message.author.avatar_url)
+        emb.set_author(name = before.message.author.name, icon_url = before.message.author.name)
         emb.add_field(name = 'Было', value = before.message.content)
         emb.add_field(name = 'Стало', value = after.message.content)
         emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
@@ -37,7 +35,7 @@ async def info(ctx, amount = 1):
 @commands.cooldown(1, 5, commands.BucketType.default)
 async def remind(ctx, arg, time:int, *, amount = 1):
     await ctx.channel.purge(limit = amount)
-    emb = discord.Embed(title = None, colour = ctx.author.color, timestamp = ctx.message.created_at)
+    emb = discord.Embed(colour = ctx.author.color, timestamp = ctx.message.created_at)
     emb.add_field(name = 'Напомню через', value = f'{time} минут(у, ы)')
     emb.add_field(name = 'О чём напомню?', value = arg)
     emb.add_field(name = 'Кому?', value = ctx.author.mention)
@@ -56,7 +54,7 @@ async def remind(ctx, arg, time:int, *, amount = 1):
 async def guild(ctx, guild : discord.Guild = None, amount = 1):
     guild = ctx.guild if not guild else guild
     await ctx.channel.purge(limit = amount)
-    emb = discord.Embed(titile = f'Информация о {guild}', colour = discord.Color.orange(), timestamp = ctx.message.created_at)
+    emb = discord.Embed(title = f'Информация о {guild}', colour = discord.Color.orange(), timestamp = ctx.message.created_at)
     emb.add_field(name = 'ID сервера', value = guild.id)
     emb.add_field(name = 'Уровень сервера', value = guild.premium_tier)
     emb.add_field(name = 'Люди, бустящие сервер', value = guild.premium_subscribers)
