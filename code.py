@@ -12,17 +12,7 @@ client.remove_command('help')
 client.owner_id = 338714886001524737
 
 #test commands space
-@client.event
-async def on_voice_state_update(member, after, before):
-    if before.channel.id == 742457421456343272:
-        channel = client.get_channel(id = 742469905755930705)
-        await member.move_to(channel)
-    elif before.channel.id == 742470426487160863:
-        channel = client.get_channel(id = 742469942963732582)
-        await member.move_to(channel)
-    elif before.channel.id == 742470517805809745:
-        channel = client.get_channel(id = 742469986458533889)
-        await member.move_to(channel)
+
 #test commands space
 
 @client.command(aliases = ['Info', 'INFO'])
@@ -244,6 +234,18 @@ async def coinflip(ctx, amount = 1):
     rancoin = random.choice(choices)
     await ctx.send(rancoin)
 
+@client.event
+async def on_voice_state_update(member, after, before):
+    if before.channel.id == 742457421456343272:
+        channel = client.get_channel(id = 742469905755930705)
+        await member.move_to(channel)
+    elif before.channel.id == 742470426487160863:
+        channel = client.get_channel(id = 742469942963732582)
+        await member.move_to(channel)
+    elif before.channel.id == 742470517805809745:
+        channel = client.get_channel(id = 742469986458533889)
+        await member.move_to(channel)
+    
 #получение роли по эмодзи       
 @client.event
 async def on_raw_reaction_add(payload):
