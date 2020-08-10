@@ -439,19 +439,19 @@ async def ban(ctx , member: discord.Member, *, reason = None):
 async def clear(ctx, amount : int):
     await ctx.channel.purge(limit = amount + 1)
     if amount == 1:
-        emb = discord.Embed(description = f'удалено {amount} сообщений', colour = discord.Color.orange())
+        emb = discord.Embed(description = f'удалено {amount} сообщение', colour = discord.Color.orange())
         emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
         await ctx.send(embed = emb, delete_after = 1)
     elif amount == 2:
-        emb = discord.Embed(description = f'удалено {amount} сообщений', colour = discord.Color.orange())
+        emb = discord.Embed(description = f'удалено {amount} сообщения', colour = discord.Color.orange())
         emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
         await ctx.send(embed = emb, delete_after = 1)
     elif amount == 3:
-        emb = discord.Embed(description = f'удалено {amount} сообщений', colour = discord.Color.orange())
+        emb = discord.Embed(description = f'удалено {amount} сообщения', colour = discord.Color.orange())
         emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
         await ctx.send(embed = emb, delete_after = 1)
     elif amount == 4:
-        emb = discord.Embed(description = f'удалено {amount} сообщений', colour = discord.Color.orange())
+        emb = discord.Embed(description = f'удалено {amount} сообщения', colour = discord.Color.orange())
         emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
         await ctx.send(embed = emb, delete_after = 1)
     else:
