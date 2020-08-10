@@ -15,14 +15,15 @@ client.owner_id = 338714886001524737
 @client.event
 async def on_voice_state_update(member, after, before):
     if before.channel.id == 742457421456343272:
-        category = discord.utils.get(before.channel.guild.categories, id = 693937532550774824)
-        channel2 = await Guild.create_voice_channel(name = f'Комната {member.name}', category = category)
-        await channel2.set_permissions(member, mute_members = True, move_members = True, manage_channels = True)
-        await member.move_to(channel2)
-        def check(a, b, c):
-            return len(channel2.member) == 0
-        await client.wait_for('voice_state_update', check = check)
-        await channel2.delete()
+        category = client.get_category(id = 693937532550774824)
+        #channel = await guild.create_voice_channel(name = f'Комната {member.name}', category = category)
+        channel = client.get_channel(id = 738056810883186698)
+        #await channel.set_permissions(member, mute_members = True, move_members = True, manage_channels = True)
+        await member.move_to(channel)
+        #def check(a, b, c):
+            #return len(channel.member) == 0
+        #await client.wait_for('voice_state_update', check = check)
+        #await channel.delete()
 #test commands space
 
 @client.command(aliases = ['Info', 'INFO'])
