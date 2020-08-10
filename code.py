@@ -14,7 +14,7 @@ client.owner_id = 338714886001524737
 #test commands space
 @client.event
 async def on_voice_state_update(member, after, before):
-    if before.channel.id = 742457421456343272:
+    if before.channel.id == 742457421456343272:
         category = discord.utils.get(before.channel.guild.category, id = 693937532550774824)
         channel2 = await guild.create_voice_channel(name = f'Комната {member.name}', category = category)
         await channel2.set_permissions(member, mute_members = True, move_members = True, manage_channels = True)
