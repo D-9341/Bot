@@ -25,7 +25,7 @@ async def info(ctx, amount = 1):
 @client.command(aliases = ['Ping', 'PING'])
 async def ping(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
-    emb = discord.Embed(description = f'Pong!, `{round(client.latency * 1000)} ms`', colour = discord.Color.orange(), timestamp = ctx.message.created_at)
+    emb = discord.Embed(description = f'Pong! `{round(client.latency * 1000)} ms`', colour = discord.Color.orange(), timestamp = ctx.message.created_at)
     emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
     await ctx.send(embed = emb)
     
