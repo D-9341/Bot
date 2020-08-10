@@ -397,7 +397,7 @@ async def time(ctx, amount = 1):
 #проверка на подключение
 @client.event
 async def on_ready():
-    await client.change_presence(status = discord.Status.idle, activity = discord.Game('Discord API'))
+    await client.change_presence(status = discord.Status.idle, activity = discord.Activity(type = discord.ActivityType.watching, name = 'Discord API'))
 
 #kick
 @client.command(aliases = ['Kick', 'KICK'])
