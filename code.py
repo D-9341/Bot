@@ -68,7 +68,7 @@ async def guild(ctx, guild : discord.Guild = None, amount = 1):
 async def rap(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
     emb = discord.Embed(colour = ctx.author.color, timestamp = ctx.message.created_at)
-    emb.set_author(name = ctx.author.name, icon_url = ctx.author.avatar_url)
+    emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
     emb.set_image(url = 'https://thumbs.gfycat.com/MessyCarefreeHousefly-size_restricted.gif')
     emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
     await ctx.send(embed = emb)
@@ -120,7 +120,7 @@ async def mute(ctx, member: discord.Member, time : int, amount = 1):
         role = discord.utils.get(ctx.message.guild.roles, name = 'Muted')
         if role is not None:
             await member.add_roles(role)
-            emb = discord.Embed(title = f'Мут от {ctx.author.name}', colour = member.color, timestamp = ctx.message.created_at)
+            emb = discord.Embed(title = f'Мут от {ctx.author}', colour = member.color, timestamp = ctx.message.created_at)
             emb.add_field(name = 'В муте', value = f'{member.mention}')
             emb.add_field(name = 'Время мута в минутах', value = time)
             emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
@@ -158,7 +158,7 @@ async def give(ctx, arg, member: discord.Member, amount = 1):
     emb = discord.Embed(colour = member.color, timestamp = ctx.message.created_at)
     emb.add_field(name = 'Была выдана роль', value = role)
     emb.add_field(name = 'Выдана:', value = member.mention)
-    emb.set_author(name = ctx.author.name, icon_url = ctx.author.avatar_url)
+    emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
     emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
     await channel.send(embed = emb)
     
@@ -172,7 +172,7 @@ async def take(ctx, arg, member: discord.Member, amount = 1):
     emb = discord.Embed(colour = member.color, timestamp = ctx.message.created_at)
     emb.add_field(name = 'Была забрана роль', value = role)
     emb.add_field(name = 'Забрана у:', value = member.mention)
-    emb.set_author(name = ctx.author.name, icon_url = ctx.author.avatar_url)
+    emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
     emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
     await channel.send(embed = emb)
     
@@ -181,7 +181,7 @@ async def take(ctx, arg, member: discord.Member, amount = 1):
 async def image(ctx, arg, *, amount = 1):
     await ctx.channel.purge(limit = amount)
     emb = discord.Embed(colour = ctx.author.color)
-    emb.set_author(name = ctx.author.name, icon_url = ctx.author.avatar_url)
+    emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
     emb.set_image(url = arg)
     emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
     await ctx.send(embed = emb)
@@ -193,7 +193,7 @@ async def gaystvo_embed(ctx, d, t, img, f, *, amount = 1):
     await ctx.channel.purge(limit = amount)
     await ctx.send('@everyone')
     emb = discord.Embed(colour = ctx.author.color)
-    emb.set_author(name = ctx.author.name, icon_url = ctx.author.avatar_url)
+    emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
     emb.add_field(name = d, value = t)
     emb.set_image(url = img)
     emb.set_thumbnail(url = f)
@@ -205,7 +205,7 @@ async def gaystvo_embed(ctx, d, t, img, f, *, amount = 1):
 async def embed(ctx, d, t, img, f, *, amount = 1):
     await ctx.channel.purge(limit = amount)
     emb = discord.Embed(colour = ctx.author.color)
-    emb.set_author(name = ctx.author.name, icon_url = ctx.author.avatar_url)
+    emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
     emb.add_field(name = d, value = t)
     emb.set_image(url = img)
     emb.set_thumbnail(url = f)
