@@ -454,8 +454,8 @@ async def clear(ctx, amount : int):
 @client.event
 async def on_command_error(ctx, error):
     if isinstance(error, commands.CommandNotFound):
-        await ctx.send(f'{ctx.author.mention})
-        emb = discord.Embed(description = f'{ctx.author.mention}, чё это за команда?')
+        await ctx.send(f'{ctx.author.mention}')
+        emb = discord.Embed(description = f'{ctx.author.mention}, я не знаю такую команду!')
         emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
         await ctx.send(f'{ctx.author.mention}, чё это за команда?')
         
@@ -465,80 +465,123 @@ async def on_command_error(ctx, error):
         emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
         await ctx.send(embed = emb)
     
-@about.error
-async def about_error(ctx, error):
-    if isinstance(error, commands.MissingRequiredArgument):
-        await ctx.send(f'{ctx.author.mention}, о ком инфа то?')
-
-    if isinstance(error, commands.MissingPermissions):
-        await ctx.send(f'{ctx.author.mention} пытался вызвать комманду about. Хаха')
-    
 @pm.error
 async def pm_error(ctx, error):
     if isinstance(error, commands.MissingRequiredArgument):
-        await ctx.send(f'{ctx.author.mention}, кому написать то?')
+        await ctx.send(f'{ctx.author.mention}')
+        emb = discord.Embed(description = f'{ctx.author.mention}, укажите, кому и что написать!')
+        emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+        await ctx.send(embed = emb)
 
     if isinstance(error, commands.MissingPermissions):
-        await ctx.send(f'{ctx.author.mention} пытался вызвать комманду Pm. Хаха')
+        await ctx.send(f'{ctx.author.mention}')
+        emb = discord.Embed(description = f'{ctx.author.mention} пытался вызвать команду pm')
+        emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+        await ctx.send(embed = emb)
         
 @gaystvo_embed.error
 async def gaystvo_embed_error(ctx, error):
     if isinstance(error, commands.MissingRequiredArgument):
-        await ctx.send(f'{ctx.author.mention}, чё сказать то?')
+        await ctx.send(f'{ctx.author.mention}')
+        emb = discord.Embed(description = f'{ctx.author.mention}, так шутить не нужно')
+        emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+        await ctx.send(embed = emb)
 
     if isinstance(error, commands.MissingPermissions):
-        await ctx.send(f'{ctx.author.mention} пытался вызвать комманду gaystvo_embed. Хаха')
+        await ctx.send(f'{ctx.author.mention}')
+        emb = discord.Embed(description = f'{ctx.author.mention} пытался вызвать команду gaystvo_embed')
+        emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+        await ctx.send(embed = emb)
         
 @embed.error
 async def embed_error(ctx, error):
     if isinstance(error, commands.MissingRequiredArgument):
-        await ctx.send(f'{ctx.author.mention}, чё сказать то?')
+        await ctx.send(f'{ctx.author.mention}')
+        emb = discord.Embed(description = f'{ctx.author.mention}, укажите, что закрепить!')
+        emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+        await ctx.send(embed = emb)
 
     if isinstance(error, commands.MissingPermissions):
-        await ctx.send(f'{ctx.author.mention} пытался вызвать комманду Embed. Хаха')
+        await ctx.send(f'{ctx.author.mention}')
+        emb = discord.Embed(description = f'{ctx.author.mention} пытался вызвать команду embed')
+        emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+        await ctx.send(embed = emb)
 
 @gaystvo.error
 async def gaystvo_error(ctx, error):
     if isinstance(error, commands.MissingRequiredArgument):
-        await ctx.send(f'{ctx.author.mention}, ты так не шути')
+        await ctx.send(f'{ctx.author.mention}')
+        emb = discord.Embed(description = f'{ctx.author.mention}, так шутить не нужно')
+        emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+        await ctx.send(embed = emb)
 
     if isinstance(error, commands.MissingPermissions):
-        await ctx.send(f'{ctx.author.mention} пытался пингануть \@everyone. Ой')
+        await ctx.send(f'{ctx.author.mention}')
+        emb = discord.Embed(description = f'{ctx.author.mention} пытался пингануть everyone')
+        emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+        await ctx.send(embed = emb)
 
 @say.error
 async def say_error(ctx, error):
     if isinstance(error, commands.MissingRequiredArgument):
-        await ctx.send(f'{ctx.author.mention}, чё сказать то?')
+        await ctx.send(f'{ctx.author.mention}')
+        emb = discord.Embed(description = f'{ctx.author.mention}, укажите, что я должен сказать!')
+        emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+        await ctx.send(embed = emb)
             
     if isinstance(error, commands.MissingPermissions):
-        await ctx.send(f'{ctx.author.mention} пытался вызвать комманду Say. Хаха')
+        await ctx.send(f'{ctx.author.mention}')
+        emb = discord.Embed(description = f'{ctx.author.mention} пытался вызвать команду say')
+        emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+        await ctx.send(embed = emb)
         
 @mute.error
 async def mute_error(ctx, error):
     if isinstance(error, commands.MissingRequiredArgument):
-        await ctx.send(f'{ctx.author.mention}, кого и на сколько мутить то?')
+        await ctx.send(f'{ctx.author.mention}')
+        emb = discord.Embed(description = f'{ctx.author.mention}, укажите, кого и на сколько мутить!')
+        emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+        await ctx.send(embed = emb)
         
     if isinstance(error, commands.BadArgument):
-        await ctx.send(f'{ctx.author.mention}, проверьте правильность написания команды')
+        await ctx.send(f'{ctx.author.mention}')
+        emb = discord.Embed(description = f'{ctx.author.mention}, проверьте правильность написания команды!')
+        emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+        await ctx.send(embed = emb)
                        
     if isinstance(error, commands.MissingPermissions):
-        await ctx.send(f'{ctx.author.mention} пытался вызвать комманду Mute. Хаха')
+        await ctx.send(f'{ctx.author.mention}')
+        emb = discord.Embed(description = f'{ctx.author.mention} пытался вызвать команду mute')
+        emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+        await ctx.send(embed = emb)
 
 @kick.error
 async def kick_error(ctx, error):
     if isinstance(error, commands.MissingRequiredArgument):
-        await ctx.send(f'{ctx.author.mention}, кого кикать то?')
+        await ctx.send(f'{ctx.author.mention}')
+        emb = discord.Embed(description = f'{ctx.author.mention}, укажите, кого нужно кикнуть!')
+        emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+        await ctx.send(embed = emb)
 
     if isinstance(error, commands.MissingPermissions):
-        await ctx.send(f'{cctx.author.mention} пытался вызвать комманду Kick. Хаха')
+        await ctx.send(f'{ctx.author.mention}')
+        emb = discord.Embed(description = f'{ctx.author.mention} пытался вызвать команду kick')
+        emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+        await ctx.send(embed = emb)
 
 @ban.error
 async def ban_error(ctx, error):
     if isinstance(error, commands.MissingRequiredArgument):
-        await ctx.send(f'{ctx.author.mention}, кого банить то?')
+        await ctx.send(f'{ctx.author.mention}')
+        emb = discord.Embed(description = f'{ctx.author.mention}, укажите, кого нужно забанить!')
+        emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+        await ctx.send(embed = emb)
 
     if isinstance(error, commands.MissingPermissions):
-        await ctx.send(f'{ctx.author.mention} пытался вызвать комманду Ban. Хаха')
+        await ctx.send(f'{ctx.author.mention}')
+        emb = discord.Embed(description = f'{ctx.author.mention} пытался вызвать команду ban')
+        emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+        await ctx.send(embed = emb)
 
 @clear.error
 async def clear_error(ctx, error):
@@ -546,10 +589,16 @@ async def clear_error(ctx, error):
         await ctx.send(f'{ctx.author.mention}, нет аргумента!')
 
     if isinstance(error, commands.MissingPermissions):
-        await ctx.send(f'{ctx.author.mention} пытался вызвать комманду Clear. Хаха')
+        await ctx.send(f'{ctx.author.mention}')
+        emb = discord.Embed(description = f'{ctx.author.mention} пытался вызвать команду clear')
+        emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+        await ctx.send(embed = emb)
         
     if isinstance(error, commands.BadArgument):
-        await ctx.send(f'{ctx.author.mention}, это не число!')
+        await ctx.send(f'{ctx.author.mention}')
+        emb = discord.Embed(description = f'{ctx.author.mention}, проверьте правильность написания команды!')
+        emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+        await ctx.send(embed = emb)
     
 t = os.environ.get('t')
 
