@@ -18,7 +18,14 @@ client.owner_id = 338714886001524737
 @client.command(aliases = ['Info', 'INFO'])
 async def info(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
-    emb = discord.Embed(description = f'Cy в сети, пинг равен `{round(client.latency * 1000)} ms`', colour = discord.Color.orange())
+    emb = discord.Embed(description = f'Cy в сети, это моя хуй знает какая версия', colour = discord.Color.orange())
+    emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+    await ctx.send(embed = emb)
+    
+@client.command(aliases = ['Ping', 'PING'])
+async def ping(ctx, amount = 1):
+    await ctx.channel.purge(limit = amount)
+    emb = discord.Embed(description = f'Pong!, `{round(client.latency * 1000)} ms`', colour = discord.Color.orange(), timestamp = ctx.message.created_at)
     emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
     await ctx.send(embed = emb)
     
@@ -354,6 +361,7 @@ async def help(ctx, amount = 1):
     emb.add_field(name = 'cy/info', value = 'Команда для определения, в сети ли бот', inline = False)
     emb.add_field(name = 'cy/clear', value = 'Очистка чата.')
     emb.add_field(name = 'cy/rap', value = '.rap')
+    emb.add_field(name = 'cy/ping', value = 'Pong!')
     emb.add_field(name = 'cy/ban', value = 'Бан игрока.')
     emb.add_field(name = 'cy/kick', value = 'Кик игрока.')
     emb.add_field(name = 'cy/mute', value = 'Мут игрока. Пример: cy/mute @StakanDudka64 10 (время измеряется в минутах). По прошествии времени мут автоматически слетает.', inline = False)
