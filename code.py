@@ -15,15 +15,14 @@ client.owner_id = 338714886001524737
 @client.event
 async def on_voice_state_update(member, after, before):
     if before.channel.id == 742457421456343272:
-        #category = client.get_categories(id = 693937532550774824)
-        #channel = await guild.create_voice_channel(name = f'Комната {member.name}', category = category)
-        channel = client.get_channel(id = 738056810883186698)
-        #await channel.set_permissions(member, mute_members = True, move_members = True, manage_channels = True)
+        channel = client.get_channel(id = 742469905755930705)
         await member.move_to(channel)
-        #def check(a, b, c):
-            #return len(channel.member) == 0
-        #await client.wait_for('voice_state_update', check = check)
-        #await channel.delete()
+    elif before.channel.id == 742470426487160863:
+        channel = client.get_channel(id = 742469942963732582)
+        await member.move_to(channel)
+    elif before.channel.id == 742470517805809745:
+        channel = client.get_channel(id = 742469986458533889)
+        await member.move_to(channel)
 #test commands space
 
 @client.command(aliases = ['Info', 'INFO'])
