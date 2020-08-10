@@ -300,6 +300,8 @@ async def leave(ctx):
 async def pm(ctx, member: discord.Member, arg, amount = 1):
     await ctx.channel.purge(limit = amount)
     emb = discord.Embed(description = f'{arg}')
+    emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
+    emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
     await member.send(embed = emb)
 
 @client.event
