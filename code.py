@@ -96,13 +96,14 @@ async def about(ctx, member:discord.Member = None, amount = 1):
     
 @client.command(aliases = ['Unmute', 'UNMUTE'])
 @commands.has_permissions(manage_channels = True)
-async def unmute(ctx, member : discord.Member, amount = 1):
+async def unmute(ctx, member : discord.Member, arg, *, amount = 1):
     await ctx.channel.purge(limit = amount)
     role = discord.utils.get(ctx.message.guild.roles, name = 'Muted')
     if role is not None:
         await member.remove_roles(role)
         emb = discord.Embed(title = f'Принудительное снятие мута у {member.name}', colour = member.color, timestamp = ctx.message.created_at)
         emb.add_field(name = 'Снял мут', value = ctx.author.mention)
+        emb.add_field(name = 'По причине', value = arg)
         emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
         await ctx.send(embed = emb)
     else:
@@ -114,7 +115,7 @@ async def unmute(ctx, member : discord.Member, amount = 1):
 @client.command(aliases = ['Mute', 'MUTE'])
 @commands.has_permissions(manage_channels = True)
 @commands.cooldown(1, 10, commands.BucketType.default)
-async def mute(ctx, member: discord.Member, time : int, amount = 1):
+async def mute(ctx, member: discord.Member, time : int, arg, *, amount = 1):
     await ctx.channel.purge(limit = amount)
     if member.id != client.owner_id:
         role = discord.utils.get(ctx.message.guild.roles, name = 'Muted')
@@ -129,6 +130,7 @@ async def mute(ctx, member: discord.Member, time : int, amount = 1):
             if role is not None:
                 for role in member.roles:
                     if role.name == 'Muted':
+                        await asyncio.sleep(1)
                         await ctx.send(f'{member.mention}')
                         emb = discord.Embed(colour = member.color, timestamp = ctx.message.created_at)
                         emb.add_field(name = 'Размучен по истечению времени', value = member.mention)
@@ -137,6 +139,7 @@ async def mute(ctx, member: discord.Member, time : int, amount = 1):
                         await ctx.send(embed = emb)
                         await member.remove_roles(role)
                     else:
+                        await asyncio.sleep(1)
                         emb = discord.Embed(description = f'{member.mention} уже размучен, снятие мута не требуется', colour = discord.Color.orange())
                         emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
                         await ctx.send(embed = emb)
