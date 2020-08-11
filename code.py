@@ -126,15 +126,20 @@ async def mute(ctx, member: discord.Member, time : int, amount = 1):
             emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
             await ctx.send(embed = emb)
             await asyncio.sleep(time*60)
-            mrole = discord.utils.get(ctx.message.guild.roles, name = 'Muted')
-            if mrole is not None:
-                await ctx.send(f'{member.mention}')
-                emb = discord.Embed(colour = member.color, timestamp = ctx.message.created_at)
-                emb.add_field(name = 'Размучен по истечению времени', value = member.mention)
-                emb.add_field(name = 'Время мута в минутах составляло', value = time)
-                emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
-                await ctx.send(embed = emb)
-                await member.remove_roles(mrole)
+            if role is not None:
+                for role in member.roles:
+                    if role.name == 'Muted':
+                        await ctx.send(f'{member.mention}')
+                        emb = discord.Embed(colour = member.color, timestamp = ctx.message.created_at)
+                        emb.add_field(name = 'Размучен по истечению времени', value = member.mention)
+                        emb.add_field(name = 'Время мута в минутах составляло', value = time)
+                        emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+                        await ctx.send(embed = emb)
+                        await member.remove_roles(role)
+                    else:
+                        emb = discord.Embed(description = f'{member.mention} уже размучен, снятие мута не требуется', colour = discord.Color.orange())
+                        emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+                        await ctx.send(embed = emb)
             else:
                 emb = discord.Embed(description = f'{ctx.author.mention}, Я не могу снять мут у {member.mention} из-за того, что роль Muted была удалена/отредактирована!', colour = discord.Color.orange())
                 emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
