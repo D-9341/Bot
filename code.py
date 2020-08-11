@@ -123,6 +123,7 @@ async def mute(ctx, member: discord.Member, time : int, arg, *, amount = 1):
             await member.add_roles(role)
             emb = discord.Embed(title = f'Мут от {ctx.author}', colour = member.color, timestamp = ctx.message.created_at)
             emb.add_field(name = 'В муте', value = f'{member.mention}')
+            emb.add_field(name = 'По причине', value = arg)
             emb.add_field(name = 'Время мута в минутах', value = time)
             emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
             await ctx.send(embed = emb)
@@ -130,10 +131,10 @@ async def mute(ctx, member: discord.Member, time : int, arg, *, amount = 1):
             if role is not None:
                 for role in member.roles:
                     if role.name == 'Muted':
-                        await asyncio.sleep(1)
                         await ctx.send(f'{member.mention}')
                         emb = discord.Embed(colour = member.color, timestamp = ctx.message.created_at)
                         emb.add_field(name = 'Размучен по истечению времени', value = member.mention)
+                        emb.add_field(name = 'По причине', value = arg)
                         emb.add_field(name = 'Время мута в минутах составляло', value = time)
                         emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
                         await ctx.send(embed = emb)
