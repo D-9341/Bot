@@ -140,7 +140,7 @@ async def mute(ctx, member: discord.Member, time : int, arg, *, amount = 1):
                         await ctx.send(embed = emb)
                         await member.remove_roles(role)
                     else:
-                        await asyncio.sleep(1)
+                        await asyncio.sleep(5)
                         emb = discord.Embed(description = f'{member.mention} уже размучен, снятие мута не требуется', colour = discord.Color.orange())
                         emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
                         await ctx.send(embed = emb)
