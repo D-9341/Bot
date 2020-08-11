@@ -315,14 +315,23 @@ async def pm(ctx, member: discord.Member, arg, amount = 1):
 @client.event
 async def on_member_join(member):
     channel = client.get_channel(693929823030214658)
-    role = discord.utils.get(member.guild.roles, id = 693933516294979704)
-    role1 = discord.utils.get(member.guild.roles, id = 693933510523879454)
-    role2 = discord.utils.get(member.guild.roles, id = 693933514198089838)
-    if role is not None:
-        await member.add_roles(role, role1, role2)
-    emb = discord.Embed(description = f'{member.mention} Has entered the facility, 👋', colour = discord.Color.orange())
-    emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
-    await channel.send(embed = emb)
+    if member.bot == False:
+        role = discord.utils.get(member.guild.roles, id = 693933516294979704)
+        role1 = discord.utils.get(member.guild.roles, id = 693933510523879454)
+        role2 = discord.utils.get(member.guild.roles, id = 693933514198089838)
+        if role is not None:
+            await member.add_roles(role, role1, role2)
+        emb = discord.Embed(description = f'{member.mention} Has entered the facility, 👋', colour = discord.Color.orange())
+        emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+        await channel.send(embed = emb)
+    else:
+        role = discord.utils.get(member.guild.roles, id = 693933516831850527)
+        role1 = discord.utils.get(member.guild.roles, id = 693933511412940800)
+        if role is not None:
+            await member.add_roles(role, role1)
+        emb = discord.Embed(description = 'Очередной ботяра? ок', colour = discord.Color.orange())
+        emb.set_footer(text = 'сука')
+        await channel.send(embed = emb)
 
 @client.event
 async def on_member_remove(member):
