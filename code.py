@@ -142,6 +142,7 @@ async def mute(ctx, member: discord.Member, time : int, arg, *, amount = 1):
                     else:
                         emb = discord.Embed(description = f'{member.mention} уже размучен, мут не был автоматически снят', colour = discord.Color.orange())
                         emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+                        await asyncio.sleep(3)
                         await ctx.send(embed = emb)
             else:
                 emb = discord.Embed(description = f'{ctx.author.mention}, Я не могу снять мут у {member.mention} из-за того, что роль Muted была удалена/отредактирована!', colour = discord.Color.orange())
