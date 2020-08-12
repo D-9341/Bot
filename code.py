@@ -12,7 +12,7 @@ client.remove_command('help')
 client.owner_id = 338714886001524737
 
 #test commands space
-@client.command
+@client.command()
 async def purge(ctx, amount : int):
     await ctx.channel.purge(limit = amount + 1)
     if amount.endswith('1') and amount != 11:
