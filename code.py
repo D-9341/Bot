@@ -12,13 +12,7 @@ client.remove_command('help')
 client.owner_id = 338714886001524737
 
 #test commands space
-@client.command()
-async def purge(ctx, amount : int):
-    await ctx.channel.purge(limit = amount + 1)
-    if message.content.endswith('1'):
-        await ctx.send(f'было удалено {amount} сообшение')
-    elif message.content.endswith('2') and amount != 20 or 12:
-        await ctx.send(f'было удалено {amount} сообщения')
+
 #test commands space
 
 @client.command(aliases = ['Info', 'INFO'])
@@ -148,8 +142,7 @@ async def mute(ctx, member: discord.Member, time : int, arg, *, amount = 1):
                     else:
                         emb = discord.Embed(description = f'{member.mention} уже размучен, мут не был автоматически снят', colour = discord.Color.orange())
                         emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
-                        await asyncio.sleep(1)
-                        await ctx.send(embed = emb, delete_after = 4)
+                        await ctx.send(embed = emb, delete_after = 3)
             else:
                 emb = discord.Embed(description = f'{ctx.author.mention}, Я не могу снять мут у {member.mention} из-за того, что роль Muted была удалена/отредактирована!', colour = discord.Color.orange())
                 emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
