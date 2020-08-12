@@ -12,7 +12,13 @@ client.remove_command('help')
 client.owner_id = 338714886001524737
 
 #test commands space
-
+@client.command
+async def purge(ctx, amount : int):
+    await ctx.channel.purge(limit = amount + 1)
+    if amount.endswith('1') and amount != 11:
+        await ctx.send(f'было удалено {amount} сообшение')
+    elif amount.enswith('2') and amount != 20 or 12:
+        await ctx.send(f'было удалено {amount} сообщения')
 #test commands space
 
 @client.command(aliases = ['Info', 'INFO'])
