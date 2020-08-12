@@ -15,7 +15,7 @@ client.owner_id = 338714886001524737
 @client.command()
 async def purge(ctx, amount : int):
     await ctx.channel.purge(limit = amount + 1)
-    if message.content.endswith('1') and amount != 11:
+    if message.content.endswith('1'):
         await ctx.send(f'было удалено {amount} сообшение')
     elif message.content.endswith('2') and amount != 20 or 12:
         await ctx.send(f'было удалено {amount} сообщения')
