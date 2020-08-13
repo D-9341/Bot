@@ -12,11 +12,7 @@ client.remove_command('help')
 client.owner_id = 338714886001524737
 
 #test commands space
-@client.command()
-async def edit(ctx, arg, arg1, *, amount = 1):
-    await ctx.channel.purge(limit = amount)
-    m = await ctx.fetch_message(id = arg)
-    await m.edit(content = arg1)
+
 #test commands space
 
 @client.command(aliases = ['Info', 'INFO'])
@@ -223,6 +219,13 @@ async def embed(ctx, d, t, img, f, *, amount = 1):
     emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
     await ctx.send(embed = emb)
 
+@client.command()
+@commands.has_permissions(administrator = True)
+async def edit(ctx, arg, arg1, *, amount = 1):
+    await ctx.channel.purge(limit = amount)
+    m = await ctx.fetch_message(id = arg)
+    await m.edit(content = arg1)
+    
 @client.command(aliases = ['Gaystvo', 'GAYSTVO'])
 @commands.cooldown(1, 20, commands.BucketType.default)
 @commands.has_permissions(mention_everyone = True)
@@ -404,6 +407,7 @@ async def help(ctx, amount = 1):
     emb.add_field(name = 'cy/remind', value = 'Может напомнить вам что угодно, даже suck some dick. Формат - cy/remind "suck some dick" 10')
     emb.add_field(name = 'cy/say', value = 'Пишет сообщение от лица бота. Всё.')
     emb.add_field(name = 'cy/gaystvo', value = 'Пишет от лица бота и пингует @everyone')
+    emb.add_field(name = 'cy/edit', value = 'Редактирует сообщение. Формат : cy/edit (id сообщения) сообщение. При использовании на gaystvo требует повторного пинга everyone')
     emb.add_field(name = 'cy/embed', value = 'От лица бота отправляется эмбед. Прочтите #инструкции-cy-бот , чтобы узнать подробнее.')
     emb.add_field(name = 'cy/gaystvo_embed', value = 'Совмещает в себе команды gaystvo и embed.')
     emb.add_field(name = 'cy/image', value = 'Бот может прикрепить изображение, в аргумент нужно указать ссылку.')
