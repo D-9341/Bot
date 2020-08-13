@@ -12,7 +12,18 @@ client.remove_command('help')
 client.owner_id = 338714886001524737
 
 #test commands space
-
+@client.command()
+async def emb_edit(ctx, arg, d, t, img, f, *, amount = 1):
+    await ctx.channel.purge(limit = amount)
+    emb = discord.Embed(colour = ctx.author.color)
+    m = await ctx.fetch_message(id = arg)
+    emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
+    emb.add_field(name = d, value = t)
+    emb.set_image(url = img)
+    emb.set_thumbnail(url = f)
+    emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+    await m.edit(embed = emb)
+    
 #test commands space
 
 @client.command(aliases = ['Info', 'INFO'])
