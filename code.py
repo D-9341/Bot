@@ -15,7 +15,7 @@ client.owner_id = 338714886001524737
 @client.command()
 async def edit(ctx, arg, arg1, *, amount = 1):
     await ctx.channel.purge(limit = amount)
-    m = member.fetch_message(id = arg)
+    m = ctx.fetch_message(id = arg)
     await m.edit(arg1)
 #test commands space
 
