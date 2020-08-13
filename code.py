@@ -432,7 +432,7 @@ async def on_ready():
 @client.command(aliases = ['Kick', 'KICK'])
 @commands.cooldown(1, 10, commands.BucketType.default)
 @commands.has_permissions(kick_members = True)
-async def kick(ctx , member: discord.Member, *, reason = None):
+async def kick(ctx , member: discord.Member, *, reason = 'Пидарас'):
     await ctx.channel.purge(limit = 1)
     if member.id != client.owner_id:
         emb = discord.Embed(title = f'Кик от {ctx.author.name}', colour = member.color)
@@ -448,7 +448,7 @@ async def kick(ctx , member: discord.Member, *, reason = None):
 @client.command(aliases = ['Ban', 'BAN'])
 @commands.cooldown(1, 10, commands.BucketType.default)
 @commands.has_permissions(ban_members = True)
-async def ban(ctx , member: discord.Member, *, reason = None):
+async def ban(ctx , member: discord.Member, *, reason = 'Пидарас'):
     await ctx.channel.purge(limit = 1)
     if member.id != client.owner_id:
         emb = discord.Embed(title = f'Бан от {ctx.author.name}', colour = member.color)
