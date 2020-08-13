@@ -12,18 +12,7 @@ client.remove_command('help')
 client.owner_id = 338714886001524737
 
 #test commands space
-@client.command()
-async def emb_edit(ctx, arg, d, t, img, f, *, amount = 1):
-    await ctx.channel.purge(limit = amount)
-    emb = discord.Embed(colour = ctx.author.color)
-    m = await ctx.fetch_message(id = arg)
-    emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
-    emb.add_field(name = d, value = t)
-    emb.set_image(url = img)
-    emb.set_thumbnail(url = f)
-    emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
-    await m.edit(embed = emb)
-    
+
 #test commands space
 
 @client.command(aliases = ['Info', 'INFO'])
@@ -231,7 +220,20 @@ async def embed(ctx, d, t, img, f, *, amount = 1):
     await ctx.send(embed = emb)
 
 @client.command()
-@commands.has_permissions(administrator = True)
+@commands.has_permission(manage_channels = True)
+async def emb_edit(ctx, arg, d, t, img, f, *, amount = 1):
+    await ctx.channel.purge(limit = amount)
+    emb = discord.Embed(colour = ctx.author.color)
+    m = await ctx.fetch_message(id = arg)
+    emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
+    emb.add_field(name = d, value = t)
+    emb.set_image(url = img)
+    emb.set_thumbnail(url = f)
+    emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+    await m.edit(embed = emb)
+    
+@client.command()
+@commands.has_permissions(manage_channels = True)
 async def edit(ctx, arg, arg1, *, amount = 1):
     await ctx.channel.purge(limit = amount)
     m = await ctx.fetch_message(id = arg)
@@ -419,6 +421,7 @@ async def help(ctx, amount = 1):
     emb.add_field(name = 'cy/say', value = 'Пишет сообщение от лица бота. Всё.')
     emb.add_field(name = 'cy/gaystvo', value = 'Пишет от лица бота и пингует @everyone')
     emb.add_field(name = 'cy/edit', value = 'Редактирует сообщение. Формат : cy/edit (id сообщения) сообщение. При использовании на gaystvo требует повторного пинга everyone')
+    emb.add_field(name = 'cy/emb_edit', value = 'Редактирует эмбед. Формат : cy/emb_edit (id), аргументы те же самые, что и на эмбед. Работает как и VAULTBOT')
     emb.add_field(name = 'cy/embed', value = 'От лица бота отправляется эмбед. Прочтите #инструкции-cy-бот , чтобы узнать подробнее.')
     emb.add_field(name = 'cy/gaystvo_embed', value = 'Совмещает в себе команды gaystvo и embed.')
     emb.add_field(name = 'cy/image', value = 'Бот может прикрепить изображение, в аргумент нужно указать ссылку.')
