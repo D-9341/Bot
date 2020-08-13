@@ -220,7 +220,7 @@ async def embed(ctx, d, t, img, f, *, amount = 1):
     await ctx.send(embed = emb)
 
 @client.command()
-@commands.has_permission(manage_channels = True)
+@commands.has_permissions(manage_channels = True)
 async def emb_edit(ctx, arg, d, t, img, f, *, amount = 1):
     await ctx.channel.purge(limit = amount)
     emb = discord.Embed(colour = ctx.author.color)
