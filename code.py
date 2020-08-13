@@ -140,9 +140,7 @@ async def mute(ctx, member: discord.Member, time : int, arg, *, amount = 1):
                         await ctx.send(embed = emb)
                         await member.remove_roles(role)
                     else:
-                        emb = discord.Embed(description = f'{member.mention} уже размучен, мут не был автоматически снят', colour = discord.Color.orange())
-                        emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
-                        await ctx.send(embed = emb, delete_after = 3)
+                        break
             else:
                 emb = discord.Embed(description = f'{ctx.author.mention}, Я не могу снять мут у {member.mention} из-за того, что роль Muted была удалена/отредактирована!', colour = discord.Color.orange())
                 emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
@@ -164,7 +162,7 @@ async def give(ctx, arg, member: discord.Member, amount = 1):
     await member.add_roles(role)
     channel = client.get_channel(714175791033876490)
     emb = discord.Embed(colour = member.color, timestamp = ctx.message.created_at)
-    emb.add_field(name = 'Была выдана роль', value = role)
+    emb.add_field(name = 'Была выдана роль', value = role.mention)
     emb.add_field(name = 'Выдана:', value = member.mention)
     emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
     emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
@@ -178,7 +176,7 @@ async def take(ctx, arg, member: discord.Member, amount = 1):
     await member.remove_roles(role)
     channel = client.get_channel(714175791033876490)
     emb = discord.Embed(colour = member.color, timestamp = ctx.message.created_at)
-    emb.add_field(name = 'Была забрана роль', value = role)
+    emb.add_field(name = 'Была забрана роль', value = role.mention)
     emb.add_field(name = 'Забрана у:', value = member.mention)
     emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
     emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
