@@ -193,10 +193,10 @@ async def image(ctx, arg, *, amount = 1):
     emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
     await ctx.send(embed = emb)
     
-@client.command(aliases = ['emb_g'])
+@client.command(aliases = ['emb_e'])
 @commands.has_permissions(mention_everyone = True)
 @commands.cooldown(1, 20, commands.BucketType.default)
-async def gaystvo_embed(ctx, d, t, img, f, *, amount = 1):
+async def everyone_embed(ctx, d, t, img, f, *, amount = 1):
     await ctx.channel.purge(limit = amount)
     await ctx.send('@everyone')
     emb = discord.Embed(colour = ctx.author.color)
@@ -239,10 +239,10 @@ async def edit(ctx, arg, arg1, *, amount = 1):
     m = await ctx.fetch_message(id = arg)
     await m.edit(content = arg1)
     
-@client.command(aliases = ['Gaystvo', 'GAYSTVO'])
+@client.command(aliases = ['Everyone', 'EVERYONE'])
 @commands.cooldown(1, 20, commands.BucketType.default)
 @commands.has_permissions(mention_everyone = True)
-async def gaystvo(ctx, *, arg, amount = 1):
+async def everyone(ctx, *, arg, amount = 1):
     await ctx.channel.purge(limit = amount)
     await ctx.send('@everyone ' + arg)
     
@@ -419,11 +419,11 @@ async def help(ctx, amount = 1):
     emb.add_field(name = 'cy/unmute', value = 'Размут игрока.')
     emb.add_field(name = 'cy/remind', value = 'Может напомнить вам что угодно, даже suck some dick. Формат - cy/remind "suck some dick" 10')
     emb.add_field(name = 'cy/say', value = 'Пишет сообщение от лица бота. Всё.')
-    emb.add_field(name = 'cy/gaystvo', value = 'Пишет от лица бота и пингует @everyone')
-    emb.add_field(name = 'cy/edit', value = 'Редактирует сообщение. Формат : cy/edit (id сообщения) сообщение. При использовании на gaystvo требует повторного пинга everyone')
-    emb.add_field(name = 'cy/emb_edit', value = 'Редактирует эмбед. Формат : cy/emb_edit (id), аргументы те же самые, что и на эмбед. Работает как и VAULTBOT')
+    emb.add_field(name = 'cy/everyone', value = 'Пишет от лица бота и пингует @everyone')
+    emb.add_field(name = 'cy/edit', value = 'Редактирует сообщение. Формат : cy/edit (id сообщения) сообщение. При использовании на gaystvo требует повторного пинга everyone', inline = False)
+    emb.add_field(name = 'cy/emb_edit', value = 'Редактирует эмбед. Формат : cy/emb_edit (id), аргументы те же самые, что и на эмбед. Работает как и VAULTBOT', inline = False)
     emb.add_field(name = 'cy/embed', value = 'От лица бота отправляется эмбед. Прочтите #инструкции-cy-бот , чтобы узнать подробнее.')
-    emb.add_field(name = 'cy/gaystvo_embed', value = 'Совмещает в себе команды gaystvo и embed.')
+    emb.add_field(name = 'cy/everyone_embed', value = 'Совмещает в себе команды everyone и embed.')
     emb.add_field(name = 'cy/image', value = 'Бот может прикрепить изображение, в аргумент нужно указать ссылку.')
     emb.add_field(name = 'cy/about', value = 'Показывает информацию о человеке.')
     emb.add_field(name = 'cy/guild', value = 'Показывает информацию о сервере.')
