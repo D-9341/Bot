@@ -368,7 +368,7 @@ async def on_member_remove(member):
         emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
         await channel.send(embed = emb)
     else:
-        emb = discord.Embed(description = f'{member.mention}, ну и вали, хаха!', colour = discord.Color.orange())
+        emb = discord.Embed(description = f'{member.mention}, ну и вали, ботаря, хаха!', colour = discord.Color.orange())
         emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
         await channel.send(embed = emb)
 
@@ -420,7 +420,7 @@ async def help(ctx, amount = 1):
     emb.add_field(name = 'cy/remind', value = 'Может напомнить вам что угодно, даже suck some dick. Формат - cy/remind "suck some dick" 10')
     emb.add_field(name = 'cy/say', value = 'Пишет сообщение от лица бота. Всё.')
     emb.add_field(name = 'cy/everyone', value = 'Пишет от лица бота и пингует @everyone')
-    emb.add_field(name = 'cy/edit', value = 'Редактирует сообщение. Формат : cy/edit (id сообщения) сообщение. При использовании на gaystvo требует повторного пинга everyone', inline = False)
+    emb.add_field(name = 'cy/edit', value = 'Редактирует сообщение. Формат : cy/edit (id сообщения) сообщение. При использовании на cy/everyone требует повторного пинга everyone', inline = False)
     emb.add_field(name = 'cy/emb_edit', value = 'Редактирует эмбед. Формат : cy/emb_edit (id), аргументы те же самые, что и на эмбед. Работает как и VAULTBOT', inline = False)
     emb.add_field(name = 'cy/embed', value = 'От лица бота отправляется эмбед. Прочтите #инструкции-cy-бот , чтобы узнать подробнее.')
     emb.add_field(name = 'cy/everyone_embed', value = 'Совмещает в себе команды everyone и embed.')
