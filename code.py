@@ -415,7 +415,7 @@ async def help(ctx, amount = 1):
     emb.add_field(name = 'cy/ping', value = 'Pong!')
     emb.add_field(name = 'cy/ban', value = 'Бан игрока.')
     emb.add_field(name = 'cy/kick', value = 'Кик игрока.')
-    emb.add_field(name = 'cy/mute', value = 'Мут игрока. Пример: cy/mute @StakanDudka64 10 (время измеряется в минутах) причина. По прошествии времени мут автоматически слетает.(ВНИМАНИЕ! ПЕРЕД СНЯТИЕМ МУТА ЧЕЛОВЕКА ПИНГУЕТ НЕСКОЛЬКО РАЗ! НЕ ИСПОЛЬЗУЙТЕ ЭТУ КОМАНДУ СЛИШКОМ ЧАСТО!)', inline = False)
+    emb.add_field(name = 'cy/mute', value = 'Мут игрока. Пример: cy/mute @StakanDudka64 10 (время измеряется в минутах) причина. По прошествии времени мут автоматически слетает.~~(ВНИМАНИЕ! ПЕРЕД СНЯТИЕМ МУТА ЧЕЛОВЕКА ПИНГУЕТ НЕСКОЛЬКО РАЗ! НЕ ИСПОЛЬЗУЙТЕ ЭТУ КОМАНДУ СЛИШКОМ ЧАСТО!)~~ исправлено вырезанием нахуй этого куска кода', inline = False)
     emb.add_field(name = 'cy/unmute', value = 'Размут игрока.')
     emb.add_field(name = 'cy/remind', value = 'Может напомнить вам что угодно, даже suck some dick. Формат - cy/remind "suck some dick" 10')
     emb.add_field(name = 'cy/say', value = 'Пишет сообщение от лица бота. Всё.')
