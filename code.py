@@ -101,18 +101,12 @@ async def unmute(ctx, member : discord.Member, arg, *, amount = 1):
     await ctx.channel.purge(limit = amount)
     role = discord.utils.get(ctx.message.guild.roles, name = 'Muted')
     if role is not None:
-        for role in member.roles:
-            if role.name == 'Muted':
-                await member.remove_roles(role)
-                emb = discord.Embed(title = f'Принудительное снятие мута у {member.name}', colour = member.color, timestamp = ctx.message.created_at)
-                emb.add_field(name = 'Снял мут', value = ctx.author.mention)
-                emb.add_field(name = 'По причине', value = arg)
-                emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
-                await ctx.send(embed = emb)
-            else:
-                emb = discord.Embed(description = f'Принудительное снятие мута у {member.mention} не требуется', colour = member.color, timestamp = ctx.message.created_at)
-                emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
-                await ctx.send(embed = emb)
+        await member.remove_roles(role)
+        emb = discord.Embed(title = f'Принудительное снятие мута у {member.name}', colour = member.color, timestamp = ctx.message.created_at)
+        emb.add_field(name = 'Снял мут', value = ctx.author.mention)
+        emb.add_field(name = 'По причине', value = arg)
+        emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+        await ctx.send(embed = emb)
     else:
         emb = discord.Embed(description = f'{ctx.author.mention}, Я не могу снять мут у {member.mention} из-за того, что роль Muted была удалена/отредактирована!', colour = discord.Color.orange())
         emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
