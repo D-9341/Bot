@@ -18,7 +18,7 @@ client.owner_id = 338714886001524737
 @client.command(aliases = ['Info', 'INFO'])
 async def info(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
-    emb = discord.Embed(description = f'Cy в сети, это моя хуй знает какая версия', colour = discord.Color.orange())
+    emb = discord.Embed(description = f'Cy в сети, это моя янезнаюкакая версия!', colour = discord.Color.orange())
     emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
     await ctx.send(embed = emb)
     
@@ -357,7 +357,6 @@ async def on_member_join(member):
         if role is not None:
             await member.add_roles(role, role1)
         emb = discord.Embed(description = f'А, {member.mention} - очередной ботяра? ок', colour = discord.Color.orange())
-        emb.set_footer(text = 'сука')
         await channel.send(embed = emb)
 
 @client.event
@@ -409,15 +408,15 @@ async def help(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
     emb = discord.Embed(title = "Меню команд для администраторов", colour = discord.Color.orange())
     emb.add_field(name = 'Инфо', value = 'Cy, или же сай - бот, написанный сасиска#2472')
-    emb.add_field(name = 'cy/info', value = 'Команда для определения, в сети ли бот', inline = False)
+    emb.add_field(name = 'cy/info', value = 'Команда для определения - в сети ли бот', inline = False)
     emb.add_field(name = 'cy/clear', value = 'Очистка чата.')
     emb.add_field(name = 'cy/rap', value = '.rap')
     emb.add_field(name = 'cy/ping', value = 'Pong!')
     emb.add_field(name = 'cy/ban', value = 'Бан игрока.')
     emb.add_field(name = 'cy/kick', value = 'Кик игрока.')
-    emb.add_field(name = 'cy/mute', value = 'Мут игрока. Пример: cy/mute @StakanDudka64 10 (время измеряется в минутах) причина. По прошествии времени мут автоматически слетает.~~(ВНИМАНИЕ! ПЕРЕД СНЯТИЕМ МУТА ЧЕЛОВЕКА ПИНГУЕТ НЕСКОЛЬКО РАЗ! НЕ ИСПОЛЬЗУЙТЕ ЭТУ КОМАНДУ СЛИШКОМ ЧАСТО!)~~ исправлено вырезанием нахуй этого куска кода', inline = False)
-    emb.add_field(name = 'cy/unmute', value = 'Размут игрока.')
-    emb.add_field(name = 'cy/remind', value = 'Может напомнить вам что угодно, даже suck some dick. Формат - cy/remind "suck some dick" 10')
+    emb.add_field(name = 'cy/mute', value = 'Мут игрока. Пример: cy/mute @StakanDudka64 10 (время измеряется в минутах) "причина". По прошествии времени мут автоматически слетает.~~(ВНИМАНИЕ! ПЕРЕД СНЯТИЕМ МУТА ЧЕЛОВЕКА ПИНГУЕТ НЕСКОЛЬКО РАЗ! НЕ ИСПОЛЬЗУЙТЕ ЭТУ КОМАНДУ СЛИШКОМ ЧАСТО!)~~ исправлено вырезанием этого куска кода', inline = False)
+    emb.add_field(name = 'cy/unmute', value = 'Размут игрока. Пример: cy/unmute @StakanDudka64 "причина"')
+    emb.add_field(name = 'cy/remind', value = 'Может напомнить вам что угодно. Формат - cy/remind "напоминание" 10')
     emb.add_field(name = 'cy/say', value = 'Пишет сообщение от лица бота. Всё.')
     emb.add_field(name = 'cy/everyone', value = 'Пишет от лица бота и пингует @everyone')
     emb.add_field(name = 'cy/edit', value = 'Редактирует сообщение. Формат : cy/edit (id сообщения) сообщение. При использовании на cy/everyone требует повторного пинга everyone', inline = False)
@@ -430,8 +429,8 @@ async def help(ctx, amount = 1):
     emb.add_field(name = 'cy/pm', value = 'Пишет участнику любой написанный текст. Формат - cy/pm @пинг "сообщение"')
     emb.add_field(name = 'cy/join', value = 'Бот заходит в голосовой канал.')
     emb.add_field(name = 'cy/leave', value = 'Бот выходит из голосового канала.')
-    emb.add_field(name = 'cy/give', value = 'Выдаёт роль, писать в формате: give ("выдаваемая роль"(кавычки обязательны для ролей с пробелами)) (пинг пользователя)', inline = False)
-    emb.add_field(name = 'cy/take', value = 'Забирает роль, писать в формате: take ("забираемая роль"(кавычки обязательны для ролей с пробелами)) (пинг пользователя)', inline = False)
+    emb.add_field(name = 'cy/give', value = 'Выдаёт роль, писать в формате: give "выдаваемая роль" @пинг', inline = False)
+    emb.add_field(name = 'cy/take', value = 'Забирает роль, писать в формате: take "забираемая роль" @пинг', inline = False)
     emb.add_field(name = 'Послесловие', value = 'Также, для написания команд необязательно писать префикс, можно пингануть бота.')
     emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
     await ctx.send(embed = emb)
@@ -439,10 +438,10 @@ async def help(ctx, amount = 1):
 @client.command()
 async def time(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
+    date_now = datetime.datetime.now()
     emb = discord.Embed(colour = discord.Color.orange())
     emb.set_footer(text = 'Cephalon Cy от сасиска#2472')
-    now_date = datetime.datetime.now()
-    emb.add_field(name = 'Время по Гринвичу равняется', value = now_date)
+    emb.add_field(name = 'Время по Гринвичу равняется', value = date_now)
     await ctx.author.send(embed = emb)
 
 #проверка на подключение
@@ -454,7 +453,7 @@ async def on_ready():
 @client.command(aliases = ['Kick', 'KICK'])
 @commands.cooldown(1, 10, commands.BucketType.default)
 @commands.has_permissions(kick_members = True)
-async def kick(ctx , member: discord.Member, *, reason = 'Пидарас'):
+async def kick(ctx , member: discord.Member, *, reason = 'лох'):
     await ctx.channel.purge(limit = 1)
     if member.id != client.owner_id:
         emb = discord.Embed(title = f'Кик от {ctx.author.name}', colour = member.color)
@@ -470,7 +469,7 @@ async def kick(ctx , member: discord.Member, *, reason = 'Пидарас'):
 @client.command(aliases = ['Ban', 'BAN'])
 @commands.cooldown(1, 10, commands.BucketType.default)
 @commands.has_permissions(ban_members = True)
-async def ban(ctx , member: discord.Member, *, reason = 'Пидарас'):
+async def ban(ctx , member: discord.Member, *, reason = 'лох'):
     await ctx.channel.purge(limit = 1)
     if member.id != client.owner_id:
         emb = discord.Embed(title = f'Бан от {ctx.author.name}', colour = member.color)
@@ -515,7 +514,7 @@ async def on_command_error(ctx, error):
     if isinstance(error, commands.CommandNotFound):
         emb = discord.Embed(description = f'{ctx.author.mention}, я не знаю такую команду!', colour = discord.Color.orange())
         emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
-        await ctx.send(f'{ctx.author.mention}, чё это за команда?')
+        await ctx.send(embed = emb)
         
     if isinstance(error, commands.CommandOnCooldown):
         emb = discord.Embed(description = f'{ctx.author.mention}, команда в кд, потерпи чутка!', colour = discord.Color.orange())
@@ -542,7 +541,12 @@ async def everyone_embed_error(ctx, error):
         await ctx.send(embed = emb)
 
     if isinstance(error, commands.MissingPermissions):
-        emb = discord.Embed(description = f'{ctx.author.mention} пытался вызвать команду gaystvo_embed', colour = discord.Color.orange())
+        emb = discord.Embed(description = f'{ctx.author.mention} пытался вызвать команду everyone_embed', colour = discord.Color.orange())
+        emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+        await ctx.send(embed = emb)
+        
+    if isinstance(error, commands.TooManyArguments):
+        emb = discord.Embed(description = f'{ctx.author.mention}, возможно, вы забыли кавычки?', colour = discord.Color.orange())
         emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
         await ctx.send(embed = emb)
         
@@ -557,7 +561,12 @@ async def embed_error(ctx, error):
         emb = discord.Embed(description = f'{ctx.author.mention} пытался вызвать команду embed', colour = discord.Color.orange())
         emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
         await ctx.send(embed = emb)
-
+        
+    if isinstance(error, commands.TooManyArguments):
+        emb = discord.Embed(description = f'{ctx.author.mention}, возможно, вы забыли кавычки?', colour = discord.Color.orange())
+        emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+        await ctx.send(embed = emb)
+        
 @everyone.error
 async def everyone_error(ctx, error):
     if isinstance(error, commands.MissingRequiredArgument):
