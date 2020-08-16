@@ -23,7 +23,7 @@ async def info(ctx, amount = 1):
     emb.add_field(name = 'Написан на', value = 'discord.py')
     emb.add_field(name = 'Разработчик', value = 'Написано в футере, ха!')
     emb.add_field(name = 'Веб-сайт', value = 'http://ru-unioncraft.ru/')
-    emb.add_field(name = 'Шард', value = client.shard_id)
+    emb.add_field(name = 'Шард', value = client.shard_count)
     emb.set_author(name = client.user.name, icon_url = client.user.avatar_url)
     emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
     await ctx.send(embed = emb)
