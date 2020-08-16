@@ -219,7 +219,7 @@ async def embed(ctx, d, t, img, f, *, amount = 1):
     emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
     await ctx.send(embed = emb)
 
-@client.command()
+@client.command(aliases = ['emb_ed'])
 @commands.has_permissions(manage_channels = True)
 async def emb_edit(ctx, arg, d, t, img, f, *, amount = 1):
     await ctx.channel.purge(limit = amount)
@@ -231,15 +231,15 @@ async def emb_edit(ctx, arg, d, t, img, f, *, amount = 1):
     emb.set_thumbnail(url = f)
     emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
     await m.edit(embed = emb)
-    await ctx.send('👌', delete_after = 5)
+    await ctx.send('👌', delete_after = 1)
     
-@client.command()
+@client.command(aliases = ['Edit', 'EDIT'])
 @commands.has_permissions(manage_channels = True)
 async def edit(ctx, arg, arg1, *, amount = 1):
     await ctx.channel.purge(limit = amount)
     m = await ctx.fetch_message(id = arg)
     await m.edit(content = arg1)
-    await ctx.send('👌', delete_after = 5)
+    await ctx.send('👌', delete_after = 1)
     
 @client.command(aliases = ['Everyone', 'EVERYONE'])
 @commands.cooldown(1, 20, commands.BucketType.default)
