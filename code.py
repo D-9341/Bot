@@ -12,15 +12,7 @@ client.remove_command('help')
 client.owner_id = 338714886001524737
 
 #test commands space
-@client.event
-async def on_guild_join(ctx, guild):
-    channel = client.get_channel(id = 714175791033876490)
-    emb = discord.Embed(description = f'Спасибо за приглашение меня на сервер! Пропишите команду cy/help для подробностей! По всем вопросам обращайтесь к автору бота. ПРИМЕЧАНИЕ - бот заточен под сервер SPELL, поэтому пара команд и событий работать не будут!', colour = discord.Color.orange())
-    emb.set_author(name = client.user.name, icon_url = client.user.avatar_url)
-    emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
-    await ctx.send(embed = emb)
-    embed = discord.Embed(description = f'Меня пригласили на сервер {guild}!')
-    await channel.send(embed = embed)
+
 #test commands space
 
 @client.command(aliases = ['Info', 'INFO'])
