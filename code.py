@@ -157,7 +157,7 @@ async def mute(ctx, member: discord.Member, time : int, *, arg, amount = 1):
         
 @client.command(aliases = ['Give', 'GIVE'])
 @commands.has_permissions(manage_channels = True)
-async def give(ctx, *, arg, member: discord.Member, amount = 1):
+async def give(ctx, arg, member: discord.Member, *, amount = 1):
     await ctx.channel.purge(limit = amount)
     role = discord.utils.get(ctx.message.guild.roles, name = arg)
     await member.add_roles(role)
@@ -171,7 +171,7 @@ async def give(ctx, *, arg, member: discord.Member, amount = 1):
     
 @client.command(aliases = ['Take', 'TAKE'])
 @commands.has_permissions(manage_channels = True)
-async def take(ctx, *, arg, member: discord.Member, amount = 1):
+async def take(ctx, arg, member: discord.Member, *, amount = 1):
     await ctx.channel.purge(limit = amount)
     role = discord.utils.get(ctx.message.guild.roles, name = arg)
     await member.remove_roles(role)
