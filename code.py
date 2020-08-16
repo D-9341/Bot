@@ -31,7 +31,7 @@ async def ping(ctx, amount = 1):
     
 @client.command()
 @commands.cooldown(1, 5, commands.BucketType.default)
-async def remind(ctx, arg, time:int, *, amount = 1):
+async def remind(ctx, time:int *, arg, amount = 1):
     await ctx.channel.purge(limit = amount)
     emb = discord.Embed(colour = ctx.author.color, timestamp = ctx.message.created_at)
     emb.add_field(name = 'Напомню через', value = f'{time} минут(у, ы)')
@@ -97,7 +97,7 @@ async def about(ctx, member:discord.Member = None, amount = 1):
     
 @client.command(aliases = ['Unmute', 'UNMUTE'])
 @commands.has_permissions(manage_channels = True)
-async def unmute(ctx, member : discord.Member, arg, *, amount = 1):
+async def unmute(ctx, member : discord.Member, *, arg, amount = 1):
     await ctx.channel.purge(limit = amount)
     role = discord.utils.get(ctx.message.guild.roles, name = 'Muted')
     if role is not None:
@@ -116,7 +116,7 @@ async def unmute(ctx, member : discord.Member, arg, *, amount = 1):
 @client.command(aliases = ['Mute', 'MUTE'])
 @commands.has_permissions(manage_channels = True)
 @commands.cooldown(1, 10, commands.BucketType.default)
-async def mute(ctx, member: discord.Member, time : int, arg, *, amount = 1):
+async def mute(ctx, member: discord.Member, time : int, *, arg, amount = 1):
     await ctx.channel.purge(limit = amount)
     if member.id != client.owner_id:
         role = discord.utils.get(ctx.message.guild.roles, name = 'Muted')
@@ -157,7 +157,7 @@ async def mute(ctx, member: discord.Member, time : int, arg, *, amount = 1):
         
 @client.command(aliases = ['Give', 'GIVE'])
 @commands.has_permissions(manage_channels = True)
-async def give(ctx, arg, member: discord.Member, amount = 1):
+async def give(ctx, *, arg, member: discord.Member, amount = 1):
     await ctx.channel.purge(limit = amount)
     role = discord.utils.get(ctx.message.guild.roles, name = arg)
     await member.add_roles(role)
@@ -171,7 +171,7 @@ async def give(ctx, arg, member: discord.Member, amount = 1):
     
 @client.command(aliases = ['Take', 'TAKE'])
 @commands.has_permissions(manage_channels = True)
-async def take(ctx, arg, member: discord.Member, amount = 1):
+async def take(ctx, *, arg, member: discord.Member, amount = 1):
     await ctx.channel.purge(limit = amount)
     role = discord.utils.get(ctx.message.guild.roles, name = arg)
     await member.remove_roles(role)
@@ -334,7 +334,7 @@ async def leave(ctx):
 @client.command()
 @commands.has_permissions(administrator = True)
 @commands.cooldown(1, 5, commands.BucketType.default)
-async def pm(ctx, member: discord.Member, arg, amount = 1):
+async def pm(ctx, member: discord.Member, *, arg, amount = 1):
     await ctx.channel.purge(limit = amount)
     emb = discord.Embed(description = f'{arg}', colour = member.color)
     emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
@@ -414,15 +414,15 @@ async def help(ctx, amount = 1):
     emb.add_field(name = 'cy/clear', value = 'Очистка чата.')
     emb.add_field(name = 'cy/rap', value = '.rap')
     emb.add_field(name = 'cy/ping', value = 'Pong!')
-    emb.add_field(name = 'cy/ban', value = 'Бан игрока.')
-    emb.add_field(name = 'cy/kick', value = 'Кик игрока.')
-    emb.add_field(name = 'cy/mute', value = 'Мут игрока. Пример: cy/mute @StakanDudka64 10 (время измеряется в минутах) "причина". По прошествии времени мут автоматически слетает.~~(ВНИМАНИЕ! ПЕРЕД СНЯТИЕМ МУТА ЧЕЛОВЕКА ПИНГУЕТ НЕСКОЛЬКО РАЗ! НЕ ИСПОЛЬЗУЙТЕ ЭТУ КОМАНДУ СЛИШКОМ ЧАСТО!)~~ исправлено вырезанием этого куска кода', inline = False)
-    emb.add_field(name = 'cy/unmute', value = 'Размут игрока. Пример: cy/unmute @StakanDudka64 "причина"')
-    emb.add_field(name = 'cy/remind', value = 'Может напомнить вам что угодно. Формат - cy/remind "напоминание" 10')
+    emb.add_field(name = 'cy/ban', value = 'Бан игрока. Формат - cy/ban @StakanDudka64 дебил')
+    emb.add_field(name = 'cy/kick', value = 'Кик игрока. Формат - cy/kick @StakanDudka64 дебил')
+    emb.add_field(name = 'cy/mute', value = 'Мут игрока. Формат - cy/mute @StakanDudka64 10 (время измеряется в минутах) дубил. По прошествии времени мут автоматически слетает.~~(ВНИМАНИЕ! ПЕРЕД СНЯТИЕМ МУТА ЧЕЛОВЕКА ПИНГУЕТ НЕСКОЛЬКО РАЗ! НЕ ИСПОЛЬЗУЙТЕ ЭТУ КОМАНДУ СЛИШКОМ ЧАСТО!)~~ исправлено вырезанием этого куска кода', inline = False)
+    emb.add_field(name = 'cy/unmute', value = 'Размут игрока. Пример: cy/unmute @StakanDudka64 админ дебил')
+    emb.add_field(name = 'cy/remind', value = 'Может напомнить вам что угодно. Формат - cy/remind 10 напоминание')
     emb.add_field(name = 'cy/say', value = 'Пишет сообщение от лица бота. Всё.')
     emb.add_field(name = 'cy/everyone', value = 'Пишет от лица бота и пингует @everyone')
-    emb.add_field(name = 'cy/edit', value = 'Редактирует сообщение. Формат : cy/edit (id сообщения) сообщение. При использовании на cy/everyone требует повторного пинга everyone', inline = False)
-    emb.add_field(name = 'cy/emb_edit', value = 'Редактирует эмбед. Формат : cy/emb_edit (id), аргументы те же самые, что и на эмбед. Работает как и VAULTBOT', inline = False)
+    emb.add_field(name = 'cy/edit', value = 'Редактирует сообщение. Формат - cy/edit (id сообщения) сообщение. При использовании на cy/everyone требует повторного пинга everyone', inline = False)
+    emb.add_field(name = 'cy/emb_edit', value = 'Редактирует эмбед. Формат - cy/emb_edit (id), аргументы те же самые, что и на эмбед. Работает как и VAULTBOT', inline = False)
     emb.add_field(name = 'cy/embed', value = 'От лица бота отправляется эмбед. Прочтите #инструкции-cy-бот , чтобы узнать подробнее.')
     emb.add_field(name = 'cy/everyone_embed', value = 'Совмещает в себе команды everyone и embed.')
     emb.add_field(name = 'cy/image', value = 'Бот может прикрепить изображение, в аргумент нужно указать ссылку.')
