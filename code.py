@@ -12,7 +12,11 @@ client.remove_command('help')
 client.owner_id = 338714886001524737
 
 #test commands space
-
+@client.command()
+async def purge(ctx, amount : int):
+    await ctx.channel.purge(limit = amount + 1)
+    if amount.content.endsWith('1') and amount != 11:
+        await ctx.send(f'удалено {amount} сообщений')
 #test commands space
 
 @client.command(aliases = ['Info', 'INFO'])
@@ -235,7 +239,7 @@ async def emb_edit(ctx, arg, d, t, img, f, *, amount = 1):
     
 @client.command(aliases = ['Edit', 'EDIT'])
 @commands.has_permissions(manage_channels = True)
-async def edit(ctx, arg, arg1, *, amount = 1):
+async def edit(ctx, arg, *, arg1, amount = 1):
     await ctx.channel.purge(limit = amount)
     m = await ctx.fetch_message(id = arg)
     await m.edit(content = arg1)
@@ -455,12 +459,13 @@ async def on_ready():
 @client.command(aliases = ['Kick', 'KICK'])
 @commands.cooldown(1, 10, commands.BucketType.default)
 @commands.has_permissions(kick_members = True)
-async def kick(ctx , member: discord.Member, *, reason = 'лох'):
+async def kick(ctx , member: discord.Member, *, reason: str):
     await ctx.channel.purge(limit = 1)
     if member.id != client.owner_id:
         emb = discord.Embed(title = f'Кик от {ctx.author.name}', colour = member.color)
         await member.kick(reason = reason)
         emb.add_field(name = 'Кикнут', value = member.mention)
+        emb.add_field(name = 'По причине', value = reason)
         emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
         await ctx.send(embed = emb)
     else:
@@ -471,12 +476,13 @@ async def kick(ctx , member: discord.Member, *, reason = 'лох'):
 @client.command(aliases = ['Ban', 'BAN'])
 @commands.cooldown(1, 10, commands.BucketType.default)
 @commands.has_permissions(ban_members = True)
-async def ban(ctx , member: discord.Member, *, reason = 'лох'):
+async def ban(ctx , member: discord.Member, *, reason: str):
     await ctx.channel.purge(limit = 1)
     if member.id != client.owner_id:
         emb = discord.Embed(title = f'Бан от {ctx.author.name}', colour = member.color)
         await member.ban(reason = reason)
         emb.add_field(name = 'Забанен', value = member.mention)
+        emb.add_field(name = 'По причине', value = reason)
         emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
         await ctx.send(embed = emb)
     else:
