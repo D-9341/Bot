@@ -424,7 +424,7 @@ async def on_message_edit(before, after):
 async def help(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
     emb = discord.Embed(title = "Меню команд для Cephalon Cy", colour = discord.Color.orange())
-    emb.add_field(name = 'Префикс бота', value = 'cy/'
+    emb.add_field(name = 'Префикс бота', value = 'cy/')
     emb.add_field(name = 'Развлекательные', value = '```rap``` ```ping``` ```guild``` ```about``` ```image``` ```time``` ```coin```', inline = False)
     emb.add_field(name = 'Модерация', value = '```ban``` ```kick``` ```mute``` ```unmute``` ```say``` ```remind``` ```everyone``` ```embed``` ```everyone_embed``` ```edit``` ```emb_edit``` ```give``` ```take``` ```clear```', inline = False)
     emb.add_field(name = 'Другое', value = '```info``` ```invite_cy``` ```join``` ```leave``` ```pm```', inline = False)
