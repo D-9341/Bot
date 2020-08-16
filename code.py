@@ -12,7 +12,13 @@ client.remove_command('help')
 client.owner_id = 338714886001524737
 
 #test commands space
-
+@client.command(aliases = ['invite', 'invcy'])
+async def invite_cy(ctx, amount = 1):
+    await ctx.channel.purge(limit = amount)
+    emb = discord.Embed(description = f'Ссылка для быстрого приглашения @Cy на сервера')
+    emb.add_field(name = 'Сама ссылка', value = 'https://discordapp.com/oauth2/authorize?&client_id=694170281270312991&scope=bot&permissions=8')
+    emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+    await ctx.send(embed = emb)
 #test commands space
 
 @client.command(aliases = ['Info', 'INFO'])
