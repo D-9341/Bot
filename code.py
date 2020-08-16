@@ -31,7 +31,7 @@ async def ping(ctx, amount = 1):
     
 @client.command()
 @commands.cooldown(1, 5, commands.BucketType.default)
-async def remind(ctx, time:int *, arg, amount = 1):
+async def remind(ctx, time:int, *, arg, amount = 1):
     await ctx.channel.purge(limit = amount)
     emb = discord.Embed(colour = ctx.author.color, timestamp = ctx.message.created_at)
     emb.add_field(name = 'Напомню через', value = f'{time} минут(у, ы)')
