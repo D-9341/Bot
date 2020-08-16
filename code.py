@@ -18,7 +18,12 @@ client.owner_id = 338714886001524737
 @client.command(aliases = ['Info', 'INFO'])
 async def info(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
-    emb = discord.Embed(description = f'Cy в сети, это моя янезнаюкакая версия!', colour = discord.Color.orange())
+    emb = discord.Embed(title = 'Привет! Я Cephalon Cy!', colour = discord.Color.orange())
+    emb.add_field(name = 'Версия', value = '0.12.7.8631')
+    emb.add_field(name = 'Написан на', value = 'discord.py')
+    emb.add_field(name = 'Разработчик', value = 'Написано в футере, ха!')
+    emb.add_field(name = 'Веб-сайт', value = 'http://ru-unioncraft.ru/')
+    emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
     emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
     await ctx.send(embed = emb)
     
@@ -460,7 +465,7 @@ async def kick(ctx , member: discord.Member, *, reason: str):
     if member.id != client.owner_id:
         emb = discord.Embed(title = f'Кик от {ctx.author.name}', colour = member.color)
         await member.kick(reason = reason)
-        emb.add_field(name = 'Кикнут', value = member.mention)
+        emb.add_field(name = 'Был кикнут', value = member.mention)
         emb.add_field(name = 'По причине', value = reason)
         emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
         await ctx.send(embed = emb)
@@ -477,7 +482,7 @@ async def ban(ctx , member: discord.Member, *, reason: str):
     if member.id != client.owner_id:
         emb = discord.Embed(title = f'Бан от {ctx.author.name}', colour = member.color)
         await member.ban(reason = reason)
-        emb.add_field(name = 'Забанен', value = member.mention)
+        emb.add_field(name = 'Был забанен', value = member.mention)
         emb.add_field(name = 'По причине', value = reason)
         emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
         await ctx.send(embed = emb)
