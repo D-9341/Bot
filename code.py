@@ -415,8 +415,7 @@ async def on_message_edit(before, after):
 async def help(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
     emb = discord.Embed(title = "Меню команд для администраторов", colour = discord.Color.orange())
-    emb.add_field(name = 'Инфо', value = 'Cy, или же сай - бот, написанный сасиска#2472')
-    emb.add_field(name = 'cy/info', value = 'Команда для определения - в сети ли бот', inline = False)
+    emb.add_field(name = 'cy/info', value = 'Команда для просмотра подробной информации о боте', inline = False)
     emb.add_field(name = 'cy/clear', value = 'Очистка чата.')
     emb.add_field(name = 'cy/rap', value = '.rap')
     emb.add_field(name = 'cy/ping', value = 'Pong!')
