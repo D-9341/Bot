@@ -186,7 +186,7 @@ async def give(ctx, member: discord.Member, *, arg, amount = 1):
         emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
         await channel.send(embed = emb)
     else:
-        emb = discord.Embed(description = f'{ctx.author.mantion}, я не могу найти подходящую роль!', colour = member.color, timestamp = ctx.message.created_at)
+        emb = discord.Embed(description = f'{ctx.author.mention}, я не могу найти подходящую роль!', colour = member.color, timestamp = ctx.message.created_at)
         emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
         await ctx.send(embed = emb)
     
@@ -205,7 +205,7 @@ async def take(ctx, member: discord.Member, *, arg, amount = 1):
         emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
         await channel.send(embed = emb)
     else:
-        emb = discord.Embed(description = f'{ctx.author.mantion}, я не могу найти подходящую роль!', colour = member.color, timestamp = ctx.message.created_at)
+        emb = discord.Embed(description = f'{ctx.author.mention}, я не могу найти подходящую роль!', colour = member.color, timestamp = ctx.message.created_at)
         emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
         await ctx.send(embed = emb)
     
@@ -455,8 +455,8 @@ async def help(ctx, amount = 1):
     emb.add_field(name = 'cy/pm', value = 'Пишет участнику любой написанный текст. Формат - cy/pm @пинг сообщение')
     emb.add_field(name = 'cy/join', value = 'Бот заходит в голосовой канал.')
     emb.add_field(name = 'cy/leave', value = 'Бот выходит из голосового канала.')
-    emb.add_field(name = 'cy/give', value = 'Выдаёт роль, писать в формате: give "выдаваемая роль" @пинг', inline = False)
-    emb.add_field(name = 'cy/take', value = 'Забирает роль, писать в формате: take "забираемая роль" @пинг', inline = False)
+    emb.add_field(name = 'cy/give', value = 'Выдаёт роль, писать в формате: give @пинг выдаваемая роль', inline = False)
+    emb.add_field(name = 'cy/take', value = 'Забирает роль, писать в формате: take @пинг забираемая роль', inline = False)
     emb.add_field(name = 'Послесловие', value = 'Также, для написания команд необязательно писать префикс, можно пингануть бота.')
     emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
     await ctx.send(embed = emb)
