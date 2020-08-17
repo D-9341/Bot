@@ -176,28 +176,38 @@ async def mute(ctx, member: discord.Member, time : int, *, arg, amount = 1):
 async def give(ctx, member: discord.Member, *, arg, amount = 1):
     await ctx.channel.purge(limit = amount)
     role = discord.utils.get(ctx.message.guild.roles, name = arg)
-    await member.add_roles(role)
-    channel = client.get_channel(714175791033876490)
-    emb = discord.Embed(colour = member.color, timestamp = ctx.message.created_at)
-    emb.add_field(name = 'Была выдана роль', value = role)
-    emb.add_field(name = 'Выдана:', value = member.mention)
-    emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
-    emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
-    await channel.send(embed = emb)
+    if role is not None:
+        await member.add_roles(role)
+        channel = client.get_channel(714175791033876490)
+        emb = discord.Embed(colour = member.color, timestamp = ctx.message.created_at)
+        emb.add_field(name = 'Была выдана роль', value = role)
+        emb.add_field(name = 'Выдана:', value = member.mention)
+        emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
+        emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+        await channel.send(embed = emb)
+    else:
+        emb = discord.Embed(description = f'{ctx.author.mantion}, я не могу найти подходящую роль!') colour = member.color, timestamp = ctx.message.created_at)
+        emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+        await ctx.send(embed = emb)
     
 @client.command(aliases = ['Take', 'TAKE'])
 @commands.has_permissions(manage_channels = True)
 async def take(ctx, member: discord.Member, *, arg, amount = 1):
     await ctx.channel.purge(limit = amount)
     role = discord.utils.get(ctx.message.guild.roles, name = arg)
-    await member.remove_roles(role)
-    channel = client.get_channel(714175791033876490)
-    emb = discord.Embed(colour = member.color, timestamp = ctx.message.created_at)
-    emb.add_field(name = 'Была забрана роль', value = role)
-    emb.add_field(name = 'Забрана у:', value = member.mention)
-    emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
-    emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
-    await channel.send(embed = emb)
+    if role is not None:
+        await member.remove_roles(role)
+        channel = client.get_channel(714175791033876490)
+        emb = discord.Embed(colour = member.color, timestamp = ctx.message.created_at)
+        emb.add_field(name = 'Была забрана роль', value = role)
+        emb.add_field(name = 'Забрана у:', value = member.mention)
+        emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
+        emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+        await channel.send(embed = emb)
+    else:
+        emb = discord.Embed(description = f'{ctx.author.mantion}, я не могу найти подходящую роль!') colour = member.color, timestamp = ctx.message.created_at)
+        emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+        await ctx.send(embed = emb)
     
 @client.command(aliases = ['img&'])
 async def image(ctx, arg, *, amount = 1):
@@ -582,6 +592,30 @@ async def embed_error(ctx, error):
         
     if isinstance(error, commands.TooManyArguments):
         emb = discord.Embed(description = f'{ctx.author.mention}, возможно, вы забыли кавычки?', colour = discord.Color.orange())
+        emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+        await ctx.send(embed = emb)
+        
+@give.error
+async def give_error(ctx, error):
+    if isinstance(error, commands.MissingRequiredArgument):
+        emb = discord.Embed(description = f'{ctx.author.mention}, укажите роль, которую нужно выдать!', colour = discord.Color.orange())
+        emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+        await ctx.send(embed = emb)
+
+    if isinstance(error, commands.MissingPermissions):
+        emb = discord.Embed(description = f'{ctx.author.mention} пытался вызвать команду give', colour = discord.Color.orange())
+        emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+        await ctx.send(embed = emb)
+        
+@take.error
+async def take_error(ctx, error):
+    if isinstance(error, commands.MissingRequiredArgument):
+        emb = discord.Embed(description = f'{ctx.author.mention}, укажите роль, которую нужно забрать!', colour = discord.Color.orange())
+        emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+        await ctx.send(embed = emb)
+
+    if isinstance(error, commands.MissingPermissions):
+        emb = discord.Embed(description = f'{ctx.author.mention} пытался вызвать команду take', colour = discord.Color.orange())
         emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
         await ctx.send(embed = emb)
         
