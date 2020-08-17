@@ -186,7 +186,7 @@ async def give(ctx, member: discord.Member, *, arg, amount = 1):
         emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
         await channel.send(embed = emb)
     else:
-        emb = discord.Embed(description = f'{ctx.author.mantion}, я не могу найти подходящую роль!'), colour = member.color, timestamp = ctx.message.created_at)
+        emb = discord.Embed(description = f'{ctx.author.mantion}, я не могу найти подходящую роль!', colour = member.color, timestamp = ctx.message.created_at)
         emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
         await ctx.send(embed = emb)
     
@@ -205,7 +205,7 @@ async def take(ctx, member: discord.Member, *, arg, amount = 1):
         emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
         await channel.send(embed = emb)
     else:
-        emb = discord.Embed(description = f'{ctx.author.mantion}, я не могу найти подходящую роль!'), colour = member.color, timestamp = ctx.message.created_at)
+        emb = discord.Embed(description = f'{ctx.author.mantion}, я не могу найти подходящую роль!', colour = member.color, timestamp = ctx.message.created_at)
         emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
         await ctx.send(embed = emb)
     
