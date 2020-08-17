@@ -12,20 +12,7 @@ client.remove_command('help')
 client.owner_id = 338714886001524737
 
 #test commands space
-@client.command()
-@commands.cooldown(1, 5, commands.BucketType.default)
-async def aliases(ctx, amount = 1):
-    await ctx.channel.purge(limit = amount)
-    emb = discord.Embed(description = 'Неочевидные *никнеймы* команд', colour = ctx.author.color)
-    emb.add_field(name = 'invite_cy', value = 'invite, invcy')
-    emb.add_field(name = 'rap', value = '.rap')
-    emb.add_field(name = 'about', value = 'me')
-    emb.add_field(name = 'image', value = 'img&')
-    emb.add_field(name = 'emb_edit', value = 'emb_ed')
-    emb.add_field(name = 'embed', value = 'emb')
-    emb.add_field(name = 'coinflip', value = 'c, coin')
-    emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
-    await ctx.send(embed = emb)
+
 #test commands space
 
 @client.command(aliases = ['Info', 'INFO'])
@@ -39,6 +26,22 @@ async def info(ctx, amount = 1):
     emb.add_field(name = 'Веб-сайт', value = '```http://ru-unioncraft.ru/```')
     emb.add_field(name = 'Шард', value = client.shard_count)
     emb.set_author(name = client.user.name, icon_url = client.user.avatar_url)
+    emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+    await ctx.send(embed = emb)
+    
+@client.command()
+@commands.cooldown(1, 5, commands.BucketType.default)
+async def aliases(ctx, amount = 1):
+    await ctx.channel.purge(limit = amount)
+    emb = discord.Embed(description = 'Неочевидные *никнеймы* команд', colour = discord.Color.orange())
+    emb.add_field(name = 'invite_cy', value = 'invite, invcy')
+    emb.add_field(name = 'rap', value = '.rap')
+    emb.add_field(name = 'about', value = 'me')
+    emb.add_field(name = 'image', value = 'img&')
+    emb.add_field(name = 'emb_edit', value = 'emb_ed')
+    emb.add_field(name = 'embed', value = 'emb')
+    emb.add_field(name = 'coinflip', value = 'c, coin')
+    emb.add_field(name = 'А также', value = 'Для остальных команд также есть *никнеймы*, их можно писать с заглавной буквы или полностью капсом')
     emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
     await ctx.send(embed = emb)
     
@@ -449,6 +452,7 @@ async def help(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
     emb = discord.Embed(title = "Меню команд Cephalon Cy", colour = discord.Color.orange())
     emb.add_field(name = 'cy/info', value = 'Команда для просмотра подробной информации о боте', inline = False)
+    emb.add_field(name = 'cy/aliases', value = 'Для просмотра *никнеймов* команд', inline = False)
     emb.add_field(name = 'cy/clear', value = 'Очистка чата.')
     emb.add_field(name = 'cy/rap', value = '.rap')
     emb.add_field(name = 'cy/ping', value = 'Pong!')
