@@ -12,10 +12,24 @@ client.remove_command('help')
 client.owner_id = 338714886001524737
 
 #test commands space
-
+@client.command()
+@commands.cooldown(1, 5, commands.BucketType.default)
+async def aliases(ctx, amount = 1):
+    await ctx.channel.purge(limit = amount)
+    emb = discord.Embed(description = 'Неочевидные *никнеймы* команд', colour = ctx.author.color)
+    emb.add_field(name = 'invite_cy', value = 'invite, invcy')
+    emb.add_field(name = 'rap', value = '.rap')
+    emb.add_field(name = 'about', value = 'me')
+    emb.add_field(name = 'image', value = 'img&')
+    emb.add_field(name = 'emb_edit', value = 'emb_ed')
+    emb.add_field(name = 'embed', value = 'emb')
+    emb.add_field(name = 'coinflip', value = 'c, coin')
+    emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+    await ctx.send(embed = emb)
 #test commands space
 
 @client.command(aliases = ['Info', 'INFO'])
+@commands.cooldown(1, 5, commands.BucketType.default)
 async def info(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
     emb = discord.Embed(title = 'Привет! Я Cephalon Cy!', colour = discord.Color.orange())
