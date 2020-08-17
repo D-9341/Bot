@@ -20,7 +20,7 @@ client.owner_id = 338714886001524737
 async def info(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
     emb = discord.Embed(title = 'Привет! Я Cephalon Cy!', colour = discord.Color.orange())
-    emb.set_author(name = [Cy](https://warframe.fandom.com/ru/wiki/Цефалон_Сай), icon_url = client.user.avatar_url)
+    emb.set_author(name = f"[Cy](https://warframe.fandom.com/ru/wiki/Цефалон_Сай)", icon_url = client.user.avatar_url)
     emb.add_field(name = 'Версия', value = '0.12.7.8631')
     emb.add_field(name = 'Написан на', value = 'discord.py')
     emb.add_field(name = 'Разработчик', value = 'Написано в футере, ха!')
