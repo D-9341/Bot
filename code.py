@@ -22,10 +22,10 @@ async def embed(ctx, d, t, img = None, f = None, a = None, *, amount = 1):
         a = int('0x' + a, 16)
         
     if img == None:
-        img = 'https://steamcommunity.com/profiles/ЦИФРЫ/'
+        img = ('https://steamcommunity.com/profiles/ЦИФРЫ/')
         
     if f == None:
-        img = 'https://steamcommunity.com/profiles/ЦИФРЫ/'
+        img = ('https://steamcommunity.com/profiles/ЦИФРЫ/')
         
     emb = discord.Embed(colour = a)
     emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
