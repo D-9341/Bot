@@ -14,7 +14,7 @@ client.owner_id = 338714886001524737
 #test commands space
 @client.command(aliases = ['Embed', 'EMBED', 'emb' , 'Emb', 'EMB'])
 @commands.has_permissions(manage_channels = True)
-async def embed(ctx, d, t, img, f, a = None *, amount = 1):
+async def embed(ctx, d, t, img, f, a = None, *, amount = 1):
     await ctx.channel.purge(limit = amount)
     if a == None:
         a = ctx.author.color
