@@ -12,28 +12,7 @@ client.remove_command('help')
 client.owner_id = 338714886001524737
 
 #test commands space
-@client.command(aliases = ['Embed', 'EMBED', 'emb' , 'Emb', 'EMB'])
-@commands.has_permissions(manage_channels = True)
-async def embed(ctx, d, t, img = None, f = None, a = None, *, amount = 1):
-    await ctx.channel.purge(limit = amount)
-    if a == None:
-        a = ctx.author.color
-    else:
-        a = int('0x' + a, 16)
-        
-    if img == None:
-        img = ('https://steamcommunity.com/profiles/ЦИФРЫ/')
-        
-    if f == None:
-        f = ('https://steamcommunity.com/profiles/ЦИФРЫ/')
-        
-    emb = discord.Embed(colour = a)
-    emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
-    emb.add_field(name = d, value = t)
-    emb.set_image(url = img)
-    emb.set_thumbnail(url = f)
-    emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
-    await ctx.send(embed = emb)
+
 #test commands space
 
 @client.command(aliases = ['Info', 'INFO'])
@@ -267,7 +246,14 @@ async def everyone_embed(ctx, d, t, img, f, a = None, *, amount = 1):
         a = ctx.author.color
     else:
         a = int('0x' + a, 16)
+        
+    if img == None:
+        img = ('https://steamcommunity.com/profiles/ЦИФРЫ/')
+        
+    if f == None:
+        f = ('https://steamcommunity.com/profiles/ЦИФРЫ/')
     emb = discord.Embed(colour = a)
+    
     emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
     emb.add_field(name = d, value = t)
     emb.set_image(url = img)
@@ -275,7 +261,28 @@ async def everyone_embed(ctx, d, t, img, f, a = None, *, amount = 1):
     emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
     await ctx.send(embed = emb)
     
-
+@client.command(aliases = ['Embed', 'EMBED', 'emb' , 'Emb', 'EMB'])
+@commands.has_permissions(manage_channels = True)
+async def embed(ctx, d, t, img = None, f = None, a = None, *, amount = 1):
+    await ctx.channel.purge(limit = amount)
+    if a == None:
+        a = ctx.author.color
+    else:
+        a = int('0x' + a, 16)
+        
+    if img == None:
+        img = ('https://steamcommunity.com/profiles/ЦИФРЫ/')
+        
+    if f == None:
+        f = ('https://steamcommunity.com/profiles/ЦИФРЫ/')
+        
+    emb = discord.Embed(colour = a)
+    emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
+    emb.add_field(name = d, value = t)
+    emb.set_image(url = img)
+    emb.set_thumbnail(url = f)
+    emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+    await ctx.send(embed = emb)
 
 @client.command(aliases = ['emb_ed'])
 @commands.has_permissions(manage_channels = True)
@@ -286,7 +293,13 @@ async def emb_edit(ctx, arg, d, t, img, f, a = None, *, amount = 1):
         a = ctx.author.color
     else:
         a = int('0x' + a, 16)
-    emb = discord.Embed(colour = a)
+        
+    if img == None:
+        img = ('https://steamcommunity.com/profiles/ЦИФРЫ/')
+        
+    if f == None:
+        f = ('https://steamcommunity.com/profiles/ЦИФРЫ/')
+        
     emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
     emb.add_field(name = d, value = t)
     emb.set_image(url = img)
