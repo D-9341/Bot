@@ -262,10 +262,14 @@ async def everyone_embed(ctx, d, t, img, f, a = None, *, amount = 1):
     
 @client.command(aliases = ['Embed', 'EMBED', 'emb' , 'Emb', 'EMB'])
 @commands.has_permissions(manage_channels = True)
-async def embed(ctx, d, t, img, f, a = None, *, amount = 1):
+async def embed(ctx, d, t, img = None, f = None, a = None, *, amount = 1):
     await ctx.channel.purge(limit = amount)
     if a == None:
         a = ctx.author.color
+        if img == None:
+            img = 'https://steamcommunity.com/profiles/ЦИФРЫ/'
+        elif f == None:
+            f = 'https://steamcommunity.com/profiles/ЦИФРЫ/'
         emb = discord.Embed(colour = a)
         emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
         emb.add_field(name = d, value = t)
@@ -275,6 +279,10 @@ async def embed(ctx, d, t, img, f, a = None, *, amount = 1):
         await ctx.send(embed = emb)
     else:
         emb = discord.Embed(colour = int("0x" + a, 16))
+        if img == None:
+            img = 'https://steamcommunity.com/profiles/ЦИФРЫ/'
+        elif f == None:
+            f = 'https://steamcommunity.com/profiles/ЦИФРЫ/'
         emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
         emb.add_field(name = d, value = t)
         emb.set_image(url = img)
