@@ -253,7 +253,6 @@ async def everyone_embed(ctx, d, t, img, f, a = None, *, amount = 1):
     if f == None:
         f = ('https://steamcommunity.com/profiles/ЦИФРЫ/')
     emb = discord.Embed(colour = a)
-    
     emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
     emb.add_field(name = d, value = t)
     emb.set_image(url = img)
@@ -300,6 +299,7 @@ async def emb_edit(ctx, arg, d, t, img, f, a = None, *, amount = 1):
     if f == None:
         f = ('https://steamcommunity.com/profiles/ЦИФРЫ/')
         
+    emb = discord.Embed(colour = a)
     emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
     emb.add_field(name = d, value = t)
     emb.set_image(url = img)
