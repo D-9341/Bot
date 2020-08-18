@@ -14,11 +14,11 @@ client.owner_id = 338714886001524737
 #test commands space
 @client.command(aliases = ['Embed', 'EMBED', 'emb' , 'Emb', 'EMB'])
 @commands.has_permissions(manage_channels = True)
-async def embed(ctx, c = None, d, t, img, f, *, amount = 1):
+async def embed(ctx, a = None, d, t, img, f, *, amount = 1):
     await ctx.channel.purge(limit = amount)
-    if c == None:
-        c = ctx.author.color
-    emb = discord.Embed(colour = c)
+    if a == None:
+        a = ctx.author.color
+    emb = discord.Embed(colour = a)
     emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
     emb.add_field(name = d, value = t)
     emb.set_image(url = img)
