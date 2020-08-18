@@ -18,7 +18,7 @@ async def embed(ctx, d, t, img, f, a = None, *, amount = 1):
     await ctx.channel.purge(limit = amount)
     if a == None:
         a = ctx.author.color
-    emb = discord.Embed(colour = discord.Color, a)
+    emb = discord.Embed(colour = a)
     emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
     emb.add_field(name = d, value = t)
     emb.set_image(url = img)
