@@ -254,10 +254,12 @@ async def everyone_embed(ctx, d, t, img, f, a = None, *, amount = 1):
     
 @client.command(aliases = ['Embed', 'EMBED', 'emb' , 'Emb', 'EMB'])
 @commands.has_permissions(manage_channels = True)
-async def embed(ctx, d, t, img = None, f = None, a = None, *, amount = 1):
+async def embed(ctx, d, t, img, f, a = None, *, amount = 1):
     await ctx.channel.purge(limit = amount)
     if a == None:
         a = ctx.author.color
+    else:
+        a = int('0x' + a, 16)
     emb = discord.Embed(colour = a)
     emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
     emb.add_field(name = d, value = t)
@@ -273,6 +275,8 @@ async def emb_edit(ctx, arg, d, t, img, f, a = None, *, amount = 1):
     m = await ctx.fetch_message(id = arg)
     if a == None:
         a = ctx.author.color
+    else:
+        a = int('0x' + a, 16)
     emb = discord.Embed(colour = a)
     emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
     emb.add_field(name = d, value = t)
