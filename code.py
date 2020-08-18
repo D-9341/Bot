@@ -239,16 +239,26 @@ async def image(ctx, arg, *, amount = 1):
 @client.command(aliases = ['emb_e'])
 @commands.has_permissions(mention_everyone = True)
 @commands.cooldown(1, 20, commands.BucketType.default)
-async def everyone_embed(ctx, d, t, img, f, *, amount = 1):
+async def everyone_embed(ctx, d, t, img, f, a = None, *, amount = 1):
     await ctx.channel.purge(limit = amount)
     await ctx.send('@everyone')
-    emb = discord.Embed(colour = ctx.author.color)
-    emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
-    emb.add_field(name = d, value = t)
-    emb.set_image(url = img)
-    emb.set_thumbnail(url = f)
-    emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
-    await ctx.send(embed = emb)
+    if a == None:
+        a = ctx.author.color
+        emb = discord.Embed(colour = a)
+        emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
+        emb.add_field(name = d, value = t)
+        emb.set_image(url = img)
+        emb.set_thumbnail(url = f)
+        emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+        await ctx.send(embed = emb)
+    else:
+        emb = discord.Embed(colour = int("0x" + a, 16))
+        emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
+        emb.add_field(name = d, value = t)
+        emb.set_image(url = img)
+        emb.set_thumbnail(url = f)
+        emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+        await ctx.send(embed = emb)
     
 @client.command(aliases = ['Embed', 'EMBED', 'emb' , 'Emb', 'EMB'])
 @commands.has_permissions(manage_channels = True)
@@ -256,25 +266,42 @@ async def embed(ctx, d, t, img, f, a = None, *, amount = 1):
     await ctx.channel.purge(limit = amount)
     if a == None:
         a = ctx.author.color
-    emb = discord.Embed(colour = int("0x" + a, 16))
-    emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
-    emb.add_field(name = d, value = t)
-    emb.set_image(url = img)
-    emb.set_thumbnail(url = f)
-    emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
-    await ctx.send(embed = emb)
+        emb = discord.Embed(colour = a)
+        emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
+        emb.add_field(name = d, value = t)
+        emb.set_image(url = img)
+        emb.set_thumbnail(url = f)
+        emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+        await ctx.send(embed = emb)
+    else:
+        emb = discord.Embed(colour = int("0x" + a, 16))
+        emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
+        emb.add_field(name = d, value = t)
+        emb.set_image(url = img)
+        emb.set_thumbnail(url = f)
+        emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+        await ctx.send(embed = emb)
 
 @client.command(aliases = ['emb_ed'])
 @commands.has_permissions(manage_channels = True)
-async def emb_edit(ctx, arg, d, t, img, f, *, amount = 1):
+async def emb_edit(ctx, arg, d, t, img, f, a = None, *, amount = 1):
     await ctx.channel.purge(limit = amount)
-    emb = discord.Embed(colour = ctx.author.color)
     m = await ctx.fetch_message(id = arg)
-    emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
-    emb.add_field(name = d, value = t)
-    emb.set_image(url = img)
-    emb.set_thumbnail(url = f)
-    emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+    if a == None:
+        a = ctx.author.color
+        emb = discord.Embed(colour = a)
+        emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
+        emb.add_field(name = d, value = t)
+        emb.set_image(url = img)
+        emb.set_thumbnail(url = f)
+        emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+    else:
+        emb = discord.Embed(colour = int("0x" + a, 16))
+        emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
+        emb.add_field(name = d, value = t)
+        emb.set_image(url = img)
+        emb.set_thumbnail(url = f)
+        emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
     await m.edit(embed = emb)
     await ctx.send('👌', delete_after = 1)
     
