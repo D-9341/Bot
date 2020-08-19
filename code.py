@@ -239,7 +239,7 @@ async def image(ctx, arg, *, amount = 1):
 @client.command(aliases = ['emb_e'])
 @commands.has_permissions(mention_everyone = True)
 @commands.cooldown(1, 20, commands.BucketType.default)
-async def everyone_embed(ctx, d, t, img, f, a = None, *, amount = 1):
+async def everyone_embed(ctx, d, t, img = None, f = None, a = None, *, amount = 1):
     await ctx.channel.purge(limit = amount)
     await ctx.send('@everyone')
     if a == None:
@@ -285,7 +285,7 @@ async def embed(ctx, d, t, img = None, f = None, a = None, *, amount = 1):
 
 @client.command(aliases = ['emb_ed'])
 @commands.has_permissions(manage_channels = True)
-async def emb_edit(ctx, arg, d, t, img, f, a = None, *, amount = 1):
+async def emb_edit(ctx, arg, d, t, img = None, f = None, a = None, *, amount = 1):
     await ctx.channel.purge(limit = amount)
     m = await ctx.fetch_message(id = arg)
     if a == None:
