@@ -12,10 +12,7 @@ client.remove_command('help')
 client.owner_id = 338714886001524737
 
 #test commands space
-@client.command(aliases = ['Cu', 'CU'])
-async def cu(ctx, amount = 1):
-    await ctx.channel.purge(limit = amount)
-    await ctx.send('Медь')
+
 #test commands space
 
 @client.command(aliases = ['Info', 'INFO'])
@@ -341,6 +338,12 @@ async def coinflip(ctx, amount = 1):
     rancoin = random.choice(choices)
     await ctx.send(rancoin)
 
+@client.command(aliases = ['Cu', 'CU'])
+@commands.cooldown(1, 5, commands.BucketType.default)
+async def cu(ctx, amount = 1):
+    await ctx.channel.purge(limit = amount)
+    await ctx.send('Медь')
+    
 @client.event
 async def on_voice_state_update(member, after, before):
     if before.channel.id == 742457421456343272:
@@ -492,6 +495,7 @@ async def help(ctx, amount = 1):
     emb.add_field(name = 'cy/clear', value = 'Очистка чата.')
     emb.add_field(name = 'cy/rap', value = '.rap')
     emb.add_field(name = 'cy/ping', value = 'Pong!')
+    emb.add_field(name = 'cy/cu', value = 'Медь')
     emb.add_field(name = 'cy/ban', value = 'Бан игрока. Формат - cy/ban @StakanDudka64 дебил')
     emb.add_field(name = 'cy/kick', value = 'Кик игрока. Формат - cy/kick @StakanDudka64 дебил')
     emb.add_field(name = 'cy/mute', value = 'Мут игрока. Формат - cy/mute @StakanDudka64 10 (время измеряется в минутах) дебил. По прошествии времени мут автоматически слетает.', inline = False)
