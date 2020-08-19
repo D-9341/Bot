@@ -12,7 +12,10 @@ client.remove_command('help')
 client.owner_id = 338714886001524737
 
 #test commands space
-
+@client.command(aliases = ['Cu', 'CU'])
+async def cu(ctx, amount = 1):
+    await ctx.channel.purge(limit = amount)
+    await ctx.send('Медь')
 #test commands space
 
 @client.command(aliases = ['Info', 'INFO'])
