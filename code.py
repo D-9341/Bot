@@ -17,7 +17,7 @@ async def emb_content(ctx, arg):
     await ctx.channel.purge(limit = 1)
     message = await ctx.fetch_message(id = arg)
     emb = discord.Embed.copy(message)
-    await ctx.send(f'```{emb}```')
+    await ctx.send(f'{emb}')
 #test commands space
 
 @client.command(aliases = ['Info', 'INFO'])
