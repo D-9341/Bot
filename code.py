@@ -15,8 +15,9 @@ client.owner_id = 338714886001524737
 @client.command()
 async def content(ctx, arg, amount = 1):
     await ctx.channel.purge(limit = amount)
-    emb = await ctx.fetch_message(id = arg)
-    await ctx.send(f'```{copy(emb)}```')
+    m = await ctx.fetch_message(id = arg)
+    emb = await m.copy()
+    await ctx.send(f'```{m}```')
 #test commands space
 
 @client.command(aliases = ['Info', 'INFO'])
