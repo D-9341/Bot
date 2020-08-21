@@ -65,8 +65,7 @@ async def ping(ctx, amount = 1):
     
 @client.command()
 @commands.cooldown(1, 5, commands.BucketType.default)
-async def content(ctx, arg, amount = 1):
-    await ctx.channel.purge(limit = amount)
+async def content(ctx, arg):
     message = await ctx.fetch_message(id = arg)
     await ctx.send(f'```{message.content}```')
     
