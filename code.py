@@ -12,12 +12,7 @@ client.remove_command('help')
 client.owner_id = 338714886001524737
 
 #test commands space
-@client.command(aliases = ['e_ctx'])
-async def emb_content(ctx, arg):
-    await ctx.channel.purge(limit = 1)
-    message = await ctx.fetch_message(id = arg)
-    emb = discord.Embed.copy(message)
-    await ctx.send(f'{emb}')
+
 #test commands space
 
 @client.command(aliases = ['Info', 'INFO'])
