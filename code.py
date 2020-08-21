@@ -12,7 +12,12 @@ client.remove_command('help')
 client.owner_id = 338714886001524737
 
 #test commands space
-
+@client.command(aliases = ['e_ctx'])
+async def emb_content(ctx, arg):
+    await ctx.channel.purge(limit = 1)
+    message = await ctx.fetch_message(id = arg)
+    emb = discord.Embed.copy(message)
+    await ctx.send(f'```{emb.content}```')
 #test commands space
 
 @client.command(aliases = ['Info', 'INFO'])
@@ -66,6 +71,7 @@ async def ping(ctx, amount = 1):
 @client.command()
 @commands.cooldown(1, 5, commands.BucketType.default)
 async def content(ctx, arg):
+    await ctx.channel.purge(limit = 1)
     message = await ctx.fetch_message(id = arg)
     await ctx.send(f'```{message.content}```')
     
@@ -259,6 +265,7 @@ async def everyone_embed(ctx, d, t, img = None, f = None, a = None, *, amount = 
         
     if f == None:
         f = ('https://steamcommunity.com/profiles/ЦИФРЫ/')
+        
     emb = discord.Embed(colour = a)
     emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
     emb.add_field(name = d, value = t)
