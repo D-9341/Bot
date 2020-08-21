@@ -12,12 +12,7 @@ client.remove_command('help')
 client.owner_id = 338714886001524737
 
 #test commands space
-@client.command()
-async def content(ctx, arg, amount = 1):
-    await ctx.channel.purge(limit = amount)
-    m = await ctx.fetch_message(id = arg)
-    emb = await m.copy()
-    await ctx.send(f'```{m}```')
+
 #test commands space
 
 @client.command(aliases = ['Info', 'INFO'])
@@ -61,11 +56,19 @@ async def invite_cy(ctx, amount = 1):
     await ctx.send(embed = emb)
     
 @client.command(aliases = ['Ping', 'PING'])
+@commands.cooldown(1, 5, commands.BucketType.default)
 async def ping(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
     emb = discord.Embed(description = f'Pong! `{round(client.latency * 1000)} ms`', colour = discord.Color.orange(), timestamp = ctx.message.created_at)
     emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
     await ctx.send(embed = emb)
+    
+@client.command()
+@commands.cooldown(1, 5, commands.BucketType.default)
+async def content(ctx, arg, amount = 1):
+    await ctx.channel.purge(limit = amount)
+    message = await ctx.fetch_message(id = arg)
+    await ctx.send(f'```{message.content}```')
     
 @client.command()
 @commands.cooldown(1, 5, commands.BucketType.default)
