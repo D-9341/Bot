@@ -271,7 +271,7 @@ async def everyone_embed(ctx, d, t, img = None, f = None, a = None, *, amount = 
     
 @client.command(aliases = ['Embed', 'EMBED', 'emb' , 'Emb', 'EMB'])
 @commands.has_permissions(manage_channels = True)
-async def embed(ctx, d, t, img = None, f = None, a = None, *, amount = 1):
+async def embed(ctx, t, d, img = None, f = None, a = None, *, amount = 1):
     await ctx.channel.purge(limit = amount)
     if a == None:
         a = ctx.author.color
@@ -284,9 +284,8 @@ async def embed(ctx, d, t, img = None, f = None, a = None, *, amount = 1):
     if f == None:
         f = ('https://steamcommunity.com/profiles/ЦИФРЫ/')
         
-    emb = discord.Embed(colour = a)
+    emb = discord.Embed(title = t, description = d, colour = a)
     emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
-    emb.add_field(name = d, value = t)
     emb.set_image(url = img)
     emb.set_thumbnail(url = f)
     emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
