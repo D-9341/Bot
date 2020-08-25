@@ -247,7 +247,7 @@ async def image(ctx, arg, *, amount = 1):
 @client.command(aliases = ['emb_e'])
 @commands.has_permissions(mention_everyone = True)
 @commands.cooldown(1, 20, commands.BucketType.default)
-async def everyone_embed(ctx, d, t, img = None, f = None, a = None, *, amount = 1):
+async def everyone_embed(ctx, t, d, img = None, f = None, a = None, *, amount = 1):
     await ctx.channel.purge(limit = amount)
     await ctx.send('@everyone')
     if a == None:
@@ -261,9 +261,8 @@ async def everyone_embed(ctx, d, t, img = None, f = None, a = None, *, amount = 
     if f == None:
         f = ('https://steamcommunity.com/profiles/ЦИФРЫ/')
         
-    emb = discord.Embed(colour = a)
+    emb = discord.Embed(title = t, description = d, colour = a)
     emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
-    emb.add_field(name = d, value = t)
     emb.set_image(url = img)
     emb.set_thumbnail(url = f)
     emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
@@ -293,7 +292,7 @@ async def embed(ctx, t, d, img = None, f = None, a = None, *, amount = 1):
 
 @client.command(aliases = ['emb_ed'])
 @commands.has_permissions(manage_channels = True)
-async def emb_edit(ctx, arg, d, t, img = None, f = None, a = None, *, amount = 1):
+async def emb_edit(ctx, arg, t, d, img = None, f = None, a = None, *, amount = 1):
     await ctx.channel.purge(limit = amount)
     m = await ctx.fetch_message(id = arg)
     if a == None:
@@ -307,9 +306,8 @@ async def emb_edit(ctx, arg, d, t, img = None, f = None, a = None, *, amount = 1
     if f == None:
         f = ('https://steamcommunity.com/profiles/ЦИФРЫ/')
         
-    emb = discord.Embed(colour = a)
+    emb = discord.Embed(title = t, description = d, colour = a)
     emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
-    emb.add_field(name = d, value = t)
     emb.set_image(url = img)
     emb.set_thumbnail(url = f)
     emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
