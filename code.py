@@ -255,6 +255,9 @@ async def everyone_embed(ctx, t, d, img = None, f = None, a = None, *, amount = 
     else:
         a = int('0x' + a, 16)
         
+    if fu == None:
+        fu = ('Cephalon Cy от сасиска#2472. Secured by Knox')
+
     if img == None:
         img = ('https://steamcommunity.com/profiles/ЦИФРЫ/')
         
@@ -295,13 +298,16 @@ async def embed(ctx, t, d, img = None, f = None, fu = None, a = None, *, amount 
 
 @client.command(aliases = ['emb_ed'])
 @commands.has_permissions(manage_channels = True)
-async def emb_edit(ctx, arg, t, d, img = None, f = None, a = None, *, amount = 1):
+async def emb_edit(ctx, arg, t, d, img = None, f = None, fu = None, a = None, *, amount = 1):
     await ctx.channel.purge(limit = amount)
     m = await ctx.fetch_message(id = arg)
     if a == None:
         a = ctx.author.color
     else:
         a = int('0x' + a, 16)
+
+    if fu == None:
+        fu = ('Cephalon Cy от сасиска#2472. Secured by Knox')
         
     if img == None:
         img = ('https://steamcommunity.com/profiles/ЦИФРЫ/')
