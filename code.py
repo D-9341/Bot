@@ -268,7 +268,7 @@ async def everyone_embed(ctx, t, d, img = None, f = None, a = None, *, amount = 
     emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
     emb.set_image(url = img)
     emb.set_thumbnail(url = f)
-    emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+    emb.set_footer(text = fu)
     await ctx.send(embed = emb)
     
 @client.command(aliases = ['Embed', 'EMBED', 'emb' , 'Emb', 'EMB'])
@@ -319,7 +319,7 @@ async def emb_edit(ctx, arg, t, d, img = None, f = None, fu = None, a = None, *,
     emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
     emb.set_image(url = img)
     emb.set_thumbnail(url = f)
-    emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+    emb.set_footer(text = fu)
     await m.edit(embed = emb)
     await ctx.send('👌', delete_after = 1)
     
