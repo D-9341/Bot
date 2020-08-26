@@ -264,7 +264,7 @@ async def everyone_embed(ctx, t, d, img = None, f = None, a = None, *, amount = 
     
 @client.command(aliases = ['Embed', 'EMBED', 'emb' , 'Emb', 'EMB'])
 @commands.has_permissions(manage_channels = True)
-async def embed(ctx, au: discord.Member, t, d, img = None, f = None, fu = None, a = None, *, amount = 1):
+async def embed(ctx, au = None, t, d, img = None, f = None, fu = None, a = None, *, amount = 1):
     await ctx.channel.purge(limit = amount)
     if a == None:
         a = ctx.author.color
