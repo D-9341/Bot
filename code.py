@@ -235,15 +235,6 @@ async def take(ctx, member: discord.Member, *, arg, amount = 1):
         emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
         await ctx.send(embed = emb)
     
-@client.command(aliases = ['img&'])
-async def image(ctx, arg, *, amount = 1):
-    await ctx.channel.purge(limit = amount)
-    emb = discord.Embed(colour = ctx.author.color)
-    emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
-    emb.set_image(url = arg)
-    emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
-    await ctx.send(embed = emb)
-    
 @client.command(aliases = ['emb_e'])
 @commands.has_permissions(mention_everyone = True)
 @commands.cooldown(1, 20, commands.BucketType.default)
@@ -273,12 +264,15 @@ async def everyone_embed(ctx, t, d, img = None, f = None, a = None, *, amount = 
     
 @client.command(aliases = ['Embed', 'EMBED', 'emb' , 'Emb', 'EMB'])
 @commands.has_permissions(manage_channels = True)
-async def embed(ctx, t, d, img = None, f = None, fu = None, a = None, *, amount = 1):
+async def embed(ctx, au: discord.Member, t, d, img = None, f = None, fu = None, a = None, *, amount = 1):
     await ctx.channel.purge(limit = amount)
     if a == None:
         a = ctx.author.color
     else:
         a = int('0x' + a, 16)
+
+    if au == None:
+        au = ctx.author
 
     if fu == None:
         fu = ('Cephalon Cy от сасиска#2472. Secured by Knox')
