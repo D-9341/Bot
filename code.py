@@ -284,7 +284,7 @@ async def embed(ctx, au: discord.Member, t, d, img = None, f = None, fu = None, 
         f = ('https://steamcommunity.com/profiles/ЦИФРЫ/')
         
     emb = discord.Embed(title = t, description = d, colour = a)
-    emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
+    emb.set_author(name = au, icon_url = au.avatar_url)
     emb.set_image(url = img)
     emb.set_thumbnail(url = f)
     emb.set_footer(text = fu)
