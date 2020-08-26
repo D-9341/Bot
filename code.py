@@ -264,15 +264,12 @@ async def everyone_embed(ctx, t, d, img = None, f = None, a = None, *, amount = 
     
 @client.command(aliases = ['Embed', 'EMBED', 'emb' , 'Emb', 'EMB'])
 @commands.has_permissions(manage_channels = True)
-async def embed(ctx, au = None, t, d, img = None, f = None, fu = None, a = None, *, amount = 1):
+async def embed(ctx, t, d, img = None, f = None, fu = None, a = None, *, amount = 1):
     await ctx.channel.purge(limit = amount)
     if a == None:
         a = ctx.author.color
     else:
         a = int('0x' + a, 16)
-
-    if au == None:
-        au = ctx.author
 
     if fu == None:
         fu = ('Cephalon Cy от сасиска#2472. Secured by Knox')
@@ -514,9 +511,8 @@ async def help(ctx, amount = 1):
     emb.add_field(name = 'cy/everyone', value = 'Пишет сообщение от лица бота и пингует @everyone')
     emb.add_field(name = 'cy/edit', value = 'Редактирует сообщение. Формат - cy/edit (id сообщения) сообщение. При использовании на cy/everyone требует повторного пинга everyone', inline = False)
     emb.add_field(name = 'cy/emb_edit', value = 'Редактирует эмбед. Формат - cy/emb_edit (id), аргументы те же самые, что и на эмбед. Работает как и VAULTBOT', inline = False)
-    emb.add_field(name = 'cy/embed', value = 'От лица бота отправляется эмбед. Прочтите #инструкции-cy-бот, чтобы узнать подробнее.')
+    emb.add_field(name = 'cy/embed', value = 'От лица бота отправляется высоконастраеваемый эмбед. ~~Прочтите #инструкции-cy-бот, чтобы узнать подробнее.~~ В скором времени гайд будет обновлён.')
     emb.add_field(name = 'cy/everyone_embed', value = 'Совмещает в себе команды everyone и embed.')
-    emb.add_field(name = 'cy/image', value = 'Бот может прикрепить изображение, в аргумент нужно указать ссылку.')
     emb.add_field(name = 'cy/about', value = 'Показывает информацию о человеке.')
     emb.add_field(name = 'cy/guild', value = 'Показывает информацию о сервере.')
     emb.add_field(name = 'cy/pm', value = 'Пишет участнику любой написанный текст. Формат - cy/pm @пинг сообщение')
