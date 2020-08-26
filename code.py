@@ -238,7 +238,7 @@ async def take(ctx, member: discord.Member, *, arg, amount = 1):
 @client.command(aliases = ['emb_e'])
 @commands.has_permissions(mention_everyone = True)
 @commands.cooldown(1, 20, commands.BucketType.default)
-async def everyone_embed(ctx, t, d, img = None, f = None, au:discord.Member = None, a = None, *, amount = 1):
+async def everyone_embed(ctx, t, d, img = None, f = None, au:discord.Member = None, fu = None, a = None, *, amount = 1):
     await ctx.channel.purge(limit = amount)
     await ctx.send('@everyone')
     if a == None:
@@ -267,7 +267,7 @@ async def everyone_embed(ctx, t, d, img = None, f = None, au:discord.Member = No
     
 @client.command(aliases = ['Embed', 'EMBED', 'emb' , 'Emb', 'EMB'])
 @commands.has_permissions(manage_channels = True)
-async def embed(ctx, t, d, img = None, f = None, fu = None, au:discord.Member = None, a = None, *, amount = 1):
+async def embed(ctx, t, d, img = None, f = None, au:discord.Member = None, fu = None, a = None, *, amount = 1):
     await ctx.channel.purge(limit = amount)
     if a == None:
         a = ctx.author.color
@@ -295,7 +295,7 @@ async def embed(ctx, t, d, img = None, f = None, fu = None, au:discord.Member = 
 
 @client.command(aliases = ['emb_ed'])
 @commands.has_permissions(manage_channels = True)
-async def emb_edit(ctx, arg, t, d, img = None, f = None, fu = None, au:discord.Member = None, a = None, *, amount = 1):
+async def emb_edit(ctx, arg, t, d, img = None, f = None, au:discord.Member = None, fu = None, a = None, *, amount = 1):
     await ctx.channel.purge(limit = amount)
     m = await ctx.fetch_message(id = arg)
     if a == None:
