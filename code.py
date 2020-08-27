@@ -267,7 +267,7 @@ async def everyone_embed(ctx, t, d, img = None, f = None, a = None, fu = None, *
 async def embed(ctx, t, d, img = None, f = None, a = None, fu = None, *, amount = 1):
     await ctx.channel.purge(limit = amount)
     if a == None:
-        a = au.color
+        a = ctx.author.color
     else:
         a = int('0x' + a, 16)
 
