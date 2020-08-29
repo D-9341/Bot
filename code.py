@@ -350,18 +350,6 @@ async def cu(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
     await ctx.send('Медь')
     
-@client.event
-async def on_voice_state_update(member, after, before):
-    if before.channel.id == 742457421456343272:
-        channel = client.get_channel(id = 742469905755930705)
-        await member.move_to(channel)
-    elif before.channel.id == 742470426487160863:
-        channel = client.get_channel(id = 742469942963732582)
-        await member.move_to(channel)
-    elif before.channel.id == 742470517805809745:
-        channel = client.get_channel(id = 742469986458533889)
-        await member.move_to(channel)
-    
 #получение роли по эмодзи       
 @client.event
 async def on_raw_reaction_add(payload):
@@ -505,7 +493,7 @@ async def help(ctx, amount = 1):
     emb.add_field(name = 'cy/ban', value = 'Бан игрока. Формат - cy/ban @StakanDudka64 дебил')
     emb.add_field(name = 'cy/kick', value = 'Кик игрока. Формат - cy/kick @StakanDudka64 дебил')
     emb.add_field(name = 'cy/mute', value = 'Мут игрока. Формат - cy/mute @StakanDudka64 10 (время измеряется в минутах) дебил. По прошествии времени мут автоматически слетает.', inline = False)
-    emb.add_field(name = 'cy/unmute', value = 'Размут игрока. Пример: cy/unmute @StakanDudka64 админ дебил')
+    emb.add_field(name = 'cy/unmute', value = 'Принудительный размут игрока. Пример: cy/unmute @StakanDudka64 админ дебил')
     emb.add_field(name = 'cy/remind', value = 'Может напомнить вам что угодно. Формат - cy/remind 10 напоминание')
     emb.add_field(name = 'cy/say', value = 'Пишет сообщение от лица бота. Всё.')
     emb.add_field(name = 'cy/everyone', value = 'Пишет сообщение от лица бота и пингует @everyone')
