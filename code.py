@@ -566,6 +566,7 @@ async def ban(ctx , member: discord.Member, *, reason: str):
 @commands.cooldown(1, 10, commands.BucketType.default)
 @commands.has_permissions(administrator = True)
 async def clear(ctx, amount : int):
+    await ctx.channel.purge(limit = 1)
     if amount == 1:
         emb = discord.Embed(description = f'удалено {amount} сообщение', colour = discord.Color.orange())
         emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
@@ -591,8 +592,8 @@ async def clear(ctx, amount : int):
         emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
         await ctx.send(embed = emb, delete_after = 2)
         await asyncio.sleep(3)
-        await ctx.channel.purge(limit = amount + 1)
-        await ctx.send(f'удалено {amount} сообщений')
+        await ctx.channel.purge(limit = amount)
+        await ctx.send(f'удалено {amount} сообщений', delete_after = 3)
     else:
         emb = discord.Embed(description = f'удалено {amount} сообщений', colour = discord.Color.orange())
         emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
