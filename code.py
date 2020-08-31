@@ -12,7 +12,10 @@ client.remove_command('help')
 client.owner_id = 338714886001524737
 
 #test commands space
-
+@client.event
+async def on_member_update(before, after):
+    role = discord.utils.get(guild.roles, id = 693933514198089838) #анонсы дискорда
+    role1 = discord.utils.get(guild.roles, id = 707890231550148650) #анонсы ютаба
 #test commands space
 
 @client.command(aliases = ['Info', 'INFO'])
@@ -24,8 +27,8 @@ async def info(ctx, amount = 1):
     emb.add_field(name = 'Cephalon', value = '[Cy](https://warframe.fandom.com/wiki/Cephalon_Cy)')
     emb.add_field(name = 'Версия', value = '0.12.7.8694')
     emb.add_field(name = 'Написан на', value = 'discord.py')
-    emb.add_field(name = 'Разработчики', value = 'сасиска#2472, Vskyrim2019#6174')
-    emb.add_field(name = 'Веб-сайт', value = '```http://ru-unioncraft.ru/```')
+    emb.add_field(name = 'Разработчик', value = 'Написано в футере, ха!')
+    emb.add_field(name = 'Веб-сайт', value = '`http://ru-unioncraft.ru/`')
     emb.add_field(name = 'Шард', value = client.shard_count)
     emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
     await ctx.send(embed = emb)
@@ -51,7 +54,7 @@ async def aliases(ctx, amount = 1):
 async def invite_cy(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
     emb = discord.Embed(description = f'Ссылка для быстрого приглашения Cy на сервера', colour = discord.Color.orange(), timestamp = ctx.message.created_at)
-    emb.add_field(name = 'Сама ссылка', value = 'https://discordapp.com/oauth2/authorize?&client_id=694170281270312991&scope=bot&permissions=8', inline = False)
+'https://discordapp.com/oauth2/authorize?&client_id=694170281270312991&scope=bot&permissions=8'
     emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
     await ctx.send(embed = emb)
     
