@@ -25,7 +25,7 @@ async def embed(ctx, t, d, img = None, f = None, a = None, fu = None, au : disco
         au = ctx.author
 
     if fu == None:
-        fu = ('Cephalon Cy от сасиска#2472. Secured by Knox')
+        fu = ('Cephalon Cy by сасиска#2472')
         
     if img == None:
         img = ('https://steamcommunity.com/profiles/ЦИФРЫ/')
@@ -53,7 +53,7 @@ async def info(ctx, amount = 1):
     emb.add_field(name = 'Разработчик', value = 'Написано в футере, ха!')
     emb.add_field(name = 'Веб-сайт', value = '`http://ru-unioncraft.ru/`')
     emb.add_field(name = 'Шард', value = client.shard_count)
-    emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+    emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
     await ctx.send(embed = emb)
     
 @client.command()
@@ -69,7 +69,7 @@ async def aliases(ctx, amount = 1):
     emb.add_field(name = 'embed', value = 'emb')
     emb.add_field(name = 'coinflip', value = 'c, coin')
     emb.add_field(name = 'А также', value = 'Для остальных команд также есть *никнеймы*, их можно писать с заглавной буквы или полностью капсом')
-    emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+    emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
     await ctx.send(embed = emb)
     
 @client.command(aliases = ['invite', 'invcy'])
@@ -77,7 +77,7 @@ async def aliases(ctx, amount = 1):
 async def invite_cy(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
     emb = discord.Embed(title = f'Ссылка для быстрого приглашения Cy на сервера', description = 'https://discordapp.com/oauth2/authorize?&client_id=694170281270312991&scope=bot&permissions=8', colour = discord.Color.orange(), timestamp = ctx.message.created_at)
-    emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+    emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
     await ctx.send(embed = emb)
     
 @client.command(aliases = ['Ping', 'PING'])
@@ -85,7 +85,7 @@ async def invite_cy(ctx, amount = 1):
 async def ping(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
     emb = discord.Embed(description = f'Pong! `{round(client.latency * 1000)} ms`', colour = discord.Color.orange(), timestamp = ctx.message.created_at)
-    emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+    emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
     await ctx.send(embed = emb)
     
 @client.command()
@@ -103,14 +103,14 @@ async def remind(ctx, time:int, *, arg, amount = 1):
     emb.add_field(name = 'Напомню через', value = f'{time} минут(у, ы)')
     emb.add_field(name = 'О чём напомню?', value = arg)
     emb.add_field(name = 'Кому?', value = ctx.author.mention)
-    emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+    emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
     await ctx.send(embed = emb)
     await asyncio.sleep(time*60)
     await ctx.send(f'{ctx.author.mention}')
     emb = discord.Embed(title = 'Напоминание', colour = ctx.author.color)
     emb.add_field(name = 'Напомнил через', value = f'{time} минут(у, ы)')
     emb.add_field(name = 'Напоминаю о', value = arg)
-    emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+    emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
     await ctx.send(embed = emb) 
    
 @client.command(aliases = ['Guild', 'GUILD'])
@@ -127,7 +127,7 @@ async def guild(ctx, guild : discord.Guild = None, amount = 1):
     emb.add_field(name = 'Шард', value = guild.shard_id)
     emb.add_field(name = 'Дата создания сервера', value = guild.created_at.strftime("%a, %#d %B %Y, %I:%M %p UTC"), inline = False)
     emb.set_thumbnail(url = guild.icon_url)
-    emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+    emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
     await ctx.send(embed = emb)
     
 @client.command(aliases = ['.rap'])
@@ -137,7 +137,7 @@ async def rap(ctx, amount = 1):
     emb = discord.Embed(colour = ctx.author.color, timestamp = ctx.message.created_at)
     emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
     emb.set_image(url = 'https://thumbs.gfycat.com/MessyCarefreeHousefly-size_restricted.gif')
-    emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+    emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
     await ctx.send(embed = emb)
     
 @client.command(aliases = ['me', 'Me', 'ME', 'About', 'ABOUT'])
@@ -159,7 +159,7 @@ async def about(ctx, member:discord.Member = None, amount = 1):
     emb.add_field(name = 'Высшая Роль', value = member.top_role.mention, inline = False)
     emb.add_field(name = 'Бот?', value = member.bot)
     emb.set_thumbnail(url = member.avatar_url)
-    emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+    emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
     await ctx.send(embed = emb)
     
 @client.command(aliases = ['Unmute', 'UNMUTE'])
@@ -172,11 +172,11 @@ async def unmute(ctx, member : discord.Member, *, arg, amount = 1):
         emb = discord.Embed(title = f'Принудительное снятие мута у {member.name}', colour = member.color, timestamp = ctx.message.created_at)
         emb.add_field(name = 'Снял мут', value = ctx.author.mention)
         emb.add_field(name = 'По причине', value = arg)
-        emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
     else:
         emb = discord.Embed(description = f'{ctx.author.mention}, Я не могу снять мут у {member.mention} из-за того, что роль Muted была удалена/отредактирована!', colour = discord.Color.orange())
-        emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
         
     
@@ -193,7 +193,7 @@ async def mute(ctx, member: discord.Member, time : int, *, arg, amount = 1):
             emb.add_field(name = 'В муте', value = f'{member.mention}')
             emb.add_field(name = 'По причине', value = arg)
             emb.add_field(name = 'Время мута в минутах', value = time)
-            emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+            emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
             await ctx.send(embed = emb)
             await asyncio.sleep(time*60)
             if role is not None:
@@ -204,22 +204,22 @@ async def mute(ctx, member: discord.Member, time : int, *, arg, amount = 1):
                         emb.add_field(name = 'Размучен по истечению времени', value = member.mention)
                         emb.add_field(name = 'По причине', value = arg)
                         emb.add_field(name = 'Время мута в минутах составляло', value = time)
-                        emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+                        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
                         await ctx.send(embed = emb)
                         await member.remove_roles(role)
                     else:
                         break
             else:
                 emb = discord.Embed(description = f'{ctx.author.mention}, Я не могу снять мут у {member.mention} из-за того, что роль Muted была удалена/отредактирована!', colour = discord.Color.orange())
-                emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+                emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
                 await ctx.send(embed = emb)
         else:
             emb = discord.Embed(description = f'{ctx.author.mention}, Я не смог найти подходящую для этой команды роль. Роль должна называться Muted', colour = discord.Color.orange())
-            emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+            emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
             await ctx.send(embed = emb)
     else:
         emb = discord.Embed(description = f'Извините, {ctx.author.mention}, но вы не можете замутить моего создателя!', colour = discord.Color.orange())
-        emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
         
 @client.command(aliases = ['Give', 'GIVE'])
@@ -234,11 +234,11 @@ async def give(ctx, member: discord.Member, *, arg, amount = 1):
         emb.add_field(name = 'Была выдана роль', value = role)
         emb.add_field(name = 'Выдана:', value = member.mention)
         emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
-        emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await channel.send(embed = emb)
     else:
         emb = discord.Embed(description = f'{ctx.author.mention}, я не могу найти подходящую роль!', colour = member.color, timestamp = ctx.message.created_at)
-        emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
     
 @client.command(aliases = ['Take', 'TAKE'])
@@ -253,11 +253,11 @@ async def take(ctx, member: discord.Member, *, arg, amount = 1):
         emb.add_field(name = 'Была забрана роль', value = role)
         emb.add_field(name = 'Забрана у:', value = member.mention)
         emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
-        emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await channel.send(embed = emb)
     else:
         emb = discord.Embed(description = f'{ctx.author.mention}, я не могу найти подходящую роль!', colour = member.color, timestamp = ctx.message.created_at)
-        emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
     
 @client.command(aliases = ['emb_e'])
@@ -272,7 +272,7 @@ async def everyone_embed(ctx, t, d, img = None, f = None, a = None, fu = None, *
         a = int('0x' + a, 16)
         
     if fu == None:
-        fu = ('Cephalon Cy от сасиска#2472. Secured by Knox')
+        fu = ('Cephalon Cy by сасиска#2472')
 
     if img == None:
         img = ('https://steamcommunity.com/profiles/ЦИФРЫ/')
@@ -300,7 +300,7 @@ async def emb_edit(ctx, arg, t, d, img = None, f = None, a = None, fu = None, *,
         a = int('0x' + a, 16)
 
     if fu == None:
-        fu = ('Cephalon Cy от сасиска#2472. Secured by Knox')
+        fu = ('Cephalon Cy by сасиска#2472')
         
     if img == None:
         img = ('https://steamcommunity.com/profiles/ЦИФРЫ/')
@@ -390,7 +390,7 @@ async def join(ctx):
         channel = ctx.author.voice.channel
     else:
         emb = discord.Embed(description = 'Ты должен быть в канале, чтобы использовать это.', colour = discord.Color.orange())
-        emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
         return
     global vc
@@ -415,7 +415,7 @@ async def pm(ctx, member: discord.Member, *, arg, amount = 1):
     await ctx.channel.purge(limit = amount)
     emb = discord.Embed(description = f'{arg}', colour = member.color)
     emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
-    emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+    emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
     await member.send(embed = emb)
 
 @client.event
@@ -428,7 +428,7 @@ async def on_member_join(member):
         if role is not None:
             await member.add_roles(role, role1, role2)
         emb = discord.Embed(description = f'{member.mention} Has entered the facility, 👋', colour = discord.Color.orange())
-        emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await channel.send(embed = emb)
     else:
         role = discord.utils.get(member.guild.roles, id = 693933516831850527)
@@ -443,11 +443,11 @@ async def on_member_remove(member):
     channel = client.get_channel(693929823030214658)
     if member.bot == False:
         emb = discord.Embed(description = f'{member.mention} Has exited the facility...', colour = discord.Color.red())
-        emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await channel.send(embed = emb)
     else:
         emb = discord.Embed(description = f'{member.mention}, ну и вали, ботаря, хаха!', colour = discord.Color.orange())
-        emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await channel.send(embed = emb)
 
 @client.event
@@ -462,7 +462,7 @@ async def on_message(message):
         emb.set_author(name = message.author, icon_url = message.author.avatar_url)
         emb.add_field(name = 'В канале', value = message.channel.mention)
         emb.add_field(name = 'Было написано', value = message.content)
-        emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await channel.send(embed = emb)
         await client.process_commands(message)
     
@@ -476,7 +476,7 @@ async def on_message_edit(before, after):
         emb.set_author(name = before.author.name, icon_url = before.author.avatar_url)
         emb.add_field(name = 'Было', value = before.content)
         emb.add_field(name = 'Стало', value = after.content)
-        emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await channel.send(embed = emb)
     
 #help command
@@ -511,7 +511,7 @@ async def help(ctx, amount = 1):
     emb.add_field(name = 'cy/give', value = 'Выдаёт роль, писать в формате: give @пинг выдаваемая роль', inline = False)
     emb.add_field(name = 'cy/take', value = 'Забирает роль, писать в формате: take @пинг забираемая роль', inline = False)
     emb.add_field(name = 'Послесловие', value = 'Также, для написания команд необязательно писать префикс, можно пингануть бота.')
-    emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+    emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
     await ctx.send(embed = emb)
 
 @client.command()
@@ -519,7 +519,7 @@ async def time(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
     date_now = datetime.datetime.now()
     emb = discord.Embed(colour = discord.Color.orange())
-    emb.set_footer(text = 'Cephalon Cy от сасиска#2472')
+    emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
     emb.add_field(name = 'Время по Гринвичу равняется', value = date_now)
     await ctx.author.send(embed = emb)
 
@@ -539,11 +539,11 @@ async def kick(ctx , member: discord.Member, *, reason: str):
         await member.kick(reason = reason)
         emb.add_field(name = 'Был кикнут', value = member.mention)
         emb.add_field(name = 'По причине', value = reason)
-        emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
     else:
         emb = discord.Embed(description = f'Извините, {ctx.author.mention}, но вы не можете кикнуть моего создателя!', colour = discord.Color.orange())
-        emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
 #ban
 @client.command(aliases = ['Ban', 'BAN'])
@@ -556,11 +556,11 @@ async def ban(ctx , member: discord.Member, *, reason: str):
         await member.ban(reason = reason)
         emb.add_field(name = 'Был забанен', value = member.mention)
         emb.add_field(name = 'По причине', value = reason)
-        emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
     else:
         emb = discord.Embed(description = f'Извините, {ctx.author.mention}, но вы не можете забанить моего создателя!', colour = discord.Color.orange())
-        emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
         
 #message delete
@@ -571,34 +571,34 @@ async def clear(ctx, amount : int):
     await ctx.channel.purge(limit = 1)
     if amount == 1:
         emb = discord.Embed(description = f'удалено {amount} сообщение', colour = discord.Color.orange())
-        emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.channel.purge(limit = amount + 1)
         await ctx.send(embed = emb, delete_after = 1)
     elif amount == 2:
         emb = discord.Embed(description = f'удалено {amount} сообщения', colour = discord.Color.orange())
-        emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.channel.purge(limit = amount + 1)
         await ctx.send(embed = emb, delete_after = 1)
     elif amount == 3:
         emb = discord.Embed(description = f'удалено {amount} сообщения', colour = discord.Color.orange())
-        emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.channel.purge(limit = amount + 1)
         await ctx.send(embed = emb, delete_after = 1)
     elif amount == 4:
         emb = discord.Embed(description = f'удалено {amount} сообщения', colour = discord.Color.orange())
-        emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.channel.purge(limit = amount + 1)
         await ctx.send(embed = emb, delete_after = 1)
     elif amount >= 10:
         emb = discord.Embed(description = f'через 3 секунды будет удалено {amount} сообщений.', colour = discord.Color.orange())
-        emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb, delete_after = 2)
         await asyncio.sleep(3)
         await ctx.channel.purge(limit = amount)
         await ctx.send(f'удалено {amount} сообщений', delete_after = 3)
     else:
         emb = discord.Embed(description = f'удалено {amount} сообщений', colour = discord.Color.orange())
-        emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.channel.purge(limit = amount + 1)
         await ctx.send(embed = emb, delete_after = 1)
     
@@ -606,164 +606,164 @@ async def clear(ctx, amount : int):
 async def on_command_error(ctx, error):
     if isinstance(error, commands.CommandNotFound):
         emb = discord.Embed(description = f'{ctx.author.mention}, я не знаю такую команду!', colour = discord.Color.orange())
-        emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
         
     if isinstance(error, commands.CommandOnCooldown):
         emb = discord.Embed(description = f'{ctx.author.mention}, команда в кд, потерпи чутка!', colour = discord.Color.orange())
-        emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
     
 @pm.error
 async def pm_error(ctx, error):
     if isinstance(error, commands.MissingRequiredArgument):
         emb = discord.Embed(description = f'{ctx.author.mention}, укажите, кому и что написать!', colour = discord.Color.orange())
-        emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
 
     if isinstance(error, commands.MissingPermissions):
         emb = discord.Embed(description = f'{ctx.author.mention} пытался вызвать команду pm', colour = discord.Color.orange())
-        emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
         
 @everyone_embed.error
 async def everyone_embed_error(ctx, error):
     if isinstance(error, commands.MissingRequiredArgument):
         emb = discord.Embed(description = f'{ctx.author.mention}, так шутить не нужно', colour = discord.Color.orange())
-        emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
 
     if isinstance(error, commands.MissingPermissions):
         emb = discord.Embed(description = f'{ctx.author.mention} пытался вызвать команду everyone_embed', colour = discord.Color.orange())
-        emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
         
     if isinstance(error, commands.TooManyArguments):
         emb = discord.Embed(description = f'{ctx.author.mention}, возможно, вы забыли кавычки?', colour = discord.Color.orange())
-        emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
         
 @embed.error
 async def embed_error(ctx, error):
     if isinstance(error, commands.MissingRequiredArgument):
         emb = discord.Embed(description = f'{ctx.author.mention}, укажите, что закрепить!', colour = discord.Color.orange())
-        emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
 
     if isinstance(error, commands.MissingPermissions):
         emb = discord.Embed(description = f'{ctx.author.mention} пытался вызвать команду embed', colour = discord.Color.orange())
-        emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
         
     if isinstance(error, commands.TooManyArguments):
         emb = discord.Embed(description = f'{ctx.author.mention}, возможно, вы забыли кавычки?', colour = discord.Color.orange())
-        emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
         
 @give.error
 async def give_error(ctx, error):
     if isinstance(error, commands.MissingRequiredArgument):
         emb = discord.Embed(description = f'{ctx.author.mention}, укажите роль, которую нужно выдать!', colour = discord.Color.orange())
-        emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
 
     if isinstance(error, commands.MissingPermissions):
         emb = discord.Embed(description = f'{ctx.author.mention} пытался вызвать команду give', colour = discord.Color.orange())
-        emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
         
 @take.error
 async def take_error(ctx, error):
     if isinstance(error, commands.MissingRequiredArgument):
         emb = discord.Embed(description = f'{ctx.author.mention}, укажите роль, которую нужно забрать!', colour = discord.Color.orange())
-        emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
 
     if isinstance(error, commands.MissingPermissions):
         emb = discord.Embed(description = f'{ctx.author.mention} пытался вызвать команду take', colour = discord.Color.orange())
-        emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
         
 @everyone.error
 async def everyone_error(ctx, error):
     if isinstance(error, commands.MissingRequiredArgument):
         emb = discord.Embed(description = f'{ctx.author.mention}, так шутить не нужно', colour = discord.Color.orange())
-        emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
 
     if isinstance(error, commands.MissingPermissions):
         emb = discord.Embed(description = f'{ctx.author.mention} пытался пингануть everyone', colour = discord.Color.orange())
-        emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
 
 @say.error
 async def say_error(ctx, error):
     if isinstance(error, commands.MissingRequiredArgument):
         emb = discord.Embed(description = f'{ctx.author.mention}, укажите, что я должен сказать!', colour = discord.Color.orange())
-        emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
             
     if isinstance(error, commands.MissingPermissions):
         emb = discord.Embed(description = f'{ctx.author.mention} пытался вызвать команду say', colour = discord.Color.orange())
-        emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
         
 @mute.error
 async def mute_error(ctx, error):
     if isinstance(error, commands.MissingRequiredArgument):
         emb = discord.Embed(description = f'{ctx.author.mention}, укажите, кого и на сколько мутить!', colour = discord.Color.orange())
-        emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
         
     if isinstance(error, commands.BadArgument):
         emb = discord.Embed(description = f'{ctx.author.mention}, проверьте правильность написания команды!', colour = discord.Color.orange())
-        emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
                        
     if isinstance(error, commands.MissingPermissions):
         emb = discord.Embed(description = f'{ctx.author.mention} пытался вызвать команду mute', colour = discord.Color.orange())
-        emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
 
 @kick.error
 async def kick_error(ctx, error):
     if isinstance(error, commands.MissingRequiredArgument):
         emb = discord.Embed(description = f'{ctx.author.mention}, укажите, кого нужно кикнуть!', colour = discord.Color.orange())
-        emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
 
     if isinstance(error, commands.MissingPermissions):
         emb = discord.Embed(description = f'{ctx.author.mention} пытался вызвать команду kick', colour = discord.Color.orange())
-        emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
 
 @ban.error
 async def ban_error(ctx, error):
     if isinstance(error, commands.MissingRequiredArgument):
         emb = discord.Embed(description = f'{ctx.author.mention}, укажите, кого нужно забанить!', colour = discord.Color.orange())
-        emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
 
     if isinstance(error, commands.MissingPermissions):
         emb = discord.Embed(description = f'{ctx.author.mention} пытался вызвать команду ban', colour = discord.Color.orange())
-        emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
 
 @clear.error
 async def clear_error(ctx, error):
     if isinstance(error, commands.MissingRequiredArgument):
         emb = discord.Embed(description = f'{ctx.author.mention}, укажите, сколько сообщений нужно удалить!', colour = discord.Color.orange())
-        emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
 
     if isinstance(error, commands.MissingPermissions):
         emb = discord.Embed(description = f'{ctx.author.mention} пытался вызвать команду clear', colour = discord.Color.orange())
-        emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
         
     if isinstance(error, commands.BadArgument):
         emb = discord.Embed(description = f'{ctx.author.mention}, проверьте правильность написания команды!', colour = discord.Color.orange())
-        emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
+        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
     
 t = os.environ.get('t')
