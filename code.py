@@ -12,15 +12,7 @@ client.remove_command('help')
 client.owner_id = 338714886001524737
 
 #test commands space
-@client.event
-async def on_member_update(before, after):
-    member = discord.Member
-    role = discord.utils.get(guild.roles, id = 693933514198089838) #анонсы дискорда
-    role1 = discord.utils.get(guild.roles, id = 707890231550148650) #анонсы ютаба
-    role2 = discord.utils.get(guild.roles, id = 693933510523879454)
-    for role in member.roles:
-        if role in member.roles or role1 in member.roles and role2 is not in member.roles:
-            await member.add_roles(role2)
+
 #test commands space
 
 @client.command(aliases = ['Info', 'INFO'])
