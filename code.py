@@ -19,7 +19,7 @@ client.owner_id = 338714886001524737
 @commands.cooldown(1, 5, commands.BucketType.default)
 async def info(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
-    emb = discord.Embed(title = 'Привет! Я Cephalon Cy!', colour = discord.Color.orange())
+    emb = discord.Embed(title = 'Welcum to the cum zone', colour = discord.Color.orange())
     emb.set_author(name = client.user.name, icon_url = client.user.avatar_url)
     emb.add_field(name = 'Cephalon', value = '[Cy](https://warframe.fandom.com/wiki/Cephalon_Cy)')
     emb.add_field(name = 'Версия', value = '0.12.7.8694')
