@@ -42,6 +42,7 @@ async def aliases(ctx, amount = 1):
     emb.add_field(name = 'emb_edit', value = 'emb_ed')
     emb.add_field(name = 'embed', value = 'emb')
     emb.add_field(name = 'coinflip', value = 'c, coin')
+    emb.add_field(name = 'content', value = 'ctx')
     emb.add_field(name = 'А также', value = 'Для остальных команд также есть *никнеймы*, их можно писать с заглавной буквы или полностью капсом')
     emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
     await ctx.send(embed = emb)
@@ -62,7 +63,7 @@ async def ping(ctx, amount = 1):
     emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
     await ctx.send(embed = emb)
     
-@client.command()
+@client.command(aliases = ['ctx'])
 @commands.cooldown(1, 5, commands.BucketType.default)
 async def content(ctx, arg):
     await ctx.channel.purge(limit = 1)
