@@ -53,8 +53,7 @@ async def aliases(ctx, amount = 1):
 @commands.cooldown(1, 5, commands.BucketType.default)
 async def invite_cy(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
-    emb = discord.Embed(description = f'Ссылка для быстрого приглашения Cy на сервера', colour = discord.Color.orange(), timestamp = ctx.message.created_at)
-'https://discordapp.com/oauth2/authorize?&client_id=694170281270312991&scope=bot&permissions=8'
+    emb = discord.Embed(title = f'Ссылка для быстрого приглашения Cy на сервера' description = 'https://discordapp.com/oauth2/authorize?&client_id=694170281270312991&scope=bot&permissions=8', colour = discord.Color.orange(), timestamp = ctx.message.created_at)
     emb.set_footer(text = 'Cephalon Cy от сасиска#2472. Secured by Knox')
     await ctx.send(embed = emb)
     
