@@ -15,10 +15,10 @@ client.owner_id = 338714886001524737
 #EFT
 @client.event
 async def on_message(message):
+    guild = message.guild
     channel = client.get_channel(750372413102883028)
-    role = discord.utils.get(message.guild.roles, id = 750368477671325728)
-    a = role.mention
-    await channel.send(a)
+    role = discord.utils.get(guild.roles, name = '📢 EFT')
+    await channel.send(f'{role.mention}')
     await client.process_commands(message)
 #test commands space
 
