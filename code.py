@@ -478,43 +478,43 @@ async def on_message(message):
     role1 = discord.utils.get(guild.roles, id = 750366953125969990)
     b = role1.mention
     if not message.author.bot:
-        await channel.send(b)
+        await channel1.send(b)
         await client.process_commands(message)
     channel2 = client.get_channel(750363498290348123) #Dota 2
     role2 = discord.utils.get(guild.roles, id = 750363797226782802)
     c = role2.mention
     if not message.author.bot:
-        await channel.send(c)
+        await channel2.send(c)
         await client.process_commands(message)
     channel3 = client.get_channel(750371693779746826) #RSS
     role3 = discord.utils.get(guild.roles, id = 750372161134264400)
     d = role3.mention
     if not message.author.bot:
-        await channel.send(d)
+        await channel3.send(d)
         await client.process_commands(message)
     channel4 = client.get_channel(750373213447389194) #SCP: SL
     role4 = discord.utils.get(guild.roles, id = 750379151210446949)
     e = role4.mention
     if not message.author.bot:
-        await channel.send(e)
+        await channel4.send(e)
         await client.process_commands(message)
     channel5 = client.get_channel(750373602460827730) #MC
     role5 = discord.utils.get(guild.roles, id = 750373687479238787)
     f = role5.mention
     if not message.author.bot:
-        await channel.send(f)
+        await channel5.send(f)
         await client.process_commands(message)
     channel6 = client.get_channel(750362487224008846) #LOL
     role6 = discord.utils.get(guild.roles, id = 750056065474887852)
     g = role6.mention
     if not message.author.bot:
-        await channel.send(g)
+        await channel6.send(g)
         await client.process_commands(message)
     channel7 = client.get_channel(750368033578680361) #OVERWATCH
     role7 = discord.utils.get(guild.roles, id = 750366804689420319)
     h = role7.mention
     if not message.author.bot:
-        await channel.send(h)
+        await channel7.send(h)
         await client.process_commands(message)
     
 @client.event
