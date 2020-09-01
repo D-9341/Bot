@@ -17,9 +17,10 @@ client.owner_id = 338714886001524737
 async def on_message(message):
     guild = message.guild
     channel = client.get_channel(750372413102883028)
-    role = discord.utils.get(guild.roles, name = '📢 EFT')
-    await channel.send('э')
-    await client.process_commands(message)
+    role = discord.utils.get(guild.roles, id = 750368477671325728)
+    if channel is not None:
+        await channel.send('э')
+        await client.process_commands(message)
 #test commands space
 
 @client.command(aliases = ['Info', 'INFO'])
