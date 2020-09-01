@@ -12,7 +12,13 @@ client.remove_command('help')
 client.owner_id = 338714886001524737
 
 #test commands space
-
+#EFT
+@client.event
+async def on_message(message):
+    channel = client.get_channel(id = 750372413102883028)
+    role = discord.utils.get(message.guild.roles, id = 750368477671325728)
+    a = role.mention
+    await channel.send(a)
 #test commands space
 
 @client.command(aliases = ['Info', 'INFO'])
