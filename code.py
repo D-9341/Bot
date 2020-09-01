@@ -468,6 +468,11 @@ async def on_message(message):
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await channel.send(embed = emb)
         await client.process_commands(message)
+    channel1 = client.get_channel(750372413102883028)
+    role = discord.utils.get(guild.roles, id = 750368477671325728)
+    a = role.mention
+    await channel1.send(a)
+    await client.process_commands(message)
     
 @client.event
 async def on_message_edit(before, after):
