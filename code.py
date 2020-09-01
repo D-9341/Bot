@@ -18,7 +18,7 @@ async def on_message(message):
     guild = message.guild
     channel = client.get_channel(750372413102883028)
     role = discord.utils.get(guild.roles, name = '📢 EFT')
-    await channel.send(f'{role.mention}')
+    await channel.send('э')
     await client.process_commands(message)
 #test commands space
 
