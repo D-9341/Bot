@@ -12,14 +12,7 @@ client.remove_command('help')
 client.owner_id = 338714886001524737
 
 #test commands space
-#EFT
-@client.event
-async def on_message(message):
-    guild = message.guild
-    channel = client.get_channel(750372413102883028)
-    if channel is not None:
-        await channel.send('э')
-        await client.process_commands(message)
+
 #test commands space
 
 @client.command(aliases = ['Info', 'INFO'])
