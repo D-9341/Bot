@@ -592,7 +592,7 @@ async def clear(ctx, amount : int, confirm : str = None):
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.channel.purge(limit = amount + 1)
         await ctx.send(embed = emb, delete_after = 1)
-    elif amount >= 10:)
+    elif amount >= 10:
         if confirm == 'CONFIRM':
             await ctx.send('Принято. Будет выполнено через 3 секунды.')
             await asyncio.sleep(3)
