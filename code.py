@@ -618,14 +618,14 @@ async def on_command_error(ctx, error):
         await ctx.send(embed = emb)
     
 @dm.error
-async def pm_error(ctx, error):
+async def dm_error(ctx, error):
     if isinstance(error, commands.MissingRequiredArgument):
         emb = discord.Embed(description = f'{ctx.author.mention}, укажите, кому и что написать!', colour = discord.Color.orange())
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
 
     if isinstance(error, commands.MissingPermissions):
-        emb = discord.Embed(description = f'{ctx.author.mention} пытался вызвать команду pm', colour = discord.Color.orange())
+        emb = discord.Embed(description = f'{ctx.author.mention} пытался вызвать команду dm', colour = discord.Color.orange())
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
         
