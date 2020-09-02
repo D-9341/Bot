@@ -570,7 +570,7 @@ async def ban(ctx , member: discord.Member, *, reason: str):
 @client.command(aliases = ['Clear', 'CLEAR'])
 @commands.cooldown(1, 10, commands.BucketType.default)
 @commands.has_permissions(administrator = True)
-async def clear(ctx, amount : int, confirm = None):
+async def clear(ctx, amount : int, confirm : str = None):
     await ctx.channel.purge(limit = 1)
     if amount == 1:
         emb = discord.Embed(description = f'удалено {amount} сообщение', colour = discord.Color.orange())
