@@ -617,7 +617,7 @@ async def on_command_error(ctx, error):
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
     
-@pm.error
+@dm.error
 async def pm_error(ctx, error):
     if isinstance(error, commands.MissingRequiredArgument):
         emb = discord.Embed(description = f'{ctx.author.mention}, укажите, кому и что написать!', colour = discord.Color.orange())
