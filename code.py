@@ -570,7 +570,7 @@ async def ban(ctx , member: discord.Member, *, reason: str):
 @client.command(aliases = ['Clear', 'CLEAR'])
 @commands.cooldown(1, 10, commands.BucketType.default)
 @commands.has_permissions(administrator = True)
-async def clear(ctx, amount : int):
+async def clear(ctx, amount : int, confirm = None):
     await ctx.channel.purge(limit = 1)
     if amount == 1:
         emb = discord.Embed(description = f'удалено {amount} сообщение', colour = discord.Color.orange())
@@ -593,12 +593,13 @@ async def clear(ctx, amount : int):
         await ctx.channel.purge(limit = amount + 1)
         await ctx.send(embed = emb, delete_after = 1)
     elif amount >= 10:
-        emb = discord.Embed(description = f'через 3 секунды будет удалено {amount} сообщений.', colour = discord.Color.orange())
-        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-        await ctx.send(embed = emb, delete_after = 2)
-        await asyncio.sleep(3)
-        await ctx.channel.purge(limit = amount)
-        await ctx.send(f'удалено {amount} сообщений', delete_after = 3)
+        if confirm == 'CONFIRM':
+            emb = discord.Embed(description = f'через 3 секунды будет удалено {amount} сообщений.', colour = discord.Color.orange())
+            emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+            await ctx.send(embed = emb, delete_after = 2)
+            await asyncio.sleep(3)
+            await ctx.channel.purge(limit = amount)
+            await ctx.send(f'удалено {amount} сообщений', delete_after = 5)
     else:
         emb = discord.Embed(description = f'удалено {amount} сообщений', colour = discord.Color.orange())
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
