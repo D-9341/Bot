@@ -601,12 +601,9 @@ async def clear(ctx, amount : int, confirm = None):
             await ctx.send(f'удалено {amount} сообщений', delete_after = 5)
         else:
             await ctx.send('Принято.', delete_after = 1)
-            await asyncio.sleep(1)
-            break
         await asyncio.sleep(10)
         if confirm == None:
             await ctx.send('Время вышло. Выполнение отменено.')
-            break
     else:
         emb = discord.Embed(description = f'удалено {amount} сообщений', colour = discord.Color.orange())
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
