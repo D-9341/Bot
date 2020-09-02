@@ -414,7 +414,7 @@ async def leave(ctx):
 @client.command()
 @commands.has_permissions(administrator = True)
 @commands.cooldown(1, 5, commands.BucketType.default)
-async def pm(ctx, member: discord.Member, *, arg, amount = 1):
+async def dm(ctx, member: discord.Member, *, arg, amount = 1):
     await ctx.channel.purge(limit = amount)
     emb = discord.Embed(description = f'{arg}', colour = member.color)
     emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
@@ -508,7 +508,7 @@ async def help(ctx, amount = 1):
     emb.add_field(name = 'cy/everyone_embed', value = 'Совмещает в себе команды everyone и embed.')
     emb.add_field(name = 'cy/about', value = 'Показывает информацию о человеке.')
     emb.add_field(name = 'cy/guild', value = 'Показывает информацию о сервере.')
-    emb.add_field(name = 'cy/pm', value = 'Пишет участнику любой написанный текст. Формат - cy/pm @пинг сообщение')
+    emb.add_field(name = 'cy/dm', value = 'Пишет участнику любой написанный текст. Формат - cy/dm @пинг сообщение')
     emb.add_field(name = 'cy/join', value = 'Бот заходит в голосовой канал.')
     emb.add_field(name = 'cy/leave', value = 'Бот выходит из голосового канала.')
     emb.add_field(name = 'cy/give', value = 'Выдаёт роль, писать в формате: give @пинг выдаваемая роль', inline = False)
