@@ -597,13 +597,15 @@ async def clear(ctx, amount : int, confirm = None):
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
         if confirm == 'CONFIRM':
+            await ctx.send('Принято. Будет выполнено через 3 секунды.')
+            await asyncio.sleep(3)
             await ctx.channel.purge(limit = amount + 1)
             await ctx.send(f'удалено {amount} сообщений', delete_after = 5)
-        else:
-            await ctx.send('Принято.', delete_after = 1)
-        await asyncio.sleep(10)
+        elif confirm == 'DENY':
+            await ctx.send('Принято. Отменено.', delete_after = 1)
+        await asyncio.sleep(5)
         if confirm == None:
-            await ctx.send('Время вышло. Выполнение отменено.')
+            await ctx.send('Ответ не был получен. Выполнение отменено.')
     else:
         emb = discord.Embed(description = f'удалено {amount} сообщений', colour = discord.Color.orange())
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
