@@ -593,13 +593,20 @@ async def clear(ctx, amount : int, confirm = None):
         await ctx.channel.purge(limit = amount + 1)
         await ctx.send(embed = emb, delete_after = 1)
     elif amount >= 10:
+        emb = discord.Embed(description = f'Будет удалено {amount} сообщений. Вы уверены? (CONFIRM/DENY, чувствительно к регистру)', colour = discord.Color.orange())
+        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+        await ctx.send(embed = emb)
         if confirm == 'CONFIRM':
-            emb = discord.Embed(description = f'через 3 секунды будет удалено {amount} сообщений.', colour = discord.Color.orange())
-            emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-            await ctx.send(embed = emb, delete_after = 2)
-            await asyncio.sleep(3)
-            await ctx.channel.purge(limit = amount)
+            await ctx.channel.purge(limit = amount + 1)
             await ctx.send(f'удалено {amount} сообщений', delete_after = 5)
+        else:
+            await ctx.send('Принято.', delete_after = 1)
+            await asyncio.sleep(1)
+            break
+        await asyncio.sleep(10)
+        if confirm == None:
+            await ctx.send('Время вышло. Выполнение отменено.')
+            break
     else:
         emb = discord.Embed(description = f'удалено {amount} сообщений', colour = discord.Color.orange())
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
