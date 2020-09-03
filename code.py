@@ -475,9 +475,9 @@ async def on_raw_message_edit(payload):
     if channel is None:
         return
     emb = discord.Embed(title = 'Сообщение было изменено', colour = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
-    emb.set_author(name = payload.author.name, icon_url = payload.author.avatar_url)
-    emb.add_field(name = 'Было', value = payload.before.content)
-    emb.add_field(name = 'Стало', value = payload.after.content)
+    emb.set_author(name = payload.message.author, icon_url = payload.message.author.avatar_url)
+    emb.add_field(name = 'Было', value = payload.before.message.content)
+    emb.add_field(name = 'Стало', value = payload.after.message.content)
     emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
     await channel.send(embed = emb)
     
