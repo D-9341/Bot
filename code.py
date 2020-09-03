@@ -169,7 +169,7 @@ async def mute(ctx, member: discord.Member, time : int, *, arg, amount = 1):
             emb.add_field(name = 'По причине', value = arg)
             emb.add_field(name = 'Время мута в минутах', value = time)
             emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-            await ctx.send(embed = emb)
+            await ctx.send(embed = emb, delete_after = time*60)
             await asyncio.sleep(time*60)
             if role is not None:
                 await ctx.send(f'{member.mention}')
@@ -594,12 +594,12 @@ async def clear(ctx, amount : int, confirm : str = None):
         await ctx.send(embed = emb, delete_after = 1)
     elif amount >= 10:
         if confirm == 'CONFIRM':
-            await ctx.send('Принято. Будет выполнено через 3 секунды.')
+            await ctx.send(f'Через 3 секунды будет удалено {amount} сообщений')
             await asyncio.sleep(3)
             await ctx.channel.purge(limit = amount + 1)
-            await ctx.send(f'удалено {amount} сообщений', delete_after = 5)
+            await ctx.send(f'удалено {amount} сообщений', delete_after = 2)
         if confirm == None:
-            await ctx.send(f'{ctx.author.mention}, для выполнения этой команды мне нужно ваше подтвеждение! (CONFIRM, чувствительно к регистру)')
+            await ctx.send(f'{ctx.author.mention}, для выполнения этой команды мне нужно ваше подтвеждение! (чувствительно к регистру)')
     else:
         emb = discord.Embed(description = f'удалено {amount} сообщений', colour = discord.Color.orange())
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
