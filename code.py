@@ -129,7 +129,6 @@ async def about(ctx, member:discord.Member = None, amount = 1):
     emb.add_field(name = 'Имя', value = member.name)
     emb.add_field(name = 'Никнейм', value = member.nick)
     emb.add_field(name = 'Статус', value = member.status)
-    emb.add_field(name = 'Пользовательский статус', value = member.activity, inline = False)
     emb.add_field(name = f'Роли [{len(member.roles)-1}]', value=' '.join([role.mention for role in member.roles[1:]]), inline = False)
     emb.add_field(name = 'Высшая Роль', value = member.top_role.mention, inline = False)
     emb.add_field(name = 'Бот?', value = member.bot)
@@ -164,7 +163,8 @@ async def mute(ctx, member: discord.Member, time : int, *, arg, amount = 1):
         role = discord.utils.get(ctx.message.guild.roles, name = 'Muted')
         if role is not None:
             await member.add_roles(role)
-            emb = discord.Embed(title = f'Мут от {ctx.author}', colour = member.color, timestamp = ctx.message.created_at)
+            emb = discord.Embed(colour = member.color, timestamp = ctx.message.created_at)
+            emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
             emb.add_field(name = 'В муте', value = f'{member.mention}')
             emb.add_field(name = 'По причине', value = arg)
             emb.add_field(name = 'Время мута в минутах', value = time)
@@ -538,8 +538,9 @@ async def on_ready():
 async def kick(ctx , member: discord.Member, *, reason: str):
     await ctx.channel.purge(limit = 1)
     if member.id != client.owner_id:
-        emb = discord.Embed(title = f'Кик от {ctx.author.name}', colour = member.color)
+        emb = discord.Embed(colour = member.color)
         await member.kick(reason = reason)
+        emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
         emb.add_field(name = 'Был кикнут', value = member.mention)
         emb.add_field(name = 'По причине', value = reason)
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
@@ -555,8 +556,9 @@ async def kick(ctx , member: discord.Member, *, reason: str):
 async def ban(ctx , member: discord.Member, *, reason: str):
     await ctx.channel.purge(limit = 1)
     if member.id != client.owner_id:
-        emb = discord.Embed(title = f'Бан от {ctx.author.name}', colour = member.color)
+        emb = discord.Embed(colour = member.color)
         await member.ban(reason = reason)
+        emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
         emb.add_field(name = 'Был забанен', value = member.mention)
         emb.add_field(name = 'По причине', value = reason)
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
