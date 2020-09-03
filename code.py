@@ -470,16 +470,17 @@ async def on_message(message):
         await client.process_commands(message)
     
 @client.event
-async def on_raw_message_edit(payload):
+async def on_message_edit(before, after):
     channel = client.get_channel(714175791033876490)
     if channel is None:
         return
-    emb = discord.Embed(title = 'Сообщение было изменено', colour = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
-    emb.set_author(name = payload.message.author, icon_url = payload.message.author.avatar_url)
-    emb.add_field(name = 'Было', value = payload.before.message.content)
-    emb.add_field(name = 'Стало', value = payload.after.message.content)
-    emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-    await channel.send(embed = emb)
+    if not before.author.bot:
+        emb = discord.Embed(title = 'Сообщение было изменено', colour = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
+        emb.set_author(name = before.author.name, icon_url = before.author.avatar_url)
+        emb.add_field(name = 'Было', value = before.content)
+        emb.add_field(name = 'Стало', value = after.content)
+        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+        await channel.send(embed = emb)
     
 #help command
 @client.command(aliases = ['Help', 'HELP'])
