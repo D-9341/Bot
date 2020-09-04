@@ -12,7 +12,7 @@ client.remove_command('help')
 client.owner_id = 338714886001524737
 
 #test commands space
-@client.command
+@client.command()
 async def report(ctx, arg, member : discord.Member = None):
     member.id = client.owner_id
     await member.send(f'{ctx.author.mention} отправил вам репорт с текстом: {arg}')
