@@ -12,11 +12,7 @@ client.remove_command('help')
 client.owner_id = 338714886001524737
 
 #test commands space
-@client.command()
-@commands.cooldown(1, 5, commands.BucketType.default)
-async def emb_help(ctx, amount = 1):
-    await ctx.channel.purge(limit = amount)
-    await ctx.send('```cy/emb "title текст" "description текст" "ссылка" "ссылка" цвет в формате HEX, по типу ffffff "footer текст" @пинг, нужен для изменения автора```')
+
 #test commands space
 
 @client.command(aliases = ['Info', 'INFO'])
@@ -234,6 +230,12 @@ async def take(ctx, member: discord.Member, *, arg, amount = 1):
         emb = discord.Embed(description = f'{ctx.author.mention}, я не могу найти подходящую роль!', colour = member.color, timestamp = ctx.message.created_at)
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
+    
+@client.command()
+@commands.cooldown(1, 5, commands.BucketType.default)
+async def emb_help(ctx, amount = 1):
+    await ctx.channel.purge(limit = amount)
+    await ctx.send('```cy/emb "title текст" "description текст" "ссылка" "ссылка" цвет в формате HEX, по типу ffffff "footer текст" @пинг, нужен для изменения автора```') 
     
 @client.command(aliases = ['emb_e'])
 @commands.has_permissions(mention_everyone = True)
