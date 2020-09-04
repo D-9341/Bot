@@ -508,7 +508,7 @@ async def help(ctx, amount = 1):
     emb.add_field(name = 'cy/everyone', value = 'Пишет сообщение от лица бота и пингует @everyone')
     emb.add_field(name = 'cy/edit', value = 'Редактирует сообщение. Формат - cy/edit (id сообщения) сообщение. При использовании на cy/everyone требует повторного пинга everyone', inline = False)
     emb.add_field(name = 'cy/emb_edit', value = 'Редактирует эмбед. Формат - cy/emb_edit (id), аргументы те же самые, что и на эмбед. Работает как и VAULTBOT', inline = False)
-    emb.add_field(name = 'cy/embed', value = 'От лица бота отправляется высоконастраеваемый эмбед. Прочтите #инструкции-cy-bot, чтобы узнать подробнее.')
+    emb.add_field(name = 'cy/embed', value = 'От лица бота отправляется высоконастраеваемый эмбед. Напишите cy/emb_help, чтобы узнать подробнее.')
     emb.add_field(name = 'cy/everyone_embed', value = 'Совмещает в себе команды everyone и embed.')
     emb.add_field(name = 'cy/about', value = 'Показывает информацию о человеке.')
     emb.add_field(name = 'cy/guild', value = 'Показывает информацию о сервере.')
