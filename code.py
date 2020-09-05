@@ -509,6 +509,7 @@ async def help(ctx, amount = 1):
     emb = discord.Embed(title = "Меню команд Cephalon Cy", colour = discord.Color.orange())
     emb.add_field(name = 'cy/info', value = 'Команда для просмотра подробной информации о боте', inline = False)
     emb.add_field(name = 'cy/aliases', value = 'Для просмотра *никнеймов* команд', inline = False)
+    emb.add_field(name = 'cy/avatar', value = 'Показывает аватар человека.')
     emb.add_field(name = 'cy/clear', value = 'Очистка чата.')
     emb.add_field(name = 'cy/rap', value = '.rap')
     emb.add_field(name = 'cy/ping', value = 'Pong!')
