@@ -12,7 +12,10 @@ client.remove_command('help')
 client.owner_id = 338714886001524737
 
 #test commands space
-
+@client.command()
+async def role(ctx, arg, amount = 1):
+    await ctx.channel.purge(limit = 1)
+    role = discord.utils.get(ctx.message.guild.roles, mention = arg)
 #test commands space
 
 @client.command(aliases = ['Info', 'INFO'])
@@ -209,7 +212,7 @@ async def mute(ctx, member: discord.Member, time : int, *, arg, amount = 1):
 @commands.has_permissions(manage_channels = True)
 async def give(ctx, member: discord.Member, *, arg, amount = 1):
     await ctx.channel.purge(limit = amount)
-    role = discord.utils.get(ctx.message.guild.roles, name = arg)
+    role = discord.utils.get(ctx.message.guild.roles, mention = arg)
     if role is not None:
         await member.add_roles(role)
         channel = client.get_channel(714175791033876490)
@@ -228,7 +231,7 @@ async def give(ctx, member: discord.Member, *, arg, amount = 1):
 @commands.has_permissions(manage_channels = True)
 async def take(ctx, member: discord.Member, *, arg, amount = 1):
     await ctx.channel.purge(limit = amount)
-    role = discord.utils.get(ctx.message.guild.roles, name = arg)
+    role = discord.utils.get(ctx.message.guild.roles, mention = arg)
     if role is not None:
         await member.remove_roles(role)
         channel = client.get_channel(714175791033876490)
