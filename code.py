@@ -18,7 +18,8 @@ async def avatar(ctx, member : discord.Member = None, amount = 1):
     await ctx.channel.purge(limit = amount)
     if member == None:
         member = ctx.message.author
-    emb = discord.Embed(colour = member.color)
+    emb = discord.Embed(descriprion = f'[Прямая ссылка]({member.avatar_url})', colour = member.color)
+    emb.set_author(name = ctx.author)
     emb.set_image(url = member.avatar_url)
     emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
     await ctx.send(embed = emb)
