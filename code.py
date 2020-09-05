@@ -17,15 +17,14 @@ client.owner_id = 338714886001524737
 async def role(ctx, arg, amount = 1):
     await ctx.channel.purge(limit = 1)
     role = discord.utils.get(ctx.message.guild.roles, mention = arg)
-    emb = discord.Embed(title = role.name)
+    emb = discord.Embed(title = role.name, colour = ctx.author.color)
     emb.add_field(name = 'ID', value = role.id)
     emb.add_field(name = 'Цвет', value = role.color)
     emb.add_field(name = 'Упоминается?', value = role.mentionable)
     emb.add_field(name = 'Управляется интеграцией?', value = role.managed)
     emb.add_field(name = 'Позиция в списке', value = role.position)
-    emb.add_field(name = 'Создана', value = role.created_at)
+    emb.add_field(name = 'Создана', value = role.created_at.datetime.now(timezone.utc))
     emb.add_field(name = 'Показывает участников отдельно?', value = role.hoist)
-    emb.add_field(name = 'Участники с этой ролью', value = role.members)
     emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
     await ctx.send(embed = emb)
 #test commands space
