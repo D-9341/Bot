@@ -12,21 +12,7 @@ client.remove_command('help')
 client.owner_id = 338714886001524737
 
 #test commands space
-@client.command()
-@commands.cooldown(1, 5, commands.BucketType.default)
-async def role(ctx, arg, amount = 1):
-    await ctx.channel.purge(limit = 1)
-    role = discord.utils.get(ctx.message.guild.roles, mention = arg)
-    emb = discord.Embed(title = role.name, colour = ctx.author.color)
-    emb.add_field(name = 'ID', value = role.id)
-    emb.add_field(name = 'Цвет', value = role.color)
-    emb.add_field(name = 'Упоминается?', value = role.mentionable)
-    emb.add_field(name = 'Управляется интеграцией?', value = role.managed)
-    emb.add_field(name = 'Позиция в списке', value = role.position)
-    emb.add_field(name = 'Создана', value = role.created_at.strftime("%A, %#d %B %Y, %I:%M %p UTC"), inline = False)
-    emb.add_field(name = 'Показывает участников отдельно?', value = role.hoist)
-    emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-    await ctx.send(embed = emb)
+
 #test commands space
 
 @client.command(aliases = ['Info', 'INFO'])
@@ -77,6 +63,16 @@ async def ping(ctx, amount = 1):
     emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
     await ctx.send(embed = emb)
     
+@client.command(aliases = ['.rap'])
+@commands.cooldown(1, 5, commands.BucketType.default)
+async def rap(ctx, amount = 1):
+    await ctx.channel.purge(limit = amount)
+    emb = discord.Embed(colour = ctx.author.color, timestamp = ctx.message.created_at)
+    emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
+    emb.set_image(url = 'https://thumbs.gfycat.com/MessyCarefreeHousefly-size_restricted.gif')
+    emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+    await ctx.send(embed = emb)
+    
 @client.command(aliases = ['ctx'])
 @commands.cooldown(1, 5, commands.BucketType.default)
 async def content(ctx, arg):
@@ -119,13 +115,19 @@ async def guild(ctx, guild : discord.Guild = None, amount = 1):
     emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
     await ctx.send(embed = emb)
     
-@client.command(aliases = ['.rap'])
+@client.command()
 @commands.cooldown(1, 5, commands.BucketType.default)
-async def rap(ctx, amount = 1):
-    await ctx.channel.purge(limit = amount)
-    emb = discord.Embed(colour = ctx.author.color, timestamp = ctx.message.created_at)
-    emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
-    emb.set_image(url = 'https://thumbs.gfycat.com/MessyCarefreeHousefly-size_restricted.gif')
+async def role(ctx, arg, amount = 1):
+    await ctx.channel.purge(limit = 1)
+    role = discord.utils.get(ctx.message.guild.roles, mention = arg)
+    emb = discord.Embed(title = role.name, colour = ctx.author.color)
+    emb.add_field(name = 'ID', value = role.id)
+    emb.add_field(name = 'Цвет', value = role.color)
+    emb.add_field(name = 'Упоминается?', value = role.mentionable)
+    emb.add_field(name = 'Управляется интеграцией?', value = role.managed)
+    emb.add_field(name = 'Позиция в списке', value = role.position)
+    emb.add_field(name = 'Создана', value = role.created_at.strftime("%A, %#d %B %Y, %I:%M %p UTC"), inline = False)
+    emb.add_field(name = 'Показывает участников отдельно?', value = role.hoist)
     emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
     await ctx.send(embed = emb)
     
@@ -543,6 +545,7 @@ async def help(ctx, amount = 1):
     emb.add_field(name = 'cy/ping', value = 'Pong!')
     emb.add_field(name = 'cy/rap', value = '.rap')
     emb.add_field(name = 'cy/remind', value = 'Может напомнить вам что угодно. Формат - cy/remind 10 напоминание')
+    emb.add_field(name = 'cy/role', value = 'Показывает информацию о роли')
     emb.add_field(name = 'cy/say', value = 'Пишет сообщение от лица бота. Всё.')
     emb.add_field(name = 'cy/take', value = 'Забирает роль, писать в формате: take @пинг @роль', inline = False)
     emb.add_field(name = 'cy/unmute', value = 'Принудительный размут игрока. Пример: cy/unmute @StakanDudka64 админ дебил')
