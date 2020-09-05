@@ -23,7 +23,7 @@ async def role(ctx, arg, amount = 1):
     emb.add_field(name = 'Упоминается?', value = role.mentionable)
     emb.add_field(name = 'Управляется интеграцией?', value = role.managed)
     emb.add_field(name = 'Позиция в списке', value = role.position)
-    emb.add_field(name = 'Создана', value = role.created_at.datetime.now(timezone.utc))
+    emb.add_field(name = 'Создана', value = role.created_at.strftime("%A, %#d %B %Y, %I:%M %p UTC"), inline = False)
     emb.add_field(name = 'Показывает участников отдельно?', value = role.hoist)
     emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
     await ctx.send(embed = emb)
