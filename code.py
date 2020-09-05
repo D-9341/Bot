@@ -373,7 +373,7 @@ async def everyone(ctx, *, arg, amount = 1):
 @commands.has_permissions(manage_channels = True)
 async def say(ctx, *, arg, amount = 1):
     await ctx.channel.purge(limit = amount)
-    await ctx.send(arg)
+    await ctx.send(arg, allowed_mentions = None)
     
 @client.command(aliases = ['c', 'C', 'coin', 'Coin', 'COIN', 'Coinflip', 'COINFLIP'])
 @commands.cooldown(5, 10, commands.BucketType.default)
