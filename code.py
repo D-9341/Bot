@@ -12,17 +12,7 @@ client.remove_command('help')
 client.owner_id = 338714886001524737
 
 #test commands space
-@client.command(aliases = ['Avatar', 'AVATAR'])
-@commands.cooldown(1, 5, commands.BucketType.default)
-async def avatar(ctx, member : discord.Member = None, amount = 1):
-    await ctx.channel.purge(limit = amount)
-    if member == None:
-        member = ctx.author
-    emb = discord.Embed(colour = member.color)
-    emb.set_author(name = member)
-    emb.set_image(url = member.avatar_url)
-    emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-    await ctx.send(embed = emb)
+
 #test commands space
 
 @client.command(aliases = ['Info', 'INFO'])
@@ -122,6 +112,18 @@ async def rap(ctx, amount = 1):
     emb = discord.Embed(colour = ctx.author.color, timestamp = ctx.message.created_at)
     emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
     emb.set_image(url = 'https://thumbs.gfycat.com/MessyCarefreeHousefly-size_restricted.gif')
+    emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+    await ctx.send(embed = emb)
+    
+@client.command(aliases = ['Avatar', 'AVATAR'])
+@commands.cooldown(1, 5, commands.BucketType.default)
+async def avatar(ctx, member : discord.Member = None, amount = 1):
+    await ctx.channel.purge(limit = amount)
+    if member == None:
+        member = ctx.author
+    emb = discord.Embed(colour = member.color)
+    emb.set_author(name = member)
+    emb.set_image(url = member.avatar_url)
     emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
     await ctx.send(embed = emb)
     
