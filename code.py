@@ -13,9 +13,21 @@ client.owner_id = 338714886001524737
 
 #test commands space
 @client.command()
+@commands.cooldown(1, 5, commands.BucketType.default)
 async def role(ctx, arg, amount = 1):
     await ctx.channel.purge(limit = 1)
     role = discord.utils.get(ctx.message.guild.roles, mention = arg)
+    emb = discord.Embed(title = role.name)
+    emb.add_field(name = 'ID', value = role.id)
+    emb.add_field(name = 'Цвет', value = role.color)
+    emb.add_field(name = 'Упоминается?', value = role.mentionable)
+    emb.add_field(name = 'Управляется интеграцией?', value = role.managed)
+    emb.add_field(name = 'Позиция в списке', value = role.position)
+    emb.add_field(name = 'Создана', value = role.created_at)
+    emb.add_field(name = 'Показывает участников отдельно?', value = role.hoist)
+    emb.add_field(name = 'Участники с этой ролью', value = role.members)
+    emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+    await ctx.send(embed = emb)
 #test commands space
 
 @client.command(aliases = ['Info', 'INFO'])
@@ -523,7 +535,7 @@ async def help(ctx, amount = 1):
     emb.add_field(name = 'cy/emb_edit', value = 'Редактирует эмбед. Формат - cy/emb_edit (id), аргументы те же самые, что и на эмбед. Работает как и VAULTBOT', inline = False)
     emb.add_field(name = 'cy/everyone', value = 'Пишет сообщение от лица бота и пингует @everyone')
     emb.add_field(name = 'cy/everyone_embed', value = 'Совмещает в себе команды everyone и embed.')
-    emb.add_field(name = 'cy/give', value = 'Выдаёт роль, писать в формате: give @пинг выдаваемая роль', inline = False)
+    emb.add_field(name = 'cy/give', value = 'Выдаёт роль, писать в формате: give @пинг @роль', inline = False)
     emb.add_field(name = 'cy/guild', value = 'Показывает информацию о сервере.')
     emb.add_field(name = 'cy/join', value = 'Бот заходит в голосовой канал.')
     emb.add_field(name = 'cy/kick', value = 'Кик игрока. Формат - cy/kick @StakanDudka64 дебил')
@@ -533,7 +545,7 @@ async def help(ctx, amount = 1):
     emb.add_field(name = 'cy/rap', value = '.rap')
     emb.add_field(name = 'cy/remind', value = 'Может напомнить вам что угодно. Формат - cy/remind 10 напоминание')
     emb.add_field(name = 'cy/say', value = 'Пишет сообщение от лица бота. Всё.')
-    emb.add_field(name = 'cy/take', value = 'Забирает роль, писать в формате: take @пинг забираемая роль', inline = False)
+    emb.add_field(name = 'cy/take', value = 'Забирает роль, писать в формате: take @пинг @роль', inline = False)
     emb.add_field(name = 'cy/unmute', value = 'Принудительный размут игрока. Пример: cy/unmute @StakanDudka64 админ дебил')
     emb.add_field(name = 'Послесловие', value = 'Также, для написания команд необязательно писать префикс, можно пингануть бота.')
     emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
