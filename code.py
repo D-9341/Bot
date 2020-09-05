@@ -12,40 +12,7 @@ client.remove_command('help')
 client.owner_id = 338714886001524737
 
 #test commands space
-@client.command(aliases = ['emb_e'])
-@commands.has_permissions(mention_everyone = True)
-@commands.cooldown(1, 20, commands.BucketType.default)
-async def everyone_embed(ctx, t = None, d = None, msg = None, img = None, f = None, a = None, fu = None, au : discord.Member = None, *, amount = 1):
-    await ctx.channel.purge(limit = amount)
-    if msg == None:
-        msg = '@everyone'
-    else:
-        role = discord.utils.get(ctx.message.guild.roles, mention = msg)
-        await ctx.send(f'{role.mention}')
-        
-    if a == None:
-        a = ctx.author.color
-    else:
-        a = int('0x' + a, 16)
 
-    if au == None:
-        au = ctx.author
-
-    if fu == None:
-        fu = ('Cephalon Cy by сасиска#2472')
-
-    if img == None:
-        img = ('https://steamcommunity.com/profiles/ЦИФРЫ/')
-        
-    if f == None:
-        f = ('https://steamcommunity.com/profiles/ЦИФРЫ/')
-        
-    emb = discord.Embed(title = t, description = d, colour = a)
-    emb.set_author(name = au, icon_url = au.avatar_url)
-    emb.set_image(url = img)
-    emb.set_thumbnail(url = f)
-    emb.set_footer(text = fu)
-    await ctx.send(embed = emb)
 #test commands space
 
 @client.command(aliases = ['Info', 'INFO'])
@@ -298,15 +265,45 @@ async def emb_help(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
     await ctx.send('```cy/emb "title текст" "description текст" "ссылка" "ссылка" цвет в формате HEX, по типу ffffff "footer текст" @пинг, нужен для изменения автора```') 
     
+@client.command(aliases = ['emb_e'])
+@commands.has_permissions(mention_everyone = True)
+@commands.cooldown(1, 20, commands.BucketType.default)
+async def everyone_embed(ctx, t = None, d = None, img = None, f = None, a = None, fu = None, au : discord.Member = None, *, amount = 1):
+    await ctx.channel.purge(limit = amount)    
+    if a == None:
+        a = ctx.author.color
+    else:
+        a = int('0x' + a, 16)
 
+    if au == None:
+        au = ctx.author
+
+    if fu == None:
+        fu = ('Cephalon Cy by сасиска#2472')
+
+    if img == None:
+        img = ('https://steamcommunity.com/profiles/ЦИФРЫ/')
+        
+    if f == None:
+        f = ('https://steamcommunity.com/profiles/ЦИФРЫ/')
+        
+    emb = discord.Embed(title = t, description = d, colour = a)
+    emb.set_author(name = au, icon_url = au.avatar_url)
+    emb.set_image(url = img)
+    emb.set_thumbnail(url = f)
+    emb.set_footer(text = fu)
+    await ctx.send(embed = emb)
     
 @client.command(aliases = ['Embed', 'EMBED', 'emb' , 'Emb', 'EMB'])
 @commands.has_permissions(manage_channels = True)
-async def embed(ctx, t = None, d = None, msg = None, img = None, f = None, a = None, fu = None, au : discord.Member = None, *, amount = 1):
+async def embed(ctx, t = None, d = None, msg = None, img = None, f = None, a = None, fu = None, au : discord.Member = None, ch = None *, amount = 1):
     await ctx.channel.purge(limit = amount)
     if msg is not None:
-        role = discord.utils.get(ctx.message.guild.roles, name = msg)
+        role = discord.utils.get(ctx.message.guild.roles, mention = msg)
         await ctx.send(f'{role.mention}')
+        
+    if ch == None:
+        ch = ctx.message.channel
         
     if a == None:
         a = ctx.author.color
@@ -330,7 +327,7 @@ async def embed(ctx, t = None, d = None, msg = None, img = None, f = None, a = N
     emb.set_image(url = img)
     emb.set_thumbnail(url = f)
     emb.set_footer(text = fu)
-    await ctx.send(embed = emb)
+    await ch.send(embed = emb)
 
 @client.command(aliases = ['emb_ed'])
 @commands.has_permissions(manage_channels = True)
