@@ -304,6 +304,8 @@ async def embed(ctx, t = None, d = None, img = None, f = None, a = None, fu = No
         
     if ch == None:
         ch = ctx.message.channel
+    else:
+        ch = client.get_channel(id = ch)
         
     if a == None:
         a = ctx.author.color
