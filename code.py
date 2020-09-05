@@ -15,11 +15,13 @@ client.owner_id = 338714886001524737
 @client.command(aliases = ['Avatar', 'AVATAR'])
 @commands.cooldown(1, 5, commands.BucketType.default)
 async def avatar(ctx, member : discord.Member = None, amount = 1):
+    await ctx.channel.purge(limit = amount)
     if member == None:
         member = ctx.message.author
     emb = discord.Embed(colour = member.color)
     emb.set_image(url = member.avatar_url)
     emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+    await ctx.send(embed = emb)
 #test commands space
 
 @client.command(aliases = ['Info', 'INFO'])
