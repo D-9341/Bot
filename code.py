@@ -17,7 +17,7 @@ async def emb_ctx(ctx, arg, amount = 1):
     await ctx.channel.purge(limit = amount)
     message = await ctx.fetch_message(id = arg)
     emb = discord.Embed(description = message, title = message, thumbnail = message, image = message, colour = message, author = message)
-    await ctx.send(f'```{emb}```')
+    await ctx.send(f'{emb}')
 #test commands space
 
 @client.command(aliases = ['Info', 'INFO'])
