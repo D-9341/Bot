@@ -263,7 +263,7 @@ async def take(ctx, member: discord.Member, *, arg, amount = 1):
 @commands.cooldown(1, 5, commands.BucketType.default)
 async def emb_help(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
-    await ctx.send('```cy/emb "title текст" "description текст" "ссылка" "ссылка" цвет в формате HEX, по типу ffffff "footer текст" @пинг, нужен для изменения автора```') 
+    await ctx.send('```cy/emb "title текст" "description текст" "ссылка" "ссылка" цвет в формате HEX, по типу ffffff "footer текст" @пинг, нужен для изменения автора @роль, нужен для пинга роли, чтобы её обладатели увидели содержимое эмбеда```') 
     
 @client.command(aliases = ['emb_e'])
 @commands.has_permissions(mention_everyone = True)
@@ -274,19 +274,14 @@ async def everyone_embed(ctx, t = None, d = None, img = None, f = None, a = None
         a = ctx.author.color
     else:
         a = int('0x' + a, 16)
-
     if au == None:
         au = ctx.author
-
     if fu == None:
         fu = ('Cephalon Cy by сасиска#2472')
-
     if img == None:
         img = ('https://steamcommunity.com/profiles/ЦИФРЫ/')
-        
     if f == None:
         f = ('https://steamcommunity.com/profiles/ЦИФРЫ/')
-        
     emb = discord.Embed(title = t, description = d, colour = a)
     emb.set_author(name = au, icon_url = au.avatar_url)
     emb.set_image(url = img)
@@ -301,24 +296,18 @@ async def embed(ctx, t = None, d = None, img = None, f = None, a = None, fu = No
     if msg is not None:
         role = discord.utils.get(ctx.message.guild.roles, mention = msg)
         await ctx.send(f'{role.mention}')
-        
     if a == None:
         a = ctx.author.color
     else:
         a = int('0x' + a, 16)
-        
     if au == None:
         au = ctx.author
-
     if fu == None:
         fu = ('Cephalon Cy by сасиска#2472')
-        
     if img == None:
         img = ('https://steamcommunity.com/profiles/ЦИФРЫ/')
-        
     if f == None:
         f = ('https://steamcommunity.com/profiles/ЦИФРЫ/')
-        
     emb = discord.Embed(title = t, description = d, colour = a)
     emb.set_author(name = au, icon_url = au.avatar_url)
     emb.set_image(url = img)
@@ -334,24 +323,18 @@ async def emb_edit(ctx, arg, t = None, d = None, img = None, f = None, a = None,
     if msg is not None:
         role = discord.utils.get(ctx.message.guild.roles, mention = msg)
         await ctx.send(f'{role.mention}')
-        
     if a == None:
         a = ctx.author.color
     else:
         a = int('0x' + a, 16)
-        
     if au == None:
         au = ctx.author
-        
     if fu == None:
         fu = ('Cephalon Cy by сасиска#2472')
-        
     if img == None:
         img = ('https://steamcommunity.com/profiles/ЦИФРЫ/')
-        
     if f == None:
         f = ('https://steamcommunity.com/profiles/ЦИФРЫ/')
-        
     emb = discord.Embed(title = t, description = d, colour = a)
     emb.set_author(name = au, icon_url = au.avatar_url)
     emb.set_image(url = img)
