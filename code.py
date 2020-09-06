@@ -294,7 +294,7 @@ async def everyone_embed(ctx, t = None, d = None, img = None, f = None, a = None
 async def embed(ctx, t = None, d = None, img = None, f = None, a = None, fu = None, au : discord.Member = None, msg = None, *, amount = 1):
     await ctx.channel.purge(limit = amount)
     if msg is not None:
-        role = discord.utils.get(ctx.message.guild.roles, id = msg)
+        role = discord.utils.get(ctx.message.guild.roles, name = msg)
     if a == None:
         a = ctx.author.color
     else:
