@@ -276,7 +276,7 @@ async def everyone_embed(ctx, t = None, d = None, img = None, f = None, a = None
         a = int('0x' + a, 16)
     if au == None:
         au = ctx.author
-    if fu == 'None':
+    if fu == None:
         fu = ('Cephalon Cy by сасиска#2472')
     if img == None:
         img = ('https://steamcommunity.com/profiles/ЦИФРЫ/')
@@ -301,7 +301,7 @@ async def embed(ctx, t = None, d = None, img = None, f = None, a = None, fu = No
         a = int('0x' + a, 16)
     if au == None:
         au = ctx.author
-    if fu == 'None':
+    if fu == None:
         fu = ('Cephalon Cy by сасиска#2472')
     if img == None:
         img = ('https://steamcommunity.com/profiles/ЦИФРЫ/')
