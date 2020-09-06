@@ -295,6 +295,7 @@ async def embed(ctx, t = None, d = None, img = None, f = None, a = None, fu = No
     await ctx.channel.purge(limit = amount)
     if msg is not None:
         role = discord.utils.get(ctx.message.guild.roles, mention = msg)
+        await ctx.send(f'{role.mention}')
     if a == None:
         a = ctx.author.color
     else:
@@ -312,7 +313,7 @@ async def embed(ctx, t = None, d = None, img = None, f = None, a = None, fu = No
     emb.set_image(url = img)
     emb.set_thumbnail(url = f)
     emb.set_footer(text = fu)
-    await ctx.send(f'{role.mention}', embed = emb)
+    await ctx.send(embed = emb)
 
 @client.command(aliases = ['emb_ed'])
 @commands.has_permissions(manage_channels = True)
