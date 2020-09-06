@@ -263,7 +263,7 @@ async def take(ctx, member: discord.Member, *, arg, amount = 1):
 @commands.cooldown(1, 5, commands.BucketType.default)
 async def emb_help(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
-    await ctx.send('```cy/emb "title текст" "description текст" "ссылка" "ссылка" цвет в формате HEX, по типу ffffff "footer текст" @пинг, нужен для изменения автора ID роли, нужен для пинга роли, чтобы её обладатели увидели содержимое эмбеда(работает только в emb). Должно получится что-то по типу такого - cy/emb "Срантум лох" "Кринжовые правила:" "" "" ff0000 "None" @StakanDudka64 730081220209279016```') 
+    await ctx.send('```cy/emb "title текст" "description текст" "ссылка" "ссылка" цвет в формате HEX, по типу ffffff "footer текст" @пинг, нужен для изменения автора @роль, нужен для пинга роли, чтобы её обладатели увидели содержимое эмбеда(работает только в emb). Должно получится что-то по типу такого - cy/emb "Срантум лох" "Кринжовые правила:" "" "" ff0000 "Cephalon Cy by сасиска#2472" @StakanDudka64 @роль лоховская```') 
     
 @client.command(aliases = ['emb_e'])
 @commands.has_permissions(mention_everyone = True)
@@ -294,7 +294,7 @@ async def everyone_embed(ctx, t = None, d = None, img = None, f = None, a = None
 async def embed(ctx, t = None, d = None, img = None, f = None, a = None, fu = None, au : discord.Member = None, msg = None, *, amount = 1):
     await ctx.channel.purge(limit = amount)
     if msg is not None:
-        role = discord.utils.get(ctx.message.guild.roles, name = msg)
+        role = discord.utils.get(ctx.message.guild.roles, mention = msg)
     if a == None:
         a = ctx.author.color
     else:
