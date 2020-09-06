@@ -268,8 +268,12 @@ async def emb_help(ctx, amount = 1):
 @client.command(aliases = ['emb_e'])
 @commands.has_permissions(mention_everyone = True)
 @commands.cooldown(1, 20, commands.BucketType.default)
-async def everyone_embed(ctx, t = None, d = None, img = None, f = None, a = None, fu = None, au : discord.Member = None, *, amount = 1):
-    await ctx.channel.purge(limit = amount)    
+async def everyone_embed(ctx, t = None, d = None, img = None, f = None, a = None, fu = None, au : discord.Member = None, ch = None, *, amount = 1):
+    await ctx.channel.purge(limit = amount)
+    if ch == None:
+        channel = ctx.message.channel
+    else:
+        channel = client.get_channel(id = ch)
     if a == None:
         a = ctx.author.color
     else:
@@ -287,15 +291,18 @@ async def everyone_embed(ctx, t = None, d = None, img = None, f = None, a = None
     emb.set_image(url = img)
     emb.set_thumbnail(url = f)
     emb.set_footer(text = fu)
-    await ctx.send(embed = emb)
+    await channel.send('@everyone', embed = emb)
     
 @client.command(aliases = ['Embed', 'EMBED', 'emb' , 'Emb', 'EMB'])
 @commands.has_permissions(manage_channels = True)
-async def embed(ctx, t = None, d = None, img = None, f = None, a = None, fu = None, au : discord.Member = None, msg = None, *, amount = 1):
+async def embed(ctx, t = None, d = None, img = None, f = None, a = None, fu = None, au : discord.Member = None, msg = None, ch = None, *, amount = 1):
     await ctx.channel.purge(limit = amount)
     if msg is not None:
         role = discord.utils.get(ctx.message.guild.roles, mention = msg)
-        await ctx.send(f'{role.mention}')
+    if ch == None:
+        channel = ctx.message.channel
+    else:
+        channel = client.get_channel(id = ch)
     if a == None:
         a = ctx.author.color
     else:
@@ -313,7 +320,7 @@ async def embed(ctx, t = None, d = None, img = None, f = None, a = None, fu = No
     emb.set_image(url = img)
     emb.set_thumbnail(url = f)
     emb.set_footer(text = fu)
-    await ctx.send(embed = emb)
+    await channel.send(f'{role.mention}', embed = emb)
 
 @client.command(aliases = ['emb_ed'])
 @commands.has_permissions(manage_channels = True)
@@ -322,7 +329,6 @@ async def emb_edit(ctx, arg, t = None, d = None, img = None, f = None, a = None,
     m = await ctx.fetch_message(id = arg)
     if msg is not None:
         role = discord.utils.get(ctx.message.guild.roles, mention = msg)
-        await ctx.send(f'{role.mention}')
     if a == None:
         a = ctx.author.color
     else:
@@ -340,7 +346,7 @@ async def emb_edit(ctx, arg, t = None, d = None, img = None, f = None, a = None,
     emb.set_image(url = img)
     emb.set_thumbnail(url = f)
     emb.set_footer(text = fu)
-    await m.edit(embed = emb)
+    await m.edit(f'{role.mention}', embed = emb)
     await ctx.send('👌', delete_after = 1)
     
 @client.command(aliases = ['Edit', 'EDIT'])
