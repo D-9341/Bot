@@ -263,24 +263,20 @@ async def take(ctx, member: discord.Member, *, arg, amount = 1):
 @commands.cooldown(1, 5, commands.BucketType.default)
 async def emb_help(ctx, amount = 1):
     await ctx.channel.purge(limit = amount)
-    await ctx.send('```cy/emb "title текст" "description текст" "ссылка" "ссылка" цвет в формате HEX, по типу ffffff "footer текст" @пинг, нужен для изменения автора @роль, нужен для пинга роли, чтобы её обладатели увидели содержимое эмбеда```') 
+    await ctx.send('```cy/emb "title текст" "description текст" "ссылка" "ссылка" цвет в формате HEX, по типу ffffff "footer текст" @пинг, нужен для изменения автора ID роли, нужен для пинга роли, чтобы её обладатели увидели содержимое эмбеда(работает только в emb). Должно получится что-то по типу такого - cy/emb "Срантум лох" "Кринжовые правила:" "" "" ff0000 "None" @StakanDudka64 730081220209279016```') 
     
 @client.command(aliases = ['emb_e'])
 @commands.has_permissions(mention_everyone = True)
 @commands.cooldown(1, 20, commands.BucketType.default)
-async def everyone_embed(ctx, t = None, d = None, img = None, f = None, a = None, fu = None, au : discord.Member = None, ch = None, *, amount = 1):
+async def everyone_embed(ctx, t = None, d = None, img = None, f = None, a = None, fu = None, au : discord.Member = None, *, amount = 1):
     await ctx.channel.purge(limit = amount)
-    if ch == None:
-        channel = ctx.message.channel
-    else:
-        channel = client.get_channel(id = ch)
     if a == None:
         a = ctx.author.color
     else:
         a = int('0x' + a, 16)
     if au == None:
         au = ctx.author
-    if fu == None:
+    if fu == 'None':
         fu = ('Cephalon Cy by сасиска#2472')
     if img == None:
         img = ('https://steamcommunity.com/profiles/ЦИФРЫ/')
@@ -291,25 +287,21 @@ async def everyone_embed(ctx, t = None, d = None, img = None, f = None, a = None
     emb.set_image(url = img)
     emb.set_thumbnail(url = f)
     emb.set_footer(text = fu)
-    await channel.send('@everyone', embed = emb)
+    await ctx.send('@everyone', embed = emb)
     
 @client.command(aliases = ['Embed', 'EMBED', 'emb' , 'Emb', 'EMB'])
 @commands.has_permissions(manage_channels = True)
-async def embed(ctx, t = None, d = None, img = None, f = None, a = None, fu = None, au : discord.Member = None, msg = None, ch = None, *, amount = 1):
+async def embed(ctx, t = None, d = None, img = None, f = None, a = None, fu = None, au : discord.Member = None, msg = None, *, amount = 1):
     await ctx.channel.purge(limit = amount)
     if msg is not None:
-        role = discord.utils.get(ctx.message.guild.roles, mention = msg)
-    if ch == None:
-        channel = ctx.message.channel
-    else:
-        channel = client.get_channel(id = ch)
+        role = discord.utils.get(ctx.message.guild.roles, id = msg)
     if a == None:
         a = ctx.author.color
     else:
         a = int('0x' + a, 16)
     if au == None:
         au = ctx.author
-    if fu == None:
+    if fu == 'None':
         fu = ('Cephalon Cy by сасиска#2472')
     if img == None:
         img = ('https://steamcommunity.com/profiles/ЦИФРЫ/')
@@ -320,15 +312,13 @@ async def embed(ctx, t = None, d = None, img = None, f = None, a = None, fu = No
     emb.set_image(url = img)
     emb.set_thumbnail(url = f)
     emb.set_footer(text = fu)
-    await channel.send(f'{role.mention}', embed = emb)
+    await ctx.send(f'{role.mention}', embed = emb)
 
 @client.command(aliases = ['emb_ed'])
 @commands.has_permissions(manage_channels = True)
-async def emb_edit(ctx, arg, t = None, d = None, img = None, f = None, a = None, fu = None, au : discord.Member = None, msg = None, *, amount = 1):
+async def emb_edit(ctx, arg, t = None, d = None, img = None, f = None, a = None, fu = None, au : discord.Member = None, *, amount = 1):
     await ctx.channel.purge(limit = amount)
     m = await ctx.fetch_message(id = arg)
-    if msg is not None:
-        role = discord.utils.get(ctx.message.guild.roles, mention = msg)
     if a == None:
         a = ctx.author.color
     else:
