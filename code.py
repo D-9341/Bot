@@ -12,17 +12,7 @@ client.remove_command('help')
 client.owner_id = 338714886001524737
 
 #test commands space
-@client.event
-async def on_voice_state_update(member, before, after):
-    if after.channel.id == 742647888424730735:
-        category = discord.utils.get(member.guild.categories, id = 742647888101769236)
-        channel = await member.guild.create_voice_channel(name = f'Комната {member}', category = category)
-        await member.move_to(channel)
-        await channel.set_permissions(member, mute_members = True, move_members = True, manage_channels = True)
-        def check(a,b,c):
-            return len(channel.members) == 0
-        await client.wait_for('voice_state_update', check = check)
-        await channel.delete()
+
 #test commands space
 
 @client.command(aliases = ['Info', 'INFO'])
@@ -189,7 +179,6 @@ async def unmute(ctx, member : discord.Member, *, arg, amount = 1):
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
         
-    
 @client.command(aliases = ['Mute', 'MUTE'])
 @commands.has_permissions(manage_channels = True)
 @commands.cooldown(1, 10, commands.BucketType.default)
@@ -482,6 +471,18 @@ async def on_member_remove(member):
         emb = discord.Embed(description = f'{member.mention}, ну и вали, ботаря, хаха!', colour = discord.Color.orange())
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await channel.send(embed = emb)
+
+@client.event
+async def on_voice_state_update(member, before, after):
+    if after.channel.id == 742647888424730735:
+        category = discord.utils.get(member.guild.categories, id = 742647888101769236)
+        channel = await member.guild.create_voice_channel(name = f'Комната {member}', category = category)
+        await member.move_to(channel)
+        await channel.set_permissions(member, mute_members = True, move_members = True, manage_channels = True)
+        def check(a,b,c):
+            return len(channel.members) == 0
+        await client.wait_for('voice_state_update', check = check)
+        await channel.delete()
 
 @client.event
 async def on_message(message):
