@@ -12,7 +12,17 @@ client.remove_command('help')
 client.owner_id = 338714886001524737
 
 #test commands space
-
+@client.event
+async def on_voice_state_update(member, before, after):
+    if after.channel.id == 742647888424730735:
+        category = discord.utils.get(after.member.guild.categories, id = 742647888101769236)
+        channel = await member.guild.create_voice_channel(name = f'Комната {member}',category = mainCategory)
+        await member.move_to(channel)
+        await channel.set_permissions(member, mute_members = True, move_members = True, manage_channels = True)
+        def check(a,b,c):
+            return len(channel.members) == 0
+        await client.wait_for('voice_state_update', check = check)
+        await channel.delete()
 #test commands space
 
 @client.command(aliases = ['Info', 'INFO'])
@@ -87,16 +97,14 @@ async def remind(ctx, time:int, *, arg, amount = 1):
     emb = discord.Embed(colour = ctx.author.color, timestamp = ctx.message.created_at)
     emb.add_field(name = 'Напомню через', value = f'{time} минут(у, ы)')
     emb.add_field(name = 'О чём напомню?', value = arg)
-    emb.add_field(name = 'Кому?', value = ctx.author.mention)
     emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
     await ctx.send(embed = emb)
     await asyncio.sleep(time*60)
-    await ctx.send(f'{ctx.author.mention}')
     emb = discord.Embed(title = 'Напоминание', colour = ctx.author.color)
     emb.add_field(name = 'Напомнил через', value = f'{time} минут(у, ы)')
     emb.add_field(name = 'Напоминаю о', value = arg)
     emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-    await ctx.send(embed = emb) 
+    await ctx.send(f'{ctx.author.mention}', embed = emb) 
    
 @client.command(aliases = ['Guild', 'GUILD'])
 @commands.cooldown(1, 5, commands.BucketType.default)
@@ -293,9 +301,6 @@ async def everyone_embed(ctx, t = None, d = None, img = None, f = None, a = None
 @commands.has_permissions(manage_channels = True)
 async def embed(ctx, t = None, d = None, img = None, f = None, a = None, fu = None, au : discord.Member = None, msg = None, *, amount = 1):
     await ctx.channel.purge(limit = amount)
-    if msg is not None:
-        role = discord.utils.get(ctx.message.guild.roles, mention = msg)
-        await ctx.send(f'{role.mention}')
     if a == None:
         a = ctx.author.color
     else:
@@ -313,7 +318,11 @@ async def embed(ctx, t = None, d = None, img = None, f = None, a = None, fu = No
     emb.set_image(url = img)
     emb.set_thumbnail(url = f)
     emb.set_footer(text = fu)
-    await ctx.send(embed = emb)
+    if msg is not None:
+        role = discord.utils.get(ctx.message.guild.roles, mention = msg)
+        await ctx.send(f'{role.mention}', embed = emb)
+    else:
+        await ctx.send(embed = emb)
 
 @client.command(aliases = ['emb_ed'])
 @commands.has_permissions(manage_channels = True)
