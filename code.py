@@ -425,7 +425,8 @@ async def join(ctx):
     global vc
     try:
         vc = await channel.connect()
-        await change_voice_state(self_deaf = True)
+        while True:
+            await change_voice_state(self_deaf = True)
     except:
         pass
 
