@@ -359,7 +359,7 @@ async def everyone(ctx, *, arg):
     await ctx.message.delete()
     await ctx.send('@everyone ' + arg)
     
-1 = ['@']
+lis = ['@']
 @client.command(aliases = ['Say', 'SAY'])
 @commands.cooldown(1, 10, commands.BucketType.default)
 @commands.has_permissions(manage_channels = True)
@@ -367,7 +367,7 @@ async def say(ctx, *, arg):
     await ctx.message.delete()
     content = message.content()
     for word in content:
-        if word in 1:
+        if word in lis:
             await ctx.send(f'{ctx.author.mention}, возможно, вы попытались пингануть кого-либо?')
         else:
             await ctx.send(arg)
