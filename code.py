@@ -293,7 +293,7 @@ async def everyone_embed(ctx, t = None, d = None, img = None, f = None, a = None
     
 @client.command(aliases = ['Embed', 'EMBED', 'emb' , 'Emb', 'EMB'])
 @commands.has_permissions(manage_channels = True)
-async def embed(ctx, t = None, d = None, img = None, f = None, a = None, fu = None, au : discord.Member = None, msg = None):
+async def embed(ctx, t = None, d = None, img = None, f = None, a = None, fu = None, au : discord.Member = None, *, msg = None):
     await ctx.message.delete()
     if a == None:
         a = ctx.author.color
