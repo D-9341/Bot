@@ -16,6 +16,7 @@ client.owner_id = 338714886001524737
 #test commands space
 
 @client.command(aliases = ['.пуленепробиваемое-стекло'])
+@commands.cooldown(1, 5, commands.BucketType.default)
 async def bulletproofglass(ctx):
     await ctx.message.delete()
     await ctx.send('https://cdn.discordapp.com/attachments/694530056281915392/752563367549468882/unknown.png')
@@ -265,7 +266,7 @@ async def take(ctx, member: discord.Member, *, arg):
 @commands.cooldown(1, 5, commands.BucketType.default)
 async def emb_help(ctx):
     await ctx.message.delete()
-    await ctx.send('```cy/emb "title текст" "description текст" "ссылка" "ссылка" цвет в формате HEX, по типу ffffff "footer текст" @пинг, нужен для изменения автора @роль, нужен для пинга роли, чтобы её обладатели увидели содержимое эмбеда(работает только в emb). Должно получится что-то по типу такого - cy/emb "Срантум лох" "Кринжовые правила:" "" "" ff0000 "Cephalon Cy by сасиска#2472" @StakanDudka64 @роль лоховская```') 
+    await ctx.send('```cy/emb "title текст" "description текст" "ссылка" "ссылка" цвет в формате HEX, по типу ffffff "footer текст" @пинг, нужен для изменения автора название роли, нужно для пинга роли, чтобы её обладатели увидели содержимое эмбеда(работает только в emb). Должно получится что-то по типу такого - cy/emb "Срантум лох" "Кринжовые правила:" "" "" ff0000 "Cephalon Cy by сасиска#2472" @StakanDudka64 роль лоховская```') 
     
 @client.command(aliases = ['emb_e'])
 @commands.has_permissions(mention_everyone = True)
