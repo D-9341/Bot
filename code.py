@@ -414,6 +414,7 @@ async def on_raw_reaction_remove(payload):
 #бесполезное говно
 @client.command(aliases = ['Join', 'JOIN'])
 async def join(ctx):
+    a = True
     await ctx.message.delete()
     if ctx.author.voice and ctx.author.voice.channel:
         channel = ctx.author.voice.channel
@@ -423,22 +424,16 @@ async def join(ctx):
         await ctx.send(embed = emb)
         return
     global vc
-    try:
-        vc = await channel.connect()
-        while True:
-            await change_voice_state(self_deaf = True)
-    except:
-        pass
+    vc = await channel.connect()
+    while a == True:
+        await change_voice_state(self_deaf = True)
 
 @client.command(aliases = ['Leave', 'LEAVE'])
 async def leave(ctx):
     await ctx.message.delete()
-    try:
-        if vc.is_connected():
-            await vc.disconnect()
-    except:
-        pass
-
+    if vc.is_connected():
+        await vc.disconnect()
+            
 @client.command()
 @commands.has_permissions(administrator = True)
 @commands.cooldown(1, 5, commands.BucketType.default)
