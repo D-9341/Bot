@@ -265,8 +265,8 @@ async def emb_help(ctx, amount = 1):
 @client.command(aliases = ['emb_e'])
 @commands.has_permissions(mention_everyone = True)
 @commands.cooldown(1, 20, commands.BucketType.default)
-async def everyone_embed(ctx, t = None, d = None, img = None, f = None, a = None, fu = None, au : discord.Member = None, *, amount = 1):
-    await ctx.channel.purge(limit = amount)
+async def everyone_embed(ctx, t = None, d = None, img = None, f = None, a = None, fu = None, au : discord.Member = None):
+    await ctx.message.delete()
     if a == None:
         a = ctx.author.color
     else:
