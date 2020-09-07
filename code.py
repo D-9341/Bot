@@ -12,7 +12,10 @@ client.remove_command('help')
 client.owner_id = 338714886001524737
 
 #test commands space
-
+@client.command(aliases = ['.пуленепробиваемое-стекло'])
+async def bulletproofglass(ctx):
+    await ctx.message.delete
+    await ctx.send('https://cdn.discordapp.com/attachments/694530056281915392/752563367549468882/unknown.png')
 #test commands space
 
 @client.command(aliases = ['Info', 'INFO'])
