@@ -17,8 +17,8 @@ client.owner_id = 338714886001524737
 
 @client.command(aliases = ['Info', 'INFO'])
 @commands.cooldown(1, 5, commands.BucketType.default)
-async def info(ctx, amount = 1):
-    await ctx.channel.purge(limit = amount)
+async def info(ctx):
+    await ctx.message.delete()
     emb = discord.Embed(title = 'Welcum to the cum zone', colour = discord.Color.orange())
     emb.set_author(name = client.user.name, icon_url = client.user.avatar_url)
     emb.add_field(name = 'Cephalon', value = '[Cy](https://warframe.fandom.com/wiki/Cephalon_Cy)')
@@ -32,8 +32,8 @@ async def info(ctx, amount = 1):
     
 @client.command()
 @commands.cooldown(1, 5, commands.BucketType.default)
-async def aliases(ctx, amount = 1):
-    await ctx.channel.purge(limit = amount)
+async def aliases(ctx):
+    await ctx.message.delete()
     emb = discord.Embed(description = 'Неочевидные *никнеймы* команд', colour = discord.Color.orange())
     emb.add_field(name = 'invite_cy', value = 'invite, invcy')
     emb.add_field(name = 'rap', value = '.rap')
@@ -49,24 +49,24 @@ async def aliases(ctx, amount = 1):
     
 @client.command(aliases = ['invite', 'invcy'])
 @commands.cooldown(1, 5, commands.BucketType.default)
-async def invite_cy(ctx, amount = 1):
-    await ctx.channel.purge(limit = amount)
+async def invite_cy(ctx):
+    await ctx.message.delete()
     emb = discord.Embed(title = f'Ссылка для быстрого приглашения Cy на сервера', description = 'https://discordapp.com/oauth2/authorize?&client_id=694170281270312991&scope=bot&permissions=8', colour = discord.Color.orange(), timestamp = ctx.message.created_at)
     emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
     await ctx.send(embed = emb)
     
 @client.command(aliases = ['Ping', 'PING'])
 @commands.cooldown(1, 5, commands.BucketType.default)
-async def ping(ctx, amount = 1):
-    await ctx.channel.purge(limit = amount)
+async def ping(ctx):
+    await ctx.message.delete()
     emb = discord.Embed(description = f'Pong! `{round(client.latency * 1000)} ms`', colour = discord.Color.orange(), timestamp = ctx.message.created_at)
     emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
     await ctx.send(embed = emb)
     
 @client.command(aliases = ['.rap'])
 @commands.cooldown(1, 5, commands.BucketType.default)
-async def rap(ctx, amount = 1):
-    await ctx.channel.purge(limit = amount)
+async def rap(ctx):
+    await ctx.message.delete()
     emb = discord.Embed(colour = ctx.author.color, timestamp = ctx.message.created_at)
     emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
     emb.set_image(url = 'https://thumbs.gfycat.com/MessyCarefreeHousefly-size_restricted.gif')
@@ -76,14 +76,14 @@ async def rap(ctx, amount = 1):
 @client.command(aliases = ['ctx'])
 @commands.cooldown(1, 5, commands.BucketType.default)
 async def content(ctx, arg):
-    await ctx.channel.purge(limit = 1)
+    await ctx.message.delete()
     message = await ctx.fetch_message(id = arg)
     await ctx.send(f'```{message.content}```')
     
 @client.command()
 @commands.cooldown(1, 5, commands.BucketType.default)
-async def remind(ctx, time:int, *, arg, amount = 1):
-    await ctx.channel.purge(limit = amount)
+async def remind(ctx, time:int, *, arg):
+    await ctx.message.delete()
     emb = discord.Embed(colour = ctx.author.color, timestamp = ctx.message.created_at)
     emb.add_field(name = 'Напомню через', value = f'{time} минут(у, ы)')
     emb.add_field(name = 'О чём напомню?', value = arg)
@@ -98,9 +98,9 @@ async def remind(ctx, time:int, *, arg, amount = 1):
    
 @client.command(aliases = ['Guild', 'GUILD'])
 @commands.cooldown(1, 5, commands.BucketType.default)
-async def guild(ctx, guild : discord.Guild = None, amount = 1):
+async def guild(ctx, guild : discord.Guild = None):
     guild = ctx.guild if not guild else guild
-    await ctx.channel.purge(limit = amount)
+    await ctx.message.delete()
     emb = discord.Embed(title = f'Информация о {guild}', colour = discord.Color.orange(), timestamp = ctx.message.created_at)
     emb.add_field(name = 'ID сервера', value = guild.id)
     emb.add_field(name = 'Уровень сервера', value = guild.premium_tier)
@@ -115,8 +115,8 @@ async def guild(ctx, guild : discord.Guild = None, amount = 1):
     
 @client.command()
 @commands.cooldown(1, 5, commands.BucketType.default)
-async def role(ctx, arg, amount = 1):
-    await ctx.channel.purge(limit = 1)
+async def role(ctx, arg):
+    await ctx.message.delete()
     role = discord.utils.get(ctx.message.guild.roles, mention = arg)
     emb = discord.Embed(title = role.name, colour = ctx.author.color)
     emb.add_field(name = 'ID', value = role.id)
@@ -131,8 +131,8 @@ async def role(ctx, arg, amount = 1):
     
 @client.command(aliases = ['Avatar', 'AVATAR'])
 @commands.cooldown(1, 5, commands.BucketType.default)
-async def avatar(ctx, member : discord.Member = None, amount = 1):
-    await ctx.channel.purge(limit = amount)
+async def avatar(ctx, member : discord.Member = None):
+    await ctx.message.delete()
     if member == None:
         member = ctx.author
     emb = discord.Embed(colour = member.color)
@@ -143,8 +143,8 @@ async def avatar(ctx, member : discord.Member = None, amount = 1):
     
 @client.command(aliases = ['me', 'Me', 'ME', 'About', 'ABOUT'])
 @commands.cooldown(1, 5, commands.BucketType.default)
-async def about(ctx, member:discord.Member = None, amount = 1):
-    await ctx.channel.purge(limit = amount)
+async def about(ctx, member:discord.Member = None):
+    await ctx.message.delete()
     if member == None:
         member = ctx.message.author
     emb = discord.Embed(title = f'Информация о {member.name}', colour = member.color, timestamp = ctx.message.created_at)
@@ -164,8 +164,8 @@ async def about(ctx, member:discord.Member = None, amount = 1):
     
 @client.command(aliases = ['Unmute', 'UNMUTE'])
 @commands.has_permissions(manage_channels = True)
-async def unmute(ctx, member : discord.Member, *, arg, amount = 1):
-    await ctx.channel.purge(limit = amount)
+async def unmute(ctx, member : discord.Member, *, arg):
+    await ctx.message.delete()
     role = discord.utils.get(ctx.message.guild.roles, name = 'Muted')
     if role is not None:
         await member.remove_roles(role)
@@ -182,8 +182,8 @@ async def unmute(ctx, member : discord.Member, *, arg, amount = 1):
 @client.command(aliases = ['Mute', 'MUTE'])
 @commands.has_permissions(manage_channels = True)
 @commands.cooldown(1, 10, commands.BucketType.default)
-async def mute(ctx, member: discord.Member, time : int, *, arg, amount = 1):
-    await ctx.channel.purge(limit = amount)
+async def mute(ctx, member: discord.Member, time : int, *, arg):
+    await ctx.message.delete()
     if member.id != client.owner_id:
         role = discord.utils.get(ctx.message.guild.roles, name = 'Muted')
         if role is not None:
@@ -220,8 +220,8 @@ async def mute(ctx, member: discord.Member, time : int, *, arg, amount = 1):
         
 @client.command(aliases = ['Give', 'GIVE'])
 @commands.has_permissions(manage_channels = True)
-async def give(ctx, member: discord.Member, *, arg, amount = 1):
-    await ctx.channel.purge(limit = amount)
+async def give(ctx, member: discord.Member, *, arg):
+    await ctx.message.delete()
     role = discord.utils.get(ctx.message.guild.roles, mention = arg)
     if role is not None:
         await member.add_roles(role)
@@ -239,8 +239,8 @@ async def give(ctx, member: discord.Member, *, arg, amount = 1):
     
 @client.command(aliases = ['Take', 'TAKE'])
 @commands.has_permissions(manage_channels = True)
-async def take(ctx, member: discord.Member, *, arg, amount = 1):
-    await ctx.channel.purge(limit = amount)
+async def take(ctx, member: discord.Member, *, arg):
+    await ctx.message.delete()
     role = discord.utils.get(ctx.message.guild.roles, mention = arg)
     if role is not None:
         await member.remove_roles(role)
@@ -258,8 +258,8 @@ async def take(ctx, member: discord.Member, *, arg, amount = 1):
     
 @client.command()
 @commands.cooldown(1, 5, commands.BucketType.default)
-async def emb_help(ctx, amount = 1):
-    await ctx.channel.purge(limit = amount)
+async def emb_help(ctx):
+    await ctx.message.delete()
     await ctx.send('```cy/emb "title текст" "description текст" "ссылка" "ссылка" цвет в формате HEX, по типу ffffff "footer текст" @пинг, нужен для изменения автора @роль, нужен для пинга роли, чтобы её обладатели увидели содержимое эмбеда(работает только в emb). Должно получится что-то по типу такого - cy/emb "Срантум лох" "Кринжовые правила:" "" "" ff0000 "Cephalon Cy by сасиска#2472" @StakanDudka64 @роль лоховская```') 
     
 @client.command(aliases = ['emb_e'])
@@ -288,8 +288,8 @@ async def everyone_embed(ctx, t = None, d = None, img = None, f = None, a = None
     
 @client.command(aliases = ['Embed', 'EMBED', 'emb' , 'Emb', 'EMB'])
 @commands.has_permissions(manage_channels = True)
-async def embed(ctx, t = None, d = None, img = None, f = None, a = None, fu = None, au : discord.Member = None, msg = None, *, amount = 1):
-    await ctx.channel.purge(limit = amount)
+async def embed(ctx, t = None, d = None, img = None, f = None, a = None, fu = None, au : discord.Member = None, msg = None):
+    await ctx.message.delete()
     if a == None:
         a = ctx.author.color
     else:
@@ -315,8 +315,8 @@ async def embed(ctx, t = None, d = None, img = None, f = None, a = None, fu = No
 
 @client.command(aliases = ['emb_ed'])
 @commands.has_permissions(manage_channels = True)
-async def emb_edit(ctx, arg, t = None, d = None, img = None, f = None, a = None, fu = None, au : discord.Member = None, *, amount = 1):
-    await ctx.channel.purge(limit = amount)
+async def emb_edit(ctx, arg, t = None, d = None, img = None, f = None, a = None, fu = None, au : discord.Member = None):
+    await ctx.message.delete()
     m = await ctx.fetch_message(id = arg)
     if a == None:
         a = ctx.author.color
@@ -340,38 +340,38 @@ async def emb_edit(ctx, arg, t = None, d = None, img = None, f = None, a = None,
     
 @client.command(aliases = ['Edit', 'EDIT'])
 @commands.has_permissions(manage_channels = True)
-async def edit(ctx, arg, *, arg1, amount = 1):
-    await ctx.channel.purge(limit = amount)
+async def edit(ctx, arg, *, text):
+    await ctx.message.delete()
     m = await ctx.fetch_message(id = arg)
-    await m.edit(content = arg1)
+    await m.edit(content = text)
     await ctx.send('👌', delete_after = 1)
     
 @client.command(aliases = ['Everyone', 'EVERYONE'])
 @commands.cooldown(1, 20, commands.BucketType.default)
 @commands.has_permissions(mention_everyone = True)
-async def everyone(ctx, *, arg, amount = 1):
-    await ctx.channel.purge(limit = amount)
+async def everyone(ctx, *, arg):
+    await ctx.message.delete()
     await ctx.send('@everyone ' + arg)
     
 @client.command(aliases = ['Say', 'SAY'])
 @commands.cooldown(1, 10, commands.BucketType.default)
 @commands.has_permissions(manage_channels = True)
-async def say(ctx, *, arg, amount = 1):
-    await ctx.channel.purge(limit = amount)
+async def say(ctx, *, arg):
+    await ctx.message.delete()
     await ctx.send(arg, allowed_mentions = None)
     
 @client.command(aliases = ['c', 'C', 'coin', 'Coin', 'COIN', 'Coinflip', 'COINFLIP'])
 @commands.cooldown(5, 10, commands.BucketType.default)
-async def coinflip(ctx, amount = 1):
-    await ctx.channel.purge(limit = amount)
+async def coinflip(ctx):
+    await ctx.message.delete()
     choices = ['Орёл!', 'Решка!']
     rancoin = random.choice(choices)
     await ctx.send(rancoin)
 
 @client.command(aliases = ['Cu', 'CU'])
 @commands.cooldown(1, 5, commands.BucketType.default)
-async def cu(ctx, amount = 1):
-    await ctx.channel.purge(limit = amount)
+async def cu(ctx):
+    await ctx.message.delete()
     await ctx.send('Медь')
     
 #получение роли по эмодзи       
@@ -408,6 +408,7 @@ async def on_raw_reaction_remove(payload):
 #бесполезное говно
 @client.command(aliases = ['Join', 'JOIN'])
 async def join(ctx):
+    await ctx.message.delete()
     if ctx.author.voice and ctx.author.voice.channel:
         channel = ctx.author.voice.channel
     else:
@@ -424,6 +425,7 @@ async def join(ctx):
 
 @client.command(aliases = ['Leave', 'LEAVE'])
 async def leave(ctx):
+    await ctx.message.delete()
     try:
         if vc.is_connected():
             await vc.disconnect()
@@ -433,8 +435,8 @@ async def leave(ctx):
 @client.command()
 @commands.has_permissions(administrator = True)
 @commands.cooldown(1, 5, commands.BucketType.default)
-async def dm(ctx, member: discord.Member, *, arg, amount = 1):
-    await ctx.channel.purge(limit = amount)
+async def dm(ctx, member: discord.Member, *, arg):
+    await ctx.message.delete()
     emb = discord.Embed(description = f'{arg}', colour = member.color)
     emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
     emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
@@ -517,8 +519,8 @@ async def on_message_edit(before, after):
 @client.command(aliases = ['Help', 'HELP'])
 @commands.cooldown(1, 10, commands.BucketType.default)
 @commands.has_permissions(kick_members = True)
-async def help(ctx, amount = 1):
-    await ctx.channel.purge(limit = amount)
+async def help(ctx):
+    await ctx.message.delete()
     emb = discord.Embed(title = "Меню команд Cephalon Cy", colour = discord.Color.orange())
     emb.add_field(name = 'cy/info', value = 'Команда для просмотра подробной информации о боте', inline = False)
     emb.add_field(name = 'cy/about', value = 'Показывает информацию о человеке.')
@@ -551,8 +553,8 @@ async def help(ctx, amount = 1):
     await ctx.send(embed = emb)
 
 @client.command()
-async def time(ctx, amount = 1):
-    await ctx.channel.purge(limit = amount)
+async def time(ctx):
+    await ctx.message.delete()
     date_now = datetime.datetime.now()
     emb = discord.Embed(colour = discord.Color.orange())
     emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
@@ -569,7 +571,7 @@ async def on_ready():
 @commands.cooldown(1, 10, commands.BucketType.default)
 @commands.has_permissions(kick_members = True)
 async def kick(ctx , member: discord.Member, *, reason: str):
-    await ctx.channel.purge(limit = 1)
+    await ctx.message.delete()
     if member.id != client.owner_id:
         emb = discord.Embed(colour = member.color)
         await member.kick(reason = reason)
@@ -587,7 +589,7 @@ async def kick(ctx , member: discord.Member, *, reason: str):
 @commands.cooldown(1, 10, commands.BucketType.default)
 @commands.has_permissions(ban_members = True)
 async def ban(ctx , member: discord.Member, *, reason: str):
-    await ctx.channel.purge(limit = 1)
+    await ctx.message.delete()
     if member.id != client.owner_id:
         emb = discord.Embed(colour = member.color)
         await member.ban(reason = reason)
@@ -606,7 +608,7 @@ async def ban(ctx , member: discord.Member, *, reason: str):
 @commands.cooldown(1, 10, commands.BucketType.default)
 @commands.has_permissions(administrator = True)
 async def clear(ctx, amount : int, confirm : str = None):
-    await ctx.channel.purge(limit = 1)
+    await ctx.message.delete()
     if amount == 1:
         emb = discord.Embed(description = f'удалено {amount} сообщение', colour = discord.Color.orange())
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
