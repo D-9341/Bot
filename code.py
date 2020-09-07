@@ -364,7 +364,10 @@ async def everyone(ctx, *, arg):
 @commands.has_permissions(manage_channels = True)
 async def say(ctx, *, arg):
     await ctx.message.delete()
-    await ctx.send(arg, allowed_mentions = None)
+    try:
+        await ctx.send(arg, allowed_mentions = None)
+    except:
+        await ctx.send(f'{ctx.author.mention}, возможно, вы попытались пингануть кого либо?')
     
 @client.command(aliases = ['c', 'C', 'coin', 'Coin', 'COIN', 'Coinflip', 'COINFLIP'])
 @commands.cooldown(5, 10, commands.BucketType.default)
@@ -414,7 +417,6 @@ async def on_raw_reaction_remove(payload):
 #бесполезное говно
 @client.command(aliases = ['Join', 'JOIN'])
 async def join(ctx):
-    a = True
     await ctx.message.delete()
     if ctx.author.voice and ctx.author.voice.channel:
         channel = ctx.author.voice.channel
@@ -425,8 +427,6 @@ async def join(ctx):
         return
     global vc
     vc = await channel.connect()
-    while a == True:
-        await change_voice_state(self_deaf = True)
 
 @client.command(aliases = ['Leave', 'LEAVE'])
 async def leave(ctx):
