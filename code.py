@@ -16,7 +16,7 @@ client.owner_id = 338714886001524737
 async def emb_content(ctx, arg):
     await ctx.message.delete()
     message = await ctx.fetch_message(id = arg)
-    await ctx.send(message.embeds[0])
+    await ctx.send(message.embeds.title)
 #test commands space
 
 @client.command(aliases = ['.пуленепробиваемое-стекло'])
