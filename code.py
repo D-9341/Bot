@@ -17,10 +17,8 @@ async def emb_content(ctx, arg):
     await ctx.message.delete()
     message = await ctx.fetch_message(id = arg)
     for emb in message.embeds:
-        for title in emb.title:
-            for description in emb.descriprion:
-                for footer in emb.footer:
-                    await ctx.send(f'{emb.title} {emb.description} {emb.footer}')
+        for field in emb.fields:
+            await ctx.send(f'{field.name} {field.value}')
 #test commands space
 
 @client.command(aliases = ['.пуленепробиваемое-стекло'])
@@ -65,7 +63,8 @@ async def aliases(ctx):
 @commands.cooldown(1, 5, commands.BucketType.default)
 async def invite_cy(ctx):
     await ctx.message.delete()
-    emb = discord.Embed(title = f'Ссылка для быстрого приглашения Cy на сервера', description = 'https://discordapp.com/oauth2/authorize?&client_id=694170281270312991&scope=bot&permissions=8', colour = discord.Color.orange(), timestamp = ctx.message.created_at)
+    emb = discord.Embed(colour = discord.Color.orange(), timestamp = ctx.message.created_at)
+    emb.add_field(name = 'Ссылка для быстрого приглашения Cy на сервера', value = 'https://discordapp.com/oauth2/authorize?&client_id=694170281270312991&scope=bot&permissions=8')
     emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
     await ctx.send(embed = emb)
     
