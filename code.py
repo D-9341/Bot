@@ -17,13 +17,10 @@ async def emb_content(ctx, arg):
     await ctx.message.delete()
     message = await ctx.fetch_message(id = arg)
     for emb in message.embeds:
-        for description in emb.fields:
-            for title in emb.fields:
-                for colour in emb.fields:
-                    for footer in emb.fields:
-                        for thumbnail in emb.fields:
-                            for image in emb.fields:
-                                await ctx.send(f'{emb.title} {emb.description} {emb.footer} {emb.colour} {emb.thumbnail} {emb.image}')
+        for title in emb.title:
+            for description in emb.descriprion:
+                for footer in emb.footer:
+                    await ctx.send(f'{emb.title} {emb.description} {emb.footer}')
 #test commands space
 
 @client.command(aliases = ['.пуленепробиваемое-стекло'])
