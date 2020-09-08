@@ -17,8 +17,7 @@ async def emb_content(ctx, arg):
     await ctx.message.delete()
     message = await ctx.fetch_message(id = arg)
     for emb in message.embeds:
-        for field in emb.fields:
-            await ctx.send(f'{emb.description}')
+        await ctx.send(f'{emb.description}')
 #test commands space
 
 @client.command(aliases = ['.пуленепробиваемое-стекло'])
