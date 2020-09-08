@@ -12,12 +12,7 @@ client.remove_command('help')
 client.owner_id = 338714886001524737
 
 #test commands space
-@client.command(aliases = ['emb_ctx'])
-async def emb_content(ctx, arg):
-    await ctx.message.delete()
-    message = await ctx.fetch_message(id = arg)
-    for emb in message.embeds:
-        await ctx.send(f'```cy/emb t& {emb.title} d& {emb.description} f& {emb.footer.text} c& {emb.colour} a& @{emb.author.name} img& {emb.image.url} fu& {emb.thumbnail.url}```')
+
 #test commands space
 
 @client.command(aliases = ['.пуленепробиваемое-стекло'])
@@ -273,6 +268,14 @@ async def take(ctx, member: discord.Member, *, arg):
 async def emb_help(ctx):
     await ctx.message.delete()
     await ctx.send('```cy/emb "title текст" "description текст" "ссылка" "ссылка" цвет в формате HEX, по типу ffffff "footer текст" @пинг, нужен для изменения автора название роли, нужно для пинга роли, чтобы её обладатели увидели содержимое эмбеда(работает только в emb). Должно получится что-то по типу такого - cy/emb "Срантум лох" "Кринжовые правила:" "" "" ff0000 "Cephalon Cy by сасиска#2472" @StakanDudka64 роль лоховская```') 
+    
+@client.command(aliases = ['emb_ctx'])
+@commands.cooldown(1, 5, commands.BucketType.default)
+async def emb_content(ctx, arg):
+    await ctx.message.delete()
+    message = await ctx.fetch_message(id = arg)
+    for emb in message.embeds:
+        await ctx.send(f'```cy/emb t& {emb.title} d& {emb.description} f& {emb.footer.text} c& {emb.colour} a& @{emb.author.name} img& {emb.image.url} fu& {emb.thumbnail.url}```')
     
 @client.command(aliases = ['emb_e'])
 @commands.has_permissions(mention_everyone = True)
@@ -537,6 +540,7 @@ async def help(ctx):
     emb.add_field(name = 'cy/dm', value = 'Пишет участнику любой написанный текст. Формат - cy/dm @пинг сообщение')
     emb.add_field(name = 'cy/edit', value = 'Редактирует сообщение. Формат - cy/edit (id сообщения) сообщение. При использовании на cy/everyone требует повторного пинга everyone', inline = False)
     emb.add_field(name = 'cy/emb', value = 'От лица бота отправляется высоконастраеваемый эмбед. Напишите cy/emb_help, чтобы узнать подробнее.')
+    emb.add_field(name = 'cy/emb_ctx', value = 'Позволяет увидеть контент эмбеда. Формат - cy/emb_ctx ID')
     emb.add_field(name = 'cy/emb_edit', value = 'Редактирует эмбед. Формат - cy/emb_edit (id), аргументы те же самые, что и на эмбед. Работает как и VAULTBOT', inline = False)
     emb.add_field(name = 'cy/everyone', value = 'Пишет сообщение от лица бота и пингует @everyone')
     emb.add_field(name = 'cy/everyone_embed', value = 'Совмещает в себе команды everyone и embed.')
