@@ -341,7 +341,7 @@ async def emb_edit(ctx, arg, t = None, d = None, img = None, f = None, a = None,
     emb.set_image(url = img)
     emb.set_thumbnail(url = f)
     emb.set_footer(text = fu)
-    await m.edit(f'{role.mention}', embed = emb)
+    await m.edit(embed = emb)
     await ctx.send('👌', delete_after = 1)
     
 @client.command(aliases = ['Edit', 'EDIT'])
