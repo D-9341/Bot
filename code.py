@@ -287,10 +287,14 @@ async def everyone_embed(ctx, t = None, d = None, img = None, f = None, a = None
         au = ctx.author
     if fu == None:
         fu = ('Cephalon Cy by сасиска#2472')
+    if img == None:
+        img1 = None
+    if f == None:
+        f1 = None
     emb = discord.Embed(title = t, description = d, colour = a)
     emb.set_author(name = au, icon_url = au.avatar_url)
-    emb.set_image(url = img)
-    emb.set_thumbnail(url = f)
+    emb.set_image(url = img1)
+    emb.set_thumbnail(url = f1)
     emb.set_footer(text = fu)
     await ctx.send('@everyone', embed = emb)
     
@@ -306,10 +310,14 @@ async def embed(ctx, t = None, d = None, img = None, f = None, a = None, fu = No
         au = ctx.author
     if fu == None:
         fu = ('Cephalon Cy by сасиска#2472')
+    if img == None:
+        img1 = None
+    if f == None:
+        f1 = None
     emb = discord.Embed(title = t, description = d, colour = a)
     emb.set_author(name = au, icon_url = au.avatar_url)
-    emb.set_image(url = img)
-    emb.set_thumbnail(url = f)
+    emb.set_image(url = img1)
+    emb.set_thumbnail(url = f1)
     emb.set_footer(text = fu)
     if msg is not None:
         role = discord.utils.get(ctx.message.guild.roles, name = msg)
@@ -330,10 +338,14 @@ async def emb_edit(ctx, arg, t = None, d = None, img = None, f = None, a = None,
         au = ctx.author
     if fu == None:
         fu = ('Cephalon Cy by сасиска#2472')
+    if img == None:
+        img1 = None
+    if f == None:
+        f1 = None
     emb = discord.Embed(title = t, description = d, colour = a)
     emb.set_author(name = au, icon_url = au.avatar_url)
-    emb.set_image(url = img)
-    emb.set_thumbnail(url = f)
+    emb.set_image(url = img1)
+    emb.set_thumbnail(url = f1)
     emb.set_footer(text = fu)
     await m.edit(embed = emb)
     await ctx.send('👌', delete_after = 1)
