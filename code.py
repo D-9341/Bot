@@ -608,7 +608,11 @@ async def ban(ctx , member: discord.Member, *, reason: str):
 @commands.has_permissions(administrator = True)
 async def clear(ctx, amount : int, confirm : str = None):
     await ctx.message.delete()
-    if amount == 1:
+    if amount == 0:
+        emb = discord.Embed(description = 'Ты еблан? Удалять 0 сообщений?', colour = discord.Color.red())
+        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+        await ctx.send(embed = emb, delete_after = 1)
+    elif amount == 1:
         emb = discord.Embed(description = f'удалено {amount} сообщение', colour = discord.Color.orange())
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.channel.purge(limit = amount)
