@@ -17,7 +17,7 @@ async def emb_content(ctx, arg):
     await ctx.message.delete()
     message = await ctx.fetch_message(id = arg)
     for emb in message.embeds:
-        await ctx.send(f'```t& {emb.title} d& {emb.description} fu& {emb.footer} c& {emb.colour} a& {emb.author} img& {emb.image} f& {emb.thumbnail}```')
+        await ctx.send(f'```t& {emb.title} d& {emb.description} fu& {emb.footer.text} c& {emb.colour.value} a& {emb.author.name} img& {emb.image.url} f& {emb.thumbnail.url}```')
 #test commands space
 
 @client.command(aliases = ['.пуленепробиваемое-стекло'])
@@ -288,13 +288,13 @@ async def everyone_embed(ctx, t = None, d = None, img = None, f = None, a = None
     if fu == None:
         fu = ('Cephalon Cy by сасиска#2472')
     if img == None:
-        img1 = None
+        img = ('https://steamcommunity.com/profiles/ЦИФРЫ/')
     if f == None:
-        f1 = None
+        f = ('https://steamcommunity.com/profiles/ЦИФРЫ/')
     emb = discord.Embed(title = t, description = d, colour = a)
     emb.set_author(name = au, icon_url = au.avatar_url)
-    emb.set_image(url = img1)
-    emb.set_thumbnail(url = f1)
+    emb.set_image(url = img)
+    emb.set_thumbnail(url = f)
     emb.set_footer(text = fu)
     await ctx.send('@everyone', embed = emb)
     
@@ -311,13 +311,13 @@ async def embed(ctx, t = None, d = None, img = None, f = None, a = None, fu = No
     if fu == None:
         fu = ('Cephalon Cy by сасиска#2472')
     if img == None:
-        img1 = None
+        img = ('https://steamcommunity.com/profiles/ЦИФРЫ/')
     if f == None:
-        f1 = None
+        f = ('https://steamcommunity.com/profiles/ЦИФРЫ/')
     emb = discord.Embed(title = t, description = d, colour = a)
     emb.set_author(name = au, icon_url = au.avatar_url)
-    emb.set_image(url = img1)
-    emb.set_thumbnail(url = f1)
+    emb.set_image(url = img)
+    emb.set_thumbnail(url = f)
     emb.set_footer(text = fu)
     if msg is not None:
         role = discord.utils.get(ctx.message.guild.roles, name = msg)
@@ -339,13 +339,13 @@ async def emb_edit(ctx, arg, t = None, d = None, img = None, f = None, a = None,
     if fu == None:
         fu = ('Cephalon Cy by сасиска#2472')
     if img == None:
-        img1 = None
+        img = ('https://steamcommunity.com/profiles/ЦИФРЫ/')
     if f == None:
-        f1 = None
+        f = ('https://steamcommunity.com/profiles/ЦИФРЫ/')
     emb = discord.Embed(title = t, description = d, colour = a)
     emb.set_author(name = au, icon_url = au.avatar_url)
-    emb.set_image(url = img1)
-    emb.set_thumbnail(url = f1)
+    emb.set_image(url = img)
+    emb.set_thumbnail(url = f)
     emb.set_footer(text = fu)
     await m.edit(embed = emb)
     await ctx.send('👌', delete_after = 1)
