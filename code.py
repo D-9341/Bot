@@ -611,22 +611,22 @@ async def clear(ctx, amount : int, confirm : str = None):
     if amount == 1:
         emb = discord.Embed(description = f'удалено {amount} сообщение', colour = discord.Color.orange())
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-        await ctx.channel.purge(limit = amount + 1)
+        await ctx.channel.purge(limit = amount)
         await ctx.send(embed = emb, delete_after = 1)
     elif amount == 2:
         emb = discord.Embed(description = f'удалено {amount} сообщения', colour = discord.Color.orange())
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-        await ctx.channel.purge(limit = amount + 1)
+        await ctx.channel.purge(limit = amount)
         await ctx.send(embed = emb, delete_after = 1)
     elif amount == 3:
         emb = discord.Embed(description = f'удалено {amount} сообщения', colour = discord.Color.orange())
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-        await ctx.channel.purge(limit = amount + 1)
+        await ctx.channel.purge(limit = amount)
         await ctx.send(embed = emb, delete_after = 1)
     elif amount == 4:
         emb = discord.Embed(description = f'удалено {amount} сообщения', colour = discord.Color.orange())
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-        await ctx.channel.purge(limit = amount + 1)
+        await ctx.channel.purge(limit = amount)
         await ctx.send(embed = emb, delete_after = 1)
     elif amount >= 10:
         if confirm == 'CONFIRM':
@@ -639,7 +639,7 @@ async def clear(ctx, amount : int, confirm : str = None):
     else:
         emb = discord.Embed(description = f'удалено {amount} сообщений', colour = discord.Color.orange())
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-        await ctx.channel.purge(limit = amount + 1)
+        await ctx.channel.purge(limit = amount)
         await ctx.send(embed = emb, delete_after = 1)
     
 @client.event
