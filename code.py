@@ -12,7 +12,11 @@ client.remove_command('help')
 client.owner_id = 338714886001524737
 
 #test commands space
-
+@client.command()
+async def emb_content(ctx, arg):
+    await ctx.message.delete()
+    message = ctx.fetch_message(id = arg)
+    await ctx.send(f'{message.embeds}')
 #test commands space
 
 @client.command(aliases = ['.пуленепробиваемое-стекло'])
