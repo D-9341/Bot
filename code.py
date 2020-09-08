@@ -611,7 +611,7 @@ async def clear(ctx, amount : int, confirm : str = None):
     if amount == 0:
         emb = discord.Embed(description = 'Ты еблан? Удалять 0 сообщений?', colour = discord.Color.red())
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-        await ctx.send(embed = emb, delete_after = 1)
+        await ctx.send(embed = emb, delete_after = 5)
     elif amount == 1:
         emb = discord.Embed(description = f'удалено {amount} сообщение', colour = discord.Color.orange())
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
