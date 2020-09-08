@@ -287,10 +287,6 @@ async def everyone_embed(ctx, t = None, d = None, img = None, f = None, a = None
         au = ctx.author
     if fu == None:
         fu = ('Cephalon Cy by сасиска#2472')
-    if img == None:
-        img = ('https://steamcommunity.com/profiles/ЦИФРЫ/')
-    if f == None:
-        f = ('https://steamcommunity.com/profiles/ЦИФРЫ/')
     emb = discord.Embed(title = t, description = d, colour = a)
     emb.set_author(name = au, icon_url = au.avatar_url)
     emb.set_image(url = img)
@@ -310,10 +306,6 @@ async def embed(ctx, t = None, d = None, img = None, f = None, a = None, fu = No
         au = ctx.author
     if fu == None:
         fu = ('Cephalon Cy by сасиска#2472')
-    if img == None:
-        img = ('https://steamcommunity.com/profiles/ЦИФРЫ/')
-    if f == None:
-        f = ('https://steamcommunity.com/profiles/ЦИФРЫ/')
     emb = discord.Embed(title = t, description = d, colour = a)
     emb.set_author(name = au, icon_url = au.avatar_url)
     emb.set_image(url = img)
@@ -338,10 +330,6 @@ async def emb_edit(ctx, arg, t = None, d = None, img = None, f = None, a = None,
         au = ctx.author
     if fu == None:
         fu = ('Cephalon Cy by сасиска#2472')
-    if img == None:
-        img = ('https://steamcommunity.com/profiles/ЦИФРЫ/')
-    if f == None:
-        f = ('https://steamcommunity.com/profiles/ЦИФРЫ/')
     emb = discord.Embed(title = t, description = d, colour = a)
     emb.set_author(name = au, icon_url = au.avatar_url)
     emb.set_image(url = img)
