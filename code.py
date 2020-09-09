@@ -142,7 +142,7 @@ async def avatar(ctx, member : discord.Member = None):
     await ctx.message.delete()
     if member == None:
         member = ctx.author
-    emb = discord.Embed(description = f'{member.avatar_url}', colour = member.color)
+    emb = discord.Embed(description = f'[Прямая ссылка]({member.avatar_url})', colour = member.color)
     emb.set_author(name = member)
     emb.set_image(url = member.avatar_url)
     emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
