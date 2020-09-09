@@ -219,7 +219,7 @@ async def mute(ctx, member: discord.Member, time : int, *, arg = None):
                 await ctx.send(embed = emb)
         else:
             await guild.create_role(name = 'Muted', colour = discord.Colour(0x100000))
-            emb = discord.Embed(description = f'{ctx.author.mention}, По причине того, что я не нашёл роль Muted, была создана роль {role.mention}. Повторите команду.', colour = discord.Color.orange())
+            emb = discord.Embed(description = f'{ctx.author.mention}, По причине того, что я не нашёл роль Muted, была создана роль Muted с цветом 0x100000. Повторите команду.', colour = discord.Color.orange())
             emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
             await ctx.send(embed = emb)
     else:
