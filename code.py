@@ -557,7 +557,7 @@ async def help(ctx, arg = None):
     elif arg == 'avatar':
         await ctx.send('```cy/avatar |@пинг|```')
     elif arg == 'ban':
-        await ctx.send('```cy/about <@пинг> |причина|```')
+        await ctx.send('```cy/ban <@пинг> |причина|```')
     elif arg == 'clear':
         await ctx.send('```cy/clear <количество>```')
     elif arg == 'dm':
@@ -587,7 +587,7 @@ async def help(ctx, arg = None):
     elif arg == 'say':
         await ctx.send('```cy/say <текст>```')
     elif arg == 'take':
-        await ctx.send('```cy/about <@пинг> <@роль>```')
+        await ctx.send('```cy/take <@пинг> <@роль>```')
     elif arg == 'unmute':
         await ctx.send('```cy/unmute <@пинг> |причина|```')
 
@@ -598,7 +598,7 @@ async def time(ctx):
     emb = discord.Embed(colour = discord.Color.orange())
     emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
     emb.add_field(name = 'Время по Гринвичу равняется', value = date_now)
-    await ctx.author.send(embed = emb)
+    await ctx.send(embed = emb)
 
 #проверка на подключение
 @client.event
