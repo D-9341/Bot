@@ -125,12 +125,7 @@ async def guild(ctx, guild : discord.Guild = None):
 async def role(ctx, *, arg):
     await ctx.message.delete()
     guild = ctx.guild
-    if arg.startswith('@'):
-        role = discord.utils.get(guild.roles, mention = arg)
-    elif arg == int:
-        role = guild.get_role(id = arg)
-    elif arg == str:
-        role = discord.utils.get(guild.roles, name = arg)
+    role = guild.get_role(id = arg)
     emb = discord.Embed(title = role.name, colour = ctx.author.color)
     emb.add_field(name = 'ID', value = role.id)
     emb.add_field(name = 'Цвет', value = role.color)
@@ -454,8 +449,7 @@ async def join(ctx):
         await ctx.send(embed = emb)
         return
     global vc
-    while True:
-        await ctx.message.guild.change_voice_state(self_deaf = True)
+    await ctx.message.guild.change_voice_state(self_deaf = True)
     vc = await channel.connect()
 
 @client.command(aliases = ['Leave', 'LEAVE'])
