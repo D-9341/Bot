@@ -142,7 +142,7 @@ async def avatar(ctx, member : discord.Member = None):
     await ctx.message.delete()
     if member == None:
         member = ctx.author
-    emb = discord.Embed(colour = member.color)
+    emb = discord.Embed(description = f'{member.avatar_url}' colour = member.color)
     emb.set_author(name = member)
     emb.set_image(url = member.avatar_url)
     emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
@@ -275,10 +275,7 @@ async def emb_content(ctx, arg):
     await ctx.message.delete()
     message = await ctx.fetch_message(id = arg)
     for emb in message.embeds:
-        if colour is not None:
-            await ctx.send(f'```cy/emb t& {emb.title} d& {emb.description} f& {emb.footer.text} c& {emb.colour} a& @{emb.author.name} img& {emb.image.url} fu& {emb.thumbnail.url}```')
-        else:
-            await ctx.send('Возможно, вы написали ID сообщения без эмбеда?')
+        await ctx.send(f'```cy/emb t& {emb.title} d& {emb.description} f& {emb.footer.text} c& {emb.colour} a& @{emb.author.name} img& {emb.image.url} fu& {emb.thumbnail.url}```')
             
 @client.command(aliases = ['emb_e'])
 @commands.has_permissions(mention_everyone = True)
