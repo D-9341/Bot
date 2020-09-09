@@ -122,9 +122,10 @@ async def guild(ctx, guild : discord.Guild = None):
     
 @client.command()
 @commands.cooldown(1, 5, commands.BucketType.default)
-async def role(ctx, arg):
+async def role(ctx, *, arg):
     await ctx.message.delete()
-    role = discord.utils.get(ctx.message.guild.roles, id = arg) or discord.utils.get(ctx.message.guild.roles, name = arg) or discord.utils.get(ctx.message.guild.roles, id = arg)
+    guild = ctx.guild
+    role = guild.get_role(id = arg) or discord.utils.get(guild.roles, name = arg) or discord.utils.get(guild.roles, mention = arg)
     emb = discord.Embed(title = role.name, colour = ctx.author.color)
     emb.add_field(name = 'ID', value = role.id)
     emb.add_field(name = 'Цвет', value = role.color)
