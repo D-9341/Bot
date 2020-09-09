@@ -220,7 +220,7 @@ async def mute(ctx, member: discord.Member, time : int, *, arg = None):
         else:
             await guild.create_role(name = 'Muted', colour = discord.Colour(0x100000))
             emb3 = discord.Embed(description = f'{ctx.author.mention}, По причине того, что я не нашёл роль Muted, была создана роль Muted с цветом 0x100000.', colour = discord.Color.orange())
-            emb3.set_footer(text = 'Cephalon Cy by сасиска#2472')
+            emb3.set_footer(text = 'Это сообщение должно показываться только 1 раз. Иначе, роль была удалена/отредактирована')
             await ctx.send(embed = emb3)
             await asyncio.sleep(3)
             role = discord.utils.get(guild.roles, name = 'Muted')
