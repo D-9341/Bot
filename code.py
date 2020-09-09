@@ -191,9 +191,9 @@ async def unmute(ctx, member : discord.Member, *, arg = None):
 @commands.cooldown(1, 10, commands.BucketType.default)
 async def mute(ctx, member: discord.Member, time : int, *, arg = None):
     await ctx.message.delete()
-    guild = ctx.message.guild
+    guild = ctx.guild
     if member.id != client.owner_id:
-        role = discord.utils.get(ctx.message.guild.roles, name = 'Muted')
+        role = discord.utils.get(guild.roles, name = 'Muted')
         if role is not None:
             await member.add_roles(role)
             emb = discord.Embed(colour = member.color, timestamp = ctx.message.created_at)
