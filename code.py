@@ -125,7 +125,7 @@ async def guild(ctx, guild : discord.Guild = None):
 async def role(ctx, *, arg):
     await ctx.message.delete()
     guild = ctx.guild
-    role = guild.get_role(id = arg)
+    role = discord.utils.get(guild.roles, id = arg)
     emb = discord.Embed(title = role.name, colour = ctx.author.color)
     emb.add_field(name = 'ID', value = role.id)
     emb.add_field(name = 'Цвет', value = role.color)
