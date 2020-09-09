@@ -519,7 +519,7 @@ async def on_message_edit(before, after):
     
 #help command
 @client.command(aliases = ['Help', 'HELP'])
-@commands.cooldown(1, 10, commands.BucketType.default)
+@commands.cooldown(1, 3, commands.BucketType.default)
 @commands.has_permissions(kick_members = True)
 async def help(ctx, arg = None):
     await ctx.message.delete()
