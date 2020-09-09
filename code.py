@@ -171,7 +171,7 @@ async def about(ctx, member:discord.Member = None):
     
 @client.command(aliases = ['Unmute', 'UNMUTE'])
 @commands.has_permissions(manage_channels = True)
-async def unmute(ctx, member : discord.Member, *, arg):
+async def unmute(ctx, member : discord.Member, *, arg = None):
     await ctx.message.delete()
     role = discord.utils.get(ctx.message.guild.roles, name = 'Muted')
     if role is not None:
@@ -189,7 +189,7 @@ async def unmute(ctx, member : discord.Member, *, arg):
 @client.command(aliases = ['Mute', 'MUTE'])
 @commands.has_permissions(manage_channels = True)
 @commands.cooldown(1, 10, commands.BucketType.default)
-async def mute(ctx, member: discord.Member, time : int, *, arg):
+async def mute(ctx, member: discord.Member, time : int, *, arg = None):
     await ctx.message.delete()
     if member.id != client.owner_id:
         role = discord.utils.get(ctx.message.guild.roles, name = 'Muted')
@@ -261,13 +261,7 @@ async def take(ctx, member: discord.Member, *, arg):
     else:
         emb = discord.Embed(description = f'{ctx.author.mention}, я не могу найти подходящую роль!', colour = member.color, timestamp = ctx.message.created_at)
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-        await ctx.send(embed = emb)
-    
-@client.command()
-@commands.cooldown(1, 5, commands.BucketType.default)
-async def emb_help(ctx):
-    await ctx.message.delete()
-    await ctx.send('```cy/emb "title текст" "description текст" "ссылка" "ссылка" цвет в формате HEX, по типу ffffff "footer текст" @пинг, нужен для изменения автора название роли, нужно для пинга роли, чтобы её обладатели увидели содержимое эмбеда(работает только в emb). Должно получится что-то по типу такого - cy/emb "Срантум лох" "Кринжовые правила:" "" "" ff0000 "Cephalon Cy by сасиска#2472" @StakanDudka64 роль лоховская```') 
+        await ctx.send(embed = emb) 
     
 @client.command(aliases = ['emb_ctx'])
 @commands.cooldown(1, 5, commands.BucketType.default)
@@ -527,42 +521,79 @@ async def on_message_edit(before, after):
 @client.command(aliases = ['Help', 'HELP'])
 @commands.cooldown(1, 10, commands.BucketType.default)
 @commands.has_permissions(kick_members = True)
-async def help(ctx, arg):
+async def help(ctx, arg = None):
     await ctx.message.delete()
     if arg == None:
-        emb = discord.Embed(title = "Меню команд Cephalon Cy", colour = discord.Color.orange())
+        emb = discord.Embed(title = "Меню команд Cephalon Cy", description = 'Существует дополнительная помощь по командам, нужно написать cy/help |команда|', colour = discord.Color.orange())
         emb.add_field(name = 'cy/info', value = 'Команда для просмотра подробной информации о боте', inline = False)
         emb.add_field(name = 'cy/about', value = 'Показывает информацию о человеке.')
-        emb.add_field(name = 'cy/aliases', value = 'Для просмотра *никнеймов* команд', inline = False)
+        emb.add_field(name = 'cy/aliases', value = 'Для просмотра ***никнеймов*** команд', inline = False)
         emb.add_field(name = 'cy/avatar', value = 'Показывает аватар человека.')
-        emb.add_field(name = 'cy/ban', value = 'Бан игрока. Формат - cy/ban @StakanDudka64 дебил')
+        emb.add_field(name = 'cy/ban', value = 'Бан игрока.')
         emb.add_field(name = 'cy/clear', value = 'Очистка чата.')
         emb.add_field(name = 'cy/cu', value = 'Медь')
-        emb.add_field(name = 'cy/dm', value = 'Пишет участнику любой написанный текст. Формат - cy/dm @пинг сообщение')
-        emb.add_field(name = 'cy/edit', value = 'Редактирует сообщение. Формат - cy/edit (id сообщения) сообщение. При использовании на cy/everyone требует повторного пинга everyone', inline = False)
-        emb.add_field(name = 'cy/emb', value = 'От лица бота отправляется высоконастраеваемый эмбед. Напишите cy/emb_help, чтобы узнать подробнее.')
-        emb.add_field(name = 'cy/emb_ctx', value = 'Позволяет увидеть контент эмбеда. Формат - cy/emb_ctx ID')
-        emb.add_field(name = 'cy/emb_edit', value = 'Редактирует эмбед. Формат - cy/emb_edit (id), аргументы те же самые, что и на эмбед. Работает как и VAULTBOT', inline = False)
+        emb.add_field(name = 'cy/dm', value = 'Пишет участнику любой написанный текст.')
+        emb.add_field(name = 'cy/edit', value = 'Редактирует сообщение.', inline = False)
+        emb.add_field(name = 'cy/emb', value = 'От лица бота отправляется высоконастраеваемый эмбед. Напишите cy/help emb, чтобы узнать подробнее.')
+        emb.add_field(name = 'cy/emb_ctx', value = 'Позволяет увидеть контент эмбеда.')
+        emb.add_field(name = 'cy/emb_edit', value = 'Редактирует эмбед. Работает как VAULTBOT', inline = False)
+        emb.add_field(name = 'cy/emb_everyone', value = 'Совмещает в себе команды everyone и emb.')
         emb.add_field(name = 'cy/everyone', value = 'Пишет сообщение от лица бота и пингует @everyone')
-        emb.add_field(name = 'cy/everyone_embed', value = 'Совмещает в себе команды everyone и embed.')
-        emb.add_field(name = 'cy/give', value = 'Выдаёт роль, писать в формате: give @пинг @роль', inline = False)
+        emb.add_field(name = 'cy/give', value = 'Выдаёт роль.', inline = False)
         emb.add_field(name = 'cy/guild', value = 'Показывает информацию о сервере.')
         emb.add_field(name = 'cy/join', value = 'Бот заходит в голосовой канал.')
-        emb.add_field(name = 'cy/kick', value = 'Кик игрока. Формат - cy/kick @StakanDudka64 дебил')
+        emb.add_field(name = 'cy/kick', value = 'Кик игрока.')
         emb.add_field(name = 'cy/leave', value = 'Бот выходит из голосового канала.')
-        emb.add_field(name = 'cy/mute', value = 'Мут игрока. Формат - cy/mute @StakanDudka64 10 (время измеряется в минутах) дебил. По прошествии времени мут автоматически слетает.', inline = False)
+        emb.add_field(name = 'cy/mute', value = 'Мут игрока.', inline = False)
         emb.add_field(name = 'cy/ping', value = 'Pong!')
         emb.add_field(name = 'cy/rap', value = '.rap')
-        emb.add_field(name = 'cy/remind', value = 'Может напомнить вам что угодно. Формат - cy/remind 10 напоминание')
+        emb.add_field(name = 'cy/remind', value = 'Может напомнить вам о событии, которое вы не хотите пропустить.')
         emb.add_field(name = 'cy/role', value = 'Показывает информацию о роли')
-        emb.add_field(name = 'cy/say', value = 'Пишет сообщение от лица бота. Всё.')
-        emb.add_field(name = 'cy/take', value = 'Забирает роль, писать в формате: take @пинг @роль', inline = False)
-        emb.add_field(name = 'cy/unmute', value = 'Принудительный размут игрока. Пример: cy/unmute @StakanDudka64 админ дебил')
+        emb.add_field(name = 'cy/say', value = 'Пишет сообщение от лица бота.')
+        emb.add_field(name = 'cy/take', value = 'Забирает роль.', inline = False)
+        emb.add_field(name = 'cy/unmute', value = 'Принудительный размут игрока.')
         emb.add_field(name = 'Послесловие', value = 'Также, для написания команд необязательно писать префикс, можно пингануть бота.')
+        emb.add_field(name = 'Обозначение символов cy/help', value = '|| - опционально, <> - обязательно')
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
+    elif arg == 'about':
+        await ctx.send('```cy/about |@пинг|```')
+    elif arg == 'avatar':
+        await ctx.send('```cy/avatar |@пинг|```')
+    elif arg == 'ban':
+        await ctx.send('```cy/about <@пинг> |причина|```')
+    elif arg == 'clear':
+        await ctx.send('```cy/clear <количество>```')
+    elif arg == 'dm':
+        await ctx.send('```cy/dm <@пинг> <текст>```')
+    elif arg == 'edit':
+        await ctx.send('```cy/edit <ID> <новый текст>```')
+    elif arg == 'emb':
+        await ctx.send('```cy/emb |title текст| |description текст| |ссылка| |ссылка| |цвет| |footer текст| |@пинг| |@роль|```')
+    elif arg == 'emb_ctx':
+        await ctx.send('```cy/emb_ctx <ID>```')
+    elif arg == 'emb_edit':
+        await ctx.send('```cy/emb_edit <ID> |title текст| |description текст| |ссылка| |ссылка| |цвет| |footer текст| |@пинг| |@роль|```')
+    elif arg == 'emb_everyone':
+        await ctx.send('```cy/emb_everyone <текст>```')
+    elif arg == 'everyone':
+        await ctx.send('```cy/everyone <текст>```')
+    elif arg == 'give':
+        await ctx.send('```cy/give <@пинг> <@роль>```')
+    elif arg == 'kick':
+        await ctx.send('```cy/kick <@пинг> |причина|```')
+    elif arg == 'mute':
+        await ctx.send('```cy/mute <@пинг> <время> |причина|```')
+    elif arg == 'remind':
+        await ctx.send('```cy/remind <время> <текст>```')
+    elif arg == 'role':
+        await ctx.send('```cy/role <@роль>```')
     elif arg == 'say':
-        await ctx.send('`cy/say <текст>`')
+        await ctx.send('```cy/say <текст>```')
+    elif arg == 'take':
+        await ctx.send('```cy/about <@пинг> <@роль>```')
+    elif arg == 'unmute':
+        await ctx.send('```cy/unmute <@пинг> |причина|```')
 
 @client.command()
 async def time(ctx):
@@ -582,7 +613,7 @@ async def on_ready():
 @client.command(aliases = ['Kick', 'KICK'])
 @commands.cooldown(1, 10, commands.BucketType.default)
 @commands.has_permissions(kick_members = True)
-async def kick(ctx , member: discord.Member, *, reason: str):
+async def kick(ctx , member: discord.Member, *, reason: str = None):
     await ctx.message.delete()
     if member.id != client.owner_id:
         emb = discord.Embed(colour = member.color)
@@ -600,7 +631,7 @@ async def kick(ctx , member: discord.Member, *, reason: str):
 @client.command(aliases = ['Ban', 'BAN'])
 @commands.cooldown(1, 10, commands.BucketType.default)
 @commands.has_permissions(ban_members = True)
-async def ban(ctx , member: discord.Member, *, reason: str):
+async def ban(ctx , member: discord.Member, *, reason: str = None):
     await ctx.message.delete()
     if member.id != client.owner_id:
         emb = discord.Embed(colour = member.color)
