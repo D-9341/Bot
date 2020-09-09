@@ -524,8 +524,7 @@ async def on_message_edit(before, after):
 async def help(ctx, arg = None):
     await ctx.message.delete()
     if arg == None:
-        emb = discord.Embed(title = "Меню команд Cephalon Cy", colour = discord.Color.orange())
-        emb.add_field(name = 'cy/info', value = 'Команда для просмотра подробной информации о боте', inline = False)
+        emb = discord.Embed(title = "Меню команд Cephalon Cy", description = 'существует дополнительная помощь по командам, пропишите cy/help команда', colour = discord.Color.orange())
         emb.add_field(name = 'cy/about', value = 'Показывает информацию о человеке.')
         emb.add_field(name = 'cy/aliases', value = 'Для просмотра **никнеймов** команд', inline = False)
         emb.add_field(name = 'cy/avatar', value = 'Показывает аватар человека.')
