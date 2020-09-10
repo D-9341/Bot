@@ -451,8 +451,6 @@ async def leave(ctx):
     await ctx.message.delete()
     if vc.is_connected():
         await vc.disconnect()
-    else:
-        await ctx.send('Я и так не в канале еблан блять тупой')
             
 @client.command()
 @commands.has_permissions(administrator = True)
