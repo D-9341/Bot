@@ -13,11 +13,11 @@ client.owner_id = 338714886001524737
 
 #test commands space
 @client.command()
-async def someone(ctx, member: discord.Member = None):
-    for member in guild.members:
-        members = [guild.members]
-        rand = random.choice(members)
-        await ctx.send(f'@{rand}')
+async def someone(ctx):
+    for a in guild.members:
+        a = [guild.members]
+        rand = random.choice(a)
+        await ctx.send(rand)
 #test commands space
 
 @client.command(aliases = ['.пуленепробиваемое-стекло'])
