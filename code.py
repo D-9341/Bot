@@ -122,7 +122,7 @@ async def guild(ctx, guild : discord.Guild = None):
     
 @client.command()
 @commands.cooldown(1, 5, commands.BucketType.default)
-async def role(ctx, role: discord.Role):
+async def role(ctx, *, role: discord.Role):
     await ctx.message.delete()
     emb = discord.Embed(title = role.name, colour = ctx.author.color)
     emb.add_field(name = 'ID', value = role.id)
