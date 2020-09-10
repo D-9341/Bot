@@ -149,7 +149,7 @@ async def avatar(ctx, member : discord.Member = None):
     
 @client.command(aliases = ['me', 'Me', 'ME', 'About', 'ABOUT'])
 @commands.cooldown(1, 5, commands.BucketType.default)
-async def about(ctx, member:discord.Member = None):
+async def about(ctx, member: discord.Member = None):
     await ctx.message.delete()
     if member == None:
         member = ctx.message.author
@@ -248,9 +248,8 @@ async def mute(ctx, member: discord.Member, time : int, *, arg = None):
         
 @client.command(aliases = ['Give', 'GIVE'])
 @commands.has_permissions(manage_channels = True)
-async def give(ctx, member: discord.Member, *, arg):
+async def give(ctx, member: discord.Member, *, role: discord.Role):
     await ctx.message.delete()
-    role = discord.utils.get(ctx.message.guild.roles, mention = arg)
     if role is not None:
         await member.add_roles(role)
         channel = client.get_channel(714175791033876490)
@@ -267,9 +266,8 @@ async def give(ctx, member: discord.Member, *, arg):
     
 @client.command(aliases = ['Take', 'TAKE'])
 @commands.has_permissions(manage_channels = True)
-async def take(ctx, member: discord.Member, *, arg):
+async def take(ctx, member: discord.Member, *, role: discord.Role):
     await ctx.message.delete()
-    role = discord.utils.get(ctx.message.guild.roles, mention = arg)
     if role is not None:
         await member.remove_roles(role)
         channel = client.get_channel(714175791033876490)
@@ -318,7 +316,7 @@ async def everyone_embed(ctx, t = None, d = None, img = None, f = None, a = None
     
 @client.command(aliases = ['Embed', 'EMBED', 'emb' , 'Emb', 'EMB'])
 @commands.has_permissions(manage_channels = True)
-async def embed(ctx, t = None, d = None, img = None, f = None, a = None, fu = None, au : discord.Member = None, *, msg = None):
+async def embed(ctx, t = None, d = None, img = None, f = None, a = None, fu = None, au : discord.Member = None, *, role: discord.Role = None):
     await ctx.message.delete()
     if a == None:
         a = ctx.author.color
@@ -337,8 +335,7 @@ async def embed(ctx, t = None, d = None, img = None, f = None, a = None, fu = No
     emb.set_image(url = img)
     emb.set_thumbnail(url = f)
     emb.set_footer(text = fu)
-    if msg is not None:
-        role = discord.utils.get(ctx.message.guild.roles, name = msg)
+    if role is not None:
         await ctx.send(f'{role.mention}', embed = emb)
     else:
         await ctx.send(embed = emb)
@@ -454,6 +451,8 @@ async def leave(ctx):
     await ctx.message.delete()
     if vc.is_connected():
         await vc.disconnect()
+    else:
+        await ctx.send('Я и так не в канале еблан блять тупой')
             
 @client.command()
 @commands.has_permissions(administrator = True)
@@ -574,43 +573,43 @@ async def help(ctx, arg = None):
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
     elif arg == 'about':
-        await ctx.send('```cy/about |@пинг|```')
+        await ctx.send('```cy/about |@пинг/имя/ID|```')
     elif arg == 'avatar':
-        await ctx.send('```cy/avatar |@пинг|```')
+        await ctx.send('```cy/avatar |@пинг/имя/ID|```')
     elif arg == 'ban':
-        await ctx.send('```cy/ban <@пинг> |причина|```')
+        await ctx.send('```cy/ban <@пинг/имя/ID> |причина|```')
     elif arg == 'clear':
         await ctx.send('```cy/clear <количество>```')
     elif arg == 'dm':
-        await ctx.send('```cy/dm <@пинг> <текст>```')
+        await ctx.send('```cy/dm <@пинг/имя/ID> <текст>```')
     elif arg == 'edit':
         await ctx.send('```cy/edit <ID> <новый текст>```')
     elif arg == 'emb':
-        await ctx.send('```cy/emb |title текст| |description текст| |ссылка| |ссылка| |цвет| |footer текст| |@пинг| |@роль|```')
+        await ctx.send('```cy/emb |title текст| |description текст| |ссылка| |ссылка| |цвет| |footer текст| |@пинг| |@роль/имя роли/ID роли|```')
     elif arg == 'emb_ctx':
         await ctx.send('```cy/emb_ctx <ID>```')
     elif arg == 'emb_edit':
-        await ctx.send('```cy/emb_edit <ID> |title текст| |description текст| |ссылка| |ссылка| |цвет| |footer текст| |@пинг| |@роль|```')
+        await ctx.send('```cy/emb_edit <ID> |title текст| |description текст| |ссылка| |ссылка| |цвет| |footer текст| |@пинг| |@роль/имя роли/ID роли|```')
     elif arg == 'emb_everyone':
         await ctx.send('```cy/emb_everyone <текст>```')
     elif arg == 'everyone':
         await ctx.send('```cy/everyone <текст>```')
     elif arg == 'give':
-        await ctx.send('```cy/give <@пинг> <@роль>```')
+        await ctx.send('```cy/give <@пинг/имя/ID> <@роль/имя роли/ID роли>```')
     elif arg == 'kick':
-        await ctx.send('```cy/kick <@пинг> |причина|```')
+        await ctx.send('```cy/kick <@пинг/имя/ID> |причина|```')
     elif arg == 'mute':
-        await ctx.send('```cy/mute <@пинг> <время> |причина|```')
+        await ctx.send('```cy/mute <@пинг/имя/ID> <время> |причина|```')
     elif arg == 'remind':
         await ctx.send('```cy/remind <время> <текст>```')
     elif arg == 'role':
-        await ctx.send('```cy/role <@роль>```')
+        await ctx.send('```cy/role <@роль/имя роли/ID роли>```')
     elif arg == 'say':
         await ctx.send('```cy/say <текст>```')
     elif arg == 'take':
-        await ctx.send('```cy/take <@пинг> <@роль>```')
+        await ctx.send('```cy/take <@пинг/имя/ID> <@роль/имя роли/ID роли>```')
     elif arg == 'unmute':
-        await ctx.send('```cy/unmute <@пинг> |причина|```')
+        await ctx.send('```cy/unmute <@пинг/имя/ID> |причина|```')
 
 @client.command()
 async def time(ctx):
@@ -670,9 +669,9 @@ async def ban(ctx , member: discord.Member, *, reason: str = None):
 async def clear(ctx, amount : int, confirm : str = None):
     await ctx.message.delete()
     if amount == 0:
-        emb = discord.Embed(description = 'Ты еблан? Удалять 0 сообщений?', colour = discord.Color.red())
+        emb = discord.Embed(description = 'Удалять 0 сообщений? Ты еблан?', colour = discord.Color.red())
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-        await ctx.send(embed = emb, delete_after = 5)
+        await ctx.send(embed = emb, delete_after = 3)
     elif amount == 1:
         emb = discord.Embed(description = f'удалено {amount} сообщение', colour = discord.Color.orange())
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
@@ -700,7 +699,9 @@ async def clear(ctx, amount : int, confirm : str = None):
             await ctx.channel.purge(limit = amount + 1)
             await ctx.send(f'удалено {amount} сообщений', delete_after = 2)
         if confirm == None:
-            await ctx.send(f'{ctx.author.mention}, для выполнения этой команды мне нужно ваше подтвеждение! (чувствительно к регистру)')
+            emb = discord.Embed(description = f'{ctx.author.mention}, для выполнения этой команды мне нужно ваше подтвеждение! (чувствительно к регистру)', colour = discord.Color.orange())
+            emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+            await ctx.send(embed = emb)
     else:
         emb = discord.Embed(description = f'удалено {amount} сообщений', colour = discord.Color.orange())
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
