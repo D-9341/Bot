@@ -521,6 +521,11 @@ async def on_message(message):
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await channel.send(embed = emb)
         await client.process_commands(message)
+    if message.content.startswith('@someone'):
+        for member in guild.members:
+            rand = random.choice(guild.members)
+            await message.send(rand)
+            await client.process_commands(message)
     
 @client.event
 async def on_message_edit(before, after):
