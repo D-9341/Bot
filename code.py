@@ -12,7 +12,12 @@ client.remove_command('help')
 client.owner_id = 338714886001524737
 
 #test commands space
-
+@client.command()
+async def someone(ctx, member: discord.Member):
+    for member in guild.members:
+        members = [guild.members]
+        rand = random.choice(members)
+        await ctx.send(f'@{rand}')
 #test commands space
 
 @client.command(aliases = ['.пуленепробиваемое-стекло'])
@@ -521,11 +526,7 @@ async def on_message(message):
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await channel.send(embed = emb)
         await client.process_commands(message)
-    if message.content.startswith('@someone'):
-        for member in guild.members:
-            rand = random.choice(guild.members)
-            await message.send(rand)
-            await client.process_commands(message)
+
     
 @client.event
 async def on_message_edit(before, after):
