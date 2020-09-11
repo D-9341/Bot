@@ -1,4 +1,3 @@
-import youtube_dl
 import asyncio
 import random
 import datetime
@@ -28,7 +27,7 @@ async def info(ctx):
     emb = discord.Embed(title = 'Welcum to the cum zone', colour = discord.Color.orange())
     emb.set_author(name = client.user.name, icon_url = client.user.avatar_url)
     emb.add_field(name = 'Cephalon', value = '[Cy](https://warframe.fandom.com/wiki/Cephalon_Cy)')
-    emb.add_field(name = 'Версия', value = '0.12.7.8735')
+    emb.add_field(name = 'Версия', value = '0.12.7.8824')
     emb.add_field(name = 'Написан на', value = 'discord.py')
     emb.add_field(name = 'Разработчик', value = 'Написано в футере, ха!')
     emb.add_field(name = 'Веб-сайт', value = '`http://ru-unioncraft.ru/`')
@@ -218,9 +217,9 @@ async def mute(ctx, member: discord.Member, time : int, *, arg = None):
                 await ctx.send(embed = emb)
         else:
             await guild.create_role(name = 'Muted', colour = discord.Colour(0x100000))
-            emb3 = discord.Embed(description = f'{ctx.author.mention}, По причине того, что я не нашёл нужную роль, была создана роль Muted с цветом 0x100000.', colour = discord.Color.orange())
-            emb3.set_footer(text = 'Это сообщение должно показываться только 1 раз. Иначе, роль была удалена/отредактирована')
-            await ctx.send(embed = emb3)
+            emb1 = discord.Embed(description = f'{ctx.author.mention}, По причине того, что я не нашёл нужную роль, была создана роль Muted с цветом 0x100000.', colour = discord.Color.orange())
+            emb1.set_footer(text = 'Это сообщение должно показываться только 1 раз. Иначе, роль была удалена/отредактирована')
+            await ctx.send(embed = emb1)
             await asyncio.sleep(3)
             role = discord.utils.get(guild.roles, name = 'Muted')
             await member.add_roles(role)
@@ -288,10 +287,7 @@ async def emb_content(ctx, arg):
     await ctx.message.delete()
     message = await ctx.fetch_message(id = arg)
     for emb in message.embeds:
-        if emb is not None:
-            await ctx.send(f'```cy/emb t& {emb.title} d& {emb.description} f& {emb.footer.text} c& {emb.colour} a& @{emb.author.name} img& {emb.image.url} fu& {emb.thumbnail.url}```')
-        else:
-            await ctx.send(f'{ctx.author.mention}, возможно, вы дали мне ID сообщения без эмбеда?')
+        await ctx.send(f'```cy/emb t& {emb.title} d& {emb.description} f& {emb.footer.text} c& {emb.colour} a& @{emb.author.name} img& {emb.image.url} fu& {emb.thumbnail.url}```')
             
 @client.command(aliases = ['emb_e'])
 @commands.has_permissions(mention_everyone = True)
