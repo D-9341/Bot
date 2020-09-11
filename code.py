@@ -288,7 +288,7 @@ async def emb_content(ctx, arg):
     await ctx.message.delete()
     message = await ctx.fetch_message(id = arg)
     for emb in message.embeds:
-        if emb.colour is not None:
+        if emb is not None:
             await ctx.send(f'```cy/emb t& {emb.title} d& {emb.description} f& {emb.footer.text} c& {emb.colour} a& @{emb.author.name} img& {emb.image.url} fu& {emb.thumbnail.url}```')
         else:
             await ctx.send(f'{ctx.author.mention}, возможно, вы дали мне ID сообщения без эмбеда?')
