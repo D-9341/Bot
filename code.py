@@ -608,7 +608,9 @@ async def help(ctx, arg = None):
     elif arg == 'unmute':
         await ctx.send('```cy/unmute <@пинг/имя/ID> |причина|```')
     else:
-        await ctx.send(f'{ctx.author.mention} для этой команды не требуется помощь, так как ей не нужны аргументы')
+        emb = discord.Embed(description = 'Для этой команды не требуется помощь, так как ей не нужны аргументы', colour = discord.Color.orange())
+        emb.set_footer(text = 'Хотя, возможно, вы ввели команду неправильно?')
+        await ctx.send(embed = emb)
 
 @client.command()
 async def time(ctx):
