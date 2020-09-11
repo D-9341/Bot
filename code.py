@@ -123,7 +123,7 @@ async def guild(ctx, guild : discord.Guild = None):
 @commands.cooldown(1, 5, commands.BucketType.default)
 async def role(ctx, *, role: discord.Role):
     await ctx.message.delete()
-    emb = discord.Embed(title = role.name, colour = ctx.author.color)
+    emb = discord.Embed(title = role.name, colour = role.colour)
     emb.add_field(name = 'ID', value = role.id)
     emb.add_field(name = 'Цвет', value = role.color)
     emb.add_field(name = 'Упоминается?', value = role.mentionable)
