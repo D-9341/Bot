@@ -542,7 +542,7 @@ async def on_message_edit(before, after):
 async def help(ctx, arg = None):
     await ctx.message.delete()
     if arg == None:
-        emb = discord.Embed(title = "Меню команд Cephalon Cy", description = 'существует дополнительная помощь по командам, пропишите cy/help команда', colour = discord.Color.orange())
+        emb = discord.Embed(title = "Меню команд Cephalon Cy", description = 'Существует дополнительная помощь по командам, пропишите cy/help |команда|', colour = discord.Color.orange())
         emb.add_field(name = 'cy/about', value = 'Показывает информацию о человеке.')
         emb.add_field(name = 'cy/aliases', value = 'Для просмотра **никнеймов** команд', inline = False)
         emb.add_field(name = 'cy/avatar', value = 'Показывает аватар человека.')
@@ -566,7 +566,6 @@ async def help(ctx, arg = None):
         emb.add_field(name = 'cy/say', value = 'Пишет сообщение от лица бота.')
         emb.add_field(name = 'cy/take', value = 'Забирает роль.', inline = False)
         emb.add_field(name = 'cy/unmute', value = 'Принудительный размут игрока.')
-        emb.add_field(name = 'Послесловие', value = 'Также, для написания команд необязательно писать префикс, можно пингануть бота.')
         emb.add_field(name = 'Обозначение символов cy/help', value = '|| - опционально, <> - обязательно')
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
@@ -608,6 +607,8 @@ async def help(ctx, arg = None):
         await ctx.send('```cy/take <@пинг/имя/ID> <@роль/имя роли/ID роли>```')
     elif arg == 'unmute':
         await ctx.send('```cy/unmute <@пинг/имя/ID> |причина|```')
+    else:
+        await ctx.send(f'{ctx.author.mention} для этой команды не требуется помощь, так как ей не нужны аргументы')
 
 @client.command()
 async def time(ctx):
