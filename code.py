@@ -11,7 +11,17 @@ client.remove_command('help')
 client.owner_id = 338714886001524737
 
 #test commands space
+
+#test commands space
+
+@client.command(aliases = ['.пуленепробиваемое-стекло'])
+@commands.cooldown(1, 5, commands.BucketType.default)
+async def bulletproofglass(ctx):
+    await ctx.message.delete()
+    await ctx.send('https://cdn.discordapp.com/attachments/694530056281915392/752563367549468882/unknown.png')
+
 @client.command()
+@commands.cooldown(1, 5, commands.BucketType.default)
 async def zatka(ctx):
     await ctx.message.delete()
     emb = discord.Embed(title = 'Форма заявки для Набор кадров', colour = ctx.author.color)
@@ -25,13 +35,6 @@ async def zatka(ctx):
     emb.add_field(name = 'в какое время дня свободны', value = '16:00 до 22:00+', inline = False)
     emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
     await ctx.send(embed = emb)
-#test commands space
-
-@client.command(aliases = ['.пуленепробиваемое-стекло'])
-@commands.cooldown(1, 5, commands.BucketType.default)
-async def bulletproofglass(ctx):
-    await ctx.message.delete()
-    await ctx.send('https://cdn.discordapp.com/attachments/694530056281915392/752563367549468882/unknown.png')
 
 @client.command(aliases = ['Info', 'INFO'])
 @commands.cooldown(1, 5, commands.BucketType.default)
@@ -118,7 +121,8 @@ async def remind(ctx, time:int, *, arg):
 @client.command(aliases = ['Guild', 'GUILD'])
 @commands.cooldown(1, 5, commands.BucketType.default)
 async def guild(ctx, guild : discord.Guild = None):
-    guild = ctx.guild if not guild else guild
+    if guild == None:
+        guild = ctx.guild
     await ctx.message.delete()
     emb = discord.Embed(title = f'Информация о {guild}', colour = discord.Color.orange(), timestamp = ctx.message.created_at)
     emb.add_field(name = 'ID сервера', value = guild.id)
