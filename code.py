@@ -315,8 +315,9 @@ async def everyone_embed(ctx, t = None, d = None, img = None, f = None, a = None
     
 @client.command(aliases = ['Embed', 'EMBED', 'emb' , 'Emb', 'EMB'])
 @commands.has_permissions(manage_channels = True)
-async def embed(ctx, t = None, d = None, img = None, f = None, a = None, fu = None, au : discord.Member = None, *, role: discord.Role = None):
+async def embed(ctx, t = None, d = None, fu = None, img = None, f = None, a = None, au : discord.Member = None, *, role: discord.Role = None):
     await ctx.message.delete()
+    x = message.content.split('&', -1)[1:]
     if a == None:
         a = ctx.author.color
     else:
@@ -329,6 +330,8 @@ async def embed(ctx, t = None, d = None, img = None, f = None, a = None, fu = No
         img = ('https://steamcommunity.com/profiles/ЦИФРЫ/')
     if f == None:
         f = ('https://steamcommunity.com/profiles/ЦИФРЫ/')
+    t = x[1]
+    d = x[2]
     emb = discord.Embed(title = t, description = d, colour = a)
     emb.set_author(name = au, icon_url = au.avatar_url)
     emb.set_image(url = img)
@@ -582,13 +585,13 @@ async def help(ctx, arg = None):
     elif arg == 'edit':
         await ctx.send('```cy/edit <ID> <новый текст>```')
     elif arg == 'emb':
-        await ctx.send('```cy/emb |title текст| |description текст| |ссылка| |ссылка| |цвет| |footer текст| |@пинг| |@роль/имя роли/ID роли|```')
+        await ctx.send('```cy/emb |title текст| |description текст| |footer текст| |ссылка| |ссылка| |цвет| |@пинг| |@роль/имя роли/ID роли|```')
     elif arg == 'emb_ctx':
         await ctx.send('```cy/emb_ctx <ID>```')
     elif arg == 'emb_edit':
-        await ctx.send('```cy/emb_edit <ID> |title текст| |description текст| |ссылка| |ссылка| |цвет| |footer текст| |@пинг| |@роль/имя роли/ID роли|```')
+        await ctx.send('```cy/emb_edit <ID> |title текст| |description текст| |footer текст| |ссылка| |ссылка| |цвет| |@пинг| |@роль/имя роли/ID роли|```')
     elif arg == 'emb_everyone':
-        await ctx.send('```cy/emb_everyone <текст>```')
+        await ctx.send('```cy/emb_everyone |title текст| |description текст| |footer текст| |ссылка| |ссылка| |цвет| |@пинг| |@роль/имя роли/ID роли|```')
     elif arg == 'everyone':
         await ctx.send('```cy/everyone <текст>```')
     elif arg == 'give':
