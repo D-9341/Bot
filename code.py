@@ -23,7 +23,7 @@ async def zatka(ctx):
     emb.add_field(name = 'технические навыки:', value = 'Нет.', inline = False)
     emb.add_field(name = '(4). Сколько часов готовы уделять работе', value = '[ 15+ в неделю ]', inline = False)
     emb.add_field(name = 'в какое время дня свободны', value = '16:00 до 22:00+', inline = False)
-    emd.set_footer(text = 'Cephalon Cy by сасиска#2472')
+    emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
     await ctx.send(embed = emb)
 #test commands space
 
