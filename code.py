@@ -315,8 +315,9 @@ async def everyone_embed(ctx, t = None, d = None, img = None, f = None, a = None
     
 @client.command(aliases = ['Embed', 'EMBED', 'emb' , 'Emb', 'EMB'])
 @commands.has_permissions(manage_channels = True)
-async def embed(ctx, t = None, d = None, fu = None, img = None, f = None, a = None, au : discord.Member = None, *, role: discord.Role = None):
+async def embed(ctx, *, t = None, d = None, fu = None, img = None, f = None, a = None, au : discord.Member = None, role: discord.Role = None):
     await ctx.message.delete()
+    x = message.content.split('&', -1)
     if a == None:
         a = ctx.author.color
     else:
@@ -329,6 +330,9 @@ async def embed(ctx, t = None, d = None, fu = None, img = None, f = None, a = No
         img = ('https://steamcommunity.com/profiles/ЦИФРЫ/')
     if f == None:
         f = ('https://steamcommunity.com/profiles/ЦИФРЫ/')
+    t = x[1]
+    d = x[2]
+    fu = x[3]
     emb = discord.Embed(title = t, description = d, colour = a)
     emb.set_author(name = au, icon_url = au.avatar_url)
     emb.set_image(url = img)
