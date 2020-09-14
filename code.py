@@ -744,7 +744,7 @@ async def clear(ctx, amount : int, confirm : str = None):
 async def on_command_error(ctx, error):
     if isinstance(error, commands.CommandNotFound):
         emb = discord.Embed(description = f'{ctx.author.mention}, я не знаю такую команду!', colour = discord.Color.orange())
-        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+        emb.set_footer(text = 'Считаете, что такая команда должна быть? Напишите сасиска#2472 и опишите её суть!')
         await ctx.send(embed = emb)
         
     if isinstance(error, commands.CommandOnCooldown):
@@ -772,7 +772,7 @@ async def everyone_embed_error(ctx, error):
         await ctx.send(embed = emb)
 
     if isinstance(error, commands.MissingPermissions):
-        emb = discord.Embed(description = f'{ctx.author.mention} пытался вызвать команду everyone_embed', colour = discord.Color.orange())
+        emb = discord.Embed(description = f'{ctx.author.mention} пытался вызвать команду emb_everyone', colour = discord.Color.orange())
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
         
@@ -780,7 +780,6 @@ async def everyone_embed_error(ctx, error):
         emb = discord.Embed(description = f'{ctx.author.mention}, возможно, вы забыли кавычки?', colour = discord.Color.orange())
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
-        
         
 @give.error
 async def give_error(ctx, error):
@@ -806,18 +805,6 @@ async def take_error(ctx, error):
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
         
-@everyone.error
-async def everyone_error(ctx, error):
-    if isinstance(error, commands.MissingRequiredArgument):
-        emb = discord.Embed(description = f'{ctx.author.mention}, так шутить не нужно', colour = discord.Color.orange())
-        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-        await ctx.send(embed = emb)
-
-    if isinstance(error, commands.MissingPermissions):
-        emb = discord.Embed(description = f'{ctx.author.mention} пытался пингануть everyone', colour = discord.Color.orange())
-        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-        await ctx.send(embed = emb)
-
 @say.error
 async def say_error(ctx, error):
     if isinstance(error, commands.MissingRequiredArgument):
