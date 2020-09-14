@@ -47,7 +47,6 @@ async def info(ctx):
     emb.add_field(name = 'Написан на', value = 'discord.py')
     emb.add_field(name = 'Разработчик', value = 'Написано в футере, ха!')
     emb.add_field(name = 'Веб-сайт', value = '```http://ru-unioncraft.ru/```')
-    emb.add_field(name = 'Шард', value = client.shard_count)
     emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
     await ctx.send(embed = emb)
     
@@ -130,7 +129,6 @@ async def guild(ctx, guild : discord.Guild = None):
     emb.add_field(name = 'Люди, бустящие сервер', value = guild.premium_subscribers)
     emb.add_field(name = 'Владелец сервера', value = guild.owner.mention, inline = False)
     emb.add_field(name = 'Количество человек на сервере', value = guild.member_count)
-    emb.add_field(name = 'Шард', value = guild.shard_id)
     emb.add_field(name = 'Дата создания сервера', value = guild.created_at.strftime("%a, %#d %B %Y, %I:%M %p UTC"), inline = False)
     emb.set_thumbnail(url = guild.icon_url)
     emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
@@ -140,6 +138,18 @@ async def guild(ctx, guild : discord.Guild = None):
 @commands.cooldown(1, 5, commands.BucketType.default)
 async def role(ctx, *, role: discord.Role):
     await ctx.message.delete()
+    if role.mentionable == False:
+        role.mentionable = 'Нет'
+    elif role.mentionable == True:
+        role.mentionable = 'Да'
+    if role.managed == False:
+        role.managed = 'Нет'
+    elif role.managed == True:
+        role.managed = 'Да'
+    if role.hoist == False:
+        role.hoist = 'Нет'
+    elif role.hoist == True:
+        role.hoist = 'Да'
     emb = discord.Embed(title = role.name, colour = role.colour)
     emb.add_field(name = 'ID', value = role.id)
     emb.add_field(name = 'Цвет', value = role.color)
@@ -168,7 +178,7 @@ async def avatar(ctx, member : discord.Member = None):
 async def about(ctx, member: discord.Member = None):
     await ctx.message.delete()
     if member == None:
-        member = ctx.message.author
+        member = ctx.author
     if member.nick == None:
         member.nick = 'Не указан'
     if member.bot == False:
@@ -232,7 +242,7 @@ async def mute(ctx, member: discord.Member, time : int, *, reason = None):
             if role is not None:
                 emb = discord.Embed(colour = member.color, timestamp = ctx.message.created_at)
                 emb.add_field(name = 'Размучен по истечению времени', value = member.mention)
-                emb.add_field(name = 'По причине', value = arg)
+                emb.add_field(name = 'По причине', value = reason)
                 emb.add_field(name = 'Время мута в минутах составляло', value = time)
                 emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
                 await ctx.send(f'{member.mention}', embed = emb)
@@ -252,7 +262,7 @@ async def mute(ctx, member: discord.Member, time : int, *, reason = None):
             emb = discord.Embed(colour = member.color, timestamp = ctx.message.created_at)
             emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
             emb.add_field(name = 'В муте', value = f'{member.mention}')
-            emb.add_field(name = 'По причине', value = arg)
+            emb.add_field(name = 'По причине', value = reason)
             emb.add_field(name = 'Время мута в минутах', value = time)
             emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
             await ctx.send(embed = emb, delete_after = time*60)
@@ -260,7 +270,7 @@ async def mute(ctx, member: discord.Member, time : int, *, reason = None):
             if role is not None:
                 emb = discord.Embed(colour = member.color, timestamp = ctx.message.created_at)
                 emb.add_field(name = 'Размучен по истечению времени', value = member.mention)
-                emb.add_field(name = 'По причине', value = arg)
+                emb.add_field(name = 'По причине', value = reason)
                 emb.add_field(name = 'Время мута в минутах составляло', value = time)
                 emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
                 await ctx.send(f'{member.mention}', embed = emb)
