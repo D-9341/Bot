@@ -743,11 +743,13 @@ async def clear(ctx, amount : int, confirm : str = None):
 @client.event
 async def on_command_error(ctx, error):
     if isinstance(error, commands.CommandNotFound):
+        await ctx.message.delete()
         emb = discord.Embed(description = f'{ctx.author.mention}, я не знаю такую команду!', colour = discord.Color.orange())
         emb.set_footer(text = 'Считаете, что такая команда должна быть? Напишите сасиска#2472 и опишите её суть!')
         await ctx.send(embed = emb)
         
     if isinstance(error, commands.CommandOnCooldown):
+        await ctx.message.delete()
         emb = discord.Embed(description = f'{ctx.author.mention}, команда в кд, потерпи чутка!', colour = discord.Color.orange())
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
@@ -755,11 +757,13 @@ async def on_command_error(ctx, error):
 @dm.error
 async def dm_error(ctx, error):
     if isinstance(error, commands.MissingRequiredArgument):
+        await ctx.message.delete()
         emb = discord.Embed(description = f'{ctx.author.mention}, укажите, кому и что написать!', colour = discord.Color.orange())
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
 
     if isinstance(error, commands.MissingPermissions):
+        await ctx.message.delete()
         emb = discord.Embed(description = f'{ctx.author.mention} пытался вызвать команду dm', colour = discord.Color.orange())
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
@@ -767,28 +771,27 @@ async def dm_error(ctx, error):
 @say_everyone.error
 async def say_everyone_error(ctx, error):
     if isinstance(error, commands.MissingRequiredArgument):
+        await ctx.message.delete()
         emb = discord.Embed(description = f'{ctx.author.mention}, так шутить не нужно', colour = discord.Color.orange())
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
 
     if isinstance(error, commands.MissingPermissions):
+        await ctx.message.delete()
         emb = discord.Embed(description = f'{ctx.author.mention} пытался вызвать команду emb_everyone', colour = discord.Color.orange())
-        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-        await ctx.send(embed = emb)
-        
-    if isinstance(error, commands.TooManyArguments):
-        emb = discord.Embed(description = f'{ctx.author.mention}, возможно, вы забыли кавычки?', colour = discord.Color.orange())
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
         
 @give.error
 async def give_error(ctx, error):
     if isinstance(error, commands.MissingRequiredArgument):
+        await ctx.message.delete()
         emb = discord.Embed(description = f'{ctx.author.mention}, укажите роль, которую нужно выдать!', colour = discord.Color.orange())
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
 
     if isinstance(error, commands.MissingPermissions):
+        await ctx.message.delete()
         emb = discord.Embed(description = f'{ctx.author.mention} пытался вызвать команду give', colour = discord.Color.orange())
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
@@ -796,11 +799,13 @@ async def give_error(ctx, error):
 @take.error
 async def take_error(ctx, error):
     if isinstance(error, commands.MissingRequiredArgument):
+        await ctx.message.delete()
         emb = discord.Embed(description = f'{ctx.author.mention}, укажите роль, которую нужно забрать!', colour = discord.Color.orange())
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
 
     if isinstance(error, commands.MissingPermissions):
+        await ctx.message.delete()
         emb = discord.Embed(description = f'{ctx.author.mention} пытался вызвать команду take', colour = discord.Color.orange())
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
@@ -808,11 +813,13 @@ async def take_error(ctx, error):
 @say.error
 async def say_error(ctx, error):
     if isinstance(error, commands.MissingRequiredArgument):
+        await ctx.message.delete()
         emb = discord.Embed(description = f'{ctx.author.mention}, укажите, что я должен сказать!', colour = discord.Color.orange())
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
             
     if isinstance(error, commands.MissingPermissions):
+        await ctx.message.delete()
         emb = discord.Embed(description = f'{ctx.author.mention} пытался вызвать команду say', colour = discord.Color.orange())
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
@@ -820,16 +827,19 @@ async def say_error(ctx, error):
 @mute.error
 async def mute_error(ctx, error):
     if isinstance(error, commands.MissingRequiredArgument):
+        await ctx.message.delete()
         emb = discord.Embed(description = f'{ctx.author.mention}, укажите, кого и на сколько мутить!', colour = discord.Color.orange())
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
         
     if isinstance(error, commands.BadArgument):
+        await ctx.message.delete()
         emb = discord.Embed(description = f'{ctx.author.mention}, проверьте правильность написания команды!', colour = discord.Color.orange())
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
                        
     if isinstance(error, commands.MissingPermissions):
+        await ctx.message.delete()
         emb = discord.Embed(description = f'{ctx.author.mention} пытался вызвать команду mute', colour = discord.Color.orange())
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
@@ -837,11 +847,13 @@ async def mute_error(ctx, error):
 @kick.error
 async def kick_error(ctx, error):
     if isinstance(error, commands.MissingRequiredArgument):
+        await ctx.message.delete()
         emb = discord.Embed(description = f'{ctx.author.mention}, укажите, кого нужно кикнуть!', colour = discord.Color.orange())
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
 
     if isinstance(error, commands.MissingPermissions):
+        await ctx.message.delete()
         emb = discord.Embed(description = f'{ctx.author.mention} пытался вызвать команду kick', colour = discord.Color.orange())
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
@@ -849,11 +861,13 @@ async def kick_error(ctx, error):
 @ban.error
 async def ban_error(ctx, error):
     if isinstance(error, commands.MissingRequiredArgument):
+        await ctx.message.delete()
         emb = discord.Embed(description = f'{ctx.author.mention}, укажите, кого нужно забанить!', colour = discord.Color.orange())
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
 
     if isinstance(error, commands.MissingPermissions):
+        await ctx.message.delete()
         emb = discord.Embed(description = f'{ctx.author.mention} пытался вызвать команду ban', colour = discord.Color.orange())
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
@@ -861,16 +875,19 @@ async def ban_error(ctx, error):
 @clear.error
 async def clear_error(ctx, error):
     if isinstance(error, commands.MissingRequiredArgument):
+        await ctx.message.delete()
         emb = discord.Embed(description = f'{ctx.author.mention}, укажите, сколько сообщений нужно удалить!', colour = discord.Color.orange())
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
 
     if isinstance(error, commands.MissingPermissions):
+        await ctx.message.delete()
         emb = discord.Embed(description = f'{ctx.author.mention} пытался вызвать команду clear', colour = discord.Color.orange())
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
         
     if isinstance(error, commands.BadArgument):
+        await ctx.message.delete()
         emb = discord.Embed(description = f'{ctx.author.mention}, проверьте правильность написания команды!', colour = discord.Color.orange())
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
