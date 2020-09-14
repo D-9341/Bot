@@ -374,9 +374,9 @@ async def embed(ctx, arg = None, text = None, t = None, d = None, fu = None, img
     emb.set_image(url = img)
     emb.set_thumbnail(url = f)
     emb.set_footer(text = fu)
-    if role is not None and arg is not 'noembed':
+    if role is not None and arg != 'noembed':
         await ctx.send(f'{role.mention}', embed = emb)
-    elif role is None and arg is not 'noembed':
+    elif role is None and arg != 'noembed':
         await ctx.send(embed = emb)
     if arg == 'noembed':
         await ctx.send(text)
