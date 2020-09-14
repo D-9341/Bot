@@ -417,7 +417,6 @@ async def edit(ctx, arg, *, text):
     await m.edit(content = text)
     await ctx.send('👌', delete_after = 1)
     
-    
 @client.command(aliases = ['c', 'C', 'coin', 'Coin', 'COIN', 'Coinflip', 'COINFLIP'])
 @commands.cooldown(5, 10, commands.BucketType.default)
 async def coinflip(ctx):
@@ -765,7 +764,7 @@ async def dm_error(ctx, error):
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
         
-@everyone_embed.error
+@emb_everyone.error
 async def everyone_embed_error(ctx, error):
     if isinstance(error, commands.MissingRequiredArgument):
         emb = discord.Embed(description = f'{ctx.author.mention}, так шутить не нужно', colour = discord.Color.orange())
@@ -782,17 +781,6 @@ async def everyone_embed_error(ctx, error):
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
         
-@embed.error
-async def embed_error(ctx, error):
-    if isinstance(error, commands.MissingPermissions):
-        emb = discord.Embed(description = f'{ctx.author.mention} пытался вызвать команду embed', colour = discord.Color.orange())
-        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-        await ctx.send(embed = emb)
-        
-    if isinstance(error, commands.TooManyArguments):
-        emb = discord.Embed(description = f'{ctx.author.mention}, возможно, вы забыли кавычки?', colour = discord.Color.orange())
-        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-        await ctx.send(embed = emb)
         
 @give.error
 async def give_error(ctx, error):
