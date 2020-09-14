@@ -332,7 +332,7 @@ async def emb_content(ctx, arg):
 @client.command(aliases = ['emb_e'])
 @commands.has_permissions(mention_everyone = True)
 @commands.cooldown(1, 20, commands.BucketType.default)
-async def everyone_embed(ctx, t = None, d = None, img = None, f = None, a = None, fu = None, au : discord.Member = None):
+async def emb_everyone(ctx, arg = None, text = None, t = None, d = None, img = None, f = None, a = None, fu = None, au : discord.Member = None):
     await ctx.message.delete()
     if a == None:
         a = ctx.author.color
@@ -351,11 +351,14 @@ async def everyone_embed(ctx, t = None, d = None, img = None, f = None, a = None
     emb.set_image(url = img)
     emb.set_thumbnail(url = f)
     emb.set_footer(text = fu)
-    await ctx.send('@everyone', embed = emb)
+    if arg == 'noembed':
+        await ctx.send(text)
+    elif arg != 'noembed':
+        await ctx.send('@everyone', embed = emb)
     
-@client.command(aliases = ['Embed', 'EMBED', 'emb' , 'Emb', 'EMB'])
+@client.command(aliases = ['Say', 'SAY'])
 @commands.has_permissions(manage_channels = True)
-async def embed(ctx, arg = None, text = None, t = None, d = None, fu = None, img = None, f = None, a = None, au : discord.Member = None, *, role: discord.Role = None):
+async def say(ctx, arg = None, text = None, t = None, d = None, fu = None, img = None, f = None, a = None, au : discord.Member = None, *, role: discord.Role = None):
     await ctx.message.delete()
     if a == None:
         a = ctx.author.color
@@ -414,19 +417,6 @@ async def edit(ctx, arg, *, text):
     await m.edit(content = text)
     await ctx.send('👌', delete_after = 1)
     
-@client.command(aliases = ['Everyone', 'EVERYONE'])
-@commands.cooldown(1, 20, commands.BucketType.default)
-@commands.has_permissions(mention_everyone = True)
-async def everyone(ctx, *, arg):
-    await ctx.message.delete()
-    await ctx.send('@everyone ' + arg)
-    
-@client.command(aliases = ['Say', 'SAY'])
-@commands.cooldown(1, 10, commands.BucketType.default)
-@commands.has_permissions(manage_channels = True)
-async def say(ctx, *, arg):
-    await ctx.message.delete()
-    await ctx.send(arg)
     
 @client.command(aliases = ['c', 'C', 'coin', 'Coin', 'COIN', 'Coinflip', 'COINFLIP'])
 @commands.cooldown(5, 10, commands.BucketType.default)
