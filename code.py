@@ -169,13 +169,9 @@ async def about(ctx, member: discord.Member = None):
     await ctx.message.delete()
     if member == None:
         member = ctx.message.author
-    member.nick = nick
-    member.bot = bot
-    if nick == None:
-        nick = 'Не указан'
-    if bot == False:
+    if member.bot == False:
         bot = 'Неа'
-    elif bot == True:
+    elif member.bot == True:
         bot = 'Ага'
     emb = discord.Embed(title = f'Информация о {member.name}', colour = member.color, timestamp = ctx.message.created_at)
     emb.add_field(name = 'ID', value = member.id)
@@ -183,7 +179,7 @@ async def about(ctx, member: discord.Member = None):
     emb.add_field(name = 'Вошёл', value = member.joined_at.strftime("%A, %#d %B %Y, %I:%M %p UTC"), inline = False)
     emb.add_field(name = 'Упоминание', value = member.mention)
     emb.add_field(name = 'Имя', value = member.name)
-    emb.add_field(name = 'Никнейм', value = nick)
+    emb.add_field(name = 'Никнейм', value = member.nick)
     emb.add_field(name = 'Статус', value = member.status)
     emb.add_field(name = f'Роли [{len(member.roles)-1}]', value=' '.join([role.mention for role in member.roles[1:]]), inline = False)
     emb.add_field(name = 'Высшая Роль', value = member.top_role.mention, inline = False)
