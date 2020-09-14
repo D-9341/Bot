@@ -11,7 +11,12 @@ client.remove_command('help')
 client.owner_id = 338714886001524737
 
 #test commands space
-
+@client.comand()
+@commands.cooldown(1, 5, commands.BucketType.default)
+async def rp(ctx):
+    await ctx.message.delete()
+    emb = discord.Embed(title = 'Ныа', description = 'https://www.youtube.com/watch?v=idmTSW9mfYI', colour = discord.Color.orange())
+    await ctx.send(embed = emb)
 #test commands space
 
 @client.command(aliases = ['.пуленепробиваемое-стекло'])
@@ -350,7 +355,7 @@ async def everyone_embed(ctx, t = None, d = None, img = None, f = None, a = None
     
 @client.command(aliases = ['Embed', 'EMBED', 'emb' , 'Emb', 'EMB'])
 @commands.has_permissions(manage_channels = True)
-async def embed(ctx, t = None, d = None, fu = None, img = None, f = None, a = None, au : discord.Member = None, *, role: discord.Role = None):
+async def embed(ctx, arg = None, text = None, t = None, d = None, fu = None, img = None, f = None, a = None, au : discord.Member = None, *, role: discord.Role = None):
     await ctx.message.delete()
     if a == None:
         a = ctx.author.color
@@ -371,8 +376,10 @@ async def embed(ctx, t = None, d = None, fu = None, img = None, f = None, a = No
     emb.set_footer(text = fu)
     if role is not None:
         await ctx.send(f'{role.mention}', embed = emb)
-    else:
+    elif role is None:
         await ctx.send(embed = emb)
+    if arg == 'noembed':
+        await ctx.send(text)
 
 @client.command(aliases = ['emb_ed'])
 @commands.has_permissions(manage_channels = True)
