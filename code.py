@@ -332,7 +332,7 @@ async def emb_content(ctx, arg):
 @client.command(aliases = ['emb_e'])
 @commands.has_permissions(mention_everyone = True)
 @commands.cooldown(1, 20, commands.BucketType.default)
-async def emb_everyone(ctx, arg = None, text = None, t = None, d = None, img = None, f = None, a = None, fu = None, au : discord.Member = None):
+async def say_everyone(ctx, arg = None, text = None, t = None, d = None, img = None, f = None, a = None, fu = None, au : discord.Member = None):
     await ctx.message.delete()
     if a == None:
         a = ctx.author.color
@@ -352,7 +352,7 @@ async def emb_everyone(ctx, arg = None, text = None, t = None, d = None, img = N
     emb.set_thumbnail(url = f)
     emb.set_footer(text = fu)
     if arg == 'noembed':
-        await ctx.send(text)
+        await ctx.send('@everyone ' + text)
     elif arg != 'noembed':
         await ctx.send('@everyone', embed = emb)
     
@@ -764,8 +764,8 @@ async def dm_error(ctx, error):
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
         
-@emb_everyone.error
-async def everyone_embed_error(ctx, error):
+@say_everyone.error
+async def say_everyone_error(ctx, error):
     if isinstance(error, commands.MissingRequiredArgument):
         emb = discord.Embed(description = f'{ctx.author.mention}, так шутить не нужно', colour = discord.Color.orange())
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
