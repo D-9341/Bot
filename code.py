@@ -353,7 +353,7 @@ async def say_everyone(ctx, arg = None, text = None, t = None, d = None, img = N
     emb.set_footer(text = fu)
     if arg == 'noembed':
         await ctx.send('@everyone ' + text)
-    elif arg != 'noembed':
+    elif arg == None:
         await ctx.send('@everyone', embed = emb)
     
 @client.command(aliases = ['Say', 'SAY'])
