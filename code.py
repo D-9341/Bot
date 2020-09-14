@@ -11,7 +11,7 @@ client.remove_command('help')
 client.owner_id = 338714886001524737
 
 #test commands space
-@client.comand()
+@client.command()
 @commands.cooldown(1, 5, commands.BucketType.default)
 async def rp(ctx):
     await ctx.message.delete()
