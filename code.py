@@ -204,17 +204,19 @@ async def unmute(ctx, member : discord.Member, *, arg = None):
 @client.command(aliases = ['Mute', 'MUTE'])
 @commands.has_permissions(manage_channels = True)
 @commands.cooldown(1, 10, commands.BucketType.default)
-async def mute(ctx, member: discord.Member, time : int, *, arg = None):
+async def mute(ctx, member: discord.Member, time : int, *, reason = None):
     await ctx.message.delete()
     guild = ctx.guild
     if member.id != client.owner_id:
         role = discord.utils.get(guild.roles, name = 'Muted')
         if role is not None:
             await member.add_roles(role)
+            if reason == None:
+                reason = 'Не указана'
             emb = discord.Embed(colour = member.color, timestamp = ctx.message.created_at)
             emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
             emb.add_field(name = 'В муте', value = f'{member.mention}')
-            emb.add_field(name = 'По причине', value = arg)
+            emb.add_field(name = 'По причине', value = reason)
             emb.add_field(name = 'Время мута в минутах', value = time)
             emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
             await ctx.send(embed = emb, delete_after = time*60)
