@@ -543,8 +543,8 @@ async def on_message(message):
         emb.add_field(name = 'В канале', value = message.channel.mention)
         emb.add_field(name = 'Было написано', value = message.content)
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-        await channel.send(embed = emb)
         await client.process_commands(message)
+        await channel.send(embed = emb)
 
     
 @client.event
