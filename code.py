@@ -332,7 +332,7 @@ async def emb_content(ctx, arg):
 @client.command(aliases = ['emb_e'])
 @commands.has_permissions(mention_everyone = True)
 @commands.cooldown(1, 20, commands.BucketType.default)
-async def say_everyone(ctx, arg = None, text = None, t = None, d = None, img = None, f = None, a = None, fu = None, au : discord.Member = None):
+async def say_everyone(ctx, arg = None, text = None, t = None, d = None, fu = None, img = None, f = None, a = None, au : discord.Member = None):
     await ctx.message.delete()
     if a == None:
         a = ctx.author.color
@@ -386,7 +386,7 @@ async def say(ctx, arg = None, text = None, t = None, d = None, fu = None, img =
 
 @client.command(aliases = ['emb_ed'])
 @commands.has_permissions(manage_channels = True)
-async def emb_edit(ctx, arg, t = None, d = None, img = None, f = None, a = None, fu = None, au : discord.Member = None):
+async def emb_edit(ctx, arg, t = None, d = None, fu = None, img = None, f = None, a = None, au : discord.Member = None):
     await ctx.message.delete()
     m = await ctx.fetch_message(id = arg)
     if a == None:
