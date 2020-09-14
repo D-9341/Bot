@@ -351,10 +351,10 @@ async def say_everyone(ctx, arg = None, text = None, t = None, d = None, fu = No
     emb.set_image(url = img)
     emb.set_thumbnail(url = f)
     emb.set_footer(text = fu)
-    if arg == 'noembed':
-        await ctx.send(f'@everyone {text}')
-    elif arg == None:
+    if arg is 'noembed':
         await ctx.send('@everyone', embed = emb)
+    elif arg is not 'noembed':
+        await ctx.send('@everyone' + text)
     
 @client.command(aliases = ['Say', 'SAY'])
 @commands.has_permissions(manage_channels = True)
