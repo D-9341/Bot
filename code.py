@@ -154,7 +154,6 @@ async def role(ctx, *, role: discord.Role):
     emb.add_field(name = 'ID', value = role.id)
     emb.add_field(name = 'Цвет', value = role.color)
     emb.add_field(name = 'Упоминается?', value = role.mentionable)
-    emb.add_field(name = 'Количество человек с ролью', value = role.members_name)
     emb.add_field(name = 'Управляется интеграцией?', value = role.managed)
     emb.add_field(name = 'Позиция в списке', value = role.position)
     emb.add_field(name = 'Создана', value = role.created_at.strftime("%A, %#d %B %Y, %I:%M %p UTC"), inline = False)
