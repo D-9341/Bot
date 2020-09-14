@@ -352,7 +352,7 @@ async def say_everyone(ctx, arg = None, text = None, t = None, d = None, fu = No
     emb.set_thumbnail(url = f)
     emb.set_footer(text = fu)
     if arg == 'noembed':
-        await ctx.send('@everyone' + text)
+        await ctx.send('@everyone ' + text)
     elif arg != 'noembed':
         await ctx.send('@everyone', embed = emb)
     
