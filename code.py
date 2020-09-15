@@ -583,10 +583,10 @@ async def help(ctx, arg = None):
         emb.add_field(name = 'cy/clear', value = 'Очистка чата.')
         emb.add_field(name = 'cy/dm', value = 'Пишет участнику любой написанный текст.')
         emb.add_field(name = 'cy/edit', value = 'Редактирует сообщение.', inline = False)
-        emb.add_field(name = 'cy/emb', value = 'От лица бота отправляется высоконастраеваемый эмбед.')
+        emb.add_field(name = 'cy/say', value = 'От лица бота отправляется высоконастраеваемый эмбед. Может использоваться как say, так и emb')
         emb.add_field(name = 'cy/emb_ctx', value = 'Позволяет увидеть контент эмбеда.')
         emb.add_field(name = 'cy/emb_edit', value = 'Редактирует эмбед. Работает как VAULTBOT', inline = False)
-        emb.add_field(name = 'cy/emb_everyone', value = 'Совмещает в себе команды everyone и emb.')
+        emb.add_field(name = 'cy/say_everyone', value = 'Совмещает в себе команды everyone и emb.')
         emb.add_field(name = 'cy/everyone', value = 'Пишет сообщение от лица бота и пингует @everyone')
         emb.add_field(name = 'cy/give', value = 'Выдаёт роль.', inline = False)
         emb.add_field(name = 'cy/guild', value = 'Показывает информацию о сервере.')
@@ -596,7 +596,6 @@ async def help(ctx, arg = None):
         emb.add_field(name = 'cy/mute', value = 'Мут игрока.', inline = False)
         emb.add_field(name = 'cy/remind', value = 'Может напомнить вам о событии, которое вы не хотите пропустить.')
         emb.add_field(name = 'cy/role', value = 'Показывает информацию о роли')
-        emb.add_field(name = 'cy/say', value = 'Пишет сообщение от лица бота.')
         emb.add_field(name = 'cy/take', value = 'Забирает роль.', inline = False)
         emb.add_field(name = 'cy/unmute', value = 'Принудительный размут игрока.')
         emb.add_field(name = 'Обозначение символов cy/help', value = '|| - опционально, <> - обязательно')
@@ -614,16 +613,14 @@ async def help(ctx, arg = None):
         await ctx.send('```cy/dm <@пинг/имя/ID> <текст>```')
     elif arg == 'edit':
         await ctx.send('```cy/edit <ID> <новый текст>```')
-    elif arg == 'emb':
-        await ctx.send('```cy/emb |title текст| |description текст| |footer текст| |ссылка| |ссылка| |цвет| |@пинг| |@роль/имя роли/ID роли|```')
+    elif arg == 'say':
+        await ctx.send('```cy/say |noembed| |text| |title текст| |description текст| |footer текст| |ссылка| |ссылка| |цвет| |@пинг| |@роль/имя роли/ID роли|\n say используется как emb и say. Для написания эмбеда напишите в налаче "" "" и уже потом аргументы для emb. В случае say напишите в начале noembed "текст".```')
     elif arg == 'emb_ctx':
         await ctx.send('```cy/emb_ctx <ID>```')
     elif arg == 'emb_edit':
         await ctx.send('```cy/emb_edit <ID> |title текст| |description текст| |footer текст| |ссылка| |ссылка| |цвет| |@пинг| |@роль/имя роли/ID роли|```')
-    elif arg == 'emb_everyone':
-        await ctx.send('```cy/emb_everyone |title текст| |description текст| |footer текст| |ссылка| |ссылка| |цвет| |@пинг| |@роль/имя роли/ID роли|```')
-    elif arg == 'everyone':
-        await ctx.send('```cy/everyone <текст>```')
+    elif arg == 'say_everyone':
+        await ctx.send('```cy/say_everyone |title текст| |description текст| |footer текст| |ссылка| |ссылка| |цвет| |@пинг| |@роль/имя роли/ID роли|```')
     elif arg == 'give':
         await ctx.send('```cy/give <@пинг/имя/ID> <@роль/имя роли/ID роли>```')
     elif arg == 'kick':
@@ -634,14 +631,12 @@ async def help(ctx, arg = None):
         await ctx.send('```cy/remind <время> <текст>```')
     elif arg == 'role':
         await ctx.send('```cy/role <@роль/имя роли/ID роли>```')
-    elif arg == 'say':
-        await ctx.send('```cy/say <текст>```')
     elif arg == 'take':
         await ctx.send('```cy/take <@пинг/имя/ID> <@роль/имя роли/ID роли>```')
     elif arg == 'unmute':
         await ctx.send('```cy/unmute <@пинг/имя/ID> |причина|```')
     else:
-        emb = discord.Embed(description = 'Для этой команды не требуется помощь, так как ей не нужны аргументы', colour = discord.Color.orange())
+        emb = discord.Embed(description = 'Для этой команды не нужны аргументы', colour = discord.Color.orange())
         emb.set_footer(text = 'Хотя, возможно, вы ввели команду неправильно?')
         await ctx.send(embed = emb)
 
