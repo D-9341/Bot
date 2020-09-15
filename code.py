@@ -343,9 +343,9 @@ async def say_everyone(ctx, arg = None, text = None, t = None, d = None, fu = No
     if fu == None:
         fu = ('Cephalon Cy by сасиска#2472')
     if img == None:
-        img = ('https://steamcommunity.com/profiles/ЦИФРЫ/')
+        img = ('')
     if f == None:
-        f = ('https://steamcommunity.com/profiles/ЦИФРЫ/')
+        f = ('')
     emb = discord.Embed(title = t, description = d, colour = a)
     emb.set_author(name = au, icon_url = au.avatar_url)
     emb.set_image(url = img)
@@ -369,9 +369,9 @@ async def say(ctx, arg = None, text = None, t = None, d = None, fu = None, img =
     if fu == None:
         fu = ('Cephalon Cy by сасиска#2472')
     if img == None:
-        img = ('https://steamcommunity.com/profiles/ЦИФРЫ/')
+        img = ('')
     if f == None:
-        f = ('https://steamcommunity.com/profiles/ЦИФРЫ/')
+        f = ('')
     emb = discord.Embed(title = t, description = d, colour = a)
     emb.set_author(name = au, icon_url = au.avatar_url)
     emb.set_image(url = img)
