@@ -614,7 +614,7 @@ async def help(ctx, arg = None):
     elif arg == 'edit':
         await ctx.send('```cy/edit <ID> <новый текст>```')
     elif arg == 'say':
-        await ctx.send('```cy/say |noembed| |text| |title текст| |description текст| |footer текст| |ссылка| |ссылка| |цвет| |@пинг| |@роль/имя роли/ID роли|\n say используется как emb и say. Для написания эмбеда напишите в налаче "" "" и уже потом аргументы для emb. В случае say напишите в начале noembed "текст".```')
+        await ctx.send('```cy/say |noembed| |text| |title текст| |description текст| |footer текст| |ссылка| |ссылка| |цвет| |@пинг| |@роль/имя роли/ID роли|```')
     elif arg == 'emb_ctx':
         await ctx.send('```cy/emb_ctx <ID>```')
     elif arg == 'emb_edit':
