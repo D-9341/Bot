@@ -374,6 +374,8 @@ async def say(ctx, arg = None, text = None, t = None, d = None, fu = None, img =
         img = ('')
     if f == None:
         f = ('')
+    if role != None:
+        a = role.color
     emb = discord.Embed(title = t, description = d, colour = a)
     emb.set_author(name = au, icon_url = au.avatar_url)
     emb.set_image(url = img)
