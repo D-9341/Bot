@@ -11,7 +11,12 @@ client.remove_command('help')
 client.owner_id = 338714886001524737
 
 #test commands space
-
+@client.event
+async def on_guild_join(guild):
+    channel = client.get_channel(714175791033876490)
+    emb = discord.Embed(descirption = f'Меня добавили на сервер {guild}!', colour = discord.Color.green())
+    emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+    await channel.send(embed = emb)
 #test commands space
 
 @client.command(aliases = ['.пуленепробиваемое-стекло'])
@@ -549,9 +554,10 @@ async def on_message(message):
     if not message.author.bot:
         emb = discord.Embed(colour = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
         emb.set_author(name = message.author, icon_url = message.author.avatar_url)
+        emb.add_field(name = 'На сервере', value = message.guild)
         emb.add_field(name = 'В канале', value = f'{message.channel.mention} ({message.channel.name})')
         emb.add_field(name = 'Было написано', value = message.content)
-        emb.set_footer(text = f'Cephalon Cy by сасиска#2472 || guild - {message.guild}')
+        emb.set_footer(text = f'Cephalon Cy by сасиска#2472')
         await client.process_commands(message)
         await channel.send(embed = emb)
     
@@ -563,9 +569,10 @@ async def on_message_edit(before, after):
     if not before.author.bot:
         emb = discord.Embed(description = f'[Сообщение]({before.jump_url}) было изменено', colour = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
         emb.set_author(name = before.author.name, icon_url = before.author.avatar_url)
+        emb.add_field(name = 'На сервере', value = message.guild)
         emb.add_field(name = 'Было', value = f'```{before.content}```')
         emb.add_field(name = 'Стало', value = f'```{after.content}```')
-        emb.set_footer(text = f'Cephalon Cy by сасиска#2472 || guild - {before.guild}')
+        emb.set_footer(text = f'Cephalon Cy by сасиска#2472')
         await channel.send(embed = emb)
 #ИВЕНТЫ    
 
