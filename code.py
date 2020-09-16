@@ -537,8 +537,12 @@ async def on_member_remove(member):
         emb = discord.Embed(description = f'{member.mention} ({member.name}) Has exited the ♂️dungeon♂️...', colour = discord.Color.red())
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await channel.send(embed = emb)
-    else:
+    elif member.bot != False and member.id != 694170281270312991:
         emb = discord.Embed(description = f'{member.mention} ({member.name}), ну и вали, ботаря, хаха!', colour = discord.Color.orange())
+        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+        await channel.send(embed = emb)
+    elif member.bot != False and member.id == 694170281270312991:
+        emb = discord.Embed(description = 'Ой, это я чтоли?', colour = discord.Color.orange())
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await channel.send(embed = emb)
 
