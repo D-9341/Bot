@@ -14,7 +14,7 @@ client.owner_id = 338714886001524737
 @client.event
 async def on_guild_join(guild):
     channel = client.get_channel(714175791033876490)
-    emb = discord.Embed(descirption = f'Меня добавили на сервер {guild}!', colour = discord.Color.green())
+    emb = discord.Embed(description = f'Меня добавили на сервер {guild}!', colour = discord.Color.green())
     emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
     await channel.send(embed = emb)
 #test commands space
