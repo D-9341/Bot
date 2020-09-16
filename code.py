@@ -342,7 +342,7 @@ async def say_everyone(ctx, arg = None, text = None, t = None, d = None, fu = No
         a = int('0x' + a, 16)
     if au == None:
         au = ctx.author
-    if fu == None:
+    if fu == None or 'Embed.Empty':
         fu = ('Cephalon Cy by сасиска#2472')
     if img == None:
         img = ('')
@@ -555,7 +555,6 @@ async def on_message(message):
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await client.process_commands(message)
         await channel.send(embed = emb)
-
     
 @client.event
 async def on_message_edit(before, after):
@@ -563,10 +562,10 @@ async def on_message_edit(before, after):
     if channel is None:
         return
     if not before.author.bot:
-        emb = discord.Embed(title = 'Сообщение было изменено', colour = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
+        emb = discord.Embed(title = f'[Сообщение]({before.message.jump_url}) было изменено', colour = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
         emb.set_author(name = before.author.name, icon_url = before.author.avatar_url)
-        emb.add_field(name = 'Было', value = before.content)
-        emb.add_field(name = 'Стало', value = after.content)
+        emb.add_field(name = 'Было', value = f'{before.content}')
+        emb.add_field(name = 'Стало', value = f'{after.content}')
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await channel.send(embed = emb)
     
