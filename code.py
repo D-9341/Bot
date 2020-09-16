@@ -469,14 +469,14 @@ async def dm(ctx, member: discord.Member, *, arg):
 @client.event
 async def on_guild_remove(guild):
     channel = client.get_channel(714175791033876490)
-    emb = discord.Embed(description = f'Меня выгнали с сервера ```{guild}```...', colour = discord.Color.red())
+    emb = discord.Embed(description = f'Меня выгнали с сервера `{guild}`...', colour = discord.Color.red())
     emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
     await channel.send(embed = emb)
 
 @client.event
 async def on_guild_join(guild):
     channel = client.get_channel(714175791033876490)
-    emb = discord.Embed(description = f'Меня добавили на сервер ```{guild}```!', colour = discord.Color.green())
+    emb = discord.Embed(description = f'Меня добавили на сервер `{guild}`!', colour = discord.Color.green())
     emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
     await channel.send(embed = emb)
 
