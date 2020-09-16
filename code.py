@@ -435,37 +435,6 @@ async def cu(ctx):
     await ctx.message.delete()
     await ctx.send('Медь')
     
-#получение роли по эмодзи       
-@client.event
-async def on_raw_reaction_add(payload):
-    message_id = payload.message_id
-    if message_id == 707496056505761802:
-        guild_id = payload.guild_id
-        guild = discord.utils.find(lambda g: g.id == guild_id, client.guilds)
-
-        if payload.emoji.name == 'strashilka':
-            role = discord.utils.get(guild.roles, name = 'Пробивший дно')
-
-        if role is not None:
-            member = discord.utils.find(lambda m: m.id == payload.user_id, guild.members)
-            if member is not None:
-                await member.add_roles(role)
-
-@client.event
-async def on_raw_reaction_remove(payload):
-    message_id = payload.message_id
-    if message_id == 707496056505761802:
-        guild_id = payload.guild_id
-        guild = discord.utils.find(lambda g: g.id == guild_id, client.guilds)
-
-        if payload.emoji.name == 'strashilka':
-            role = discord.utils.get(guild.roles, name = 'Пробивший дно')
-
-        if role is not None:
-            member = discord.utils.find(lambda m: m.id == payload.user_id, guild.members)
-            if member is not None:
-                await member.remove_roles(role)        
-    
 #бесполезное говно
 @client.command(aliases = ['Join', 'JOIN'])
 async def join(ctx):
@@ -495,6 +464,37 @@ async def dm(ctx, member: discord.Member, *, arg):
     emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
     emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
     await member.send(embed = emb)
+
+#ИВЕНТЫ       
+@client.event
+async def on_raw_reaction_add(payload):
+    message_id = payload.message_id
+    if message_id == 707496056505761802:
+        guild_id = payload.guild_id
+        guild = discord.utils.find(lambda g: g.id == guild_id, client.guilds)
+
+        if payload.emoji.name == 'strashilka':
+            role = discord.utils.get(guild.roles, name = 'Пробивший дно')
+
+        if role is not None:
+            member = discord.utils.find(lambda m: m.id == payload.user_id, guild.members)
+            if member is not None:
+                await member.add_roles(role)
+
+@client.event
+async def on_raw_reaction_remove(payload):
+    message_id = payload.message_id
+    if message_id == 707496056505761802:
+        guild_id = payload.guild_id
+        guild = discord.utils.find(lambda g: g.id == guild_id, client.guilds)
+
+        if payload.emoji.name == 'strashilka':
+            role = discord.utils.get(guild.roles, name = 'Пробивший дно')
+
+        if role is not None:
+            member = discord.utils.find(lambda m: m.id == payload.user_id, guild.members)
+            if member is not None:
+                await member.remove_roles(role)        
 
 @client.event
 async def on_member_join(member):
@@ -568,7 +568,8 @@ async def on_message_edit(before, after):
         emb.add_field(name = 'Стало', value = f'{after.content}')
         emb.set_footer(text = f'Cephalon Cy by сасиска#2472 || guild = {before.guild}')
         await channel.send(embed = emb)
-    
+#ИВЕНТЫ    
+
 #help command
 @client.command(aliases = ['Help', 'HELP'])
 @commands.cooldown(1, 3, commands.BucketType.default)
