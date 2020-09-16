@@ -399,12 +399,12 @@ async def emb_edit(ctx, arg, t = None, d = None, fu = None, img = None, f = None
         a = int('0x' + a, 16)
     if au == None:
         au = ctx.author
-    if fu == None:
+    if fu == None or 'Embed.Empty':
         fu = ('Cephalon Cy by сасиска#2472')
     if img == None:
-        img = ('https://steamcommunity.com/profiles/ЦИФРЫ/')
+        img = ('')
     if f == None:
-        f = ('https://steamcommunity.com/profiles/ЦИФРЫ/')
+        f = ('')
     emb = discord.Embed(title = t, description = d, colour = a)
     emb.set_author(name = au, icon_url = au.avatar_url)
     emb.set_image(url = img)
