@@ -550,7 +550,7 @@ async def on_message(message):
     if not message.author.bot:
         emb = discord.Embed(colour = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
         emb.set_author(name = message.author, icon_url = message.author.avatar_url)
-        emb.add_field(name = 'В канале', value = message.channel.mention)
+        emb.add_field(name = 'В канале', value = f'{message.channel.mention} ({message.channel.name})')
         emb.add_field(name = 'Было написано', value = message.content)
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await client.process_commands(message)
@@ -562,7 +562,7 @@ async def on_message_edit(before, after):
     if channel is None:
         return
     if not before.author.bot:
-        emb = discord.Embed(title = f'[Сообщение]({before.message.jump_url}) было изменено', colour = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
+        emb = discord.Embed(title = f'[Сообщение]({message.jump_url}) было изменено', colour = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
         emb.set_author(name = before.author.name, icon_url = before.author.avatar_url)
         emb.add_field(name = 'Было', value = f'{before.content}')
         emb.add_field(name = 'Стало', value = f'{after.content}')
