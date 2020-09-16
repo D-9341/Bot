@@ -542,7 +542,6 @@ async def on_voice_state_update(member, before, after):
 
 @client.event
 async def on_message(message):
-    guild = message.guild
     channel = client.get_channel(714175791033876490)
     if channel is None:
         await client.process_commands(message)
@@ -552,7 +551,7 @@ async def on_message(message):
         emb.set_author(name = message.author, icon_url = message.author.avatar_url)
         emb.add_field(name = 'В канале', value = f'{message.channel.mention} ({message.channel.name})')
         emb.add_field(name = 'Было написано', value = message.content)
-        emb.set_footer(text = f'Cephalon Cy by сасиска#2472 || guild = {message.guild}')
+        emb.set_footer(text = f'Cephalon Cy by сасиска#2472 || guild - {message.guild}')
         await client.process_commands(message)
         await channel.send(embed = emb)
     
@@ -564,9 +563,9 @@ async def on_message_edit(before, after):
     if not before.author.bot:
         emb = discord.Embed(description = f'[Сообщение]({before.jump_url}) было изменено', colour = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
         emb.set_author(name = before.author.name, icon_url = before.author.avatar_url)
-        emb.add_field(name = 'Было', value = f'{before.content}')
-        emb.add_field(name = 'Стало', value = f'{after.content}')
-        emb.set_footer(text = f'Cephalon Cy by сасиска#2472 || guild = {before.guild}')
+        emb.add_field(name = 'Было', value = f'```{before.content}```')
+        emb.add_field(name = 'Стало', value = f'```{after.content}```')
+        emb.set_footer(text = f'Cephalon Cy by сасиска#2472 || guild - {before.guild}')
         await channel.send(embed = emb)
 #ИВЕНТЫ    
 
