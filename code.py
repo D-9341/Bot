@@ -39,8 +39,8 @@ async def mute(ctx, member: discord.Member, time : int, *, reason = None):
                         emb.add_field(name = 'По причине', value = reason)
                         emb.add_field(name = 'Время мута в минутах составляло', value = time)
                         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-                        await ctx.send(f'{member.mention}', embed = emb)
                         await member.remove_roles(role)
+                        await ctx.send(f'{member.mention}', embed = emb)
                     else:
                         emb = discord.Embed(description = f'{member.mention} уже размучен, мут не был автоматически снят.', colour = member.color)
                         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
