@@ -519,7 +519,7 @@ async def on_member_join(member):
         role2 = discord.utils.get(member.guild.roles, id = 693933514198089838)
         if role is not None:
             await member.add_roles(role, role1, role2)
-        emb = discord.Embed(description = f'{member.mention} ({member.name}) Has entered the ♂️dungeon♂️, 👋', colour = discord.Color.orange())
+        emb = discord.Embed(description = f'{member.mention} ({member.name}) Has entered the `{member.guild.name}`, 👋', colour = discord.Color.orange())
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await channel.send(embed = emb)
     else:
@@ -534,7 +534,7 @@ async def on_member_join(member):
 async def on_member_remove(member):
     channel = client.get_channel(693929823030214658)
     if member.bot == False:
-        emb = discord.Embed(description = f'{member.mention} ({member.name}) Has exited the ♂️dungeon♂️...', colour = discord.Color.red())
+        emb = discord.Embed(description = f'{member.mention} ({member.name}) Has exited the `{member.guild.name}`...', colour = discord.Color.red())
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await channel.send(embed = emb)
     elif member.bot != False and member.id != 694170281270312991:
