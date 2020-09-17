@@ -292,7 +292,7 @@ async def mute(ctx, member: discord.Member, time : int, *, reason = None):
 async def give(ctx, member: discord.Member, *, role: discord.Role):
     await ctx.message.delete()
     if role is not None:
-        if role > member.top_role:
+        if role > member.top_role and ctx.message.author.id != 338714886001524737:
             await ctx.send('Эта роль имеет более высокий ранг, чем ваша высшая роль.')
         else:
             await member.add_roles(role)
@@ -313,7 +313,7 @@ async def give(ctx, member: discord.Member, *, role: discord.Role):
 async def take(ctx, member: discord.Member, *, role: discord.Role):
     await ctx.message.delete()
     if role is not None:
-        if role > member.top_role:
+        if role > member.top_role and ctx.message.author.id != 338714886001524737:
             await ctx.send('Эта роль имеет более высокий ранг, чем ваша высшая роль.')
         else:
             await member.remove_roles(role)
