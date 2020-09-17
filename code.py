@@ -293,7 +293,7 @@ async def give(ctx, member: discord.Member, *, role: discord.Role):
     await ctx.message.delete()
     if role is not None:
         if role > member.top_role and ctx.message.author.id != 338714886001524737:
-            await ctx.send('Эта роль имеет более высокий ранг, чем ваша высшая роль.')
+            await ctx.send('Вы не можете выдать эту роль, так как она имеет более высокий ранг, чем ваша высшая роль.')
         else:
             await member.add_roles(role)
             channel = client.get_channel(714175791033876490)
@@ -314,7 +314,7 @@ async def take(ctx, member: discord.Member, *, role: discord.Role):
     await ctx.message.delete()
     if role is not None:
         if role > member.top_role and ctx.message.author.id != 338714886001524737:
-            await ctx.send('Эта роль имеет более высокий ранг, чем ваша высшая роль.')
+            await ctx.send('Вы не можете забрать эту роль, так как она имеет более высокий ранг, чем ваша высшая роль.')
         else:
             await member.remove_roles(role)
             channel = client.get_channel(714175791033876490)
