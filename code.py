@@ -33,7 +33,7 @@ async def mute(ctx, member: discord.Member, time : int, *, reason = None):
             await asyncio.sleep(time*60)
             if role is not None:
                 for role in member.roles:
-                    if role in member.roles:
+                    if role.name == 'Muted':
                         emb = discord.Embed(colour = member.color, timestamp = ctx.message.created_at)
                         emb.add_field(name = 'Размучен по истечению времени', value = member.mention)
                         emb.add_field(name = 'По причине', value = reason)
