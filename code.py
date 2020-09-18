@@ -302,7 +302,7 @@ async def give(ctx, member: discord.Member, *, role: discord.Role):
             emb.add_field(name = 'Выдана:', value = member.mention)
             emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
             emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-            await channel.send(embed = emb)
+            await ctx.send(embed = emb)
     else:
         emb = discord.Embed(description = f'{ctx.author.mention}, я не могу найти подходящую роль!', colour = member.color, timestamp = ctx.message.created_at)
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
@@ -323,7 +323,7 @@ async def take(ctx, member: discord.Member, *, role: discord.Role):
             emb.add_field(name = 'Забрана у:', value = member.mention)
             emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
             emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-            await channel.send(embed = emb)
+            await ctx.send(embed = emb)
     else:
         emb = discord.Embed(description = f'{ctx.author.mention}, я не могу найти подходящую роль!', colour = member.color, timestamp = ctx.message.created_at)
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
