@@ -571,15 +571,14 @@ async def on_message(message):
         await client.process_commands(message)
         return
     if not message.author.bot:
-        if is not message.content.startswith('cy/give') or message.content.startswith('cy/take'):
-            emb = discord.Embed(colour = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
-            emb.set_author(name = message.author, icon_url = message.author.avatar_url)
-            emb.add_field(name = 'На сервере', value = message.guild)
-            emb.add_field(name = 'В канале', value = f'{message.channel.mention} ({message.channel.name})')
-            emb.add_field(name = 'Было написано', value = message.content)
-            emb.set_footer(text = f'Cephalon Cy by сасиска#2472')
-            await client.process_commands(message)
-            await channel.send(embed = emb)
+        emb = discord.Embed(colour = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
+        emb.set_author(name = message.author, icon_url = message.author.avatar_url)
+        emb.add_field(name = 'На сервере', value = message.guild)
+        emb.add_field(name = 'В канале', value = f'{message.channel.mention} ({message.channel.name})')
+        emb.add_field(name = 'Было написано', value = message.content)
+        emb.set_footer(text = f'Cephalon Cy by сасиска#2472')
+        await client.process_commands(message)
+        await channel.send(embed = emb)
     
 @client.event
 async def on_message_edit(before, after):
