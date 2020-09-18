@@ -348,7 +348,7 @@ async def say_everyone(ctx, arg = None, text = None, t = None, d = None, fu = No
         a = int('0x' + a, 16)
     if au == None:
         au = ctx.author
-    if fu == None or 'Embed.Empty':
+    if fu == None or Embed.Empty:
         fu = ('Cephalon Cy by сасиска#2472')
     if img == None:
         img = ('')
