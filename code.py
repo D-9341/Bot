@@ -571,7 +571,7 @@ async def on_message(message):
         await client.process_commands(message)
         return
     if not message.author.bot:
-        if not message.content.startswith('cy/give') or message.content.startswith('cy/take'):
+        if is not message.content.startswith('cy/give') or message.content.startswith('cy/take'):
             emb = discord.Embed(colour = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
             emb.set_author(name = message.author, icon_url = message.author.avatar_url)
             emb.add_field(name = 'На сервере', value = message.guild)
