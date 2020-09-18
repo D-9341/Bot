@@ -340,7 +340,7 @@ async def emb_content(ctx, arg):
 @client.command(aliases = ['emb_e'])
 @commands.has_permissions(mention_everyone = True)
 @commands.cooldown(1, 20, commands.BucketType.default)
-async def say_everyone(ctx, arg = None, text = None, t = None, d = None, fu = None, img = None, f = None, a = None, au : discord.Member = None):
+async def say_everyone(ctx, arg = None, text = None, t = None, d = None, img = None, f = None, a = None, au : discord.Member = None):
     await ctx.message.delete()
     if a == None:
         a = ctx.author.color
@@ -348,8 +348,6 @@ async def say_everyone(ctx, arg = None, text = None, t = None, d = None, fu = No
         a = int('0x' + a, 16)
     if au == None:
         au = ctx.author
-    if fu == None or 'Embed.Empty':
-        fu = 'Cephalon Cy by сасиска#2472'
     if img == None:
         img = ('')
     if f == None:
@@ -358,7 +356,7 @@ async def say_everyone(ctx, arg = None, text = None, t = None, d = None, fu = No
     emb.set_author(name = au, icon_url = au.avatar_url)
     emb.set_image(url = img)
     emb.set_thumbnail(url = f)
-    emb.set_footer(text = fu)
+    emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
     if arg == 'noembed':
         await ctx.send('@everyone ' + text)
     elif arg != 'noembed':
@@ -366,7 +364,7 @@ async def say_everyone(ctx, arg = None, text = None, t = None, d = None, fu = No
     
 @client.command(aliases = ['Say', 'SAY'])
 @commands.has_permissions(manage_channels = True)
-async def say(ctx, arg = None, text = None, t = None, d = None, fu = None, img = None, f = None, a = None, au : discord.Member = None, *, role: discord.Role = None):
+async def say(ctx, arg = None, text = None, t = None, d = None, img = None, f = None, a = None, au : discord.Member = None, *, role: discord.Role = None):
     await ctx.message.delete()
     if a == None:
         a = ctx.author.color
@@ -374,8 +372,6 @@ async def say(ctx, arg = None, text = None, t = None, d = None, fu = None, img =
         a = int('0x' + a, 16)
     if au == None:
         au = ctx.author
-    if fu == None or 'Embed.Empty':
-        fu = 'Cephalon Cy by сасиска#2472'
     if img == None:
         img = ('')
     if f == None:
@@ -386,7 +382,7 @@ async def say(ctx, arg = None, text = None, t = None, d = None, fu = None, img =
     emb.set_author(name = au, icon_url = au.avatar_url)
     emb.set_image(url = img)
     emb.set_thumbnail(url = f)
-    emb.set_footer(text = fu)
+    emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
     if role is not None and arg != 'noembed':
         await ctx.send(f'{role.mention}', embed = emb)
     elif role is None and arg != 'noembed':
