@@ -302,7 +302,7 @@ async def give(ctx, member: discord.Member, *, role: discord.Role):
             emb.add_field(name = 'Выдана:', value = member.mention)
             emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
             emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-            await ctx.send(embed = emb)
+            await channel.send(embed = emb)
     else:
         emb = discord.Embed(description = f'{ctx.author.mention}, я не могу найти подходящую роль!', colour = member.color, timestamp = ctx.message.created_at)
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
@@ -323,7 +323,7 @@ async def take(ctx, member: discord.Member, *, role: discord.Role):
             emb.add_field(name = 'Забрана у:', value = member.mention)
             emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
             emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-            await ctx.send(embed = emb)
+            await channel.send(embed = emb)
     else:
         emb = discord.Embed(description = f'{ctx.author.mention}, я не могу найти подходящую роль!', colour = member.color, timestamp = ctx.message.created_at)
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
@@ -571,14 +571,15 @@ async def on_message(message):
         await client.process_commands(message)
         return
     if not message.author.bot:
-        emb = discord.Embed(colour = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
-        emb.set_author(name = message.author, icon_url = message.author.avatar_url)
-        emb.add_field(name = 'На сервере', value = message.guild)
-        emb.add_field(name = 'В канале', value = f'{message.channel.mention} ({message.channel.name})')
-        emb.add_field(name = 'Было написано', value = message.content)
-        emb.set_footer(text = f'Cephalon Cy by сасиска#2472')
-        await client.process_commands(message)
-        await channel.send(embed = emb)
+        if not message.content.startswith('cy/give') or message.content.startswith('cy/take'):
+            emb = discord.Embed(colour = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
+            emb.set_author(name = message.author, icon_url = message.author.avatar_url)
+            emb.add_field(name = 'На сервере', value = message.guild)
+            emb.add_field(name = 'В канале', value = f'{message.channel.mention} ({message.channel.name})')
+            emb.add_field(name = 'Было написано', value = message.content)
+            emb.set_footer(text = f'Cephalon Cy by сасиска#2472')
+            await client.process_commands(message)
+            await channel.send(embed = emb)
     
 @client.event
 async def on_message_edit(before, after):
