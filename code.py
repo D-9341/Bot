@@ -567,6 +567,8 @@ async def on_voice_state_update(member, before, after):
 
 @client.event
 async def on_message(message):
+    if client.user.mentioned_in(message):
+        await message.channel.send('Пропишите cy/help для помощи.')
     channel = client.get_channel(714175791033876490)
     if channel is None:
         await client.process_commands(message)
