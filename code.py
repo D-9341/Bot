@@ -367,8 +367,7 @@ async def say_everyone(ctx, arg = None, text = None, t = None, d = None, fu = No
     
 @client.command(aliases = ['Say', 'SAY'])
 @commands.has_permissions(manage_channels = True)
-async def say(ctx, arg = None, text = None, *, t = None, d = None, fu = None, img = None, f = None, a = None, au : discord.Member = None, role: discord.Role = None):
-    x = message.content.split(['&'])
+async def say(ctx, arg = None, text = None, t = None, d = None, fu = None, img = None, f = None, a = None, au : discord.Member = None, *, role: discord.Role = None):
     await ctx.message.delete()
     if a == None:
         a = ctx.author.color
@@ -390,9 +389,9 @@ async def say(ctx, arg = None, text = None, *, t = None, d = None, fu = None, im
     emb.set_thumbnail(url = f)
     emb.set_footer(text = fu)
     if role is not None and arg != 'noembed':
-        await ctx.send(x, f'{role.mention}', embed = emb)
+        await ctx.send(f'{role.mention}', embed = emb)
     elif role is None and arg != 'noembed':
-        await ctx.send(x, embed = emb)
+        await ctx.send(embed = emb)
     if arg == 'noembed':
         await ctx.send(text)
 
