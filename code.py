@@ -200,7 +200,7 @@ async def about(ctx, member: discord.Member = None):
     emb.add_field(name = 'Имя', value = member.name)
     emb.add_field(name = 'Никнейм', value = member.nick)
     emb.add_field(name = 'Статус', value = member.status)
-    emb.add_field(name = 'Пользовательский статус', value = member.activity.name)
+    emb.add_field(name = 'Пользовательский статус', value = member.activity.Game.name)
     emb.add_field(name = f'Роли [{len(member.roles)-1}]', value=' '.join([role.mention for role in member.roles[1:]]), inline = False)
     emb.add_field(name = 'Высшая Роль', value = member.top_role.mention, inline = False)
     emb.add_field(name = 'Бот?', value = bot)
