@@ -378,7 +378,7 @@ async def say(ctx, arg = None, text = None, t = None, d = None, fu = None, img =
         img = ('')
     if f == None:
         f = ('')
-    if fu == Embed.Empty:
+    if fu == None:
         fu = ('Cephalon Cy by сасиска#2472')
     if role != None:
         a = role.color
@@ -415,7 +415,7 @@ async def emb_edit(ctx, arg, t = None, d = None, fu = None, img = None, f = None
     emb.set_author(name = au, icon_url = au.avatar_url)
     emb.set_image(url = img)
     emb.set_thumbnail(url = f)
-    emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+    emb.set_footer(text = fu)
     await message.edit(embed = emb)
     await ctx.send('👌', delete_after = 1)
     
