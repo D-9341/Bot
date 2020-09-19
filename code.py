@@ -358,7 +358,7 @@ async def say_everyone(ctx, arg = None, text = None, t = None, d = None, fu = No
     emb.set_author(name = au, icon_url = au.avatar_url)
     emb.set_image(url = img)
     emb.set_thumbnail(url = f)
-    emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+    emb.set_footer(text = fu)
     if arg == 'noembed':
         await ctx.send('@everyone ' + text)
     elif arg != 'noembed':
@@ -386,7 +386,7 @@ async def say(ctx, arg = None, text = None, t = None, d = None, fu = None, img =
     emb.set_author(name = au, icon_url = au.avatar_url)
     emb.set_image(url = img)
     emb.set_thumbnail(url = f)
-    emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+    emb.set_footer(text = fu)
     if role is not None and arg != 'noembed':
         await ctx.send(f'{role.mention}', embed = emb)
     elif role is None and arg != 'noembed':
