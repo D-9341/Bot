@@ -336,7 +336,7 @@ async def emb_content(ctx, arg):
     await ctx.message.delete()
     message = await ctx.fetch_message(id = arg)
     for emb in message.embeds:
-        await ctx.send(f'```cy/emb t& {emb.title} d& {emb.description} f& {emb.footer.text} c& {emb.colour} a& @{emb.author.name} img& {emb.image.url} fu& {emb.thumbnail.url}```')
+        await ctx.send(f'```cy/say "" "" t& {emb.title} d& {emb.description} f& {emb.footer.text} c& {emb.colour} a& {emb.author.name} img& {emb.image.url} fu& {emb.thumbnail.url}```')
             
 @client.command(aliases = ['emb_e'])
 @commands.has_permissions(mention_everyone = True)
