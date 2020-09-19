@@ -11,7 +11,12 @@ client.remove_command('help')
 client.owner_id = 338714886001524737
 
 #test commands space
-
+@client.command(aliases = ['r_emb_ctx'])
+@commands.cooldown(1, 5, commands.BucketType.default)
+async def raw_emb_content(ctx, arg):
+    message = await ctx.fetch_message(id = arg)
+    for emb in message.embeds:
+        await ctx.send(f'```cy/emb t& {emb.title} d& {emb.description} f& {emb.footer.text} c& {emb.colour} a& @{emb.author.name} img& {emb.image.url} fu& {emb.thumbnail.url}```')
 #test commands space
 
 @client.command(aliases = ['.пуленепробиваемое-стекло'])
