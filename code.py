@@ -367,7 +367,8 @@ async def say_everyone(ctx, arg = None, text = None, t = None, d = None, fu = No
     
 @client.command(aliases = ['Say', 'SAY'])
 @commands.has_permissions(manage_channels = True)
-async def say(ctx, arg = None, text = None, t = None, d = None, fu = None, img = None, f = None, a = None, au : discord.Member = None, *, role: discord.Role = None):
+async def say(ctx, arg = None, text = None, *, t = None, d = None, fu = None, img = None, f = None, a = None, au : discord.Member = None, role: discord.Role = None):
+    message.content.split('&')
     await ctx.message.delete()
     if a == None:
         a = ctx.author.color
@@ -693,13 +694,15 @@ async def on_ready():
 async def kick(ctx , member: discord.Member, *, reason: str = None):
     await ctx.message.delete()
     if member.id != client.owner_id:
+        if reason == None:
+            reason = 'Не указана'
         emb = discord.Embed(colour = member.color)
-        await member.kick(reason = reason)
         emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
         emb.add_field(name = 'Был кикнут', value = member.mention)
         emb.add_field(name = 'По причине', value = reason)
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
+        await member.kick(reason = reason)
     else:
         emb = discord.Embed(description = f'Извините, {ctx.author.mention}, но вы не можете кикнуть моего создателя!', colour = discord.Color.orange())
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
@@ -711,13 +714,15 @@ async def kick(ctx , member: discord.Member, *, reason: str = None):
 async def ban(ctx , member: discord.Member, *, reason: str = None):
     await ctx.message.delete()
     if member.id != client.owner_id:
+        if reason == None:
+            reason = 'Не указана'
         emb = discord.Embed(colour = member.color)
-        await member.ban(reason = reason)
         emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
         emb.add_field(name = 'Был забанен', value = member.mention)
         emb.add_field(name = 'По причине', value = reason)
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
+        await member.ban(reason = reason)
     else:
         emb = discord.Embed(description = f'Извините, {ctx.author.mention}, но вы не можете забанить моего создателя!', colour = discord.Color.orange())
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
