@@ -398,7 +398,7 @@ async def say(ctx, arg = None, text = None, t = None, d = None, fu = None, img =
 @commands.has_permissions(manage_channels = True)
 async def emb_edit(ctx, arg, t = None, d = None, fu = None, img = None, f = None, a = None, au : discord.Member = None):
     await ctx.message.delete()
-    m = await ctx.fetch_message(id = arg)
+    message = await ctx.fetch_message(id = arg)
     if a == None:
         a = ctx.author.color
     else:
@@ -409,22 +409,22 @@ async def emb_edit(ctx, arg, t = None, d = None, fu = None, img = None, f = None
         img = ('')
     if f == None:
         f = ('')
-    if fu == None:
+    if fu == None or Embed.Empty:
         fu = ('Cephalon Cy by сасиска#2472')
     emb = discord.Embed(title = t, description = d, colour = a)
     emb.set_author(name = au, icon_url = au.avatar_url)
     emb.set_image(url = img)
     emb.set_thumbnail(url = f)
     emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-    await m.edit(embed = emb)
+    await message.edit(embed = emb)
     await ctx.send('👌', delete_after = 1)
     
 @client.command(aliases = ['Edit', 'EDIT'])
 @commands.has_permissions(manage_channels = True)
 async def edit(ctx, arg, *, text):
     await ctx.message.delete()
-    m = await ctx.fetch_message(id = arg)
-    await m.edit(content = text)
+    message = await ctx.fetch_message(id = arg)
+    await message.edit(content = text)
     await ctx.send('👌', delete_after = 1)
     
 @client.command(aliases = ['c', 'C', 'coin', 'Coin', 'COIN', 'Coinflip', 'COINFLIP'])
