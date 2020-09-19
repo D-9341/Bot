@@ -378,7 +378,7 @@ async def say(ctx, arg = None, text = None, t = None, d = None, fu = None, img =
         img = ('')
     if f == None:
         f = ('')
-    if fu == None or Embed.Empty:
+    if fu == None:
         fu = ('Cephalon Cy by сасиска#2472')
     if role != None:
         a = role.color
@@ -409,7 +409,7 @@ async def emb_edit(ctx, arg, t = None, d = None, fu = None, img = None, f = None
         img = ('')
     if f == None:
         f = ('')
-    if fu == None or Embed.Empty:
+    if fu == None:
         fu = ('Cephalon Cy by сасиска#2472')
     emb = discord.Embed(title = t, description = d, colour = a)
     emb.set_author(name = au, icon_url = au.avatar_url)
