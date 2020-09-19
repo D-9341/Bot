@@ -340,7 +340,7 @@ async def emb_content(ctx, arg):
 @client.command(aliases = ['emb_e'])
 @commands.has_permissions(mention_everyone = True)
 @commands.cooldown(1, 20, commands.BucketType.default)
-async def say_everyone(ctx, arg = None, text = None, t = None, d = None, img = None, f = None, a = None, au : discord.Member = None):
+async def say_everyone(ctx, arg = None, text = None, t = None, d = None, fu = None, img = None, f = None, a = None, au : discord.Member = None):
     await ctx.message.delete()
     if a == None:
         a = ctx.author.color
@@ -352,6 +352,8 @@ async def say_everyone(ctx, arg = None, text = None, t = None, d = None, img = N
         img = ('')
     if f == None:
         f = ('')
+    if fu == None:
+        fu = ('Cephalon Cy by сасиска#2472')
     emb = discord.Embed(title = t, description = d, colour = a)
     emb.set_author(name = au, icon_url = au.avatar_url)
     emb.set_image(url = img)
@@ -364,7 +366,7 @@ async def say_everyone(ctx, arg = None, text = None, t = None, d = None, img = N
     
 @client.command(aliases = ['Say', 'SAY'])
 @commands.has_permissions(manage_channels = True)
-async def say(ctx, arg = None, text = None, t = None, d = None, img = None, f = None, a = None, au : discord.Member = None, *, role: discord.Role = None):
+async def say(ctx, arg = None, text = None, t = None, d = None, fu = None, img = None, f = None, a = None, au : discord.Member = None, *, role: discord.Role = None):
     await ctx.message.delete()
     if a == None:
         a = ctx.author.color
@@ -376,6 +378,8 @@ async def say(ctx, arg = None, text = None, t = None, d = None, img = None, f = 
         img = ('')
     if f == None:
         f = ('')
+    if fu == None:
+        fu = ('Cephalon Cy by сасиска#2472')
     if role != None:
         a = role.color
     emb = discord.Embed(title = t, description = d, colour = a)
@@ -392,7 +396,7 @@ async def say(ctx, arg = None, text = None, t = None, d = None, img = None, f = 
 
 @client.command(aliases = ['emb_ed'])
 @commands.has_permissions(manage_channels = True)
-async def emb_edit(ctx, arg, t = None, d = None, img = None, f = None, a = None, au : discord.Member = None):
+async def emb_edit(ctx, arg, t = None, d = None, fu = None, img = None, f = None, a = None, au : discord.Member = None):
     await ctx.message.delete()
     m = await ctx.fetch_message(id = arg)
     if a == None:
@@ -405,6 +409,8 @@ async def emb_edit(ctx, arg, t = None, d = None, img = None, f = None, a = None,
         img = ('')
     if f == None:
         f = ('')
+    if fu == None:
+        fu = ('Cephalon Cy by сасиска#2472')
     emb = discord.Embed(title = t, description = d, colour = a)
     emb.set_author(name = au, icon_url = au.avatar_url)
     emb.set_image(url = img)
