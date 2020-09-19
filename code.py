@@ -11,12 +11,7 @@ client.remove_command('help')
 client.owner_id = 338714886001524737
 
 #test commands space
-@client.command(aliases = ['r_emb_ctx'])
-@commands.cooldown(1, 5, commands.BucketType.default)
-async def raw_emb_content(ctx, arg):
-    message = await ctx.fetch_message(id = arg)
-    for emb in message.embeds:
-        await ctx.send(f'```cy/emb t& {emb.title} d& {emb.description} f& {emb.footer.text} c& {emb.colour} a& @{emb.author.name} img& {emb.image.url} fu& {emb.thumbnail.url}```')
+
 #test commands space
 
 @client.command(aliases = ['.пуленепробиваемое-стекло'])
@@ -573,6 +568,8 @@ async def on_voice_state_update(member, before, after):
 @client.event
 async def on_message(message):
     if client.user.mentioned_in(message):
+        await message.delete()
+        await client.process_commands(message)
         await message.channel.send('Пропишите cy/help для помощи.')
     channel = client.get_channel(714175791033876490)
     if channel is None:
