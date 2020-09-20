@@ -11,7 +11,13 @@ client.remove_command('help')
 client.owner_id = 338714886001524737
 
 #test commands space
+class test(commands.Cog):
+    def __init__(self, client):
+        self.client = client
 
+    @commands.command()
+    async def pong(self, ctx):
+        await ctx.send('Ping!')
 #test commands space
 
 @client.command()
