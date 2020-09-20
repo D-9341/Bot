@@ -14,12 +14,6 @@ client.owner_id = 338714886001524737
 
 #test commands space
 
-@client.command(aliases = ['.пуленепробиваемое-стекло'])
-@commands.cooldown(1, 5, commands.BucketType.default)
-async def bulletproofglass(ctx):
-    await ctx.message.delete()
-    await ctx.send('https://cdn.discordapp.com/attachments/694530056281915392/752563367549468882/unknown.png')
-
 @client.command()
 @commands.cooldown(1, 5, commands.BucketType.default)
 async def rp(ctx):
@@ -547,7 +541,7 @@ async def on_member_remove(member):
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await channel.send(embed = emb)
     elif member.bot != False and member.id == 694170281270312991:
-        emb = discord.Embed(description = 'Ой, это я чтоли?', colour = discord.Color.orange())
+        emb = discord.Embed(description = f'Ой, это я чтоли с `{member.guild.name}` вышел?', colour = discord.Color.orange())
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await channel.send(embed = emb)
 
@@ -634,7 +628,7 @@ async def help(ctx, arg = None):
     elif arg == 'ban':
         await ctx.send('```cy/ban <@пинг/имя/ID> |причина|```')
     elif arg == 'clear':
-        await ctx.send('```cy/clear <количество>```')
+        await ctx.send('```cy/clear <количество> |confirm|```')
     elif arg == 'dm':
         await ctx.send('```cy/dm <@пинг/имя/ID> <текст>```')
     elif arg == 'edit':
@@ -752,7 +746,7 @@ async def clear(ctx, amount : int, confirm : str = None):
         await ctx.channel.purge(limit = amount)
         await ctx.send(embed = emb, delete_after = 1)
     elif amount >= 10:
-        if confirm == 'CONFIRM':
+        if confirm == 'confirm':
             await ctx.send(f'Через 3 секунды будет удалено {amount} сообщений')
             await asyncio.sleep(3)
             await ctx.channel.purge(limit = amount + 1)
