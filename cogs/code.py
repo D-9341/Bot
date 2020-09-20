@@ -916,6 +916,7 @@ async def clear_error(ctx, error):
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
     
-t = os.environ.get('t')
+cogs = os.environ.get('test.py')
 
+t = os.environ.get('t')
 client.run(t)
