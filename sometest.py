@@ -9,6 +9,5 @@ class test(commands.Cog):
     async def pong(self, ctx):
         await ctx.send('Ping!')
 
-
 def setup(client):
     client.add_cog(test(client))
