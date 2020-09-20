@@ -565,7 +565,7 @@ async def on_voice_state_update(member, before, after):
 
 @client.event
 async def on_message(message):
-    if client.user.mentioned_in(message):
+    if client.user.mentioned_in(message) and message.content is None:
         await message.delete()
         await client.process_commands(message)
         await message.channel.send('Пропишите cy/help для помощи.')
