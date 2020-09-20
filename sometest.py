@@ -6,8 +6,8 @@ class Test(commands.Cog):
         self.client = client
 
     @commands.command()
-    async def pong(self, ctx):
-        await ctx.send('Ping!')
+    async def hello(self, ctx):
+        await ctx.send('Hi ya!')
 
 def setup(client):
     client.add_cog(Test(client))
