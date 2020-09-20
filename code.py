@@ -11,7 +11,9 @@ client.remove_command('help')
 client.owner_id = 338714886001524737
 
 #test commands space
-
+@client.command()
+async def load(ctx, extension):
+    client.load_extension(f'cogs.{extension}')
 #test commands space
 
 @client.command()
