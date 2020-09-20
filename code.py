@@ -24,7 +24,7 @@ async def bulletproofglass(ctx):
 @commands.cooldown(1, 5, commands.BucketType.default)
 async def rp(ctx):
     await ctx.message.delete()
-    emb = discord.Embed(title = 'Ныа', description = 'https://www.youtube.com/watch?v=idmTSW9mfYI', colour = discord.Color.orange())
+    emb = discord.Embed(description = '[Ныа](https://www.youtube.com/watch?v=idmTSW9mfYI)', colour = discord.Color.orange())
     await ctx.send(embed = emb)
 
 @client.command()
@@ -78,8 +78,7 @@ async def aliases(ctx):
 @commands.cooldown(1, 5, commands.BucketType.default)
 async def invite_cy(ctx):
     await ctx.message.delete()
-    emb = discord.Embed(colour = discord.Color.orange(), timestamp = ctx.message.created_at)
-    emb.add_field(name = 'Ссылка для быстрого приглашения Cy на сервера', value = 'https://discordapp.com/oauth2/authorize?&client_id=694170281270312991&scope=bot&permissions=8')
+    emb = discord.Embed(description = '[Ссылка](https://discordapp.com/oauth2/authorize?&client_id=694170281270312991&scope=bot&permissions=8) для приглашения Cy на сервера', colour = discord.Color.orange(), timestamp = ctx.message.created_at)
     emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
     await ctx.send(embed = emb)
     
