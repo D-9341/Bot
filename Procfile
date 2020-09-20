@@ -1,1 +1,1 @@
-worker: python code.py
+worker: python cogs/code.py
