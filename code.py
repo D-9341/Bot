@@ -915,4 +915,5 @@ async def clear_error(ctx, error):
     
 t = os.environ.get('t')
 
+client.add_cog(test(client))
 client.run(t)
