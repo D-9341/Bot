@@ -306,7 +306,7 @@ async def give(ctx, member: discord.Member, *, role: discord.Role):
 async def take(ctx, member: discord.Member, *, role: discord.Role):
     await ctx.message.delete()
     if role is not None:
-        if role > ctx.author.top_role and ctx.message.author.id != 338714886001524737:
+        if role > ctx.author.top_role:
             await ctx.send('Вы не можете забрать эту роль, так как она имеет более высокий ранг, чем ваша высшая роль.')
         else:
             await member.remove_roles(role)
