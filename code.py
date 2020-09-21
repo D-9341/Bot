@@ -63,16 +63,6 @@ async def ping(ctx):
     emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
     await ctx.send(embed = emb)
     
-@client.command(aliases = ['.rap'])
-@commands.cooldown(1, 5, commands.BucketType.default)
-async def rap(ctx):
-    await ctx.message.delete()
-    emb = discord.Embed(colour = ctx.author.color, timestamp = ctx.message.created_at)
-    emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
-    emb.set_image(url = 'https://thumbs.gfycat.com/MessyCarefreeHousefly-size_restricted.gif')
-    emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-    await ctx.send(embed = emb)
-    
 @client.command(aliases = ['ctx'])
 @commands.cooldown(1, 5, commands.BucketType.default)
 async def content(ctx, arg):
