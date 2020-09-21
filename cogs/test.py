@@ -12,7 +12,7 @@ class Test(commands.Cog):
         emb.set_footer(text = 'Будет отменено через 5 секунд')
         sent = await ctx.send(embed = emb)
         try:
-            msg = await self.client.wait_for('message', timeout = 5, check = lambda message: message.author == ctx.author and message.channel == ctx.channel)
+            msg = await self.client.wait_for('confirm', timeout = 5, check = lambda message: message.author == ctx.author and message.channel == ctx.channel)
             if msg:
                 await sent.delete()
                 await msg.delete()
