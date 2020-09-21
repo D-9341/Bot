@@ -168,52 +168,6 @@ async def about(ctx, member: discord.Member = None):
     emb.set_thumbnail(url = member.avatar_url)
     emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
     await ctx.send(embed = emb)
-        
-@client.command(aliases = ['Give', 'GIVE'])
-@commands.has_permissions(manage_channels = True)
-async def give(ctx, member: discord.Member, *, role: discord.Role):
-    await ctx.message.delete()
-    if role is not None:
-        if role > member.top_role and ctx.message.author.id != 338714886001524737:
-            await ctx.send('Вы не можете выдать эту роль, так как она имеет более высокий ранг, чем ваша высшая роль.')
-        elif role == ctx.author.top_role and ctx.message.author.id != 338714886001524737:
-            await ctx.send('Вы не можете выдать эту роль, так как она равна вашей высшей роли.')
-        else:
-            await member.add_roles(role)
-            channel = client.get_channel(714175791033876490)
-            emb = discord.Embed(colour = member.color, timestamp = ctx.message.created_at)
-            emb.add_field(name = 'Была выдана роль', value = f'{role.mention} | {role.name} | ID {role.id}')
-            emb.add_field(name = 'Выдана:', value = member.mention)
-            emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
-            emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-            await channel.send(embed = emb)
-    else:
-        emb = discord.Embed(description = f'{ctx.author.mention}, я не могу найти подходящую роль!', colour = member.color, timestamp = ctx.message.created_at)
-        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-        await ctx.send(embed = emb)
-    
-@client.command(aliases = ['Take', 'TAKE'])
-@commands.has_permissions(manage_channels = True)
-async def take(ctx, member: discord.Member, *, role: discord.Role):
-    await ctx.message.delete()
-    if role is not None:
-        if role > ctx.author.top_role and ctx.message.author.id != 338714886001524737:
-            await ctx.send('Вы не можете забрать эту роль, так как она имеет более высокий ранг, чем ваша высшая роль.')
-        elif role == ctx.author.top_role and ctx.message.author.id != 338714886001524737:
-            await ctx.send('Вы не можете забрать эту роль, так как она равна вашей высшей роли.')
-        else:
-            await member.remove_roles(role)
-            channel = client.get_channel(714175791033876490)
-            emb = discord.Embed(colour = member.color, timestamp = ctx.message.created_at)
-            emb.add_field(name = 'Была забрана роль', value = f'{role.mention} | {role.name} | ID {role.id}')
-            emb.add_field(name = 'Забрана у:', value = member.mention)
-            emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
-            emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-            await channel.send(embed = emb)
-    else:
-        emb = discord.Embed(description = f'{ctx.author.mention}, я не могу найти подходящую роль!', colour = member.color, timestamp = ctx.message.created_at)
-        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-        await ctx.send(embed = emb) 
     
 @client.command(aliases = ['emb_ctx'])
 @commands.cooldown(1, 5, commands.BucketType.default)
@@ -679,34 +633,6 @@ async def say_everyone_error(ctx, error):
     if isinstance(error, commands.MissingPermissions):
         await ctx.message.delete()
         emb = discord.Embed(description = f'{ctx.author.mention} пытался вызвать команду emb_everyone', colour = discord.Color.orange())
-        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-        await ctx.send(embed = emb)
-        
-@give.error
-async def give_error(ctx, error):
-    if isinstance(error, commands.MissingRequiredArgument):
-        await ctx.message.delete()
-        emb = discord.Embed(description = f'{ctx.author.mention}, укажите роль, которую нужно выдать!', colour = discord.Color.orange())
-        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-        await ctx.send(embed = emb)
-
-    if isinstance(error, commands.MissingPermissions):
-        await ctx.message.delete()
-        emb = discord.Embed(description = f'{ctx.author.mention} пытался вызвать команду give', colour = discord.Color.orange())
-        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-        await ctx.send(embed = emb)
-        
-@take.error
-async def take_error(ctx, error):
-    if isinstance(error, commands.MissingRequiredArgument):
-        await ctx.message.delete()
-        emb = discord.Embed(description = f'{ctx.author.mention}, укажите роль, которую нужно забрать!', colour = discord.Color.orange())
-        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-        await ctx.send(embed = emb)
-
-    if isinstance(error, commands.MissingPermissions):
-        await ctx.message.delete()
-        emb = discord.Embed(description = f'{ctx.author.mention} пытался вызвать команду take', colour = discord.Color.orange())
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
         
