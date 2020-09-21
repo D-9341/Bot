@@ -11,10 +11,7 @@ client.remove_command('help')
 client.owner_id = 338714886001524737
 
 #test commands space
-@client.command()
-async def load(ctx):
-    client.load_extension('cogs.Test')
-    await ctx.send('Loaded!')
+
 #test commands space
 
 @client.command()
