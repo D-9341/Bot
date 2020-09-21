@@ -286,16 +286,6 @@ async def leave(ctx):
     await ctx.message.delete()
     if vc.is_connected():
         await vc.disconnect()
-            
-@client.command()
-@commands.has_permissions(administrator = True)
-@commands.cooldown(1, 5, commands.BucketType.default)
-async def dm(ctx, member: discord.Member, *, arg):
-    await ctx.message.delete()
-    emb = discord.Embed(description = f'{arg}', colour = member.color)
-    emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
-    emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-    await member.send(embed = emb)
 
 #ИВЕНТЫ
 @client.event
@@ -518,20 +508,6 @@ async def on_command_error(ctx, error):
     if isinstance(error, commands.CommandOnCooldown):
         await ctx.message.delete()
         emb = discord.Embed(description = f'{ctx.author.mention}, команда в кд, потерпи чутка!', colour = discord.Color.orange())
-        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-        await ctx.send(embed = emb)
-    
-@dm.error
-async def dm_error(ctx, error):
-    if isinstance(error, commands.MissingRequiredArgument):
-        await ctx.message.delete()
-        emb = discord.Embed(description = f'{ctx.author.mention}, укажите, кому и что написать!', colour = discord.Color.orange())
-        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-        await ctx.send(embed = emb)
-
-    if isinstance(error, commands.MissingPermissions):
-        await ctx.message.delete()
-        emb = discord.Embed(description = f'{ctx.author.mention} пытался вызвать команду dm', colour = discord.Color.orange())
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
         
