@@ -11,6 +11,16 @@ class Moderation(commands.Cog):
     async def on_ready(self):
         print('Дополнение Moderation успешно загружено.')
         
+    @commands.command()
+    @commands.has_permissions(view_audit_log = True)
+    @commands.cooldown(1, 5, commands.BucketType.default)
+    async def dm(self, ctx, member: discord.Member, *, arg):
+        await ctx.message.delete()
+        emb = discord.Embed(description = f'{arg}', colour = member.color)
+        emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
+        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+        await member.send(embed = emb)
+
     @commands.command(aliases = ['Kick', 'KICK'])
     @commands.cooldown(1, 10, commands.BucketType.default)
     @commands.has_permissions(kick_members = True)
