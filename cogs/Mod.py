@@ -11,14 +11,56 @@ class Moderation(commands.Cog):
     async def on_ready(self):
         print('Дополнение Moderation успешно загружено.')
         
-    @commands.command()
+    @commands.command(aliases = ['Give', 'GIVE'])
     @commands.has_permissions(manage_channels = True)
-    async def mute(self, ctx, member: discord.Member, time: int, reason: str = None):
+    async def give(self, ctx, member: discord.Member, *, role: discord.Role):
         await ctx.message.delete()
-        if member == None:
-            raise commands.MissingRequiredArgument(f'{ctx.author.mention}, укажите, кого и на сколько мутить!')
-        if time != int:
-            raise commands.BadArgument(f'{ctx.author.mention}, проверьте правильность написания команды!')
+        if role != None:
+            if role > member.top_role and ctx.message.author.id != 338714886001524737:
+                await ctx.send('Вы не можете выдать эту роль, так как она имеет более высокий ранг, чем ваша высшая роль.')
+            elif role == ctx.author.top_role and ctx.message.author.id != 338714886001524737:
+                await ctx.send('Вы не можете выдать эту роль кому либо, так как она равна вашей высшей роли.')
+            else:
+                await member.add_roles(role)
+                channel = client.get_channel(714175791033876490)
+                emb = discord.Embed(colour = member.color, timestamp = ctx.message.created_at)
+                emb.add_field(name = 'Была выдана роль', value = f'{role.mention} | {role.name} | ID {role.id}')
+                emb.add_field(name = 'Выдана:', value = member.mention)
+                emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
+                emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+                await channel.send(embed = emb)
+        else:
+            emb = discord.Embed(description = f'{ctx.author.mention}, я не могу найти подходящую роль!', colour = member.color, timestamp = ctx.message.created_at)
+            emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+            await ctx.send(embed = emb)
+            
+    @commands.command(aliases = ['Take', 'TAKE'])
+    @commands.has_permissions(manage_channels = True)
+    async def take(self, ctx, member: discord.Member, *, role: discord.Role):
+        await ctx.message.delete()
+        if role != None:
+            if role > ctx.author.top_role and ctx.message.author.id != 338714886001524737:
+                await ctx.send('Вы не можете забрать эту роль, так как она имеет более высокий ранг, чем ваша высшая роль.')
+            elif role == ctx.author.top_role and ctx.message.author.id != 338714886001524737:
+                await ctx.send('Вы не можете забрать эту роль у кого, так как она равна вашей высшей роли.')
+            else:
+                await member.remove_roles(role)
+                channel = client.get_channel(714175791033876490)
+                emb = discord.Embed(colour = member.color, timestamp = ctx.message.created_at)
+                emb.add_field(name = 'Была забрана роль', value = f'{role.mention} | {role.name} | ID {role.id}')
+                emb.add_field(name = 'Забрана у:', value = member.mention)
+                emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
+                emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+                await channel.send(embed = emb)
+        else:
+            emb = discord.Embed(description = f'{ctx.author.mention}, я не могу найти подходящую роль!', colour = member.color, timestamp = ctx.message.created_at)
+            emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+            await ctx.send(embed = emb)
+            
+    @commands.command(aliases = ['Mute', 'MUTE'])
+    @commands.has_permissions(manage_channels = True)
+    async def mute(self, ctx, member: discord.Member, time: int, *, reason: str = None):
+        await ctx.message.delete()
         if member.id != 338714886001524737:
             role = discord.utils.get(ctx.guild.roles, name = 'Muted')
             if role != None:
@@ -84,9 +126,9 @@ class Moderation(commands.Cog):
             emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
             await ctx.send(embed = emb)
         
-    @commands.command()
+    @commands.command(aliases = ['Unmute', 'UNMUTE'])
     @commands.has_permissions(manage_channels = True)
-    async def unmute(self, ctx, member: discord.Member, reason = None):
+    async def unmute(self, ctx, member: discord.Member, *, reason = None):
         await ctx.message.delete()
         role = discord.utils.get(ctx.guild.roles, name = 'Muted')
         if role != None:
