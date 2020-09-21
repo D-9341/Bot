@@ -5,7 +5,7 @@ class Moderation(commands.Cog):
     def __init__(self, client):
         self.client = client
         
-    @client.Cog.listener()
+    @commands.Cog.listener()
     async def on_ready(self):
         print('Дополнение Moderation успешно загружено.')
         
