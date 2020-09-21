@@ -403,20 +403,6 @@ async def edit(ctx, arg, *, text):
     await message.edit(content = text)
     await ctx.send('👌', delete_after = 1)
     
-@client.command(aliases = ['c', 'C', 'coin', 'Coin', 'COIN', 'Coinflip', 'COINFLIP'])
-@commands.cooldown(5, 10, commands.BucketType.default)
-async def coinflip(ctx):
-    await ctx.message.delete()
-    choices = ['Орёл!', 'Решка!']
-    rancoin = random.choice(choices)
-    await ctx.send(rancoin)
-
-@client.command(aliases = ['Cu', 'CU'])
-@commands.cooldown(1, 5, commands.BucketType.default)
-async def cu(ctx):
-    await ctx.message.delete()
-    await ctx.send('Медь')
-    
 #бесполезное говно
 @client.command(aliases = ['Join', 'JOIN'])
 async def join(ctx):
