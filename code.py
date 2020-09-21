@@ -506,52 +506,6 @@ async def time(ctx):
 @client.event
 async def on_ready():
     await client.change_presence(status = discord.Status.idle, activity = discord.Activity(type = discord.ActivityType.watching, name = 'В Discord API'))
-        
-#message delete
-@client.command(aliases = ['Clear', 'CLEAR'])
-@commands.cooldown(1, 10, commands.BucketType.default)
-@commands.has_permissions(administrator = True)
-async def clear(ctx, amount : int, confirm : str = None):
-    await ctx.message.delete()
-    if amount == 0:
-        emb = discord.Embed(description = 'Удалять 0 сообщений? Ты еблан?', colour = discord.Color.red())
-        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-        await ctx.send(embed = emb, delete_after = 3)
-    elif amount == 1:
-        emb = discord.Embed(description = f'удалено {amount} сообщение', colour = discord.Color.orange())
-        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-        await ctx.channel.purge(limit = amount)
-        await ctx.send(embed = emb, delete_after = 1)
-    elif amount == 2:
-        emb = discord.Embed(description = f'удалено {amount} сообщения', colour = discord.Color.orange())
-        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-        await ctx.channel.purge(limit = amount)
-        await ctx.send(embed = emb, delete_after = 1)
-    elif amount == 3:
-        emb = discord.Embed(description = f'удалено {amount} сообщения', colour = discord.Color.orange())
-        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-        await ctx.channel.purge(limit = amount)
-        await ctx.send(embed = emb, delete_after = 1)
-    elif amount == 4:
-        emb = discord.Embed(description = f'удалено {amount} сообщения', colour = discord.Color.orange())
-        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-        await ctx.channel.purge(limit = amount)
-        await ctx.send(embed = emb, delete_after = 1)
-    elif amount >= 10:
-        if confirm == 'confirm':
-            await ctx.send(f'Через 3 секунды будет удалено {amount} сообщений')
-            await asyncio.sleep(3)
-            await ctx.channel.purge(limit = amount + 1)
-            await ctx.send(f'удалено {amount} сообщений', delete_after = 2)
-        if confirm == None:
-            emb = discord.Embed(description = f'{ctx.author.mention}, для выполнения этой команды мне нужно ваше подтвеждение! (чувствительно к регистру)', colour = discord.Color.orange())
-            emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-            await ctx.send(embed = emb)
-    else:
-        emb = discord.Embed(description = f'удалено {amount} сообщений', colour = discord.Color.orange())
-        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-        await ctx.channel.purge(limit = amount)
-        await ctx.send(embed = emb, delete_after = 1)
     
 @client.event
 async def on_command_error(ctx, error):
@@ -606,26 +560,6 @@ async def say_error(ctx, error):
     if isinstance(error, commands.MissingPermissions):
         await ctx.message.delete()
         emb = discord.Embed(description = f'{ctx.author.mention} пытался вызвать команду say', colour = discord.Color.orange())
-        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-        await ctx.send(embed = emb)
-
-@clear.error
-async def clear_error(ctx, error):
-    if isinstance(error, commands.MissingRequiredArgument):
-        await ctx.message.delete()
-        emb = discord.Embed(description = f'{ctx.author.mention}, укажите, сколько сообщений нужно удалить!', colour = discord.Color.orange())
-        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-        await ctx.send(embed = emb)
-
-    if isinstance(error, commands.MissingPermissions):
-        await ctx.message.delete()
-        emb = discord.Embed(description = f'{ctx.author.mention} пытался вызвать команду clear', colour = discord.Color.orange())
-        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-        await ctx.send(embed = emb)
-        
-    if isinstance(error, commands.BadArgument):
-        await ctx.message.delete()
-        emb = discord.Embed(description = f'{ctx.author.mention}, проверьте правильность написания команды!', colour = discord.Color.orange())
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
 
