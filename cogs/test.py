@@ -7,7 +7,6 @@ class Test(commands.Cog):
 
     @commands.command
     async def hello(self, ctx):
-        await ctx.message.delete()
         await ctx.send('Hi ya!')
 
 def setup(client):
