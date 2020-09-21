@@ -11,6 +11,26 @@ class Moderation(commands.Cog):
     async def on_ready(self):
         print('Дополнение Moderation успешно загружено.')
         
+    @commands.command(aliases = ['Kikc', 'KICK'])
+    @commands.cooldown(1, 10, commands.BucketType.default)
+    @commands.has_permissions(kick_members = True)
+    async def kick(self, ctx, member: discord.Member, *, reason: str = None):
+        await ctx.message.delete()
+        if member.id != 338714886001524737:
+            if reason == None:
+                reason = 'Не указана.'
+            emb = discord.Embed(colour = member.color)
+            emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
+            emb.add_field(name = 'Был кикнут', value = member.mention)
+            emb.add_field(name = 'По причине', value = reason)
+            emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+            await ctx.send(embed = emb)
+            await member.kick(reason = reason)
+        else:
+            emb = discord.Embed(description = f'Извините, {ctx.author.mention}, но вы не можете кикнуть моего создателя!', colour = discord.Color.orange())
+            emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+            await ctx.send(embed = emb)
+        
     @commands.command(aliases = ['Give', 'GIVE'])
     @commands.has_permissions(manage_channels = True)
     async def give(self, ctx, member: discord.Member, *, role: discord.Role):
