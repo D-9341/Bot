@@ -6,22 +6,10 @@ class Test(commands.Cog):
         self.client = client
 
     @commands.command()
-    async def purge(self, ctx):
+    async def rp1(self, ctx):
         await ctx.message.delete()
-        emb = discord.Embed(description = 'Мне нужно ваше подтверждение для продолжения.')
-        emb.set_footer(text = 'Будет отменено через 5 секунд')
-        sent = await ctx.send(embed = emb)
-        try:
-            msg = await self.client.wait_for('confirm', timeout = 5, check = lambda message: message.author == ctx.author and message.channel == ctx.channel)
-            if msg:
-                await sent.delete()
-                await msg.delete()
-                await ctx.channel.purge(limit = 5)
-                await ctx.send('Удалено 5 сообщений')
-
-        except asyncio.TimeoutError:
-            await sent.delete()
-            await ctx.send('Время вышло', delete_after = 3)
+        emb = discord.Embed(description = '[Ныа](https://www.youtube.com/watch?v=idmTSW9mfYI)', colour = discord.Color.orange())
+        await ctx.send(embed = emb)
 
 def setup(client):
     client.add_cog(Test(client))
