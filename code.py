@@ -168,25 +168,6 @@ async def about(ctx, member: discord.Member = None):
     emb.set_thumbnail(url = member.avatar_url)
     emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
     await ctx.send(embed = emb)
-    
-@client.command(aliases = ['Unmute', 'UNMUTE'])
-@commands.has_permissions(manage_channels = True)
-async def unmute(ctx, member : discord.Member, *, reason = None):
-    await ctx.message.delete()
-    role = discord.utils.get(ctx.message.guild.roles, name = 'Muted')
-    if role is not None:
-        await member.remove_roles(role)
-        if reason == None:
-            reason = 'Не указана'
-        emb = discord.Embed(title = f'Принудительное снятие мута у {member.name}', colour = member.color, timestamp = ctx.message.created_at)
-        emb.add_field(name = 'Снял мут', value = ctx.author.mention)
-        emb.add_field(name = 'По причине', value = reason)
-        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-        await ctx.send(embed = emb)
-    else:
-        emb = discord.Embed(description = f'{ctx.author.mention}, Я не могу снять мут у {member.mention} из-за того, что роль {role.mention} была удалена/отредактирована!', colour = discord.Color.orange())
-        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-        await ctx.send(embed = emb)
         
 @client.command(aliases = ['Give', 'GIVE'])
 @commands.has_permissions(manage_channels = True)
