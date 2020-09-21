@@ -379,12 +379,12 @@ async def say(ctx, arg = None, text = None, t = None, d = None, fu = None, img =
         f = ('')
     if role != None:
         a = role.color
+    if fu == None:
+        fu = ('Cephalon Cy by сасиска#2472')
     emb = discord.Embed(title = t, description = d, colour = a)
     emb.set_author(name = au, icon_url = au.avatar_url)
     emb.set_image(url = img)
     emb.set_thumbnail(url = f)
-    if fu == None or 'Embed.Empty':
-        fu = ('Cephalon Cy by сасиска#2472')
     emb.set_footer(text = fu)
     if role is not None and arg != 'noembed':
         await ctx.send(f'{role.mention}', embed = emb)
