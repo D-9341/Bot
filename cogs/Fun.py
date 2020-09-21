@@ -1,5 +1,6 @@
 import discord
 from discord.ext import commands
+import random
 
 class Fun(commands.Cog):
     def __init__(self, client):
@@ -11,7 +12,7 @@ class Fun(commands.Cog):
         emb = discord.Embed(description = '[Ныа](https://www.youtube.com/watch?v=idmTSW9mfYI)', colour = discord.Color.orange())
         await ctx.send(embed = emb)
         
-    @commands.command(asliases = ['.rap'])
+    @commands.command(aliases = ['.rap'])
     async def rap(self, ctx):
         emb = discord.Embed(colour = ctx.author.color)
         emb.set_image(url = 'https://thumbs.gfycat.com/MessyCarefreeHousefly-size_restricted.gif')
