@@ -12,8 +12,8 @@ client.owner_id = 338714886001524737
 
 #test commands space
 @client.command()
-async def load(ctx, extension):
-    client.load_extension(f'cogs.{extension}')
+async def load(ctx):
+    client.load_extension(f'cogs.Test')
     await ctx.send('Loaded!')
 #test commands space
 
