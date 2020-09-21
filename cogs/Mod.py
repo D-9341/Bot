@@ -67,26 +67,6 @@ class Moderation(commands.Cog):
             emb = discord.Embed(description = f'Извините, {ctx.author.mention}, но вы не можете замутить моего создателя!', colour = discord.Color.orange())
             emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
             await ctx.send(embed = emb)
-
-@mute.error
-async def mute_error(ctx, error):
-    if isinstance(error, commands.MissingRequiredArgument):
-        await ctx.message.delete()
-        emb = discord.Embed(description = f'{ctx.author.mention}, укажите, кого и на сколько мутить!', colour = discord.Color.orange())
-        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-        await ctx.send(embed = emb)
-        
-    if isinstance(error, commands.BadArgument):
-        await ctx.message.delete()
-        emb = discord.Embed(description = f'{ctx.author.mention}, проверьте правильность написания команды!', colour = discord.Color.orange())
-        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-        await ctx.send(embed = emb)
-                       
-    if isinstance(error, commands.MissingPermissions):
-        await ctx.message.delete()
-        emb = discord.Embed(description = f'{ctx.author.mention} пытался вызвать команду mute', colour = discord.Color.orange())
-        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-        await ctx.send(embed = emb)
         
 def setup(client):
     client.add_cog(Moderation(client))
