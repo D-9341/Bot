@@ -22,7 +22,7 @@ class Moderation(commands.Cog):
                 await ctx.send('Вы не можете выдать эту роль кому либо, так как она равна вашей высшей роли.')
             else:
                 await member.add_roles(role)
-                channel = client.get_channel(714175791033876490)
+                channel = self.client.get_channel(714175791033876490)
                 emb = discord.Embed(colour = member.color, timestamp = ctx.message.created_at)
                 emb.add_field(name = 'Была выдана роль', value = f'{role.mention} | {role.name} | ID {role.id}')
                 emb.add_field(name = 'Выдана:', value = member.mention)
@@ -45,7 +45,7 @@ class Moderation(commands.Cog):
                 await ctx.send('Вы не можете забрать эту роль у кого, так как она равна вашей высшей роли.')
             else:
                 await member.remove_roles(role)
-                channel = client.get_channel(714175791033876490)
+                channel = self.client.get_channel(714175791033876490)
                 emb = discord.Embed(colour = member.color, timestamp = ctx.message.created_at)
                 emb.add_field(name = 'Была забрана роль', value = f'{role.mention} | {role.name} | ID {role.id}')
                 emb.add_field(name = 'Забрана у:', value = member.mention)
@@ -85,7 +85,7 @@ class Moderation(commands.Cog):
                         await member.remove_roles(role)
                         await ctx.send(f'{member.mention}', embed = emb)
                     else:
-                        emb = discord.Embed(description = 'Снятие мута не требуется. Роли Muted не обнаружено в списке ролей участника.')
+                        emb = discord.Embed(description = 'Снятие мута не требуется. Роли Muted не обнаружено в списке ролей участника.', colour = discord.Color.red())
                         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
                         await ctx.send(embed = emb)
                 else:
@@ -118,7 +118,7 @@ class Moderation(commands.Cog):
                         await ctx.send(f'{member.mention}', embed = emb)
                         await member.remove_roles(role)
                     else:
-                        emb = discord.Embed(description = 'Снятие мута не требуется. Роли Muted не обнаружено в списке ролей участника.')
+                        emb = discord.Embed(description = 'Снятие мута не требуется. Роли Muted не обнаружено в списке ролей участника.', colour = discord.Color.red())
                         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
                         await ctx.send(embed = emb)
         else:
