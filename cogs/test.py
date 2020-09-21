@@ -6,9 +6,9 @@ class Test(commands.Cog):
         self.client = client
 
     @commands.command()
-    async def echo(self, ctx):
+    async def purge(self, ctx):
         await ctx.message.delete()
-        emb = discord.Embed(description = 'Напишите то, о чём вы просите меня написать')
+        emb = discord.Embed(description = 'Мне нужно ваше подтверждение для продолжения.')
         emb.set_footer(text = 'Будет отменено через 5 секунд')
         sent = await ctx.send(embed = emb)
         try:
@@ -16,7 +16,8 @@ class Test(commands.Cog):
             if msg:
                 await sent.delete()
                 await msg.delete()
-                await ctx.send(msg.content)
+                await ctx.channel.purge(limit = 5)
+                await ctx.send('Удалено 5 сообщений')
 
         except asyncio.TimeoutError:
             await sent.delete()
