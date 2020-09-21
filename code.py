@@ -1,14 +1,16 @@
 import asyncio
 import random
 import datetime
+from pathlib import Path
 import os
 import discord
 from discord.ext import commands
 from discord.utils import get
 
-client = commands.Bot(command_prefix = commands.when_mentioned_or('cy/'))
+client = commands.Bot(command_prefix = commands.when_mentioned_or('cy/'), owner_id = 338714886001524737)
 client.remove_command('help')
-client.owner_id = 338714886001524737
+cwd = Path(__file__).parents[0]
+cwd = str(cwd)
 
 #test commands space
 
@@ -917,5 +919,9 @@ async def clear_error(ctx, error):
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
 
+if __name__ == '__main__':
+    for file in os.listdir(cwd+"/cogs"):
+        if file.endswith(".py") and not file.startswith("_"):
+            client.load_extension(f"cogs.{file[:-3]}")
 t = os.environ.get('t')
 client.run(t)
