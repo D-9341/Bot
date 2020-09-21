@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 
-class Misc(commands.Cog):
+class Fun(commands.Cog):
     def __init__(self, client):
         self.client = client
 
@@ -10,6 +10,14 @@ class Misc(commands.Cog):
         await ctx.message.delete()
         emb = discord.Embed(description = '[Ныа](https://www.youtube.com/watch?v=idmTSW9mfYI)', colour = discord.Color.orange())
         await ctx.send(embed = emb)
+        
+    @commands.command(asliases = ['.rap'])
+    async def rap(self, ctx):
+        emb = discord.Embed(colour = ctx.author.color)
+        emb.set_image(url = 'https://thumbs.gfycat.com/MessyCarefreeHousefly-size_restricted.gif')
+        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+        await ctx.send(embed = emb)
+        
     @commands.command()
     async def zatka(self, ctx):
         await ctx.message.delete()
@@ -24,6 +32,18 @@ class Misc(commands.Cog):
         emb.add_field(name = 'в какое время дня свободны', value = '16:00 до 22:00+', inline = False)
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
+
+    @commands.command(aliases = ['Cu', 'CU'])
+    async def cu(self, ctx):
+        await ctx.message.delete()
+        await ctx.send('Медь')
+    
+    @commands.command(aliases = ['c', 'C', 'coin', 'Coin', 'COIN', 'Coinflip', 'COINFLIP'])
+    async def coinflip(self, ctx):
+        await ctx.message.delete()
+        choices = ['Орёл!', 'Решка!']
+        rancoin = random.choice(choices)
+        await ctx.send(rancoin)
         
 def setup(client):
-    client.add_cog(Misc(client))
+    client.add_cog(Fun(client))
