@@ -5,7 +5,7 @@ class Test(commands.Cog):
     def __init__(self, client):
         self.client = client
 
-    @commands.command
+    @commands.command()
     async def hello(self, ctx):
         await ctx.send('Hi ya!')
 
