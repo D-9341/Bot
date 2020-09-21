@@ -18,8 +18,8 @@ class Test(commands.Cog):
                 await sent.delete()
                 await msg.delete()
                 await ctx.send(msg.content)
-        except:
-            asyncio.TimeoutError:
+
+            except asyncio.TimeoutError:
                 await sent.delete()
                 await ctx.send('Время вышло', delete_after = 3)
 
