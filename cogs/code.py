@@ -915,8 +915,6 @@ async def clear_error(ctx, error):
         emb = discord.Embed(description = f'{ctx.author.mention}, проверьте правильность написания команды!', colour = discord.Color.orange())
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
-    
-cogs = os.environ.get('test.py')
 
 t = os.environ.get('t')
 client.run(t)
