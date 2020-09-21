@@ -5,6 +5,10 @@ import random
 class Fun(commands.Cog):
     def __init__(self, client):
         self.client = client
+        
+    @commands.Cog.listener()
+    async def on_ready(self):
+        print('Дополнение Fun успешно загружено.')
 
     @commands.command()
     async def rp(self, ctx):
@@ -14,6 +18,7 @@ class Fun(commands.Cog):
         
     @commands.command(aliases = ['.rap'])
     async def rap(self, ctx):
+        await ctx.message.delete()
         emb = discord.Embed(colour = ctx.author.color)
         emb.set_image(url = 'https://thumbs.gfycat.com/MessyCarefreeHousefly-size_restricted.gif')
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
