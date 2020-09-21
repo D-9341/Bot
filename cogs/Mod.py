@@ -1,6 +1,6 @@
 import discord
 from discord.ext import commands
-import random
+import datetime
 
 class Moderation(commands.Cog):
     def __init__(self, client):
@@ -13,9 +13,8 @@ class Moderation(commands.Cog):
     @commands.command()
     async def mute(self, ctx, member: discord.Member, time: int, reason: str = None):
         await ctx.message.delete()
-        guild = ctx.guild
-        if member.id != client.owner_id:
-            role = discord.utils.get(guild.roles, name = 'Muted')
+        if member.id != 338714886001524737:
+            role = discord.utils.get(ctx.guild.roles, name = 'Muted')
             if role != None:
                 await member.add_roles(role)
                 if reason == None:
@@ -46,9 +45,9 @@ class Moderation(commands.Cog):
                 emb1.set_footer(text = 'Это сообщение должно показываться только 1 раз. Иначе, роль была удалена/отредактирована')
                 await ctx.send(embed = emb1)
                 await asyncio.sleep(3)
-                role = discord.utils.get(guild.roles, name = 'Muted')
+                role = discord.utils.get(ctx.guild.roles, name = 'Muted')
                 await member.add_roles(role)
-                emb = discord.Embed(colour = member.color, timestamp = ctx.message.created_at)
+                emb = discord.Embed(colour = member.color)
                 emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
                 emb.add_field(name = 'В муте', value = f'{member.mention}')
                 emb.add_field(name = 'По причине', value = reason)
@@ -57,7 +56,7 @@ class Moderation(commands.Cog):
                 await ctx.send(embed = emb, delete_after = time*60)
                 await asyncio.sleep(time*60)
                 if role != None:
-                    emb = discord.Embed(colour = member.color, timestamp = ctx.message.created_at)
+                    emb = discord.Embed(colour = member.color)
                     emb.add_field(name = 'Размучен по истечению времени', value = member.mention)
                     emb.add_field(name = 'По причине', value = reason)
                     emb.add_field(name = 'Время мута в минутах составляло', value = time)
