@@ -19,9 +19,9 @@ class Test(commands.Cog):
                 await msg.delete()
                 await ctx.send(msg.content)
 
-            except asyncio.TimeoutError:
-                await sent.delete()
-                await ctx.send('Время вышло', delete_after = 3)
+        except asyncio.TimeoutError:
+            await sent.delete()
+            await ctx.send('Время вышло', delete_after = 3)
 
 def setup(client):
     client.add_cog(Test(client))
