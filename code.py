@@ -506,27 +506,6 @@ async def time(ctx):
 @client.event
 async def on_ready():
     await client.change_presence(status = discord.Status.idle, activity = discord.Activity(type = discord.ActivityType.watching, name = 'В Discord API'))
-    
-#ban
-@client.command(aliases = ['Ban', 'BAN'])
-@commands.cooldown(1, 10, commands.BucketType.default)
-@commands.has_permissions(ban_members = True)
-async def ban(ctx , member: discord.Member, *, reason: str = None):
-    await ctx.message.delete()
-    if member.id != client.owner_id:
-        if reason == None:
-            reason = 'Не указана'
-        emb = discord.Embed(colour = member.color)
-        emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
-        emb.add_field(name = 'Был забанен', value = member.mention)
-        emb.add_field(name = 'По причине', value = reason)
-        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-        await ctx.send(embed = emb)
-        await member.ban(reason = reason)
-    else:
-        emb = discord.Embed(description = f'Извините, {ctx.author.mention}, но вы не можете забанить моего создателя!', colour = discord.Color.orange())
-        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-        await ctx.send(embed = emb)
         
 #message delete
 @client.command(aliases = ['Clear', 'CLEAR'])
