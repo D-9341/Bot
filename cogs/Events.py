@@ -122,6 +122,7 @@ class Events(commands.Cog):
     async def on_message_edit(self, before, after):
         channel = self.client.get_channel(714175791033876490)
         if channel is None:
+            await self.client.process_commands(message)
             return
         if not before.author.bot:
             emb = discord.Embed(description = f'[Сообщение]({before.jump_url}) было изменено', colour = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
@@ -130,6 +131,7 @@ class Events(commands.Cog):
             emb.add_field(name = 'Было', value = f'```{before.content}```')
             emb.add_field(name = 'Стало', value = f'```{after.content}```')
             emb.set_footer(text = f'Cephalon Cy by сасиска#2472')
+            await self.client.process_commands(message)
             await channel.send(embed = emb)
 
 def setup(client):
