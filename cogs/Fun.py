@@ -11,12 +11,14 @@ class Fun(commands.Cog):
         print('Дополнение Fun успешно загружено.')
 
     @commands.command()
+    @commands.cooldown(1, 3, commands.BucketType.default)
     async def rp(self, ctx):
         await ctx.message.delete()
         emb = discord.Embed(description = '[Ныа](https://www.youtube.com/watch?v=idmTSW9mfYI)', colour = discord.Color.orange())
         await ctx.send(embed = emb)
         
     @commands.command(aliases = ['.rap'])
+    @commands.cooldown(1, 5, commands.BucketType.default)
     async def rap(self, ctx):
         await ctx.message.delete()
         emb = discord.Embed(colour = ctx.author.color)
@@ -25,6 +27,7 @@ class Fun(commands.Cog):
         await ctx.send(embed = emb)
         
     @commands.command()
+    @commands.cooldown(1, 5, commands.BucketType.default)
     async def zatka(self, ctx):
         await ctx.message.delete()
         emb = discord.Embed(title = 'Форма заявки для Набор кадров', colour = ctx.author.color)
@@ -40,16 +43,26 @@ class Fun(commands.Cog):
         await ctx.send(embed = emb)
 
     @commands.command(aliases = ['Cu', 'CU'])
+    @commands.cooldown(1, 5, commands.BucketType.default)
     async def cu(self, ctx):
         await ctx.message.delete()
         await ctx.send('Медь')
     
     @commands.command(aliases = ['c', 'C', 'coin', 'Coin', 'COIN', 'Coinflip', 'COINFLIP'])
+    @commands.cooldown(3, 3, commands.BucketType.default)
     async def coinflip(self, ctx):
         await ctx.message.delete()
         choices = ['Орёл!', 'Решка!']
         rancoin = random.choice(choices)
         await ctx.send(rancoin)
         
+    @commands.Cog.listener()
+    async def on_command_error(self, ctx, error)
+        if isinstance(error, commands.CommandOnCooldown):
+            await ctx.message.delete()
+            emb = discord.Embed(description = f'{ctx.author.mention}, команда в кд, потерпи чутка!', colour = discord.Color.orange())
+            emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+            await ctx.send(embed = emb)
+
 def setup(client):
     client.add_cog(Fun(client))
