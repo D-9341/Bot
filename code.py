@@ -275,34 +275,6 @@ async def on_command_error(ctx, error):
         emb = discord.Embed(description = f'{ctx.author.mention}, я не знаю такую команду!', colour = discord.Color.orange())
         emb.set_footer(text = 'Считаете, что такая команда должна быть? Напишите сасиска#2472 и опишите её суть!')
         await ctx.send(embed = emb)
-        
-@say_everyone.error
-async def say_everyone_error(ctx, error):
-    if isinstance(error, commands.MissingRequiredArgument):
-        await ctx.message.delete()
-        emb = discord.Embed(description = f'{ctx.author.mention}, так шутить не нужно', colour = discord.Color.orange())
-        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-        await ctx.send(embed = emb)
-
-    if isinstance(error, commands.MissingPermissions):
-        await ctx.message.delete()
-        emb = discord.Embed(description = f'{ctx.author.mention} пытался вызвать команду emb_everyone', colour = discord.Color.orange())
-        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-        await ctx.send(embed = emb)
-        
-@say.error
-async def say_error(ctx, error):
-    if isinstance(error, commands.MissingRequiredArgument):
-        await ctx.message.delete()
-        emb = discord.Embed(description = f'{ctx.author.mention}, укажите, что я должен сказать!', colour = discord.Color.orange())
-        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-        await ctx.send(embed = emb)
-            
-    if isinstance(error, commands.MissingPermissions):
-        await ctx.message.delete()
-        emb = discord.Embed(description = f'{ctx.author.mention} пытался вызвать команду say', colour = discord.Color.orange())
-        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-        await ctx.send(embed = emb)
 
 if __name__ == '__main__':
     for file in os.listdir(cwd+"/cogs"):
