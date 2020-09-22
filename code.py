@@ -63,13 +63,6 @@ async def ping(ctx):
     emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
     await ctx.send(embed = emb)
     
-@client.command(aliases = ['ctx'])
-@commands.cooldown(1, 5, commands.BucketType.default)
-async def content(ctx, arg):
-    await ctx.message.delete()
-    message = await ctx.fetch_message(id = arg)
-    await ctx.send(f'```{message.content}```')
-    
 @client.command()
 @commands.cooldown(1, 5, commands.BucketType.default)
 async def remind(ctx, time:int, *, arg):
@@ -168,104 +161,6 @@ async def about(ctx, member: discord.Member = None):
     emb.set_thumbnail(url = member.avatar_url)
     emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
     await ctx.send(embed = emb)
-    
-@client.command(aliases = ['emb_ctx'])
-@commands.cooldown(1, 5, commands.BucketType.default)
-async def emb_content(ctx, arg):
-    await ctx.message.delete()
-    message = await ctx.fetch_message(id = arg)
-    for emb in message.embeds:
-        await ctx.send(f'```cy/say "" "" t& {emb.title} d& {emb.description} f& {emb.footer.text} c& {emb.colour} a& {emb.author.name} img& {emb.image.url} fu& {emb.thumbnail.url}```')
-            
-@client.command(aliases = ['emb_e'])
-@commands.has_permissions(mention_everyone = True)
-@commands.cooldown(1, 20, commands.BucketType.default)
-async def say_everyone(ctx, arg = None, text = None, t = None, d = None, fu = None, img = None, f = None, a = None, au : discord.Member = None):
-    await ctx.message.delete()
-    if a == None:
-        a = ctx.author.color
-    else:
-        a = int('0x' + a, 16)
-    if au == None:
-        au = ctx.author
-    if img == None:
-        img = ('')
-    if f == None:
-        f = ('')
-    if fu == None:
-        fu = ('Cephalon Cy by сасиска#2472')
-    emb = discord.Embed(title = t, description = d, colour = a)
-    emb.set_author(name = au, icon_url = au.avatar_url)
-    emb.set_image(url = img)
-    emb.set_thumbnail(url = f)
-    emb.set_footer(text = fu)
-    if arg == 'noembed':
-        await ctx.send('@everyone ' + text)
-    elif arg != 'noembed':
-        await ctx.send('@everyone', embed = emb)
-    
-@client.command(aliases = ['Say', 'SAY'])
-@commands.has_permissions(manage_channels = True)
-async def say(ctx, arg = None, text = None, t = None, d = None, fu = None, img = None, f = None, a = None, au : discord.Member = None, *, role: discord.Role = None):
-    await ctx.message.delete()
-    if a == None:
-        a = ctx.author.color
-    else:
-        a = int('0x' + a, 16)
-    if au == None:
-        au = ctx.author
-    if img == None:
-        img = ('')
-    if f == None:
-        f = ('')
-    if role != None:
-        a = role.color
-    if fu == None:
-        fu = ('Cephalon Cy by сасиска#2472')
-    emb = discord.Embed(title = t, description = d, colour = a)
-    emb.set_author(name = au, icon_url = au.avatar_url)
-    emb.set_image(url = img)
-    emb.set_thumbnail(url = f)
-    emb.set_footer(text = fu)
-    if role is not None and arg != 'noembed':
-        await ctx.send(f'{role.mention}', embed = emb)
-    elif role is None and arg != 'noembed':
-        await ctx.send(embed = emb)
-    if arg == 'noembed':
-        await ctx.send(text)
-
-@client.command(aliases = ['emb_ed'])
-@commands.has_permissions(manage_channels = True)
-async def emb_edit(ctx, arg, t = None, d = None, fu = None, img = None, f = None, a = None, au : discord.Member = None):
-    await ctx.message.delete()
-    message = await ctx.fetch_message(id = arg)
-    if a == None:
-        a = ctx.author.color
-    else:
-        a = int('0x' + a, 16)
-    if au == None:
-        au = ctx.author
-    if img == None:
-        img = ('')
-    if f == None:
-        f = ('')
-    if fu == None:
-        fu = ('Cephalon Cy by сасиска#2472')
-    emb = discord.Embed(title = t, description = d, colour = a)
-    emb.set_author(name = au, icon_url = au.avatar_url)
-    emb.set_image(url = img)
-    emb.set_thumbnail(url = f)
-    emb.set_footer(text = fu)
-    await message.edit(embed = emb)
-    await ctx.send('👌', delete_after = 1)
-    
-@client.command(aliases = ['Edit', 'EDIT'])
-@commands.has_permissions(manage_channels = True)
-async def edit(ctx, arg, *, text):
-    await ctx.message.delete()
-    message = await ctx.fetch_message(id = arg)
-    await message.edit(content = text)
-    await ctx.send('👌', delete_after = 1)
     
 #бесполезное говно
 @client.command(aliases = ['Join', 'JOIN'])
