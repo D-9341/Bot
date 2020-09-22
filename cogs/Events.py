@@ -29,7 +29,7 @@ class Events(commands.Cog):
         message_id = payload.message_id
         if message_id == 707496056505761802:
             guild_id = payload.guild_id
-            guild = discord.utils.find(lambda g: g.id == guild_id, client.guilds)
+            guild = discord.utils.find(lambda g: g.id == guild_id, self.client.guilds)
 
             if payload.emoji.name == 'strashilka':
                 role = discord.utils.get(guild.roles, id = 693933515540135987)
@@ -44,7 +44,7 @@ class Events(commands.Cog):
         message_id = payload.message_id
         if message_id == 707496056505761802:
             guild_id = payload.guild_id
-            guild = discord.utils.find(lambda g: g.id == guild_id, client.guilds)
+            guild = discord.utils.find(lambda g: g.id == guild_id, self.client.guilds)
 
             if payload.emoji.name == 'strashilka':
                 role = discord.utils.get(guild.roles, id = 693933515540135987)
