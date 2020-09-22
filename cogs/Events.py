@@ -125,7 +125,7 @@ class Events(commands.Cog):
             return
         if not before.author.bot:
             emb = discord.Embed(description = f'[Сообщение]({before.jump_url}) было изменено', colour = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
-            emb.set_author(name = before.author.name, icon_url = before.author.avatar_url)
+            emb.set_author(name = before.author, icon_url = before.author.avatar_url)
             emb.add_field(name = 'На сервере', value = before.guild)
             emb.add_field(name = 'Было', value = f'```{before.content}```')
             emb.add_field(name = 'Стало', value = f'```{after.content}```')
