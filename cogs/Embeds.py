@@ -7,7 +7,7 @@ class Embeds(commands.Cog):
         self.client = client
 
     @commands.Cog.listener()
-    async def on_ready(self, ctx):
+    async def on_ready(self):
         print('Дополнение Embeds успешно загружено.')
         
     @commands.command(aliases = ['ctx'])
