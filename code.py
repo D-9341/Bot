@@ -257,10 +257,10 @@ async def help(ctx, arg = None):
 @client.command()
 async def time(ctx):
     await ctx.message.delete()
-    date_now = datetime.datetime.now()
+    date = datetime.datetime.utcnow()
     emb = discord.Embed(colour = discord.Color.orange())
     emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-    emb.add_field(name = 'Время по Гринвичу равняется', value = f'`{round(date_now)}`')
+    emb.add_field(name = 'Время равняется', value = f'`{round(date * 1)}`')
     await ctx.send(embed = emb)
 
 #проверка на подключение
