@@ -381,11 +381,6 @@ async def on_command_error(ctx, error):
         emb.set_footer(text = 'Считаете, что такая команда должна быть? Напишите сасиска#2472 и опишите её суть!')
         await ctx.send(embed = emb)
         
-    if isinstance(error, commands.CommandOnCooldown):
-        emb = discord.Embed(description = f'{ctx.author.mention}, команда в кд, потерпи чутка!', colour = discord.Color.orange())
-        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-        await ctx.send(embed = emb)
-        
 @say_everyone.error
 async def say_everyone_error(ctx, error):
     if isinstance(error, commands.MissingRequiredArgument):
