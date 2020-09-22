@@ -260,7 +260,7 @@ async def time(ctx):
     date = datetime.datetime.utcnow()
     emb = discord.Embed(colour = discord.Color.orange())
     emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-    emb.add_field(name = 'Время равняется', value = f'`{round(date * 1)}`')
+    emb.add_field(name = 'Время равняется', value = f'`{date}`')
     await ctx.send(embed = emb)
 
 #проверка на подключение
