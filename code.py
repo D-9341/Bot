@@ -382,7 +382,6 @@ async def on_command_error(ctx, error):
         await ctx.send(embed = emb)
         
     if isinstance(error, commands.CommandOnCooldown):
-        await ctx.message.delete()
         emb = discord.Embed(description = f'{ctx.author.mention}, команда в кд, потерпи чутка!', colour = discord.Color.orange())
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
