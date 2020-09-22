@@ -99,7 +99,7 @@ class Events(commands.Cog):
             await channel.set_permissions(member, mute_members = True, move_members = True, manage_channels = True)
             def check(a,b,c):
                 return len(channel.members) == 0
-            await client.wait_for('voice_state_update', check = check)
+            await self.client.wait_for('voice_state_update', check = check)
             await channel.delete()
 
     @commands.Cog.listener()
