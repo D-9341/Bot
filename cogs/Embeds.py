@@ -15,7 +15,7 @@ class Embeds(commands.Cog):
     async def content(self, ctx, arg):
         await ctx.message.delete()
         message = await ctx.fetch_message(id = arg)
-        await ctx.send(f'```{message.content}```')
+        await ctx.send(f'```cy/say noembed "{message.content}"```')
 
     @commands.command(aliases = ['emb_ctx'])
     @commands.cooldown(1, 5, commands.BucketType.default)
