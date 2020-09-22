@@ -254,15 +254,6 @@ async def help(ctx, arg = None):
         emb.set_footer(text = 'Хотя, возможно, вы ввели команду неправильно?')
         await ctx.send(embed = emb)
 
-@client.command()
-async def time(ctx):
-    await ctx.message.delete()
-    date = datetime.datetime.utcnow()
-    emb = discord.Embed(colour = discord.Color.orange())
-    emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-    emb.add_field(name = 'Время равняется', value = f'`{date}`')
-    await ctx.send(embed = emb)
-
 #проверка на подключение
 @client.event
 async def on_ready():
