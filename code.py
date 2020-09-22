@@ -260,7 +260,7 @@ async def time(ctx):
     date_now = datetime.datetime.now()
     emb = discord.Embed(colour = discord.Color.orange())
     emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-    emb.add_field(name = 'Время по Гринвичу равняется', value = f'`(round(date_now))`')
+    emb.add_field(name = 'Время по Гринвичу равняется', value = f'`{round(date_now)}`')
     await ctx.send(embed = emb)
 
 #проверка на подключение
