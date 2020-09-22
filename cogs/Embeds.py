@@ -15,7 +15,7 @@ class Embeds(commands.Cog):
     async def content(self, ctx, arg):
         await ctx.message.delete()
         message = await ctx.fetch_message(id = arg)
-        if message.author.name == client.user.name:
+        if message.author == self.client.user:
             await ctx.send(f'```cy/say noembed "{message.content}"```')
         else:
             await ctx.send(f'```{message.content}```')
