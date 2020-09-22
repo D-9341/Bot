@@ -57,7 +57,7 @@ class Fun(commands.Cog):
         await ctx.send(rancoin)
         
     @commands.Cog.listener()
-    async def on_command_error(self, ctx, error)
+    async def on_command_error(self, ctx, error):
         if isinstance(error, commands.CommandOnCooldown):
             await ctx.message.delete()
             emb = discord.Embed(description = f'{ctx.author.mention}, команда в кд, потерпи чутка!', colour = discord.Color.orange())
