@@ -106,7 +106,7 @@ class Events(commands.Cog):
     async def on_message(self, message):
         channel = self.client.get_channel(714175791033876490)
         if channel is None:
-            await client.process_commands(message)
+            await self.client.process_commands(message)
             return
         if not message.author.bot:
             emb = discord.Embed(colour = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
@@ -115,7 +115,7 @@ class Events(commands.Cog):
             emb.add_field(name = 'В канале', value = f'{message.channel.mention} ({message.channel.name})')
             emb.add_field(name = 'Было написано', value = message.content)
             emb.set_footer(text = f'Cephalon Cy by сасиска#2472')
-            await client.process_commands(message)
+            await self.client.process_commands(message)
             await channel.send(embed = emb)
     
     @commands.Cog.listener()
