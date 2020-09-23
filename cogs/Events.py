@@ -12,14 +12,14 @@ class Events(commands.Cog):
 
     @commands.Cog.listener()
     async def on_guild_remove(self, guild):
-        channel = self.client.get_channel(714175791033876490)
+        channel = self.client.get_channel(693929823030214658)
         emb = discord.Embed(description = f'Меня выгнали с сервера `{guild.name}`...', colour = discord.Color.red())
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await channel.send(embed = emb)
 
     @commands.Cog.listener()
     async def on_guild_join(self, guild):
-        channel = self.client.get_channel(714175791033876490)
+        channel = self.client.get_channel(693929823030214658)
         emb = discord.Embed(description = f'Меня добавили на сервер `{guild.name}`!', colour = discord.Color.green())
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await channel.send(embed = emb)
