@@ -14,7 +14,7 @@ class Cephalon(commands.Cog):
     async def info(self, ctx):
         await ctx.message.delete()
         emb = discord.Embed(title = 'Welcome to the cum zone', colour = discord.Color.orange())
-        emb.set_author(name = client.user.name, url = 'https://warframe.fandom.com/wiki/Cephalon_Cy', icon_url = client.user.avatar_url)
+        emb.set_author(name = self.client.user.name, url = 'https://warframe.fandom.com/wiki/Cephalon_Cy', icon_url = self.client.user.avatar_url)
         emb.add_field(name = 'Версия', value = '0.12.7.8824')
         emb.add_field(name = 'Написан на', value = 'discord.py')
         emb.add_field(name = 'Разработчик', value = 'Написано в футере, ха!')
