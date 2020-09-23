@@ -51,7 +51,7 @@ class Cephalon(commands.Cog):
     @commands.cooldown(1, 5, commands.BucketType.default)
     async def ping(self, ctx):
         await ctx.message.delete()
-        emb = discord.Embed(description = f'Pong! `{round(client.latency * 1000)} ms`', colour = discord.Color.orange(), timestamp = ctx.message.created_at)
+        emb = discord.Embed(description = f'Pong! `{round(self.client.latency * 1000)} ms`', colour = discord.Color.orange(), timestamp = ctx.message.created_at)
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
     
@@ -65,12 +65,12 @@ class Cephalon(commands.Cog):
             emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
             await ctx.send(embed = emb)
             return
-        global vc
         vc = await channel.connect()
 
     @commands.command(aliases = ['Leave', 'LEAVE'])
     async def leave(self, ctx):
         await ctx.message.delete()
+        vc = await channel.connect()
         if vc.is_connected():
             await vc.disconnect()
         
