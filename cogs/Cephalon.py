@@ -55,7 +55,7 @@ class Cephalon(commands.Cog):
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
     
-    @commads.command(aliases = ['Join', 'JOIN'])
+    @commands.command(aliases = ['Join', 'JOIN'])
     async def join(self, ctx):
         await ctx.message.delete()
         if ctx.author.voice and ctx.author.voice.channel:
