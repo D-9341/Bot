@@ -1,5 +1,5 @@
 import discord
-from discord.ext import get
+from discord.ext import commands
 
 class Misc(commands.Cog):
     def __init__(client):
