@@ -108,6 +108,10 @@ class Events(commands.Cog):
         if channel is None:
             await self.client.process_commands(message)
             return
+        if message.author.id == self.client.user.id:
+            return
+        if message.author.id in self.client.blacklisted_users:
+            return
         if not message.author.bot:
             emb = discord.Embed(colour = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
             emb.set_author(name = message.author, icon_url = message.author.avatar_url)
