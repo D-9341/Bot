@@ -26,7 +26,10 @@ class Embeds(commands.Cog):
         await ctx.message.delete()
         message = await ctx.fetch_message(id = arg)
         for emb in message.embeds:
-            await ctx.send(f'```cy/say "" "" t& {emb.title} d& {emb.description} f& {emb.footer.text} c& {emb.colour} a& {emb.author.name} img& {emb.image.url} fu& {emb.thumbnail.url}```')
+            if message.author == client.user:
+                await ctx.send(f'```cy/say "" "" t& {emb.title} d& {emb.description} f& {emb.footer.text} c& {emb.colour} a& {emb.author.name} img& {emb.image.url} fu& {emb.thumbnail.url}```')
+            else:
+                await ctx.send(f'```title {emb.title} description {emb.description} footer {emb.footer.text} color {emb.colour} author {emb.author.name} image {emb.image.url} footer img {emb.thumbnail.url}```')
             
     @commands.command(aliases = ['emb_e'])
     @commands.has_permissions(mention_everyone = True)
