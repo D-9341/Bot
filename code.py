@@ -9,6 +9,7 @@ from discord.utils import get
 
 client = commands.Bot(command_prefix = commands.when_mentioned_or('cy/'), owner_id = 338714886001524737)
 client.remove_command('help')
+client.blacklisted_users = []
 cwd = Path(__file__).parents[0]
 cwd = str(cwd)
 
@@ -89,6 +90,8 @@ async def help(ctx, arg = None):
 
 @client.event
 async def on_ready():
+    data = read_json("blacklist")
+    client.blacklisted_users = data["BlacklistedUsers"]
     await client.change_presence(status = discord.Status.idle, activity = discord.Activity(type = discord.ActivityType.watching, name = 'В Discord API'))
     
 @client.event
@@ -99,6 +102,15 @@ async def on_command_error(ctx, error):
         emb.set_footer(text = 'Считаете, что такая команда должна быть? Напишите сасиска#2472 и опишите её суть!')
         await ctx.send(embed = emb)
 
+def read_json(filename):
+    with open(f"{cwd}/{filename}.json", "r") as file:
+        data = json.load(file)
+    return data
+
+def write_json(data, filename):
+    with open(f"{cwd}/{filename}.json", "w") as file:
+        json.dump(data, file, indent = 4)
+        
 if __name__ == '__main__':
     for file in os.listdir(cwd+"/cogs"):
         if file.endswith(".py") and not file.startswith("_"):
