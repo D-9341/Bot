@@ -70,6 +70,7 @@ class Cephalon(commands.Cog):
     @commands.command(aliases = ['Leave', 'LEAVE'])
     async def leave(self, ctx):
         await ctx.message.delete()
+        channel = ctx.author.voice.channel
         vc = await channel.connect()
         if vc.is_connected():
             await vc.disconnect()
