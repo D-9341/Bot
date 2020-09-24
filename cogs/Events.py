@@ -92,7 +92,7 @@ class Events(commands.Cog):
 
     @commands.Cog.listener()
     async def on_voice_state_update(self, member, before, after):
-        if member.after.channel.id == 742647888424730735:
+        if after.channel.id == 742647888424730735:
             category = discord.utils.get(member.guild.categories, id = 742647888101769236)
             channel = await member.guild.create_voice_channel(name = f'Комната {member}', category = category)
             await member.move_to(channel)
