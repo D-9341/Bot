@@ -10,31 +10,11 @@ from discord.utils import get
 
 client = commands.Bot(command_prefix = commands.when_mentioned_or('cy/'), owner_id = 338714886001524737)
 client.remove_command('help')
-client.blacklisted_users = []
 cwd = Path(__file__).parents[0]
 cwd = str(cwd)
 
 #test commands space
-@client.command()
-async def blacklist(ctx, member: discord.Member):
-    await ctx.message.delete()
-    if ctx.message.author.id == member.id:
-        await ctx.send("Ты не можешь добавить себя в чёрный список!")
-        return
-    client.blacklisted_users.append(member.id)
-    data = read_json("blacklist")
-    data["BlacklistedUsers"].append(member.id)
-    write_json(data, "blacklist")
-    await ctx.send(f"{member} был добавлен в чёрный список.")
 
-@client.command()
-async def unblacklist(ctx, member: discord.Member):
-    await ctx.message.delete()
-    client.blacklisted_users.remove(member.id)
-    data = read_json("blacklist")
-    data["BlacklistedUsers"].remove(member.id)
-    write_json(data, "blacklist")
-    await ctx.send(f"{member} убран из чёрного списка.")
 #test commands space   
 
 @client.command(aliases = ['Help', 'HELP'])
@@ -121,15 +101,6 @@ async def on_command_error(ctx, error):
         emb = discord.Embed(description = f'{ctx.author.mention}, я не знаю такую команду!', colour = discord.Color.orange())
         emb.set_footer(text = 'Считаете, что такая команда должна быть? Напишите сасиска#2472 и опишите её суть!')
         await ctx.send(embed = emb)
-
-def read_json(filename):
-    with open(f"{cwd}/{filename}.json", "r") as file:
-        data = json.load(file)
-    return data
-
-def write_json(data, filename):
-    with open(f"{cwd}/{filename}.json", "w") as file:
-        json.dump(data, file, indent = 4)
         
 if __name__ == '__main__':
     for file in os.listdir(cwd+"/cogs"):
