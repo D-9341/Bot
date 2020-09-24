@@ -19,10 +19,9 @@ cwd = str(cwd)
 async def blacklist(ctx, member: discord.Member):
     if ctx.message.author.id == member.id:
         await ctx.send("Ты не можешь добавить себя в чёрный список!")
-        return
     client.blacklisted_users.append(member.id)
     data = read_json("blacklist")
-    data["blacklistedUsers"].append(member.id)
+    data["BlacklistedUsers"].append(member.id)
     write_json(data, "blacklist")
     await ctx.send(f"{member} был добавлен в чёрный список.")
 
@@ -30,7 +29,7 @@ async def blacklist(ctx, member: discord.Member):
 async def unblacklist(ctx, member: discord.Member):
     client.blacklisted_users.remove(member.id)
     data = read_json("blacklist")
-    data["blacklistedUsers"].remove(member.id)
+    data["BlacklistedUsers"].remove(member.id)
     write_json(data, "blacklist")
     await ctx.send(f"{member} убран из чёрного списка.")
 #test commands space   
