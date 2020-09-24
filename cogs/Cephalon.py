@@ -22,23 +22,6 @@ class Cephalon(commands.Cog):
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
     
-    @commands.command()
-    @commands.cooldown(1, 5, commands.BucketType.default)
-    async def aliases(self, ctx):
-        await ctx.message.delete()
-        emb = discord.Embed(description = 'Неочевидные *никнеймы* команд', colour = discord.Color.orange())
-        emb.add_field(name = 'invite_cy', value = 'invite, invcy')
-        emb.add_field(name = 'rap', value = '.rap')
-        emb.add_field(name = 'about', value = 'me')
-        emb.add_field(name = 'image', value = 'img&')
-        emb.add_field(name = 'emb_edit', value = 'emb_ed')
-        emb.add_field(name = 'embed', value = 'emb')
-        emb.add_field(name = 'coinflip', value = 'c, coin')
-        emb.add_field(name = 'content', value = 'ctx')
-        emb.add_field(name = 'А также', value = 'Для остальных команд также есть *никнеймы*, их можно писать с заглавной буквы или полностью капсом')
-        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-        await ctx.send(embed = emb)
-    
     @commands.command(aliases = ['invite', 'invcy'])
     @commands.cooldown(1, 5, commands.BucketType.default)
     async def invite_cy(self, ctx):
