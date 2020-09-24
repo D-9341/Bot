@@ -9,6 +9,12 @@ class Cephalon(commands.Cog):
     async def on_ready(self):
         print('Дополнение Cephalon успешно загружено.')
 
+    @commands.command()
+    @commands.cooldown(1, 5, commands.BucketType.default)
+    async def emb_help(self, ctx):
+        await ctx.message.delete()
+        await ctx.send('Эта команда устарела. Попробуйте cy/help say вместо неё.')
+
     @commands.command(aliases = ['Info', 'INFO'])
     @commands.cooldown(1, 5, commands.BucketType.default)
     async def info(self, ctx):
