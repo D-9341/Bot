@@ -90,8 +90,6 @@ async def help(ctx, arg = None):
 
 @client.event
 async def on_ready():
-    data = read_json("blacklist")
-    client.blacklisted_users = data["BlacklistedUsers"]
     await client.change_presence(status = discord.Status.idle, activity = discord.Activity(type = discord.ActivityType.watching, name = 'В Discord API'))
     
 @client.event
