@@ -129,13 +129,13 @@ class Moderation(commands.Cog):
                     if role in member.roles:
                         emb = discord.Embed(colour = member.color, timestamp = ctx.message.created_at)
                         emb.add_field(name = 'Размучен по истечению времени', value = member.mention)
-                        emb.add_field(name = 'По причине', value = reason)
+                        emb.add_field(name = 'Был в муте по причине', value = reason)
                         emb.add_field(name = 'Время мута в минутах составляло', value = time)
                         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
                         await member.remove_roles(role)
                         await ctx.send(f'{member.mention}', embed = emb)
                     else:
-                        emb = discord.Embed(description = 'Снятие мута не требуется. Роли Muted не обнаружено в списке ролей участника.', colour = discord.Color.red())
+                        emb = discord.Embed(description = f'Снятие мута для {member.mention} не требуется. Роли Muted не обнаружено в списке ролей участника.', colour = discord.Color.red())
                         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
                         await ctx.send(embed = emb)
                 else:
@@ -168,7 +168,7 @@ class Moderation(commands.Cog):
                         await ctx.send(f'{member.mention}', embed = emb)
                         await member.remove_roles(role)
                     else:
-                        emb = discord.Embed(description = 'Снятие мута не требуется. Роли Muted не обнаружено в списке ролей участника.', colour = discord.Color.red())
+                        emb = discord.Embed(description = f'Снятие мута для {member.mention} не требуется. Роли Muted не обнаружено в списке ролей участника.', colour = discord.Color.red())
                         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
                         await ctx.send(embed = emb)
         else:
