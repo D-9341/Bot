@@ -1,7 +1,25 @@
+import re
 import discord
 from discord.ext import commands
 import datetime
 import asyncio
+
+time_regex = re.compile("(?:(\d{1,5})(h|s|m|d))+?")
+time_dict = {'h': 3600, 's': 1, 'm': 60, 'd': 86400}
+
+class TimeConverter(commands.Converter):
+    async def convert(self, ctx, argument):
+        args = argument.lower()
+        matches = re.findall(time_regex, args)
+        time = 0
+        for key, value in matches:
+            try:
+                time += time_dict[value] * float(key)
+            except KeyError:
+                raise commands.BadArgument(f'{value} не является правильным аргументом! Правильные: h|m|s|d')
+            except ValueError:
+                raise commands.BadArgument(f'{key} не число!')
+        return time
 
 class Moderation(commands.Cog):
     def __init__(self, client):
@@ -109,7 +127,7 @@ class Moderation(commands.Cog):
             
     @commands.command(aliases = ['Mute', 'MUTE'])
     @commands.has_permissions(manage_channels = True)
-    async def mute(self, ctx, member: discord.Member, time: int, *, reason: str = None):
+    async def mute(self, ctx, member: discord.Member, time: TimeConverter, *, reason: str = None):
         await ctx.message.delete()
         if member.id != 338714886001524737:
             role = discord.utils.get(ctx.guild.roles, name = 'Muted')
@@ -121,16 +139,16 @@ class Moderation(commands.Cog):
                 emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
                 emb.add_field(name = 'В муте', value = f'{member.mention}')
                 emb.add_field(name = 'По причине', value = reason)
-                emb.add_field(name = 'Время мута в минутах', value = time)
+                emb.add_field(name = 'Время мута', value = time)
                 emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-                await ctx.send(embed = emb, delete_after = time*60)
-                await asyncio.sleep(time*60)
+                await ctx.send(embed = emb, delete_after = time)
+                await asyncio.sleep(time)
                 if role != None:
                     if role in member.roles:
                         emb = discord.Embed(colour = member.color, timestamp = ctx.message.created_at)
                         emb.add_field(name = 'Размучен по истечению времени', value = member.mention)
                         emb.add_field(name = 'Был в муте по причине', value = reason)
-                        emb.add_field(name = 'Время мута в минутах составляло', value = time)
+                        emb.add_field(name = 'Время мута составляло', value = time)
                         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
                         await member.remove_roles(role)
                         await ctx.send(f'{member.mention}', embed = emb)
@@ -154,16 +172,16 @@ class Moderation(commands.Cog):
                 emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
                 emb.add_field(name = 'В муте', value = f'{member.mention}')
                 emb.add_field(name = 'По причине', value = reason)
-                emb.add_field(name = 'Время мута в минутах', value = time)
+                emb.add_field(name = 'Время мута', value = time)
                 emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-                await ctx.send(embed = emb, delete_after = time*60)
-                await asyncio.sleep(time*60)
+                await ctx.send(embed = emb, delete_after = time)
+                await asyncio.sleep(time)
                 if role != None:
                     if role in member.roles:
                         emb = discord.Embed(colour = member.color, timestamp = ctx.message.created_at)
                         emb.add_field(name = 'Размучен по истечению времени', value = member.mention)
                         emb.add_field(name = 'По причине', value = reason)
-                        emb.add_field(name = 'Время мута в минутах составляло', value = time)
+                        emb.add_field(name = 'Время мута составляло', value = time)
                         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
                         await ctx.send(f'{member.mention}', embed = emb)
                         await member.remove_roles(role)
