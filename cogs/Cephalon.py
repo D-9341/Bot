@@ -19,13 +19,13 @@ class Cephalon(commands.Cog):
     @commands.cooldown(1, 5, commands.BucketType.default)
     async def info(self, ctx):
         await ctx.message.delete()
-        emb = discord.Embed(title = 'Welcome to the cum zone', colour = discord.Color.orange())
+        emb = discord.Embed(colour = discord.Color.orange())
         emb.set_author(name = self.client.user.name, url = 'https://warframe.fandom.com/wiki/Cephalon_Cy', icon_url = self.client.user.avatar_url)
         emb.add_field(name = 'Версия', value = '0.12.7.9018')
         emb.add_field(name = 'Написан на', value = 'discord.py')
         emb.add_field(name = 'Разработчик', value = 'Написано в футере, ха!')
         emb.add_field(name = 'Веб-сайт', value = '```http://ru-unioncraft.ru/```')
-        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+        emb.set_footer(text = 'Данное приложение не имеет никакого причастия к игре Warframe.')
         await ctx.send(embed = emb)
     
     @commands.command(aliases = ['invite', 'invcy'])
