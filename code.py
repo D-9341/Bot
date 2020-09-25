@@ -73,7 +73,7 @@ async def help(ctx, arg = None):
     elif arg == 'kick':
         await ctx.send('```cy/kick <@пинг/имя/ID> |причина|```')
     elif arg == 'mute':
-        await ctx.send('```cy/mute <@пинг/имя/ID> <время(s,m,h,d(15s , 5m, 1h, 5d))> |причина|```')
+        await ctx.send('```cy/mute <@пинг/имя/ID> <время(s,m,h,d(15s, 5m, 1h, 5d))> |причина|```')
     elif arg == 'remind':
         await ctx.send('```cy/remind <время> <текст>```')
     elif arg == 'role':
