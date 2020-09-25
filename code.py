@@ -33,7 +33,7 @@ async def help(ctx, arg = None):
         emb.add_field(name = 'cy/say', value = 'От лица бота отправляется высоконастраеваемый эмбед. Может использоваться как say, так и emb')
         emb.add_field(name = 'cy/emb_ctx', value = 'Позволяет увидеть контент эмбеда.')
         emb.add_field(name = 'cy/emb_edit', value = 'Редактирует эмбед. Работает как VAULTBOT', inline = False)
-        emb.add_field(name = 'cy/say_everyone', value = 'Совмещает в себе команды everyone и emb.')
+        emb.add_field(name = 'cy/say_everyone', value = 'Совмещает в себе команды everyone и say.')
         emb.add_field(name = 'cy/everyone', value = 'Пишет сообщение от лица бота и пингует @everyone')
         emb.add_field(name = 'cy/give', value = 'Выдаёт роль.', inline = False)
         emb.add_field(name = 'cy/guild', value = 'Показывает информацию о сервере.')
@@ -73,7 +73,7 @@ async def help(ctx, arg = None):
     elif arg == 'kick':
         await ctx.send('```cy/kick <@пинг/имя/ID> |причина|```')
     elif arg == 'mute':
-        await ctx.send('```cy/mute <@пинг/имя/ID> <время> |причина|```')
+        await ctx.send('```cy/mute <@пинг/имя/ID> <время(s,m,h,d(15s , 5m, 1h, 5d))> |причина|```')
     elif arg == 'remind':
         await ctx.send('```cy/remind <время> <текст>```')
     elif arg == 'role':
