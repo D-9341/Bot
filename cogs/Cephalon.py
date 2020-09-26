@@ -55,12 +55,6 @@ class Cephalon(commands.Cog):
             await ctx.send(embed = emb)
             return
         vc = await channel.connect()
-
-    @commands.command(aliases = ['Leave', 'LEAVE'])
-    async def leave(self, ctx):
-        await ctx.message.delete()
-        channel = ctx.author.voice.channel
-        await self.client.voice.channel.disconnect()
         
     @commands.Cog.listener()
     async def on_command_error(self, ctx, error):
