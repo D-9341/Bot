@@ -39,7 +39,6 @@ async def help(ctx, arg = None):
         emb.add_field(name = 'cy/guild', value = 'Показывает информацию о сервере.')
         emb.add_field(name = 'cy/join', value = 'Бот заходит в голосовой канал.')
         emb.add_field(name = 'cy/kick', value = 'Кик человека.')
-        emb.add_field(name = 'cy/leave', value = 'Бот выходит из голосового канала.')
         emb.add_field(name = 'cy/mute', value = 'Мут человека.', inline = False)
         emb.add_field(name = 'cy/remind', value = 'Может напомнить вам о событии, которое вы не хотите пропустить.')
         emb.add_field(name = 'cy/role', value = 'Показывает информацию о роли')
