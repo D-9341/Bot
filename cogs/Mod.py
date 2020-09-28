@@ -77,18 +77,6 @@ class Moderation(commands.Cog):
             emb = discord.Embed(description = f'Извините, {ctx.author.mention}, но вы не можете забанить моего создателя!', colour = discord.Color.orange())
             emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
             await ctx.send(embed = emb)
-        
-    @commands.command(aliases = ['Unban', 'UNBAN'])
-    @commands.has_permissions(ban_members = True)
-    async def unban(self, ctx, user: discord.User, *, reason = None):
-        await ctx.message.delete()
-        await ctx.guild.unban(user = user)
-        emb = discord.Embed(description = f'{user} был успешно разбанен.', colour = discord.Color.orange())
-        if reason == None:
-            reason = 'Не указана.'
-        emb.add_field(name = 'Причина', value = reason)
-        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-        await ctx.send(embed = emb)
 
     @commands.command(aliases = ['Give', 'GIVE'])
     @commands.has_permissions(manage_channels = True)
