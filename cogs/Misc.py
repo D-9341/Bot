@@ -78,7 +78,7 @@ class Misc(commands.Cog):
             bot = 'Неа'
         elif member.bot == True:
             bot = 'Ага'
-        emb = discord.Embed(title = f'Информация о {member.name}', colour = member.color, timestamp = ctx.message.created_at)
+        emb = discord.Embed(title = f'Информация о {member}', colour = member.color, timestamp = ctx.message.created_at)
         emb.add_field(name = 'ID', value = member.id)
         emb.add_field(name = 'Создан', value = member.created_at.strftime("%A, %#d %B %Y, %I:%M %p UTC"), inline = False)
         emb.add_field(name = 'Вошёл', value = member.joined_at.strftime("%A, %#d %B %Y, %I:%M %p UTC"), inline = False)
