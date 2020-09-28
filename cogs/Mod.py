@@ -11,7 +11,6 @@ class TimeConverter(commands.Converter):
     async def convert(self, ctx, argument):
         args = argument.lower()
         matches = re.findall(time_regex, args)
-        time = 0
         for key, value in matches:
             try:
                 time += time_dict[value] * float(key)
@@ -79,49 +78,80 @@ class Moderation(commands.Cog):
             emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
             await ctx.send(embed = emb)
         
+    @commands.command(aliases = ['Unban', 'UNBAN'])
+    @commands.has_permissions(ban_members = True)
+    async def unban(self, ctx, member: discord.User, *, reason = None):
+        await ctx.message.delete()
+        if member:
+            await ctx.guild.unban(member)
+            emb = discord.Embed(description = f'{member} был успешно разбанен.', colour = discord.Color.orange())
+            if reason == None:
+                reason = 'Не указана.'
+            emb.add_field(name = 'Причина', value = reason)
+            emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+            await ctx.send(embed = emb)
+        else:
+            await ctx.send(f'{ctx.author.mention}, вы пытаетесь разбанить человека, который не находится в бане.')
+
     @commands.command(aliases = ['Give', 'GIVE'])
     @commands.has_permissions(manage_channels = True)
-    async def give(self, ctx, member: discord.Member, *, role: discord.Role):
+    async def give(self, ctx, member: discord.Member, *role: discord.Role):
         await ctx.message.delete()
         if role != None:
             if role > member.top_role and ctx.message.author.id != 338714886001524737:
                 await ctx.send('Вы не можете выдать эту роль, так как она имеет более высокий ранг, чем ваша высшая роль.')
             elif role == ctx.author.top_role and ctx.message.author.id != 338714886001524737:
-                await ctx.send('Вы не можете выдать эту роль кому либо, так как она равна вашей высшей роли.')
+                await ctx.send('Вы не можете выдать эту роль кому-либо, так как она равна вашей высшей роли.')
             else:
                 await member.add_roles(role)
                 channel = self.client.get_channel(714175791033876490)
-                emb = discord.Embed(colour = member.color, timestamp = ctx.message.created_at)
-                emb.add_field(name = 'Была выдана роль', value = f'{role.mention} | {role.name} | ID {role.id}')
-                emb.add_field(name = 'Выдана:', value = member.mention)
-                emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
-                emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-                await channel.send(embed = emb)
+                if len(role) == 1:
+                    emb = discord.Embed(colour = member.color, timestamp = ctx.message.created_at)
+                    emb.add_field(name = 'Была выдана роль', value = f'{role.mention} | {role.name} | ID {role.id}')
+                    emb.add_field(name = 'Выдана:', value = member.mention)
+                    emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
+                    emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+                    await channel.send(embed = emb)
+                else:
+                    emb = discord.Embed(colour = member.color, timestamp = ctx.message.created_at)
+                    emb.add_field(name = 'Были выданы роли', value = f'{role.mention} | {role.name} | ID`s {role.id}')
+                    emb.add_field(name = 'Выданы:', value = member.mention)
+                    emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
+                    emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+                    await channel.send(embed = emb)
         else:
-            emb = discord.Embed(description = f'{ctx.author.mention}, я не могу найти подходящую роль!', colour = member.color, timestamp = ctx.message.created_at)
+            emb = discord.Embed(description = f'{ctx.author.mention}, я не могу найти {role.mention} в списке ролей.', colour = member.color, timestamp = ctx.message.created_at)
             emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
             await ctx.send(embed = emb)
             
     @commands.command(aliases = ['Take', 'TAKE'])
     @commands.has_permissions(manage_channels = True)
-    async def take(self, ctx, member: discord.Member, *, role: discord.Role):
+    async def take(self, ctx, member: discord.Member, *role: discord.Role):
         await ctx.message.delete()
         if role != None:
             if role > ctx.author.top_role and ctx.message.author.id != 338714886001524737:
                 await ctx.send('Вы не можете забрать эту роль, так как она имеет более высокий ранг, чем ваша высшая роль.')
             elif role == ctx.author.top_role and ctx.message.author.id != 338714886001524737:
-                await ctx.send('Вы не можете забрать эту роль у кого, так как она равна вашей высшей роли.')
+                await ctx.send('Вы не можете забрать эту роль у кого-либо, так как она равна вашей высшей роли.')
             else:
-                await member.remove_roles(role)
+                await member.add_roles(role)
                 channel = self.client.get_channel(714175791033876490)
-                emb = discord.Embed(colour = member.color, timestamp = ctx.message.created_at)
-                emb.add_field(name = 'Была забрана роль', value = f'{role.mention} | {role.name} | ID {role.id}')
-                emb.add_field(name = 'Забрана у:', value = member.mention)
-                emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
-                emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-                await channel.send(embed = emb)
+                if len(role) == 1:
+                    emb = discord.Embed(colour = member.color, timestamp = ctx.message.created_at)
+                    emb.add_field(name = 'Была забрана роль', value = f'{role.mention} | {role.name} | ID {role.id}')
+                    emb.add_field(name = 'Забрана:', value = member.mention)
+                    emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
+                    emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+                    await channel.send(embed = emb)
+                else:
+                    emb = discord.Embed(colour = member.color, timestamp = ctx.message.created_at)
+                    emb.add_field(name = 'Были забраны роли', value = f'{role.mention} | {role.name} | ID`s {role.id}')
+                    emb.add_field(name = 'Забраны у:', value = member.mention)
+                    emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
+                    emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+                    await channel.send(embed = emb)
         else:
-            emb = discord.Embed(description = f'{ctx.author.mention}, я не могу найти подходящую роль!', colour = member.color, timestamp = ctx.message.created_at)
+            emb = discord.Embed(description = f'{ctx.author.mention}, я не могу найти {role.mention} в списке ролей.', colour = member.color, timestamp = ctx.message.created_at)
             emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
             await ctx.send(embed = emb)
             
