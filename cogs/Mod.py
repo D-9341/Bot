@@ -80,10 +80,10 @@ class Moderation(commands.Cog):
         
     @commands.command(aliases = ['Unban', 'UNBAN'])
     @commands.has_permissions(ban_members = True)
-    async def unban(self, ctx, member: discord.User, *, reason = None):
+    async def unban(self, ctx, user: discord.User, *, reason = None):
         await ctx.message.delete()
-        await ctx.guild.unban(user = member)
-        emb = discord.Embed(description = f'{member} был успешно разбанен.', colour = discord.Color.orange())
+        await ctx.guild.unban(user = user)
+        emb = discord.Embed(description = f'{user} был успешно разбанен.', colour = discord.Color.orange())
         if reason == None:
             reason = 'Не указана.'
         emb.add_field(name = 'Причина', value = reason)
@@ -92,7 +92,7 @@ class Moderation(commands.Cog):
 
     @commands.command(aliases = ['Give', 'GIVE'])
     @commands.has_permissions(manage_channels = True)
-    async def give(self, ctx, member: discord.Member, *role: discord.Role):
+    async def give(self, ctx, member: discord.Member, *, role: discord.Role):
         await ctx.message.delete()
         if role != None:
             if role > member.top_role and ctx.message.author.id != 338714886001524737:
@@ -115,7 +115,7 @@ class Moderation(commands.Cog):
             
     @commands.command(aliases = ['Take', 'TAKE'])
     @commands.has_permissions(manage_channels = True)
-    async def take(self, ctx, member: discord.Member, *role: discord.Role):
+    async def take(self, ctx, member: discord.Member, *, role: discord.Role):
         await ctx.message.delete()
         if role != None:
             if role > ctx.author.top_role and ctx.message.author.id != 338714886001524737:
