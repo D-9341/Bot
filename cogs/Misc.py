@@ -12,7 +12,7 @@ class Misc(commands.Cog):
 
     @commands.command(aliases = ['Guild', 'GUILD'])
     @commands.cooldown(1, 5, commands.BucketType.default)
-    async def guild(self, ctx, guild : discord.Guild = None):
+    async def guild(self, ctx, guild: discord.Guild = None):
         if guild == None:
             guild = ctx.guild
         await ctx.message.delete()
@@ -56,11 +56,11 @@ class Misc(commands.Cog):
     
     @commands.command(aliases = ['Avatar', 'AVATAR'])
     @commands.cooldown(1, 5, commands.BucketType.default)
-    async def avatar(self, ctx, member: discord.User = None):
+    async def avatar(self, ctx, member: discord.Member = None):
         await ctx.message.delete()
         if member == None:
             member = ctx.author
-        emb = discord.Embed(description = f'[png]({member.avatar_url_as(static_format = 'png')}), colour = member.color)
+        emb = discord.Embed(description = f'[Прямая ссылка]({member.avatar_url})', colour = member.color)
         emb.set_author(name = member)
         emb.set_image(url = member.avatar_url)
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
