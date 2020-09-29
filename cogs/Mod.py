@@ -10,6 +10,7 @@ time_dict = {'h': 3600, 's': 1, 'm': 60, 'd': 86400}
 class TimeConverter(commands.Converter):
     async def convert(self, ctx, argument):
         args = argument.lower()
+        time = 0
         matches = re.findall(time_regex, args)
         for key, value in matches:
             try:
