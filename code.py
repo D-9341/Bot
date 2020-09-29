@@ -60,13 +60,13 @@ async def help(ctx, arg = None):
     elif arg == 'edit':
         await ctx.send('```cy/edit <ID> <новый текст>```')
     elif arg == 'say':
-        await ctx.send('```cy/say |noembed| |text| |title текст| |description текст| |footer текст| |ссылка| |ссылка| |цвет| |@пинг/имя/ID| |@роль/имя роли/ID роли|```')
+        await ctx.send('```cy/say |noembed| |text| |title текст| |description текст| |footer текст| |ссылка| |ссылка| |цвет| |@пинг/имя/ID| |@роль/имя роли/ID роли|(cy/say "" "" "title" "description" "footer")```')
     elif arg == 'emb_ctx':
         await ctx.send('```cy/emb_ctx <ID>```')
     elif arg == 'emb_edit':
         await ctx.send('```cy/emb_edit <ID> |title текст| |description текст| |footer текст| |ссылка| |ссылка| |цвет| |@пинг/имя/ID| |@роль/имя роли/ID роли|```')
     elif arg == 'say_everyone':
-        await ctx.send('```cy/say_everyone |title текст| |description текст| |footer текст| |ссылка| |ссылка| |цвет| |@пинг/имя/ID| |@роль/имя роли/ID роли|```')
+        await ctx.send('```cy/say_everyone |title текст| |description текст| |footer текст| |ссылка| |ссылка| |цвет| |@пинг/имя/ID| |@роль/имя роли/ID роли|(cy/say_everyone "" "" "title" "description" "footer")```')
     elif arg == 'give':
         await ctx.send('```cy/give <@пинг/имя/ID> <@роль/имя роли/ID роли>```')
     elif arg == 'kick':
