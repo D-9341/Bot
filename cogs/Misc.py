@@ -60,8 +60,7 @@ class Misc(commands.Cog):
         await ctx.message.delete()
         if member == None:
             member = ctx.author
-        avatar = member.avatar_url_as(format = 'gif', static_format = 'png', size = 1024)
-        emb = discord.Embed(description = f'[Прямая ссылка]({avatar})', colour = member.color)
+        emb = discord.Embed(description = f'[Прямая ссылка]({member.avatar_url})', colour = member.color)
         emb.set_author(name = member)
         emb.set_image(url = member.avatar_url)
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
