@@ -88,6 +88,8 @@ class Moderation(commands.Cog):
                 await ctx.send('Вы не можете выдать эту роль, так как она имеет более высокий ранг, чем ваша высшая роль.')
             elif role == ctx.author.top_role and ctx.message.author.id != 338714886001524737:
                 await ctx.send('Вы не можете выдать эту роль кому-либо, так как она равна вашей высшей роли.')
+            elif role.is_default():
+                await ctx.send('Выдавать everyone? Всё с башкой хорошо?')
             else:
                 await member.add_roles(role)
                 channel = self.client.get_channel(714175791033876490)
@@ -111,6 +113,8 @@ class Moderation(commands.Cog):
                 await ctx.send('Вы не можете забрать эту роль, так как она имеет более высокий ранг, чем ваша высшая роль.')
             elif role == ctx.author.top_role and ctx.message.author.id != 338714886001524737:
                 await ctx.send('Вы не можете забрать эту роль у кого-либо, так как она равна вашей высшей роли.')
+            elif role.is_default():
+                await ctx.send('Забирать everyone? Всё с башкой хорошо?')
             else:
                 await member.add_roles(role)
                 channel = self.client.get_channel(714175791033876490)
