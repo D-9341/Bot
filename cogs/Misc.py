@@ -1,6 +1,24 @@
 import discord
 from discord.ext import commands
 import asyncio
+import re
+
+time_regex = re.compile("(?:(\d{1,5})(h|s|m|d))+?")
+time_dict = {'h': 3600, 's': 1, 'm': 60, 'd': 86400}
+
+class TimeConverter(commands.Converter):
+    async def convert(self, ctx, argument):
+        args = argument.lower()
+        time = 0
+        matches = re.findall(time_regex, args)
+        for key, value in matches:
+            try:
+                time += time_dict[value] * float(key)
+            except KeyError:
+                raise commands.BadArgument(f'{value} не является правильным аргументом! Правильные: h|m|s|d')
+            except ValueError:
+                raise commands.BadArgument(f'{key} не число!')
+        return time
 
 class Misc(commands.Cog):
     def __init__(self, client):
@@ -95,16 +113,16 @@ class Misc(commands.Cog):
         
     @commands.command()
     @commands.cooldown(1, 5, commands.BucketType.default)
-    async def remind(self, ctx, time: int, *, arg):
+    async def remind(self, ctx, time: TimeConverter, *, arg):
         await ctx.message.delete()
         emb = discord.Embed(colour = ctx.author.color, timestamp = ctx.message.created_at)
-        emb.add_field(name = 'Напомню через', value = f'{time} минут(у, ы)')
+        emb.add_field(name = 'Напомню через', value = f'{time}s')
         emb.add_field(name = 'О чём напомню?', value = arg)
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb, delete_after = time * 60)
         await asyncio.sleep(time * 60)
         emb = discord.Embed(title = 'Напоминание', colour = ctx.author.color)
-        emb.add_field(name = 'Напомнил через', value = f'{time} минут(у, ы)')
+        emb.add_field(name = 'Напомнил через', value = f'{time}s')
         emb.add_field(name = 'Напоминаю о', value = arg)
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(f'{ctx.author.mention}', embed = emb) 
