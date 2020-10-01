@@ -121,7 +121,7 @@ class Misc(commands.Cog):
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb, delete_after = time)
         await asyncio.sleep(time)
-        emb = discord.Embed(title = 'Напоминание', colour = ctx.author.color)
+        emb = discord.Embed(colour = ctx.author.color, timestamp = ctx.message.created_at)
         emb.add_field(name = 'Напомнил через', value = f'{time}s')
         emb.add_field(name = 'Напоминаю о', value = arg)
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
