@@ -74,7 +74,7 @@ async def help(ctx, arg = None):
     elif arg == 'mute':
         await ctx.send('```cy/mute <@пинг/имя/ID> <время(s,m,h,d(15s, 5m, 1h, 5d))> |причина|```')
     elif arg == 'remind':
-        await ctx.send('```cy/remind <время> <текст>```')
+        await ctx.send('```cy/remind <время(s,m,h,d(15s, 5m, 1h, 5d))> <текст>```')
     elif arg == 'role':
         await ctx.send('```cy/role <@роль/имя роли/ID роли>```')
     elif arg == 'take':
@@ -102,5 +102,6 @@ if __name__ == '__main__':
     for file in os.listdir(cwd+"/cogs"):
         if file.endswith(".py") and not file.startswith("_"):
             client.load_extension(f"cogs.{file[:-3]}")
+            
 t = os.environ.get('t')
 client.run(t)
