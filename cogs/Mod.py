@@ -165,7 +165,7 @@ class Moderation(commands.Cog):
                     emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
                     await ctx.send(embed = emb)
             else:
-                await guild.create_role(name = 'Muted', colour = discord.Colour(0x000001))
+                await ctx.guild.create_role(name = 'Muted', colour = discord.Colour(0x000001))
                 emb1 = discord.Embed(description = f'{ctx.author.mention}, По причине того, что я не нашёл нужную роль, была создана роль {role.mention} с цветом 0x000001.', colour = discord.Color.orange(), timestamp = ctx.message.created_at)
                 emb1.set_footer(text = 'Это сообщение должно показываться только 1 раз. Иначе, роль была удалена/отредактирована')
                 await ctx.send(embed = emb1)
