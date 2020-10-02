@@ -166,10 +166,9 @@ class Moderation(commands.Cog):
                     await ctx.send(embed = emb)
             else:
                 await guild.create_role(name = 'Muted', colour = discord.Colour(0x000001))
-                role1 = discord.utils.get(ctx.guild.roles, position = 1)
                 emb1 = discord.Embed(description = f'{ctx.author.mention}, По причине того, что я не нашёл нужную роль, была создана роль {role.mention} с цветом 0x000001.', colour = discord.Color.orange(), timestamp = ctx.message.created_at)
                 emb1.set_footer(text = 'Это сообщение должно показываться только 1 раз. Иначе, роль была удалена/отредактирована')
-                await ctx.send(f'{role.mention}', embed = emb1)
+                await ctx.send(f'{ctx.guild.owner.mention}', embed = emb1)
                 await asyncio.sleep(3)
                 role = discord.utils.get(ctx.guild.roles, name = 'Muted')
                 await member.add_roles(role)
