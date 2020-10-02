@@ -74,7 +74,7 @@ class Embeds(commands.Cog):
             f = ('')
         if role != None:
             c = role.color
-        if fu == None:
+        if fu == None or 'Empty':
             fu = ('Cephalon Cy by сасиска#2472')
         emb = discord.Embed(title = t, description = d, colour = c)
         emb.set_author(name = a, icon_url = a.avatar_url)
