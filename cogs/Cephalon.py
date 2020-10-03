@@ -24,6 +24,7 @@ class Cephalon(commands.Cog):
         emb.add_field(name = 'Версия', value = '0.12.7.9018')
         emb.add_field(name = 'Написан на', value = 'discord.py')
         emb.add_field(name = 'Разработчик', value = 'Написано в футере, ха!')
+        emb.add_field(name = 'Шардов', value = self.client.shard_count)
         emb.add_field(name = 'Веб-сайт', value = '```http://ru-unioncraft.ru/```')
         emb.set_footer(text = 'Данное приложение не имеет никакого причастия к игре Warframe.', icon_url = 'https://i.playground.ru/p/yVaOZNSTdgUTxmzy_qvzzQ.png')
         await ctx.send(embed = emb)
