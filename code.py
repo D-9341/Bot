@@ -23,7 +23,7 @@ guilds = [693929822543675455]
 async def pro(ctx):
     await ctx.message.delete()
     if ctx.guild.id not in guilds:
-        await ctx.send(f'Сервер `{ctx.guild}` не имеет активных подписок. Купить можно по [ссылке](https://qiwi.me/spell). Преймущества на сайте (ссылка на dashboard)')
+        await ctx.send(f'Сервер `{ctx.guild}` не имеет активных подписок. Купить можно по [ссылке](https://qiwi.me/spell). Преимущества: пинг не более 25ms, больший аптайм, защита от несанкционированного добавления на сервера.')
     else:
         await ctx.send(f'Сервер `{ctx.guild}` имеет активную подписку. Все пользователи могут пользоваться полным функционалом бота с минимальным пингом.')
 
@@ -50,6 +50,7 @@ async def help(ctx, arg = None):
         emb.add_field(name = 'cy/join', value = 'Бот заходит в голосовой канал.')
         emb.add_field(name = 'cy/kick', value = 'Кик человека.')
         emb.add_field(name = 'cy/mute', value = 'Мут человека.', inline = False)
+        emb.add_field(name = 'cy/pro', value = 'Показывает информацию о про версии. Также, проверяет на наличие активных подписок.')
         emb.add_field(name = 'cy/remind', value = 'Может напомнить вам о событии, которое вы не хотите пропустить.')
         emb.add_field(name = 'cy/role', value = 'Показывает информацию о роли')
         emb.add_field(name = 'cy/take', value = 'Забирает роль.', inline = False)
