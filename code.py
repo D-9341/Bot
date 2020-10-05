@@ -13,8 +13,17 @@ client.remove_command('help')
 cwd = Path(__file__).parents[0]
 cwd = str(cwd)
 
-#test commands space
+guilds = [693929822543675455, 735874149578440855]
 
+#test commands space
+@client.command()
+@commands.cooldown(1, 3, commands.BucketType.default)
+async def pro(ctx):
+    await ctx.message.delete()
+    if ctx.guild.id not in guilds:
+        await ctx.send(f'Сервер `{ctx.guild}` не имеет активных подписок. Купить можно по [ссылке]()')
+    else:
+        await ctx.send(f'Сервер `{ctx.guild}` имеет активную подписку. Все пользователи могут пользоваться полным функционалом бота с минимальным пингом.')
 #test commands space   
 
 @client.command(aliases = ['Help', 'HELP'])
