@@ -71,8 +71,9 @@ class Events(commands.Cog):
             role1 = discord.utils.get(member.guild.roles, id = 693933511412940800)
             if role is not None:
                 await member.add_roles(role, role1)
-            emb = discord.Embed(description = f'А, {member.mention} ({member.name}) - очередной ботяра? `{member.guild.name}`, зачем?', colour = discord.Color.orange())
-            await channel.send(embed = emb)
+            if member.id != 762015251264569352:
+                emb = discord.Embed(description = f'А, {member.mention} ({member.name}) - очередной ботяра? `{member.guild.name}`, зачем?', colour = discord.Color.orange())
+                await channel.send(embed = emb)
 
     @commands.Cog.listener()
     async def on_member_remove(self, member):
