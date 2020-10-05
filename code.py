@@ -13,7 +13,7 @@ client.remove_command('help')
 cwd = Path(__file__).parents[0]
 cwd = str(cwd)
 
-guilds = [693929822543675455]
+guilds = [693929822543675455, 735874149578440855]
 
 #test commands space
 
