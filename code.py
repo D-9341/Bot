@@ -23,7 +23,7 @@ guilds = [693929822543675455, 735874149578440855]
 async def pro(ctx):
     await ctx.message.delete()
     if ctx.guild.id not in guilds:
-        emb = discord.Embed(description = f'Сервер `{ctx.guild}` не имеет активных подписок. Купить можно по [Ссылке](https://qiwi.me/spell) Преимущества: пинг не более 25ms, больший аптайм, защита от несанкционированного добавления на сервера.', colour = discord.Color.red())
+        emb = discord.Embed(description = f'Сервер `{ctx.guild}` не имеет активных подписок. Купить можно по [Ссылке](https://www.patreon.com/cephaloncy) Преимущества: пинг не более 25ms, больший аптайм, защита от несанкционированного добавления на сервера.', colour = discord.Color.red())
         await ctx.send(embed = emb)
     else:
         emb = discord.Embed(description = f'Сервер `{ctx.guild}` имеет активную подписку. Все пользователи могут пользоваться полным функционалом бота с минимальным пингом.', colour = discord.Color.red())
