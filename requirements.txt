@@ -3,4 +3,3 @@ discord.py
 aiohttp
 websockets
 chardet
-youtube-dl
