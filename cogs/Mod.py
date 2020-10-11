@@ -42,42 +42,52 @@ class Moderation(commands.Cog):
     @commands.command(aliases = ['Kick', 'KICK'])
     @commands.cooldown(1, 10, commands.BucketType.default)
     @commands.has_permissions(kick_members = True)
-    async def kick(self, ctx, member: discord.Member, *, reason: str = None):
+    async def kick(ctx, member: discord.Member, *, reason: str = None):
         await ctx.message.delete()
-        if member.id != 338714886001524737:
-            if reason == None:
-                reason = 'Не указана.'
-            emb = discord.Embed(colour = member.color)
-            emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
-            emb.add_field(name = 'Был кикнут', value = member.mention)
-            emb.add_field(name = 'По причине', value = reason)
-            emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+        if ctx.guild.id not in guilds:
+            emb = discord.Embed(description = f'Сервер `{ctx.guild}` не имеет активных подписок. Купить можно по [Ссылке](https://www.patreon.com/cephaloncy) Преимущества: пинг не более 25ms, больший аптайм, защита от несанкционированного добавления на сервера.', colour = discord.Color.red())
             await ctx.send(embed = emb)
-            await member.kick(reason = reason)
         else:
-            emb = discord.Embed(description = f'Извините, {ctx.author.mention}, но вы не можете кикнуть моего создателя!', colour = discord.Color.orange())
-            emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-            await ctx.send(embed = emb)
+            if member.id != 338714886001524737:
+                if reason == None:
+                    reason = 'Не указана.'
+                if ctx.author.top_role == member.top_role:
+                    await ctx.send(f'{ctx.author.mention}, ваша высшая роль равна высшей роли {member.mention}. Отклонено')
+                else:
+                    emb = discord.Embed(colour = member.color)
+                    emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
+                    emb.add_field(name = 'Был кикнут', value = member.mention)
+                    emb.add_field(name = 'По причине', value = reason)
+                    await ctx.send(embed = emb)
+                    await member.kick(reason = reason)
+            else:
+                emb = discord.Embed(description = f'Извините, {ctx.author.mention}, но вы не можете кикнуть моего создателя!', colour = discord.Color.red())
+                await ctx.send(embed = emb)
 
     @commands.command(aliases = ['Ban', 'BAN'])
     @commands.cooldown(1, 10, commands.BucketType.default)
     @commands.has_permissions(ban_members = True)
-    async def ban(self, ctx, member: discord.Member, *, reason = None):
+    async def ban(ctx, member: discord.Member, *, reason = None):
         await ctx.message.delete()
-        if member.id != 338714886001524737:
-            if reason == None:
-                reason = 'Не указана.'
-            emb = discord.Embed(colour = member.color)
-            emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
-            emb.add_field(name = 'Был кикнут', value = member.mention)
-            emb.add_field(name = 'По причине', value = reason)
-            emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+        if ctx.guild.id not in guilds:
+            emb = discord.Embed(description = f'Сервер `{ctx.guild}` не имеет активных подписок. Купить можно по [Ссылке](https://www.patreon.com/cephaloncy) Преимущества: пинг не более 25ms, больший аптайм, защита от несанкционированного добавления на сервера.', colour = discord.Color.red())
             await ctx.send(embed = emb)
-            await member.ban(reason = reason)
         else:
-            emb = discord.Embed(description = f'Извините, {ctx.author.mention}, но вы не можете забанить моего создателя!', colour = discord.Color.orange())
-            emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-            await ctx.send(embed = emb)
+            if member.id != 338714886001524737:
+                if reason == None:
+                    reason = 'Не указана.'
+                if ctx.author.top_role == member.top_role:
+                    await ctx.send(f'{ctx.author.mention}, ваша высшая роль равна высшей роли {member.mention}. Отклонено')
+                else:
+                    emb = discord.Embed(colour = member.color)
+                    emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
+                    emb.add_field(name = 'Был кикнут', value = member.mention)
+                    emb.add_field(name = 'По причине', value = reason)
+                    await ctx.send(embed = emb)
+                    await member.ban(reason = reason)
+            else:
+                emb = discord.Embed(description = f'Извините, {ctx.author.mention}, но вы не можете забанить моего создателя!', colour = discord.Color.red())
+                await ctx.send(embed = emb)
 
     @commands.command(aliases = ['Give', 'GIVE'])
     @commands.has_permissions(manage_channels = True)
