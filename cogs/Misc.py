@@ -39,7 +39,11 @@ class Misc(commands.Cog):
         emb.add_field(name = 'Уровень сервера', value = guild.premium_tier)
         emb.add_field(name = 'Люди, бустящие сервер', value = guild.premium_subscribers)
         emb.add_field(name = 'Владелец сервера', value = guild.owner.mention, inline = False)
-        emb.add_field(name = 'Количество человек на сервере', value = guild.member_count)
+        emb.add_field(name = 'Человек', value = guild.member_count)
+        if len(guild.roles) >= 15:
+            emb.add_field(name = f'Роли', value = 'Слишком много', inline = False)
+        else:
+            emb.add_field(name = f'Роли [{len(guild.roles)-1}]', value = ' '.join([role.mention for role in guild.roles[1:]]), inline = False)
         emb.add_field(name = 'Дата создания сервера', value = guild.created_at.strftime('%d/%m/%Y %H:%M:%S UTC'), inline = False)
         emb.set_thumbnail(url = guild.icon_url)
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
