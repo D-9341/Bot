@@ -74,7 +74,7 @@ class Misc(commands.Cog):
     
     @commands.command(aliases = ['Avatar', 'AVATAR'])
     @commands.cooldown(1, 5, commands.BucketType.default)
-    async def avatar(self, ctx, member: discord.Member = None):
+    async def avatar(self, ctx, *, member: discord.Member = None):
         await ctx.message.delete()
         if member == None:
             member = ctx.author
@@ -86,7 +86,7 @@ class Misc(commands.Cog):
     
     @commands.command(aliases = ['me', 'Me', 'ME', 'About', 'ABOUT'])
     @commands.cooldown(1, 5, commands.BucketType.default)
-    async def about(self, ctx, member: discord.Member = None):
+    async def about(self, ctx, *, member: discord.Member = None):
         await ctx.message.delete()
         if member == None:
             member = ctx.author
