@@ -38,7 +38,6 @@ class Misc(commands.Cog):
         emb.add_field(name = 'ID сервера', value = guild.id)
         emb.add_field(name = 'Уровень сервера', value = guild.premium_tier)
         emb.add_field(name = 'Люди, бустящие сервер', value = guild.premium_subscribers)
-        emb.add_field(name = 'Владелец сервера', value = guild.owner.mention, inline = False)
         emb.add_field(name = 'Человек', value = guild.member_count)
         if len(guild.roles) >= 15:
             emb.add_field(name = 'Роли', value = f'Слишком много ({len(guild.roles)-1})', inline = False)
