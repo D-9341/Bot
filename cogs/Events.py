@@ -11,6 +11,15 @@ class Events(commands.Cog):
         print('Дополнение Events успешно загружено.')
 
     @commands.Cog.listener()
+    async def on_member_update(self, before, after):
+        if before.roles != after.roles:
+            channel = self.client.get_channel(714175791033876490)
+            if after.top_role > before.top_role:
+                emb = discord.Embed(title = 'ВНИМАНИЕ', description = 'БЫЛА ОБНАРУЖЕНА ПОПЫТКА ВЫДАЧИ РОЛИ ВЫШЕ ТОЙ, ЧТО БЫЛА У ЧЕЛОВЕКА.', colour = discord.Color.red())
+                emb.add_field(name = 'Выдал роль', value = 'а я ебу? в журнале аудита посмотри, оттуда ничего нельзя удалить')
+                await channel.send(f'<@!338714886001524737>', embed = emb)
+
+    @commands.Cog.listener()
     async def on_guild_remove(self, guild):
         channel = self.client.get_channel(693929823030214658)
         emb = discord.Embed(description = f'Меня выгнали с сервера `{guild.name}`...', colour = discord.Color.red())
