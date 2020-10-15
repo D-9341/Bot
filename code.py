@@ -14,10 +14,7 @@ cwd = Path(__file__).parents[0]
 cwd = str(cwd)
 
 guilds = [693929822543675455, 735874149578440855]
-
-#test commands space
-
-#test commands space   
+ 
 @client.command()
 @commands.cooldown(1, 3, commands.BucketType.default)
 async def pro(ctx):
