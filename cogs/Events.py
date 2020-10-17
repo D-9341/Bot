@@ -70,16 +70,14 @@ class Events(commands.Cog):
             role = discord.utils.get(member.guild.roles, id = 693933516294979704)
             role1 = discord.utils.get(member.guild.roles, id = 693933510523879454)
             role2 = discord.utils.get(member.guild.roles, id = 693933514198089838)
-            if role is not None:
-                await member.add_roles(role, role1, role2)
+            await member.add_roles(role, role1, role2)
             emb = discord.Embed(description = f'{member.mention} ({member.name}) Has entered the `{member.guild.name}`, 👋', colour = discord.Color.orange())
             emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
             await channel.send(embed = emb)
         else:
             role = discord.utils.get(member.guild.roles, id = 693933516831850527)
             role1 = discord.utils.get(member.guild.roles, id = 693933511412940800)
-            if role is not None:
-                await member.add_roles(role, role1)
+            await member.add_roles(role, role1)
             emb = discord.Embed(description = f'А, {member.mention} ({member.name}) - очередной ботяра? `{member.guild.name}`, зачем?', colour = discord.Color.orange())
             await channel.send(embed = emb)
 
@@ -90,12 +88,8 @@ class Events(commands.Cog):
             emb = discord.Embed(description = f'{member.mention} ({member.name}) Has exited the `{member.guild.name}`...', colour = discord.Color.red())
             emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
             await channel.send(embed = emb)
-        elif member.bot != False and member.id != 694170281270312991:
+        elif member.bot != False:
             emb = discord.Embed(description = f'{member.mention} ({member.name}), ну и вали с `{member.guild.name}` ботаря, хаха!', colour = discord.Color.orange())
-            emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-            await channel.send(embed = emb)
-        elif member.bot != False and member.id == 694170281270312991 or 762015251264569352:
-            emb = discord.Embed(description = f'Ой, это я чтоли с `{member.guild.name}` вышел?', colour = discord.Color.orange())
             emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
             await channel.send(embed = emb)
 
