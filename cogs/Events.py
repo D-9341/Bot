@@ -23,23 +23,6 @@ class Events(commands.Cog):
         channel = self.client.get_channel(693929823030214658)
         emb = discord.Embed(description = f'Меня добавили на сервер `{guild.name}`!', colour = discord.Color.green())
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-        await channel.send(embed = emb)     
-
-    @commands.Cog.listener()
-    async def on_member_join(self, member):
-        channel = self.client.get_channel(693929823030214658)
-        role = discord.utils.get(member.guild.roles, id = 693933516294979704)
-        role1 = discord.utils.get(member.guild.roles, id = 693933510523879454)
-        role2 = discord.utils.get(member.guild.roles, id = 693933514198089838)
-        if role != None:
-            await member.add_roles(role, role1, role2)
-        emb = discord.Embed(description = f'{member.mention} ({member.name}) Has entered the `{member.guild.name}`, 👋', colour = discord.Color.orange())
-        await channel.send(embed = emb)
-
-    @commands.Cog.listener()
-    async def on_member_remove(self, member):
-        channel = self.client.get_channel(693929823030214658)
-        emb = discord.Embed(description = f'{member.mention} ({member.name}) Has exited the `{member.guild.name}`...', colour = discord.Color.red())
         await channel.send(embed = emb)
 
     @commands.Cog.listener()
