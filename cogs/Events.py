@@ -27,7 +27,7 @@ class Events(commands.Cog):
     @commands.Cog.listener()
     async def on_member_join(self, member):
         channel = self.client.get_channel(693929823030214658)
-        if member.bot == False:
+        if member.bot is False:
             role = discord.utils.get(member.guild.roles, id = 693933516294979704)
             role1 = discord.utils.get(member.guild.roles, id = 693933510523879454)
             role2 = discord.utils.get(member.guild.roles, id = 693933514198089838)
@@ -44,10 +44,10 @@ class Events(commands.Cog):
     @commands.Cog.listener()
     async def on_member_remove(self, member):
         channel = self.client.get_channel(693929823030214658)
-        if member.bot == False:
+        if member.bot is False:
             emb = discord.Embed(description = f'{member.mention} ({member.name}) Has exited the `{member.guild.name}`...', colour = discord.Color.red())
             await channel.send(embed = emb)
-        elif member.bot != False:
+        else:
             emb = discord.Embed(description = f'{member.mention} ({member.name}), ну и вали с `{member.guild.name}` ботаря, хаха!', colour = discord.Color.orange())
             await channel.send(embed = emb)
 
