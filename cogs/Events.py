@@ -22,31 +22,7 @@ class Events(commands.Cog):
         channel = self.client.get_channel(693929823030214658)
         emb = discord.Embed(description = f'Меня добавили на сервер `{guild.name}`!', colour = discord.Color.green())
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-        await channel.send(embed = emb)
-
-    @commands.Cog.listener()
-    async def on_raw_reaction_add(self, payload):
-        message_id = payload.message_id
-        if message_id == 707496056505761802:
-            guild_id = payload.guild_id
-            guild = discord.utils.find(lambda g: g.id == guild_id, self.client.guilds)
-            if payload.emoji.id == 697161900277891132:
-                role = discord.utils.get(guild.roles, id = 693933515540135987)
-            if role is not None:
-                member = discord.utils.find(lambda m: m.id == payload.user_id, guild.members)
-                await member.add_roles(role)
-
-    @commands.Cog.listener()
-    async def on_raw_reaction_remove(self, payload):
-        message_id = payload.message_id
-        if message_id == 707496056505761802:
-            guild_id = payload.guild_id
-            guild = discord.utils.find(lambda g: g.id == guild_id, self.client.guilds)
-            if payload.emoji.id == 697161900277891132:
-                role = discord.utils.get(guild.roles, id = 693933515540135987)
-            if role is not None:
-                member = discord.utils.find(lambda m: m.id == payload.user_id, guild.members)
-                await member.remove_roles(role)        
+        await channel.send(embed = emb)     
 
     @commands.Cog.listener()
     async def on_member_join(self, member):
@@ -57,7 +33,6 @@ class Events(commands.Cog):
             role2 = discord.utils.get(member.guild.roles, id = 693933514198089838)
             await member.add_roles(role, role1, role2)
             emb = discord.Embed(description = f'{member.mention} ({member.name}) Has entered the `{member.guild.name}`, 👋', colour = discord.Color.orange())
-            emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
             await channel.send(embed = emb)
         else:
             role = discord.utils.get(member.guild.roles, id = 693933516831850527)
@@ -71,11 +46,9 @@ class Events(commands.Cog):
         channel = self.client.get_channel(693929823030214658)
         if member.bot == False:
             emb = discord.Embed(description = f'{member.mention} ({member.name}) Has exited the `{member.guild.name}`...', colour = discord.Color.red())
-            emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
             await channel.send(embed = emb)
         elif member.bot != False:
             emb = discord.Embed(description = f'{member.mention} ({member.name}), ну и вали с `{member.guild.name}` ботаря, хаха!', colour = discord.Color.orange())
-            emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
             await channel.send(embed = emb)
 
     @commands.Cog.listener()
