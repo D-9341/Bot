@@ -30,7 +30,8 @@ class Events(commands.Cog):
         role = discord.utils.get(member.guild.roles, id = 693933516294979704)
         role1 = discord.utils.get(member.guild.roles, id = 693933510523879454)
         role2 = discord.utils.get(member.guild.roles, id = 693933514198089838)
-        await member.add_roles(role, role1, role2)
+        if role != None:
+            await member.add_roles(role, role1, role2)
         emb = discord.Embed(description = f'{member.mention} ({member.name}) Has entered the `{member.guild.name}`, 👋', colour = discord.Color.orange())
         await channel.send(embed = emb)
 
