@@ -28,7 +28,6 @@ async def pro(ctx):
 
 @client.command(aliases = ['Help', 'HELP'])
 @commands.cooldown(1, 3, commands.BucketType.default)
-@commands.has_permissions(kick_members = True)
 async def help(ctx, arg = None):
     await ctx.message.delete()
     if arg == None:
