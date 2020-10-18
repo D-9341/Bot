@@ -80,6 +80,8 @@ class Misc(commands.Cog):
             role.hoist = 'Да'
         emb = discord.Embed(title = role.name, colour = role.colour)
         emb.add_field(name = 'ID', value = role.id)
+        if role.is_default():
+            emb.add_field(name = '@everyone', value = 'Является ролью, что имеют все участники сервера.')
         emb.add_field(name = 'Цвет', value = role.color)
         emb.add_field(name = 'Упоминается?', value = role.mentionable)
         emb.add_field(name = 'Управляется интеграцией?', value = role.managed)
