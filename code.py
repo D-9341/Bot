@@ -110,7 +110,7 @@ async def on_command_error(ctx, error):
 async def on_command_error(ctx, error):
     if isinstance(error, commands.MissingPermissions):
         await ctx.message.delete()
-        emb = discord.Embed(description = f'{ctx.author.mention}, у вас недостаточно прав на выполнение {command}', colour = discord.Color.orange())
+        emb = discord.Embed(description = f'{ctx.author.mention}, у вас недостаточно прав на выполнение {commands.command}', colour = discord.Color.orange())
         emb.set_footer(text = 'Считаете, что такая команда должна быть? Напишите сасиска#2472 и опишите её суть!')
         await ctx.send(embed = emb)
         
