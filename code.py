@@ -110,9 +110,7 @@ async def on_command_error(ctx, error):
 async def on_command_error(ctx, error):
     if isinstance(error, commands.MissingPermissions):
         await ctx.message.delete()
-        permissions = ctx.author.guild_permissions
-        missing = [permissions for permissions, value in permissions.items() if getattr(permissions, permissions, None) != value]
-        emb = discord.Embed(description = f'{ctx.author.mention}, у вас недостаточно прав на выполнение команды `{ctx.command.name}` ({missing})', colour = discord.Color.orange())
+        emb = discord.Embed(description = f'{ctx.author.mention}, у вас недостаточно прав на выполнение команды `{ctx.command.name}`', colour = discord.Color.orange())
         await ctx.send(embed = emb)
         
 if __name__ == '__main__':
