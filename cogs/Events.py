@@ -38,6 +38,30 @@ class Events(commands.Cog):
             await channel.delete()
 
     @commands.Cog.listener()
+    async def on_member_join(self, member):
+        channel = self.client.get_channel(693929823030214658)
+        if member.bot == False:
+            emb = discord.Embed(description = f'{member.mention} ({member.name}) Has entered the `{member.guild.name}`, 👋', colour = discord.Color.orange())
+            emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+            await channel.send(embed = emb)
+        else:
+            if member.id != 762015251264569352:
+                emb = discord.Embed(description = f'А, {member.mention} ({member.name}) - очередной ботяра? `{member.guild.name}`, зачем?', colour = discord.Color.orange())
+                await channel.send(embed = emb)
+
+    @commands.Cog.listener()
+    async def on_member_remove(self, member):
+        channel = self.client.get_channel(693929823030214658)
+        if member.bot == False:
+            emb = discord.Embed(description = f'{member.mention} ({member.name}) Has exited the `{member.guild.name}`...', colour = discord.Color.red())
+            emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+            await channel.send(embed = emb)
+        elif member.bot != False and member.id != 694170281270312991 or 762015251264569352:
+            emb = discord.Embed(description = f'{member.mention} ({member.name}), ну и вали с `{member.guild.name}` ботаря, хаха!', colour = discord.Color.orange())
+            emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+            await channel.send(embed = emb)
+
+    @commands.Cog.listener()
     async def on_message(self, message):
         channel = self.client.get_channel(714175791033876490)
         if channel is None:
