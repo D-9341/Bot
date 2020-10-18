@@ -31,7 +31,7 @@ class Misc(commands.Cog):
 
     @commands.command(aliases = ['Guild', 'GUILD'])
     @commands.cooldown(1, 5, commands.BucketType.default)
-    async def guild(self, ctx, guild: discord.Guild = None):
+    async def guild(self, ctx):
         await ctx.message.delete()
         guild = ctx.guild
         emb = discord.Embed(colour = discord.Color.orange(), timestamp = ctx.message.created_at)
@@ -178,7 +178,6 @@ class Misc(commands.Cog):
         if isinstance(error, commands.CommandOnCooldown):
             await ctx.message.delete()
             emb = discord.Embed(description = f'{ctx.author.mention}, команда в кд, потерпи чутка!', colour = discord.Color.orange())
-            emb.set_footer(text = 'По причине того, что этот еблан сломался - бесплатно раздаётся про версия. Для этого, напишите в лс сасиска#2472 с ID вашего сервера, далее я скину вам ссылку приглашение.')
             await ctx.send(embed = emb)
 
 def setup(client):
