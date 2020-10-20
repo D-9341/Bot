@@ -38,21 +38,9 @@ class Events(commands.Cog):
             await channel.delete()
 
     @commands.Cog.listener()
-    async def on_member_join(self, member):
-        channel = self.client.get_channel(693929823030214658)
-        emb = discord.Embed(description = f'{member.mention} ({member.name}) Has entered the `{member.guild.name}`, 👋', colour = discord.Color.orange())
-        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-        await channel.send(embed = emb)
-
-    @commands.Cog.listener()
-    async def on_member_remove(self, member):
-        channel = self.client.get_channel(693929823030214658)
-        emb = discord.Embed(description = f'{member.mention} ({member.name}) Has exited the `{member.guild.name}`...', colour = discord.Color.red())
-        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-        await channel.send(embed = emb)
-
-    @commands.Cog.listener()
     async def on_message(self, message):
+        if message.channel.id == 693931411815661608:
+            await message.add_reaction('👍')
         channel = self.client.get_channel(714175791033876490)
         if channel is None:
             await self.client.process_commands(message)
