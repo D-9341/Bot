@@ -48,7 +48,7 @@ class Events(commands.Cog):
         elif message.channel.id == 747838996729692160:
             await message.add_reaction('👍')
             await message.add_reaction('👎')
-        elif mesaage.channel.id == 707498623981715557:
+        elif message.channel.id == 707498623981715557:
             await message.add_reaction('👍')
             await message.add_reaction('👎')
         channel = self.client.get_channel(714175791033876490)
