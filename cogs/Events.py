@@ -42,6 +42,9 @@ class Events(commands.Cog):
         if message.channel.id == 693931411815661608:
             await message.add_reaction('👍')
             await message.add_reaction('👎')
+        elif message.channel.id == 694213387625693264:
+            await message.add_reaction('👍')
+            await message.add_reaction('👎')  
         channel = self.client.get_channel(714175791033876490)
         if channel is None:
             await self.client.process_commands(message)
