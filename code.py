@@ -733,7 +733,7 @@ async def emb_content(ctx, arg):
     message = await ctx.fetch_message(id = arg)
     for emb in message.embeds:
         if message.author == client.user:
-            await ctx.send(f'```cy/say "" "" "{emb.title}"  "{emb.description}" {emb.image.url} {emb.thumbnail.url} {emb.colour}  @{emb.author.name}```')
+            await ctx.send(f'```cy/say "" "" "{emb.title}" "{emb.description}" {emb.image.url} {emb.thumbnail.url} {emb.colour}  @{emb.author.name}```')
         else:
             await ctx.send(f'```title {emb.title} description {emb.description} footer {emb.footer.text} color {emb.colour} author {emb.author.name} image {emb.image.url} footer img {emb.thumbnail.url}```')
             
@@ -759,6 +759,7 @@ async def say_everyone(ctx, arg = None, text = None, t = None, d = None, img = N
         emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
     emb.set_image(url = img)
     emb.set_thumbnail(url = f)
+    emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
     if arg == 'noembed':
         await ctx.send('@everyone ' + text)
     elif arg != 'noembed':
@@ -785,6 +786,7 @@ async def say(ctx, arg = None, text = None, t = None, d = None, img = None, f = 
         emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
     emb.set_image(url = img)
     emb.set_thumbnail(url = f)
+    emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
     if role is not None and arg != 'noembed':
         await ctx.send(f'{role.mention}', embed = emb)
     elif role is None and arg != 'noembed':
@@ -812,6 +814,7 @@ async def emb_edit(ctx, arg, t = None, d = None, img = None, f = None, c = None,
         emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
     emb.set_image(url = img)
     emb.set_thumbnail(url = f)
+    emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
     await message.edit(embed = emb)
     await ctx.send('👌', delete_after = 1)
     
@@ -915,13 +918,13 @@ async def help(ctx, arg = None):
     elif arg == 'edit':
         await ctx.send('```cy/edit <ID> <новый текст>```')
     elif arg == 'say':
-        await ctx.send('```cy/say |noembed| |text| |title текст| |description текст| |footer текст| |ссылка| |ссылка| |цвет| |@пинг/имя/ID| |@роль/имя роли/ID роли|(cy/say "" "" "title" "description" "footer")```')
+        await ctx.send('```cy/say |noembed| |text| |title текст| |description текст| |ссылка| |ссылка| |цвет| |@пинг/имя/ID| |@роль/имя роли/ID роли|(cy/say "" "" "title" "description")```')
     elif arg == 'emb_ctx':
         await ctx.send('```cy/emb_ctx <ID>```')
     elif arg == 'emb_edit':
-        await ctx.send('```cy/emb_edit <ID> |title текст| |description текст| |footer текст| |ссылка| |ссылка| |цвет| |@пинг/имя/ID| |@роль/имя роли/ID роли|```')
+        await ctx.send('```cy/emb_edit <ID> |title текст| |description текст| |ссылка| |ссылка| |цвет| |@пинг/имя/ID| |@роль/имя роли/ID роли|```')
     elif arg == 'say_everyone':
-        await ctx.send('```cy/say_everyone |title текст| |description текст| |footer текст| |ссылка| |ссылка| |цвет| |@пинг/имя/ID| |@роль/имя роли/ID роли|(cy/say_everyone "" "" "title" "description" "footer")```')
+        await ctx.send('```cy/say_everyone |title текст| |description текст| |ссылка| |ссылка| |цвет| |@пинг/имя/ID| |@роль/имя роли/ID роли|(cy/say_everyone "" "" "title" "description")```')
     elif arg == 'give':
         await ctx.send('```cy/give <@пинг/имя/ID> <@роль/имя роли/ID роли>```')
     elif arg == 'kick':
