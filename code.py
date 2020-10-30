@@ -4,26 +4,12 @@ import json
 import os
 import random
 import re
-
 import discord
 from discord.ext import commands
 from discord.utils import get
 
 client = commands.Bot(command_prefix = commands.when_mentioned_or('cy/'), intents = discord.Intents.all(), owner_id = 338714886001524737)
 client.remove_command('help')
-
-guilds = [693929822543675455, 735874149578440855]
- 
-@client.command()
-@commands.cooldown(1, 3, commands.BucketType.default)
-async def pro(ctx):
-    await ctx.message.delete()
-    if ctx.guild.id not in guilds:
-        emb = discord.Embed(description = f'Сервер `{ctx.guild}` не имеет активных подписок. Купить можно по [Ссылке](https://www.patreon.com/cephaloncy) Преимущества: пинг не более 25ms, больший аптайм, защита от несанкционированного добавления на сервера.', colour = discord.Color.red())
-        await ctx.send(embed = emb)
-    else:
-        emb = discord.Embed(description = f'Сервер `{ctx.guild}` имеет активную подписку. Все пользователи могут пользоваться полным функционалом про версии с минимальным пингом.', colour = discord.Color.red())
-        await ctx.send(embed = emb)
 
 time_regex = re.compile(r"(?:(\d{1,5})(h|s|m|d))+?")
 time_dict = {'h': 3600, 's': 1, 'm': 60, 'd': 86400}
@@ -41,6 +27,26 @@ class TimeConverter(commands.Converter):
             except ValueError:
                 await ctx.send(f'{key} не число!')
         return time
+
+class Slapper(commands.Converter):
+    async def convert(self, ctx, argument):
+        mention = random.choice(ctx.guild.members)
+        emb = discord.Embed(description = f'{argument}', colour =  ctx.author.colour, timestamp = ctx.message.created_at)
+        emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
+        return await ctx.send(f'@someone ||{mention.mention}||', embed = emb)
+
+guilds = [693929822543675455, 735874149578440855]
+ 
+@client.command()
+@commands.cooldown(1, 3, commands.BucketType.default)
+async def pro(ctx):
+    await ctx.message.delete()
+    if ctx.guild.id not in guilds:
+        emb = discord.Embed(description = f'Сервер `{ctx.guild}` не имеет активных подписок. Купить можно по [Ссылке](https://www.patreon.com/cephaloncy) Преимущества: пинг не более 25ms, больший аптайм, защита от несанкционированного добавления на сервера.', colour = discord.Color.red())
+        await ctx.send(embed = emb)
+    else:
+        emb = discord.Embed(description = f'Сервер `{ctx.guild}` имеет активную подписку. Все пользователи могут пользоваться полным функционалом про версии с минимальным пингом.', colour = discord.Color.red())
+        await ctx.send(embed = emb)
 
 #Events
 @client.event
@@ -72,7 +78,7 @@ async def on_guild_join(guild):
 @client.event
 async def on_voice_state_update(member, before, after):
     try:
-        if after.channel.id == 742647888424730735:
+        if after.channel.id == 742647888424730735: 
             category = discord.utils.get(member.guild.categories, id = 742647888101769236)
             channel = await member.guild.create_voice_channel(name = f'Комната {member}', category = category)
             await member.move_to(channel)
@@ -86,7 +92,10 @@ async def on_voice_state_update(member, before, after):
 
 @client.event
 async def on_message(message):
-    if ('чё') in message.content.lower():
+    if message.content.startswith(f'<@!{client.user.id}>') and len(message.content) == len(f'<@!{client.user.id}>'):
+        await message.channel.send(f'{message.author.mention}, мой префикс - `cy/`')
+        await client.process_commands(message)
+    if ('чё') in message.content.lower() and message.author.bot == False:
         await message.channel.send('хуй через плечо')
     def _check(m):
 	    return (m.author == message.author and len(m.mentions) and (datetime.datetime.utcnow() - m.created_at).seconds < 5)
@@ -94,7 +103,7 @@ async def on_message(message):
         if len(list(filter(lambda m: _check(m), client.cached_messages))) >= 3 and message.author.id != client.owner_id:
             role = discord.utils.get(message.guild.roles, name = 'Muted')
             if role is not None:
-                await message.channel.send(f"{message.author.mention} Был замучен на 10 минут за спам упоминаниями. Больше так не делай!")
+                await message.channel.send(f'{message.author.mention} Был замучен на 10 минут за спам упоминаниями. Больше так не делай!')
                 await message.author.add_roles(role)
                 await asyncio.sleep(600)
                 if role is not None:
@@ -156,7 +165,7 @@ async def on_message(message):
     elif message.channel.id == 747838996729692160:
         await message.add_reaction('👍')
         await message.add_reaction('👎')
-    elif message.channel.id == 707498623981715557:
+    elif message.channel.id == 707498623981715557: #я не ебу, что это за каналы
         await message.add_reaction('👍')
         await message.add_reaction('👎')
     channel = client.get_channel(714175791033876490)
@@ -342,6 +351,7 @@ async def mute(ctx, member: discord.Member, time: TimeConverter, *, reason: str 
                     await ctx.send(embed = emb)
             else:
                 await ctx.guild.create_role(name = 'Muted', colour = discord.Colour(0x000001))
+                role = discord.utils.get(ctx.guild.roles, name = 'Muted')
                 emb1 = discord.Embed(description = f'{ctx.author.mention}, По причине того, что я не нашёл нужную роль, была создана роль {role.name} с цветом {role.colour}.', colour = discord.Color.orange(), timestamp = ctx.message.created_at)
                 emb1.set_footer(text = 'Это сообщение должно показываться только 1 раз. Иначе, роль была удалена/отредактирована')
                 await ctx.send(embed = emb1, delete_after = 3)
@@ -431,11 +441,19 @@ async def clear(ctx, amount: int, confirm: str = None):
 
 #Misc
 @client.command()
+async def someone(ctx, *, text: Slapper):
+    await ctx.message.delete()
+    await ctx.send(embed = text)
+
+@client.command()
 @commands.cooldown(1, 5, commands.BucketType.default)
 async def rolemembers(ctx, role: discord.Role, member: discord.Member = None):
     await ctx.message.delete()
     emb = discord.Embed(colour = discord.Color.orange())
-    emb.add_field(name = f'Участники с ролью {role}', value = ', '.join([member.mention for member in role.members]))
+    if len(role.members) != 0:
+        emb.add_field(name = f'Участники с ролью {role} ({len(role.members)})', value = ', '.join([member.mention for member in role.members]))
+    else:
+        emb.set_footer(text = 'Обнаружено 0 участников с этой ролью.')
     await ctx.send(embed = emb)
 
 @client.command(aliases = ['Guild', 'GUILD'])
@@ -551,19 +569,27 @@ async def about(ctx, member: discord.Member = None):
     if member.activities != None and member.status != 'offline':
         emb.add_field(name = 'Активности', value = ', '.join([activity.name for activity in member.activities]))
     limit = len(member.roles)
-    if limit > 21:
-        emb.add_field(name = 'Роли', value = f'Слишком много для отрисовки ({len(member.roles)-1}) [лимит 20]', inline = False)
-    elif limit == 21:
-        emb.add_field(name = f'Роли ({len(member.roles)-1}) [лимит достигнут]', value = ', '.join([role.mention for role in member.roles[1:]]), inline = False)
-    elif limit == 20:
-        emb.add_field(name = f'Роли ({len(member.roles)-1}) [1 до лимита]', value = ', '.join([role.mention for role in member.roles[1:]]), inline = False)
-    elif limit == 19:
-        emb.add_field(name = f'Роли ({len(member.roles)-1}) [2 до лимита]', value = ', '.join([role.mention for role in member.roles[1:]]), inline = False)
-    elif limit == 18:
-        emb.add_field(name = f'Роли ({len(member.roles)-1}) [3 до лимита]', value = ', '.join([role.mention for role in member.roles[1:]]), inline = False)
+    if limit != 0:
+        if limit > 21:
+            emb.add_field(name = 'Роли', value = f'Слишком много для отрисовки ({len(member.roles)-1}) [лимит 20]', inline = False)
+            emb.add_field(name = 'Высшая Роль', value = member.top_role.mention, inline = False)
+        elif limit == 21:
+            emb.add_field(name = f'Роли ({len(member.roles)-1}) [лимит достигнут]', value = ', '.join([role.mention for role in member.roles[1:]]), inline = False)
+            emb.add_field(name = 'Высшая Роль', value = member.top_role.mention, inline = False)
+        elif limit == 20:
+            emb.add_field(name = f'Роли ({len(member.roles)-1}) [1 до лимита]', value = ', '.join([role.mention for role in member.roles[1:]]), inline = False)
+            emb.add_field(name = 'Высшая Роль', value = member.top_role.mention, inline = False)
+        elif limit == 19:
+            emb.add_field(name = f'Роли ({len(member.roles)-1}) [2 до лимита]', value = ', '.join([role.mention for role in member.roles[1:]]), inline = False)
+            emb.add_field(name = 'Высшая Роль', value = member.top_role.mention, inline = False)
+        elif limit == 18:
+            emb.add_field(name = f'Роли ({len(member.roles)-1}) [3 до лимита]', value = ', '.join([role.mention for role in member.roles[1:]]), inline = False)
+            emb.add_field(name = 'Высшая Роль', value = member.top_role.mention, inline = False)
+        else:
+            emb.add_field(name = f'Роли ({len(member.roles)-1})', value = ', '.join([role.mention for role in member.roles[1:]]), inline = False)
+            emb.add_field(name = 'Высшая Роль', value = member.top_role.mention, inline = False)
     else:
-        emb.add_field(name = f'Роли ({len(member.roles)-1})', value = ', '.join([role.mention for role in member.roles[1:]]), inline = False)
-    emb.add_field(name = 'Высшая Роль', value = member.top_role.mention, inline = False)
+        emb.add_field(name = 'Роли', value = 'Ролей не обнаружено.')
     emb.add_field(name = 'Бот?', value = bot)
     emb.set_thumbnail(url = member.avatar_url)
     await ctx.send(embed = emb)
@@ -584,6 +610,46 @@ async def remind(ctx, time: TimeConverter, *, arg):
 #Misc
 
 #Fun
+@client.command()
+async def insult(ctx, members: commands.Greedy[discord.Member]):
+    await ctx.message.delete()
+    insulted = ', '.join(x.mention for x in members)
+    if len(insulted) == 0:
+        insulted = 'Себя'
+    emb = discord.Embed(description = f'{ctx.message.author.mention} пизданул {insulted}!', colour = discord.Color.orange())
+    await ctx.send(embed = emb)
+
+@client.command()
+async def dotersbrain(ctx):
+    await ctx.message.delete()
+    sent1 =  await ctx.send(f'{ctx.author.mention}, через 5 секунд появится одно из слов (чё, а, чего), на которое вам нужно будет правильно ответить. На размышление 3 секунды.')
+    await asyncio.sleep(5)
+    words = ['чё', 'а', 'чего']
+    rand = random.choice(words)
+    sent = await ctx.send(rand)
+    try:
+        msg = await client.wait_for('message', timeout = 3, check = lambda message: message.author == ctx.author and message.channel == ctx.message.channel)
+        if msg.content == 'хуй через плечо' and sent.content == 'чё':
+            await ctx.send(f'Поздравляю, у вас 3 стадия рака!')
+            await sent1.delete()
+            await sent.delete()
+        elif sent.content == 'а' and msg.content == 'хуй на':
+            await ctx.send(f'Поздравляю, у вас 3 стадия рака!')
+            await sent1.delete()
+            await sent.delete()
+        elif sent.content == 'чего' and msg.content == 'хуй на воротничок': #чего бля
+            await ctx.send(f'Поздравляю, у вас 3 стадия рака!')
+            await sent1.delete()
+            await sent.delete()
+        else:
+            await ctx.send('Вы совершенно здоровый человек!')
+            await sent1.delete()
+            await sent.delete()
+    except asyncio.TimeoutError:
+        await ctx.send(f'{ctx.author.mention}, Слишком медленно.')
+        await sent1.delete()
+        await sent.delete()
+
 @client.command()
 @commands.cooldown(1, 3, commands.BucketType.default)
 async def niggers(ctx):
@@ -680,14 +746,17 @@ async def say_everyone(ctx, arg = None, text = None, t = None, d = None, img = N
         c = ctx.author.color
     else:
         c = int('0x' + c, 16)
-    if a == None:
-        a = ctx.author
     if img == None:
         img = ('')
     if f == None:
         f = ('')
+    if role != None:
+        c = role.color
     emb = discord.Embed(title = t, description = d, colour = c)
-    emb.set_author(name = a, icon_url = a.avatar_url)
+    if a != None:
+        emb.set_author(name = f'{a} ({ctx.author})', icon_url = a.avatar_url)
+    else:
+        emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
     emb.set_image(url = img)
     emb.set_thumbnail(url = f)
     if arg == 'noembed':
@@ -703,8 +772,6 @@ async def say(ctx, arg = None, text = None, t = None, d = None, img = None, f = 
         c = ctx.author.color
     else:
         c = int('0x' + c, 16)
-    if a == None:
-        a = ctx.author
     if img == None:
         img = ('')
     if f == None:
@@ -712,7 +779,10 @@ async def say(ctx, arg = None, text = None, t = None, d = None, img = None, f = 
     if role != None:
         c = role.color
     emb = discord.Embed(title = t, description = d, colour = c)
-    emb.set_author(name = a, icon_url = a.avatar_url)
+    if a != None:
+        emb.set_author(name = f'{a} ({ctx.author})', icon_url = a.avatar_url)
+    else:
+        emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
     emb.set_image(url = img)
     emb.set_thumbnail(url = f)
     if role is not None and arg != 'noembed':
@@ -731,14 +801,15 @@ async def emb_edit(ctx, arg, t = None, d = None, img = None, f = None, c = None,
         c = ctx.author.color
     else:
         c = int('0x' + c, 16)
-    if a == None:
-        a = ctx.author
     if img == None:
         img = ('')
     if f == None:
         f = ('')
     emb = discord.Embed(title = t, description = d, colour = c)
-    emb.set_author(name = a, icon_url = a.avatar_url)
+    if a != None:
+        emb.set_author(name = f'{a} ({ctx.author})', icon_url = a.avatar_url)
+    else:
+        emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
     emb.set_image(url = img)
     emb.set_thumbnail(url = f)
     await message.edit(embed = emb)
@@ -808,7 +879,7 @@ async def invite(ctx):
 async def help(ctx, arg = None):
     await ctx.message.delete()
     if arg == None:
-        emb = discord.Embed(title = "Меню команд Cephalon Cy", description = 'Существует дополнительная помощь по командам, пропишите cy/help |команда|', colour = discord.Color.orange())
+        emb = discord.Embed(title = 'Меню команд Cephalon Cy', description = 'Существует дополнительная помощь по командам, пропишите cy/help |команда|', colour = discord.Color.orange())
         emb.add_field(name = 'cy/about', value = 'Показывает информацию о человеке.')
         emb.add_field(name = 'cy/avatar', value = 'Показывает аватар человека.')
         emb.add_field(name = 'cy/ban', value = 'Бан человека.')
@@ -819,7 +890,6 @@ async def help(ctx, arg = None):
         emb.add_field(name = 'cy/emb_ctx', value = 'Позволяет увидеть контент эмбеда.')
         emb.add_field(name = 'cy/emb_edit', value = 'Редактирует эмбед. Работает как VAULTBOT', inline = False)
         emb.add_field(name = 'cy/say_everyone', value = 'Совмещает в себе команды everyone и say.')
-        emb.add_field(name = 'cy/everyone', value = 'Пишет сообщение от лица бота и пингует @everyone')
         emb.add_field(name = 'cy/give', value = 'Выдаёт роль.', inline = False)
         emb.add_field(name = 'cy/guild', value = 'Показывает информацию о сервере.')
         emb.add_field(name = 'cy/join', value = 'Бот заходит в голосовой канал.')
@@ -889,10 +959,21 @@ async def on_command_error(ctx, error):
     elif isinstance(error, commands.CommandOnCooldown):
         await ctx.message.delete()
         s = error.retry_after
-        choises = ['Its not time yet', 'I am not ready', 'Not yet']
+        choises = ['Its not time yet..', 'I am not ready..', 'Not yet..']
+        choices1 = ['Its. Not. Time. Yet.', 'I. Am. Not. Ready.', 'Not. Yet.']
+        choices2 = ['ITS NOT TIME YET!', 'I AM NOT READY!', 'NOT YET!']
         rand = random.choice(choises)
-        emb = discord.Embed(description = f'{rand}! Команда `{ctx.command.name}` будет доступна через {round(s)} секунд!', colour = discord.Color.orange())
-        await ctx.send(embed = emb)
-        
+        rand1 = random.choice(choices1)
+        rand2 = random.choice(choices2)
+        if round(s) >= 5:
+            emb = discord.Embed(description = f'{rand} Команда `{ctx.command.name}` будет доступна через {round(s)} секунд..', colour = discord.Color.orange())
+            await ctx.send(embed = emb)
+        elif round(s) >= 2:
+            emb = discord.Embed(description = f'{rand1} Команда `{ctx.command.name}` будет доступна через {round(s)} секунды.', colour = discord.Color.orange())
+            await ctx.send(embed = emb)
+        else:
+            emb = discord.Embed(description = f'{rand2} Команда `{ctx.command.name}` будет доступна через {round(s)} секунду!', colour = discord.Color.orange())
+            await ctx.send(embed = emb)
+
 t = os.environ.get('t')
 client.run(t)
