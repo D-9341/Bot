@@ -35,18 +35,9 @@ class Slapper(commands.Converter):
         emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
         return await ctx.send(f'@someone ||{mention.mention}||', embed = emb)
 
-guilds = [693929822543675455, 735874149578440855]
- 
-@client.command()
-@commands.cooldown(1, 3, commands.BucketType.default)
-async def pro(ctx):
-    await ctx.message.delete()
-    if ctx.guild.id not in guilds:
-        emb = discord.Embed(description = f'Сервер `{ctx.guild}` не имеет активных подписок. Купить можно по [Ссылке](https://www.patreon.com/cephaloncy) Преимущества: пинг не более 25ms, больший аптайм, защита от несанкционированного добавления на сервера.', colour = discord.Color.red())
-        await ctx.send(embed = emb)
-    else:
-        emb = discord.Embed(description = f'Сервер `{ctx.guild}` имеет активную подписку. Все пользователи могут пользоваться полным функционалом про версии с минимальным пингом.', colour = discord.Color.red())
-        await ctx.send(embed = emb)
+#test space
+
+#test space
 
 #Events
 @client.event
@@ -95,6 +86,8 @@ async def on_message(message):
     if message.content.startswith(f'<@!{client.user.id}>') and len(message.content) == len(f'<@!{client.user.id}>'):
         await message.channel.send(f'{message.author.mention}, мой префикс - `cy/`')
         await client.process_commands(message)
+    if ('адамант') in message.content.lower():
+        await message.channel.send('гей')
     if ('чё') in message.content.lower() and message.author.bot == False:
         await message.channel.send('хуй через плечо')
     def _check(m):
@@ -403,40 +396,28 @@ async def unmute(ctx, member: discord.Member, *, reason = None):
 @client.command(aliases = ['Clear', 'CLEAR'])
 @commands.cooldown(1, 10, commands.BucketType.default)
 @commands.has_permissions(administrator = True)
-async def clear(ctx, amount: int, confirm: str = None):
+async def clear(ctx, amount: int):
     await ctx.message.delete()
-    if amount == 0:
-        emb = discord.Embed(description = 'Удалять 0 сообщений? Ты еблан?', colour = discord.Color.orange())
-        await ctx.send(embed = emb, delete_after = 3)
-    elif amount == 1:
-        emb = discord.Embed(description = f'удалено {amount} сообщение', colour = discord.Color.orange())
-        await ctx.channel.purge(limit = amount)
-        await ctx.send(embed = emb, delete_after = 1)
-    elif amount == 2:
-        emb = discord.Embed(description = f'удалено {amount} сообщения', colour = discord.Color.orange())
-        await ctx.channel.purge(limit = amount)
-        await ctx.send(embed = emb, delete_after = 1)
-    elif amount == 3:
-        emb = discord.Embed(description = f'удалено {amount} сообщения', colour = discord.Color.orange())
-        await ctx.channel.purge(limit = amount)
-        await ctx.send(embed = emb, delete_after = 1)
-    elif amount == 4:
-        emb = discord.Embed(description = f'удалено {amount} сообщения', colour = discord.Color.orange())
-        await ctx.channel.purge(limit = amount)
-        await ctx.send(embed = emb, delete_after = 1)
-    elif amount >= 10:
-        if confirm == 'confirm':
-            await ctx.send(f'Через 3 секунды будет удалено {amount} сообщений')
-            await asyncio.sleep(3)
-            await ctx.channel.purge(limit = amount + 1)
-            await ctx.send(f'удалено {amount} сообщений', delete_after = 2)
-        else:
-            emb = discord.Embed(description = f'{ctx.author.mention}, для выполнения этой команды мне нужно ваше подтвеждение! (чувствительно к регистру)', colour = discord.Color.orange())
-            await ctx.send(embed = emb)
+    if amount >= 10:
+        sent = await ctx.send(f'{ctx.author.mention}, создан запрос на удаление {amount} сообщений. Продолжить? (y/n) ||Запрос будет отменён через 10 секунд.||')
+        try:
+            msg = await client.wait_for('message', timeout = 10, check = lambda message: message.author == ctx.author and message.channel == ctx.message.channel)
+            if msg.content.lower() == 'y':
+                await msg.delete()
+                await sent.delete()
+                await ctx.channel.purge(limit = amount)
+                await ctx.send(f'Удалено {amount} сообщений.', delete_after = 3)
+            elif msg.content.lower() == 'n':
+                await msg.delete()
+                await sent.delete()
+                await ctx.send('Отменено.', delete_after = 3)
+        except asyncio.TimeoutError:
+            await sent.delete()
+            await ctx.send(f'{ctx.author.mention}, Время вышло.', delete_after = 3)
+    elif amount == 0:
+        await ctx.send('Удалять 0 сообщений? Ты еблан?', delete_after = 1)
     else:
-        emb = discord.Embed(description = f'удалено {amount} сообщений', colour = discord.Color.orange())
-        await ctx.channel.purge(limit = amount)
-        await ctx.send(embed = emb, delete_after = 1)
+        await ctx.send(f'Удалено {amount} сообщений.', delete_after = 3)
 #Mod
 
 #Misc
@@ -533,7 +514,7 @@ async def avatar(ctx, member: discord.Member = None):
         emb.add_field(name = '.webp', value = f'[Ссылка]({member.avatar_url_as(format = av1)})')
         emb.add_field(name = '.jpg', value = f'[Ссылка]({member.avatar_url_as(format = av2)})')
     else:
-        emb.add_field(name = 'Внимание', value = 'по причине того, что аватар анимирован - ссылок на статичные форматы нет!')
+        emb.set_footer(text = 'по причине того, что аватар анимирован - ссылок на статичные форматы нет!')
     emb.set_image(url = member.avatar_url)
     emb.set_author(name = member)
     await ctx.send(embed = emb)
@@ -671,7 +652,7 @@ async def rp(ctx):
     await ctx.message.delete()
     emb = discord.Embed(description = '[Ныа](https://www.youtube.com/watch?v=idmTSW9mfYI)', colour = discord.Color.orange())
     await ctx.send(embed = emb)
-        
+
 @client.command(aliases = ['.rap'])
 @commands.cooldown(1, 5, commands.BucketType.default)
 async def rap(ctx):
@@ -680,7 +661,7 @@ async def rap(ctx):
     emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
     emb.set_image(url = 'https://thumbs.gfycat.com/MessyCarefreeHousefly-size_restricted.gif')
     await ctx.send(embed = emb)
-        
+
 @client.command()
 @commands.cooldown(1, 5, commands.BucketType.default)
 async def zatka(ctx):
@@ -759,7 +740,6 @@ async def say_everyone(ctx, arg = None, text = None, t = None, d = None, img = N
         emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
     emb.set_image(url = img)
     emb.set_thumbnail(url = f)
-    emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
     if arg == 'noembed':
         await ctx.send('@everyone ' + text)
     elif arg != 'noembed':
@@ -786,7 +766,6 @@ async def say(ctx, arg = None, text = None, t = None, d = None, img = None, f = 
         emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
     emb.set_image(url = img)
     emb.set_thumbnail(url = f)
-    emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
     if role is not None and arg != 'noembed':
         await ctx.send(f'{role.mention}', embed = emb)
     elif role is None and arg != 'noembed':
@@ -814,7 +793,6 @@ async def emb_edit(ctx, arg, t = None, d = None, img = None, f = None, c = None,
         emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
     emb.set_image(url = img)
     emb.set_thumbnail(url = f)
-    emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
     await message.edit(embed = emb)
     await ctx.send('👌', delete_after = 1)
     
@@ -912,7 +890,7 @@ async def help(ctx, arg = None):
     elif arg == 'ban':
         await ctx.send('```cy/ban <@пинг/имя/ID> |причина|```')
     elif arg == 'clear':
-        await ctx.send('```cy/clear <количество> |confirm|```')
+        await ctx.send('```cy/clear <количество> |y/n|```')
     elif arg == 'dm':
         await ctx.send('```cy/dm <@пинг/имя/ID> <текст>```')
     elif arg == 'edit':
