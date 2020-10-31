@@ -36,7 +36,9 @@ class Slapper(commands.Converter):
         return await ctx.send(f'@someone ||{mention.mention}||', embed = emb)
 
 #test space
-
+@client.command()
+async def ereone(ctx):
+    await ctx.send('@everyone')
 #test space
 
 #Events
@@ -399,25 +401,31 @@ async def unmute(ctx, member: discord.Member, *, reason = None):
 async def clear(ctx, amount: int):
     await ctx.message.delete()
     if amount >= 10:
-        sent = await ctx.send(f'{ctx.author.mention}, создан запрос на удаление {amount} сообщений. Продолжить? (y/n) ||Запрос будет отменён через 10 секунд.||')
+        emb = discord.Embed(description = f'{ctx.author.mention}, создан запрос на удаление {amount} сообщений. Продолжить? (y/n)\n ||Запрос будет отменён через 10 секунд.||', colour = discord.Color.orange())
+        sent = await ctx.send(embed = emb)
         try:
             msg = await client.wait_for('message', timeout = 10, check = lambda message: message.author == ctx.author and message.channel == ctx.message.channel)
             if msg.content.lower() == 'y':
                 await msg.delete()
                 await sent.delete()
                 await ctx.channel.purge(limit = amount)
-                await ctx.send(f'Удалено {amount} сообщений.', delete_after = 3)
+                emb = discord.Embed(description = f'Удалено {amount} сообщений.', colour = discord.Color.orange())
+                await ctx.send(embed = emb, delete_after = 3)
             elif msg.content.lower() == 'n':
                 await msg.delete()
                 await sent.delete()
-                await ctx.send('Отменено.', delete_after = 3)
+                emb = discord.Embed(description = 'Отменено.', colour = discord.Color.orange())
+                await ctx.send(embed = emb, delete_after = 3)
         except asyncio.TimeoutError:
             await sent.delete()
-            await ctx.send(f'{ctx.author.mention}, Время вышло.', delete_after = 3)
+            emb = discord.Embed(description = f'{ctx.author.mention}, Время вышло.', colour = discord.Color.orange())
+            await ctx.send(embed = emb, delete_after = 3)
     elif amount == 0:
-        await ctx.send('Удалять 0 сообщений? Ты еблан?', delete_after = 1)
+        emb = discord.Embed(description = 'Удалять 0 сообщений? Ты еблан?', colour = discord.Color.orange())
+        await ctx.send(embed = emb, delete_after = 1)
     else:
-        await ctx.send(f'Удалено {amount} сообщений.', delete_after = 3)
+        emb = discord.Embed(description = f'Удалено {amount} сообщений.', colour = discord.Color.orange())
+        await ctx.send(embed = emb, delete_after = 3)
 #Mod
 
 #Misc
@@ -718,10 +726,10 @@ async def emb_content(ctx, arg):
         else:
             await ctx.send(f'```title {emb.title} description {emb.description} footer {emb.footer.text} color {emb.colour} author {emb.author.name} image {emb.image.url} footer img {emb.thumbnail.url}```')
             
-@client.command(aliases = ['emb_e'])
+@client.command(aliases = ['say_e'])
 @commands.has_permissions(mention_everyone = True)
 @commands.cooldown(1, 20, commands.BucketType.default)
-async def say_everyone(ctx, arg = None, text = None, t = None, d = None, img = None, f = None, c = None, a : discord.Member = None):
+async def say_everyone(ctx, arg = None, text = None, t = None, d = None, img = None, f = None, c = None, a: discord.Member = None):
     await ctx.message.delete()
     if c == None:
         c = ctx.author.color
@@ -731,8 +739,6 @@ async def say_everyone(ctx, arg = None, text = None, t = None, d = None, img = N
         img = ('')
     if f == None:
         f = ('')
-    if role != None:
-        c = role.color
     emb = discord.Embed(title = t, description = d, colour = c)
     if a != None:
         emb.set_author(name = f'{a} ({ctx.author})', icon_url = a.avatar_url)
@@ -741,13 +747,13 @@ async def say_everyone(ctx, arg = None, text = None, t = None, d = None, img = N
     emb.set_image(url = img)
     emb.set_thumbnail(url = f)
     if arg == 'noembed':
-        await ctx.send('@everyone ' + text)
+        await ctx.send(f'@everyone {text}')
     elif arg != 'noembed':
         await ctx.send('@everyone', embed = emb)
     
 @client.command(aliases = ['Say', 'SAY'])
 @commands.has_permissions(manage_channels = True)
-async def say(ctx, arg = None, text = None, t = None, d = None, img = None, f = None, c = None, a : discord.Member = None, *, role: discord.Role = None):
+async def say(ctx, arg = None, text = None, t = None, d = None, img = None, f = None, c = None, a: discord.Member = None, *, role: discord.Role = None):
     await ctx.message.delete()
     if c == None:
         c = ctx.author.color
@@ -766,9 +772,9 @@ async def say(ctx, arg = None, text = None, t = None, d = None, img = None, f = 
         emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
     emb.set_image(url = img)
     emb.set_thumbnail(url = f)
-    if role is not None and arg != 'noembed':
-        await ctx.send(f'{role.mention}', embed = emb)
-    elif role is None and arg != 'noembed':
+    if role != None and arg != 'noembed':
+        await ctx.send(role, embed = emb)
+    elif role == None and arg != 'noembed':
         await ctx.send(embed = emb)
     if arg == 'noembed':
         await ctx.send(text)
