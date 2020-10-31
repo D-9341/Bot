@@ -35,12 +35,6 @@ class Slapper(commands.Converter):
         emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
         return await ctx.send(f'@someone ||{mention.mention}||', embed = emb)
 
-#test space
-@client.command()
-async def ereone(ctx):
-    await ctx.send('@everyone')
-#test space
-
 #Events
 @client.event
 async def on_member_join(member):
@@ -611,7 +605,7 @@ async def insult(ctx, members: commands.Greedy[discord.Member]):
 @client.command()
 async def dotersbrain(ctx):
     await ctx.message.delete()
-    sent1 =  await ctx.send(f'{ctx.author.mention}, через 5 секунд появится одно из слов (чё, а, чего), на которое вам нужно будет правильно ответить. На размышление 3 секунды.')
+    sent1 = await ctx.send(f'{ctx.author.mention}, через 5 секунд появится одно из слов (чё, а, чего), на которое вам нужно будет правильно ответить. На размышление 3 секунды.')
     await asyncio.sleep(5)
     words = ['чё', 'а', 'чего']
     rand = random.choice(words)
@@ -722,7 +716,7 @@ async def emb_content(ctx, arg):
     message = await ctx.fetch_message(id = arg)
     for emb in message.embeds:
         if message.author == client.user:
-            await ctx.send(f'```cy/say "" "" "{emb.title}" "{emb.description}" {emb.image.url} {emb.thumbnail.url} {emb.colour}  @{emb.author.name}```')
+            await ctx.send(f'```cy/say "" "" "{emb.title}" "{emb.description}" {emb.image.url} {emb.thumbnail.url} {emb.colour} @{emb.author.name}```')
         else:
             await ctx.send(f'```title {emb.title} description {emb.description} footer {emb.footer.text} color {emb.colour} author {emb.author.name} image {emb.image.url} footer img {emb.thumbnail.url}```')
             
