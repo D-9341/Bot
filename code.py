@@ -390,7 +390,7 @@ async def unmute(ctx, member: discord.Member, *, reason = None):
     else:
         emb = discord.Embed(description = f'{ctx.author.mention}, Я не могу снять мут у {member.mention} из-за того, что роль Muted была удалена/отредактирована!', colour = discord.Color.orange(), timestamp = ctx.message.created_at)
         await ctx.send(embed = emb)
-
+ 
 @client.command(aliases = ['Clear', 'CLEAR'])
 @commands.cooldown(1, 10, commands.BucketType.default)
 @commands.has_permissions(administrator = True)
