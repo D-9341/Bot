@@ -425,6 +425,22 @@ async def clear(ctx, amount: int):
 #Misc
 @client.command()
 @commands.cooldown(1, 60, commands.BucketType.guild)
+async def vote(ctx, text, *, role: discord.Role = None):
+    await ctx.message.delete()
+    emb = discord.Embed(description = 'ГОЛОСОВАНИЕ', colour = discord.Color.orange())
+    emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
+    emb.add_field(name = 'Голосуем за:', value = text)
+    emb.set_footer(text = '🚫 - воздержусь')
+    if role == None:
+        sent = await ctx.send(embed = emb)
+    else:
+        sent = await ctx.send(f'{role.mention}', embed = emb)
+    await sent.add_reaction('👍')
+    await sent.add_reaction('👎')
+    await sent.add_reaction('🚫')
+
+@client.command()
+@commands.cooldown(1, 60, commands.BucketType.guild)
 async def vote(ctx, *, text):
     await ctx.message.delete()
     emb = discord.Embed(description = 'ГОЛОСОВАНИЕ', colour = discord.Color.orange())
@@ -934,6 +950,8 @@ async def help(ctx, arg = None):
         await ctx.send('```cy/take <@пинг/имя/ID> <@роль/имя роли/ID роли>```')
     elif arg == 'unmute':
         await ctx.send('```cy/unmute <@пинг/имя/ID> |причина|```')
+    elif arg == 'vote':
+        await ctx.send('```cy/vote <"текст"> |@пинг/имя/ID роли|```')
     else:
         emb = discord.Embed(description = 'Для этой команды не нужны аргументы', colour = discord.Color.orange())
         emb.set_footer(text = 'Хотя, возможно, вы ввели команду неправильно?')
