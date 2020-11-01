@@ -346,6 +346,8 @@ async def mute(ctx, member: discord.Member, time: TimeConverter, *, reason: str 
                 await ctx.send(embed = emb1, delete_after = 3)
                 await asyncio.sleep(3)
                 await member.add_roles(role)
+		        if reason == None:
+                    reason = 'Не указана.'
                 emb = discord.Embed(colour = member.color, timestamp = ctx.message.created_at)
                 emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
                 emb.add_field(name = 'В муте', value = f'{member.mention}')
@@ -533,7 +535,7 @@ async def about(ctx, member: discord.Member = None):
         bot = 'Неа'
     elif member.bot == True:
         bot = 'Ага'
-    emb = discord.Embed(colour = member.color, timestamp = ctx.message.created_at)
+    emb = discord.Embed(colour = discord.Color.orange(), timestamp = ctx.message.created_at)
     emb.set_author(name = member)
     emb.add_field(name = 'ID', value = member.id)
     now = datetime.datetime.today()
@@ -872,7 +874,7 @@ async def help(ctx, arg = None):
         emb.add_field(name = 'cy/clear', value = 'Очистка чата.')
         emb.add_field(name = 'cy/dm', value = 'Пишет участнику любой написанный текст.')
         emb.add_field(name = 'cy/edit', value = 'Редактирует сообщение.', inline = False)
-        emb.add_field(name = 'cy/say', value = 'От лица бота отправляется высоконастраеваемый эмбед. Может использоваться как say, так и emb')
+        emb.add_field(name = 'cy/say', value = 'От лица бота отправляется высоконастраеваемый эмбед. Может использоваться как для написания обычных текстов, так и для написания эмбедов')
         emb.add_field(name = 'cy/emb_ctx', value = 'Позволяет увидеть контент эмбеда.')
         emb.add_field(name = 'cy/emb_edit', value = 'Редактирует эмбед. Работает как VAULTBOT', inline = False)
         emb.add_field(name = 'cy/say_everyone', value = 'Совмещает в себе команды everyone и say.')
