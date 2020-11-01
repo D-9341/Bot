@@ -716,9 +716,9 @@ async def emb_content(ctx, arg):
     message = await ctx.fetch_message(id = arg)
     for emb in message.embeds:
         if message.author == client.user:
-            await ctx.send(f'```cy/say "" "" "{emb.title}" "{emb.description}" {emb.image.url} {emb.thumbnail.url} {emb.colour} @{emb.author.name}```')
+            await ctx.send(f'```cy/say "" "" "{emb.title}" "{emb.description}" {emb.image.url} {emb.thumbnail.url} {emb.colour} @{emb.author}```')
         else:
-            await ctx.send(f'```title {emb.title} description {emb.description} footer {emb.footer.text} color {emb.colour} author {emb.author.name} image {emb.image.url} footer img {emb.thumbnail.url}```')
+            await ctx.send(f'```title {emb.title} description {emb.description} footer {emb.footer.text} color {emb.colour} author {emb.author} image {emb.image.url} footer img {emb.thumbnail.url}```')
             
 @client.command(aliases = ['say_e'])
 @commands.has_permissions(mention_everyone = True)
@@ -740,6 +740,7 @@ async def say_everyone(ctx, arg = None, text = None, t = None, d = None, img = N
         emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
     emb.set_image(url = img)
     emb.set_thumbnail(url = f)
+    emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
     if arg == 'noembed':
         await ctx.send(f'@everyone {text}')
     elif arg != 'noembed':
@@ -766,6 +767,7 @@ async def say(ctx, arg = None, text = None, t = None, d = None, img = None, f = 
         emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
     emb.set_image(url = img)
     emb.set_thumbnail(url = f)
+    emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
     if role != None and arg != 'noembed':
         await ctx.send(role, embed = emb)
     elif role == None and arg != 'noembed':
@@ -802,8 +804,11 @@ async def edit(ctx, arg, *, text):
     await ctx.message.delete()
     message = await ctx.fetch_message(id = arg)
     if message.author == client.user:
-        if text == '--delete':
+        if text == '--clean':
             await message.edit(content = None)
+            await ctx.send('👌', delete_after = 1)
+        elif text == '--delete':
+            await message.delete()
             await ctx.send('👌', delete_after = 1)
         else:
             await message.edit(content = text)
@@ -890,11 +895,11 @@ async def help(ctx, arg = None):
     elif arg == 'ban':
         await ctx.send('```cy/ban <@пинг/имя/ID> |причина|```')
     elif arg == 'clear':
-        await ctx.send('```cy/clear <количество> |y/n|```')
+        await ctx.send('```cy/clear <количество>```')
     elif arg == 'dm':
         await ctx.send('```cy/dm <@пинг/имя/ID> <текст>```')
     elif arg == 'edit':
-        await ctx.send('```cy/edit <ID> <новый текст>```')
+        await ctx.send('```cy/edit <ID> <новый текст(--clean - удаляет контент над эмбедом | --delete - удаляет сообщение целиком)>```')
     elif arg == 'say':
         await ctx.send('```cy/say |noembed| |text| |title текст| |description текст| |ссылка| |ссылка| |цвет| |@пинг/имя/ID| |@роль/имя роли/ID роли|(cy/say "" "" "title" "description")```')
     elif arg == 'emb_ctx':
