@@ -441,7 +441,7 @@ async def vote(ctx, text, *, role: discord.Role = None):
 
 @client.command()
 @commands.cooldown(1, 60, commands.BucketType.guild)
-async def vote(ctx, *, text):
+async def poll(ctx, *, text):
     await ctx.message.delete()
     emb = discord.Embed(description = 'ГОЛОСОВАНИЕ', colour = discord.Color.orange())
     emb.add_field(name = 'Голосуем за:', value = text)
