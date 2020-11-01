@@ -303,6 +303,8 @@ async def take(ctx, member: discord.Member, *, role: discord.Role):
 @commands.has_permissions(view_audit_log = True)
 async def mute(ctx, member: discord.Member, time: TimeConverter, *, reason: str = None):
     await ctx.message.delete()
+	if reason == None:
+		reason = 'Не указана.'
     role = discord.utils.get(ctx.guild.roles, name = 'Muted')
     if member.id != 338714886001524737:
         if ctx.author.top_role == member.top_role and ctx.message.author.id != 338714886001524737:
@@ -314,8 +316,6 @@ async def mute(ctx, member: discord.Member, time: TimeConverter, *, reason: str 
         else:
             if role != None:
                 await member.add_roles(role)
-                if reason == None:
-                    reason = 'Не указана.'
                 emb = discord.Embed(colour = member.color, timestamp = ctx.message.created_at)
                 emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
                 emb.add_field(name = 'В муте', value = f'{member.mention}')
