@@ -196,7 +196,7 @@ async def on_message_edit(before, after):
 #Mod
 @client.command()
 @commands.has_permissions(view_audit_log = True)
-@commands.cooldown(1, 5, commands.BucketType.default)
+@commands.cooldown(1, 5, commands.BucketType.guild)
 async def dm(ctx, member: discord.User, *, text):
     await ctx.message.delete()
     emb = discord.Embed(description = f'{text}', colour = ctx.author.color)
@@ -204,7 +204,7 @@ async def dm(ctx, member: discord.User, *, text):
     await member.send(embed = emb)
 
 @client.command(aliases = ['Kick', 'KICK'])
-@commands.cooldown(1, 10, commands.BucketType.default)
+@commands.cooldown(1, 10, commands.BucketType.guild)
 @commands.has_permissions(kick_members = True)
 async def kick(ctx, member: discord.Member, *, reason: str = None):
     await ctx.message.delete()
@@ -229,7 +229,7 @@ async def kick(ctx, member: discord.Member, *, reason: str = None):
         await ctx.send(embed = emb)
 
 @client.command(aliases = ['Ban', 'BAN'])
-@commands.cooldown(1, 10, commands.BucketType.default)
+@commands.cooldown(1, 10, commands.BucketType.guild)
 @commands.has_permissions(ban_members = True)
 async def ban(ctx, member: discord.Member, *, reason = None):
     await ctx.message.delete()
@@ -390,7 +390,7 @@ async def unmute(ctx, member: discord.Member, *, reason = None):
         await ctx.send(embed = emb)
  
 @client.command(aliases = ['Clear', 'CLEAR'])
-@commands.cooldown(1, 10, commands.BucketType.default)
+@commands.cooldown(1, 10, commands.BucketType.guild)
 @commands.has_permissions(administrator = True)
 async def clear(ctx, amount: int):
     await ctx.message.delete()
@@ -424,12 +424,24 @@ async def clear(ctx, amount: int):
 
 #Misc
 @client.command()
+@commands.cooldown(1, 60, commands.BucketType.guild)
+async def vote(ctx, *, text):
+    await ctx.message.delete()
+    emb = discord.Embed(description = 'ГОЛОСОВАНИЕ', colour = discord.Color.orange())
+    emb.add_field(name = 'Голосуем за:', value = text)
+    emb.set_footer(text = '🚫 - воздержусь')
+    sent = await ctx.send(embed = emb)
+    await sent.add_reaction('👍')
+    await sent.add_reaction('👎')
+    await sent.add_reaction('🚫')
+
+@client.command()
 async def someone(ctx, *, text: Slapper):
     await ctx.message.delete()
     await ctx.send(embed = text)
 
 @client.command()
-@commands.cooldown(1, 5, commands.BucketType.default)
+@commands.cooldown(1, 5, commands.BucketType.guild)
 async def rolemembers(ctx, role: discord.Role, member: discord.Member = None):
     await ctx.message.delete()
     emb = discord.Embed(colour = discord.Color.orange())
@@ -440,7 +452,7 @@ async def rolemembers(ctx, role: discord.Role, member: discord.Member = None):
     await ctx.send(embed = emb)
 
 @client.command(aliases = ['Guild', 'GUILD'])
-@commands.cooldown(1, 5, commands.BucketType.default)
+@commands.cooldown(1, 5, commands.BucketType.guild)
 async def guild(ctx):
     await ctx.message.delete()
     guild = ctx.guild
@@ -472,7 +484,7 @@ async def guild(ctx):
     await ctx.send(embed = emb)
 
 @client.command()
-@commands.cooldown(1, 5, commands.BucketType.default)
+@commands.cooldown(1, 5, commands.BucketType.guild)
 async def role(ctx, *, role: discord.Role):
     await ctx.message.delete()
     if role.mentionable == False:
@@ -502,7 +514,7 @@ async def role(ctx, *, role: discord.Role):
     await ctx.send(embed = emb)
     
 @client.command(aliases = ['Avatar', 'AVATAR'])
-@commands.cooldown(1, 5, commands.BucketType.default)
+@commands.cooldown(1, 5, commands.BucketType.guild)
 async def avatar(ctx, member: discord.Member = None):
     await ctx.message.delete()
     if member == None:
@@ -522,7 +534,7 @@ async def avatar(ctx, member: discord.Member = None):
     await ctx.send(embed = emb)
     
 @client.command(aliases = ['me', 'Me', 'ME', 'About', 'ABOUT'])
-@commands.cooldown(1, 5, commands.BucketType.default)
+@commands.cooldown(1, 5, commands.BucketType.guild)
 async def about(ctx, member: discord.Member = None):
     await ctx.message.delete()
     if member == None:
@@ -578,7 +590,7 @@ async def about(ctx, member: discord.Member = None):
     await ctx.send(embed = emb)
         
 @client.command()
-@commands.cooldown(1, 5, commands.BucketType.default)
+@commands.cooldown(1, 5, commands.BucketType.guild)
 async def remind(ctx, time: TimeConverter, *, arg):
     await ctx.message.delete()
     emb = discord.Embed(colour = ctx.author.color, timestamp = ctx.message.created_at)
@@ -634,14 +646,14 @@ async def dotersbrain(ctx):
         await sent.delete()
 
 @client.command()
-@commands.cooldown(1, 3, commands.BucketType.default)
+@commands.cooldown(1, 3, commands.BucketType.guild)
 async def niggers(ctx):
     await ctx.message.delete()
     emb = discord.Embed(description = '[осуждающее видео](https://vk.com/video-184856829_456240358)', colour = discord.Color.orange())
     await ctx.send(embed = emb)
 
 @client.command()
-@commands.cooldown(1, 3, commands.BucketType.default)
+@commands.cooldown(1, 3, commands.BucketType.guild)
 async def aye_balbec(ctx):
     await ctx.message.delete()
     emb = discord.Embed(colour = ctx.author.color)
@@ -649,14 +661,14 @@ async def aye_balbec(ctx):
     await ctx.send(embed = emb)
 
 @client.command()
-@commands.cooldown(1, 3, commands.BucketType.default)
+@commands.cooldown(1, 3, commands.BucketType.guild)
 async def rp(ctx):
     await ctx.message.delete()
     emb = discord.Embed(description = '[Ныа](https://www.youtube.com/watch?v=idmTSW9mfYI)', colour = discord.Color.orange())
     await ctx.send(embed = emb)
 
 @client.command(aliases = ['.rap'])
-@commands.cooldown(1, 5, commands.BucketType.default)
+@commands.cooldown(1, 5, commands.BucketType.guild)
 async def rap(ctx):
     await ctx.message.delete()
     emb = discord.Embed(colour = ctx.author.color)
@@ -665,7 +677,7 @@ async def rap(ctx):
     await ctx.send(embed = emb)
 
 @client.command()
-@commands.cooldown(1, 5, commands.BucketType.default)
+@commands.cooldown(1, 5, commands.BucketType.guild)
 async def zatka(ctx):
     await ctx.message.delete()
     emb = discord.Embed(title = 'Форма заявки для Набор кадров', colour = ctx.author.color)
@@ -680,13 +692,13 @@ async def zatka(ctx):
     await ctx.send(embed = emb)
 
 @client.command(aliases = ['Cu', 'CU'])
-@commands.cooldown(1, 5, commands.BucketType.default)
+@commands.cooldown(1, 5, commands.BucketType.guild)
 async def cu(ctx):
     await ctx.message.delete()
     await ctx.send('Медь')
     
 @client.command(aliases = ['c', 'C', 'coin', 'Coin', 'COIN', 'Coinflip', 'COINFLIP'])
-@commands.cooldown(3, 3, commands.BucketType.default)
+@commands.cooldown(3, 3, commands.BucketType.guild)
 async def coinflip(ctx):
     await ctx.message.delete()
     emb = discord.Embed(description = 'Орёл!', colour = discord.Color.orange())
@@ -700,7 +712,7 @@ async def coinflip(ctx):
 
 #Embeds
 @client.command(aliases = ['ctx'])
-@commands.cooldown(1, 5, commands.BucketType.default)
+@commands.cooldown(1, 5, commands.BucketType.guild)
 async def content(ctx, arg):
     await ctx.message.delete()
     message = await ctx.fetch_message(id = arg)
@@ -710,7 +722,7 @@ async def content(ctx, arg):
         await ctx.send(f'```{message.content}```')
 
 @client.command(aliases = ['emb_ctx'])
-@commands.cooldown(1, 5, commands.BucketType.default)
+@commands.cooldown(1, 5, commands.BucketType.guild)
 async def emb_content(ctx, arg):
     await ctx.message.delete()
     message = await ctx.fetch_message(id = arg)
@@ -722,7 +734,7 @@ async def emb_content(ctx, arg):
             
 @client.command(aliases = ['say_e'])
 @commands.has_permissions(mention_everyone = True)
-@commands.cooldown(1, 20, commands.BucketType.default)
+@commands.cooldown(1, 20, commands.BucketType.guild)
 async def say_everyone(ctx, arg = None, text = None, t = None, d = None, img = None, f = None, c = None, a: discord.Member = None):
     await ctx.message.delete()
     if c == None:
@@ -829,7 +841,7 @@ async def join(ctx):
     await channel.connect()
 
 @client.command(aliases = ['Ping', 'PING'])
-@commands.cooldown(1, 5, commands.BucketType.default)
+@commands.cooldown(1, 5, commands.BucketType.guild)
 async def ping(ctx):
     await ctx.message.delete()
     emb = discord.Embed(description = f'`fetching..`', colour = discord.Color.orange())
@@ -839,7 +851,7 @@ async def ping(ctx):
     await message.edit(embed = emb1)
 
 @client.command(aliases = ['Info', 'INFO'])
-@commands.cooldown(1, 5, commands.BucketType.default)
+@commands.cooldown(1, 5, commands.BucketType.guild)
 async def info(ctx):
     await ctx.message.delete()
     emb = discord.Embed(colour = discord.Color.orange())
@@ -853,7 +865,7 @@ async def info(ctx):
     await ctx.send(embed = emb)
 
 @client.command(aliases = ['invcy'])
-@commands.cooldown(1, 3, commands.BucketType.default)
+@commands.cooldown(1, 3, commands.BucketType.guild)
 async def invite(ctx):
     await ctx.message.delete()
     emb = discord.Embed(description = '[Ссылка](https://discord.com/oauth2/authorize?client_id=694170281270312991&scope=bot&permissions=8) для быстрого приглашения Cy на сервера.', colour = discord.Color.orange())
@@ -861,7 +873,7 @@ async def invite(ctx):
 #Cephalon
 
 @client.command(aliases = ['Help', 'HELP'])
-@commands.cooldown(1, 3, commands.BucketType.default)
+@commands.cooldown(1, 3, commands.BucketType.guild)
 async def help(ctx, arg = None):
     await ctx.message.delete()
     if arg == None:
