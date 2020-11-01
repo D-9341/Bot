@@ -346,7 +346,7 @@ async def mute(ctx, member: discord.Member, time: TimeConverter, *, reason: str 
                 await ctx.send(embed = emb1, delete_after = 3)
                 await asyncio.sleep(3)
                 await member.add_roles(role)
-		        if reason == None:
+		if reason == None:
                     reason = 'Не указана.'
                 emb = discord.Embed(colour = member.color, timestamp = ctx.message.created_at)
                 emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
