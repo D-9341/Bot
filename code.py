@@ -298,7 +298,7 @@ async def take(ctx, member: discord.Member, *, role: discord.Role):
     else:
         emb = discord.Embed(description = f'{ctx.author.mention}, я не могу найти {role.mention} в списке ролей.', colour = member.color, timestamp = ctx.message.created_at)
         await ctx.send(embed = emb)
-            
+  
 @client.command(aliases = ['Mute', 'MUTE'])
 @commands.has_permissions(view_audit_log = True)
 async def mute(ctx, member: discord.Member, time: TimeConverter, *, reason: str = None):
