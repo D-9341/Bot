@@ -950,8 +950,8 @@ async def help(ctx, arg = None):
         await ctx.send('```cy/take <@пинг/имя/ID> <@роль/имя роли/ID роли>```')
     elif arg == 'unmute':
         await ctx.send('```cy/unmute <@пинг/имя/ID> |причина|```')
-    elif arg == 'vote':
-        await ctx.send('```cy/vote <"текст"> |@пинг/имя/ID роли|```')
+    elif arg == 'poll':
+        await ctx.send('```cy/poll <"текст"> |@пинг/имя/ID роли|```')
     else:
         emb = discord.Embed(description = 'Для этой команды не нужны аргументы', colour = discord.Color.orange())
         emb.set_footer(text = 'Хотя, возможно, вы ввели команду неправильно?')
