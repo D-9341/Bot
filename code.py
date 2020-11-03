@@ -988,6 +988,14 @@ async def on_command_error(ctx, error):
         elif round(s) >= 1:
             emb = discord.Embed(description = f'{rand2} Команда `{ctx.command.name}` будет доступна через {round(s)} секунду!', colour = discord.Color.orange())
             await ctx.send(embed = emb)
+    elif isinstance(error, commands.MissingRequiredArgument):
+        await ctx.message.delete()
+        emb = discord.Embed(description = f'{ctx.author.mention}, обнаружен недостаток аргументов для `{ctx.command.name}`', colour = discord.Color.orange())
+        await ctx.send(embed = emb)
+    elif isinstance(error, commands.BadArgument):
+        await ctx.message.delete()
+        emb = discord.Embed(description = f'{ctx.author.mention}, обнаружен неверный аргумент для `{ctx.command.name}`', colour = discord.Color.orange())
+        await ctx.send(embed = emb)
 
 t = os.environ.get('t')
 client.run(t)
