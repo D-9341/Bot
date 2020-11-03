@@ -440,18 +440,6 @@ async def vote(ctx, text, *, role: discord.Role = None):
     await sent.add_reaction('🚫')
 
 @client.command()
-@commands.cooldown(1, 60, commands.BucketType.guild)
-async def poll(ctx, *, text):
-    await ctx.message.delete()
-    emb = discord.Embed(description = 'ГОЛОСОВАНИЕ', colour = discord.Color.orange())
-    emb.add_field(name = 'Голосуем за:', value = text)
-    emb.set_footer(text = '🚫 - воздержусь')
-    sent = await ctx.send(embed = emb)
-    await sent.add_reaction('👍')
-    await sent.add_reaction('👎')
-    await sent.add_reaction('🚫')
-
-@client.command()
 async def someone(ctx, *, text: Slapper):
     await ctx.message.delete()
     await ctx.send(embed = text)
@@ -961,7 +949,7 @@ async def help(ctx, arg = None):
     elif arg == 'unmute':
         await ctx.send('```cy/unmute <@пинг/имя/ID> |причина|```')
     elif arg == 'poll':
-        await ctx.send('```cy/poll <"текст"> |@пинг/имя/ID роли|```')
+        await ctx.send('```cy/vote <"текст"> |@пинг/имя/ID роли|```')
     else:
         emb = discord.Embed(description = 'Для этой команды не нужны аргументы', colour = discord.Color.orange())
         emb.set_footer(text = 'Хотя, возможно, вы ввели команду неправильно?')
