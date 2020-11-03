@@ -561,7 +561,7 @@ async def about(ctx, member: discord.Member = None):
         bot = 'Неа'
     elif member.bot == True:
         bot = 'Ага'
-    emb = discord.Embed(colour = discord.Color.orange(), timestamp = ctx.message.created_at)
+    emb = discord.Embed(colour = member.color, timestamp = ctx.message.created_at)
     emb.set_author(name = member)
     emb.add_field(name = 'ID', value = member.id)
     now = datetime.datetime.today()
@@ -580,7 +580,7 @@ async def about(ctx, member: discord.Member = None):
     if member.activities != None and member.status != 'offline':
         emb.add_field(name = 'Активности', value = ', '.join([activity.name for activity in member.activities]))
     limit = len(member.roles)
-    if limit != 0:
+    if limit != 0: #загадка от Жака Фреско - почему? на размышление 30 попыток переписи кода
         if limit > 21:
             emb.add_field(name = 'Роли', value = f'Слишком много для отрисовки ({len(member.roles)-1}) [лимит 20]', inline = False)
             emb.add_field(name = 'Высшая Роль', value = member.top_role.mention, inline = False)
@@ -762,7 +762,7 @@ async def say_everyone(ctx, arg = None, text = None, t = None, d = None, img = N
     if f == None:
         f = ('')
     emb = discord.Embed(title = t, description = d, colour = c)
-    if a != None:
+    if a != None and a.id != ctx.author.id:
         emb.set_author(name = f'{a} ({ctx.author})', icon_url = a.avatar_url)
     else:
         emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
@@ -789,7 +789,7 @@ async def say(ctx, arg = None, text = None, t = None, d = None, img = None, f = 
     if role != None:
         c = role.color
     emb = discord.Embed(title = t, description = d, colour = c)
-    if a != None:
+    if a != None and a.id != ctx.author.id:
         emb.set_author(name = f'{a} ({ctx.author})', icon_url = a.avatar_url)
     else:
         emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
@@ -856,6 +856,16 @@ async def join(ctx):
         await ctx.send(embed = emb)
     await channel.connect()
 
+@client.command()
+async def leave(ctx):
+    await ctx.message.delete()
+    if ctx.author.voice and ctx.author.voice.channel:
+        pass
+    else:
+        emb = discord.Embed(description = 'Ты должен быть в канале, чтобы использовать это.', colour = discord.Color.orange())
+        await ctx.send(embed = emb)
+    await vc.disconnect()
+
 @client.command(aliases = ['Ping', 'PING'])
 @commands.cooldown(1, 5, commands.BucketType.guild)
 async def ping(ctx):
@@ -863,7 +873,7 @@ async def ping(ctx):
     emb = discord.Embed(description = f'`fetching..`', colour = discord.Color.orange())
     emb1 = discord.Embed(description = f'Pong!  `{round(client.latency * 1000)} ms`', colour = discord.Color.orange())
     message = await ctx.send(embed = emb)
-    await asyncio.sleep(0.01)
+    await asyncio.sleep(client.latency)
     await message.edit(embed = emb1)
 
 @client.command(aliases = ['Info', 'INFO'])
@@ -987,7 +997,7 @@ async def on_command_error(ctx, error):
         elif round(s) >= 2:
             emb = discord.Embed(description = f'{rand1} Команда `{ctx.command.name}` будет доступна через {round(s)} секунды.', colour = discord.Color.orange())
             await ctx.send(embed = emb)
-        else:
+        elif round(s) >= 1:
             emb = discord.Embed(description = f'{rand2} Команда `{ctx.command.name}` будет доступна через {round(s)} секунду!', colour = discord.Color.orange())
             await ctx.send(embed = emb)
 
