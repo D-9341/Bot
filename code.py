@@ -394,7 +394,7 @@ async def unmute(ctx, member: discord.Member, *, reason = None):
 @commands.has_permissions(administrator = True)
 async def clear(ctx, amount: int):
     await ctx.message.delete()
-    if amount >= 500:
+    if amount >= 300:
         if ctx.author == ctx.guild.owner:
             a = 'владелец блять'
         else:
