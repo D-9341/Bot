@@ -390,11 +390,108 @@ async def unmute(ctx, member: discord.Member, *, reason = None):
         await ctx.send(embed = emb)
  
 @client.command(aliases = ['Clear', 'CLEAR'])
-@commands.cooldown(1, 10, commands.BucketType.guild)
+@commands.cooldown(1, 10, commands.BucketType.default)
 @commands.has_permissions(administrator = True)
 async def clear(ctx, amount: int):
     await ctx.message.delete()
-    if amount >= 10:
+    if amount >= 500:
+        if ctx.author == ctx.guild.owner:
+            a = 'владелец блять'
+        else:
+            a = 'еблан сука'
+        emb = discord.Embed(description = f'{ctx.author.mention}, при таком числе удаления сообщений ({amount} блять) неизбежны ошибки в работе {client.user.mention}.\n Нахуй иди, {a}', colour = discord.Color.orange())
+        await ctx.send(f'{ctx.guild.owner.mention}', embed = emb)
+    elif amount >= 250:
+        if ctx.author != ctx.guild.owner:
+            emb = discord.Embed(description = f'{ctx.author.mention}, операция с данным числом ({amount}) доступна только {ctx.guild.owner.mention}. Отмена.', colour = discord.Color.orange())
+            await ctx.send(f'{ctx.guild.owner.mention}', embed = emb, delete_after = 5)
+        else:
+            emb = discord.Embed(description = f'{ctx.author.mention}, обнаружено слишком большое число для удаления сообщений ({amount}). Возможны дальнейшие ошибки в работе {client.user.mention}. Продолжить? (y/n)\n ||Отмена через 10 секунд.||', colour = discord.Color.orange())
+            sent = await ctx.send(embed = emb)
+            try:
+                msg = await client.wait_for('message', timeout = 10, check = lambda message: message.channel == ctx.message.channel)
+                if msg.content.lower() == 'y' and msg.author.id == ctx.guild.owner.id:
+                    await msg.delete()
+                    await sent.delete()
+                    await ctx.channel.purge(limit = amount)
+                    emb = discord.Embed(description = f'С разрешения {ctx.guild.owner.mention} удалено {amount} сообщений.', colour = discord.Color.orange())
+                    await ctx.send(embed = emb, delete_after = 3)
+                elif msg.content.lower() == 'n' and msg.author.id == ctx.guild.owner.id:
+                    await msg.delete()
+                    await sent.delete()
+                    emb = discord.Embed(description = f'{ctx.guild.owner.mention} отменил запрос.', colour = discord.Color.orange())
+                    await ctx.send(embed = emb, delete_after = 3)
+                elif msg.content.lower() == 'n' or 'y' and msg.author.id != ctx.guild.owner.id:
+                    await msg.delete()
+                    await sent.delete()
+                    emb = discord.Embed(description = f'{ctx.author.mention}, ты не являешься владельцем сервера.', colour = discord.Color.orange())
+                    await ctx.send(embed = emb, delete_after = 3)
+                else:
+                    await msg.delete()
+                    await sent.delete()
+                    emb = discord.Embed(description = f'Обнаружен недопустимый ответ ({msg.content})', colour = discord.Color.orange())
+                    await ctx.send(embed = emb, delete_after = 3)
+            except asyncio.TimeoutError:
+                await sent.delete()
+                emb = discord.Embed(description = f'{ctx.author.mention}, Время вышло.', colour = discord.Color.orange())
+                await ctx.send(f'{ctx.guild.owner.mention}', embed = emb, delete_after = 3)
+    elif amount >= 100:
+        if ctx.author != ctx.guild.owner:
+            emb = discord.Embed(description = f'{ctx.author.mention}, создан запрос на удаление {amount} сообщений. Мне нужен ответ создателя сервера на это действие. Продолжаем? (y/n)\n ||Запрос будет отменён через 1 минуту.||', colour = discord.Color.orange())
+            sent = await ctx.send(f'{ctx.guild.owner.mention}', embed = emb)
+            try:
+                msg = await client.wait_for('message', timeout = 60, check = lambda message: message.channel == ctx.message.channel)
+                if msg.content.lower() == 'y' and msg.author.id == ctx.guild.owner.id:
+                    await msg.delete()
+                    await sent.delete()
+                    await ctx.channel.purge(limit = amount)
+                    emb = discord.Embed(description = f'С разрешения {ctx.guild.owner.mention} удалено {amount} сообщений.', colour = discord.Color.orange())
+                    await ctx.send(embed = emb, delete_after = 3)
+                elif msg.content.lower() == 'n' and msg.author.id == ctx.guild.owner.id:
+                    await msg.delete()
+                    await sent.delete()
+                    emb = discord.Embed(description = f'{ctx.guild.owner.mention} отменил запрос.', colour = discord.Color.orange())
+                    await ctx.send(embed = emb, delete_after = 3)
+                elif msg.content.lower() == 'n' or 'y' and msg.author.id != ctx.guild.owner.id:
+                    await msg.delete()
+                    await sent.delete()
+                    emb = discord.Embed(description = f'{ctx.author.mention}, ты не являешься владельцем сервера.', colour = discord.Color.orange())
+                    await ctx.send(embed = emb, delete_after = 3)
+                else:
+                    await msg.delete()
+                    await sent.delete()
+                    emb = discord.Embed(description = f'Обнаружен недопустимый ответ ({msg.content})', colour = discord.Color.orange())
+                    await ctx.send(embed = emb, delete_after = 3)
+            except asyncio.TimeoutError:
+                await sent.delete()
+                emb = discord.Embed(description = f'{ctx.author.mention}, Время вышло.', colour = discord.Color.orange())
+                await ctx.send(f'{ctx.guild.owner.mention}', embed = emb, delete_after = 3)
+        else:
+            emb = discord.Embed(description = f'{ctx.author.mention}, создан запрос на удаление {amount} сообщений. Продолжить? (y/n)\n ||Запрос будет отменён через 10 секунд.||', colour = discord.Color.orange())
+            sent = await ctx.send(embed = emb)
+            try:
+                msg = await client.wait_for('message', timeout = 10, check = lambda message: message.author == ctx.author and message.channel == ctx.message.channel)
+                if msg.content.lower() == 'y':
+                    await msg.delete()
+                    await sent.delete()
+                    await ctx.channel.purge(limit = amount)
+                    emb = discord.Embed(description = f'Удалено {amount} сообщений.', colour = discord.Color.orange())
+                    await ctx.send(embed = emb, delete_after = 3)
+                elif msg.content.lower() == 'n':
+                    await msg.delete()
+                    await sent.delete()
+                    emb = discord.Embed(description = 'Отменено.', colour = discord.Color.orange())
+                    await ctx.send(embed = emb, delete_after = 3)
+                else:
+                    await msg.delete()
+                    await sent.delete()
+                    emb = discord.Embed(description = f'Обнаружен недопустимый ответ ({msg.content})', colour = discord.Color.orange())
+                    await ctx.send(embed = emb, delete_after = 3)
+            except asyncio.TimeoutError:
+                await sent.delete()
+                emb = discord.Embed(description = f'{ctx.author.mention}, Время вышло.', colour = discord.Color.orange())
+                await ctx.send(embed = emb, delete_after = 3)
+    elif amount >= 10:
         emb = discord.Embed(description = f'{ctx.author.mention}, создан запрос на удаление {amount} сообщений. Продолжить? (y/n)\n ||Запрос будет отменён через 10 секунд.||', colour = discord.Color.orange())
         sent = await ctx.send(embed = emb)
         try:
@@ -410,6 +507,11 @@ async def clear(ctx, amount: int):
                 await sent.delete()
                 emb = discord.Embed(description = 'Отменено.', colour = discord.Color.orange())
                 await ctx.send(embed = emb, delete_after = 3)
+            else:
+                await msg.delete()
+                await sent.delete()
+                emb = discord.Embed(description = f'Обнаружен недопустимый ответ ({msg.content})', colour = discord.Color.orange())
+                await ctx.send(embed = emb, delete_after = 3)
         except asyncio.TimeoutError:
             await sent.delete()
             emb = discord.Embed(description = f'{ctx.author.mention}, Время вышло.', colour = discord.Color.orange())
@@ -418,6 +520,7 @@ async def clear(ctx, amount: int):
         emb = discord.Embed(description = 'Удалять 0 сообщений? Ты еблан?', colour = discord.Color.orange())
         await ctx.send(embed = emb, delete_after = 1)
     else:
+        await ctx.channel.purge(limit = amount)
         emb = discord.Embed(description = f'Удалено {amount} сообщений.', colour = discord.Color.orange())
         await ctx.send(embed = emb, delete_after = 3)
 #Mod
@@ -568,7 +671,7 @@ async def about(ctx, member: discord.Member = None):
     if member.activities != None and member.status != 'offline':
         emb.add_field(name = 'Активности', value = ', '.join([activity.name for activity in member.activities]))
     limit = len(member.roles)
-    if limit != 1: #загадка от Жака Фреско - почему? на размышление 30 попыток переписи кода
+    if limit != 1: #загадка от Жака Фреско - почему? на размышление 30 попыток переписи кода || Загадка решена простой перестановкой значения с 0 на 1
         if limit > 21:
             emb.add_field(name = 'Роли', value = f'Слишком много для отрисовки ({len(member.roles)-1}) [лимит 20]', inline = False)
             emb.add_field(name = 'Высшая Роль', value = member.top_role.mention, inline = False)
@@ -887,24 +990,25 @@ async def invite(ctx):
 #Cephalon
 
 @client.command(aliases = ['Help', 'HELP'])
-@commands.cooldown(1, 3, commands.BucketType.guild)
+@commands.cooldown(1, 3, commands.BucketType.default)
 async def help(ctx, arg = None):
     await ctx.message.delete()
     if arg == None:
-        emb = discord.Embed(title = 'Меню команд Cephalon Cy', description = 'Существует дополнительная помощь по командам, пропишите cy/help |команда|', colour = discord.Color.orange())
+        emb = discord.Embed(title = 'Меню команд Cephalon Cy', description = 'Существует дополнительная помощь по командам, пропишите\n cy/help |команда|', colour = discord.Color.orange())
         emb.add_field(name = 'cy/about', value = 'Показывает информацию о человеке.')
         emb.add_field(name = 'cy/avatar', value = 'Показывает аватар человека.')
         emb.add_field(name = 'cy/ban', value = 'Бан человека.')
-        emb.add_field(name = 'cy/clear', value = 'Очистка чата.')
-        emb.add_field(name = 'cy/dm', value = 'Пишет участнику любой написанный текст.')
+        emb.add_field(name = 'cy/clear', value = 'Очистка чата. ||Не более 500!||')
+        emb.add_field(name = 'cy/dm', value = 'Пишет участнику написанный текст.')
         emb.add_field(name = 'cy/edit', value = 'Редактирует сообщение.', inline = False)
-        emb.add_field(name = 'cy/say', value = 'От лица бота отправляется высоконастраеваемый эмбед. Может использоваться как для написания обычных текстов, так и для написания эмбедов')
+        emb.add_field(name = 'cy/say', value = 'От лица бота отправляется высоконастраеваемый эмбед. Может использоваться как для написания текстов, так и эмбедов')
         emb.add_field(name = 'cy/emb_ctx', value = 'Позволяет увидеть контент эмбеда.')
-        emb.add_field(name = 'cy/emb_edit', value = 'Редактирует эмбед. Работает как VAULTBOT', inline = False)
-        emb.add_field(name = 'cy/say_everyone', value = 'Совмещает в себе команды everyone и say.')
+        emb.add_field(name = 'cy/emb_edit', value = 'Редактирует эмбед.', inline = False)
+        emb.add_field(name = 'cy/say_everyone', value = 'Как say, но с @everyone сверху.')
         emb.add_field(name = 'cy/give', value = 'Выдаёт роль.', inline = False)
         emb.add_field(name = 'cy/guild', value = 'Показывает информацию о сервере.')
         emb.add_field(name = 'cy/join', value = 'Бот заходит в голосовой канал.')
+        emb.add_field(name = 'cy/leave', value = 'Бот выходит из голосового канала. ||Для справки - этот бот НЕ имеет НИКАКИХ команд для проигрывания музыки!||')
         emb.add_field(name = 'cy/kick', value = 'Кик человека.')
         emb.add_field(name = 'cy/mute', value = 'Мут человека.', inline = False)
         emb.add_field(name = 'cy/remind', value = 'Может напомнить вам о событии, которое вы не хотите пропустить.')
@@ -921,11 +1025,11 @@ async def help(ctx, arg = None):
     elif arg == 'ban':
         await ctx.send('```cy/ban <@пинг/имя/ID> |причина|```')
     elif arg == 'clear':
-        await ctx.send('```cy/clear <количество>```')
+        await ctx.send('```cy/clear <количество> |y/n|```')
     elif arg == 'dm':
         await ctx.send('```cy/dm <@пинг/имя/ID> <текст>```')
     elif arg == 'edit':
-        await ctx.send('```cy/edit <ID> <новый текст(--clean - удаляет контент над эмбедом | --delete - удаляет сообщение целиком)>```')
+        await ctx.send('```cy/edit <ID> <новый текст>```')
     elif arg == 'say':
         await ctx.send('```cy/say |noembed| |text| |title текст| |description текст| |ссылка| |ссылка| |цвет| |@пинг/имя/ID| |@роль/имя роли/ID роли|(cy/say "" "" "title" "description")```')
     elif arg == 'emb_ctx':
@@ -948,7 +1052,7 @@ async def help(ctx, arg = None):
         await ctx.send('```cy/take <@пинг/имя/ID> <@роль/имя роли/ID роли>```')
     elif arg == 'unmute':
         await ctx.send('```cy/unmute <@пинг/имя/ID> |причина|```')
-    elif arg == 'poll':
+    elif arg == 'vote':
         await ctx.send('```cy/vote <"текст"> |@пинг/имя/ID роли|```')
     else:
         emb = discord.Embed(description = 'Для этой команды не нужны аргументы', colour = discord.Color.orange())
