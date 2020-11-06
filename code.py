@@ -945,7 +945,7 @@ async def join(ctx):
     else:
         emb = discord.Embed(description = 'Ты должен быть в канале, чтобы использовать это.', colour = discord.Color.orange())
         await ctx.send(embed = emb)
-	global vc
+    global vc
     vc = await channel.connect()
 
 @client.command()
