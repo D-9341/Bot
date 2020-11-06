@@ -80,7 +80,7 @@ async def on_voice_state_update(member, before, after):
 @client.event
 async def on_message(message):
     if message.content.startswith(f'<@!{client.user.id}>') and len(message.content) == len(f'<@!{client.user.id}>'):
-        await message.channel.send(f'{message.author.mention}, мой префикс - `cy/`')
+        await message.channel.send(f'чё звал {message.author.mention} ||`cy/`||')
         await client.process_commands(message)
     if ('адамант') in message.content.lower():
         await message.channel.send('гей')
