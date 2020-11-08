@@ -390,7 +390,7 @@ async def unmute(ctx, member: discord.Member, *, reason = None):
         await ctx.send(embed = emb)
  
 @client.command(aliases = ['Clear', 'CLEAR'])
-@commands.cooldown(1, 10, commands.BucketType.default)
+@commands.cooldown(1, 15, commands.BucketType.guild)
 @commands.has_permissions(administrator = True)
 async def clear(ctx, amount: int):
     await ctx.message.delete()
