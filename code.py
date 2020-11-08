@@ -888,7 +888,7 @@ async def say(ctx, arg = None, text = None, t = None, d = None, img = None, f = 
     emb.set_thumbnail(url = f)
     emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
     if role != None and arg != 'noembed':
-        await ctx.send(role, embed = emb)
+        await ctx.send(role.mention, embed = emb)
     elif role == None and arg != 'noembed':
         await ctx.send(embed = emb)
     if arg == 'noembed':
