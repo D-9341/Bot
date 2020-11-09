@@ -950,6 +950,13 @@ async def ping(ctx):
     await asyncio.sleep(client.latency)
     await message.edit(embed = emb1)
 
+@client.command(aliases = ['invcy'])
+@commands.cooldown(1, 3, commands.BucketType.default)
+async def invite(ctx):
+    await ctx.message.delete()
+    emb = discord.Embed(description = '[Ссылка](https://discord.com/oauth2/authorize?client_id=694170281270312991&scope=bot&permissions=8) для быстрого приглашения Cy на сервера.', colour = discord.Color.orange())
+    await ctx.send(embed = emb)
+    
 @client.command(aliases = ['Info', 'INFO'])
 @commands.cooldown(1, 5, commands.BucketType.guild)
 async def info(ctx):
@@ -975,7 +982,7 @@ async def help(ctx, arg = None):
         emb.add_field(name = 'Fun', value = '`aye_balbec`, `cu`, `coinflip`, `dotersbrain`, `niggers`, `rp`, `rap`, `zatka`', inline = False)
         emb.add_field(name = 'Mod', value = '`ban`, `clear`, `dm`, `give`, `kick`, `mute`, `take`, `unmute`', inline = False)
         emb.add_field(name = 'Misc', value = '`about`, `avatar`, `guild`, `remind`, `role`, `rolemembers`, `someone`, `vote`', inline = False)
-        emb.add_field(name = 'ᅠ', value = '**Используйте `cy/help [команда]` для подробностей.**', inline = False)
+        emb.add_field(name = 'ᅠ', value = 'Используйте `cy/help [команда]` для подробностей.', inline = False)
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
     elif arg == 'about':
