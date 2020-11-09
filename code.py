@@ -79,7 +79,7 @@ async def on_voice_state_update(member, before, after):
 
 @client.event
 async def on_message(message):
-	if message.channel.id == 767848243291095090 and message.content.startswith('n!'):
+    if message.channel.id == 767848243291095090 and message.content.startswith('n!'):
         await message.delete()
     if message.content.startswith(f'<@!{client.user.id}>') and len(message.content) == len(f'<@!{client.user.id}>'):
         await message.channel.send(f'чё звал {message.author.mention} ||`cy/`||')
