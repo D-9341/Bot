@@ -79,11 +79,11 @@ async def on_voice_state_update(member, before, after):
 
 @client.event
 async def on_message(message):
+	if message.channel.id == 767848243291095090 and message.content.startswith('n!'):
+		await message.delete()
     if message.content.startswith(f'<@!{client.user.id}>') and len(message.content) == len(f'<@!{client.user.id}>'):
         await message.channel.send(f'чё звал {message.author.mention} ||`cy/`||')
         await client.process_commands(message)
-    if ('адамант') in message.content.lower():
-        await message.channel.send('гей')
     if ('чё') in message.content.lower() and message.author.bot == False:
         await message.channel.send('хуй через плечо')
     def _check(m):
@@ -528,16 +528,13 @@ async def clear(ctx, amount: int):
 #Misc
 @client.command()
 @commands.cooldown(1, 60, commands.BucketType.guild)
-async def vote(ctx, text, *, role: discord.Role = None):
+async def vote(ctx, *, text):
     await ctx.message.delete()
     emb = discord.Embed(description = 'ГОЛОСОВАНИЕ', colour = discord.Color.orange())
     emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
     emb.add_field(name = 'Голосуем за:', value = text)
     emb.set_footer(text = '🚫 - воздержусь')
-    if role == None:
-        sent = await ctx.send(embed = emb)
-    else:
-        sent = await ctx.send(f'{role.mention}', embed = emb)
+    sent = await ctx.send(embed = emb)
     await sent.add_reaction('👍')
     await sent.add_reaction('👎')
     await sent.add_reaction('🚫')
@@ -671,7 +668,7 @@ async def about(ctx, member: discord.Member = None):
     if member.activities != None and member.status != 'offline':
         emb.add_field(name = 'Активности', value = ', '.join([activity.name for activity in member.activities]))
     limit = len(member.roles)
-    if limit != 1: #загадка от Жака Фреско - почему? на размышление 30 попыток переписи кода || Загадка решена простой перестановкой значения с 0 на 1
+    if limit != 1: 
         if limit > 21:
             emb.add_field(name = 'Роли', value = f'Слишком много для отрисовки ({len(member.roles)-1}) [лимит 20]', inline = False)
             emb.add_field(name = 'Высшая Роль', value = member.top_role.mention, inline = False)
@@ -819,29 +816,26 @@ async def coinflip(ctx):
 
 #Embeds
 @client.command(aliases = ['ctx'])
-@commands.cooldown(1, 5, commands.BucketType.guild)
+@commands.cooldown(1, 5, commands.BucketType.default)
 async def content(ctx, arg):
     await ctx.message.delete()
     message = await ctx.fetch_message(id = arg)
     if message.author == client.user:
-        await ctx.send(f'```cy/say noembed "{message.content}"```')
-    else:
-        await ctx.send(f'```{message.content}```')
-
-@client.command(aliases = ['emb_ctx'])
-@commands.cooldown(1, 5, commands.BucketType.guild)
-async def emb_content(ctx, arg):
-    await ctx.message.delete()
-    message = await ctx.fetch_message(id = arg)
-    for emb in message.embeds:
-        if message.author == client.user:
-            await ctx.send(f'```cy/say "" "" "{emb.title}" "{emb.description}" {emb.image.url} {emb.thumbnail.url} {emb.colour} @{emb.author}```')
+        if message.embeds == []:
+            await ctx.send(f'```cy/say noembed "{message.content}"```')
         else:
-            await ctx.send(f'```title {emb.title} description {emb.description} footer {emb.footer.text} color {emb.colour} author {emb.author} image {emb.image.url} footer img {emb.thumbnail.url}```')
-            
+            for emb in message.embeds:
+                await ctx.send(f'```cy/say "" "" "{emb.title}" "{emb.description}" {emb.image.url} {emb.thumbnail.url} {emb.colour} @{emb.author.name}```')
+    else:
+        if message.embeds == []:
+            await ctx.send(f'```@{message.author} {message.content}```')
+        else:
+            for emb in message.embeds:
+                await ctx.send(f'```content {message.content} title {emb.title} description {emb.description} footer {emb.footer.text} color {emb.colour} author {emb.author.name} image {emb.image.url} footer img {emb.thumbnail.url}```')
+
 @client.command(aliases = ['say_e'])
 @commands.has_permissions(mention_everyone = True)
-@commands.cooldown(1, 20, commands.BucketType.guild)
+@commands.cooldown(1, 20, commands.BucketType.default)
 async def say_everyone(ctx, arg = None, text = None, t = None, d = None, img = None, f = None, c = None, a: discord.Member = None):
     await ctx.message.delete()
     if c == None:
@@ -859,7 +853,6 @@ async def say_everyone(ctx, arg = None, text = None, t = None, d = None, img = N
         emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
     emb.set_image(url = img)
     emb.set_thumbnail(url = f)
-    emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
     if arg == 'noembed':
         await ctx.send(f'@everyone {text}')
     elif arg != 'noembed':
@@ -886,17 +879,16 @@ async def say(ctx, arg = None, text = None, t = None, d = None, img = None, f = 
         emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
     emb.set_image(url = img)
     emb.set_thumbnail(url = f)
-    emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
     if role != None and arg != 'noembed':
-        await ctx.send(role.mention, embed = emb)
+        await ctx.send(role, embed = emb)
     elif role == None and arg != 'noembed':
         await ctx.send(embed = emb)
     if arg == 'noembed':
         await ctx.send(text)
 
-@client.command(aliases = ['emb_ed'])
+@client.command(aliases = ['Edit', 'EDIT'])
 @commands.has_permissions(manage_channels = True)
-async def emb_edit(ctx, arg, t = None, d = None, img = None, f = None, c = None, a : discord.Member = None):
+async def edit(ctx, arg, embed = None, text = None, t = None, d = None, img = None, f = None, c = None, a : discord.Member = None):
     await ctx.message.delete()
     message = await ctx.fetch_message(id = arg)
     if c == None:
@@ -914,26 +906,22 @@ async def emb_edit(ctx, arg, t = None, d = None, img = None, f = None, c = None,
         emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
     emb.set_image(url = img)
     emb.set_thumbnail(url = f)
-    await message.edit(embed = emb)
-    await ctx.send('👌', delete_after = 1)
-    
-@client.command(aliases = ['Edit', 'EDIT'])
-@commands.has_permissions(manage_channels = True)
-async def edit(ctx, arg, *, text):
-    await ctx.message.delete()
-    message = await ctx.fetch_message(id = arg)
-    if message.author == client.user:
-        if text == '--clean':
-            await message.edit(content = None)
-            await ctx.send('👌', delete_after = 1)
-        elif text == '--delete':
-            await message.delete()
-            await ctx.send('👌', delete_after = 1)
+    if embed == 'noembed':
+        if message.author == client.user:
+            if text == '--clean':
+                await message.edit(content = None)
+                await ctx.send('👌', delete_after = 1)
+            elif text == '--delete':
+                await message.delete()
+                await ctx.send('👌', delete_after = 1)
+            else:
+                await message.edit(content = text)
+                await ctx.send('👌', delete_after = 1)
         else:
-            await message.edit(content = text)
-            await ctx.send('👌', delete_after = 1)
+            await ctx.send(f'{message.id} не является сообщением от {client.user.mention}.')
     else:
-        await ctx.send(f'{message.id} не является сообщением от {client.user.mention}.')
+        await message.edit(embed = emb)
+        await ctx.send('👌', delete_after = 1)
 #Embeds
 
 #Cephalon
@@ -982,79 +970,60 @@ async def info(ctx):
     emb.set_footer(text = 'Данное приложение не имеет никакого причастия к игре Warframe.', icon_url = 'https://i.playground.ru/p/yVaOZNSTdgUTxmzy_qvzzQ.png')
     await ctx.send(embed = emb)
 
-@client.command(aliases = ['invcy'])
-@commands.cooldown(1, 3, commands.BucketType.guild)
-async def invite(ctx):
-    await ctx.message.delete()
-    emb = discord.Embed(description = '[Ссылка](https://discord.com/oauth2/authorize?client_id=694170281270312991&scope=bot&permissions=8) для быстрого приглашения Cy на сервера.', colour = discord.Color.orange())
-    await ctx.send(embed = emb)
-#Cephalon
-
 @client.command(aliases = ['Help', 'HELP'])
 @commands.cooldown(1, 3, commands.BucketType.default)
 async def help(ctx, arg = None):
     await ctx.message.delete()
     if arg == None:
-        emb = discord.Embed(title = 'Меню команд Cephalon Cy', description = 'Существует дополнительная помощь по командам, пропишите\n cy/help |команда|', colour = discord.Color.orange())
-        emb.add_field(name = 'cy/about', value = 'Показывает информацию о человеке.')
-        emb.add_field(name = 'cy/avatar', value = 'Показывает аватар человека.')
-        emb.add_field(name = 'cy/ban', value = 'Бан человека.')
-        emb.add_field(name = 'cy/clear', value = 'Очистка чата. ||Не более 300!||')
-        emb.add_field(name = 'cy/dm', value = 'Пишет участнику написанный текст.')
-        emb.add_field(name = 'cy/edit', value = 'Редактирует сообщение.', inline = False)
-        emb.add_field(name = 'cy/say', value = 'От лица бота отправляется высоконастраеваемый эмбед. Может использоваться как для написания текстов, так и эмбедов')
-        emb.add_field(name = 'cy/emb_ctx', value = 'Позволяет увидеть контент эмбеда.')
-        emb.add_field(name = 'cy/emb_edit', value = 'Редактирует эмбед.', inline = False)
-        emb.add_field(name = 'cy/say_everyone', value = 'Как say, но с @everyone сверху.')
-        emb.add_field(name = 'cy/give', value = 'Выдаёт роль.', inline = False)
-        emb.add_field(name = 'cy/guild', value = 'Показывает информацию о сервере.')
-        emb.add_field(name = 'cy/join', value = 'Бот заходит в голосовой канал.')
-        emb.add_field(name = 'cy/leave', value = 'Бот выходит из голосового канала. ||Для справки - этот бот НЕ имеет НИКАКИХ команд для проигрывания музыки!||')
-        emb.add_field(name = 'cy/kick', value = 'Кик человека.')
-        emb.add_field(name = 'cy/mute', value = 'Мут человека.', inline = False)
-        emb.add_field(name = 'cy/remind', value = 'Может напомнить вам о событии, которое вы не хотите пропустить.')
-        emb.add_field(name = 'cy/role', value = 'Показывает информацию о роли')
-        emb.add_field(name = 'cy/take', value = 'Забирает роль.', inline = False)
-        emb.add_field(name = 'cy/unmute', value = 'Принудительный размут человека.')
-        emb.add_field(name = 'Обозначение символов cy/help', value = '|| - опционально, <> - обязательно')
+        emb = discord.Embed(title = client.user.name, description = 'Вот команды, что я могу исполнить. И нет, я не могу управлять кораблём. ||Несколько команд ниже требуют некоторых прав.||', colour = discord.Color.orange())
+        emb.add_field(name = 'Cephalon', value = '`info`, `invite`, `join`, `leave`, `ping`', inline = False)
+        emb.add_field(name = 'Embeds', value = '`content`, `edit`, `say`, `say_everyone`', inline = False)
+        emb.add_field(name = 'Fun', value = '`aye_balbec`, `cu`, `coinflip`, `dotersbrain`, `niggers`, `rp`, `rap`, `insult`, `zatka`', inline = False)
+        emb.add_field(name = 'Mod', value = '`ban`, `clear`, `dm`, `give`, `kick`, `mute`, `take`, `unmute`', inline = False)
+        emb.add_field(name = 'Misc', value = '`about`, `avatar`, `guild`, `remind`, `role`, `rolemembers`, `someone`, `vote`', inline = False)
+        emb.add_field(name = 'ᅠ', value = '**Используйте `cy/help [команда]` для подробностей.**', inline = False)
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
     elif arg == 'about':
-        await ctx.send('```cy/about |@пинг/имя/ID|```')
+        await ctx.send('```cy/about [@пинг/имя/ID] ([] - опционально, <> - обязательно, / - или)```')
     elif arg == 'avatar':
-        await ctx.send('```cy/avatar |@пинг/имя/ID|```')
+        await ctx.send('```cy/avatar [@пинг/имя/ID] ([] - опционально, <> - обязательно, / - или)```')
     elif arg == 'ban':
-        await ctx.send('```cy/ban <@пинг/имя/ID> |причина|```')
+        await ctx.send('```cy/ban <@пинг/имя/ID> [причина] ([] - опционально, <> - обязательно, / - или)```')
+    elif arg == 'content':
+        await ctx.send('```cy/content <ID> ([] - опционально, <> - обязательно, / - или)```')
     elif arg == 'clear':
-        await ctx.send('```cy/clear <количество> |y/n|```')
+        await ctx.send('```cy/clear <количество> [y/n] ([] - опционально, <> - обязательно, / - или)```')
     elif arg == 'dm':
-        await ctx.send('```cy/dm <@пинг/имя/ID> <текст>```')
-    elif arg == 'edit':
-        await ctx.send('```cy/edit <ID> <новый текст>```')
+        await ctx.send('```cy/dm <@пинг/имя/ID> <текст> ([] - опционально, <> - обязательно, / - или)```')
     elif arg == 'say':
-        await ctx.send('```cy/say |noembed| |text| |title текст| |description текст| |ссылка| |ссылка| |цвет| |@пинг/имя/ID| |@роль/имя роли/ID роли|(cy/say "" "" "title" "description")```')
-    elif arg == 'emb_ctx':
-        await ctx.send('```cy/emb_ctx <ID>```')
-    elif arg == 'emb_edit':
-        await ctx.send('```cy/emb_edit <ID> |title текст| |description текст| |ссылка| |ссылка| |цвет| |@пинг/имя/ID| |@роль/имя роли/ID роли|```')
+        await ctx.send('```cy/say [noembed] [text] [title текст] [description текст] [ссылка] [ссылка] [цвет] [@пинг/имя/ID] [@роль/имя роли/ID роли](cy/say "" "" "title" "description")```')
+    elif arg == 'edit':
+        await ctx.send('```cy/edit <ID> [noembed] [text] [title текст] [description текст] [ссылка] [ссылка] [цвет] [@пинг/имя/ID]\n(--clean в text удалит контент над эмбедом, --delete удалит сообщение)```')
     elif arg == 'say_everyone':
-        await ctx.send('```cy/say_everyone |title текст| |description текст| |ссылка| |ссылка| |цвет| |@пинг/имя/ID| |@роль/имя роли/ID роли|(cy/say_everyone "" "" "title" "description")```')
+        await ctx.send('```cy/say_everyone [noembed] [text] [title текст] [description текст] [ссылка] [ссылка] [цвет] [@пинг/имя/ID](cy/say_everyone "" "" "title" "description")```')
     elif arg == 'give':
         await ctx.send('```cy/give <@пинг/имя/ID> <@роль/имя роли/ID роли>```')
     elif arg == 'kick':
-        await ctx.send('```cy/kick <@пинг/имя/ID> |причина|```')
+        await ctx.send('```cy/kick <@пинг/имя/ID> [причина]```')
     elif arg == 'mute':
-        await ctx.send('```cy/mute <@пинг/имя/ID> <время(s,m,h,d(15s, 5m, 1h, 5d))> |причина|```')
+        await ctx.send('```cy/mute <@пинг/имя/ID> <время(s,m,h,d(15s, 5m, 1h, 5d))> [причина]```')
     elif arg == 'remind':
         await ctx.send('```cy/remind <время(s,m,h,d(15s, 5m, 1h, 5d))> <текст>```')
     elif arg == 'role':
         await ctx.send('```cy/role <@роль/имя роли/ID роли>```')
     elif arg == 'take':
         await ctx.send('```cy/take <@пинг/имя/ID> <@роль/имя роли/ID роли>```')
+    elif arg == 'someone':
+        await ctx.send('```cy/someone <текст>```')
     elif arg == 'unmute':
-        await ctx.send('```cy/unmute <@пинг/имя/ID> |причина|```')
+        await ctx.send('```cy/unmute <@пинг/имя/ID> [причина]```')
+    elif arg == 'insult':
+        await ctx.send('```cy/insult [@пинг/имя/ID]```')
     elif arg == 'vote':
-        await ctx.send('```cy/vote <"текст"> |@пинг/имя/ID роли|```')
+        await ctx.send('```cy/vote <текст>```')
+    elif arg == 'info' or 'join' or 'leave' or 'ping' or 'invite':
+        await ctx.send('```Для команд категории Cephalon НЕ нужны аргументы.```')
     else:
         emb = discord.Embed(description = 'Для этой команды не нужны аргументы', colour = discord.Color.orange())
         emb.set_footer(text = 'Хотя, возможно, вы ввели команду неправильно?')
