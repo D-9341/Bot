@@ -999,7 +999,7 @@ async def help(ctx, arg = None):
         emb.add_field(name = 'cy/about', value = 'Показывает информацию о человеке.')
         emb.add_field(name = 'cy/avatar', value = 'Показывает аватар человека.')
         emb.add_field(name = 'cy/ban', value = 'Бан человека.')
-        emb.add_field(name = 'cy/clear', value = 'Очистка чата. ||Не более 500!||')
+        emb.add_field(name = 'cy/clear', value = 'Очистка чата. ||Не более 300!||')
         emb.add_field(name = 'cy/dm', value = 'Пишет участнику написанный текст.')
         emb.add_field(name = 'cy/edit', value = 'Редактирует сообщение.', inline = False)
         emb.add_field(name = 'cy/say', value = 'От лица бота отправляется высоконастраеваемый эмбед. Может использоваться как для написания текстов, так и эмбедов')
