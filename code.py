@@ -79,8 +79,6 @@ async def on_voice_state_update(member, before, after):
 
 @client.event
 async def on_message(message):
-	if message.channel.id == 767848243291095090 and message.content.startswith('n!'):
-		await message.delete()
     if message.content.startswith(f'<@!{client.user.id}>') and len(message.content) == len(f'<@!{client.user.id}>'):
         await message.channel.send(f'чё звал {message.author.mention} ||`cy/`||')
         await client.process_commands(message)
@@ -389,7 +387,7 @@ async def unmute(ctx, member: discord.Member, *, reason = None):
         emb = discord.Embed(description = f'{ctx.author.mention}, Я не могу снять мут у {member.mention} из-за того, что роль Muted была удалена/отредактирована!', colour = discord.Color.orange(), timestamp = ctx.message.created_at)
         await ctx.send(embed = emb)
  
-@client.command(aliases = ['Clear', 'CLEAR'])
+@client.command(aliases = ['Clear', 'CLEAR', 'purge', 'Purge', 'PURGE'])
 @commands.cooldown(1, 15, commands.BucketType.guild)
 @commands.has_permissions(administrator = True)
 async def clear(ctx, amount: int):
@@ -1037,7 +1035,7 @@ async def on_ready():
 async def on_command_error(ctx, error):
     if isinstance(error, commands.CommandNotFound):
         await ctx.message.delete()
-        emb = discord.Embed(description = f'{ctx.author.mention}, я не знаю такую команду!', colour = discord.Color.orange())
+        emb = discord.Embed(description = f'{ctx.author.mention}, я не знаю такую команду!\n||raw контент - {ctx.message.content}||', colour = discord.Color.orange())
         emb.set_footer(text = 'Считаете, что такая команда должна быть? Напишите сасиска#2472 и опишите её суть!')
         await ctx.send(embed = emb)
     elif isinstance(error, commands.MissingPermissions):
