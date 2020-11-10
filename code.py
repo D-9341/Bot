@@ -719,15 +719,15 @@ async def dotersbrain(ctx):
     sent = await ctx.send(rand)
     try:
         msg = await client.wait_for('message', timeout = 3, check = lambda message: message.author == ctx.author and message.channel == ctx.message.channel)
-        if msg.content == 'хуй через плечо' and sent.content == 'чё':
+        if msg.content.lower == 'хуй через плечо' and sent.content == 'чё':
             await ctx.send(f'Поздравляю, у вас 3 стадия рака!')
             await sent1.delete()
             await sent.delete()
-        elif sent.content == 'а' and msg.content == 'хуй на':
+        elif sent.content == 'а' and msg.content.lower == 'хуй на':
             await ctx.send(f'Поздравляю, у вас 3 стадия рака!')
             await sent1.delete()
             await sent.delete()
-        elif sent.content == 'чего' and msg.content == 'хуй на воротничок': #чего бля
+        elif sent.content == 'чего' and msg.content.lower == 'хуй на воротничок': #чего бля
             await ctx.send(f'Поздравляю, у вас 3 стадия рака!')
             await sent1.delete()
             await sent.delete()
