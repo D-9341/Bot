@@ -54,6 +54,7 @@ async def on_member_update(before, after):
                 emb = discord.Embed(title = 'РОЛЬ_ЗАБРАНА', description = ', '.join([getattr(r, "mention", r.id) for r in event.before.roles or event.after.roles]), colour = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
             elif a < b:
                 emb = discord.Embed(title = 'РОЛЬ_ВЫДАНА', description = ', '.join([getattr(r, "mention", r.id) for r in event.before.roles or event.after.roles]), colour = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
+            emb.set_author(name = before, icon_url = before.avatar_url)
             emb.set_footer(text = f'ID: {before.id}')
         await channel.send(embed = emb)
 
