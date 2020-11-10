@@ -1036,6 +1036,8 @@ async def help(ctx, arg = None):
         await ctx.send('```ARM\nban - бан участника\nclear - очистка чата, не более 300!\ndm - пишет в лс участнику написанный текст\ngive - выдаёт роль\nkick - кик участника\nmute - мут участника\ntake - забирает роль\nunmute - снятие мута участника.```')
     elif arg == 'Misc' or arg == 'misc':
         await ctx.send('```ARM\nabout - информация о человеке\navatar - аватар человека\nguild - информация о сервере\nremind - напоминание о событии\nrole - информация о роли\nrolemembers - участники роли\nsomeone - упоминание someone\nvote - голосование за что-то.```')
+    elif arg == 'All' or arg == 'all':
+        await ctx.send('a')
     else:
         emb = discord.Embed(description = f'Команда `{arg}` не обнаружена/аргументы не нужны.', color = discord.Color.orange())
         await ctx.send(embed = emb)
