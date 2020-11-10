@@ -1026,6 +1026,22 @@ async def help(ctx, arg = None):
         await ctx.send('```apache\ncy/vote <текст> (<> - обязательно)```')
     elif arg == 'help':
         await ctx.send('```apache\ncy/help [команда] ([] - опционально)```')
+    elif arg == 'aye_balbec':
+        await ctx.send('```cy/aye_balbec```')
+    elif arg == 'cu':
+        await ctx.send('```cy/cu```')
+    elif arg == 'coinflip' or arg == 'coin' or arg == 'c':
+        await ctx.send('```cy/c```')
+    elif arg == 'dotersbrain':
+        await ctx.send('```cy/dotersbrain```')
+    elif arg == 'niggers':
+        await ctx.send('```cy/niggers```')
+    elif arg == 'rp':
+        await ctx.send('```cy/rp```')
+    elif arg == 'rap':
+        await ctx.send('```cy/rap```')
+    elif arg == 'zatka':
+        await ctx.send('```cy/zatka```')
     elif arg == 'Embeds' or arg == 'embeds':
         await ctx.send('```ARM\ncontent(ctx) - позволяет увидеть raw контент сообщения\nedit - редактирует сообщение, отправленное от лица бота. Иные сообщения редактировать нельзя.\nsay - используется для написания как текстов, так и эмбедов.\nsay_everyone - то же, что и say, но с пингом everyone```')
     elif arg == 'Cephalon' or arg == 'cephalon':
@@ -1043,7 +1059,7 @@ async def help(ctx, arg = None):
         await ctx.send('```ARM\nban - бан участника\nclear - очистка чата, не более 300!\ndm - пишет в лс участнику написанный текст\ngive - выдаёт роль\nkick - кик участника\nmute - мут участника\ntake - забирает роль\nunmute - снятие мута участника.```')
         await ctx.send('```ARM\nabout - информация о человеке\navatar - аватар человека\nguild - информация о сервере\nremind - напоминание о событии\nrole - информация о роли\nrolemembers - участники роли\nsomeone - упоминание someone\nvote - голосование за что-то.```')
     else:
-        emb = discord.Embed(description = f'Команда `{arg}` не обнаружена/аргументы не нужны.', color = discord.Color.orange())
+        emb = discord.Embed(description = f'Команда `{arg}` не обнаружена.', color = discord.Color.orange())
         await ctx.send(embed = emb)
 
 @client.event
