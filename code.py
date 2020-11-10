@@ -989,41 +989,41 @@ async def help(ctx, arg = None):
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
     elif arg == 'about':
-        await ctx.send('```apache\ncy/about [@пинг/имя/ID] ([] - опционально, <> - обязательно, / - или)```')
+        await ctx.send('```apache\ncy/about [@пинг/имя/ID] ([] - опционально, / - или)```')
     elif arg == 'avatar':
-        await ctx.send('```apache\ncy/avatar [@пинг/имя/ID] ([] - опционально, <> - обязательно, / - или)```')
+        await ctx.send('```apache\ncy/avatar [@пинг/имя/ID] ([] - опционально, / - или)```')
     elif arg == 'ban':
-        await ctx.send('```apache\ncy/ban <@пинг/имя/ID> [причина] ([] - опционально, <> - обязательно, / - или) perms = ban_members```')
+        await ctx.send('```apache\ncy/ban <@пинг/имя/ID> [причина] ([] - опционально, <> - обязательно, / - или)\nperms = ban_members```')
     elif arg == 'content':
-        await ctx.send('```apache\ncy/content <ID> ([] - опционально, <> - обязательно, / - или)```')
+        await ctx.send('```apache\ncy/content <ID> (<> - обязательно)```')
     elif arg == 'clear':
-        await ctx.send('```apache\ncy/clear <количество> [y/n] ([] - опционально, <> - обязательно, / - или) perms = administrator```')
+        await ctx.send('```apache\ncy/clear <количество> [y/n] ([] - опционально, <> - обязательно, / - или)\nperms = adminstator```')
     elif arg == 'dm':
-        await ctx.send('```apache\ncy/dm <@пинг/имя/ID> <текст> ([] - опционально, <> - обязательно, / - или) perms = view_audit_log```')
+        await ctx.send('```apache\ncy/dm <@пинг/имя/ID> <текст> (<> - обязательно, / - или)\nperms = view_audit_log```')
     elif arg == 'say':
-        await ctx.send('```apache\ncy/say [noembed] [text] [title текст] [description текст] [ссылка] [ссылка] [цвет] [@пинг/имя/ID] [@роль/имя роли/ID роли](cy/say "" "" "title" "description") ([] - опционально, <> - обязательно, / - или) perms = manage_channels```')
+        await ctx.send('```apache\ncy/say [noembed] [text] [title текст] [description текст] [ссылка] [ссылка] [цвет] [@пинг/имя/ID] [@роль/имя роли/ID роли](cy/say "" "" "title" "description") ([] - опционально, / - или)\nperms = manage_channels```')
     elif arg == 'edit':
-        await ctx.send('```apache\ncy/edit <ID> [noembed] [text] [title текст] [description текст] [ссылка] [ссылка] [цвет] [@пинг/имя/ID]\n(--clean в text удалит контент над эмбедом, --delete удалит сообщение) ([] - опционально, <> - обязательно, / - или) perms = manage_channels```')
+        await ctx.send('```apache\ncy/edit <ID> [noembed] [text] [title текст] [description текст] [ссылка] [ссылка] [цвет] [@пинг/имя/ID]\n(--clean в text удалит контент над эмбедом, --delete удалит сообщение) ([] - опционально, <> - обязательно, / - или)\nperms = manage_channels```')
     elif arg == 'say_everyone':
-        await ctx.send('```apache\ncy/say_everyone [noembed] [text] [title текст] [description текст] [ссылка] [ссылка] [цвет] [@пинг/имя/ID](cy/say_everyone "" "" "title" "description") ([] - опционально, <> - обязательно, / - или) perms = mention_everyone```')
+        await ctx.send('```apache\ncy/say_everyone [noembed] [text] [title текст] [description текст] [ссылка] [ссылка] [цвет] [@пинг/имя/ID](cy/say_everyone "" "" "title" "description") ([] - опционально, / - или)\nperms = mention_everyone```')
     elif arg == 'give':
-        await ctx.send('```apache\ncy/give <@пинг/имя/ID> <@роль/имя роли/ID роли> ([] - опционально, <> - обязательно, / - или) perms = manage_channels```')
+        await ctx.send('```apache\ncy/give <@пинг/имя/ID> <@роль/имя роли/ID роли> (<> - обязательно, / - или)\nperms = manage_channels```')
     elif arg == 'kick':
-        await ctx.send('```apache\ncy/kick <@пинг/имя/ID> [причина] ([] - опционально, <> - обязательно, / - или) perms = kick_members```')
+        await ctx.send('```apache\ncy/kick <@пинг/имя/ID> [причина] ([] - опционально, <> - обязательно, / - или)\nperms = kick_members```')
     elif arg == 'mute':
-        await ctx.send('```apache\ncy/mute <@пинг/имя/ID> <время(s/m/h/d(15s, 5m, 1h, 5d))> [причина] ([] - опционально, <> - обязательно, / - или) perms = manage_channels```')
+        await ctx.send('```apache\ncy/mute <@пинг/имя/ID> <время(s/m/h/d(15s, 5m, 1h, 5d))> [причина] ([] - опционально, <> - обязательно, / - или)\nperms = manage_channels```')
     elif arg == 'remind':
-        await ctx.send('```apache\ncy/remind <время(s/m/h/d(15s, 5m, 1h, 5d))> <текст> ([] - опционально, <> - обязательно, / - или)```')
+        await ctx.send('```apache\ncy/remind <время(s/m/h/d(15s, 5m, 1h, 5d))> <текст> (<> - обязательно, / - или)```')
     elif arg == 'role':
-        await ctx.send('```apache\ncy/role <@роль/имя роли/ID роли> ([] - опционально, <> - обязательно, / - или)```')
+        await ctx.send('```apache\ncy/role <@роль/имя роли/ID роли> (<> - обязательно, / - или)```')
     elif arg == 'take':
-        await ctx.send('```apache\ncy/take <@пинг/имя/ID> <@роль/имя роли/ID роли> ([] - опционально, <> - обязательно, / - или) perms = view_audit_log = True```')
+        await ctx.send('```apache\ncy/take <@пинг/имя/ID> <@роль/имя роли/ID роли> (<> - обязательно, / - или)\nperms = view_audit_log = True```')
     elif arg == 'someone':
-        await ctx.send('```apache\ncy/someone <текст> ([] - опционально, <> - обязательно, / - или)```')
+        await ctx.send('```apache\ncy/someone <текст> <> - обязательно)```')
     elif arg == 'unmute':
-        await ctx.send('```apache\ncy/unmute <@пинг/имя/ID> [причина] ([] - опционально, <> - обязательно, / - или) perms = manage_channels```')
+        await ctx.send('```apache\ncy/unmute <@пинг/имя/ID> [причина] ([] - опционально, <> - обязательно, / - или)\nperms = manage_channels```')
     elif arg == 'vote':
-        await ctx.send('```apache\ncy/vote <текст> ([] - опционально, <> - обязательно, / - или)```')
+        await ctx.send('```apache\ncy/vote <текст> (<> - обязательно)```')
     elif arg == 'help':
         await ctx.send('```apache\ncy/help [команда] ([] - опционально)```')
     elif arg == 'Embeds' or arg == 'embeds':
