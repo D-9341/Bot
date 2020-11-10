@@ -66,15 +66,14 @@ async def on_member_join(member):
     emb.add_field(name = 'УПОМИНАНИЕ', value = member.mention)
     emb.add_field(name = 'СЕРВЕР', value = member.guild.name)
     await channel.send(embed = emb)
-    role = discord.utils.get(member.guild, id = 693933516294979704)
-    role1 = discord.utils.get(message.guild.roles, id = 775265053162209300)
-    role2 = discord.utils.get(message.guild.roles, id = 693933511412940800)
+    role = discord.utils.get(member.guild.roles, id = 693933516294979704)
+    role1 = discord.utils.get(member.guild.roles, id = 775265053162209300)
+    role2 = discord.utils.get(member.guild.roles, id = 693933511412940800)
     if role != None:
         await member.add_roles(role, role1, role2)
         emb1 = discord.Embed(title = 'ВЫДАЧА\_РОЛИ\_ЧЕРЕЗ\_АВТО_РОЛЬ', colour = discord.Color.orange())
         emb.add_field(name = 'УЧАСТНИК', value = member.name)
         emb.add_field(name = 'УПОМИНАНИЕ', value = member.mention)
-        emb.add_field(name = 'СЕРВЕР', value = member.guild.name)
         emb1.add_field(name = 'РОЛЬ', value = role)
         await channel.send(embed = emb1)
 
