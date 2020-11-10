@@ -37,29 +37,67 @@ class Slapper(commands.Converter):
 
 #Events
 @client.event
+async def on_member_update(before, after):
+    channel = client.get_channel(714175791033876490)
+    if before.nick != after.nick:
+        emb = discord.Embed(title = 'ИЗМЕНЕНИЕ_НИКНЕЙМА', color = discord.Colour.orange(), timestamp = datetime.datetime.utcnow())
+        emb.add_field(name = 'УЧАСТНИК', value = before)
+        emb.add_field(name = 'БЫЛ', value = before.nick)
+        emb.add_field(name = 'СТАЛ', value = after.nick)
+        emb.set_footer(text = f'ID: {before.id}')
+        await channel.send(embed = emb)
+    if before.roles != after.roles:
+        a = set(before.roles)
+        b = set(after.roles)
+        async for event in before.guild.audit_logs(limit = 1, action = discord.AuditLogAction.member_role_update):
+            if a > b:
+                emb = discord.Embed(title = 'РОЛЬ_ЗАБРАНА', description = ', '.join([getattr(r, "mention", r.id) for r in event.before.roles or event.after.roles]), colour = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
+            elif a < b:
+                emb = discord.Embed(title = 'РОЛЬ_ВЫДАНА', description = ', '.join([getattr(r, "mention", r.id) for r in event.before.roles or event.after.roles]), colour = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
+            emb.set_footer(text = f'ID: {before.id}')
+        await channel.send(embed = emb)
+
+@client.event
 async def on_member_join(member):
-    channel = client.get_channel(693929823030214658)
-    emb = discord.Embed(description = f'{member.mention} ({member.name}) has entered the `{member.guild.name}`', colour = discord.Color.orange())
+    channel = client.get_channel(714175791033876490)
+    emb = discord.Embed(title = 'УЧАСТНИК\_ЗАШЁЛ\_НА_СЕРВЕР', colour = discord.Color.orange())
+    emb.add_field(name = 'УЧАСТНИК', value = member.name)
+    emb.add_field(name = 'УПОМИНАНИЕ', value = member.mention)
+    emb.add_field(name = 'СЕРВЕР', value = member.guild.name)
     await channel.send(embed = emb)
+    role = discord.utils.get(member.guild, id = 693933516294979704)
+    role1 = discord.utils.get(message.guild.roles, id = 775265053162209300)
+    role2 = discord.utils.get(message.guild.roles, id = 693933511412940800)
+    if role != None:
+        await member.add_roles(role, role1, role2)
+        emb1 = discord.Embed(title = 'ВЫДАЧА\_РОЛИ\_ЧЕРЕЗ\_АВТО_РОЛЬ', colour = discord.Color.orange())
+        emb.add_field(name = 'УЧАСТНИК', value = member.name)
+        emb.add_field(name = 'УПОМИНАНИЕ', value = member.mention)
+        emb.add_field(name = 'СЕРВЕР', value = member.guild.name)
+        emb1.add_field(name = 'РОЛЬ', value = role)
+        await channel.send(embed = emb1)
 
 @client.event
 async def on_member_remove(member):
-    channel = client.get_channel(693929823030214658)
-    emb = discord.Embed(description = f'{member.mention} ({member.name}) has exited the `{member.guild.name}`...', colour = discord.Color.orange())
+    channel = client.get_channel(714175791033876490)
+    emb = discord.Embed(title = 'УЧАСТНИК\_ВЫШЕЛ\_С_СЕРВЕРА', colour = discord.Color.orange())
+    emb.add_field(name = 'УЧАСТНИК', value = member.name)
+    emb.add_field(name = 'УПОМИНАНИЕ', value = member.mention)
+    emb.add_field(name = 'СЕРВЕР', value = member.guild.name)
     await channel.send(embed = emb)
 
 @client.event
 async def on_guild_remove(guild):
-    channel = client.get_channel(693929823030214658)
-    emb = discord.Embed(description = f'Меня выгнали с сервера `{guild.name}`...', colour = discord.Color.red())
-    emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+    channel = client.get_channel(714175791033876490)
+    emb = discord.Embed(title = 'УБОРКА\_С_СЕРВЕРА', colour = discord.Color.red())
+    emb.add_field(name = 'СЕРВЕР', value = guild.name)
     await channel.send(embed = emb)
 
 @client.event
 async def on_guild_join(guild):
-    channel = client.get_channel(693929823030214658)
-    emb = discord.Embed(description = f'Меня добавили на сервер `{guild.name}`!', colour = discord.Color.green())
-    emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+    channel = client.get_channel(714175791033876490)
+    emb = discord.Embed(title = 'ДОБАВЛЕНИЕ\_НА_СЕРВЕР', colour = discord.Color.green())
+    emb.add_field(name = 'СЕРВЕР', value = guild.name)
     await channel.send(embed = emb)
 
 @client.event
@@ -67,7 +105,7 @@ async def on_voice_state_update(member, before, after):
     try:
         if after.channel.id == 742647888424730735: 
             category = discord.utils.get(member.guild.categories, id = 742647888101769236)
-            channel = await member.guild.create_voice_channel(name = f'Комната {member}', category = category)
+            channel = await member.guild.create_voice_channel(name = f'КОМНАТА {member}', category = category)
             await member.move_to(channel)
             await channel.set_permissions(member, mute_members = True, move_members = True, manage_channels = True)
             def check(a,b,c):
@@ -165,11 +203,11 @@ async def on_message(message):
         emb = discord.Embed(colour = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
         emb.set_author(name = message.author, icon_url = message.author.avatar_url)
         if isinstance(message.channel, discord.channel.DMChannel):
-            emb.add_field(name = 'На сервере', value = 'в ЛС')
+            emb.add_field(name = 'НА_СЕРВЕРЕ', value = 'ЛС')
         else:
-            emb.add_field(name = 'На сервере', value = message.guild)
-            emb.add_field(name = 'В канале', value = f'{message.channel.mention} ({message.channel.name})')
-        emb.add_field(name = 'Было написано', value = message.content)
+            emb.add_field(name = 'НА_СЕРВЕРЕ', value = message.guild)
+            emb.add_field(name = 'В_КАНАЛЕ', value = f'{message.channel.mention} ({message.channel.name})')
+        emb.add_field(name = 'НАПИСАНО', value = message.content)
         emb.set_footer(text = f'Cephalon Cy by сасиска#2472')
         await client.process_commands(message)
         try:
@@ -184,11 +222,11 @@ async def on_message_edit(before, after):
         return
     if not before.author.bot:
         if ('http') not in after.content.lower():
-            emb = discord.Embed(description = f'[Сообщение]({before.jump_url}) было изменено', colour = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
+            emb = discord.Embed(description = f'[ИЗМЕНЕНИЕ_СООБЩЕНИЯ]({before.jump_url})', colour = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
             emb.set_author(name = before.author, icon_url = before.author.avatar_url)
-            emb.add_field(name = 'На сервере', value = before.guild)
-            emb.add_field(name = 'Было', value = f'```{before.content}```')
-            emb.add_field(name = 'Стало', value = f'```{after.content}```')
+            emb.add_field(name = 'НА_СЕРВЕРЕ', value = before.guild)
+            emb.add_field(name = 'БЫЛО', value = f'```{before.content}```')
+            emb.add_field(name = 'СТАЛО', value = f'```{after.content}```')
             emb.set_footer(text = f'Cephalon Cy by сасиска#2472')
             await channel.send(embed = emb)
 #Events
