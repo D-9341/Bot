@@ -1147,7 +1147,7 @@ async def help(ctx, arg = None):
     elif arg == 'vote':
         await ctx.send('```apache\ncy/vote <текст> (<> - обязательно)```')
     elif arg == 'help':
-        await ctx.send('```apache\ncy/help [команда/категория] ([] - опционально)```')
+        await ctx.send('```apache\ncy/help [команда/категория] ([] - опционально, / - или)```')
     elif arg == 'aye_balbec':
         await ctx.send('```cy/aye_balbec```')
     elif arg == 'cu':
