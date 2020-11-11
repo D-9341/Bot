@@ -12,7 +12,7 @@ from discord.utils import get
 client = commands.Bot(command_prefix = commands.when_mentioned_or('cy/'), intents = discord.Intents.all(), owner_id = 338714886001524737)
 client.remove_command('help')
 
-url = os.environ('DATABASE_URL')
+url = os.environ.get('DATABASE_URL')
 conn = psycopg2.connect(url, sslmode = 'require')
 
 time_regex = re.compile(r"(?:(\d{1,5})(h|s|m|d))+?")
