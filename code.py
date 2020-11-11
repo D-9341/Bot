@@ -1111,8 +1111,7 @@ async def on_ready():
 async def on_command_error(ctx, error):
     if isinstance(error, commands.CommandNotFound):
         await ctx.message.delete()
-        emb = discord.Embed(description = f'{ctx.author.mention}, команда не обнаружена.', colour = discord.Color.orange())
-        emb.set_footer(text = f'||raw content = {ctx.message.content}||')
+        emb = discord.Embed(description = f'{ctx.author.mention}, команда не обнаружена. ||{ctx.message.content}||', colour = discord.Color.orange())
         await ctx.send(embed = emb)
     elif isinstance(error, commands.MissingPermissions):
         await ctx.message.delete()
