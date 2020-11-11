@@ -41,6 +41,10 @@ async def on_member_update(before, after):
     channel = client.get_channel(714175791033876490)
     if before.nick != after.nick:
         emb = discord.Embed(title = 'ИЗМЕНЕНИЕ_НИКНЕЙМА', color = discord.Colour.orange(), timestamp = datetime.datetime.utcnow())
+        if before.nick == None:
+            before.nick = 'НЕ\_БЫЛ_УКАЗАН'
+        if after.nick == None:
+            after.nick = 'НЕ_УКАЗАН'
         emb.add_field(name = 'УЧАСТНИК', value = before)
         emb.add_field(name = 'БЫЛ', value = before.nick)
         emb.add_field(name = 'СТАЛ', value = after.nick)
@@ -62,7 +66,7 @@ async def on_member_update(before, after):
 async def on_member_join(member):
     channel = client.get_channel(714175791033876490)
     emb = discord.Embed(title = 'УЧАСТНИК\_ЗАШЁЛ\_НА_СЕРВЕР', colour = discord.Color.orange())
-    emb.add_field(name = 'УЧАСТНИК', value = member.name)
+    emb.add_field(name = 'УЧАСТНИК', value = member)
     emb.add_field(name = 'УПОМИНАНИЕ', value = member.mention)
     emb.add_field(name = 'СЕРВЕР', value = member.guild.name)
     await channel.send(embed = emb)
@@ -72,8 +76,8 @@ async def on_member_join(member):
     if role != None:
         await member.add_roles(role, role1, role2)
         emb1 = discord.Embed(title = 'ВЫДАЧА\_РОЛЕЙ\_ЧЕРЕЗ\_АВТО_РОЛЬ', colour = discord.Color.orange())
-        emb.add_field(name = 'УЧАСТНИК', value = member.name)
-        emb.add_field(name = 'УПОМИНАНИЕ', value = member.mention)
+        emb1.add_field(name = 'УЧАСТНИК', value = member)
+        emb1.add_field(name = 'УПОМИНАНИЕ', value = member.mention)
         emb1.add_field(name = 'РОЛИ', value = f'{role.mention}, {role1.mention}, {role2.mention}')
         await channel.send(embed = emb1)
 
@@ -81,7 +85,7 @@ async def on_member_join(member):
 async def on_member_remove(member):
     channel = client.get_channel(714175791033876490)
     emb = discord.Embed(title = 'УЧАСТНИК\_ВЫШЕЛ\_С_СЕРВЕРА', colour = discord.Color.orange())
-    emb.add_field(name = 'УЧАСТНИК', value = member.name)
+    emb.add_field(name = 'УЧАСТНИК', value = member)
     emb.add_field(name = 'УПОМИНАНИЕ', value = member.mention)
     emb.add_field(name = 'СЕРВЕР', value = member.guild.name)
     await channel.send(embed = emb)
@@ -105,7 +109,7 @@ async def on_voice_state_update(member, before, after):
     try:
         if after.channel.id == 742647888424730735: 
             category = discord.utils.get(member.guild.categories, id = 742647888101769236)
-            channel = await member.guild.create_voice_channel(name = f'КОМНАТА {member}', category = category)
+            channel = await member.guild.create_voice_channel(name = f'Комната {member}', category = category)
             await member.move_to(channel)
             await channel.set_permissions(member, mute_members = True, move_members = True, manage_channels = True)
             def check(a,b,c):
@@ -208,7 +212,6 @@ async def on_message(message):
             emb.add_field(name = 'НА_СЕРВЕРЕ', value = message.guild)
             emb.add_field(name = 'В_КАНАЛЕ', value = f'{message.channel.mention} ({message.channel.name})')
         emb.add_field(name = 'НАПИСАНО', value = message.content)
-        emb.set_footer(text = f'Cephalon Cy by сасиска#2472')
         await client.process_commands(message)
         try:
             await channel.send(embed = emb)
@@ -227,7 +230,6 @@ async def on_message_edit(before, after):
             emb.add_field(name = 'НА_СЕРВЕРЕ', value = before.guild)
             emb.add_field(name = 'БЫЛО', value = f'```{before.content}```')
             emb.add_field(name = 'СТАЛО', value = f'```{after.content}```')
-            emb.set_footer(text = f'Cephalon Cy by сасиска#2472')
             await channel.send(embed = emb)
 #Events
 
