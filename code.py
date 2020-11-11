@@ -40,26 +40,28 @@ class Slapper(commands.Converter):
 async def on_guild_channel_delete(channel):
     if channel.guild.id == 693929822543675455:
         lchannel = client.get_channel(714175791033876490)
-        emb = discord.Embed(title = 'УДАЛЕНИЕ_КАНАЛА', color = discord.Color.orange())
+        emb = discord.Embed(title = 'УДАЛЕНИЕ_КАНАЛА', color = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
         emb.add_field(name = 'НАЗВАНИЕ', value = channel.name)
         if channel.type == discord.ChannelType.voice:
             typ = 'ГОЛОСОВОЙ'
         if channel.type == discord.ChannelType.text:
             typ = 'ТЕКСТОВЫЙ'
         emb.add_field(name = 'ТИП', value = typ)
+        emb.set_footer(text = f'ID: {channel.id}')
         await lchannel.send(embed = emb)
 
 @client.event
 async def on_guild_channel_create(channel):
     if channel.guild.id == 693929822543675455:
         lchannel = client.get_channel(714175791033876490)
-        emb = discord.Embed(title = 'СОЗДАНИЕ_КАНАЛА', color = discord.Color.orange())
+        emb = discord.Embed(title = 'СОЗДАНИЕ_КАНАЛА', color = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
         emb.add_field(name = 'НАЗВАНИЕ', value = channel.name)
         if channel.type == discord.ChannelType.voice:
             typ = 'ГОЛОСОВОЙ'
         if channel.type == discord.ChannelType.text:
             typ = 'ТЕКСТОВЫЙ'
         emb.add_field(name = 'ТИП', value = typ)
+        emb.set_footer(text = f'ID: {channel.id}')
         await lchannel.send(embed = emb)
 
 @client.event
@@ -67,30 +69,30 @@ async def on_guild_channel_update(before, after):
     channel = client.get_channel(714175791033876490)
     if before.guild.id == 693929822543675455:
         if before.type == discord.ChannelType.voice:
-            emb = discord.Embed(title = r'ИЗМЕНЕНИЕ\_ГОЛОСОВОГО_КАНАЛА', color = discord.Color.orange())
+            emb = discord.Embed(title = r'ИЗМЕНЕНИЕ\_ГОЛОСОВОГО_КАНАЛА', color = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
             if before.name != after.name:
                 emb.add_field(name = 'НАЗВАНИЕ_ДО', value = before.name)
                 emb.add_field(name = 'НАЗВАНИЕ_ПОСЛЕ', value = after.name)
-                emb.timestamp = datetime.datetime.utcnow()
+                emb.set_footer(text = f'ID: {before.id}')
                 await channel.send(embed = emb)
             if before.position != after.position:
                 emb.add_field(name = 'НАЗВАНИЕ', value = before.name, inline = False)
                 emb.add_field(name = 'ПОЗИЦИЯ_ДО', value = before.position)
                 emb.add_field(name = 'ПОЗИЦИЯ_ПОСЛЕ', value = after.position)
-                emb.timestamp = datetime.datetime.utcnow()
+                emb.set_footer(text = f'ID: {before.id}')
                 await channel.send(embed = emb)
         elif before.type == discord.ChannelType.text:
-            emb = discord.Embed(title = r'ИЗМЕНЕНИЕ\_ТЕКСТОВОГО_КАНАЛА', color = discord.Color.orange())
+            emb = discord.Embed(title = r'ИЗМЕНЕНИЕ\_ТЕКСТОВОГО_КАНАЛА', color = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
             if before.name != after.name:
                 emb.add_field(name = 'НАЗВАНИЕ_ДО', value = before.name)
                 emb.add_field(name = 'НАЗВАНИЕ_ПОСЛЕ', value = after.name)
-                emb.timestamp = datetime.datetime.utcnow()
+                emb.set_footer(text = f'ID: {before.id}')
                 await channel.send(embed = emb)
             if before.position != after.position:
                 emb.add_field(name = 'НАЗВАНИЕ', value = before.name, inline = False)
                 emb.add_field(name = 'ПОЗИЦИЯ_ДО', value = before.position)
                 emb.add_field(name = 'ПОЗИЦИЯ_ПОСЛЕ', value = after.position)
-                emb.timestamp = datetime.datetime.utcnow()
+                emb.set_footer(text = f'ID: {before.id}')
                 await channel.send(embed = emb)
 
 @client.event
@@ -124,52 +126,57 @@ async def on_member_update(before, after):
 async def on_member_join(member):
     if member.bot == False:
         channel = client.get_channel(714175791033876490)
-        emb = discord.Embed(title = 'УЧАСТНИК\_ЗАШЁЛ\_НА_СЕРВЕР', colour = discord.Color.orange())
+        emb = discord.Embed(title = 'УЧАСТНИК\_ЗАШЁЛ\_НА_СЕРВЕР', colour = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
         emb.add_field(name = 'УЧАСТНИК', value = member)
         emb.add_field(name = 'УПОМИНАНИЕ', value = member.mention)
         emb.add_field(name = 'СЕРВЕР', value = member.guild.name)
+        emb.set_footer(text = f'ID: {member.id}')
         await channel.send(embed = emb)
         role = discord.utils.get(member.guild.roles, id = 693933516294979704)
         role1 = discord.utils.get(member.guild.roles, id = 775265053162209300)
         role2 = discord.utils.get(member.guild.roles, id = 693933511412940800)
         if member.guild.id == 693929822543675455:
             channel = client.get_channel(693929823030214658)
-            emb = discord.Embed(description = f'{member.mention} ({member.name}) пришёл к нам!', colour = discord.Color.orange())
+            emb = discord.Embed(description = f'{member.mention} ({member.name}) пришёл к нам!', colour = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
             await channel.send(embed = emb)
             if role != None:
                 await member.add_roles(role, role1, role2)
-                emb1 = discord.Embed(title = 'ВЫДАЧА\_РОЛЕЙ\_ЧЕРЕЗ\_АВТО_РОЛЬ', colour = discord.Color.orange())
+                emb1 = discord.Embed(title = 'ВЫДАЧА\_РОЛЕЙ\_ЧЕРЕЗ\_АВТО_РОЛЬ', colour = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
                 emb1.add_field(name = 'УЧАСТНИК', value = member)
                 emb1.add_field(name = 'УПОМИНАНИЕ', value = member.mention)
                 emb1.add_field(name = 'РОЛИ', value = f'{role.mention}, {role1.mention}, {role2.mention}')
+                emb1.set_footer(text = f'ID: {member.id}')
                 await channel.send(embed = emb1)
 
 @client.event
 async def on_member_remove(member):
     if member.bot == False:
         channel = client.get_channel(714175791033876490)
-        emb = discord.Embed(title = 'УЧАСТНИК\_ВЫШЕЛ\_С_СЕРВЕРА', colour = discord.Color.orange())
+        emb = discord.Embed(title = 'УЧАСТНИК\_ВЫШЕЛ\_С_СЕРВЕРА', colour = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
         emb.add_field(name = 'УЧАСТНИК', value = member)
         emb.add_field(name = 'УПОМИНАНИЕ', value = member.mention)
         emb.add_field(name = 'СЕРВЕР', value = member.guild.name)
+        emb.set_footer(text = f'ID: {member.id}')
         await channel.send(embed = emb)
         if member.guild.id == 693929822543675455:
             channel = client.get_channel(693929823030214658)
-            emb = discord.Embed(description = f'{member.mention} ({member.name}) покинул нас...', colour = discord.Color.orange())
+            emb = discord.Embed(description = f'{member.mention} ({member.name}) покинул нас...', colour = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
             await channel.send(embed = emb)
 
 @client.event
 async def on_guild_remove(guild):
     channel = client.get_channel(714175791033876490)
-    emb = discord.Embed(title = 'ВЫХОД\_С_СЕРВЕРА', colour = discord.Color.red())
+    emb = discord.Embed(title = 'ВЫХОД\_С_СЕРВЕРА', colour = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
     emb.add_field(name = 'СЕРВЕР', value = guild.name)
+    emb.set_footer(text = f'ID: {guild.id}')
     await channel.send(embed = emb)
 
 @client.event
 async def on_guild_join(guild):
     channel = client.get_channel(714175791033876490)
-    emb = discord.Embed(title = 'ДОБАВЛЕНИЕ\_НА_СЕРВЕР', colour = discord.Color.green())
+    emb = discord.Embed(title = 'ДОБАВЛЕНИЕ\_НА_СЕРВЕР', colour = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
     emb.add_field(name = 'СЕРВЕР', value = guild.name)
+    emb.set_footer(text = f'ID: {guild.id}')
     await channel.send(embed = emb)
 
 @client.event
