@@ -174,9 +174,6 @@ async def on_guild_join(guild):
 
 @client.event
 async def on_voice_state_update(member, before, after):
-    if before.voice.channel.name != after.voice.channel.name:
-        channel = client.get_channel(714175791033876490)
-        await channel.send('сменён голосовой статус')
     try:
         if after.channel.id == 742647888424730735: 
             category = discord.utils.get(member.guild.categories, id = 742647888101769236)
