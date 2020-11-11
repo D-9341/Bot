@@ -212,7 +212,7 @@ async def on_message(message):
         else:
             emb.add_field(name = 'НА_СЕРВЕРЕ', value = message.guild)
             emb.add_field(name = 'В_КАНАЛЕ', value = f'{message.channel.mention} ({message.channel.name})')
-        emb.add_field(name = 'НАПИСАНО', value = message.content)
+        emb.add_field(name = 'НАПИСАНО', value = message.content, inline = False)
         await client.process_commands(message)
         try:
             await channel.send(embed = emb)
