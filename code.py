@@ -174,7 +174,7 @@ async def on_guild_join(guild):
 
 @client.event
 async def on_voice_state_update(member, before, after):
-    if before.channel.name != after.channel.name:
+    if before.voice.channel.name != after.voice.channel.name:
         channel = client.get_channel(714175791033876490)
         await channel.send('сменён голосовой статус')
     try:
