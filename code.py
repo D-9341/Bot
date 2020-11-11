@@ -39,28 +39,29 @@ class Slapper(commands.Converter):
 @client.event
 async def on_member_update(before, after):
     channel = client.get_channel(714175791033876490)
-    if before.nick != after.nick:
-        emb = discord.Embed(title = 'ИЗМЕНЕНИЕ_НИКНЕЙМА', color = discord.Colour.orange(), timestamp = datetime.datetime.utcnow())
-        if before.nick == None:
-            before.nick = 'НЕ\_БЫЛ_УКАЗАН'
-        if after.nick == None:
-            after.nick = 'НЕ_УКАЗАН'
-        emb.add_field(name = 'УЧАСТНИК', value = before)
-        emb.add_field(name = 'БЫЛ', value = before.nick)
-        emb.add_field(name = 'СТАЛ', value = after.nick)
-        emb.set_footer(text = f'ID: {before.id}')
-        await channel.send(embed = emb)
-    if before.roles != after.roles:
-        a = set(before.roles)
-        b = set(after.roles)
-        async for event in before.guild.audit_logs(limit = 1, action = discord.AuditLogAction.member_role_update):
-            if a > b:
-                emb = discord.Embed(title = 'РОЛЬ_ЗАБРАНА', description = ', '.join([getattr(r, "mention", r.id) for r in event.before.roles or event.after.roles]), colour = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
-            elif a < b:
-                emb = discord.Embed(title = 'РОЛЬ_ВЫДАНА', description = ', '.join([getattr(r, "mention", r.id) for r in event.before.roles or event.after.roles]), colour = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
-            emb.set_author(name = before, icon_url = before.avatar_url)
+    if before.guild.id == 693929822543675455:
+        if before.nick != after.nick:
+            emb = discord.Embed(title = 'ИЗМЕНЕНИЕ_НИКНЕЙМА', color = discord.Colour.orange(), timestamp = datetime.datetime.utcnow())
+            if before.nick == None:
+                before.nick = 'НЕ\_БЫЛ_УКАЗАН'
+            if after.nick == None:
+                after.nick = 'НЕ_УКАЗАН'
+            emb.add_field(name = 'УЧАСТНИК', value = before)
+            emb.add_field(name = 'БЫЛ', value = before.nick)
+            emb.add_field(name = 'СТАЛ', value = after.nick)
             emb.set_footer(text = f'ID: {before.id}')
-        await channel.send(embed = emb)
+            await channel.send(embed = emb)
+        if before.roles != after.roles:
+            a = set(before.roles)
+            b = set(after.roles)
+            async for event in before.guild.audit_logs(limit = 1, action = discord.AuditLogAction.member_role_update):
+                if a > b:
+                    emb = discord.Embed(title = 'РОЛЬ_ЗАБРАНА', description = ', '.join([getattr(r, "mention", r.id) for r in event.before.roles or event.after.roles]), colour = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
+                elif a < b:
+                    emb = discord.Embed(title = 'РОЛЬ_ВЫДАНА', description = ', '.join([getattr(r, "mention", r.id) for r in event.before.roles or event.after.roles]), colour = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
+                emb.set_author(name = before, icon_url = before.avatar_url)
+                emb.set_footer(text = f'ID: {before.id}')
+            await channel.send(embed = emb)
 
 @client.event
 async def on_member_join(member):
