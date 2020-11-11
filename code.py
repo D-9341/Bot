@@ -1,5 +1,6 @@
 import asyncio
 import datetime
+import psycopg2
 import json
 import os
 import random
@@ -10,6 +11,9 @@ from discord.utils import get
 
 client = commands.Bot(command_prefix = commands.when_mentioned_or('cy/'), intents = discord.Intents.all(), owner_id = 338714886001524737)
 client.remove_command('help')
+
+url = os.environ('DATABASE_URL')
+conn = psycopg2.connect(url, sslmode = 'require')
 
 time_regex = re.compile(r"(?:(\d{1,5})(h|s|m|d))+?")
 time_dict = {'h': 3600, 's': 1, 'm': 60, 'd': 86400}
@@ -35,6 +39,8 @@ class Slapper(commands.Converter):
         emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
         return await ctx.send(f'@someone ||{mention.mention}||', embed = emb)
 
+
+    
 #Events
 @client.event
 async def on_member_update(before, after):
@@ -74,6 +80,9 @@ async def on_member_join(member):
     role = discord.utils.get(member.guild.roles, id = 693933516294979704)
     role1 = discord.utils.get(member.guild.roles, id = 775265053162209300)
     role2 = discord.utils.get(member.guild.roles, id = 693933511412940800)
+    channel = client.get_channel(693929823030214658)
+    emb = discord.Embed(description = f'{member.mention} ({member.name}) пришёл к нам!', colour = discord.Color.orange())
+    await channel.send(embed = emb)
     if role != None:
         await member.add_roles(role, role1, role2)
         emb1 = discord.Embed(title = 'ВЫДАЧА\_РОЛЕЙ\_ЧЕРЕЗ\_АВТО_РОЛЬ', colour = discord.Color.orange())
@@ -89,6 +98,9 @@ async def on_member_remove(member):
     emb.add_field(name = 'УЧАСТНИК', value = member)
     emb.add_field(name = 'УПОМИНАНИЕ', value = member.mention)
     emb.add_field(name = 'СЕРВЕР', value = member.guild.name)
+    await channel.send(embed = emb)
+    channel = client.get_channel(693929823030214658)
+    emb = discord.Embed(description = f'{member.mention} ({member.name}) покинул нас...', colour = discord.Color.orange())
     await channel.send(embed = emb)
 
 @client.event
