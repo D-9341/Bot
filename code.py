@@ -1,6 +1,5 @@
 import asyncio
 import datetime
-import psycopg2
 import json
 import os
 import random
@@ -11,9 +10,6 @@ from discord.utils import get
 
 client = commands.Bot(command_prefix = commands.when_mentioned_or('cy/'), intents = discord.Intents.all(), owner_id = 338714886001524737)
 client.remove_command('help')
-
-url = os.environ.get('DATABASE_URL')
-conn = psycopg2.connect(url, sslmode = 'require')
 
 time_regex = re.compile(r"(?:(\d{1,5})(h|s|m|d))+?")
 time_dict = {'h': 3600, 's': 1, 'm': 60, 'd': 86400}
@@ -38,8 +34,6 @@ class Slapper(commands.Converter):
         emb = discord.Embed(description = f'{argument}', colour =  ctx.author.colour, timestamp = ctx.message.created_at)
         emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
         return await ctx.send(f'@someone ||{mention.mention}||', embed = emb)
-
-
     
 #Events
 @client.event
