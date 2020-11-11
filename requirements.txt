@@ -3,3 +3,4 @@ discord.py
 aiohttp
 websockets
 chardet
+psycopg2-binary
