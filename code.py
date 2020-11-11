@@ -272,7 +272,7 @@ async def on_message(message):
         await client.process_commands(message)
         return
     if not message.author.bot:
-        if message.channel.id == 714175791033876490:
+        if message.channel.id != 714175791033876490:
             emb = discord.Embed(colour = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
             emb.set_author(name = message.author, icon_url = message.author.avatar_url)
             if isinstance(message.channel, discord.channel.DMChannel):
