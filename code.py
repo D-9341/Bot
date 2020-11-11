@@ -146,7 +146,7 @@ async def on_member_join(member):
 
 @client.event
 async def on_member_remove(member):
-    if member.bot == False
+    if member.bot == False:
         channel = client.get_channel(714175791033876490)
         emb = discord.Embed(title = 'УЧАСТНИК\_ВЫШЕЛ\_С_СЕРВЕРА', colour = discord.Color.orange())
         emb.add_field(name = 'УЧАСТНИК', value = member)
