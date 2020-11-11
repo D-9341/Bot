@@ -174,6 +174,9 @@ async def on_guild_join(guild):
 
 @client.event
 async def on_voice_state_update(member, before, after):
+    if before.member.voice.channel.name != after.member.voice.channel.name:
+        channel = client.get_channel(714175791033876490)
+        await channel.send('сменён голосовой статус')
     try:
         if after.channel.id == 742647888424730735: 
             category = discord.utils.get(member.guild.categories, id = 742647888101769236)
@@ -947,8 +950,10 @@ async def say_everyone(ctx, embed = None, text = None, t = None, d = None, img =
     if f == None:
         f = ('')
     emb = discord.Embed(title = t, description = d, colour = c)
-    if a != None and a.id != ctx.author.id:
+    if a != None and a.id != ctx.author.id and ctx.author.id != client.owner_id:
         emb.set_author(name = f'{a} ({ctx.author})', icon_url = a.avatar_url)
+    elif a != None and ctx.author.id == client.owner_id:
+        emb.set_author(name = a, icon_url = a.avatar_url)
     else:
         emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
     emb.set_image(url = img)
@@ -977,6 +982,8 @@ async def say(ctx, embed = None, text = None, t = None, d = None, img = None, f 
     emb = discord.Embed(title = t, description = d, colour = c)
     if a != None and a.id != ctx.author.id and ctx.author.id != client.owner_id:
         emb.set_author(name = f'{a} ({ctx.author})', icon_url = a.avatar_url)
+    elif a != None and ctx.author.id == client.owner_id:
+        emb.set_author(name = a, icon_url = a.avatar_url)
     else:
         emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
     emb.set_image(url = img)
