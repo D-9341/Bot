@@ -5,6 +5,7 @@ import os
 import random
 import re
 import discord
+import secrets
 from discord.ext import commands
 from discord.utils import get
 
@@ -781,14 +782,14 @@ async def about(ctx, member: discord.Member = None):
     emb.add_field(name = 'Raw имя', value = member.name)
     emb.add_field(name = 'Никнейм', value = member.nick)
     if member.status == discord.Status.online:
-        member.status = 'В сети'
+        status = 'В сети'
     elif member.status == discord.Status.dnd:
-        member.status = 'Не беспокоить'
+        status = 'Не беспокоить'
     elif member.status == discord.Status.idle:
-        member.status = 'Отошёл'
+        status = 'Отошёл'
     elif member.status == discord.Status.offline:
-        member.status = 'Не в сети'
-    emb.add_field(name = 'Статус', value = member.status)
+        status = 'Не в сети'
+    emb.add_field(name = 'Статус', value = status)
     roles = ', '.join([role.mention for role in member.roles[1:]])
     if member.activities != None and member.status != discord.Status.offline:
         emb.add_field(name = 'Активности', value = ', '.join([activity.name for activity in member.activities]))
@@ -1058,6 +1059,12 @@ async def edit(ctx, msg, embed = None, text = None, t = None, d = None, img = No
 #Embeds
 
 #Cephalon
+@client.command()
+async def generate(ctx, amount = 1):
+    await ctx.message.delete()
+    token = ''.join([secrets.choice('QWERTYUIOPASDFGHJKLZXCVBNM1234567890') for i in range(12)])
+    await ctx.send(f'```{token}```')
+
 @client.command(aliases = ['Join', 'JOIN'])
 async def join(ctx):
     await ctx.message.delete()
