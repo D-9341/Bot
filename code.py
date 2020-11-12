@@ -505,7 +505,7 @@ async def unmute(ctx, member: discord.Member, *, reason = None):
         emb = discord.Embed(description = f'{ctx.author.mention}, Я не могу снять мут у {member.mention} из-за того, что роль Muted была удалена/отредактирована!', colour = discord.Color.orange(), timestamp = ctx.message.created_at)
         await ctx.send(embed = emb)
 
-@client.command(aliases = ['Clear', 'CLEAR', 'purge', 'Purge', 'PURGE'])
+@client.command(aliases = ['Clear', 'CLEAR', 'purge', 'Purge', 'PURGE', 'prune', 'Prune', 'PRUNE'])
 @commands.cooldown(1, 15, commands.BucketType.guild)
 @commands.has_permissions(administrator = True)
 async def clear(ctx, amount: int):
@@ -728,7 +728,7 @@ async def role(ctx, *, role: discord.Role):
     now = datetime.datetime.today()
     then = role.created_at
     delta = now - then
-    d = role.created_at.strftime('%d/%m/%Y %H:%M:%S UTC')
+    d = role.created_at.strftime('%d.%m.%Y %H:%M:%S UTC')
     emb.add_field(name = 'Создана', value = f'{delta.days} дня(ей) назад. ({d})', inline = False)
     emb.add_field(name = 'Показывает участников отдельно?', value = role.hoist)
     await ctx.send(embed = emb)
@@ -754,7 +754,7 @@ async def avatar(ctx, member: discord.Member = None):
     await ctx.send(embed = emb)
 
 @client.command(aliases = ['me', 'Me', 'ME', 'About', 'ABOUT'])
-@commands.cooldown(1, 5, commands.BucketType.guild)
+@commands.cooldown(1, 5, commands.BucketType.default)
 async def about(ctx, member: discord.Member = None):
     await ctx.message.delete()
     if member == None:
@@ -771,39 +771,55 @@ async def about(ctx, member: discord.Member = None):
     now = datetime.datetime.today()
     then = member.created_at
     delta = now - then
-    d = member.created_at.strftime('%d/%m/%Y %H:%M:%S UTC')
+    d = member.created_at.strftime('%d.%m.%Y %H:%M:%S UTC')
     then1 = member.joined_at
     delta1 = now - then1
-    d1 = member.joined_at.strftime('%d/%m/%Y %H:%M:%S UTC')
+    d1 = member.joined_at.strftime('%d.%m.%Y %H:%M:%S UTC')
     emb.add_field(name = 'Создан', value = f'{delta.days} дня(ей) назад. ({d})', inline = False)
     emb.add_field(name = 'Вошёл', value = f'{delta1.days} дня(ей) назад. ({d1})', inline = False)
     emb.add_field(name = 'Упоминание', value = member.mention)
     emb.add_field(name = 'Raw имя', value = member.name)
     emb.add_field(name = 'Никнейм', value = member.nick)
+    if member.status == discord.Status.online:
+        member.status = 'В сети'
+    elif member.status == discord.Status.dnd:
+        member.status = 'Не беспокоить'
+    elif member.status == discord.Status.idle:
+        member.status = 'Отошёл'
+    elif member.status == discord.Status.offline:
+        member.status = 'Не в сети'
     emb.add_field(name = 'Статус', value = member.status)
+    roles = ', '.join([role.mention for role in member.roles[1:]])
+    if member.activities != None and member.status != discord.Status.offline:
+        emb.add_field(name = 'Активности', value = ', '.join([activity.name for activity in member.activities]))
+    if member.id == 774273205745483797 or member.id == 764882153812787250 or member.id == 694170281270312991:
+        bro = 'Даа'
+    else:
+        bro = 'Неа'
+    emb.add_field(name = 'Бро?', value = bro, inline = False)
+    emb.add_field(name = 'Бот?', value = bot)
     limit = len(member.roles)
-    if limit != 1: 
+    if len(member.roles) != 1:
         if limit > 21:
             emb.add_field(name = 'Роли', value = f'Слишком много для отрисовки ({len(member.roles)-1}) [лимит 20]', inline = False)
             emb.add_field(name = 'Высшая Роль', value = member.top_role.mention, inline = False)
         elif limit == 21:
-            emb.add_field(name = f'Роли ({len(member.roles)-1}) [лимит достигнут]', value = ', '.join([role.mention for role in member.roles[1:]]), inline = False)
+            emb.add_field(name = f'Роли ({len(member.roles)-1}) [лимит достигнут]', value = roles, inline = False)
             emb.add_field(name = 'Высшая Роль', value = member.top_role.mention, inline = False)
         elif limit == 20:
-            emb.add_field(name = f'Роли ({len(member.roles)-1}) [1 до лимита]', value = ', '.join([role.mention for role in member.roles[1:]]), inline = False)
+            emb.add_field(name = f'Роли ({len(member.roles)-1}) [1 до лимита]', value = roles, inline = False)
             emb.add_field(name = 'Высшая Роль', value = member.top_role.mention, inline = False)
         elif limit == 19:
-            emb.add_field(name = f'Роли ({len(member.roles)-1}) [2 до лимита]', value = ', '.join([role.mention for role in member.roles[1:]]), inline = False)
+            emb.add_field(name = f'Роли ({len(member.roles)-1}) [2 до лимита]', value = roles, inline = False)
             emb.add_field(name = 'Высшая Роль', value = member.top_role.mention, inline = False)
         elif limit == 18:
-            emb.add_field(name = f'Роли ({len(member.roles)-1}) [3 до лимита]', value = ', '.join([role.mention for role in member.roles[1:]]), inline = False)
+            emb.add_field(name = f'Роли ({len(member.roles)-1}) [3 до лимита]', value = roles, inline = False)
             emb.add_field(name = 'Высшая Роль', value = member.top_role.mention, inline = False)
         else:
-            emb.add_field(name = f'Роли ({len(member.roles)-1})', value = ', '.join([role.mention for role in member.roles[1:]]), inline = False)
+            emb.add_field(name = f'Роли ({len(member.roles)-1})', value = roles, inline = False)
             emb.add_field(name = 'Высшая Роль', value = member.top_role.mention, inline = False)
     else:
         emb.add_field(name = 'Роли', value = 'Ролей не обнаружено.')
-    emb.add_field(name = 'Бот?', value = bot)
     emb.set_thumbnail(url = member.avatar_url)
     await ctx.send(embed = emb)
 
@@ -858,7 +874,7 @@ async def dotersbrain(ctx):
 @commands.cooldown(1, 3, commands.BucketType.guild)
 async def niggers(ctx):
     await ctx.message.delete()
-    emb = discord.Embed(description = '[осуждающее видео](https://vk.com/video-184856829_456240358)', colour = discord.Color.orange())
+    emb = discord.Embed(description = '[осуждающее видео](https://www.youtube.com/watch?v=167apVK8Suw)', colour = discord.Color.orange())
     await ctx.send(embed = emb)
 
 @client.command()
@@ -1086,7 +1102,7 @@ async def info(ctx):
     await ctx.message.delete()
     emb = discord.Embed(colour = discord.Color.orange())
     emb.set_author(name = client.user.name, url = 'https://warframe.fandom.com/wiki/Cephalon_Cy', icon_url = client.user.avatar_url)
-    emb.add_field(name = 'Версия', value = '0.12.8.9457')
+    emb.add_field(name = 'Версия', value = '0.12.8.9743')
     emb.add_field(name = 'Написан на', value = 'discord.py')
     emb.add_field(name = 'Разработчик', value = 'сасиска#2472')
     emb.add_field(name = 'Веб-сайт', value = '```http://ru-unioncraft.ru/```')
