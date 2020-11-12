@@ -781,8 +781,6 @@ async def about(ctx, member: discord.Member = None):
     emb.add_field(name = 'Raw имя', value = member.name)
     emb.add_field(name = 'Никнейм', value = member.nick)
     emb.add_field(name = 'Статус', value = member.status)
-    if member.activities != None and member.status != discord.Member.status.offline:
-        emb.add_field(name = 'Активности', value = ', '.join([activity.name for activity in member.activities]))
     limit = len(member.roles)
     if limit != 1: 
         if limit > 21:
