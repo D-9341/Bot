@@ -99,7 +99,7 @@ async def on_guild_channel_update(before, after):
 @client.event
 async def on_member_update(before, after):
     channel = client.get_channel(714175791033876490)
-    if member.bot == False:
+    if before.bot == False:
         chmo = 'УЧАСТНИК'
     else:
         chmo = 'БОТ'
@@ -195,7 +195,7 @@ async def on_guild_join(guild):
 async def on_voice_state_update(member, before, after):
     try:
         if after.channel.id == 742647888424730735:
-            if member.bot == False:
+            if member.bot == True:
                 room = 'Чего бля'
             else:
                 room = f'Комната {member}'
