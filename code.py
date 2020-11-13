@@ -133,7 +133,7 @@ async def on_member_join(member):
         chmo = 'УЧАСТНИК'
     else:
         chmo = 'БОТ'
-    channel = client.get_channel(714175791033876490)
+    lchannel = client.get_channel(714175791033876490)
     emb = discord.Embed(title = f'{chmo}\_ЗАШЁЛ\_НА_СЕРВЕР', colour = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
     emb.add_field(name = f'{chmo}', value = member)
     emb.add_field(name = 'УПОМИНАНИЕ', value = member.mention)
@@ -155,7 +155,7 @@ async def on_member_join(member):
                 emb1.add_field(name = 'УПОМИНАНИЕ', value = member.mention)
                 emb1.add_field(name = 'РОЛИ', value = f'{role.mention}, {role1.mention}, {role2.mention}')
                 emb1.set_footer(text = f'ID: {member.id}')
-                await channel.send(embed = emb1)
+                await lchannel.send(embed = emb1)
 
 @client.event
 async def on_member_remove(member):
