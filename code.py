@@ -35,7 +35,7 @@ class Slapper(commands.Converter):
         emb = discord.Embed(description = f'{argument}', colour =  ctx.author.colour, timestamp = ctx.message.created_at)
         emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
         return await ctx.send(f'@someone ||{mention.mention}||', embed = emb)
-    
+
 #Events
 @client.event
 async def on_guild_channel_delete(channel):
@@ -99,6 +99,10 @@ async def on_guild_channel_update(before, after):
 @client.event
 async def on_member_update(before, after):
     channel = client.get_channel(714175791033876490)
+    if member.bot == False:
+        chmo = 'УЧАСТНИК'
+    else:
+        chmo = 'БОТ'
     if before.guild.id == 693929822543675455:
         if before.nick != after.nick:
             emb = discord.Embed(title = 'ИЗМЕНЕНИЕ_НИКНЕЙМА', color = discord.Colour.orange(), timestamp = datetime.datetime.utcnow())
@@ -106,7 +110,7 @@ async def on_member_update(before, after):
                 before.nick = 'НЕ\_БЫЛ_УКАЗАН'
             if after.nick == None:
                 after.nick = 'НЕ_УКАЗАН'
-            emb.add_field(name = 'УЧАСТНИК', value = before)
+            emb.add_field(name = f'{chmo}', value = before)
             emb.add_field(name = 'БЫЛ', value = before.nick)
             emb.add_field(name = 'СТАЛ', value = after.nick)
             emb.set_footer(text = f'ID: {before.id}')
@@ -126,17 +130,21 @@ async def on_member_update(before, after):
 @client.event
 async def on_member_join(member):
     if member.bot == False:
-        channel = client.get_channel(714175791033876490)
-        emb = discord.Embed(title = 'УЧАСТНИК\_ЗАШЁЛ\_НА_СЕРВЕР', colour = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
-        emb.add_field(name = 'УЧАСТНИК', value = member)
-        emb.add_field(name = 'УПОМИНАНИЕ', value = member.mention)
-        emb.add_field(name = 'СЕРВЕР', value = member.guild.name)
-        emb.set_footer(text = f'ID: {member.id}')
-        await channel.send(embed = emb)
+        chmo = 'УЧАСТНИК'
+    else:
+        chmo = 'БОТ'
+    channel = client.get_channel(714175791033876490)
+    emb = discord.Embed(title = f'{chmo}\_ЗАШЁЛ\_НА_СЕРВЕР', colour = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
+    emb.add_field(name = f'{chmo}', value = member)
+    emb.add_field(name = 'УПОМИНАНИЕ', value = member.mention)
+    emb.add_field(name = 'СЕРВЕР', value = member.guild.name)
+    emb.set_footer(text = f'ID: {member.id}')
+    await channel.send(embed = emb)
+    if member.bot == False:
         role = discord.utils.get(member.guild.roles, id = 693933516294979704)
         role1 = discord.utils.get(member.guild.roles, id = 775265053162209300)
         role2 = discord.utils.get(member.guild.roles, id = 693933511412940800)
-        if member.guild.id == 693929822543675455:
+        if member.guild.id == 693929822543675455 and member.bot == False:
             channel = client.get_channel(693929823030214658)
             emb = discord.Embed(description = f'{member.mention} ({member.name}) пришёл к нам!', colour = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
             await channel.send(embed = emb)
@@ -152,17 +160,20 @@ async def on_member_join(member):
 @client.event
 async def on_member_remove(member):
     if member.bot == False:
-        channel = client.get_channel(714175791033876490)
-        emb = discord.Embed(title = 'УЧАСТНИК\_ВЫШЕЛ\_С_СЕРВЕРА', colour = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
-        emb.add_field(name = 'УЧАСТНИК', value = member)
-        emb.add_field(name = 'УПОМИНАНИЕ', value = member.mention)
-        emb.add_field(name = 'СЕРВЕР', value = member.guild.name)
-        emb.set_footer(text = f'ID: {member.id}')
+        chmo = 'УЧАСТНИК'
+    else:
+        chmo = 'БОТ'
+    channel = client.get_channel(714175791033876490)
+    emb = discord.Embed(title = f'{chmo}\_ВЫШЕЛ\_С_СЕРВЕРА', colour = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
+    emb.add_field(name = f'{chmo}', value = member)
+    emb.add_field(name = 'УПОМИНАНИЕ', value = member.mention)
+    emb.add_field(name = 'СЕРВЕР', value = member.guild.name)
+    emb.set_footer(text = f'ID: {member.id}')
+    await channel.send(embed = emb)
+    if member.guild.id == 693929822543675455 and member.bot == False:
+        channel = client.get_channel(693929823030214658)
+        emb = discord.Embed(description = f'{member.mention} ({member.name}) покинул нас...', colour = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
         await channel.send(embed = emb)
-        if member.guild.id == 693929822543675455:
-            channel = client.get_channel(693929823030214658)
-            emb = discord.Embed(description = f'{member.mention} ({member.name}) покинул нас...', colour = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
-            await channel.send(embed = emb)
 
 @client.event
 async def on_guild_remove(guild):
@@ -183,9 +194,13 @@ async def on_guild_join(guild):
 @client.event
 async def on_voice_state_update(member, before, after):
     try:
-        if after.channel.id == 742647888424730735: 
+        if after.channel.id == 742647888424730735:
+            if member.bot == False:
+                room = 'Чего бля'
+            else:
+                room = f'Комната {member}'
             category = discord.utils.get(member.guild.categories, id = 742647888101769236)
-            channel = await member.guild.create_voice_channel(name = f'Комната {member}', category = category)
+            channel = await member.guild.create_voice_channel(name = room, category = category)
             await member.move_to(channel)
             await channel.set_permissions(member, mute_members = True, move_members = True, manage_channels = True)
             def check(a,b,c):
@@ -1058,7 +1073,7 @@ async def edit(ctx, msg, embed = None, text = None, t = None, d = None, img = No
 
 #Cephalon
 @client.command()
-async def generate(ctx, amount = 1):
+async def generate(ctx):
     await ctx.message.delete()
     token = ''.join([secrets.choice('QWERTYUIOPASDFGHJKLZXCVBNM1234567890') for i in range(12)])
     await ctx.send(f'```{token}```')
