@@ -202,8 +202,6 @@ async def on_message(message):
     if message.content.startswith(f'<@!{client.user.id}>') and len(message.content) == len(f'<@!{client.user.id}>'):
         await message.channel.send(f'чё звал {message.author.mention} ||`cy/`||')
         await client.process_commands(message)
-    if ('чё') in message.content.lower() and message.author.bot == False:
-        await message.channel.send('хуй через плечо')
     def _check(m):
         return (m.author == message.author and len(m.mentions) and (datetime.datetime.utcnow() - m.created_at).seconds < 5)
     if not message.author.bot:
