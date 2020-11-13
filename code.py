@@ -1111,6 +1111,7 @@ async def info(ctx):
     emb.add_field(name = 'Написан на', value = 'discord.py')
     emb.add_field(name = 'Разработчик', value = 'сасиска#2472')
     emb.add_field(name = 'Веб-сайт', value = '```http://ru-unioncraft.ru/```')
+    emb.add_field(name = 'Раздражаю', value = f'{len(client.users)} людей'
     emb.add_field(name = 'Существую на', value = f'{len(client.guilds)} серверах')
     emb.set_footer(text = 'Данное приложение не имеет никакого причастия к игре Warframe.', icon_url = 'https://i.playground.ru/p/yVaOZNSTdgUTxmzy_qvzzQ.png')
     await ctx.send(embed = emb)
