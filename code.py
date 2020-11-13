@@ -139,7 +139,7 @@ async def on_member_join(member):
     emb.add_field(name = 'УПОМИНАНИЕ', value = member.mention)
     emb.add_field(name = 'СЕРВЕР', value = member.guild.name)
     emb.set_footer(text = f'ID: {member.id}')
-    await channel.send(embed = emb)
+    await lchannel.send(embed = emb)
     if member.bot == False:
         role = discord.utils.get(member.guild.roles, id = 693933516294979704)
         role1 = discord.utils.get(member.guild.roles, id = 775265053162209300)
