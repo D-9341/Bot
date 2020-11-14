@@ -548,7 +548,7 @@ async def clear(ctx, amount: int):
                     await ctx.channel.purge(limit = amount)
                     emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
                     emb.add_field(name = f'Всего удалено с разрешения {ctx.guild.owner}', value = f'```ARM\n{amount}```')
-                    emb.add_field(name = 'Удалены сообщения от:', value = '\n'.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
+                    emb.add_field(name = 'Удалены сообщения от:', value = '\n'.join([f"```ARM\n{author}: {amount}```" for author, amount in authors.items()]), inline = False)
                     emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c"')
                     sent = await ctx.send(embed = emb)
                     try:
@@ -592,7 +592,7 @@ async def clear(ctx, amount: int):
                     await ctx.channel.purge(limit = amount)
                     emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
                     emb.add_field(name = f'Всего удалено с разрешения {ctx.guild.owner}', value = f'```ARM\n{amount}```')
-                    emb.add_field(name = 'Удалены сообщения от:', value = '\n'.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
+                    emb.add_field(name = 'Удалены сообщения от:', value = '\n'.join([f"```ARM\n{author}: {amount}```" for author, amount in authors.items()]), inline = False)
                     emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c"')
                     sent = await ctx.send(embed = emb)
                     try:
@@ -600,7 +600,7 @@ async def clear(ctx, amount: int):
                         if msg.content.lower() == 'c':
                             emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
                             emb.add_field(name = f'Всего удалено с разрешения {ctx.guild.owner}', value = f'```ARM\n{amount}```')
-                            emb.add_field(name = 'Удалены сообщения от:', value = '\n'.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
+                            emb.add_field(name = 'Удалены сообщения от:', value = '\n'.join([f"```ARM\n{author}: {amount}```" for author, amount in authors.items()]), inline = False)
                             emb.set_footer(text = f'Удаление отменено.')
                             await sent.edit(embed = emb)
                     except asyncio.TimeoutError:
@@ -635,7 +635,7 @@ async def clear(ctx, amount: int):
                     await ctx.channel.purge(limit = amount)
                     emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
                     emb.add_field(name = f'Всего удалено', value = f'```ARM\n{amount}```')
-                    emb.add_field(name = 'Удалены сообщения от:', value = '\n'.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
+                    emb.add_field(name = 'Удалены сообщения от:', value = '\n'.join([f"```ARM\n{author}: {amount}```" for author, amount in authors.items()]), inline = False)
                     emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c"')
                     sent = await ctx.send(embed = emb)
                     try:
@@ -643,7 +643,7 @@ async def clear(ctx, amount: int):
                         if msg.content.lower() == 'c':
                             emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
                             emb.add_field(name = 'Всего удалено', value = f'```ARM\n{amount}```')
-                            emb.add_field(name = 'Удалены сообщения от:', value = '\n'.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
+                            emb.add_field(name = 'Удалены сообщения от:', value = '\n'.join([f"```ARM\n{author}: {amount}```" for author, amount in authors.items()]), inline = False)
                             emb.set_footer(text = f'Удаление отменено.')
                             await sent.edit(embed = emb)
                     except asyncio.TimeoutError:
@@ -673,7 +673,7 @@ async def clear(ctx, amount: int):
                 await ctx.channel.purge(limit = amount)
                 emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
                 emb.add_field(name = f'Всего удалено', value = f'```ARM\n{amount}```')
-                emb.add_field(name = 'Удалены сообщения от:', value = '\n'.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
+                emb.add_field(name = 'Удалены сообщения от:', value = '\n'.join([f"```ARM\n{author}: {amount}```" for author, amount in authors.items()]), inline = False)
                 emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c"')
                 sent = await ctx.send(embed = emb)
                 try:
@@ -681,7 +681,7 @@ async def clear(ctx, amount: int):
                     if msg.content.lower() == 'c':
                         emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
                         emb.add_field(name = 'Всего удалено', value = f'```ARM\n{amount}```')
-                        emb.add_field(name = 'Удалены сообщения от:', value = '\n'.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
+                        emb.add_field(name = 'Удалены сообщения от:', value = '\n'.join([f"```ARM\n{author}: {amount}```" for author, amount in authors.items()]), inline = False)
                         emb.set_footer(text = f'Удаление отменено.')
                         await sent.edit(embed = emb)
                 except asyncio.TimeoutError:
@@ -707,7 +707,7 @@ async def clear(ctx, amount: int):
         await ctx.channel.purge(limit = amount)
         emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
         emb.add_field(name = f'Всего удалено', value = f'```ARM\n{amount}```')
-        emb.add_field(name = 'Удалены сообщения от:', value = '\n'.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
+        emb.add_field(name = 'Удалены сообщения от:', value = '\n'.join([f"```ARM\n{author}: {amount}```" for author, amount in authors.items()]), inline = False)
         emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c"')
         sent = await ctx.send(embed = emb)
         try:
@@ -715,7 +715,7 @@ async def clear(ctx, amount: int):
             if msg.content.lower() == 'c':
                 emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
                 emb.add_field(name = 'Всего удалено', value = f'```ARM\n{amount}```')
-                emb.add_field(name = 'Удалены сообщения от:', value = '\n'.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
+                emb.add_field(name = 'Удалены сообщения от:', value = '\n'.join([f"```ARM\n{author}: {amount}```" for author, amount in authors.items()]), inline = False)
                 emb.set_footer(text = f'Удаление отменено.')
                 await sent.edit(embed = emb)
         except asyncio.TimeoutError:
