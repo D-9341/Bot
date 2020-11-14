@@ -531,16 +531,12 @@ async def clear(ctx, amount: int):
         else:
             authors[message.author] += 1
     if amount >= 300:
-        if ctx.author == ctx.guild.owner:
-            a = 'владелец блять'
-        else:
-            a = 'еблан сука'
-        emb = discord.Embed(description = f'{ctx.author.mention}, при таком числе удаления сообщений ({amount} блять) неизбежны ошибки в работе {client.user.mention}.\n Нахуй иди, {a}', colour = discord.Color.orange())
+        emb = discord.Embed(description = f'{ctx.author.mention}, тебе чё сказали в help? Ты зачем удаляешь {amount} сообщений? При таком числе удаления сообщений неизбежны ошибки в работе {client.user.mention}.', colour = discord.Color.orange())
         await ctx.send(f'{ctx.guild.owner.mention}', embed = emb)
     elif amount >= 250:
         if ctx.author != ctx.guild.owner:
             emb = discord.Embed(description = f'{ctx.author.mention}, операция с данным числом ({amount}) доступна только {ctx.guild.owner.mention}. Отмена.', colour = discord.Color.orange())
-            await ctx.send(f'{ctx.guild.owner.mention}', embed = emb, delete_after = 5)
+            await ctx.send(f'{ctx.guild.owner.mention}', embed = emb, delete_after = 7)
         else:
             emb = discord.Embed(description = f'{ctx.author.mention}, обнаружено слишком большое число для удаления сообщений ({amount}). Возможны дальнейшие ошибки в работе {client.user.mention}. Продолжить? (y/n)\n ||Отмена через 10 секунд.||', colour = discord.Color.orange())
             sent = await ctx.send(embed = emb)
@@ -560,7 +556,7 @@ async def clear(ctx, amount: int):
                         if msg.content.lower() == 'c':
                             emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
                             emb.add_field(name = 'Всего удалено', value = f'```ARM\n{amount}```')
-                            emb.add_field(name = 'Удалены сообщения от:', value = '\n'.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
+                            emb.add_field(name = 'Удалены сообщения от:', value = '\n'.join([f"```ARM\n{author}: {amount}```" for author, amount in authors.items()]), inline = False)
                             emb.set_footer(text = f'Удаление отменено.')
                             await sent.edit(embed = emb)
                     except asyncio.TimeoutError:
