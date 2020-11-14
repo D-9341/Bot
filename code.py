@@ -220,7 +220,7 @@ async def on_message(message):
     def _check(m):
         return (m.author == message.author and len(m.mentions) and (datetime.datetime.utcnow() - m.created_at).seconds < 5)
     if not message.author.bot:
-        if len(list(filter(lambda m: _check(m), client.cached_messages))) >= 3:
+        if len(list(filter(lambda m: _check(m), client.cached_messages))) >= 3 and message.author.id != client.owner_id:
             role = discord.utils.get(message.guild.roles, name = 'Muted')
             if role is not None:
                 if role not in message.author.roles:
@@ -546,7 +546,7 @@ async def clear(ctx, amount: int):
             emb = discord.Embed(description = f'канал `{ctx.channel.name}` удалён.', color = discord.Color.orange())
             await ctx.author.send(embed = emb)
     elif amount >= 300:
-        emb = discord.Embed(description = f'{ctx.author.mention}, при таком числе удаления сообщений ({amount} блять) неизбежны ошибки в работе {client.user.mention}.', colour = discord.Color.orange())
+        emb = discord.Embed(description = f'{ctx.author.mention}, тебе что в help сказано? При таком числе удаления сообщений неизбежны ошибки в работе {client.user.mention}.', colour = discord.Color.orange())
         await ctx.send(f'{ctx.guild.owner.mention}', embed = emb)
     elif amount >= 250:
         if ctx.author != ctx.guild.owner:
@@ -788,6 +788,7 @@ async def guild(ctx):
     emb.add_field(name = 'Голосовой регион', value = guild.region)
     emb.add_field(name = 'Участников', value = guild.member_count)
     emb.add_field(name = 'Каналов', value = f'Текстовых {len(guild.text_channels)} | Голосовых {len(guild.voice_channels)}')
+    emb.add_field(name = 'Владелец сервера', value = guild.owner.mention)
     emb.add_field(name = f'Роли ({len(guild.roles)-1})', value = ', '.join([role.name for role in guild.roles[1:]]), inline = False)
     now = datetime.datetime.today()
     then = guild.created_at
@@ -879,11 +880,11 @@ async def about(ctx, member: discord.Member = None):
     elif member.status == discord.Status.dnd:
         status = 'Не беспокоить'
     elif member.status == discord.Status.idle:
-        status = 'Отошёл'
+        status = 'Не активен'
     elif member.status == discord.Status.offline:
         status = 'Не в сети'
     emb.add_field(name = 'Статус', value = status)
-    roles = ', '.join([role.mention for role in member.roles[1:]])
+    roles = ', '.join([role.name for role in member.roles[1:]])
     if member.activities != None and member.status != discord.Status.offline:
         emb.add_field(name = 'Активности', value = ', '.join([activity.name for activity in member.activities]))
     if member.id == 774273205745483797 or member.id == 764882153812787250 or member.id == 694170281270312991:
@@ -894,24 +895,8 @@ async def about(ctx, member: discord.Member = None):
     emb.add_field(name = 'Бот?', value = bot)
     limit = len(member.roles)
     if len(member.roles) != 1:
-        if limit > 21:
-            emb.add_field(name = 'Роли', value = f'Слишком много для отрисовки ({len(member.roles)-1}) [лимит 20]', inline = False)
-            emb.add_field(name = 'Высшая Роль', value = member.top_role.mention, inline = False)
-        elif limit == 21:
-            emb.add_field(name = f'Роли ({len(member.roles)-1}) [лимит достигнут]', value = roles, inline = False)
-            emb.add_field(name = 'Высшая Роль', value = member.top_role.mention, inline = False)
-        elif limit == 20:
-            emb.add_field(name = f'Роли ({len(member.roles)-1}) [1 до лимита]', value = roles, inline = False)
-            emb.add_field(name = 'Высшая Роль', value = member.top_role.mention, inline = False)
-        elif limit == 19:
-            emb.add_field(name = f'Роли ({len(member.roles)-1}) [2 до лимита]', value = roles, inline = False)
-            emb.add_field(name = 'Высшая Роль', value = member.top_role.mention, inline = False)
-        elif limit == 18:
-            emb.add_field(name = f'Роли ({len(member.roles)-1}) [3 до лимита]', value = roles, inline = False)
-            emb.add_field(name = 'Высшая Роль', value = member.top_role.mention, inline = False)
-        else:
-            emb.add_field(name = f'Роли ({len(member.roles)-1})', value = roles, inline = False)
-            emb.add_field(name = 'Высшая Роль', value = member.top_role.mention, inline = False)
+        emb.add_field(name = f'Роли ({len(member.roles)-1})', value = roles, inline = False)
+        emb.add_field(name = 'Высшая Роль', value = member.top_role.mention, inline = False)
     else:
         emb.add_field(name = 'Роли', value = 'Ролей не обнаружено.')
     emb.set_thumbnail(url = member.avatar_url)
