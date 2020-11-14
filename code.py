@@ -223,22 +223,25 @@ async def on_message(message):
         if len(list(filter(lambda m: _check(m), client.cached_messages))) >= 3:
             role = discord.utils.get(message.guild.roles, name = 'Muted')
             if role is not None:
-                await message.channel.send(f'{message.author.mention} Был замучен на 10 минут за спам упоминаниями. Больше так не делай!')
-                await message.author.add_roles(role)
-                channel = client.get_channel(714175791033876490)
-                emb = discord.Embed(title = 'СРАБОТАЛ\_АВТО_МУТ', color = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
-                emb.add_field(name = 'СЕРВЕР', value = message.guild.name)
-                emb.add_field(name = 'УЧАСТНИК', value = message.author)
-                await channel.send(embed = emb)
-                await asyncio.sleep(600)
-                if role is not None:
-                    if role in message.author.roles:
-                        await message.author.remove_roles(role)
-                        await message.channel.send(f'{message.author.mention} Был размучен.')
+                if role not in message.author.roles:
+                    await message.channel.send(f'{message.author.mention} Был замучен на 10 минут за спам упоминаниями. Больше так не делай!')
+                    await message.author.add_roles(role)
+                    channel = client.get_channel(714175791033876490)
+                    emb = discord.Embed(title = 'СРАБОТАЛ\_АВТО_МУТ', color = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
+                    emb.add_field(name = 'СЕРВЕР', value = message.guild.name)
+                    emb.add_field(name = 'УЧАСТНИК', value = message.author)
+                    await channel.send(embed = emb)
+                    await asyncio.sleep(600)
+                    if role is not None:
+                        if role in message.author.roles:
+                            await message.author.remove_roles(role)
+                            await message.channel.send(f'{message.author.mention} Был размучен.')
+                        else:
+                            await message.channel.send(f'Роли Muted не было обнаружено в списке ролей {message.author.mention}.')
                     else:
-                        await message.channel.send(f'Роли Muted не было обнаружено в списке ролей {message.author.mention}.')
+                        await message.channel.send(f'{message.author.mention} Не был размучен по причине того, что роль Muted не была обнаружена в списке ролей сервера!')
                 else:
-                    await message.channel.send(f'{message.author.mention} Не был размучен по причине того, что роль Muted не была обнаружена в списке ролей сервера!')
+                    return
             else:
                 await message.channel.send(f'{message.author.mention}, прекрати так делать! (а ты, {message.guild.owner.mention}, создай роль Muted!)')
     if ('сделать') in message.content.lower() or ('предлагаю') in message.content.lower() or ('предложение') in message.content.lower():
