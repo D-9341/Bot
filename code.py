@@ -44,7 +44,7 @@ async def on_command_completion(ctx):
     emb.add_field(name = 'НАЗВАНИЕ', value = f'```{ctx.command.name}```')
     emb.add_field(name = 'ИСПОЛНИТЕЛЬ', value = f'{ctx.author.mention} ({ctx.author})')
     emb.add_field(name = 'СЕРВЕР', value = ctx.guild.name)
-    emb.add_field(name = 'КАНАЛ', value = f'{ctx.channel.name} ({ctx.channel.name})')
+    emb.add_field(name = 'КАНАЛ', value = f'{ctx.channel.name} ({ctx.channel.mention})')
     await lchannel.send(embed = emb)
 
 @client.event
