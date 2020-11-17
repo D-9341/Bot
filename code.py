@@ -790,12 +790,14 @@ async def rolemembers(ctx, role: discord.Role, member: discord.Member = None):
 async def guild(ctx):
     await ctx.message.delete()
     guild = ctx.guild
+    statuses = [len(list(filter(lambda m: str(m.status) == "online", ctx.guild.members))), len(list(filter(lambda m: str(m.status) == "idle", ctx.guild.members))), len(list(filter(lambda m: str(m.status) == "dnd", ctx.guild.members))), len(list(filter(lambda m: str(m.status) == "offline", ctx.guild.members)))]
     emb = discord.Embed(colour = discord.Color.orange(), timestamp = ctx.message.created_at)
     emb.set_author(name = guild, icon_url = guild.icon_url)
     emb.add_field(name = 'ID сервера', value = guild.id)
     emb.add_field(name = 'Голосовой регион', value = guild.region)
     emb.add_field(name = 'Владелец', value = guild.owner.mention)
     emb.add_field(name = 'Участников', value = guild.member_count)
+    emb.add_field(name = 'Статусы', value = f"🟢 {statuses[0]} 🟠 {statuses[1]} 🔴 {statuses[2]} ⚫ {statuses[3]}")
     emb.add_field(name = 'Из них ботов', value = len(list(filter(lambda m: m.bot, ctx.guild.members))))
     emb.add_field(name = 'Из них людей', value = len(list(filter(lambda m: not m.bot, ctx.guild.members))))
     emb.add_field(name = 'Каналов', value = f'Текстовых {len(guild.text_channels)} | Голосовых {len(guild.voice_channels)}')
