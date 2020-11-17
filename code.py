@@ -39,23 +39,23 @@ class Slapper(commands.Converter):
 #Events
 @client.event
 async def on_command(ctx):
-    channel = client.get_channel(7141757910338764)
+    lchannel = client.get_channel(7141757910338764)
     emb = discord.Embed(title = 'НАПИСАНИЕ_КОМАНДЫ', color = discord.Color.orange())
     emb.add_field(name = 'НАЗВАНИЕ', value = f'```{ctx.command.name}```')
     emb.add_field(name = 'НАПИСАНА', value = f'{ctx.author.mention} ({ctx.author})')
     emb.add_field(name = 'СЕРВЕР', value = ctx.guild.name)
     emb.add_field(name = 'КАНАЛ', value = f'{ctx.channel.name} ({ctx.channel.mention})')
-    await channel.send(embed = emb)
+    await lchannel.send(embed = emb)
 
 @client.event
 async def on_command_completion(ctx):
-    channel = client.get_channel(7141757910338764)
+    lchannel = client.get_channel(7141757910338764)
     emb = discord.Embed(title = 'ВЫПОЛНЕНИЕ_КОМАНДЫ', color = discord.Color.orange())
     emb.add_field(name = 'НАЗВАНИЕ', value = f'```{ctx.command.name}```')
     emb.add_field(name = 'ИСПОЛНИТЕЛЬ', value = f'{ctx.author.mention} ({ctx.author})')
     emb.add_field(name = 'СЕРВЕР', value = ctx.guild.name)
     emb.add_field(name = 'КАНАЛ', value = f'{ctx.channel.name} ({ctx.channel.name})')
-    await channel.send(embed = emb)
+    await lchannel.send(embed = emb)
 
 @client.event
 async def on_guild_channel_delete(channel):
