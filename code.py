@@ -39,7 +39,7 @@ class Slapper(commands.Converter):
 #Events
 @client.event
 async def on_command(ctx):
-    lchannel = client.get_channel(7141757910338764)
+    lchannel = client.get_channel(714175791033876490)
     emb = discord.Embed(title = 'НАПИСАНИЕ_КОМАНДЫ', color = discord.Color.orange())
     emb.add_field(name = 'НАЗВАНИЕ', value = f'```{ctx.command.name}```')
     emb.add_field(name = 'НАПИСАНА', value = f'{ctx.author.mention} ({ctx.author})')
@@ -49,7 +49,7 @@ async def on_command(ctx):
 
 @client.event
 async def on_command_completion(ctx):
-    lchannel = client.get_channel(7141757910338764)
+    lchannel = client.get_channel(714175791033876490)
     emb = discord.Embed(title = 'ВЫПОЛНЕНИЕ_КОМАНДЫ', color = discord.Color.orange())
     emb.add_field(name = 'НАЗВАНИЕ', value = f'```{ctx.command.name}```')
     emb.add_field(name = 'ИСПОЛНИТЕЛЬ', value = f'{ctx.author.mention} ({ctx.author})')
