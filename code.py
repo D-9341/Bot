@@ -38,6 +38,26 @@ class Slapper(commands.Converter):
 
 #Events
 @client.event
+async def on_command(ctx):
+    channel = client.get_channel(7141757910338764)
+    emb = discord.Embed(title = 'НАПИСАНИЕ_КОМАНДЫ', color = discord.Color.orange())
+    emb.add_field(name = 'НАЗВАНИЕ', value = f'```{ctx.command.name}```')
+    emb.add_field(name = 'НАПИСАНА', value = f'{ctx.author.mention} ({ctx.author})')
+    emb.add_field(name = 'СЕРВЕР', value = ctx.guild.name)
+    emb.add_field(name = 'КАНАЛ', value = f'{ctx.channel.name} ({ctx.channel.mention})')
+    await channel.send(embed = emb)
+
+@client.event
+async def on_command_completion(ctx):
+    channel = client.get_channel(7141757910338764)
+    emb = discord.Embed(title = 'ВЫПОЛНЕНИЕ_КОМАНДЫ', color = discord.Color.orange())
+    emb.add_field(name = 'НАЗВАНИЕ', value = f'```{ctx.command.name}```')
+    emb.add_field(name = 'ИСПОЛНИТЕЛЬ', value = f'{ctx.author.mention} ({ctx.author})')
+    emb.add_field(name = 'СЕРВЕР', value = ctx.guild.name)
+    emb.add_field(name = 'КАНАЛ', value = f'{ctx.channel.name} ({ctx.channel.name})')
+    await channel.send(embed = emb)
+
+@client.event
 async def on_guild_channel_delete(channel):
     if channel.guild.id == 693929822543675455:
         lchannel = client.get_channel(714175791033876490)
@@ -404,12 +424,11 @@ async def give(ctx, member: discord.Member, *, role: discord.Role):
             await ctx.send('Выдавать everyone? Всё с башкой хорошо?')
         else:
             await member.add_roles(role)
-            channel = client.get_channel(714175791033876490)
             emb = discord.Embed(colour = member.color, timestamp = ctx.message.created_at)
-            emb.add_field(name = 'Была выдана роль', value = f'{role.mention} | {role.name} | ID {role.id}')
-            emb.add_field(name = 'Выдана:', value = member.mention)
+            emb.add_field(name = 'ВЫДАНА_РОЛЬ', value = f'{role.mention} | {role.name} | ID {role.id}')
+            emb.add_field(name = 'ВЫДАНА:', value = member.mention, inline = False)
             emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
-            await channel.send(embed = emb)
+            await ctx.send(embed = emb)
     else:
         emb = discord.Embed(description = f'{ctx.author.mention}, я не могу найти {role.mention} в списке ролей.', colour = member.color, timestamp = ctx.message.created_at)
         await ctx.send(embed = emb)
@@ -427,12 +446,11 @@ async def take(ctx, member: discord.Member, *, role: discord.Role):
             await ctx.send('Забирать everyone? Всё с башкой хорошо?')
         else:
             await member.remove_roles(role)
-            channel = client.get_channel(714175791033876490)
             emb = discord.Embed(colour = member.color, timestamp = ctx.message.created_at)
-            emb.add_field(name = 'Была забрана роль', value = f'{role.mention} | {role.name} | ID {role.id}')
-            emb.add_field(name = 'Забрана:', value = member.mention)
+            emb.add_field(name = 'ЗАБРАНА_РОЛЬ', value = f'{role.mention} | {role.name} | ID {role.id}')
+            emb.add_field(name = 'ЗАБРАНА_У:', value = member.mention, inline = False)
             emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
-            await channel.send(embed = emb)
+            await ctx.send(embed = emb)
     else:
         emb = discord.Embed(description = f'{ctx.author.mention}, я не могу найти {role.mention} в списке ролей.', colour = member.color, timestamp = ctx.message.created_at)
         await ctx.send(embed = emb)
