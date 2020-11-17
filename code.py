@@ -43,8 +43,8 @@ async def on_command_completion(ctx):
     emb = discord.Embed(title = 'ВЫПОЛНЕНИЕ_КОМАНДЫ', color = discord.Color.orange())
     emb.add_field(name = 'НАЗВАНИЕ', value = f'```{ctx.command.name}```')
     emb.add_field(name = 'ИСПОЛНИТЕЛЬ', value = f'{ctx.author.mention} ({ctx.author})')
-    emb.add_field(name = 'СЕРВЕР', value = ctx.guild.name)
-    emb.add_field(name = 'КАНАЛ', value = f'{ctx.channel.name} ({ctx.channel.mention})')
+    emb.add_field(name = 'СЕРВЕР', value = ctx.guild.name, inline = False)
+    emb.add_field(name = 'КАНАЛ', value = f'{ctx.channel.name} ({ctx.channel.mention})', inline = False)
     await lchannel.send(embed = emb)
 
 @client.event
@@ -794,9 +794,11 @@ async def guild(ctx):
     emb.set_author(name = guild, icon_url = guild.icon_url)
     emb.add_field(name = 'ID сервера', value = guild.id)
     emb.add_field(name = 'Голосовой регион', value = guild.region)
+    emb.add_field(name = 'Владелец', value = guild.owner.mention)
     emb.add_field(name = 'Участников', value = guild.member_count)
+    emb.add_field(name = 'Из них ботов', value = len(list(filter(lambda m: m.bot, ctx.guild.members))))
+    emb.add_field(name = 'Из них людей', value = len(list(filter(lambda m: not m.bot, ctx.guild.members))))
     emb.add_field(name = 'Каналов', value = f'Текстовых {len(guild.text_channels)} | Голосовых {len(guild.voice_channels)}')
-    emb.add_field(name = 'Владелец сервера', value = guild.owner.mention)
     emb.add_field(name = f'Роли ({len(guild.roles)-1})', value = ', '.join([role.name for role in guild.roles[1:]]), inline = False)
     now = datetime.datetime.today()
     then = guild.created_at
