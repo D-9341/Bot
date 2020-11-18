@@ -1213,7 +1213,7 @@ async def info(ctx):
 async def help(ctx, arg = None):
     await ctx.message.delete()
     if arg == None:
-        emb = discord.Embed(title = client.user.name, description = 'Вот команды, что я могу исполнить. ||Несколько команд ниже требуют некоторых прав.||', colour = discord.Color.orange())
+        emb = discord.Embed(title = client.user.name, description = 'Вот команды, что я могу исполнить. ||Некоторые улучшения появятся после верификации.||', colour = discord.Color.orange())
         emb.add_field(name = 'Cephalon', value = '`info`, `invite`, `join`, `leave`, `ping`', inline = False)
         emb.add_field(name = 'Embeds', value = '`content`, `edit`, `say`, `say_everyone`', inline = False)
         emb.add_field(name = 'Fun', value = '`aye_balbec`, `cu`, `coinflip`, `dotersbrain`, `niggers`, `rp`, `rap`, `zatka`', inline = False)
