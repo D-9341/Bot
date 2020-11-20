@@ -1298,7 +1298,7 @@ async def help(ctx, arg = None):
 
 @client.event
 async def on_ready():
-    await client.change_presence(status = discord.Status.idle, activity = discord.Activity(type = discord.ActivityType.watching, name = 'Discord API'))
+    await client.change_presence(status = discord.Status.idle, activity = discord.Activity(type = discord.ActivityType.watching, name = 'На cum'))
 
 @client.event
 async def on_command_error(ctx, error):
