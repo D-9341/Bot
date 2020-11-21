@@ -1079,7 +1079,7 @@ async def say(ctx, *, msg = None):
             if thumbnail:
                 emb.set_thumbnail(url = thumbnail)
             if ctx.guild.id != 693929822543675455:
-                emb.set_footer(text = 'Cephalon Cy Beta')
+                emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
             if 't&' not in msg and 'd&' not in msg and 'img&' not in msg and 'th&' not in msg and 'c&' not in msg:
                 if '--everyone' in msg:
                     return await ctx.send(f'@everyone {msg.strip()[10:].strip()}')
@@ -1254,7 +1254,7 @@ async def help(ctx, arg = None):
     elif arg == 'dm':
         await ctx.send('```apache\ncy/dm <@пинг/имя/ID> <текст> (<> - обязательно, / - или)\nperms = view_audit_log```')
     elif arg == 'say':
-        await ctx.send('```apache\ncy/say [t& title текст] | [d& description текст] | [c& HEX цвет] | [th& картинка справа] | [img& картинка снизу]\n(cy/say t& title | d& description / cy/say --everyone | t& title | d& description / cy/say [текст] / cy/say --everyone [текст]\n(вам НЕ обязательно писать все аргументы в данном порядке, пишите только те, что вам нужны в любом порядке. Не работает с --everyone, это нужно писать в начале)) ([] - опционально, / - или)\nperms = manage_channels```')
+        await ctx.send('```apache\ncy/say [t& title текст] | [d& description текст] | [c& HEX цвет] | [th& ссылка на картинку справа] | [img& ссылка на картинку снизу]\ncy/say t& title | d& description\ncy/say --everyone | t& title | d& description | img& https://cdn.discordapp.com/avatars/694170281270312991/e27e0909a72cdc6a98d4234ecbfe9a91.webp?size=1024\ncy/say [текст]\ncy/say --everyone [текст]\n(вам НЕ обязательно писать все аргументы в данном порядке, пишите только те, что вам нужны в любом порядке. Не работает с --everyone, это нужно писать в начале) ([] - опционально, / - или)\nperms = manage_channels```')
     elif arg == 'edit':
         await ctx.send('```apache\ncy/edit <ID> [t& title текст] | [d& description текст] | [c& HEX цвет] | [th& картинка справа] | [img& картинка снизу]\n(--clean удалит контент над эмбедом, --noembed удалит эмбед, работает только если есть эмбед, --empty-embed опустошит эмбед, --delete удалит сообщение) ([] - опционально, <> - обязательно, / - или)\nperms = manage_channels```')
     elif arg == 'give':
@@ -1294,7 +1294,7 @@ async def help(ctx, arg = None):
     elif arg == 'zatka':
         await ctx.send('```cy/zatka```')
     elif arg == 'Embeds' or arg == 'embeds':
-        await ctx.send('```ARM\ncontent(ctx) - позволяет увидеть raw контент сообщения\nedit - редактирует сообщение, отправленное от лица бота. Иные сообщения редактировать нельзя.\nsay - используется для написания как текстов, так и эмбедов.\nsay_everyone - то же, что и say, но с пингом everyone```')
+        await ctx.send('```ARM\ncontent(ctx) - позволяет увидеть raw контент сообщения\nedit - редактирует сообщение, отправленное от лица бота. Иные сообщения редактировать нельзя.\nsay - используется для написания как текстов, так и эмбедов.```')
     elif arg == 'Cephalon' or arg == 'cephalon':
         await ctx.send('```ARM\ninfo - информация о боте\ninvite - ссылка-приглашения бота\njoin - бот зайдёт в ваш голосовой канал\nleave - бот из него выйдет\nping - проверяет задержку клиента бота.```')
     elif arg == 'Fun' or arg == 'fun':
@@ -1305,7 +1305,7 @@ async def help(ctx, arg = None):
         await ctx.send('```ARM\nabout - информация о человеке\navatar - аватар человека\nguild - информация о сервере\nremind - напоминание о событии\nrole - информация о роли\nrolemembers - участники роли\nsomeone - упоминание someone\nvote - голосование за что-то.```')
     elif arg == 'All' or arg == 'all':
         await ctx.send('```ARM\ninfo - информация о боте\ninvite - ссылка-приглашения бота\njoin - бот зайдёт в ваш голосовой канал\nleave - бот из него выйдет\nping - проверяет задержку клиента бота.```')
-        await ctx.send('```ARM\ncontent(ctx) - позволяет увидеть raw контент сообщения\nedit - редактирует сообщение, отправленное от лица бота. Иные сообщения редактировать нельзя.\nsay - используется для написания как текстов, так и эмбедов.\nsay_everyone - то же, что и say, но с пингом everyone```')
+        await ctx.send('```ARM\ncontent(ctx) - позволяет увидеть raw контент сообщения\nedit - редактирует сообщение, отправленное от лица бота. Иные сообщения редактировать нельзя.\nsay - используется для написания как текстов, так и эмбедов.```')
         await ctx.send('```ARM\naye_balbec - я не ангел и не бес, просто..\ncu - медь\ncoinflip(c, coin) - подкидывает монетку\ndotersbrain - проверка на мозг дотера\nniggers - осуждаем!\nrp - ультимативный гайд по рп отыгровке\nrap - .rap\nzatka - Форма заявки для набор кадров```')
         await ctx.send('```ARM\nban - бан участника\nclear - очистка чата, не более 300!\ndm - пишет в лс участнику написанный текст\ngive - выдаёт роль\nkick - кик участника\nmute - мут участника\ntake - забирает роль\nunmute - снятие мута участника.```')
         await ctx.send('```ARM\nabout - информация о человеке\navatar - аватар человека\nguild - информация о сервере\nremind - напоминание о событии\nrole - информация о роли\nrolemembers - участники роли\nsomeone - упоминание someone\nvote - голосование за что-то.```')
