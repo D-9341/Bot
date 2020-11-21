@@ -1077,7 +1077,8 @@ async def say_everyone(ctx, *, msg = None):
             emb.set_image(url = image)
         if thumbnail:
             emb.set_thumbnail(url = thumbnail)
-        emb.set_footer(text = 'Cephalon Cy Beta')
+        if ctx.guild.id != 693929822543675455:
+            emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         if 't&' not in msg and 'd&' not in msg and 'img&' not in msg and 'th&' not in msg and 'c&' not in msg:
             await ctx.send(f'@everyone {msg}')
         else:
@@ -1114,7 +1115,8 @@ async def say(ctx, *, msg = None):
             emb.set_image(url = image)
         if thumbnail:
             emb.set_thumbnail(url = thumbnail)
-        emb.set_footer(text = 'Cephalon Cy Beta')
+        if ctx.guild.id != 693929822543675455:
+            emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         if 't&' not in msg and 'd&' not in msg and 'img&' not in msg and 'th&' not in msg and 'c&' not in msg:
             await ctx.send(msg)
         else:
@@ -1152,7 +1154,8 @@ async def edit(ctx, arg, *, msg = None):
             emb.set_image(url = image)
         if thumbnail:
             emb.set_thumbnail(url = thumbnail)
-        emb.set_footer(text = 'Cephalon Cy Beta')
+        if ctx.guild.id != 693929822543675455:
+            emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         if 't&' not in msg and 'd&' not in msg and 'img&' not in msg and 'th&' not in msg and 'c&' not in msg:
             if message.author == client.user:
                 if '--clean' in msg:
@@ -1255,15 +1258,15 @@ async def help(ctx, arg = None):
     elif arg == 'content':
         await ctx.send('```apache\ncy/content <ID> (<> - обязательно)```')
     elif arg == 'clear':
-        await ctx.send('```apache\ncy/clear <количество> [y/n] ([] - опционально, <> - обязательно, / - или)\nperms = adminstator```')
+        await ctx.send('```apache\ncy/clear <количество> [y/n] ([] - опционально, <> - обязательно, / - или)\nperms = adminstrator```')
     elif arg == 'dm':
         await ctx.send('```apache\ncy/dm <@пинг/имя/ID> <текст> (<> - обязательно, / - или)\nperms = view_audit_log```')
     elif arg == 'say':
-        await ctx.send('```apache\ncy/say [t& title текст] | [d& description текст] | [c& HEX цвет] | [th& картинка справа] | [img& картинка слева](cy/say t& title | d& description) ([] - опционально, / - или)\nperms = manage_channels```')
+        await ctx.send('```apache\ncy/say [t& title текст] | [d& description текст] | [c& HEX цвет] | [th& картинка справа] | [img& картинка снизу](cy/say t& title | d& description) ([] - опционально, / - или)\nperms = manage_channels```')
     elif arg == 'edit':
-        await ctx.send('```apache\ncy/edit <ID> [t& title текст] | [d& description текст] | [c& HEX цвет] | [th& картинка справа] | [img& картинка слева]\n(--clean в любой части текста удалит контент над эмбедом, --delete удалит сообщение) ([] - опционально, <> - обязательно, / - или)\nperms = manage_channels```')
+        await ctx.send('```apache\ncy/edit <ID> [t& title текст] | [d& description текст] | [c& HEX цвет] | [th& картинка справа] | [img& картинка снизу]\n(--clean в любой части текста удалит контент над эмбедом, --delete удалит сообщение) ([] - опционально, <> - обязательно, / - или)\nperms = manage_channels```')
     elif arg == 'say_everyone':
-        await ctx.send('```apache\ncy/say_everyone [t& title текст] | [d& description текст] | [c& HEX цвет] | [th& картинка справа] | [img& картинка слева](cy/say_everyone t& title | d& description) ([] - опционально, / - или)\nperms = mention_everyone```')
+        await ctx.send('```apache\ncy/say_everyone [t& title текст] | [d& description текст] | [c& HEX цвет] | [th& картинка справа] | [img& картинка снизу](cy/say_everyone t& title | d& description) ([] - опционально, / - или)\nperms = mention_everyone```')
     elif arg == 'give':
         await ctx.send('```apache\ncy/give <@пинг/имя/ID> <@роль/имя роли/ID роли> (<> - обязательно, / - или)\nperms = manage_channels```')
     elif arg == 'kick':
@@ -1275,7 +1278,7 @@ async def help(ctx, arg = None):
     elif arg == 'role':
         await ctx.send('```apache\ncy/role <@роль/имя роли/ID роли> (<> - обязательно, / - или)```')
     elif arg == 'take':
-        await ctx.send('```apache\ncy/take <@пинг/имя/ID> <@роль/имя роли/ID роли> (<> - обязательно, / - или)\nperms = view_audit_log = True```')
+        await ctx.send('```apache\ncy/take <@пинг/имя/ID> <@роль/имя роли/ID роли> (<> - обязательно, / - или)\nperms = view_audit_log```')
     elif arg == 'someone':
         await ctx.send('```apache\ncy/someone <текст> <> - обязательно)```')
     elif arg == 'unmute':
@@ -1328,7 +1331,7 @@ async def on_ready():
 async def on_command_error(ctx, error):
     if isinstance(error, commands.CommandNotFound):
         await ctx.message.delete()
-        emb = discord.Embed(description = f'{ctx.author.mention}, команда не обнаружена.\n||{ctx.message.content}||', colour = discord.Color.orange())
+        emb = discord.Embed(description = f'{ctx.author.mention}, команда не обнаружена. Может, пропишите cy/help?\n||{ctx.message.content}||', colour = discord.Color.orange())
         await ctx.send(embed = emb)
     elif isinstance(error, commands.MissingPermissions):
         await ctx.message.delete()
