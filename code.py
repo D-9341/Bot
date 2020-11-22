@@ -537,7 +537,7 @@ async def unmute(ctx, member: discord.Member, *, reason = None):
         await ctx.send(embed = emb)
 
 @client.command(aliases = ['Clear', 'CLEAR', 'purge', 'Purge', 'PURGE', 'prune', 'Prune', 'PRUNE', 'clean', 'Clean', 'CLEAN'])
-@commands.cooldown(1, 10, commands.BucketType.default)
+@commands.cooldown(1, 10, commands.BucketType.guild)
 @commands.has_permissions(administrator = True)
 async def clear(ctx, amount: int):
     await ctx.message.delete()
@@ -862,7 +862,7 @@ async def avatar(ctx, member: discord.Member = None):
     await ctx.send(embed = emb)
 
 @client.command(aliases = ['me', 'Me', 'ME', 'About', 'ABOUT'])
-@commands.cooldown(1, 5, commands.BucketType.default)
+@commands.cooldown(1, 5, commands.BucketType.guild)
 async def about(ctx, member: discord.Member = None):
     await ctx.message.delete()
     if member == None:
@@ -1029,16 +1029,22 @@ async def coinflip(ctx):
 
 #Embeds
 @client.command(aliases = ['ctx'])
-@commands.cooldown(1, 5, commands.BucketType.default)
+@commands.cooldown(1, 5, commands.BucketType.guild)
 async def content(ctx, arg):
     await ctx.message.delete()
     message = await ctx.fetch_message(id = arg)
     if message.author == client.user:
         if message.embeds == []:
-            await ctx.send(f'```cy/say {message.content}```')
+            if '@everyone' in message.content:
+                await ctx.send(f'```cy/say --everyone {message.content.strip()[10:].strip()}```')
+            else:
+                await ctx.send(f'```cy/say {message.content}```')
         else:
             for emb in message.embeds:
-                await ctx.send(f'```cy/say t& {emb.title} | d& {emb.description} | th& {emb.thumbnail.url} | img& {emb.image.url} | c& {emb.color}```')
+                if '@everyone' in message.content:
+                    await ctx.send(f'```cy/say --everyone | t& {emb.title} | d& {emb.description} | th& {emb.thumbnail.url} | img& {emb.image.url} | c& {emb.color[1:]}```')
+                else:
+                    await ctx.send(f'```cy/say t& {emb.title} | d& {emb.description} | th& {emb.thumbnail.url} | img& {emb.image.url} | c& {emb.color}```')
     else:
         if message.embeds == []:
             await ctx.send(f'```@{message.author} {message.content}```')
@@ -1102,67 +1108,83 @@ async def say(ctx, *, msg = None):
 async def edit(ctx, arg, *, msg = None):
     await ctx.message.delete()
     message = await ctx.fetch_message(id = arg)
-    title = description = image = thumbnail = color = author = None
-    embed_values = msg.split('|')
-    for i in embed_values:
-        if i.strip().lower().startswith('t&'):
-            title = i.strip()[2:].strip()
-        elif i.strip().lower().startswith('d&'):
-            description = i.strip()[2:].strip()
-        elif i.strip().lower().startswith('img&'):
-            image = i.strip()[4:].strip()
-        elif i.strip().lower().startswith('th&'):
-            thumbnail = i.strip()[3:].strip()
-        elif i.strip().lower().startswith('c&'):
-            color = i.strip()[2:].strip()
-    if color == None:
-        color = ctx.author.color
-    else:
-        color = int('0x' + color, 16)
-    if author == None:
-        author = ctx.author
-    emb = discord.Embed(title = title, description = description, color = color)
-    for i in embed_values:
-        if author:
-            emb.set_author(name = author, icon_url = author.avatar_url)
-        if image:
-            emb.set_image(url = image)
-        if thumbnail:
-            emb.set_thumbnail(url = thumbnail)
-        if ctx.guild.id != 693929822543675455:
-            emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-        if 't&' not in msg and 'd&' not in msg and 'img&' not in msg and 'th&' not in msg and 'c&' not in msg:
-            if message.author == client.user:
-                if '--clean' in msg:
-                    await message.edit(content = None)
-                    return await ctx.send('👌', delete_after = 1)
-                if '--delete' in msg:
-                    await message.delete()
-                    return await ctx.send('👌', delete_after = 1)
-                if '--noembed' in msg:
-                    if message.embeds != []:
-                        await message.edit(embed = None)
+    if message:
+        title = description = image = thumbnail = color = author = None
+        embed_values = msg.split('|')
+        for i in embed_values:
+            if i.strip().lower().startswith('t&'):
+                title = i.strip()[2:].strip()
+            elif i.strip().lower().startswith('d&'):
+                description = i.strip()[2:].strip()
+            elif i.strip().lower().startswith('img&'):
+                image = i.strip()[4:].strip()
+            elif i.strip().lower().startswith('th&'):
+                thumbnail = i.strip()[3:].strip()
+            elif i.strip().lower().startswith('c&'):
+                color = i.strip()[2:].strip()
+        if color == None:
+            color = ctx.author.color
+        else:
+            color = int('0x' + color, 16)
+        if author == None:
+            author = ctx.author
+        emb = discord.Embed(title = title, description = description, color = color)
+        for i in embed_values:
+            if author:
+                emb.set_author(name = author, icon_url = author.avatar_url)
+            if image:
+                emb.set_image(url = image)
+            if thumbnail:
+                emb.set_thumbnail(url = thumbnail)
+            if ctx.guild.id != 693929822543675455:
+                emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+            if 't&' not in msg and 'd&' not in msg and 'img&' not in msg and 'th&' not in msg and 'c&' not in msg:
+                if message.author == client.user:
+                    if '--clean' in msg:
+                        await message.edit(content = None)
                         return await ctx.send('👌', delete_after = 1)
+                    if '--delete' in msg:
+                        await message.delete()
+                        return await ctx.send('👌', delete_after = 1)
+                    if '--noembed' in msg:
+                        if message.embeds != []:
+                            await message.edit(embed = None)
+                            return await ctx.send('👌', delete_after = 1)
+                        else:
+                            return await ctx.send(f'{ctx.author.mention}, нечего удалять. Возможно, вы имели ввиду cy/edit {message.id} --delete ?', delete_after = 8)
+                    if '--empty-embed' in msg:
+                        if message.embeds != []:
+                            emb = discord.Embed(title = None, description = None, color = ctx.author.color)
+                            emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
+                            if ctx.guild.id != 693929822543675455:
+                                emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+                            await message.edit(embed = emb)
+                            return await ctx.send('👌', delete_after = 1)
+                        else:
+                            return await ctx.send(f'{ctx.author.mention}, нечего очищать. Возможно, вы имели ввиду cy/edit {message.id} --delete ?')
                     else:
-                        return await ctx.send(f'{ctx.author.mention}, нечего удалять. Возможно, вы имели ввиду cy/edit {message.id} --delete ?', delete_after = 3)
-                if '--empty-embed' in msg:
-                    if message.embeds != []:
-                        emb = discord.Embed(title = None, description = None, color = ctx.author.color)
-                        emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
-                        if ctx.guild.id != 693929822543675455:
-                            emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+                        await message.edit(content = msg)
+                        return await ctx.send('👌', delete_after = 1)
+                else:
+                    return await ctx.send(f'{message.id} не является сообщением от {client.user}')
+            else:
+                if message.author == client.user:
+                    if '--clean' in msg:
+                        await message.edit(content = None, embed = emb)
+                        return await ctx.send('👌', delete_after = 1)
+                    if '--noembed' in msg:
+                        if message.embeds != []:
+                            await message.edit(embed = None)
+                            return await ctx.send('👌', delete_after = 1)
+                        else:
+                            return await ctx.send(f'{ctx.author.mention}, нечего удалять. Возможно, вы имели ввиду cy/edit {message.id} --delete ?', delete_after = 8)
+                    else:
                         await message.edit(embed = emb)
                         return await ctx.send('👌', delete_after = 1)
-                    else:
-                        return await ctx.send(f'{ctx.author.mention}, нечего очищать. Возможно, вы имели ввиду cy/edit {message.id} --delete ?', delete_after = 3)
                 else:
-                    await message.edit(content = msg)
-                    return await ctx.send('👌', delete_after = 1)
-            else:
-                await ctx.send(f'{message.id} не является сообщением от {client.user}')
-        else:
-            await message.edit(embed = emb)
-            return await ctx.send('👌', delete_after = 1)
+                    return await ctx.send(f'{message.id} не является сообщением от {client.user}')
+    else:
+        await ctx.send(f'сообщение {message.id} не обнаружено.')
 #Embeds
 
 #Cephalon
@@ -1206,7 +1228,7 @@ async def ping(ctx):
     await message.edit(embed = emb1)
 
 @client.command(aliases = ['invcy'])
-@commands.cooldown(1, 3, commands.BucketType.default)
+@commands.cooldown(1, 3, commands.BucketType.guild)
 async def invite(ctx):
     await ctx.message.delete()
     emb = discord.Embed(description = '[Ссылка](https://discord.com/oauth2/authorize?client_id=694170281270312991&scope=bot&permissions=8) для быстрого приглашения Cy на сервера.', colour = discord.Color.orange())
@@ -1228,7 +1250,7 @@ async def info(ctx):
     await ctx.send(embed = emb)
 
 @client.command(aliases = ['Help', 'HELP'])
-@commands.cooldown(1, 3, commands.BucketType.default)
+@commands.cooldown(1, 3, commands.BucketType.guild)
 async def help(ctx, arg = None):
     await ctx.message.delete()
     if arg == None:
@@ -1238,7 +1260,7 @@ async def help(ctx, arg = None):
         emb.add_field(name = 'Fun', value = '`aye_balbec`, `cu`, `coinflip`, `dotersbrain`, `niggers`, `rp`, `rap`, `zatka`', inline = False)
         emb.add_field(name = 'Mod', value = '`ban`, `clear`, `dm`, `give`, `kick`, `mute`, `take`, `unmute`', inline = False)
         emb.add_field(name = 'Misc', value = '`about`, `avatar`, `guild`, `remind`, `role`, `rolemembers`, `someone`, `vote`', inline = False)
-        emb.add_field(name = 'ᅠ', value = '**Используйте `cy/help [команда/категория]` для подробностей использования.**\nᅠ\n**[Ссылка-приглашение](https://discord.com/oauth2/authorize?client_id=694170281270312991&scope=bot&permissions=8)**', inline = False)
+        emb.add_field(name = 'ᅠ', value = '**Используйте** `cy/help [команда/категория]` **для подробностей использования.**\nᅠ\n**[Ссылка-приглашение](https://discord.com/oauth2/authorize?client_id=694170281270312991&scope=bot&permissions=8)**', inline = False)
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
     elif arg == 'about':
@@ -1254,9 +1276,9 @@ async def help(ctx, arg = None):
     elif arg == 'dm':
         await ctx.send('```apache\ncy/dm <@пинг/имя/ID> <текст> (<> - обязательно, / - или)\nperms = view_audit_log```')
     elif arg == 'say':
-        await ctx.send('```apache\ncy/say [t& title текст] | [d& description текст] | [c& HEX цвет] | [th& ссылка на картинку справа] | [img& ссылка на картинку снизу]\ncy/say t& title | d& description\ncy/say --everyone | t& title | d& description | img& https://cdn.discordapp.com/avatars/694170281270312991/e27e0909a72cdc6a98d4234ecbfe9a91.webp?size=1024\ncy/say [текст]\ncy/say --everyone [текст]\n(вам НЕ обязательно писать все аргументы в данном порядке, пишите только те, что вам нужны в любом порядке. Не работает с --everyone, это нужно писать в начале) ([] - опционально, / - или)\nperms = manage_channels```')
+        await ctx.send('```apache\ncy/say [t& title текст] | [d& description текст] | [c& HEX цвет] | [th& ссылка на картинку справа] | [img& ссылка на картинку снизу]\ncy/say t& title | d& description\ncy/say --everyone | t& title | d& description\ncy/say [текст]\ncy/say --everyone [текст]\n(вам НЕ обязательно писать все аргументы в данном порядке, пишите только те, что вам нужны в любом порядке) ([] - опционально, / - или)\nperms = manage_channels```')
     elif arg == 'edit':
-        await ctx.send('```apache\ncy/edit <ID> [t& title текст] | [d& description текст] | [c& HEX цвет] | [th& картинка справа] | [img& картинка снизу]\n(--clean удалит контент над эмбедом, --noembed удалит эмбед, работает только если есть эмбед, --empty-embed опустошит эмбед, --delete удалит сообщение) ([] - опционально, <> - обязательно, / - или)\nperms = manage_channels```')
+        await ctx.send('```apache\ncy/edit <ID> [t& title текст] | [d& description текст] | [c& HEX цвет] | [th& ссылка на картинку справа] | [img& ссылка на картинку снизу]\ncy/edit <ID> [текст]\ncy/edit <ID> --clean | d& description\ncy/edit <ID> --clean\ncy/edit <ID> --noembed\ncy/edit <ID> --empty-embed\ncy/edit <ID> --delete\n(--clean удалит контент над эмбедом, --noembed удалит эмбед, работает только если есть эмбед, --empty-embed опустошит эмбед, --delete удалит сообщение) ([] - опционально, <> - обязательно, / - или)\nperms = manage_channels```')
     elif arg == 'give':
         await ctx.send('```apache\ncy/give <@пинг/имя/ID> <@роль/имя роли/ID роли> (<> - обязательно, / - или)\nperms = manage_channels```')
     elif arg == 'kick':
