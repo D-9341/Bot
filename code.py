@@ -573,7 +573,7 @@ async def clear(ctx, amount: int, members = '--everyone'):
             emb = discord.Embed(description = f'{ctx.author.mention}, операция с данным числом ({amount}) доступна только {ctx.guild.owner.mention}. Отмена.', colour = discord.Color.orange())
             await ctx.send(f'{ctx.guild.owner.mention}', embed = emb, delete_after = 5)
         else:
-            emb = discord.Embed(description = f'{ctx.author.mention}, обнаружено слишком большое число для удаления сообщений ({amount}). Возможны дальнейшие ошибки в работе {client.user.mention}. Продолжить? (y/n)\n ||Отмена через 10 секунд.||', colour = discord.Color.orange())
+            emb = discord.Embed(description = f'{ctx.author.mention}, обнаружено слишком большое число для удаления сообщений ({amount}). Возможны дальнейшие ошибки в работе {client.user.mention}. Продолжить? (y/n)\n||Отмена через 10 секунд.||', colour = discord.Color.orange())
             sent = await ctx.send(embed = emb)
             try:
                 msg = await client.wait_for('message', timeout = 10, check = lambda message: message.channel == ctx.message.channel)
@@ -632,7 +632,7 @@ async def clear(ctx, amount: int, members = '--everyone'):
                 await ctx.send(f'{ctx.guild.owner.mention}', embed = emb, delete_after = 3)
     elif amount >= 100:
         if ctx.author != ctx.guild.owner:
-            emb = discord.Embed(description = f'{ctx.author.mention}, создан запрос на удаление {amount} сообщений. Мне нужен ответ создателя сервера на это действие. Продолжаем? (y/n)\n ||Запрос будет отменён через 1 минуту.||', colour = discord.Color.orange())
+            emb = discord.Embed(description = f'{ctx.author.mention}, создан запрос на удаление {amount} сообщений. Мне нужен ответ создателя сервера на это действие. Продолжаем? (y/n)\n||Запрос будет отменён через 1 минуту.||', colour = discord.Color.orange())
             sent = await ctx.send(f'{ctx.guild.owner.mention}', embed = emb)
             try:
                 msg = await client.wait_for('message', timeout = 60, check = lambda message: message.channel == ctx.message.channel)
@@ -690,7 +690,7 @@ async def clear(ctx, amount: int, members = '--everyone'):
                 emb = discord.Embed(description = f'{ctx.author.mention}, Время вышло.', colour = discord.Color.orange())
                 await ctx.send(f'{ctx.guild.owner.mention}', embed = emb, delete_after = 3)
         else:
-            emb = discord.Embed(description = f'{ctx.author.mention}, создан запрос на удаление {amount} сообщений. Продолжить? (y/n)\n ||Запрос будет отменён через 10 секунд.||', colour = discord.Color.orange())
+            emb = discord.Embed(description = f'{ctx.author.mention}, создан запрос на удаление {amount} сообщений. Продолжить? (y/n)\n||Запрос будет отменён через 10 секунд.||', colour = discord.Color.orange())
             sent = await ctx.send(embed = emb)
             try:
                 msg = await client.wait_for('message', timeout = 10, check = lambda message: message.author == ctx.author and message.channel == ctx.message.channel)
@@ -743,7 +743,7 @@ async def clear(ctx, amount: int, members = '--everyone'):
                 emb = discord.Embed(description = f'{ctx.author.mention}, Время вышло.', colour = discord.Color.orange())
                 await ctx.send(embed = emb, delete_after = 3)
     elif amount >= 10:
-        emb = discord.Embed(description = f'{ctx.author.mention}, создан запрос на удаление {amount} сообщений. Продолжить? (y/n)\n ||Запрос будет отменён через 10 секунд.||', colour = discord.Color.orange())
+        emb = discord.Embed(description = f'{ctx.author.mention}, создан запрос на удаление {amount} сообщений. Продолжить? (y/n)\n||Запрос будет отменён через 10 секунд.||', colour = discord.Color.orange())
         sent = await ctx.send(embed = emb)
         try:
             msg = await client.wait_for('message', timeout = 10, check = lambda message: message.author == ctx.author and message.channel == ctx.message.channel)
