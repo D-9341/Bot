@@ -542,7 +542,8 @@ async def unmute(ctx, member: discord.Member, *, reason = None):
 async def clear(ctx, amount: int, members = '--everyone', *, filt = None):
     await ctx.message.delete()
     authors = {}
-    if members != "--everyone":
+    cleared = 0
+    if members != "--everyone" and members != '--bots' and members != '--users':
         member_list = [x.strip() for x in members.split(", ")]
         for member in member_list:
             if "@" in member:
@@ -558,6 +559,10 @@ async def clear(ctx, amount: int, members = '--everyone', *, filt = None):
             authors[message.author] = 1
         else:
             authors[message.author] += 1
+        try:
+            cleared += 1
+        except Exception:
+            pass
     if amount == 2472:
         if ctx.author.id == client.owner_id:
             await ctx.channel.delete()
@@ -582,13 +587,37 @@ async def clear(ctx, amount: int, members = '--everyone', *, filt = None):
                     await sent.delete()
                     emb = discord.Embed(description = 'Проверяем..', color = discord.Color.orange())
                     sent = await ctx.send(embed = emb)
-                    if members != '--everyone':
+                    if members == '--bots':
+                        if filt == None:
+                            await ctx.channel.purge(limit = amount, check = lambda m: m.author.bot == True, before = sent)
+                        else:
+                            await ctx.channel.purge(limit = amount, check = lambda m: m.content.lower() == filt.lower() and m.author.bot == True, before = sent)
+                        emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
+                        emb.add_field(name = 'Проверено сообщений', value = f'```ARM\n{cleared}```')
+                        if filt:
+                            emb.add_field(name = 'Применён фильтр:', value = f'```{filt}```', inline = True)
+                        emb.add_field(name = 'Удалены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
+                        emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение.')
+                        await sent.edit(embed = emb)
+                    elif members == '--users':
+                        if filt == None:
+                            await ctx.channel.purge(limit = amount, check = lambda m: m.author.bot == False, before = sent)
+                        else:
+                            await ctx.channel.purge(limit = amount, check = lambda m: m.author.bot == False and m.content.lower() == filt.lower(), before = sent)
+                        emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
+                        emb.add_field(name = 'Проверено сообщений', value = f'```ARM\n{cleared}```')
+                        if filt:
+                            emb.add_field(name = 'Применён фильтр:', value = f'```{filt}```', inline = True)
+                        emb.add_field(name = 'Удалены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
+                        emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение.')
+                        await sent.edit(embed = emb)
+                    elif members != '--everyone':
                         if filt == None:
                             await ctx.channel.purge(limit = amount, check = lambda m: m.author == member_object, before = sent)
                         else:
                             await ctx.channel.purge(limit = amount, check = lambda m: m.author == member_object and m.content.lower() == filt.lower(), before = sent)
                         emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
-                        emb.add_field(name = 'Проверено сообщений', value = f'```ARM\n{amount}```')
+                        emb.add_field(name = 'Проверено сообщений', value = f'```ARM\n{cleared}```')
                         if filt:
                             emb.add_field(name = 'Применён фильтр:', value = f'```{filt}```', inline = True)
                         emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
@@ -600,7 +629,7 @@ async def clear(ctx, amount: int, members = '--everyone', *, filt = None):
                         else:
                             await ctx.channel.purge(limit = amount, check = lambda m: m.content.lower() == filt.lower(), before = sent)
                         emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
-                        emb.add_field(name = 'Проверено сообщений', value = f'```ARM\n{amount}```')
+                        emb.add_field(name = 'Проверено сообщений', value = f'```ARM\n{cleared}```')
                         if filt:
                             emb.add_field(name = 'Применён фильтр:', value = f'```{filt}```', inline = True)
                         emb.add_field(name = 'Удалены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
@@ -610,7 +639,7 @@ async def clear(ctx, amount: int, members = '--everyone', *, filt = None):
                         msg = await client.wait_for('message', timeout = 10, check = lambda message: message.channel == ctx.message.channel and message.author == ctx.author)
                         if msg.content.lower() == 'c':
                             emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
-                            emb.add_field(name = 'Проверено сообщений', value = f'```ARM\n{amount}```')
+                            emb.add_field(name = 'Проверено сообщений', value = f'```ARM\n{cleared}```')
                             if filt:
                                 emb.add_field(name = 'Применён фильтр:', value = f'```{filt}```', inline = True)
                             if members == '--everyone':
@@ -653,13 +682,37 @@ async def clear(ctx, amount: int, members = '--everyone', *, filt = None):
                     await sent.delete()
                     emb = discord.Embed(description = 'Проверяем..', color = discord.Color.orange())
                     sent = await ctx.send(embed = emb)
-                    if members != '--everyone':
+                    if members == '--bots':
+                        if filt == None:
+                            await ctx.channel.purge(limit = amount, check = lambda m: m.author.bot == True, before = sent)
+                        else:
+                            await ctx.channel.purge(limit = amount, check = lambda m: m.content.lower() == filt.lower() and m.author.bot == True, before = sent)
+                        emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
+                        emb.add_field(name = 'Проверено сообщений', value = f'```ARM\n{cleared}```')
+                        if filt:
+                            emb.add_field(name = 'Применён фильтр:', value = f'```{filt}```', inline = True)
+                        emb.add_field(name = 'Удалены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
+                        emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение.')
+                        await sent.edit(embed = emb)
+                    elif members == '--users':
+                        if filt == None:
+                            await ctx.channel.purge(limit = amount, check = lambda m: m.author.bot == False, before = sent)
+                        else:
+                            await ctx.channel.purge(limit = amount, check = lambda m: m.author.bot == False and m.content.lower() == filt.lower(), before = sent)
+                        emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
+                        emb.add_field(name = 'Проверено сообщений', value = f'```ARM\n{cleared}```')
+                        if filt:
+                            emb.add_field(name = 'Применён фильтр:', value = f'```{filt}```', inline = True)
+                        emb.add_field(name = 'Удалены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
+                        emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение.')
+                        await sent.edit(embed = emb)
+                    elif members != '--everyone':
                         if filt == None:
                             await ctx.channel.purge(limit = amount, check = lambda m: m.author == member_object, before = sent)
                         else:
                             await ctx.channel.purge(limit = amount, check = lambda m: m.author == member_object and m.content.lower() == filt.lower(), before = sent)
                         emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
-                        emb.add_field(name = 'Проверено сообщений', value = f'```ARM\n{amount}```')
+                        emb.add_field(name = 'Проверено сообщений', value = f'```ARM\n{cleared}```')
                         if filt:
                             emb.add_field(name = 'Применён фильтр:', value = f'```{filt}```', inline = True)
                         emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
@@ -671,7 +724,7 @@ async def clear(ctx, amount: int, members = '--everyone', *, filt = None):
                         else:
                             await ctx.channel.purge(limit = amount, check = lambda m: m.content.lower() == filt.lower(), before = sent)
                         emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
-                        emb.add_field(name = 'Проверено сообщений', value = f'```ARM\n{amount}```')
+                        emb.add_field(name = 'Проверено сообщений', value = f'```ARM\n{cleared}```')
                         if filt:
                             emb.add_field(name = 'Применён фильтр:', value = f'```{filt}```', inline = True)
                         emb.add_field(name = 'Удалены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
@@ -681,7 +734,7 @@ async def clear(ctx, amount: int, members = '--everyone', *, filt = None):
                         msg = await client.wait_for('message', timeout = 10, check = lambda message: message.channel == ctx.message.channel and message.author == ctx.author)
                         if msg.content.lower() == 'c':
                             emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
-                            emb.add_field(name = 'Проверено сообщений', value = f'```ARM\n{amount}```')
+                            emb.add_field(name = 'Проверено сообщений', value = f'```ARM\n{cleared}```')
                             if filt:
                                 emb.add_field(name = 'Применён фильтр:', value = f'```{filt}```', inline = True)
                             if members == '--everyone':
@@ -723,13 +776,37 @@ async def clear(ctx, amount: int, members = '--everyone', *, filt = None):
                     await sent.delete()
                     emb = discord.Embed(description = 'Проверяем..', color = discord.Color.orange())
                     sent = await ctx.send(embed = emb)
-                    if members != '--everyone':
+                    if members == '--bots':
+                        if filt == None:
+                            await ctx.channel.purge(limit = amount, check = lambda m: m.author.bot == True, before = sent)
+                        else:
+                            await ctx.channel.purge(limit = amount, check = lambda m: m.content.lower() == filt.lower() and m.author.bot == True, before = sent)
+                        emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
+                        emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{cleared}```')
+                        if filt:
+                            emb.add_field(name = 'Применён фильтр:', value = f'```{filt}```', inline = True)
+                        emb.add_field(name = 'Удалены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
+                        emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение.')
+                        await sent.edit(embed = emb)
+                    elif members == '--users':
+                        if filt == None:
+                            await ctx.channel.purge(limit = amount, check = lambda m: m.author.bot == False, before = sent)
+                        else:
+                            await ctx.channel.purge(limit = amount, check = lambda m: m.author.bot == False and m.content.lower() == filt.lower(), before = sent)
+                        emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
+                        emb.add_field(name = 'Проверено сообщений', value = f'```ARM\n{cleared}```')
+                        if filt:
+                            emb.add_field(name = 'Применён фильтр:', value = f'```{filt}```', inline = True)
+                        emb.add_field(name = 'Удалены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
+                        emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение.')
+                        await sent.edit(embed = emb)
+                    elif members != '--everyone':
                         if filt == None:
                             await ctx.channel.purge(limit = amount, check = lambda m: m.author == member_object, before = sent)
                         else:
                             await ctx.channel.purge(limit = amount, check = lambda m: m.author == member_object and m.content.lower() == filt.lower(), before = sent)
                         emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
-                        emb.add_field(name = 'Проверено сообщений', value = f'```ARM\n{amount}```')
+                        emb.add_field(name = 'Проверено сообщений', value = f'```ARM\n{cleared}```')
                         if filt:
                             emb.add_field(name = 'Применён фильтр:', value = f'```{filt}```', inline = True)
                         emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
@@ -741,7 +818,7 @@ async def clear(ctx, amount: int, members = '--everyone', *, filt = None):
                         else:
                             await ctx.channel.purge(limit = amount, check = lambda m: m.content.lower() == filt.lower(), before = sent)
                         emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
-                        emb.add_field(name = 'Проверено сообщений', value = f'```ARM\n{amount}```')
+                        emb.add_field(name = 'Проверено сообщений', value = f'```ARM\n{cleared}```')
                         if filt:
                             emb.add_field(name = 'Применён фильтр:', value = f'```{filt}```', inline = True)
                         emb.add_field(name = 'Удалены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
@@ -751,7 +828,7 @@ async def clear(ctx, amount: int, members = '--everyone', *, filt = None):
                         msg = await client.wait_for('message', timeout = 10, check = lambda message: message.channel == ctx.message.channel and message.author == ctx.author)
                         if msg.content.lower() == 'c':
                             emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
-                            emb.add_field(name = 'Проверено сообщений', value = f'```ARM\n{amount}```')
+                            emb.add_field(name = 'Проверено сообщений', value = f'```ARM\n{cleared}```')
                             if filt:
                                 emb.add_field(name = 'Применён фильтр:', value = f'```{filt}```', inline = True)
                             if members == '--everyone':
@@ -788,13 +865,37 @@ async def clear(ctx, amount: int, members = '--everyone', *, filt = None):
                 await sent.delete()
                 emb = discord.Embed(description = 'Проверяем..', color = discord.Color.orange())
                 sent = await ctx.send(embed = emb)
-                if members != '--everyone':
+                if members == '--bots':
+                    if filt == None:
+                        await ctx.channel.purge(limit = amount, check = lambda m: m.author.bot == True, before = sent)
+                    else:
+                        await ctx.channel.purge(limit = amount, check = lambda m: m.content.lower() == filt.lower() and m.author.bot == True, before = sent)
+                    emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
+                    emb.add_field(name = 'Проверено сообщений', value = f'```ARM\n{cleared}```')
+                    if filt:
+                        emb.add_field(name = 'Применён фильтр:', value = f'```{filt}```', inline = True)
+                    emb.add_field(name = 'Удалены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
+                    emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение.')
+                    await sent.edit(embed = emb)
+                elif members == '--users':
+                    if filt == None:
+                        await ctx.channel.purge(limit = amount, check = lambda m: m.author.bot == False, before = sent)
+                    else:
+                        await ctx.channel.purge(limit = amount, check = lambda m: m.author.bot == False and m.content.lower() == filt.lower(), before = sent)
+                    emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
+                    emb.add_field(name = 'Проверено сообщений', value = f'```ARM\n{cleared}```')
+                    if filt:
+                        emb.add_field(name = 'Применён фильтр:', value = f'```{filt}```', inline = True)
+                    emb.add_field(name = 'Удалены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
+                    emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение.')
+                    await sent.edit(embed = emb)
+                elif members != '--everyone':
                     if filt == None:
                         await ctx.channel.purge(limit = amount, check = lambda m: m.author == member_object, before = sent)
                     else:
                         await ctx.channel.purge(limit = amount, check = lambda m: m.author == member_object and m.content.lower() == filt.lower(), before = sent)
                     emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
-                    emb.add_field(name = 'Проверено сообщений', value = f'```ARM\n{amount}```')
+                    emb.add_field(name = 'Проверено сообщений', value = f'```ARM\n{cleared}```')
                     if filt:
                         emb.add_field(name = 'Применён фильтр:', value = f'```{filt}```', inline = True)
                     emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
@@ -806,7 +907,7 @@ async def clear(ctx, amount: int, members = '--everyone', *, filt = None):
                     else:
                         await ctx.channel.purge(limit = amount, check = lambda m: m.content.lower() == filt.lower(), before = sent)
                     emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
-                    emb.add_field(name = 'Проверено сообщений', value = f'```ARM\n{amount}```')
+                    emb.add_field(name = 'Проверено сообщений', value = f'```ARM\n{cleared}```')
                     if filt:
                         emb.add_field(name = 'Применён фильтр:', value = f'```{filt}```', inline = True)
                     emb.add_field(name = 'Удалены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
@@ -816,7 +917,7 @@ async def clear(ctx, amount: int, members = '--everyone', *, filt = None):
                     msg = await client.wait_for('message', timeout = 10, check = lambda message: message.channel == ctx.message.channel and message.author == ctx.author)
                     if msg.content.lower() == 'c':
                         emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
-                        emb.add_field(name = 'Проверено сообщений', value = f'```ARM\n{amount}```')
+                        emb.add_field(name = 'Проверено сообщений', value = f'```ARM\n{cleared}```')
                         if filt:
                             emb.add_field(name = 'Применён фильтр:', value = f'```{filt}```', inline = True)
                         if members == '--everyone':
@@ -849,13 +950,37 @@ async def clear(ctx, amount: int, members = '--everyone', *, filt = None):
     else:
         emb = discord.Embed(description = 'Проверяем..', color = discord.Color.orange())
         sent = await ctx.send(embed = emb)
-        if members != '--everyone':
+        if members == '--bots':
+            if filt == None:
+                await ctx.channel.purge(limit = amount, check = lambda m: m.author.bot == True, before = sent)
+            else:
+                await ctx.channel.purge(limit = amount, check = lambda m: m.content.lower() == filt.lower() and m.author.bot == True, before = sent)
+            emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
+            emb.add_field(name = 'Проверено сообщений', value = f'```ARM\n{cleared}```')
+            if filt:
+                emb.add_field(name = 'Применён фильтр:', value = f'```{filt}```', inline = True)
+            emb.add_field(name = 'Удалены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
+            emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение.')
+            await sent.edit(embed = emb)
+        elif members == '--users':
+            if filt == None:
+                await ctx.channel.purge(limit = amount, check = lambda m: m.author.bot == False, before = sent)
+            else:
+                await ctx.channel.purge(limit = amount, check = lambda m: m.author.bot == False and m.content.lower() == filt.lower(), before = sent)
+            emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
+            emb.add_field(name = 'Проверено сообщений', value = f'```ARM\n{cleared}```')
+            if filt:
+                emb.add_field(name = 'Применён фильтр:', value = f'```{filt}```', inline = True)
+            emb.add_field(name = 'Удалены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
+            emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение.')
+            await sent.edit(embed = emb)
+        elif members != '--everyone':
             if filt == None:
                 await ctx.channel.purge(limit = amount, check = lambda m: m.author == member_object, before = sent)
             else:
                 await ctx.channel.purge(limit = amount, check = lambda m: m.author == member_object and m.content.lower() == filt.lower(), before = sent)
             emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
-            emb.add_field(name = 'Проверено сообщений', value = f'```ARM\n{amount}```')
+            emb.add_field(name = 'Проверено сообщений', value = f'```ARM\n{cleared}```')
             if filt:
                 emb.add_field(name = 'Применён фильтр:', value = f'```{filt}```', inline = True)
             emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
@@ -867,7 +992,7 @@ async def clear(ctx, amount: int, members = '--everyone', *, filt = None):
             else:
                 await ctx.channel.purge(limit = amount, check = lambda m: m.content.lower() == filt.lower(), before = sent)
             emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
-            emb.add_field(name = 'Проверено сообщений', value = f'```ARM\n{amount}```')
+            emb.add_field(name = 'Проверено сообщений', value = f'```ARM\n{cleared}```')
             if filt:
                 emb.add_field(name = 'Применён фильтр:', value = f'```{filt}```', inline = True)
             emb.add_field(name = 'Удалены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
@@ -877,9 +1002,9 @@ async def clear(ctx, amount: int, members = '--everyone', *, filt = None):
             msg = await client.wait_for('message', timeout = 10, check = lambda message: message.channel == ctx.message.channel and message.author == ctx.author)
             if msg.content.lower() == 'c':
                 emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
-                emb.add_field(name = 'Проверено сообщений', value = f'```ARM\n{amount}```')
+                emb.add_field(name = 'Проверено сообщений', value = f'```ARM\n{cleared}```')
                 if filt:
-                    emb.add_field(name = 'Применён фильтр:', value = f'```{filt}```', inline = True)
+                    emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
                 if members == '--everyone':
                     emb.add_field(name = 'Удалены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
                 else:
@@ -1408,7 +1533,7 @@ async def help(ctx, arg = None):
     elif arg == 'content':
         await ctx.send('```apache\ncy/content <ID> (<> - обязательно)```')
     elif arg == 'clear':
-        await ctx.send('```apache\ncy/clear <количество> [автор] [фильтр]\ncy/clear 100\ncy/clear 10 @сасиска\ncy/clear 50 --everyone хыха\n--ВАЖНО--\nПри указании автора не будет удалено столько сообщений, сколько было указано, будет удалено столько, сколько будет найдено в пределах этих сообщений.\nСообщения старше 2 недель будут удалены не сразу - лимит discord API\nПри удалении более 100 сообщений нужно подтверждение владельца сервера.\nТолько владелец может удалять от 250 сообщений за раз.\n([] - опционально, <> - обязательно, / - или)\nperms = adminstrator```')
+        await ctx.send('```apache\ncy/clear <количество> [автор] [фильтр]\ncy/clear 100\ncy/clear 10 @сасиска\ncy/clear 50 --everyone хыха\ncy/clear 30 --bots\ncy/clear 15 --users\n\n--everyone удалит сообщения от всех\n--bots удалит сообщения только от ботов\n--users удалит сообщения только от участников\n\nПри указании автора не будет удалено столько сообщений, сколько было указано, будет удалено столько, сколько будет найдено в пределах этих сообщений.\nСообщения старше 2 недель будут удалены не сразу - лимит discord API\nПри удалении более 100 сообщений нужно подтверждение владельца сервера.\nТолько владелец может удалять от 250 сообщений за раз.\nНе более 300!\n([] - опционально, <> - обязательно, / - или)\nperms = adminstrator```')
     elif arg == 'dm':
         await ctx.send('```apache\ncy/dm <@пинг/имя/ID> <текст> (<> - обязательно, / - или)\nperms = view_audit_log```')
     elif arg == 'say':
