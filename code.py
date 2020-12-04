@@ -1297,15 +1297,15 @@ async def content(ctx, arg):
     if message.author == client.user:
         if message.embeds == []:
             if '@everyone' in message.content:
-                await ctx.send(f'```cy/say --everyone {message.content.strip()[10:].strip()}```')
+                await ctx.send(f'```py\ncy/say --everyone {message.content.strip()[10:].strip()}```')
             else:
-                await ctx.send(f'```cy/say {message.content}```')
+                await ctx.send(f'```py\ncy/say {message.content}```')
         else:
             for emb in message.embeds:
                 if '@everyone' in message.content:
-                    await ctx.send(f'```cy/say --everyone | t& {emb.title} | d& {emb.description} | th& {emb.thumbnail.url} | img& {emb.image.url} | c& {emb.color[1:]}```')
+                    await ctx.send(f'```py\ncy/say --everyone | t& {emb.title} | d& {emb.description} | th& {emb.thumbnail.url} | img& {emb.image.url} | c& {emb.color[1:]}```')
                 else:
-                    await ctx.send(f'```cy/say t& {emb.title} | d& {emb.description} | th& {emb.thumbnail.url} | img& {emb.image.url} | c& {emb.color}```')
+                    await ctx.send(f'```py\ncy/say t& {emb.title} | d& {emb.description} | th& {emb.thumbnail.url} | img& {emb.image.url} | c& {emb.color}```')
     else:
         if message.embeds == []:
             await ctx.send(f'```@{message.author} {message.content}```')
