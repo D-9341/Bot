@@ -350,24 +350,31 @@ async def dm(ctx, member: discord.User, *, text):
 @client.command(aliases = ['Kick', 'KICK'])
 @commands.cooldown(1, 10, commands.BucketType.guild)
 @commands.has_permissions(kick_members = True)
-async def kick(ctx, member: discord.Member, *, reason: str = None):
+async def kick(ctx, member: discord.Member, *, reason = None):
     await ctx.message.delete()
+    bot = discord.utils.get(ctx.guild.members, id = client.user.id)
     if member.id != 338714886001524737:
-            if reason == None:
-                reason = 'Не указана.'
-            if ctx.author.top_role == member.top_role and ctx.message.author.id != 338714886001524737:
-                emb = discord.Embed(description = f'{ctx.author.mention}, ваша высшая роль равна высшей роли {member.mention}. Кик отклонён.', colour = discord.Color.orange())
-                await ctx.send(embed = emb)
-            elif member.top_role > ctx.author.top_role and ctx.message.author.id != 338714886001524737:
+        if reason == None:
+            reason = 'Не указана.'
+        if ctx.author.top_role == member.top_role and ctx.message.author.id != 338714886001524737:
+            emb = discord.Embed(description = f'{ctx.author.mention}, ваша высшая роль равна высшей роли {member.mention}. Кик отклонён.', colour = discord.Color.orange())
+            await ctx.send(embed = emb)
+        elif member.top_role > ctx.author.top_role and ctx.message.author.id != 338714886001524737:
                 emb = discord.Embed(description = f'{ctx.author.mention}, ваша высшая роль ниже высшей роли {member.mention}. Кик отклонён.', colour = discord.Color.orange())
                 await ctx.send(embed = emb)
-            else:
-                emb = discord.Embed(colour = member.color)
-                emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
-                emb.add_field(name = 'Был кикнут', value = member.mention)
-                emb.add_field(name = 'По причине', value = reason)
-                await ctx.send(embed = emb)
-                await member.kick(reason = reason)
+        elif member.top_role > bot.top_role:
+            emb = discord.Embed(description = f'МОЯ высшая роль ниже высшей роли {member.mention}. Кик невозможен.', color = 0xff0000)
+            await ctx.send(embed = emb)
+        elif member.top_role == bot.top_role:
+            emb = discord.Embed(description = f'МОЯ высшая роль идентична высшей роли {member.mention}. Кик невозможен.', color = 0xff0000)
+            await ctx.send(embed = emb)
+        else:
+            emb = discord.Embed(colour = member.color)
+            emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
+            emb.add_field(name = 'Был кикнут', value = member.mention)
+            emb.add_field(name = 'По причине', value = reason)
+            await ctx.send(embed = emb)
+            await member.kick(reason = reason)
     else:
         emb = discord.Embed(description = f'Извините, {ctx.author.mention}, но вы не можете кикнуть моего создателя!', colour = discord.Color.orange())
         await ctx.send(embed = emb)
@@ -377,6 +384,7 @@ async def kick(ctx, member: discord.Member, *, reason: str = None):
 @commands.has_permissions(ban_members = True)
 async def ban(ctx, member: discord.Member, *, reason = None):
     await ctx.message.delete()
+    bot = discord.utils.get(ctx.guild.members, id = client.user.id)
     if member.id != 338714886001524737:
         if reason == None:
             reason = 'Не указана.'
@@ -386,13 +394,32 @@ async def ban(ctx, member: discord.Member, *, reason = None):
         elif member.top_role > ctx.author.top_role and ctx.message.author.id != 338714886001524737:
             emb = discord.Embed(description = f'{ctx.author.mention}, ваша высшая роль ниже высшей роли {member.mention}. Бан отклонён.', colour = discord.Color.orange())
             await ctx.send(embed = emb)
-        else:
-            emb = discord.Embed(colour = member.color)
-            emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
-            emb.add_field(name = 'Был забанен', value = member.mention)
-            emb.add_field(name = 'По причине', value = reason)
+        elif member.top_role > bot.top_role:
+            emb = discord.Embed(description = f'МОЯ высшая роль ниже высшей роли {member.mention}. Бан невозможен.', color = 0xff0000)
             await ctx.send(embed = emb)
-            await member.ban(reason = reason)
+        elif member.top_role == bot.top_role:
+            emb = discord.Embed(description = f'МОЯ высшая роль идентична высшей роли {member.mention}. Бан невозможен.', color = 0xff0000)
+            await ctx.send(embed = emb)
+        else:
+            if '--soft' in reason:
+                emb = discord.Embed(color = member.color)
+                emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
+                emb.add_field(name = 'Упрощённо забанен', value = f'{member.mention} ({member.name})')
+                if '--reason' in reason:
+                    reason = reason.strip()[15:].strip()
+                else:
+                    reason = 'Не указана.'
+                emb.add_field(name = 'По причине', value = reason)
+                await ctx.send(embed = emb)
+                await member.ban(reason = reason)
+                await member.unban(reason = '--softban')
+            else:
+                emb = discord.Embed(colour = member.color)
+                emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
+                emb.add_field(name = 'Был забанен', value = member.mention)
+                emb.add_field(name = 'По причине', value = reason)
+                await ctx.send(embed = emb)
+                await member.ban(reason = reason)
     else:
         emb = discord.Embed(description = f'Извините, {ctx.author.mention}, но вы не можете забанить моего создателя!', colour = discord.Color.orange())
         await ctx.send(embed = emb)
