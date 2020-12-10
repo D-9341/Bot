@@ -223,6 +223,14 @@ async def on_voice_state_update(member, before, after):
 
 @client.event
 async def on_message(message):
+    if message.content.lower().startswith('cy|'):
+        channel = client.get_channel(714175791033876490)
+        emb = discord.Embed(title = 'ВОЗМОЖНОЕ\_ВЫПОЛНЕНИЕ_КОМАНДЫ', color = discord.Color.orange())
+        emb.add_field(name = 'ВОЗМОЖНОЕ_НАЗВАНИЕ', value = message.content.strip()[3:].strip())
+        emb.add_field(name = 'ВОЗМОЖНЫЙ_ИСПОЛНИТЕЛЬ', value = message.author)
+        emb.add_field(name = 'КАНАЛ', value = f'{message.channel.mention} ({message.channel.name})')
+        emb.add_field(name = 'СЕРВЕР', value = message.guild.name, inline = False)
+        await channel.send(embed = emb)
     if message.channel.id == 767848243291095090 and message.content.startswith('n!'):
         await message.delete()
     if message.content.startswith(f'<@!{client.user.id}>') and len(message.content) == len(f'<@!{client.user.id}>'):
