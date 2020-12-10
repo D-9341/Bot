@@ -227,7 +227,7 @@ async def on_message(message):
         channel = client.get_channel(714175791033876490)
         emb = discord.Embed(title = 'ВОЗМОЖНОЕ\_ВЫПОЛНЕНИЕ_КОМАНДЫ', color = discord.Color.orange())
         emb.add_field(name = 'ВОЗМОЖНОЕ_НАЗВАНИЕ', value = message.content.strip()[3:].strip())
-        emb.add_field(name = 'ВОЗМОЖНЫЙ_ИСПОЛНИТЕЛЬ', value = message.author)
+        emb.add_field(name = 'ВОЗМОЖНЫЙ_ИСПОЛНИТЕЛЬ', value = f'{message.author.mention} ({message.author.name})')
         emb.add_field(name = 'КАНАЛ', value = f'{message.channel.mention} ({message.channel.name})')
         emb.add_field(name = 'СЕРВЕР', value = message.guild.name, inline = False)
         await channel.send(embed = emb)
