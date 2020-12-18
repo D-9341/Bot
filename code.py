@@ -1223,6 +1223,12 @@ async def remind(ctx, time: TimeConverter, *, arg):
 
 #Fun
 @client.command()
+async def roll(ctx):
+    await ctx.message.delete()
+    rand = random.randint(1, 100)
+    await ctx.send(f'{ctx.author.mention}, выпало число `{rand}`')
+
+@client.command()
 async def dotersbrain(ctx):
     await ctx.message.delete()
     sent1 = await ctx.send(f'{ctx.author.mention}, через 5 секунд появится одно из слов (чё, а, чего), на которое вам нужно будет правильно ответить. На размышление 3 секунды.')
