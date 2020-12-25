@@ -271,43 +271,71 @@ async def on_message(message):
             role = discord.utils.get(message.guild.roles, id = 750368477671325728)
             sent = await message.channel.send(role.mention)
             await sent.delete()
+            channel = client.get_channel(714175791033876490)
+            emb = discord.Embed(title = 'ОПОВЕЩЕНИЕ\_ОБ_ОБНОВЛЕНИИ', color = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
+            emb.add_field(name = 'ОПОВЕЩЕНЫ', value = role.mention)
+            await channel.send(embed = emb)
     elif message.channel.id == 750371693779746826: #RSS
         if message.author.bot == True and message.author.id != 694170281270312991:
             role = discord.utils.get(message.guild.roles, id = 750372161134264400)
             sent = await message.channel.send(role.mention)
             await sent.delete()
+            channel = client.get_channel(714175791033876490)
+            emb = discord.Embed(title = 'ОПОВЕЩЕНИЕ\_ОБ_ОБНОВЛЕНИИ', color = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
+            emb.add_field(name = 'ОПОВЕЩЕНЫ', value = role.mention)
+            await channel.send(embed = emb)
     elif message.channel.id == 750368033578680361: #OV
         if message.author.bot == True and message.author.id != 694170281270312991:
             role = discord.utils.get(message.guild.roles, id = 750366804689420319)
             sent = await message.channel.send(role.mention)
             await sent.delete()
+            channel = client.get_channel(714175791033876490)
+            emb = discord.Embed(title = 'ОПОВЕЩЕНИЕ\_ОБ_ОБНОВЛЕНИИ', color = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
+            emb.add_field(name = 'ОПОВЕЩЕНЫ', value = role.mention)
+            await channel.send(embed = emb)
     elif message.channel.id == 750362487224008846: #L.O.L. HAHA
         if message.author.bot == True and message.author.id != 694170281270312991:
             role = discord.utils.get(message.guild.roles, id = 750056065474887852)
             sent = await message.channel.send(role.mention)
             await sent.delete()
+            channel = client.get_channel(714175791033876490)
+            emb = discord.Embed(title = 'ОПОВЕЩЕНИЕ\_ОБ_ОБНОВЛЕНИИ', color = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
+            emb.add_field(name = 'ОПОВЕЩЕНЫ', value = role.mention)
+            await channel.send(embed = emb)
     elif message.channel.id == 750363498290348123: #DOTA 2
         if message.author.bot == True and message.author.id != 694170281270312991:
             role = discord.utils.get(message.guild.roles, id = 750363797226782802)
             sent = await message.channel.send(role.mention)
             await sent.delete()
+            channel = client.get_channel(714175791033876490)
+            emb = discord.Embed(title = 'ОПОВЕЩЕНИЕ\_ОБ_ОБНОВЛЕНИИ', color = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
+            emb.add_field(name = 'ОПОВЕЩЕНЫ', value = role.mention)
+            await channel.send(embed = emb)
     elif message.channel.id == 750373602460827730: #MC
         if message.author.bot == True and message.author.id != 694170281270312991:
             role = discord.utils.get(message.guild.roles, id = 750373687479238787)
             sent = await message.channel.send(role.mention)
             await sent.delete()
+            channel = client.get_channel(714175791033876490)
+            emb = discord.Embed(title = 'ОПОВЕЩЕНИЕ\_ОБ_ОБНОВЛЕНИИ', color = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
+            emb.add_field(name = 'ОПОВЕЩЕНЫ', value = role.mention)
+            await channel.send(embed = emb)
     elif message.channel.id == 750373213447389194: #DCP
         if message.author.bot == True and message.author.id != 694170281270312991:
             role = discord.utils.get(message.guild.roles, id = 750379151210446949)
             sent = await message.channel.send(role.mention)
             await sent.delete()
+            channel = client.get_channel(714175791033876490)
+            emb = discord.Embed(title = 'ОПОВЕЩЕНИЕ\_ОБ_ОБНОВЛЕНИИ', color = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
+            emb.add_field(name = 'ОПОВЕЩЕНЫ', value = role.mention)
+            await channel.send(embed = emb)
     if message.channel.id == 693931411815661608:
         await message.add_reaction('👍')
         await message.add_reaction('👎')
     elif message.channel.id == 747838996729692160:
         await message.add_reaction('👍')
         await message.add_reaction('👎')
-    elif message.channel.id == 707498623981715557: #я не ебу, что это за каналы
+    elif message.channel.id == 707498623981715557:
         await message.add_reaction('👍')
         await message.add_reaction('👎')
     channel = client.get_channel(714175791033876490)
@@ -498,7 +526,6 @@ async def mute(ctx, member: discord.Member, time: TimeConverter, *, reason: str 
                 emb.add_field(name = 'В муте', value = f'{member.mention}')
                 emb.add_field(name = 'По причине', value = reason)
                 emb.add_field(name = 'Время мута', value = f'{time}s')
-                emb.add_field(name = 'raw контент', value = ctx.message.content)
                 await ctx.send(embed = emb, delete_after = time)
                 await asyncio.sleep(time)
                 if role != None:
@@ -534,7 +561,7 @@ async def mute(ctx, member: discord.Member, time: TimeConverter, *, reason: str 
                     if role in member.roles:
                         emb = discord.Embed(colour = member.color, timestamp = ctx.message.created_at)
                         emb.add_field(name = 'Размучен по истечению времени', value = member.mention)
-                        emb.add_field(name = 'По причине', value = reason)
+                        emb.add_field(name = 'Был в муте по причине', value = reason)
                         emb.add_field(name = 'Время мута составляло', value = f'{time}s')
                         await ctx.send(f'{member.mention}', embed = emb)
                         await member.remove_roles(role)
@@ -1225,8 +1252,13 @@ async def remind(ctx, time: TimeConverter, *, arg):
 @client.command()
 async def roll(ctx):
     await ctx.message.delete()
-    rand = random.randint(1, 100)
-    await ctx.send(f'{ctx.author.mention}, выпало число `{rand}`')
+    rand = random.randint(0, 1)
+    if rand == '1':
+        await ctx.send(f'`100`')
+    else:
+        rand1 = random.randint(0, 9)
+        rand2 = random.randint(0, 9)
+        await ctx.send(f'`0{rand1}{rand2}`')
 
 @client.command()
 async def dotersbrain(ctx):
