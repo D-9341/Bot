@@ -15,7 +15,9 @@ client.remove_command('help')
 
 time_regex = re.compile(r"(?:(\d{1,5})(h|s|m|d))+?")
 time_dict = {'h': 3600, 's': 1, 'm': 60, 'd': 86400}
- 
+
+friends = ['351071668241956865']
+
 class TimeConverter(commands.Converter):
     async def convert(self, ctx, argument):
         args = argument.lower()
@@ -1566,13 +1568,22 @@ async def info(ctx):
     await ctx.message.delete()
     emb = discord.Embed(colour = discord.Color.orange())
     emb.set_author(name = client.user.name, url = 'https://warframe.fandom.com/wiki/Cephalon_Cy', icon_url = client.user.avatar_url)
-    emb.add_field(name = 'Версия', value = '0.12.8.9888')
-    emb.add_field(name = 'Написан на', value = 'discord.py')
-    emb.add_field(name = 'Разработчик', value = 'сасиска#2472')
+    emb.add_field(name = 'Версия', value = '0.12.9.10423')
+    emb.add_field(name = 'Написан на', value = 'discord.py v1.5.1')
+    emb.add_field(name = 'Разработчик', value = '[сасиска#2472](https://discord.com/users/338714886001524737)')
+    if ctx.guild.owner.id != client.owner_id:
+        emb.add_field(name = 'Сервер', value = 'Данный сервер не принадлежит моему создателю или его знакомым. Все эмбед выводы будут иметь футер с текстом `Cephalon Cy by сасиска#2472`')
+    if ctx.guild.id == 693929822543675455:
+        emb.add_field(name = 'Принадлежность', value = 'Это - мой основной сервер.')
+    if ctx.guild.id == 735874149578440855:
+        emb.add_field(name = 'Тестирование', value = 'Это - мой тестовый сервер.')
     emb.add_field(name = 'Веб-сайт', value = '```http://ru-unioncraft.ru/```', inline = False)
     emb.add_field(name = 'Раздражаю', value = f'{len(client.users)} человек')
     emb.add_field(name = 'Существую на', value = f'{len(client.guilds)} серверах')
-    emb.set_footer(text = 'Данное приложение не имеет никакого причастия к игре Warframe.', icon_url = 'https://i.playground.ru/p/yVaOZNSTdgUTxmzy_qvzzQ.png')
+    if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
+        emb.set_footer(text = 'Данное приложение не имеет никакого причастия к игре Warframe. Cephalon Cy by сасиска#2472', icon_url = 'https://i.playground.ru/p/yVaOZNSTdgUTxmzy_qvzzQ.png')
+    else:
+        emb.set_footer(text = 'Данное приложение не имеет никакого причастия к игре Warframe.', icon_url = 'https://i.playground.ru/p/yVaOZNSTdgUTxmzy_qvzzQ.png')
     await ctx.send(embed = emb)
 
 @client.command(aliases = ['Help', 'HELP'])
