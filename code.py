@@ -1387,6 +1387,8 @@ async def about(ctx, member: discord.Member = None):
         emb.add_field(name = 'Активности', value = ', '.join([activity.name for activity in member.activities]))
     if member.id == 774273205745483797 or member.id == 764882153812787250 or member.id == 694170281270312991:
         bro = 'Даа'
+    if member.id == client.owner_id:
+        bro = 'Мой создатель a.k. чмырь'
     else:
         bro = 'Неа'
     emb.add_field(name = 'Бро?', value = bro, inline = False)
@@ -1395,8 +1397,6 @@ async def about(ctx, member: discord.Member = None):
     if len(member.roles) != 1:
         emb.add_field(name = f'Роли ({len(member.roles)-1})', value = roles, inline = False)
         emb.add_field(name = 'Высшая Роль', value = member.top_role.mention, inline = False)
-    else:
-        emb.add_field(name = 'Роли', value = 'Ролей не обнаружено.')
     emb.set_thumbnail(url = member.avatar_url)
     await ctx.send(embed = emb)
 
@@ -1569,7 +1569,7 @@ async def say(ctx, *, msg):
         color = ctx.author.color
     else:
         color = int('0x' + color, 16)
-    if ctx.author.id == 338714886001524737:
+    if ctx.author.id == 338714886001524737 and ctx.guild.id != 693929822543675455:
         choices = ['х̙̣̲̪͋̃ͬͫ́͞͡ы̢͇̳̽̋͌ͨͪ͟͠х̩̜̞̝̗͌ͪͦ͆а̘͔̮̍͆ͮͫ̎͘', 'а͖̂͐̄̓͗͗̇ͪ̀̕͜а̷̨͙̩͔̜̹̗̎а́͋̐͆́͝҉̛̩̳̰̲̳̭̟̖͕а̘̠͖̝̰͇̜̭͌̿̂̋ͫ̂ͯ͊́̕͝ӓ́͒̾̇҉͎͙̙̮͓ͅа̙͖̻͈̘ͣ̾̊̊̾̊̍́͢а̼̬͇̱̞ͬ̌̏̉̋̚̚͘͝а̌̅̓͆͊̆҉̤̲̦̰̹̘͚̼͈͘͢а͈̹͔̜͓̙͖̍ͯ̽̓͜͞а̷̞̟̦̮͉̺̹͊̿̊̽̄̆͒̕ͅ', 'ч̮̲̤͒̂͌͠м͔̗̳̤͈̘̻̦̪͊̂͘͟͜о͚̭ͬ͗ͯ͢']
         author = random.choice(choices)
     emb = discord.Embed(title = title, description = description, color = color)
@@ -1616,7 +1616,7 @@ async def edit(ctx, arg, *, msg = None):
             color = ctx.author.color
         else:
             color = int('0x' + color, 16)
-        if ctx.author.id == 338714886001524737:
+        if ctx.author.id == 338714886001524737 and ctx.guild.id != 693929822543675455:
             choices = ['х̙̣̲̪͋̃ͬͫ́͞͡ы̢͇̳̽̋͌ͨͪ͟͠х̩̜̞̝̗͌ͪͦ͆а̘͔̮̍͆ͮͫ̎͘', 'а͖̂͐̄̓͗͗̇ͪ̀̕͜а̷̨͙̩͔̜̹̗̎а́͋̐͆́͝҉̛̩̳̰̲̳̭̟̖͕а̘̠͖̝̰͇̜̭͌̿̂̋ͫ̂ͯ͊́̕͝ӓ́͒̾̇҉͎͙̙̮͓ͅа̙͖̻͈̘ͣ̾̊̊̾̊̍́͢а̼̬͇̱̞ͬ̌̏̉̋̚̚͘͝а̌̅̓͆͊̆҉̤̲̦̰̹̘͚̼͈͘͢а͈̹͔̜͓̙͖̍ͯ̽̓͜͞а̷̞̟̦̮͉̺̹͊̿̊̽̄̆͒̕ͅ', 'ч̮̲̤͒̂͌͠м͔̗̳̤͈̘̻̦̪͊̂͘͟͜о͚̭ͬ͗ͯ͢']
             author = random.choice(choices)
         emb = discord.Embed(title = title, description = description, color = color)
