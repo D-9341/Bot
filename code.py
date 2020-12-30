@@ -1653,9 +1653,9 @@ async def roll(ctx):
 @client.command()
 async def dotersbrain(ctx):
     await ctx.message.delete()
-    sent1 = await ctx.send(f'{ctx.author.mention}, через 5 секунд появится одно из слов (чё, а, чего, да, нет, ок), на которое вам нужно будет правильно ответить. На размышление 4 секунды.')
+    sent1 = await ctx.send(f'{ctx.author.mention}, через 5 секунд появится одно из слов (чё, а, да, нет, ок), на которое вам нужно будет правильно ответить. На размышление 4 секунды.')
     await asyncio.sleep(5)
-    words = ['чё', 'а', 'чего', 'да', 'нет', 'ок']
+    words = ['чё', 'а', 'да', 'нет', 'ок']
     rand = random.choice(words)
     sent = await ctx.send(rand)
     try:
@@ -1665,10 +1665,6 @@ async def dotersbrain(ctx):
             await sent1.delete()
             await sent.delete()
         elif sent.content == 'а' and msg.content.lower() == 'хуй на':
-            await ctx.send(f'Поздравляю, у вас 3 стадия рака!')
-            await sent1.delete()
-            await sent.delete()
-        elif sent.content == 'чего' and msg.content.lower() == 'хуй на воротничок': #чего бля
             await ctx.send(f'Поздравляю, у вас 3 стадия рака!')
             await sent1.delete()
             await sent.delete()
