@@ -1981,7 +1981,7 @@ async def info(ctx):
     emb.add_field(name = 'Версия', value = '0.12.9.10423')
     emb.add_field(name = 'Написан на', value = 'discord.py v1.5.1')
     emb.add_field(name = 'Разработчик', value = '[сасиска#2472](https://discord.com/users/338714886001524737)')
-    if ctx.guild.owner.id != client.owner_id:
+    if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
         emb.add_field(name = 'Сервер', value = 'Данный сервер не принадлежит моему создателю или его знакомым. Все эмбед выводы будут иметь футер с текстом `Cephalon Cy by сасиска#2472`')
     if ctx.guild.id == 693929822543675455:
         emb.add_field(name = 'Принадлежность', value = 'Это - мой основной сервер.')
