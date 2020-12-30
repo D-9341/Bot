@@ -2061,7 +2061,7 @@ async def help(ctx, arg = None):
     elif arg == 'coinflip' or arg == 'coin' or arg == 'c':
         await ctx.send('```cy/c```')
     elif arg == 'dotersbrain':
-        await ctx.send('```cy/dotersbrain, список слов и рифм: чё - хуй через плечо; а - хуй на; чего - хуй на воротничок; да - пизда; нет - пидора ответ; ок - хуй намок```')
+        await ctx.send('```cy/dotersbrain, список слов и рифм: чё - хуй через плечо; а - хуй на; да - пизда; нет - пидора ответ; ок - хуй намок```')
     elif arg == 'niggers':
         await ctx.send('```cy/niggers```')
     elif arg == 'rp':
