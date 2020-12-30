@@ -398,22 +398,22 @@ async def kick(ctx, member: discord.Member, *, reason = None):
             reason = 'Не указана.'
         if ctx.author.top_role == member.top_role and ctx.message.author.id != 338714886001524737:
             emb = discord.Embed(description = f'{ctx.author.mention}, ваша высшая роль равна высшей роли {member.mention}. Кик отклонён.', colour = discord.Color.orange())
-            if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+            if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
                 emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
             await ctx.send(embed = emb)
         elif member.top_role > ctx.author.top_role and ctx.message.author.id != 338714886001524737:
                 emb = discord.Embed(description = f'{ctx.author.mention}, ваша высшая роль ниже высшей роли {member.mention}. Кик отклонён.', colour = discord.Color.orange())
-                if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+                if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
                     emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
                 await ctx.send(embed = emb)
         elif member.top_role > bot.top_role:
             emb = discord.Embed(description = f'МОЯ высшая роль ниже высшей роли {member.mention}. Кик невозможен.', color = 0xff0000)
-            if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+            if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
                 emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
             await ctx.send(embed = emb)
         elif member.top_role == bot.top_role:
             emb = discord.Embed(description = f'МОЯ высшая роль идентична высшей роли {member.mention}. Кик невозможен.', color = 0xff0000)
-            if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+            if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
                 emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
             await ctx.send(embed = emb)
         else:
@@ -421,13 +421,13 @@ async def kick(ctx, member: discord.Member, *, reason = None):
             emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
             emb.add_field(name = 'Был кикнут', value = member.mention)
             emb.add_field(name = 'По причине', value = reason)
-            if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+            if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
                 emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
             await ctx.send(embed = emb)
             await member.kick(reason = reason)
     else:
         emb = discord.Embed(description = f'Извините, {ctx.author.mention}, но вы не можете кикнуть моего создателя!', colour = discord.Color.orange())
-        if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+        if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
             emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
 
@@ -442,22 +442,22 @@ async def ban(ctx, member: discord.Member, *, reason = None):
             reason = 'Не указана.'
         if ctx.author.top_role == member.top_role and ctx.message.author.id != 338714886001524737:
             emb = discord.Embed(description = f'{ctx.author.mention}, ваша высшая роль равна высшей роли {member.mention}. Бан отклонён.', colour = discord.Color.orange())
-            if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+            if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
                 emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
             await ctx.send(embed = emb)
         elif member.top_role > ctx.author.top_role and ctx.message.author.id != 338714886001524737:
             emb = discord.Embed(description = f'{ctx.author.mention}, ваша высшая роль ниже высшей роли {member.mention}. Бан отклонён.', colour = discord.Color.orange())
-            if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+            if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
                 emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
             await ctx.send(embed = emb)
         elif member.top_role > bot.top_role:
             emb = discord.Embed(description = f'МОЯ высшая роль ниже высшей роли {member.mention}. Бан невозможен.', color = 0xff0000)
-            if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+            if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
                 emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
             await ctx.send(embed = emb)
         elif member.top_role == bot.top_role:
             emb = discord.Embed(description = f'МОЯ высшая роль идентична высшей роли {member.mention}. Бан невозможен.', color = 0xff0000)
-            if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+            if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
                 emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
             await ctx.send(embed = emb)
         else:
@@ -470,7 +470,7 @@ async def ban(ctx, member: discord.Member, *, reason = None):
                 else:
                     reason = 'Не указана.'
                 emb.add_field(name = 'По причине', value = reason)
-                if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+                if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
                     emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
                 await ctx.send(embed = emb)
                 await member.ban(reason = reason)
@@ -480,13 +480,13 @@ async def ban(ctx, member: discord.Member, *, reason = None):
                 emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
                 emb.add_field(name = 'Был забанен', value = member.mention)
                 emb.add_field(name = 'По причине', value = reason)
-                if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+                if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
                     emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
                 await ctx.send(embed = emb)
                 await member.ban(reason = reason)
     else:
         emb = discord.Embed(description = f'Извините, {ctx.author.mention}, но вы не можете забанить моего создателя!', colour = discord.Color.orange())
-        if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+        if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
             emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
 
@@ -498,26 +498,26 @@ async def give(ctx, member: discord.Member, *, role: discord.Role):
         if role > member.top_role and ctx.message.author.id != 338714886001524737:
             emb = discord.Embed(description = f'Вы не можете выдать {role.mention}, так как она имеет более высокий ранг, чем ваша высшая роль.', color = 0xffffff)
             await ctx.send(embed = emb)
-            if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+            if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
                 emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         elif role == ctx.author.top_role and ctx.message.author.id != 338714886001524737:
             emb = discord.Embed(description = f'Вы не можете выдать {role.mention} кому-либо, так как она равна вашей высшей роли.', color = 0xffffff)
-            if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+            if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
                 emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
             await ctx.send(embed = emb)
         elif member.top_role > client.user.top_role:
             emb = discord.Embed(description = f'МОЯ высшая роль ниже высшей роли {member.mention}. Выдача невозможна.', color = 0xff0000)
-            if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+            if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
                 emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
             await ctx.send(embed = emb)
         elif member.top_role == client.user.top_role:
             emb = discord.Embed(description = f'МОЯ высшая роль идентична высшей роли {member.mention}. Выдача невозможна.', color = 0xff0000)
-            if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+            if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
                 emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
             await ctx.send(embed = emb)
         elif role.is_default():
             emb = discord.Embed(description = 'Выдавать @everyone?', color = 0xff0000)
-            if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+            if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
                 emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
             await ctx.send(embed = emb)
         else:
@@ -526,12 +526,12 @@ async def give(ctx, member: discord.Member, *, role: discord.Role):
             emb.add_field(name = 'ВЫДАНА_РОЛЬ', value = f'{role.mention} | {role.name} | ID {role.id}')
             emb.add_field(name = 'ВЫДАНА:', value = member.mention, inline = False)
             emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
-            if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+            if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
                 emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
             await ctx.send(embed = emb)
     else:
         emb = discord.Embed(description = f'{ctx.author.mention}, я не могу найти {role.mention} в списке ролей.', colour = member.color, timestamp = ctx.message.created_at)
-        if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+        if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
             emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
 
@@ -543,26 +543,26 @@ async def take(ctx, member: discord.Member, *, role: discord.Role):
         if role > member.top_role and ctx.message.author.id != 338714886001524737:
             emb = discord.Embed(description = f'Вы не можете выдать {role.mention}, так как она имеет более высокий ранг, чем ваша высшая роль. Забирание роли отмененою', color = 0xffffff)
             await ctx.send(embed = emb)
-            if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+            if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
                 emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         elif role == ctx.author.top_role and ctx.message.author.id != 338714886001524737:
             emb = discord.Embed(description = f'Вы не можете выдать {role.mention} кому-либо, так как она равна вашей высшей роли. Забирание роли отмененою', color = 0xffffff)
-            if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+            if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
                 emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
             await ctx.send(embed = emb)
         elif member.top_role > client.user.top_role:
             emb = discord.Embed(description = f'МОЯ высшая роль ниже высшей роли {member.mention}. Забрать роль невозможно.', color = 0xff0000)
-            if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+            if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
                 emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
             await ctx.send(embed = emb)
         elif member.top_role == client.user.top_role:
             emb = discord.Embed(description = f'МОЯ высшая роль идентична высшей роли {member.mention}. Забрать роль невозможно.', color = 0xff0000)
-            if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+            if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
                 emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
             await ctx.send(embed = emb)
         elif role.is_default():
             emb = discord.Embed(description = 'Забирать @everyone?', color = 0xff0000)
-            if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+            if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
                 emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
             await ctx.send(embed = emb)
         else:
@@ -571,12 +571,12 @@ async def take(ctx, member: discord.Member, *, role: discord.Role):
             emb.add_field(name = 'ЗАБРАНА_РОЛЬ', value = f'{role.mention} | {role.name} | ID {role.id}')
             emb.add_field(name = 'ЗАБРАНА_У:', value = member.mention, inline = False)
             emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
-            if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+            if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
                 emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
             await ctx.send(embed = emb)
     else:
         emb = discord.Embed(description = f'{ctx.author.mention}, я не могу найти {role.mention} в списке ролей.', colour = member.color, timestamp = ctx.message.created_at)
-        if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+        if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
             emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
 
@@ -602,7 +602,7 @@ async def mute(ctx, member: discord.Member, time: TimeConverter, *, reason: str 
                 emb.add_field(name = 'В муте', value = f'{member.mention}')
                 emb.add_field(name = 'По причине', value = reason)
                 emb.add_field(name = 'Время мута', value = f'{time}s')
-                if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+                if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
                     emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
                 await ctx.send(embed = emb, delete_after = time)
                 await asyncio.sleep(time)
@@ -612,7 +612,7 @@ async def mute(ctx, member: discord.Member, time: TimeConverter, *, reason: str 
                         emb.add_field(name = 'Размучен по истечению времени', value = member.mention)
                         emb.add_field(name = 'Был в муте по причине', value = reason)
                         emb.add_field(name = 'Время мута составляло', value = f'{time}s')
-                        if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+                        if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
                             emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
                         await member.remove_roles(role)
                         await ctx.send(f'{member.mention}', embed = emb)
@@ -635,7 +635,7 @@ async def mute(ctx, member: discord.Member, time: TimeConverter, *, reason: str 
                 emb.add_field(name = 'В муте', value = f'{member.mention}')
                 emb.add_field(name = 'По причине', value = reason)
                 emb.add_field(name = 'Время мута', value = f'{time}s')
-                if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+                if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
                     emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
                 await ctx.send(embed = emb, delete_after = time)
                 await asyncio.sleep(time)
@@ -645,7 +645,7 @@ async def mute(ctx, member: discord.Member, time: TimeConverter, *, reason: str 
                         emb.add_field(name = 'Размучен по истечению времени', value = member.mention)
                         emb.add_field(name = 'Был в муте по причине', value = reason)
                         emb.add_field(name = 'Время мута составляло', value = f'{time}s')
-                        if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+                        if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
                             emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
                         await ctx.send(f'{member.mention}', embed = emb)
                         await member.remove_roles(role)
@@ -669,7 +669,7 @@ async def unmute(ctx, member: discord.Member, *, reason = None):
             emb = discord.Embed(title = f'Принудительное снятие мута у {member}', colour = member.color, timestamp = ctx.message.created_at)
             emb.add_field(name = 'Снял мут', value = ctx.author.mention)
             emb.add_field(name = 'По причине', value = reason)
-            if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+            if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
                 emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
             await ctx.send(embed = emb)
         else:
@@ -716,18 +716,18 @@ async def clear(ctx, amount: int, members = '--everyone', *, filt = None):
             await ctx.author.send('Как ты узнал об этом?!')
     elif amount >= 300:
         emb = discord.Embed(description = f'{ctx.author.mention}, при таком числе удаления сообщений ({amount}) неизбежны ошибки в работе {client.user.mention}.', colour = discord.Color.orange())
-        if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+        if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
             emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(f'{ctx.guild.owner.mention}', embed = emb)
     elif amount >= 250:
         if ctx.author != ctx.guild.owner:
             emb = discord.Embed(description = f'{ctx.author.mention}, операция с данным числом ({amount}) доступна только {ctx.guild.owner.mention}. Отмена.', colour = discord.Color.orange())
-            if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+            if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
                 emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
             await ctx.send(f'{ctx.guild.owner.mention}', embed = emb, delete_after = 5)
         else:
             emb = discord.Embed(description = f'{ctx.author.mention}, обнаружено слишком большое число для удаления сообщений ({amount}). Возможны дальнейшие ошибки в работе {client.user.mention}. Продолжить? (y/n)\n||Отмена через 10 секунд.||', colour = discord.Color.orange())
-            if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+            if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
                 emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
             sent = await ctx.send(embed = emb)
             try:
@@ -737,7 +737,7 @@ async def clear(ctx, amount: int, members = '--everyone', *, filt = None):
                     await sent.delete()
                     if '--silent' not in members:
                         emb = discord.Embed(description = 'Проверяем..', color = discord.Color.orange())
-                        if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+                        if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
                             emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
                         sent = await ctx.send(embed = emb)
                         if members == '--bots':
@@ -750,7 +750,7 @@ async def clear(ctx, amount: int, members = '--everyone', *, filt = None):
                             if filt:
                                 emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
                             emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
-                            if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+                            if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
                                 emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение. Cephalon Cy by сасиска#2472')
                             else:
                                 emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение.')
@@ -765,7 +765,7 @@ async def clear(ctx, amount: int, members = '--everyone', *, filt = None):
                             if filt:
                                 emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
                             emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
-                            if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+                            if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
                                 emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение. Cephalon Cy by сасиска#2472')
                             else:
                                 emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение.')
@@ -780,7 +780,7 @@ async def clear(ctx, amount: int, members = '--everyone', *, filt = None):
                             if filt:
                                 emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
                             emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
-                            if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+                            if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
                                 emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение. Cephalon Cy by сасиска#2472')
                             else:
                                 emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение.')
@@ -795,7 +795,7 @@ async def clear(ctx, amount: int, members = '--everyone', *, filt = None):
                             if filt:
                                 emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
                             emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
-                            if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+                            if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
                                 emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение. Cephalon Cy by сасиска#2472')
                             else:
                                 emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение.')
@@ -810,7 +810,7 @@ async def clear(ctx, amount: int, members = '--everyone', *, filt = None):
                                 if filt:
                                     emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
                                 emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
-                                if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+                                if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
                                     emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
                                 await sent.edit(embed = emb)
                             else:
@@ -852,33 +852,33 @@ async def clear(ctx, amount: int, members = '--everyone', *, filt = None):
                     await msg.delete()
                     await sent.delete()
                     emb = discord.Embed(description = f'{ctx.guild.owner.mention} отменил запрос.', colour = discord.Color.orange())
-                    if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+                    if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
                         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
                     await ctx.send(embed = emb, delete_after = 3)
                 elif msg.content.lower() == 'n' or 'y' and msg.author.id != ctx.guild.owner.id:
                     await msg.delete()
                     await sent.delete()
                     emb = discord.Embed(description = f'{ctx.author.mention}, ты не являешься владельцем сервера.', colour = discord.Color.orange())
-                    if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+                    if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
                         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
                     await ctx.send(embed = emb, delete_after = 3)
                 else:
                     await msg.delete()
                     await sent.delete()
                     emb = discord.Embed(description = f'Обнаружен недопустимый ответ ({msg.content})', colour = discord.Color.orange())
-                    if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+                    if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
                         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
                     await ctx.send(embed = emb, delete_after = 3)
             except asyncio.TimeoutError:
                 await sent.delete()
                 emb = discord.Embed(description = f'{ctx.author.mention}, Время вышло.', colour = discord.Color.orange())
-                if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+                if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
                     emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
                 await ctx.send(f'{ctx.guild.owner.mention}', embed = emb, delete_after = 3)
     elif amount >= 100:
         if ctx.author != ctx.guild.owner:
             emb = discord.Embed(description = f'{ctx.author.mention}, создан запрос на удаление {amount} сообщений. Мне нужен ответ создателя сервера на это действие. Продолжаем? (y/n)\n||Запрос будет отменён через 1 минуту.||', colour = discord.Color.orange())
-            if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+            if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
                 emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
             sent = await ctx.send(f'{ctx.guild.owner.mention}', embed = emb)
             try:
@@ -888,7 +888,7 @@ async def clear(ctx, amount: int, members = '--everyone', *, filt = None):
                     await sent.delete()
                     if '--silent' not in members:
                         emb = discord.Embed(description = 'Проверяем..', color = discord.Color.orange())
-                        if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+                        if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
                             emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
                         sent = await ctx.send(embed = emb)
                         if members == '--bots':
@@ -901,7 +901,7 @@ async def clear(ctx, amount: int, members = '--everyone', *, filt = None):
                             if filt:
                                 emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
                             emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
-                            if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+                            if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
                                 emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение. Cephalon Cy by сасиска#2472')
                             else:
                                 emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение.')
@@ -916,7 +916,7 @@ async def clear(ctx, amount: int, members = '--everyone', *, filt = None):
                             if filt:
                                 emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
                             emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
-                            if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+                            if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
                                 emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение. Cephalon Cy by сасиска#2472')
                             else:
                                 emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение.')
@@ -931,7 +931,7 @@ async def clear(ctx, amount: int, members = '--everyone', *, filt = None):
                             if filt:
                                 emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
                             emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
-                            if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+                            if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
                                 emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение. Cephalon Cy by сасиска#2472')
                             else:
                                 emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение.')
@@ -946,7 +946,7 @@ async def clear(ctx, amount: int, members = '--everyone', *, filt = None):
                             if filt:
                                 emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
                             emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
-                            if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+                            if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
                                 emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение. Cephalon Cy by сасиска#2472')
                             else:
                                 emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение.')
@@ -961,7 +961,7 @@ async def clear(ctx, amount: int, members = '--everyone', *, filt = None):
                                 if filt:
                                     emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
                                 emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
-                                if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+                                if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
                                     emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
                                 await sent.edit(embed = emb)
                             else:
@@ -1003,32 +1003,32 @@ async def clear(ctx, amount: int, members = '--everyone', *, filt = None):
                     await msg.delete()
                     await sent.delete()
                     emb = discord.Embed(description = f'{ctx.guild.owner} отменил запрос.', colour = discord.Color.orange())
-                    if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+                    if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
                         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
                     await ctx.send(embed = emb, delete_after = 3)
                 elif msg.content.lower() == 'n' or 'y' and msg.author.id != ctx.guild.owner.id:
                     await msg.delete()
                     await sent.delete()
                     emb = discord.Embed(description = f'{ctx.author.mention}, ты не являешься владельцем сервера.', colour = discord.Color.orange())
-                    if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+                    if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
                         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
                     await ctx.send(embed = emb, delete_after = 3)
                 else:
                     await msg.delete()
                     await sent.delete()
                     emb = discord.Embed(description = f'Обнаружен недопустимый ответ ({msg.content})', colour = discord.Color.orange())
-                    if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+                    if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
                         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
                     await ctx.send(embed = emb, delete_after = 3)
             except asyncio.TimeoutError:
                 await sent.delete()
                 emb = discord.Embed(description = f'{ctx.author.mention}, Время вышло.', colour = discord.Color.orange())
-                if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+                if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
                     emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
                 await ctx.send(f'{ctx.guild.owner.mention}', embed = emb, delete_after = 3)
         else:
             emb = discord.Embed(description = f'{ctx.author.mention}, создан запрос на удаление {amount} сообщений. Продолжить? (y/n)\n||Запрос будет отменён через 10 секунд.||', colour = discord.Color.orange())
-            if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+            if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
                 emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
             sent = await ctx.send(embed = emb)
             try:
@@ -1038,7 +1038,7 @@ async def clear(ctx, amount: int, members = '--everyone', *, filt = None):
                     await sent.delete()
                     if '--silent' not in members:
                         emb = discord.Embed(description = 'Проверяем..', color = discord.Color.orange())
-                        if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+                        if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
                             emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
                         sent = await ctx.send(embed = emb)
                         if members == '--bots':
@@ -1051,7 +1051,7 @@ async def clear(ctx, amount: int, members = '--everyone', *, filt = None):
                             if filt:
                                 emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
                             emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
-                            if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+                            if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
                                 emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение. Cephalon Cy by сасиска#2472')
                             else:
                                 emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение.')
@@ -1066,7 +1066,7 @@ async def clear(ctx, amount: int, members = '--everyone', *, filt = None):
                             if filt:
                                 emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
                             emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
-                            if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+                            if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
                                 emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение. Cephalon Cy by сасиска#2472')
                             else:
                                 emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение.')
@@ -1081,7 +1081,7 @@ async def clear(ctx, amount: int, members = '--everyone', *, filt = None):
                             if filt:
                                 emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
                             emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
-                            if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+                            if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
                                 emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение. Cephalon Cy by сасиска#2472')
                             else:
                                 emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение.')
@@ -1096,7 +1096,7 @@ async def clear(ctx, amount: int, members = '--everyone', *, filt = None):
                             if filt:
                                 emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
                             emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
-                            if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+                            if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
                                 emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение. Cephalon Cy by сасиска#2472')
                             else:
                                 emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение.')
@@ -1111,7 +1111,7 @@ async def clear(ctx, amount: int, members = '--everyone', *, filt = None):
                                 if filt:
                                     emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
                                 emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
-                                if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+                                if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
                                     emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
                                 await sent.edit(embed = emb)
                             else:
@@ -1153,25 +1153,25 @@ async def clear(ctx, amount: int, members = '--everyone', *, filt = None):
                     await msg.delete()
                     await sent.delete()
                     emb = discord.Embed(description = 'Отменено.', colour = discord.Color.orange())
-                    if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+                    if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
                         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
                     await ctx.send(embed = emb, delete_after = 3)
                 else:
                     await msg.delete()
                     await sent.delete()
                     emb = discord.Embed(description = f'Обнаружен недопустимый ответ ({msg.content})', colour = discord.Color.orange())
-                    if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+                    if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
                         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
                     await ctx.send(embed = emb, delete_after = 3)
             except asyncio.TimeoutError:
                 await sent.delete()
                 emb = discord.Embed(description = f'{ctx.author.mention}, Время вышло.', colour = discord.Color.orange())
-                if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+                if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
                     emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
                 await ctx.send(embed = emb, delete_after = 3)
     elif amount >= 10:
         emb = discord.Embed(description = f'{ctx.author.mention}, создан запрос на удаление {amount} сообщений. Продолжить? (y/n)\n||Запрос будет отменён через 10 секунд.||', colour = discord.Color.orange())
-        if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+        if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
             emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         sent = await ctx.send(embed = emb)
         try:
@@ -1181,7 +1181,7 @@ async def clear(ctx, amount: int, members = '--everyone', *, filt = None):
                 await sent.delete()
                 if '--silent' not in members:
                     emb = discord.Embed(description = 'Проверяем..', color = discord.Color.orange())
-                    if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+                    if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
                         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
                     sent = await ctx.send(embed = emb)
                     if members == '--bots':
@@ -1194,7 +1194,7 @@ async def clear(ctx, amount: int, members = '--everyone', *, filt = None):
                         if filt:
                             emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
                         emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
-                        if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+                        if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
                             emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение. Cephalon Cy by сасиска#2472')
                         else:
                             emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение.')
@@ -1209,7 +1209,7 @@ async def clear(ctx, amount: int, members = '--everyone', *, filt = None):
                         if filt:
                             emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
                         emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
-                        if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+                        if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
                             emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение. Cephalon Cy by сасиска#2472')
                         else:
                             emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение.')
@@ -1224,7 +1224,7 @@ async def clear(ctx, amount: int, members = '--everyone', *, filt = None):
                         if filt:
                             emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
                         emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
-                        if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+                        if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
                             emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение. Cephalon Cy by сасиска#2472')
                         else:
                             emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение.')
@@ -1239,7 +1239,7 @@ async def clear(ctx, amount: int, members = '--everyone', *, filt = None):
                         if filt:
                             emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
                         emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
-                        if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+                        if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
                             emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение. Cephalon Cy by сасиска#2472')
                         else:
                             emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение.')
@@ -1254,7 +1254,7 @@ async def clear(ctx, amount: int, members = '--everyone', *, filt = None):
                             if filt:
                                 emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
                             emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
-                            if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+                            if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
                                 emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
                             await sent.edit(embed = emb)
                         else:
@@ -1296,31 +1296,31 @@ async def clear(ctx, amount: int, members = '--everyone', *, filt = None):
                 await msg.delete()
                 await sent.delete()
                 emb = discord.Embed(description = 'Отменено.', colour = discord.Color.orange())
-                if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+                if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
                     emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
                 await ctx.send(embed = emb, delete_after = 3)
             else:
                 await msg.delete()
                 await sent.delete()
                 emb = discord.Embed(description = f'Обнаружен недопустимый ответ ({msg.content})', colour = discord.Color.orange())
-                if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+                if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
                     emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
                 await ctx.send(embed = emb, delete_after = 3)
         except asyncio.TimeoutError:
             await sent.delete()
             emb = discord.Embed(description = f'{ctx.author.mention}, Время вышло.', colour = discord.Color.orange())
-            if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+            if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
                 emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
             await ctx.send(embed = emb, delete_after = 3)
     elif amount == 0:
         emb = discord.Embed(description = 'Удалять 0 сообщений? Ты еблан?', colour = discord.Color.orange())
-        if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+        if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
             emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb, delete_after = 1)
     else:
         if '--silent' not in members:
             emb = discord.Embed(description = 'Проверяем..', color = discord.Color.orange())
-            if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+            if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
                 emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
             sent = await ctx.send(embed = emb)
             if '--bots' in members:
@@ -1333,7 +1333,7 @@ async def clear(ctx, amount: int, members = '--everyone', *, filt = None):
                 if filt:
                     emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
                 emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
-                if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+                if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
                     emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение. Cephalon Cy by сасиска#2472')
                 else:
                     emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение.')
@@ -1348,7 +1348,7 @@ async def clear(ctx, amount: int, members = '--everyone', *, filt = None):
                 if filt:
                     emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
                 emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
-                if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+                if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
                     emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение. Cephalon Cy by сасиска#2472')
                 else:
                     emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение.')
@@ -1363,7 +1363,7 @@ async def clear(ctx, amount: int, members = '--everyone', *, filt = None):
                 if filt:
                     emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
                 emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
-                if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+                if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
                     emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение. Cephalon Cy by сасиска#2472')
                 else:
                     emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение.')
@@ -1378,7 +1378,7 @@ async def clear(ctx, amount: int, members = '--everyone', *, filt = None):
                 if filt:
                     emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
                 emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
-                if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+                if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
                     emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение. Cephalon Cy by сасиска#2472')
                 else:
                     emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение.')
@@ -1393,7 +1393,7 @@ async def clear(ctx, amount: int, members = '--everyone', *, filt = None):
                 if filt:
                     emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
                 emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
-                if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+                if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
                     emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение. Cephalon Cy by сасиска#2472')
                 else:
                     emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение.')
@@ -1406,7 +1406,7 @@ async def clear(ctx, amount: int, members = '--everyone', *, filt = None):
                     if filt:
                         emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
                     emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
-                    if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+                    if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
                         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
                     await sent.edit(embed = emb)
                 else:
@@ -1454,7 +1454,7 @@ async def vote(ctx, *, text):
     emb = discord.Embed(description = 'ГОЛОСОВАНИЕ', colour = discord.Color.orange())
     emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
     emb.add_field(name = 'Голосуем за:', value = text)
-    if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+    if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
         emb.set_footer(text = '🚫 - воздержусь. Cephalon Cy by сасиска#2472')
     else:
         emb.set_footer(text = '🚫 - воздержусь.')
@@ -1476,7 +1476,7 @@ async def rolemembers(ctx, role: discord.Role, member: discord.Member = None):
     if len(role.members) != 0:
         emb.add_field(name = f'Участники с ролью {role} ({len(role.members)})', value = ', '.join([member.mention for member in role.members]))
     else:
-        if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+        if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
             emb.set_footer(text = 'Обнаружено 0 участников с этой ролью. Cephalon Cy by сасиска#2472')
         else:
             emb.set_footer(text = 'Обнаружено 0 участников с этой ролью.')
@@ -1505,7 +1505,7 @@ async def guild(ctx):
     d = guild.created_at.strftime('%d.%m.%Y %H:%M:%S UTC')
     emb.add_field(name = 'Дата создания сервера', value = f'{delta.days} дней назад. ({d})', inline = False)
     emb.set_thumbnail(url = guild.icon_url)
-    if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+    if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
     await ctx.send(embed = emb)
 
@@ -1537,7 +1537,7 @@ async def role(ctx, *, role: discord.Role):
     d = role.created_at.strftime('%d.%m.%Y %H:%M:%S UTC')
     emb.add_field(name = 'Создана', value = f'{delta.days} дня(ей) назад. ({d})', inline = False)
     emb.add_field(name = 'Показывает участников отдельно?', value = role.hoist)
-    if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+    if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
     await ctx.send(embed = emb)
 
@@ -1556,7 +1556,7 @@ async def avatar(ctx, member: discord.Member = None):
         emb.add_field(name = '.webp', value = f'[Ссылка]({member.avatar_url_as(format = av1)})')
         emb.add_field(name = '.jpg', value = f'[Ссылка]({member.avatar_url_as(format = av2)})')
     else:
-        if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+        if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
             emb.set_footer(text = 'По причине того, что аватар анимирован - ссылок на статичные форматы нет! Cephalon Cy by сасиска#2472')
         else:
             emb.set_footer(text = 'По причине того, что аватар анимирован - ссылок на статичные форматы нет!')
@@ -1615,7 +1615,7 @@ async def about(ctx, member: discord.Member = None):
         emb.add_field(name = f'Роли ({len(member.roles)-1})', value = roles, inline = False)
         emb.add_field(name = 'Высшая Роль', value = member.top_role.mention, inline = False)
     emb.set_thumbnail(url = member.avatar_url)
-    if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+    if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
     await ctx.send(embed = emb)
 
@@ -1626,14 +1626,14 @@ async def remind(ctx, time: TimeConverter, *, arg):
     emb = discord.Embed(colour = ctx.author.color, timestamp = ctx.message.created_at)
     emb.add_field(name = 'Напомню через', value = f'{time}s')
     emb.add_field(name = 'О чём напомню?', value = arg)
-    if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+    if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
     await ctx.send(embed = emb, delete_after = time)
     await asyncio.sleep(time)
     emb = discord.Embed(colour = ctx.author.color, timestamp = ctx.message.created_at)
     emb.add_field(name = 'Напомнил через', value = f'{time}s')
     emb.add_field(name = 'Напоминаю о', value = arg)
-    if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+    if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
     await ctx.send(f'{ctx.author.mention}', embed = emb)
 #Misc
@@ -1686,7 +1686,7 @@ async def dotersbrain(ctx):
 async def niggers(ctx):
     await ctx.message.delete()
     emb = discord.Embed(description = '[осуждающее видео](https://www.youtube.com/watch?v=167apVK8Suw)', colour = discord.Color.orange())
-    if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+    if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
     await ctx.send(embed = emb)
 
@@ -1696,7 +1696,7 @@ async def aye_balbec(ctx):
     await ctx.message.delete()
     emb = discord.Embed(colour = ctx.author.color)
     emb.set_image(url = 'https://sun9-61.userapi.com/tja5cuQthduwgxq2yMigLiUxfYq_5fqiA6cJWg/sZOkbPajoSY.jpg')
-    if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+    if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
     await ctx.send(embed = emb)
 
@@ -1705,7 +1705,7 @@ async def aye_balbec(ctx):
 async def rp(ctx):
     await ctx.message.delete()
     emb = discord.Embed(description = '[Ныа](https://www.youtube.com/watch?v=idmTSW9mfYI)', colour = discord.Color.orange())
-    if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+    if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
     await ctx.send(embed = emb)
 
@@ -1716,7 +1716,7 @@ async def rap(ctx):
     emb = discord.Embed(colour = ctx.author.color)
     emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
     emb.set_image(url = 'https://thumbs.gfycat.com/MessyCarefreeHousefly-size_restricted.gif')
-    if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+    if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
     await ctx.send(embed = emb)
 
@@ -1733,7 +1733,7 @@ async def zatka(ctx):
     emb.add_field(name = 'технические навыки:', value = 'Нет.', inline = False)
     emb.add_field(name = '(4). Сколько часов готовы уделять работе', value = '[ 15+ в неделю ]', inline = False)
     emb.add_field(name = 'в какое время дня свободны', value = '16:00 до 22:00+', inline = False)
-    if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+    if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
     await ctx.send(embed = emb)
 
@@ -1753,7 +1753,7 @@ async def coinflip(ctx):
     emb1.set_image(url = 'https://cdn.discordapp.com/attachments/524213591084105729/763837699240099890/-removebg-preview.png')
     choices = [emb, emb1]
     rancoin = random.choice(choices)
-    if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+    if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         emb1.set_footer(text = 'Cephalon Cy by сасиска#2472')
     await ctx.send(embed = rancoin)
@@ -1818,7 +1818,7 @@ async def say(ctx, *, msg):
             emb.set_image(url = image)
         if thumbnail:
             emb.set_thumbnail(url = thumbnail)
-        if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+        if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
             emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         if 't&' not in msg and 'd&' not in msg and 'img&' not in msg and 'th&' not in msg and 'c&' not in msg:
             if '--everyone' in msg:
@@ -1867,7 +1867,7 @@ async def edit(ctx, arg, *, msg = None):
                 emb.set_image(url = image)
             if thumbnail:
                 emb.set_thumbnail(url = thumbnail)
-            if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+            if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
                 emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
             if 't&' not in msg and 'd&' not in msg and 'img&' not in msg and 'th&' not in msg and 'c&' not in msg:
                 if message.author == client.user:
@@ -1932,7 +1932,7 @@ async def join(ctx):
         channel = ctx.author.voice.channel
     else:
         emb = discord.Embed(description = 'Ты должен быть в канале, чтобы использовать это.', colour = discord.Color.orange())
-        if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+        if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
             emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
     global vc
@@ -1945,7 +1945,7 @@ async def leave(ctx):
         pass
     else:
         emb = discord.Embed(description = 'Ты должен быть в канале, чтобы использовать это.', colour = discord.Color.orange())
-        if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+        if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
             emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
     await vc.disconnect()
@@ -1957,7 +1957,7 @@ async def ping(ctx):
     emb = discord.Embed(description = f'`fetching..`', colour = discord.Color.orange())
     emb1 = discord.Embed(description = f'Pong!  `{round(client.latency * 1000)} ms`', colour = discord.Color.orange())
     message = await ctx.send(embed = emb)
-    if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+    if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         emb1.set_footer(text = 'Cephalon Cy by сасиска#2472')
     await asyncio.sleep(client.latency)
@@ -1968,7 +1968,7 @@ async def ping(ctx):
 async def invite(ctx):
     await ctx.message.delete()
     emb = discord.Embed(description = '[Ссылка](https://discord.com/oauth2/authorize?client_id=694170281270312991&scope=bot&permissions=8) для быстрого приглашения Cy на сервера.', colour = discord.Color.orange())
-    if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+    if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
     await ctx.send(embed = emb)
 
@@ -1981,7 +1981,7 @@ async def info(ctx):
     emb.add_field(name = 'Версия', value = '0.12.9.10423')
     emb.add_field(name = 'Написан на', value = 'discord.py v1.5.1')
     emb.add_field(name = 'Разработчик', value = '[сасиска#2472](https://discord.com/users/338714886001524737)')
-    if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+    if ctx.guild.owner.id != client.owner_id:
         emb.add_field(name = 'Сервер', value = 'Данный сервер не принадлежит моему создателю или его знакомым. Все эмбед выводы будут иметь футер с текстом `Cephalon Cy by сасиска#2472`')
     if ctx.guild.id == 693929822543675455:
         emb.add_field(name = 'Принадлежность', value = 'Это - мой основной сервер.')
@@ -1990,7 +1990,7 @@ async def info(ctx):
     emb.add_field(name = 'Веб-сайт', value = '```http://ru-unioncraft.ru/```', inline = False)
     emb.add_field(name = 'Раздражаю', value = f'{len(client.users)} человек')
     emb.add_field(name = 'Существую на', value = f'{len(client.guilds)} серверах')
-    if ctx.guild.owner.id != client.owner_id or ctx.guild.owner.id not in friends:
+    if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
         emb.set_footer(text = 'Данное приложение не имеет никакого причастия к игре Warframe. Cephalon Cy by сасиска#2472', icon_url = 'https://i.playground.ru/p/yVaOZNSTdgUTxmzy_qvzzQ.png')
     else:
         emb.set_footer(text = 'Данное приложение не имеет никакого причастия к игре Warframe.', icon_url = 'https://i.playground.ru/p/yVaOZNSTdgUTxmzy_qvzzQ.png')
