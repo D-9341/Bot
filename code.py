@@ -16,7 +16,7 @@ client.remove_command('help')
 time_regex = re.compile(r"(?:(\d{1,5})(h|s|m|d))+?")
 time_dict = {'h': 3600, 's': 1, 'm': 60, 'd': 86400}
 
-friends = ['351071668241956865']
+friends = ['351071668241956865', '417362845303439360']
 
 class TimeConverter(commands.Converter):
     async def convert(self, ctx, argument):
