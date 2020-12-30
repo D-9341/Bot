@@ -1653,13 +1653,13 @@ async def roll(ctx):
 @client.command()
 async def dotersbrain(ctx):
     await ctx.message.delete()
-    sent1 = await ctx.send(f'{ctx.author.mention}, через 5 секунд появится одно из слов (чё, а, чего), на которое вам нужно будет правильно ответить. На размышление 3 секунды.')
+    sent1 = await ctx.send(f'{ctx.author.mention}, через 5 секунд появится одно из слов (чё, а, чего, да, нет, ок), на которое вам нужно будет правильно ответить. На размышление 4 секунды.')
     await asyncio.sleep(5)
-    words = ['чё', 'а', 'чего']
+    words = ['чё', 'а', 'чего', 'да', 'нет', 'ок']
     rand = random.choice(words)
     sent = await ctx.send(rand)
     try:
-        msg = await client.wait_for('message', timeout = 3, check = lambda message: message.author == ctx.author and message.channel == ctx.message.channel)
+        msg = await client.wait_for('message', timeout = 4, check = lambda message: message.author == ctx.author and message.channel == ctx.message.channel)
         if msg.content.lower() == 'хуй через плечо' and sent.content == 'чё':
             await ctx.send(f'Поздравляю, у вас 3 стадия рака!')
             await sent1.delete()
@@ -1672,8 +1672,20 @@ async def dotersbrain(ctx):
             await ctx.send(f'Поздравляю, у вас 3 стадия рака!')
             await sent1.delete()
             await sent.delete()
+        elif sent.content == 'да' and msg.content.lower() == 'пизда':
+            await ctx.send(f'Поздравляю, у вас 3 стадия рака!')
+            await sent1.delete()
+            await sent.delete()
+        elif sent.content == 'нет' and msg.content.lower() == 'пидора ответ':
+            await ctx.send(f'Поздравляю, у вас 3 стадия рака!')
+            await sent1.delete()
+            await sent.delete()
+        elif sent.content == 'ок' and msg.content.lower() == 'хуй намок':
+            await ctx.send(f'Поздравляю, у вас 3 стадия рака!')
+            await sent1.delete()
+            await sent.delete()
         else:
-            await ctx.send('Вы совершенно здоровый человек!')
+            await ctx.send('Вы совершенно здоровый человек! ||попробуйте cy/help dotersbrain||')
             await sent1.delete()
             await sent.delete()
     except asyncio.TimeoutError:
@@ -2053,7 +2065,7 @@ async def help(ctx, arg = None):
     elif arg == 'coinflip' or arg == 'coin' or arg == 'c':
         await ctx.send('```cy/c```')
     elif arg == 'dotersbrain':
-        await ctx.send('```cy/dotersbrain```')
+        await ctx.send('```cy/dotersbrain, список слов и рифм: чё - хуй через плечо; а - хуй на; чего - хуй на воротничок; да - пизда; нет - пидора ответ; ок - хуй намок```')
     elif arg == 'niggers':
         await ctx.send('```cy/niggers```')
     elif arg == 'rp':
