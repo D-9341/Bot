@@ -1603,13 +1603,6 @@ async def about(ctx, member: discord.Member = None):
     roles = ', '.join([role.name for role in member.roles[1:]])
     if member.activities != None and member.status != discord.Status.offline:
         emb.add_field(name = 'Активности', value = ', '.join([activity.name for activity in member.activities]))
-    if member.id == 774273205745483797 or member.id == 764882153812787250 or member.id == 694170281270312991:
-        bro = 'Даа'
-    if member.id == client.owner_id:
-        bro = 'Мой создатель a.k. чмырь'
-    else:
-        bro = 'Неа'
-    emb.add_field(name = 'Бро?', value = bro, inline = False)
     emb.add_field(name = 'Бот?', value = bot)
     if len(member.roles) != 1:
         emb.add_field(name = f'Роли ({len(member.roles)-1})', value = roles, inline = False)
