@@ -1601,8 +1601,6 @@ async def about(ctx, member: discord.Member = None):
         status = 'Не в сети'
     emb.add_field(name = 'Статус', value = status)
     roles = ', '.join([role.name for role in member.roles[1:]])
-    if member.activities != None and member.status != discord.Status.offline:
-        emb.add_field(name = 'Активности', value = ', '.join([activity.name for activity in member.activities]))
     if member.id == 774273205745483797 or member.id == 764882153812787250 or member.id == 694170281270312991:
         bro = 'Даа'
     if member.id == client.owner_id:
