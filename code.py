@@ -1639,15 +1639,28 @@ async def remind(ctx, time: TimeConverter, *, arg):
 
 #Fun
 @client.command()
-async def roll(ctx):
+async def roll(ctx, first: int = None, second: int = None):
     await ctx.message.delete()
-    rand = random.randint(0, 1)
-    if rand == '1':
-        await ctx.send(f'`100`')
-    else:
-        rand1 = random.randint(0, 9)
-        rand2 = random.randint(0, 9)
-        await ctx.send(f'`0{rand1}{rand2}`')
+    if first == None and second == None:
+        rand = random.randint(0, 1)
+        if rand == '1':
+            await ctx.send(f'{ctx.author} выпадает число(0-100)\n`100`')
+        else:
+            rand1 = random.randint(0, 9)
+            rand2 = random.randint(0, 9)
+            await ctx.send(f'`{ctx.author} выпадает число(0-100)\n0{rand1}{rand2}`')
+    if first != None and second == None:
+        rand = random.randint(0, first)
+        if first < 10:
+            await ctx.send(f'`{ctx.author} выпадает число(0-{first})\n0{rand}`')
+        else:
+            await ctx.send(f'`{ctx.author} выпадает число(0-{first})\n{rand}`')
+    if first != None and second != None:
+        if first > second:
+            rand = random.randint(first, first)
+            await ctx.send(f'`{ctx.author} выпадает число({first}-{first})\n{rand}`')
+        rand = random.randint(first, second)
+        await ctx.send(f'`{ctx.author} выпадает число({first}-{second})\n{rand}`')
 
 @client.command()
 async def dotersbrain(ctx):
