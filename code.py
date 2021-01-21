@@ -43,6 +43,18 @@ class Slapper(commands.Converter):
 
 #Events
 @client.event
+async def on_guild_role_update(before, after):
+    if before.name == '1':
+        role = before.guild.get_role(after.id)
+        await role.edit(name = '1', color = 0xff0000, reason = 'Нельзя изменять эту роль.')
+    elif before.name == '2':
+        role = before.guild.get_role(after.id)
+        await role.edit(name = '2', color = 0xff0000, reason = 'Нельзя изменять эту роль.')
+    elif before.name == 'Muted':
+        role = before.guild.get_role(after.id)
+        await role.edit(name = 'Muted', color = 0x000001, reason = 'Нельзя изменять эту роль.')
+
+@client.event
 async def on_command_completion(ctx):
     lchannel = client.get_channel(714175791033876490)
     emb = discord.Embed(title = 'ВЫПОЛНЕНИЕ_КОМАНДЫ', color = discord.Color.orange())
@@ -249,7 +261,7 @@ async def on_message(message):
     if not message.author.bot:
         if len(list(filter(lambda m: _check(m), client.cached_messages))) >= 3 and message.author.id != client.owner_id:
             role = discord.utils.get(message.guild.roles, name = 'Muted')
-            if role is not None:
+            if role != None:
                 if role not in message.author.roles:
                     await message.channel.send(f'{message.author.mention} Был замучен на 10 минут за спам упоминаниями. Больше так не делай!')
                     await message.author.add_roles(role)
@@ -259,18 +271,18 @@ async def on_message(message):
                     emb.add_field(name = 'УЧАСТНИК', value = message.author)
                     await channel.send(embed = emb)
                     await asyncio.sleep(600)
-                    if role is not None:
+                    if role != None:
                         if role in message.author.roles:
                             await message.author.remove_roles(role)
                             await message.channel.send(f'{message.author.mention} Был размучен.')
                         else:
                             await message.channel.send(f'Роли Muted не было обнаружено в списке ролей {message.author.mention}.')
                     else:
-                        await message.channel.send(f'{message.author.mention} Не был размучен по причине того, что роль Muted не была обнаружена в списке ролей сервера!')
+                        await message.channel.send(f'Невозможно снять мут у {message.author.mention}, т.к. роль Muted была удалена.')
                 else:
                     return
             else:
-                await message.channel.send(f'{message.author.mention}, прекрати так делать! (а ты, {message.guild.owner.mention}, создай роль Muted!)')
+                await message.guild.create_role(name = 'Muted', colour = discord.Colour(0x000001))
     if ('сделать') in message.content.lower() or ('предлагаю') in message.content.lower() or ('предложение') in message.content.lower():
         await message.add_reaction('👍')
         await message.add_reaction('👎')
@@ -624,7 +636,7 @@ async def mute(ctx, member: discord.Member, time: TimeConverter, *, reason: str 
                         emb = discord.Embed(description = f'Снятие мута для {member.mention} не требуется. Роли Muted не обнаружено в списке ролей участника.', colour = discord.Color.orange())
                         await ctx.send(embed = emb)
                 else:
-                    emb = discord.Embed(description = f'{ctx.author.mention}, Я не могу снять мут у {member.mention} из-за того, что роль Muted была удалена/отредактирована!', colour = discord.Color.orange(), timestamp = ctx.message.created_at)
+                    emb = discord.Embed(description = f'Невозможно снять мут у {member.mention}, т.к. роль Muted была удалена.', colour = discord.Color.orange(), timestamp = ctx.message.created_at)
                     await ctx.send(embed = emb)
             else:
                 await ctx.guild.create_role(name = 'Muted', colour = discord.Colour(0x000001))
@@ -680,7 +692,7 @@ async def unmute(ctx, member: discord.Member, *, reason = None):
             emb = discord.Embed(description = 'Снятие мута не требуется. Роли Muted не обнаружено в списке ролей участника.', colour = discord.Color.orange())
             await ctx.send(embed = emb)
     else:
-        emb = discord.Embed(description = f'{ctx.author.mention}, Я не могу снять мут у {member.mention} из-за того, что роль Muted была удалена/отредактирована!', colour = discord.Color.orange(), timestamp = ctx.message.created_at)
+        emb = discord.Embed(description = f'Невозможно снять мут у {member.mention}, т.к. роль Muted была удалена.', colour = discord.Color.orange(), timestamp = ctx.message.created_at)
         await ctx.send(embed = emb)
 
 @client.command(aliases = ['Clear', 'CLEAR', 'purge', 'Purge', 'PURGE', 'prune', 'Prune', 'PRUNE', 'clean', 'Clean', 'CLEAN'])
