@@ -171,6 +171,10 @@ async def on_member_join(member):
                 emb1.add_field(name = 'РОЛИ', value = f'{role.mention}, {role1.mention}, {role2.mention}')
                 emb1.set_footer(text = f'ID: {member.id}')
                 await lchannel.send(embed = emb1)
+    else:
+        role = discord.utils.get(member.guild.roles, id = 693933516831850527)
+        role1 = discord.utils.get(member.guild.roles, id = 693933511412940800)
+        await member.add_roles(role, role1)
 
 @client.event
 async def on_member_remove(member):
@@ -2031,13 +2035,13 @@ async def help(ctx, arg = None):
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
     elif arg == 'roll':
-        await ctx.send('```apache\ncy/roll [от] [до]\nесли не указано [до], [от] станет [до].\ncy/roll 80 (0-80)\ncy/roll 26 90 (26-90)\ncy/roll\n([] - опционально)```')
+        await ctx.send('```apache\ncy/roll [от] [до]\nесли не указано [до], [от] станет [до].\ncy/roll 80 (0-80)\ncy/roll 26 90 (26-90)\ncy/roll (0-100)\n([] - опционально)```')
     elif arg == 'about':
         await ctx.send('```apache\ncy/about [@пинг/имя/ID] ([] - опционально, / - или)```')
     elif arg == 'avatar':
         await ctx.send('```apache\ncy/avatar [@пинг/имя/ID] ([] - опционально, / - или)```')
     elif arg == 'ban':
-        await ctx.send('```apache\ncy/ban <@пинг/имя/ID> [причина/--soft --reason]\ncy/ban 185476724627210241 --soft --reason лошара\ncy/ban @сасиска чмо\ncy/ban "Sgt.White"\n\nПри использовании --soft обязательно указывать --reason после него, однако можно не использовать --reason\n\n([] - опционально, <> - обязательно, / - или)\nperms = ban_members```')
+        await ctx.send('```apache\ncy/ban <@пинг/имя/ID> [причина/--soft --reason]\ncy/ban 185476724627210241 --soft --reason лошара\ncy/ban @сасиска чмо\ncy/ban "Sgt.White"\n\nПри использовании --soft обязательно указывать --reason после него, однако можно не использовать --reason\n([] - опционально, <> - обязательно, / - или)\nperms = ban_members```')
     elif arg == 'content' or arg == 'ctx':
         await ctx.send('```apache\ncy/content <ID> (<> - обязательно)```')
     elif arg == 'clear':
