@@ -45,7 +45,7 @@ class Slapper(commands.Converter):
 @client.event
 async def on_guild_role_update(before, after):
     if before.name == '1':
-        await befor.edit(name = '1', color = 0xff0000, reason = 'Нельзя изменять эту роль.')
+        await before.edit(name = '1', color = 0xff0000, reason = 'Нельзя изменять эту роль.')
     elif before.name == '2':
         await before.edit(name = '2', color = 0xff0000, reason = 'Нельзя изменять эту роль.')
     elif before.name == 'Muted':
