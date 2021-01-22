@@ -48,15 +48,6 @@ class Slapper(commands.Converter):
 
 #Events
 @client.event
-async def on_guild_role_update(before, after):
-    if before.name == '1':
-        await before.edit(name = '1', reason = 'Нельзя изменять эту роль.')
-    elif before.name == '2':
-        await before.edit(name = '2', reason = 'Нельзя изменять эту роль.')
-    elif before.name == 'Muted':
-        await before.edit(name = 'Muted', reason = 'Нельзя изменять эту роль.')
-
-@client.event
 async def on_command_completion(ctx):
     lchannel = client.get_channel(714175791033876490)
     emb = discord.Embed(title = 'ВЫПОЛНЕНИЕ_КОМАНДЫ', color = discord.Color.orange())
@@ -261,30 +252,67 @@ async def on_message(message):
     def _check(m):
         return (m.author == message.author and len(m.mentions) and (datetime.datetime.utcnow() - m.created_at).seconds < 5)
     if not message.author.bot:
-        if len(list(filter(lambda m: _check(m), client.cached_messages))) >= 3 and message.author.id != client.owner_id:
+        if len(list(filter(lambda m: _check(m), client.cached_messages))) >= 5 and message.author.id != client.owner_id:
             role = discord.utils.get(message.guild.roles, name = 'Muted')
-            if role != None:
+            role3 = discord.utils.get(message.guild.roles, name = '----------Предупреждения----------')
+            role1 = discord.utils.get(message.guild.roles, name = '1')
+            role2 = discord.utils.get(message.guild.roles, name = '2')
+            if role != None and role1 != None and role2 != None and role3 != None:
                 if role not in message.author.roles:
-                    await message.channel.send(f'{message.author.mention} Был замучен на 10 минут за спам упоминаниями. Больше так не делай!')
-                    await message.author.add_roles(role)
-                    channel = client.get_channel(714175791033876490)
-                    emb = discord.Embed(title = 'СРАБОТАЛ\_АВТО_МУТ', color = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
-                    emb.add_field(name = 'СЕРВЕР', value = message.guild.name)
-                    emb.add_field(name = 'УЧАСТНИК', value = message.author)
-                    await channel.send(embed = emb)
-                    await asyncio.sleep(600)
-                    if role != None:
-                        if role in message.author.roles:
-                            await message.author.remove_roles(role)
-                            await message.channel.send(f'{message.author.mention} Был размучен.')
+                    if role1 not in message.author.roles and role2 not in message.author.roles:
+                        await message.channel.send(f'{message.author.mention} Был замучен на 10 минут за спам упоминаниями. Больше так не делай!')
+                        await message.author.add_roles(role, role1, role3)
+                        channel = client.get_channel(714175791033876490)
+                        emb = discord.Embed(title = 'СРАБОТАЛ\_АВТО_МУТ', color = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
+                        emb.add_field(name = 'СЕРВЕР', value = message.guild.name)
+                        emb.add_field(name = 'УЧАСТНИК', value = message.author)
+                        await channel.send(embed = emb)
+                        await asyncio.sleep(600)
+                        if role != None:
+                            if role in message.author.roles:
+                                await message.author.remove_roles(role)
+                                await message.channel.send(f'{message.author.mention} Был размучен.')
+                            else:
+                                await message.channel.send(f'Роли Muted не было обнаружено в списке ролей {message.author.mention}.')
                         else:
-                            await message.channel.send(f'Роли Muted не было обнаружено в списке ролей {message.author.mention}.')
-                    else:
-                        await message.channel.send(f'Невозможно снять мут у {message.author.mention}, т.к. роль Muted была удалена.')
+                            await message.channel.send(f'Невозможно снять мут у {message.author.mention}, т.к. роль `Muted` была удалена.')
+                    if role1 in message.author.roles and role2 not in message.author.roles:
+                        await message.channel.send(f'{message.author.mention} Был замучен на 30 минут за спам упоминаниями. Последнее предупреждение.')
+                        await message.author.remove_roles(role1)
+                        await message.author.add_roles(role, role2, role3)
+                        channel = client.get_channel(714175791033876490)
+                        emb = discord.Embed(title = 'СРАБОТАЛ\_АВТО_МУТ', color = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
+                        emb.add_field(name = 'СЕРВЕР', value = message.guild.name)
+                        emb.add_field(name = 'УЧАСТНИК', value = message.author)
+                        await channel.send(embed = emb)
+                        await asyncio.sleep(1800)
+                        if role != None:
+                            if role in message.author.roles:
+                                await message.author.remove_roles(role)
+                                await message.channel.send(f'{message.author.mention} Был размучен.')
+                            else:
+                                await message.channel.send(f'Роли Muted не было обнаружено в списке ролей {message.author.mention}.')
+                        else:
+                            await message.channel.send(f'Невозможно снять мут у {message.author.mention}, т.к. роль `Muted` была удалена.')
+                    if role2 in message.author.roles:
+                        await message.channel.send(f'{message.author.mention} Был замучен навсегда за спам упоминаниями.')
+                        await message.author.add_roles(role)
+                        await message.author.remove_roles(role2, role3)
+                        channel = client.get_channel(714175791033876490)
+                        emb = discord.Embed(title = 'СРАБОТАЛ\_АВТО_МУТ', color = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
+                        emb.add_field(name = 'СЕРВЕР', value = message.guild.name)
+                        emb.add_field(name = 'УЧАСТНИК', value = message.author)
+                        await channel.send(embed = emb)
                 else:
                     return
-            else:
-                await message.guild.create_role(name = 'Muted', colour = discord.Colour(0x000001))
+            elif role == None:
+                await message.guild.create_role(name = 'Muted', colour = discord.Colour(0x000001), reason = 'Создано автоматически из-за недостатка ролей.')
+            elif role3 == None:
+                await message.guild.create_role(name = '----------Предупреждения----------', colour = discord.Colour(0x2f3136), reason = 'Создано автоматически из-за недостатка ролей.')  
+            elif role1 == None:
+                await message.guild.create_role(name = '1', colour = discord.Colour(0xff0000), reason = 'Создано автоматически из-за недостатка ролей.')
+            elif role2 == None:
+                await message.guild.create_role(name = '2', colour = discord.Colour(0xff0000), reason = 'Создано автоматически из-за недостатка ролей.')  
     if ('сделать') in message.content.lower() or ('предлагаю') in message.content.lower() or ('предложение') in message.content.lower():
         await message.add_reaction('👍')
         await message.add_reaction('👎')
@@ -1956,6 +1984,27 @@ async def edit(ctx, arg, *, msg = None):
 
 #Cephalon
 @client.command()
+async def setup(ctx):
+    await ctx.message.delete()
+    role3 = discord.utils.get(ctx.guild.roles, name = '----------Предупреждения----------')
+    role1 = discord.utils.get(ctx.guild.roles, name = '1')
+    role2 = discord.utils.get(ctx.guild.roles, name = '2')
+    role = discord.utils.get(ctx.guild.roles, name = 'Muted')
+    if role and role1 and role2 and role3 != None:
+        emb = discord.Embed(description = 'Все нужные роли уже присутсвуют на сервере.', color = discord.Color.orange())
+        await ctx.send(embed = emb)
+    emb = discord.Embed(description = 'С написанием этой команды на сервер будут добавлены несколько ролей, если их нет (4). Они нужны для правильной работы авто и обычного мута. Не следует их изменять или удалять, так как они будут созданы снова, из-за чего будет много одинаковых ролей.', color = discord.Color.orange())
+    await ctx.send(embed = emb)
+    if role == None:
+        await ctx.guild.create_role(name = 'Muted', colour = discord.Colour(0x000001), reason = 'Создано командой setup.')
+    if role3 == None:
+        await ctx.guild.create_role(name = '----------Предупреждения----------', color = discord.Color(0x2f3136), reason = 'Создано командой setup.')
+    if role1 == None:
+        await ctx.guild.create_role(name = '1', color = discord.Color(0xff0000), reason = 'Создано командой setup.')
+    if role2 == None:
+        await ctx.guild.create_role(name = '2', color = discord.Color(0xff0000), reason = 'Создано командой setup.')
+
+@client.command()
 async def generate(ctx):
     await ctx.message.delete()
     token = ''.join([secrets.choice('QWERTYUIOPASDFGHJKLZXCVBNM1234567890') for i in range(4)])
@@ -2040,7 +2089,7 @@ async def help(ctx, arg = None):
     await ctx.message.delete()
     if arg == None:
         emb = discord.Embed(title = client.user.name, description = 'Вот команды, что я могу исполнить.\n||Некоторые улучшения появятся после верификации.||', colour = discord.Color.orange())
-        emb.add_field(name = 'Cephalon', value = '`info`, `invite`, `join`, `leave`, `ping`', inline = False)
+        emb.add_field(name = 'Cephalon', value = '`info`, `invite`, `join`, `leave`, `ping`, `setup`', inline = False)
         emb.add_field(name = 'Embeds', value = '`content`, `edit`, `say`', inline = False)
         emb.add_field(name = 'Fun', value = '`aye_balbec`, `cu`, `coinflip`, `dotersbrain`, `niggers`, `rp`, `rap`, `roll`, `zatka`', inline = False)
         emb.add_field(name = 'Mod', value = '`ban`, `clear`, `dm`, `give`, `kick`, `mute`, `take`, `unmute`', inline = False)
@@ -2048,6 +2097,8 @@ async def help(ctx, arg = None):
         emb.add_field(name = 'ᅠ', value = '**Используйте** `cy/help [команда/категория]` **для подробностей использования.**\n\n**[Ссылка-приглашение](https://discord.com/oauth2/authorize?client_id=694170281270312991&scope=bot&permissions=8)**', inline = False)
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
+    elif arg == 'setup':
+        await ctx.send('```apache\ncy/setup\nвыполнение команды создаст 4 роли, если их нет на сервере.\nбудет выполнено автоматически, если сработает авто-мут.```')
     elif arg == 'roll':
         await ctx.send('```apache\ncy/roll [от] [до]\nесли не указано [до], [от] станет [до].\ncy/roll 80 (0-80)\ncy/roll 26 90 (26-90)\ncy/roll (0-100)\n([] - опционально)```')
     elif arg == 'about':
@@ -2079,7 +2130,7 @@ async def help(ctx, arg = None):
     elif arg == 'take':
         await ctx.send('```apache\ncy/take <@пинг/имя/ID> <@роль/имя роли/ID роли> (<> - обязательно, / - или)\nperms = manage_channels```')
     elif arg == 'someone':
-        await ctx.send('```apache\ncy/someone <текст> <> - обязательно)```')
+        await ctx.send('```apache\ncy/someone <текст> (<> - обязательно)```')
     elif arg == 'unmute':
         await ctx.send('```apache\ncy/unmute <@пинг/имя/ID> [причина] ([] - опционально, <> - обязательно, / - или)\nperms = manage_channels```')
     elif arg == 'vote':
