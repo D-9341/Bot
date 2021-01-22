@@ -5,13 +5,18 @@ import json
 import os
 import random
 import re
-import discord
 import secrets
+
+import discord
 from discord.ext import commands
 from discord.utils import get
 
 client = commands.Bot(command_prefix = commands.when_mentioned_or('cy/'), intents = discord.Intents.all(), owner_id = 338714886001524737)
 client.remove_command('help')
+
+@client.event
+async def on_ready():
+    await client.change_presence(status = discord.Status.idle, activity = discord.Activity(type = discord.ActivityType.watching, name = 'Discord API'))
 
 time_regex = re.compile(r"(?:(\d{1,5})(h|s|m|d))+?")
 time_dict = {'h': 3600, 's': 1, 'm': 60, 'd': 86400}
@@ -2116,10 +2121,6 @@ async def help(ctx, arg = None):
     else:
         emb = discord.Embed(description = f'Команда `{arg}` не обнаружена.', color = discord.Color.orange())
         await ctx.send(embed = emb)
-
-@client.event
-async def on_ready():
-    await client.change_presence(status = discord.Status.idle, activity = discord.Activity(type = discord.ActivityType.watching, name = 'Discord API'))
 
 @client.event
 async def on_command_error(ctx, error):
