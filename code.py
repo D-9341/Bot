@@ -45,11 +45,11 @@ class Slapper(commands.Converter):
 @client.event
 async def on_guild_role_update(before, after):
     if before.name == '1':
-        await before.edit(name = '1', color = 0xff0000, reason = 'Нельзя изменять эту роль.')
+        await after.edit(name = '1', color = discord.Color(0xff0000), reason = 'Нельзя изменять эту роль.')
     elif before.name == '2':
-        await before.edit(name = '2', color = 0xff0000, reason = 'Нельзя изменять эту роль.')
+        await after.edit(name = '2', color = discord.Color(0xff0000), reason = 'Нельзя изменять эту роль.')
     elif before.name == 'Muted':
-        await before.edit(name = 'Muted', color = 0x000001, reason = 'Нельзя изменять эту роль.')
+        await after.edit(name = 'Muted', color = discord.Color(0x000001), reason = 'Нельзя изменять эту роль.')
 
 @client.event
 async def on_command_completion(ctx):
