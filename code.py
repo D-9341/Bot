@@ -2053,12 +2053,18 @@ async def ping(ctx):
 
 @client.command(aliases = ['invcy'])
 @commands.cooldown(1, 3, commands.BucketType.user)
-async def invite(ctx):
+async def invite(ctx, arg = None):
     await ctx.message.delete()
-    emb = discord.Embed(description = '[Ссылка](https://discord.com/oauth2/authorize?client_id=694170281270312991&scope=bot&permissions=8) для быстрого приглашения Cy на сервера.', colour = discord.Color.orange())
-    if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
-        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-    await ctx.send(embed = emb)
+    if arg == None:
+        emb = discord.Embed(description = '[Ссылка](https://discord.com/oauth2/authorize?client_id=694170281270312991&scope=bot&permissions=8) для приглашения Cy на сервера.', colour = discord.Color.orange())
+        if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
+            emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+        await ctx.send(embed = emb)
+    if arg.lower == 'beta':
+        emb = discord.Embed(description = '[Ссылка](https://discord.com/oauth2/authorize?client_id=764882153812787250&scope=bot&permissions=8) для приглашения Cy Beta на сервера.', color = discord.Color.orange())
+        if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
+            emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+        await ctx.send(embed = emb)
 
 @client.command(aliases = ['Info', 'INFO'])
 @commands.cooldown(1, 5, commands.BucketType.user)
@@ -2066,7 +2072,7 @@ async def info(ctx):
     await ctx.message.delete()
     emb = discord.Embed(colour = discord.Color.orange())
     emb.set_author(name = client.user.name, url = 'https://warframe.fandom.com/wiki/Cephalon_Cy', icon_url = client.user.avatar_url)
-    emb.add_field(name = 'Версия', value = '0.12.9.10423')
+    emb.add_field(name = 'Версия', value = '0.12.9.10519')
     emb.add_field(name = 'Написан на', value = 'discord.py v1.5.1')
     emb.add_field(name = 'Разработчик', value = '[сасиска#2472](https://discord.com/users/338714886001524737)')
     if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
