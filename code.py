@@ -1860,6 +1860,12 @@ async def content(ctx, arg):
     message = await ctx.fetch_message(id = arg)
     if message.author == client.user:
         if message.embeds == []:
+            if '@everyone' in message.content:
+                await ctx.send(f'```cy/say --everyone {message.content.strip()[10:].strip()}```')
+            else:
+                await ctx.send(f'```cy/say {message.content}```')
+        else:
+            for emb in message.embeds:
                 if '@everyone' in message.content:
                     if emb.image.url != emb.Empty:
                         img = f' | img& {emb.image.url}'
@@ -1901,7 +1907,7 @@ async def content(ctx, arg):
             await ctx.send(f'```@{message.author} {message.content}```')
         else:
             for emb in message.embeds:
-                await ctx.send(f'```content {message.content} title {emb.title} description {emb.description} footer {emb.footer.text} color {emb.colour} author {emb.author.name} image {emb.image.url} footer img {emb.thumbnail.url}```')
+                await ctx.send(f'```content {message.content} title {emb.title} description {emb.description} footer {emb.footer.text} color {emb.color} author {emb.author.name} image {emb.image.url} footer img {emb.thumbnail.url}```')
 
 @client.command(aliases = ['Say', 'SAY'])
 @commands.has_permissions(manage_channels = True)
