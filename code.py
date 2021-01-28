@@ -48,6 +48,33 @@ class Slapper(commands.Converter):
 
 #Events
 @client.event
+async def on_guild_role_update(before, after):
+    if before.name == '1':
+        role = before.guild.get_role(after.id)
+        if after.name == '2' or after.name == 'Muted':
+            await role.delete()
+            g = await before.guild.create_role(name = '1', color = discord.Color(0xff0000), reason = 'Нет, нельзя менять название этой роли на Muted или 2')
+            await g.edit(position = 2)
+        else:
+            await role.edit(name = '1', color = discord.Color(0xff0000), reason = 'Нельзя изменять эту роль.')
+    if before.name == '2':
+        role = before.guild.get_role(after.id)
+        if after.name == '1' or after.name == 'Muted':
+            await role.delete()
+            g = await before.guild.create_role(name = '2', color = discord.Color(0xff0000), reason = 'Нет, нельзя менять название этой роли на Muted или 1')
+            await g.edit(position = 1)
+        else:
+            await role.edit(name = '2', color = discord.Color(0xff0000), reason = 'Нельзя изменять эту роль.')
+    if before.name == 'Muted':
+        role = before.guild.get_role(after.id)
+        if after.name == '2' or after.name == '1':
+            await role.delete()
+            g = await before.guild.create_role(name = '1', color = discord.Color(0xff0000), reason = 'Нет , нельзя менять название этой роли на 1 или 2')
+            await g.edit(position = 4)
+        else:
+            await role.edit(name = 'Muted', color = discord.Color(0x000001), reason = 'Нельзя изменять эту роль.')
+
+@client.event
 async def on_command_completion(ctx):
     lchannel = client.get_channel(714175791033876490)
     emb = discord.Embed(title = 'ВЫПОЛНЕНИЕ_КОМАНДЫ', color = discord.Color.orange())
@@ -1833,16 +1860,42 @@ async def content(ctx, arg):
     message = await ctx.fetch_message(id = arg)
     if message.author == client.user:
         if message.embeds == []:
-            if '@everyone' in message.content:
-                await ctx.send(f'```py\ncy/say --everyone {message.content.strip()[10:].strip()}```')
-            else:
-                await ctx.send(f'```py\ncy/say {message.content}```')
-        else:
-            for emb in message.embeds:
                 if '@everyone' in message.content:
-                    await ctx.send(f'```py\ncy/say --everyone | c& {emb.color} | t& {emb.title} | d& {emb.description} | th& {emb.thumbnail.url} | img& {emb.image.url}```')
+                    if emb.image.url != emb.Empty:
+                        img = f' | img& {emb.image.url}'
+                    else:
+                        img = ''
+                    if emb.thumbnail.url != emb.Empty:
+                        th = f' | th& {emb.thumbnail.url}'
+                    else:
+                        th = ''
+                    if emb.description != emb.Empty:
+                        d = f' | d& {emb.description}'
+                    else:
+                        d = ''
+                    if emb.title != emb.Empty:
+                        t = f'| t& {emb.title}'
+                    else:
+                        t = ''
+                    await ctx.send(f'```py\ncy/say --everyone {t}{d}{th}{img}```')
                 else:
-                    await ctx.send(f'```py\ncy/say c& {emb.color} | t& {emb.title} | d& {emb.description} | th& {emb.thumbnail.url} | img& {emb.image.url}```')
+                    if emb.image.url != emb.Empty:
+                        img = f' | img& {emb.image.url}'
+                    else:
+                        img = ''
+                    if emb.thumbnail.url != emb.Empty:
+                        th = f' | th& {emb.thumbnail.url}'
+                    else:
+                        th = ''
+                    if emb.description != emb.Empty:
+                        d = f' | d& {emb.description}'
+                    else:
+                        d = ''
+                    if emb.title != emb.Empty:
+                        t = f't& {emb.title}'
+                    else:
+                        t = ''
+                    await ctx.send(f'```py\ncy/say {t}{d}{th}{img}```')
     else:
         if message.embeds == []:
             await ctx.send(f'```@{message.author} {message.content}```')
