@@ -614,12 +614,12 @@ async def take(ctx, member: discord.Member, *, role: discord.Role):
     await ctx.message.delete()
     if role != None:
         if role > member.top_role and ctx.message.author.id != 338714886001524737:
-            emb = discord.Embed(description = f'Вы не можете выдать {role.mention}, так как она имеет более высокий ранг, чем ваша высшая роль. Забирание роли отмененою', color = 0xffffff)
+            emb = discord.Embed(description = f'Вы не можете забрать {role.mention}, так как она имеет более высокий ранг, чем ваша высшая роль. Забирание роли отменено.', color = 0xffffff)
             await ctx.send(embed = emb)
             if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
                 emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         elif role == ctx.author.top_role and ctx.message.author.id != 338714886001524737:
-            emb = discord.Embed(description = f'Вы не можете выдать {role.mention} кому-либо, так как она равна вашей высшей роли. Забирание роли отмененою', color = 0xffffff)
+            emb = discord.Embed(description = f'Вы не можете забрать {role.mention}, так как она равна вашей высшей роли. Забирание роли отменено.', color = 0xffffff)
             if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
                 emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
             await ctx.send(embed = emb)
