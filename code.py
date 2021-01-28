@@ -1927,7 +1927,7 @@ async def say(ctx, *, msg):
         elif i.strip().lower().startswith('c&'):
             color = i.strip()[2:].strip()
     if color == None:
-        color = ctx.author.color
+        color = 0x2f3136
     else:
         color = int('0x' + color, 16)
     emb = discord.Embed(title = title, description = description, color = color)
@@ -1977,7 +1977,7 @@ async def edit(ctx, arg, *, msg = None):
             elif i.strip().lower().startswith('c&'):
                 color = i.strip()[2:].strip()
         if color == None:
-            color = ctx.author.color
+            color = 0x2f3136
         else:
             color = int('0x' + color, 16)
         if ctx.author.id == 338714886001524737 and ctx.guild.id != 693929822543675455:
