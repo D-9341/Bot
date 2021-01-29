@@ -699,7 +699,7 @@ async def mute(ctx, member: discord.Member, time: TimeConverter, *, reason: str 
                 await ctx.guild.create_role(name = 'Muted', colour = discord.Colour(0x000001))
                 role = discord.utils.get(ctx.guild.roles, name = 'Muted')
                 emb1 = discord.Embed(description = f'{ctx.author.mention}, По причине того, что я не нашёл нужную роль, была создана роль {role.name} с цветом {role.colour}.', colour = discord.Color.orange(), timestamp = ctx.message.created_at)
-                emb1.set_footer(text = 'Это сообщение должно показываться только 1 раз. Иначе, роль была удалена.)
+                emb1.set_footer(text = 'Это сообщение должно показываться только 1 раз. Иначе, роль была удалена.')
                 await ctx.send(embed = emb1, delete_after = 3)
                 await asyncio.sleep(3)
                 await member.add_roles(role)
