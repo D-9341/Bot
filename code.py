@@ -69,7 +69,7 @@ async def on_guild_role_update(before, after):
         role = before.guild.get_role(after.id)
         if after.name == '2' or after.name == '1':
             await role.delete()
-            g = await before.guild.create_role(name = '1', color = discord.Color(0xff0000), reason = 'Нет , нельзя менять название этой роли на 1 или 2')
+            g = await before.guild.create_role(name = 'Muted', color = discord.Color(0x000001), reason = 'Нет , нельзя менять название этой роли на 1 или 2')
             await g.edit(position = 4)
         else:
             await role.edit(name = 'Muted', color = discord.Color(0x000001), reason = 'Нельзя изменять эту роль.')
