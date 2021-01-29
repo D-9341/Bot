@@ -749,7 +749,7 @@ async def unmute(ctx, member: discord.Member, *, reason = None):
                 emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
             await ctx.send(embed = emb)
         else:
-            emb = discord.Embed(description = f'Снятие мута не требуется, роли Muted не обнаружено в ролях {member.mention}.', colour = 
+            emb = discord.Embed(description = f'Снятие мута не требуется, роли Muted не обнаружено в ролях {member.mention}.', colour = 0x2f3136)
             await ctx.send(embed = emb)
     else:
         emb = discord.Embed(description = f'Невозможно снять мут у {member.mention}, т.к. роль Muted была удалена.', colour = discord.Color.orange(), timestamp = ctx.message.created_at)
