@@ -589,7 +589,7 @@ async def give(ctx, member: discord.Member, *, role: discord.Role):
                 emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
             await ctx.send(embed = emb)
         elif role.is_default():
-            emb = discord.Embed(description = 'Выдавать @everyone?', color = 0xff0000)
+            emb = discord.Embed(description = 'Выдавать @everyone?', color = 0x2f3136)
             if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
                 emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
             await ctx.send(embed = emb)
@@ -634,7 +634,7 @@ async def take(ctx, member: discord.Member, *, role: discord.Role):
                 emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
             await ctx.send(embed = emb)
         elif role.is_default():
-            emb = discord.Embed(description = 'Забирать @everyone?', color = 0xff0000)
+            emb = discord.Embed(description = 'Забирать @everyone?', color = 0x2f3136)
             if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
                 emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
             await ctx.send(embed = emb)
