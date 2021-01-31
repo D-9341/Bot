@@ -657,6 +657,12 @@ async def take(ctx, member: discord.Member, *, role: discord.Role):
 @commands.has_permissions(view_audit_log = True)
 async def mute(ctx, member: discord.Member, time: TimeConverter, *, reason: str = None):
     await ctx.message.delete()
+    if time < 300:
+        color = 0x2f3136
+    if time >= 300:
+        color = discord.Color.orange()
+    if time >= 1200:
+        color = 0xff0000
     if reason == None:
         reason = 'Не указана.'
     role = discord.utils.get(ctx.guild.roles, name = 'Muted')
@@ -670,7 +676,7 @@ async def mute(ctx, member: discord.Member, time: TimeConverter, *, reason: str 
         else:
             if role != None:
                 await member.add_roles(role)
-                emb = discord.Embed(colour = 0x2f3136, timestamp = ctx.message.created_at)
+                emb = discord.Embed(colour = color, timestamp = ctx.message.created_at)
                 emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
                 emb.add_field(name = 'В муте', value = f'{member.mention}')
                 emb.add_field(name = 'По причине', value = reason)
@@ -681,7 +687,7 @@ async def mute(ctx, member: discord.Member, time: TimeConverter, *, reason: str 
                 await asyncio.sleep(time)
                 if role != None:
                     if role in member.roles:
-                        emb = discord.Embed(colour = 0x2f3136, timestamp = ctx.message.created_at)
+                        emb = discord.Embed(colour = color, timestamp = ctx.message.created_at)
                         emb.add_field(name = 'Размучен по истечению времени', value = member.mention)
                         emb.add_field(name = 'Был в муте по причине', value = reason)
                         emb.add_field(name = 'Время мута составляло', value = f'{time}s')
@@ -703,7 +709,7 @@ async def mute(ctx, member: discord.Member, time: TimeConverter, *, reason: str 
                 await ctx.send(embed = emb1, delete_after = 3)
                 await asyncio.sleep(3)
                 await member.add_roles(role)
-                emb = discord.Embed(colour = 0x2f3136, timestamp = ctx.message.created_at)
+                emb = discord.Embed(colour = color, timestamp = ctx.message.created_at)
                 emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
                 emb.add_field(name = 'В муте', value = f'{member.mention}')
                 emb.add_field(name = 'По причине', value = reason)
@@ -714,7 +720,7 @@ async def mute(ctx, member: discord.Member, time: TimeConverter, *, reason: str 
                 await asyncio.sleep(time)
                 if role != None:
                     if role in member.roles:
-                        emb = discord.Embed(colour = 0x2f3136, timestamp = ctx.message.created_at)
+                        emb = discord.Embed(colour = color, timestamp = ctx.message.created_at)
                         emb.add_field(name = 'Размучен по истечению времени', value = member.mention)
                         emb.add_field(name = 'Был в муте по причине', value = reason)
                         emb.add_field(name = 'Время мута составляло', value = f'{time}s')
