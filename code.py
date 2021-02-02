@@ -250,8 +250,7 @@ async def on_voice_state_update(member, before, after):
                 room = 'Чего бля'
             else:
                 room = f'Комната {member}'
-            category = discord.utils.get(member.guild.categories, id = 742647888101769236)
-            channel = await member.guild.create_voice_channel(name = room, category = category)
+            channel = await member.guild.create_voice_channel(name = room, category = after.channel.category)
             await member.move_to(channel)
             await channel.set_permissions(member, mute_members = True, move_members = True, manage_channels = True)
             def check(a,b,c):
