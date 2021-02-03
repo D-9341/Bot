@@ -609,7 +609,6 @@ async def give(ctx, member: discord.Member, *, role: discord.Role):
             await ctx.send(embed = emb)
 
 @client.command(aliases = ['Take', 'TAKE'])
-@commands.has_permissions(manage_channels = True)
 async def take(ctx, member: discord.Member, *, role: discord.Role):
     await ctx.message.delete()
     if ctx.message.author.guild_permissions.manage_channels or ctx.author.id == client.owner_id:
