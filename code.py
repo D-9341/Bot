@@ -245,7 +245,8 @@ async def on_guild_join(guild):
 @client.event
 async def on_voice_state_update(member, before, after):
     try:
-        if after.channel.id == 742647888424730735:
+        if after.channel.name == 'Создать канал':
+            await after.channel.edit(user_limit = 1)
             if member.bot == True:
                 room = 'Чего бля'
             else:
@@ -2160,6 +2161,7 @@ async def help(ctx, arg = None):
         emb.add_field(name = 'Fun', value = '`aye_balbec`, `cu`, `coinflip`, `dotersbrain`, `niggers`, `rp`, `rap`, `roll`, `zatka`', inline = False)
         emb.add_field(name = 'Mod', value = '`ban`, `clear`, `dm`, `give`, `kick`, `mute`, `take`, `unmute`', inline = False)
         emb.add_field(name = 'Misc', value = '`about`, `avatar`, `guild`, `remind`, `role`, `rolemembers`, `someone`, `vote`', inline = False)
+        emb.add_field(name = 'ᅠ', value = 'Назовите комнату `Создать канал` (**регистр обязателен**), чтобы бот автоматически создавал для вас временные каналы, которые будут удаляться после того, как все люди выйдут из канала.', inline = False)
         emb.add_field(name = 'ᅠ', value = '**Используйте** `cy/help [команда/категория]` **для подробностей использования.**\n\n**[Ссылка-приглашение](https://discord.com/oauth2/authorize?client_id=694170281270312991&scope=bot&permissions=8)**', inline = False)
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
