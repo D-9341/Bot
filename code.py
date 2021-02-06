@@ -1991,6 +1991,8 @@ async def edit(ctx, arg, *, msg = None):
                 choices = ['х̙̣̲̪͋̃ͬͫ́͞͡ы̢͇̳̽̋͌ͨͪ͟͠х̩̜̞̝̗͌ͪͦ͆а̘͔̮̍͆ͮͫ̎͘', 'а͖̂͐̄̓͗͗̇ͪ̀̕͜а̷̨͙̩͔̜̹̗̎а́͋̐͆́͝҉̛̩̳̰̲̳̭̟̖͕а̘̠͖̝̰͇̜̭͌̿̂̋ͫ̂ͯ͊́̕͝ӓ́͒̾̇҉͎͙̙̮͓ͅа̙͖̻͈̘ͣ̾̊̊̾̊̍́͢а̼̬͇̱̞ͬ̌̏̉̋̚̚͘͝а̌̅̓͆͊̆҉̤̲̦̰̹̘͚̼͈͘͢а͈̹͔̜͓̙͖̍ͯ̽̓͜͞а̷̞̟̦̮͉̺̹͊̿̊̽̄̆͒̕ͅ', 'ч̮̲̤͒̂͌͠м͔̗̳̤͈̘̻̦̪͊̂͘͟͜о͚̭ͬ͗ͯ͢']
                 author = random.choice(choices)
                 emb.set_author(name = author, icon_url = client.user.avatar_url)
+            else:
+                emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
             if image:
                 emb.set_image(url = image)
             if thumbnail:
