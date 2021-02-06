@@ -1983,14 +1983,13 @@ async def edit(ctx, arg, *, msg = None):
             color = 0x2f3136
         else:
             color = int('0x' + color, 16)
-        if ctx.author.id == 338714886001524737 and ctx.guild.id != 693929822543675455:
-            choices = ['х̙̣̲̪͋̃ͬͫ́͞͡ы̢͇̳̽̋͌ͨͪ͟͠х̩̜̞̝̗͌ͪͦ͆а̘͔̮̍͆ͮͫ̎͘', 'а͖̂͐̄̓͗͗̇ͪ̀̕͜а̷̨͙̩͔̜̹̗̎а́͋̐͆́͝҉̛̩̳̰̲̳̭̟̖͕а̘̠͖̝̰͇̜̭͌̿̂̋ͫ̂ͯ͊́̕͝ӓ́͒̾̇҉͎͙̙̮͓ͅа̙͖̻͈̘ͣ̾̊̊̾̊̍́͢а̼̬͇̱̞ͬ̌̏̉̋̚̚͘͝а̌̅̓͆͊̆҉̤̲̦̰̹̘͚̼͈͘͢а͈̹͔̜͓̙͖̍ͯ̽̓͜͞а̷̞̟̦̮͉̺̹͊̿̊̽̄̆͒̕ͅ', 'ч̮̲̤͒̂͌͠м͔̗̳̤͈̘̻̦̪͊̂͘͟͜о͚̭ͬ͗ͯ͢']
-            author = random.choice(choices)
         emb = discord.Embed(title = title, description = description, color = color)
         for i in embed_values:
             if ctx.author.id != 338714886001524737:
                 emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
-            else:
+            if ctx.author.id == 338714886001524737 and ctx.guild.id != 693929822543675455:
+                choices = ['х̙̣̲̪͋̃ͬͫ́͞͡ы̢͇̳̽̋͌ͨͪ͟͠х̩̜̞̝̗͌ͪͦ͆а̘͔̮̍͆ͮͫ̎͘', 'а͖̂͐̄̓͗͗̇ͪ̀̕͜а̷̨͙̩͔̜̹̗̎а́͋̐͆́͝҉̛̩̳̰̲̳̭̟̖͕а̘̠͖̝̰͇̜̭͌̿̂̋ͫ̂ͯ͊́̕͝ӓ́͒̾̇҉͎͙̙̮͓ͅа̙͖̻͈̘ͣ̾̊̊̾̊̍́͢а̼̬͇̱̞ͬ̌̏̉̋̚̚͘͝а̌̅̓͆͊̆҉̤̲̦̰̹̘͚̼͈͘͢а͈̹͔̜͓̙͖̍ͯ̽̓͜͞а̷̞̟̦̮͉̺̹͊̿̊̽̄̆͒̕ͅ', 'ч̮̲̤͒̂͌͠м͔̗̳̤͈̘̻̦̪͊̂͘͟͜о͚̭ͬ͗ͯ͢']
+                author = random.choice(choices)
                 emb.set_author(name = author, icon_url = client.user.avatar_url)
             if image:
                 emb.set_image(url = image)
