@@ -2003,14 +2003,11 @@ async def edit(ctx, arg, *, msg = None):
                 if message.author == client.user:
                     if '--clean' in msg:
                         await message.edit(content = None)
-                        return await ctx.send('👌', delete_after = 1)
                     if '--delete' in msg:
                         await message.delete()
-                        return await ctx.send('👌', delete_after = 1)
                     if '--noembed' in msg:
                         if message.embeds != []:
                             await message.edit(embed = None)
-                            return await ctx.send('👌', delete_after = 1)
                         else:
                             return await ctx.send(f'{ctx.author.mention}, нечего удалять. Возможно, вы имели ввиду cy/edit {message.id} --delete ?', delete_after = 8)
                     if '--empty-embed' in msg:
@@ -2018,28 +2015,23 @@ async def edit(ctx, arg, *, msg = None):
                             emb = discord.Embed(title = None, description = None, color = ctx.author.color)
                             emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
                             await message.edit(embed = emb)
-                            return await ctx.send('👌', delete_after = 1)
                         else:
                             return await ctx.send(f'{ctx.author.mention}, нечего очищать. Возможно, вы имели ввиду cy/edit {message.id} --delete ?')
                     else:
                         await message.edit(content = msg)
-                        return await ctx.send('👌', delete_after = 1)
                 else:
                     return await ctx.send(f'{message.id} не является сообщением от {client.user}')
             else:
                 if message.author == client.user:
                     if '--clean' in msg:
                         await message.edit(content = None, embed = emb)
-                        return await ctx.send('👌', delete_after = 1)
                     if '--noembed' in msg:
                         if message.embeds != []:
                             await message.edit(embed = None)
-                            return await ctx.send('👌', delete_after = 1)
                         else:
                             return await ctx.send(f'{ctx.author.mention}, нечего удалять. Возможно, вы имели ввиду cy/edit {message.id} --delete ?', delete_after = 8)
                     else:
                         await message.edit(embed = emb)
-                        return await ctx.send('👌', delete_after = 1)
                 else:
                     return await ctx.send(f'{message.id} не является сообщением от {client.user}')
     else:
