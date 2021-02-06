@@ -23,6 +23,8 @@ time_dict = {'h': 3600, 's': 1, 'm': 60, 'd': 86400}
 
 friends = [351071668241956865, 417362845303439360]
 
+guilds = [693929822543675455, 735874149578440855]
+
 class TimeConverter(commands.Converter):
     async def convert(self, ctx, argument):
         args = argument.lower()
@@ -2125,6 +2127,13 @@ async def invite(ctx, arg = None):
         if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
             emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
+    if arg == 'pro':
+        if ctx.guild.id not in guilds:
+            emb = discord.Embed(description = f'Сервер `{ctx.guild}` не имеет активных подписок. Купить можно по [Ссылке](https://www.patreon.com/cephaloncy) Преимущества: пинг не более 25ms, больший аптайм, защита от несанкционированного добавления на сервера.', colour = discord.Color.orange())
+            await ctx.send(embed = emb)
+        else:
+            emb = discord.Embed(description = '[Ссылка](https://discord.com/oauth2/authorize?client_id=762015251264569352&scope=bot&permissions=8) для приглашения Cy PRO на сервера.', color = discord.Color.orange())
+            await ctx.send(embed = emb)
 
 @client.command(aliases = ['Info', 'INFO'])
 @commands.cooldown(1, 5, commands.BucketType.user)
