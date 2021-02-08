@@ -2135,7 +2135,7 @@ async def info(ctx):
     emb = discord.Embed(colour = discord.Color.orange())
     emb.set_author(name = client.user.name, url = 'https://warframe.fandom.com/wiki/Cephalon_Cy', icon_url = client.user.avatar_url)
     emb.add_field(name = 'Версия', value = '0.12.9.10519')
-    emb.add_field(name = 'Написан на', value = 'discord.py v1.5.1')
+    emb.add_field(name = 'Написан на', value = 'discord.py v1.6.0')
     emb.add_field(name = 'Разработчик', value = '[сасиска#2472](https://discord.com/users/338714886001524737)')
     if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
         emb.add_field(name = 'Сервер', value = 'Данный сервер не принадлежит моему создателю или его знакомым. Все эмбед выводы будут иметь футер с текстом `Cephalon Cy by сасиска#2472`')
