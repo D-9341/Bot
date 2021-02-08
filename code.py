@@ -807,7 +807,7 @@ async def clear(ctx, amount: int, members = '--everyone', *, filt = None):
                 emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
             sent = await ctx.send(embed = emb)
             try:
-                msg = await client.wait_for('message', timeout = 10, check = lambda message: message.channel == ctx.message.channel)
+                msg = await client.wait_for('message', timeout = 10, check = lambda message: message.channel == ctx.message.channel and message.author.id == ctx.guild.owner.id)
                 if msg.content.lower() == 'y' and msg.author.id == ctx.guild.owner.id:
                     await msg.delete()
                     await sent.delete()
@@ -958,7 +958,7 @@ async def clear(ctx, amount: int, members = '--everyone', *, filt = None):
                 emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
             sent = await ctx.send(f'{ctx.guild.owner.mention}', embed = emb)
             try:
-                msg = await client.wait_for('message', timeout = 60, check = lambda message: message.channel == ctx.message.channel)
+                msg = await client.wait_for('message', timeout = 60, check = lambda message: message.channel == ctx.message.channel and message.author.id == ctx.guild.owner.id)
                 if msg.content.lower() == 'y':
                     await msg.delete()
                     await sent.delete()
