@@ -882,18 +882,15 @@ async def clear(ctx, amount: int, members = '--everyone', *, filt = None):
                         try:
                             if '--silent' in members:
                                 return
-                            msg = await client.wait_for('message', timeout = 10, check = lambda message: message.channel == ctx.message.channel and message.author == ctx.author)
-                            if msg.content.lower() == 'c':
-                                emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
-                                emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{cleared}```')
-                                if filt:
-                                    emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
-                                emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
-                                if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
-                                    emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-                                await sent.edit(embed = emb)
-                            else:
-                                raise asyncio.TimeoutError(await sent.delete())
+                            msg = await client.wait_for('message', timeout = 10, check = lambda message: message.channel == ctx.message.channel and message.author == ctx.author and message.content == 'c')
+                            emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
+                            emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{cleared}```')
+                            if filt:
+                                emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
+                            emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
+                            if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
+                                emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+                            await sent.edit(embed = emb)
                         except asyncio.TimeoutError:
                             await sent.delete()
                     else:
@@ -1033,18 +1030,15 @@ async def clear(ctx, amount: int, members = '--everyone', *, filt = None):
                         try:
                             if '--silent' in members:
                                 return
-                            msg = await client.wait_for('message', timeout = 10, check = lambda message: message.channel == ctx.message.channel and message.author == ctx.author)
-                            if msg.content.lower() == 'c':
-                                emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
-                                emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{cleared}```')
-                                if filt:
-                                    emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
-                                emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
-                                if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
-                                    emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-                                await sent.edit(embed = emb)
-                            else:
-                                raise asyncio.TimeoutError(await sent.delete())
+                            msg = await client.wait_for('message', timeout = 10, check = lambda message: message.channel == ctx.message.channel and message.author == ctx.author and message.content == 'c')
+                            emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
+                            emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{cleared}```')
+                            if filt:
+                                emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
+                            emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
+                            if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
+                                emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+                            await sent.edit(embed = emb)
                         except asyncio.TimeoutError:
                             await sent.delete()
                     else:
@@ -1183,18 +1177,15 @@ async def clear(ctx, amount: int, members = '--everyone', *, filt = None):
                         try:
                             if '--silent' in members:
                                 return
-                            msg = await client.wait_for('message', timeout = 10, check = lambda message: message.channel == ctx.message.channel and message.author == ctx.author)
-                            if msg.content.lower() == 'c':
-                                emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
-                                emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{cleared}```')
-                                if filt:
-                                    emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
-                                emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
-                                if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
-                                    emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-                                await sent.edit(embed = emb)
-                            else:
-                                raise asyncio.TimeoutError(await sent.delete())
+                            msg = await client.wait_for('message', timeout = 10, check = lambda message: message.channel == ctx.message.channel and message.author == ctx.author and message.content == 'c')
+                            emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
+                            emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{cleared}```')
+                            if filt:
+                                emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
+                            emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
+                            if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
+                                emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+                            await sent.edit(embed = emb)
                         except asyncio.TimeoutError:
                             await sent.delete()
                     else:
@@ -1326,18 +1317,15 @@ async def clear(ctx, amount: int, members = '--everyone', *, filt = None):
                     try:
                         if '--silent' in members:
                             return
-                        msg = await client.wait_for('message', timeout = 10, check = lambda message: message.channel == ctx.message.channel and message.author == ctx.author)
-                        if msg.content.lower() == 'c':
-                            emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
-                            emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{cleared}```')
-                            if filt:
-                                emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
-                            emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
-                            if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
-                                emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-                            await sent.edit(embed = emb)
-                        else:
-                            raise asyncio.TimeoutError(await sent.delete())
+                        msg = await client.wait_for('message', timeout = 10, check = lambda message: message.channel == ctx.message.channel and message.author == ctx.author and message.content == 'c')
+                        emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
+                        emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{cleared}```')
+                        if filt:
+                            emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
+                        emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
+                        if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
+                            emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+                        await sent.edit(embed = emb)
                     except asyncio.TimeoutError:
                         await sent.delete()
                 else:
@@ -1460,7 +1448,7 @@ async def clear(ctx, amount: int, members = '--everyone', *, filt = None):
                 if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
                     emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение. Cephalon Cy by сасиска#2472')
                 else:
-                    emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение.')
+                    emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c".')
                 await sent.edit(embed = emb)
             elif members == '--everyone':
                 if filt == None:
@@ -1473,23 +1461,22 @@ async def clear(ctx, amount: int, members = '--everyone', *, filt = None):
                     emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
                 emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
                 if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
-                    emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение. Cephalon Cy by сасиска#2472')
+                    emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Cephalon Cy by сасиска#2472')
                 else:
-                    emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение.')
+                    emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c".')
                 await sent.edit(embed = emb)
             try:
-                msg = await client.wait_for('message', timeout = 10, check = lambda message: message.channel == ctx.message.channel and message.author == ctx.author)
-                if msg.content.lower() == 'c':
-                    emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
-                    emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{cleared}```')
-                    if filt:
-                        emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
-                    emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
-                    if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
-                        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-                    await sent.edit(embed = emb)
-                else:
-                    raise asyncio.TimeoutError(await sent.delete())
+                if '--silent' in members:
+                    return
+                msg = await client.wait_for('message', timeout = 10, check = lambda message: message.channel == ctx.message.channel and message.author == ctx.author and message.content == 'c')
+                emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
+                emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{cleared}```')
+                if filt:
+                    emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
+                emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
+                if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
+                    emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+                await sent.edit(embed = emb)
             except asyncio.TimeoutError:
                 await sent.delete()
         else:
