@@ -334,13 +334,17 @@ async def on_message(message):
                 else:
                     return
             elif role == None:
-                await message.guild.create_role(name = 'Muted', colour = discord.Colour(0x000001), reason = 'Создано автоматически из-за недостатка ролей.')
+                r = await message.guild.create_role(name = 'Muted', colour = discord.Colour(0x000001), reason = 'Создано автоматически из-за недостатка ролей.')
+                await r.edit(position = 4)
             elif role3 == None:
-                await message.guild.create_role(name = '----------Предупреждения----------', colour = discord.Colour(0x2f3136), reason = 'Создано автоматически из-за недостатка ролей.')  
+                r1 = await message.guild.create_role(name = '----------Предупреждения----------', colour = discord.Colour(0x2f3136), reason = 'Создано автоматически из-за недостатка ролей.')
+                r1.edit(position = 3)
             elif role1 == None:
-                await message.guild.create_role(name = '1', colour = discord.Colour(0xff0000), reason = 'Создано автоматически из-за недостатка ролей.')
+                r2 = await message.guild.create_role(name = '1', colour = discord.Colour(0xff0000), reason = 'Создано автоматически из-за недостатка ролей.')
+                r2.edit(position = 2)
             elif role2 == None:
-                await message.guild.create_role(name = '2', colour = discord.Colour(0xff0000), reason = 'Создано автоматически из-за недостатка ролей.')  
+                r3 = await message.guild.create_role(name = '2', colour = discord.Colour(0xff0000), reason = 'Создано автоматически из-за недостатка ролей.')
+                r3.edit(position = 1)
     if ('сделать') in message.content.lower() or ('предлагаю') in message.content.lower() or ('предложение') in message.content.lower() and message.author.bot == False:
         await message.add_reaction('👍')
         await message.add_reaction('👎')
