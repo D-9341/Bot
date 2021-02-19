@@ -341,7 +341,7 @@ async def on_message(message):
                 await message.guild.create_role(name = '1', colour = discord.Colour(0xff0000), reason = 'Создано автоматически из-за недостатка ролей.')
             elif role2 == None:
                 await message.guild.create_role(name = '2', colour = discord.Colour(0xff0000), reason = 'Создано автоматически из-за недостатка ролей.')  
-    if ('сделать') in message.content.lower() or ('предлагаю') in message.content.lower() or ('предложение') in message.content.lower():
+    if ('сделать') in message.content.lower() or ('предлагаю') in message.content.lower() or ('предложение') in message.content.lower() and message.author.bot == False:
         await message.add_reaction('👍')
         await message.add_reaction('👎')
     elif message.channel.id == 750372413102883028: #EFT
@@ -1857,9 +1857,11 @@ async def coinflip(ctx):
 #Embeds
 @client.command(aliases = ['ctx'])
 @commands.cooldown(1, 5, commands.BucketType.user)
-async def content(ctx, arg):
+async def content(ctx, arg, channel: discord.TextChannel = None):
     await ctx.message.delete()
-    message = await ctx.fetch_message(id = arg)
+    if channel == None:
+        channel = ctx.message.channel
+    message = await channel.fetch_message(id = arg)
     if message.author == client.user:
         if message.embeds == []:
             if '@everyone' in message.content:
@@ -2177,7 +2179,7 @@ async def help(ctx, arg = None):
     elif arg == 'ban':
         await ctx.send('```apache\ncy/ban <@пинг/имя/ID> [причина/--soft --reason]\ncy/ban 185476724627210241 --soft --reason лошара\ncy/ban @сасиска чмо\ncy/ban "Sgt.White"\n\nПри использовании --soft обязательно указывать --reason после него, однако можно не использовать --reason\n([] - опционально, <> - обязательно, / - или)\nperms = ban_members```')
     elif arg == 'content' or arg == 'ctx':
-        await ctx.send('```apache\ncy/content <ID> (<> - обязательно)```')
+        await ctx.send('```apache\ncy/content <ID> [канал, в котором находится сообщение] ([] - опционально, <> - обязательно)```')
     elif arg == 'clear':
         await ctx.send('```apache\ncy/clear <количество> [автор] [фильтр]\ncy/clear 100\ncy/clear 10 @сасиска\ncy/clear 50 --everyone хыха\ncy/clear 30 --bots\ncy/clear 15 --users\ncy/clear 5 --silent\ncy/clear 200 "--silent --everyone" хыха\n\n--everyone удалит сообщения от всех\n--bots удалит сообщения только от ботов\n--users удалит сообщения только от участников\n--silent не оставит доказательств выполнения команды, исключение - количество >= 10\n\nПри указании автора не будет удалено столько сообщений, сколько было указано, будет удалено столько, сколько будет найдено в пределах этих сообщений.\nСообщения старше 2 недель будут удалены не сразу - лимит discord API\nПри использовании --silent нельзя сделать очистку по определённому участнику\nПри удалении более 100 сообщений нужно подтверждение владельца сервера.\nТолько владелец может удалять от 250 сообщений за раз.\nНе более 300!\n([] - опционально, <> - обязательно, / - или)\nperms = adminstrator```')
     elif arg == 'dm':
