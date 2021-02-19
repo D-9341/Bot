@@ -1883,7 +1883,7 @@ async def content(ctx, arg):
                     else:
                         d = ''
                     if emb.title != emb.Empty:
-                        t = f'| t& {emb.title}'
+                        t = f't& {emb.title}'
                     else:
                         t = ''
                     await ctx.send(f'```py\ncy/say --everyone {t}{d}{th}{img}```')
