@@ -830,9 +830,9 @@ async def clear(ctx, amount: int, members = '--everyone', *, filt = None):
                                 emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
                             emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
                             if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
-                                emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение. Cephalon Cy by сасиска#2472')
+                                emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Cephalon Cy by сасиска#2472')
                             else:
-                                emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение.')
+                                emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c".')
                             await sent.edit(embed = emb)
                         elif members == '--users':
                             if filt == None:
@@ -845,9 +845,9 @@ async def clear(ctx, amount: int, members = '--everyone', *, filt = None):
                                 emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
                             emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
                             if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
-                                emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение. Cephalon Cy by сасиска#2472')
+                                emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Cephalon Cy by сасиска#2472')
                             else:
-                                emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение.')
+                                emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c".')
                             await sent.edit(embed = emb)
                         elif members != '--everyone':
                             if filt == None:
@@ -860,9 +860,9 @@ async def clear(ctx, amount: int, members = '--everyone', *, filt = None):
                                 emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
                             emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
                             if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
-                                emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение. Cephalon Cy by сасиска#2472')
+                                emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Cephalon Cy by сасиска#2472')
                             else:
-                                emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение.')
+                                emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c".')
                             await sent.edit(embed = emb)
                         else:
                             if filt == None:
@@ -875,9 +875,9 @@ async def clear(ctx, amount: int, members = '--everyone', *, filt = None):
                                 emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
                             emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
                             if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
-                                emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение. Cephalon Cy by сасиска#2472')
+                                emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Cephalon Cy by сасиска#2472')
                             else:
-                                emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение.')
+                                emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c".')
                             await sent.edit(embed = emb)
                         try:
                             if '--silent' in members:
@@ -978,9 +978,9 @@ async def clear(ctx, amount: int, members = '--everyone', *, filt = None):
                                 emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
                             emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
                             if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
-                                emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение. Cephalon Cy by сасиска#2472')
+                                emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Cephalon Cy by сасиска#2472')
                             else:
-                                emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение.')
+                                emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c".')
                             await sent.edit(embed = emb)
                         elif members == '--users':
                             if filt == None:
@@ -993,9 +993,9 @@ async def clear(ctx, amount: int, members = '--everyone', *, filt = None):
                                 emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
                             emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
                             if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
-                                emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение. Cephalon Cy by сасиска#2472')
+                                emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Cephalon Cy by сасиска#2472')
                             else:
-                                emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение.')
+                                emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c".')
                             await sent.edit(embed = emb)
                         elif members != '--everyone':
                             if filt == None:
@@ -1008,9 +1008,9 @@ async def clear(ctx, amount: int, members = '--everyone', *, filt = None):
                                 emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
                             emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
                             if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
-                                emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение. Cephalon Cy by сасиска#2472')
+                                emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Cephalon Cy by сасиска#2472')
                             else:
-                                emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение.')
+                                emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c".')
                             await sent.edit(embed = emb)
                         else:
                             if filt == None:
@@ -1023,9 +1023,9 @@ async def clear(ctx, amount: int, members = '--everyone', *, filt = None):
                                 emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
                             emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
                             if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
-                                emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение. Cephalon Cy by сасиска#2472')
+                                emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Cephalon Cy by сасиска#2472')
                             else:
-                                emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение.')
+                                emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c".')
                             await sent.edit(embed = emb)
                         try:
                             if '--silent' in members:
@@ -1125,9 +1125,9 @@ async def clear(ctx, amount: int, members = '--everyone', *, filt = None):
                                 emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
                             emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
                             if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
-                                emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение. Cephalon Cy by сасиска#2472')
+                                emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Cephalon Cy by сасиска#2472')
                             else:
-                                emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение.')
+                                emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c".')
                             await sent.edit(embed = emb)
                         elif members == '--users':
                             if filt == None:
@@ -1140,9 +1140,9 @@ async def clear(ctx, amount: int, members = '--everyone', *, filt = None):
                                 emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
                             emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
                             if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
-                                emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение. Cephalon Cy by сасиска#2472')
+                                emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Cephalon Cy by сасиска#2472')
                             else:
-                                emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение.')
+                                emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c".')
                             await sent.edit(embed = emb)
                         elif members != '--everyone':
                             if filt == None:
@@ -1155,9 +1155,9 @@ async def clear(ctx, amount: int, members = '--everyone', *, filt = None):
                                 emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
                             emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
                             if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
-                                emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение. Cephalon Cy by сасиска#2472')
+                                emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Cephalon Cy by сасиска#2472')
                             else:
-                                emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение.')
+                                emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c".')
                             await sent.edit(embed = emb)
                         else:
                             if filt == None:
@@ -1170,9 +1170,9 @@ async def clear(ctx, amount: int, members = '--everyone', *, filt = None):
                                 emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
                             emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
                             if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
-                                emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение. Cephalon Cy by сасиска#2472')
+                                emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Cephalon Cy by сасиска#2472')
                             else:
-                                emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение.')
+                                emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c".')
                             await sent.edit(embed = emb)
                         try:
                             if '--silent' in members:
@@ -1265,9 +1265,9 @@ async def clear(ctx, amount: int, members = '--everyone', *, filt = None):
                             emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
                         emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
                         if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
-                            emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение. Cephalon Cy by сасиска#2472')
+                            emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Cephalon Cy by сасиска#2472')
                         else:
-                            emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение.')
+                            emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c".')
                         await sent.edit(embed = emb)
                     elif members == '--users':
                         if filt == None:
@@ -1280,9 +1280,9 @@ async def clear(ctx, amount: int, members = '--everyone', *, filt = None):
                             emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
                         emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
                         if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
-                            emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение. Cephalon Cy by сасиска#2472')
+                            emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Cephalon Cy by сасиска#2472')
                         else:
-                            emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение.')
+                            emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c".')
                         await sent.edit(embed = emb)
                     elif members != '--everyone':
                         if filt == None:
@@ -1295,9 +1295,9 @@ async def clear(ctx, amount: int, members = '--everyone', *, filt = None):
                             emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
                         emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
                         if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
-                            emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение. Cephalon Cy by сасиска#2472')
+                            emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Cephalon Cy by сасиска#2472')
                         else:
-                            emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение.')
+                            emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c".')
                         await sent.edit(embed = emb)
                     else:
                         if filt == None:
@@ -1310,9 +1310,9 @@ async def clear(ctx, amount: int, members = '--everyone', *, filt = None):
                             emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
                         emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
                         if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
-                            emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение. Cephalon Cy by сасиска#2472')
+                            emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Cephalon Cy by сасиска#2472')
                         else:
-                            emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение.')
+                            emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c".')
                         await sent.edit(embed = emb)
                     try:
                         if '--silent' in members:
@@ -1401,9 +1401,9 @@ async def clear(ctx, amount: int, members = '--everyone', *, filt = None):
                     emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
                 emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
                 if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
-                    emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение. Cephalon Cy by сасиска#2472')
+                    emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Cephalon Cy by сасиска#2472')
                 else:
-                    emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение.')
+                    emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c".')
                 await sent.edit(embed = emb)
             elif '--users' in members:
                 if filt == None:
@@ -1416,9 +1416,9 @@ async def clear(ctx, amount: int, members = '--everyone', *, filt = None):
                     emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
                 emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
                 if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
-                    emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение. Cephalon Cy by сасиска#2472')
+                    emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Cephalon Cy by сасиска#2472')
                 else:
-                    emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение.')
+                    emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c".')
                 await sent.edit(embed = emb)
             elif '--everyone' not in members:
                 if filt == None:
@@ -1431,9 +1431,9 @@ async def clear(ctx, amount: int, members = '--everyone', *, filt = None):
                     emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
                 emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
                 if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
-                    emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение. Cephalon Cy by сасиска#2472')
+                    emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Cephalon Cy by сасиска#2472')
                 else:
-                    emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение.')
+                    emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c".')
                 await sent.edit(embed = emb)
             elif '--bots' and '--users' in members:
                 if filt == None:
@@ -1446,7 +1446,7 @@ async def clear(ctx, amount: int, members = '--everyone', *, filt = None):
                     emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
                 emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
                 if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
-                    emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение. Cephalon Cy by сасиска#2472')
+                    emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Cephalon Cy by сасиска#2472')
                 else:
                     emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c".')
                 await sent.edit(embed = emb)
