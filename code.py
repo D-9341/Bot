@@ -24,6 +24,8 @@ friends = [351071668241956865, 417362845303439360]
 
 guilds = [693929822543675455, 735874149578440855]
 
+botversions = [764882153812787250, 694170281270312991, 762015251264569352]
+
 class TimeConverter(commands.Converter):
     async def convert(self, ctx, argument):
         args = argument.lower()
@@ -1852,7 +1854,7 @@ async def content(ctx, arg, channel: discord.TextChannel = None):
     if channel == None:
         channel = ctx.message.channel
     message = await channel.fetch_message(id = arg)
-    if message.author == client.user:
+    if message.author.id in botversions:
         if message.embeds == []:
             if '@everyone' in message.content:
                 await ctx.send(f'```cy/say --everyone {message.content.strip()[10:].strip()}```')
@@ -1874,7 +1876,7 @@ async def content(ctx, arg, channel: discord.TextChannel = None):
                     else:
                         d = ''
                     if emb.title != emb.Empty:
-                        t = f't& {emb.title}'
+                        t = f'| t& {emb.title}'
                     else:
                         t = ''
                     await ctx.send(f'```py\ncy/say --everyone {t}{d}{th}{img}```')
@@ -1895,13 +1897,48 @@ async def content(ctx, arg, channel: discord.TextChannel = None):
                         t = f't& {emb.title}'
                     else:
                         t = ''
-                    await ctx.send(f'```py\ncy/say {t}{d}{th}{img}```')
+                    await ctx.send(f'```cy/say {t}{d}{th}{img}```')
     else:
         if message.embeds == []:
-            await ctx.send(f'```@{message.author} {message.content}```')
+            if '```' in message.content:
+                await ctx.send(f'{message.author} {message.content}')
+            else:
+                await ctx.send(f'```@{message.author} {message.content}```')
         else:
             for emb in message.embeds:
-                await ctx.send(f'```content {message.content} title {emb.title} description {emb.description} footer {emb.footer.text} color {emb.color} author {emb.author.name} image {emb.image.url} footer img {emb.thumbnail.url}```')
+                if message.content == None:
+                    content = ''
+                else:
+                    content = f'content {message.content}'
+                if emb.title != emb.Empty:
+                    title = f' title {emb.title}'
+                else:
+                    title = ''
+                if emb.description != emb.Empty:
+                    description = f' description {emb.description}'
+                else:
+                    description = ''
+                if emb.footer.text != emb.Empty:
+                    footer = f' footer {emb.footer.text}'
+                else:
+                    footer = ''
+                if emb.image.url != emb.Empty:
+                    image = f' image {emb.image.url}'
+                else:
+                    image = ''
+                if emb.thumbnail.url != emb.Empty:
+                    thumb = f' thumbnail {emb.thumbnail.url}'
+                else:
+                    thumb = ''
+                if emb.color != emb.Empty:
+                    color = f' color {emb.color}'
+                else:
+                    color = ''
+                if emb.author.name != emb.Empty:
+                    author = f' author {emb.author.name}'
+                else:
+                    author = ''
+                await ctx.send(f'```{content}{title}{description}{footer}{color}{author}{image}{thumb}```')
 
 @client.command(aliases = ['Say', 'SAY'])
 @commands.has_permissions(manage_channels = True)
