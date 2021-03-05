@@ -35,9 +35,9 @@ class TimeConverter(commands.Converter):
             try:
                 time += time_dict[value] * float(key)
             except KeyError:
-                await ctx.send(f'{value} не является правильным аргументом! Правильные: h|m|s|d')
+                await ctx.send(f'{value} не является правильным аргументом! Правильные: h|m|s|d') #{value} is not valid argument! Use: h|m|s|d
             except ValueError:
-                await ctx.send(f'{key} не число!')
+                await ctx.send(f'{key} не число!') #{key} not a number!
         return time
 
 class Slapper(commands.Converter):
@@ -56,48 +56,48 @@ async def on_guild_role_update(before, after):
         role = before.guild.get_role(after.id)
         if after.name == '2' or after.name == 'Muted':
             await role.delete()
-            g = await before.guild.create_role(name = '1', color = discord.Color(0xff0000), reason = 'Нет, нельзя менять название этой роли на Muted или 2')
+            g = await before.guild.create_role(name = '1', color = discord.Color(0xff0000), reason = 'Нет, нельзя менять название этой роли на Muted или 2') # it is not allowed to rename this role to Muted or 2
             await g.edit(position = 2)
         else:
-            await role.edit(name = '1', color = discord.Color(0xff0000), reason = 'Нельзя изменять эту роль.')
+            await role.edit(name = '1', color = discord.Color(0xff0000), reason = 'Нельзя изменять эту роль.') # it is not allowed to edit this role
     if before.name == '2':
         role = before.guild.get_role(after.id)
         if after.name == '1' or after.name == 'Muted':
             await role.delete()
-            g = await before.guild.create_role(name = '2', color = discord.Color(0xff0000), reason = 'Нет, нельзя менять название этой роли на Muted или 1')
+            g = await before.guild.create_role(name = '2', color = discord.Color(0xff0000), reason = 'Нет, нельзя менять название этой роли на Muted или 1') # it is not allowed to rename this role to Muted or 1
             await g.edit(position = 1)
         else:
-            await role.edit(name = '2', color = discord.Color(0xff0000), reason = 'Нельзя изменять эту роль.')
+            await role.edit(name = '2', color = discord.Color(0xff0000), reason = 'Нельзя изменять эту роль.') # it is not allowed to edit this role
     if before.name == 'Muted':
         role = before.guild.get_role(after.id)
         if after.name == '2' or after.name == '1':
             await role.delete()
-            g = await before.guild.create_role(name = 'Muted', color = discord.Color(0x000001), reason = 'Нет, нельзя менять название этой роли на 1 или 2')
+            g = await before.guild.create_role(name = 'Muted', color = discord.Color(0x000001), reason = 'Нет, нельзя менять название этой роли на 1 или 2') # it is not allowed to rename this role to 1 or 2
             await g.edit(position = 4)
         else:
-            await role.edit(name = 'Muted', color = discord.Color(0x000001), reason = 'Нельзя изменять эту роль.')
+            await role.edit(name = 'Muted', color = discord.Color(0x000001), reason = 'Нельзя изменять эту роль.') # it is not allowed to edit this role
 
 @client.event
 async def on_command_completion(ctx):
     lchannel = client.get_channel(714175791033876490)
-    emb = discord.Embed(title = 'ВЫПОЛНЕНИЕ_КОМАНДЫ', color = discord.Color.orange())
-    emb.add_field(name = 'НАЗВАНИЕ', value = f'```{ctx.command.name}```')
-    emb.add_field(name = 'ИСПОЛНИТЕЛЬ', value = f'{ctx.author.mention} ({ctx.author})')
-    emb.add_field(name = 'СЕРВЕР', value = ctx.guild.name, inline = False)
-    emb.add_field(name = 'КАНАЛ', value = f'{ctx.channel.name} ({ctx.channel.mention})', inline = False)
+    emb = discord.Embed(title = 'ВЫПОЛНЕНИЕ_КОМАНДЫ', color = discord.Color.orange()) # COMMAND_COMPLETION
+    emb.add_field(name = 'НАЗВАНИЕ', value = f'```{ctx.command.name}```') # NAME
+    emb.add_field(name = 'ИСПОЛНИТЕЛЬ', value = f'{ctx.author.mention} ({ctx.author})') # EXECUTED BY
+    emb.add_field(name = 'СЕРВЕР', value = ctx.guild.name, inline = False) # SERVER
+    emb.add_field(name = 'КАНАЛ', value = f'{ctx.channel.name} ({ctx.channel.mention})', inline = False) # CHANNEL
     await lchannel.send(embed = emb)
 
 @client.event
 async def on_guild_channel_delete(channel):
     if channel.guild.id == 693929822543675455:
         lchannel = client.get_channel(714175791033876490)
-        emb = discord.Embed(title = 'УДАЛЕНИЕ_КАНАЛА', color = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
-        emb.add_field(name = 'НАЗВАНИЕ', value = channel.name)
+        emb = discord.Embed(title = 'УДАЛЕНИЕ_КАНАЛА', color = discord.Color.orange(), timestamp = datetime.datetime.utcnow()) # CHANNEL_DELETED
+        emb.add_field(name = 'НАЗВАНИЕ', value = channel.name) # NAME
         if channel.type == discord.ChannelType.voice:
-            typ = 'ГОЛОСОВОЙ'
+            typ = 'ГОЛОСОВОЙ' # VOICE
         if channel.type == discord.ChannelType.text:
-            typ = 'ТЕКСТОВЫЙ'
-        emb.add_field(name = 'ТИП', value = typ)
+            typ = 'ТЕКСТОВЫЙ' # TEXT
+        emb.add_field(name = 'ТИП', value = typ) # TYPE
         emb.set_footer(text = f'ID: {channel.id}')
         await lchannel.send(embed = emb)
 
@@ -105,13 +105,13 @@ async def on_guild_channel_delete(channel):
 async def on_guild_channel_create(channel):
     if channel.guild.id == 693929822543675455:
         lchannel = client.get_channel(714175791033876490)
-        emb = discord.Embed(title = 'СОЗДАНИЕ_КАНАЛА', color = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
-        emb.add_field(name = 'НАЗВАНИЕ', value = channel.name)
+        emb = discord.Embed(title = 'СОЗДАНИЕ_КАНАЛА', color = discord.Color.orange(), timestamp = datetime.datetime.utcnow()) # CHANNEL_CREATED
+        emb.add_field(name = 'НАЗВАНИЕ', value = channel.name) # NAME
         if channel.type == discord.ChannelType.voice:
-            typ = 'ГОЛОСОВОЙ'
+            typ = 'ГОЛОСОВОЙ' # VOICE
         if channel.type == discord.ChannelType.text:
-            typ = 'ТЕКСТОВЫЙ'
-        emb.add_field(name = 'ТИП', value = typ)
+            typ = 'ТЕКСТОВЫЙ' # TEXT
+        emb.add_field(name = 'ТИП', value = typ) # TYPE
         emb.set_footer(text = f'ID: {channel.id}')
         await lchannel.send(embed = emb)
 
@@ -120,29 +120,29 @@ async def on_guild_channel_update(before, after):
     channel = client.get_channel(714175791033876490)
     if before.guild.id == 693929822543675455:
         if before.type == discord.ChannelType.voice:
-            emb = discord.Embed(title = r'ИЗМЕНЕНИЕ\_ГОЛОСОВОГО_КАНАЛА', color = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
+            emb = discord.Embed(title = r'ИЗМЕНЕНИЕ\_ГОЛОСОВОГО_КАНАЛА', color = discord.Color.orange(), timestamp = datetime.datetime.utcnow()) # VOICE_CHANNEL_EDITED
             if before.name != after.name:
-                emb.add_field(name = 'НАЗВАНИЕ_ДО', value = before.name)
-                emb.add_field(name = 'НАЗВАНИЕ_ПОСЛЕ', value = after.name)
+                emb.add_field(name = 'НАЗВАНИЕ_ДО', value = before.name) # NAME_BEFORE
+                emb.add_field(name = 'НАЗВАНИЕ_ПОСЛЕ', value = after.name) # NAME_AFTER
                 emb.set_footer(text = f'ID: {before.id}')
                 await channel.send(embed = emb)
             if before.position != after.position:
-                emb.add_field(name = 'НАЗВАНИЕ', value = before.name, inline = False)
-                emb.add_field(name = 'ПОЗИЦИЯ_ДО', value = before.position)
-                emb.add_field(name = 'ПОЗИЦИЯ_ПОСЛЕ', value = after.position)
+                emb.add_field(name = 'НАЗВАНИЕ', value = before.name, inline = False) # NAME
+                emb.add_field(name = 'ПОЗИЦИЯ_ДО', value = before.position) # POSITION_BEFORE
+                emb.add_field(name = 'ПОЗИЦИЯ_ПОСЛЕ', value = after.position) # POSITION_AFTER
                 emb.set_footer(text = f'ID: {before.id}')
                 await channel.send(embed = emb)
         elif before.type == discord.ChannelType.text:
-            emb = discord.Embed(title = r'ИЗМЕНЕНИЕ\_ТЕКСТОВОГО_КАНАЛА', color = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
+            emb = discord.Embed(title = r'ИЗМЕНЕНИЕ\_ТЕКСТОВОГО_КАНАЛА', color = discord.Color.orange(), timestamp = datetime.datetime.utcnow()) # TEXT_CHANNEL_EDITED
             if before.name != after.name:
-                emb.add_field(name = 'НАЗВАНИЕ_ДО', value = before.name)
-                emb.add_field(name = 'НАЗВАНИЕ_ПОСЛЕ', value = after.name)
+                emb.add_field(name = 'НАЗВАНИЕ_ДО', value = before.name) # NAME_BEFORE
+                emb.add_field(name = 'НАЗВАНИЕ_ПОСЛЕ', value = after.name) # NAME_AFTER
                 emb.set_footer(text = f'ID: {before.id}')
                 await channel.send(embed = emb)
             if before.position != after.position:
-                emb.add_field(name = 'НАЗВАНИЕ', value = before.name, inline = False)
-                emb.add_field(name = 'ПОЗИЦИЯ_ДО', value = before.position)
-                emb.add_field(name = 'ПОЗИЦИЯ_ПОСЛЕ', value = after.position)
+                emb.add_field(name = 'НАЗВАНИЕ', value = before.name, inline = False) # NAME
+                emb.add_field(name = 'ПОЗИЦИЯ_ДО', value = before.position) # POSITION_BEFORE
+                emb.add_field(name = 'ПОЗИЦИЯ_ПОСЛЕ', value = after.position) # POSITION_AFTER
                 emb.set_footer(text = f'ID: {before.id}')
                 await channel.send(embed = emb)
 
@@ -150,19 +150,19 @@ async def on_guild_channel_update(before, after):
 async def on_member_update(before, after):
     channel = client.get_channel(714175791033876490)
     if before.bot == False:
-        chmo = 'УЧАСТНИК'
+        chmo = 'УЧАСТНИК' # MEMBER
     else:
-        chmo = 'БОТ'
+        chmo = 'БОТ' # BOT
     if before.guild.id == 693929822543675455:
         if before.nick != after.nick:
-            emb = discord.Embed(title = 'ИЗМЕНЕНИЕ_НИКНЕЙМА', color = discord.Colour.orange(), timestamp = datetime.datetime.utcnow())
+            emb = discord.Embed(title = 'ИЗМЕНЕНИЕ_НИКНЕЙМА', color = discord.Colour.orange(), timestamp = datetime.datetime.utcnow()) # NICKNAME_CHANGED
             if before.nick == None:
-                before.nick = 'НЕ\_БЫЛ_УКАЗАН'
+                before.nick = 'НЕ\_БЫЛ_УКАЗАН' # WAS_NONE
             if after.nick == None:
-                after.nick = 'НЕ_УКАЗАН'
+                after.nick = 'НЕ_УКАЗАН' # NOW_NONE
             emb.add_field(name = f'{chmo}', value = before)
-            emb.add_field(name = 'БЫЛ', value = before.nick)
-            emb.add_field(name = 'СТАЛ', value = after.nick)
+            emb.add_field(name = 'БЫЛ', value = before.nick) # WAS
+            emb.add_field(name = 'СТАЛ', value = after.nick) # NOW
             emb.set_footer(text = f'ID: {before.id}')
             await channel.send(embed = emb)
         if before.roles != after.roles:
@@ -170,9 +170,9 @@ async def on_member_update(before, after):
             b = set(after.roles)
             async for event in before.guild.audit_logs(limit = 1, action = discord.AuditLogAction.member_role_update):
                 if a > b:
-                    emb = discord.Embed(title = 'РОЛЬ_ЗАБРАНА', description = ', '.join([getattr(r, "mention", r.id) for r in event.before.roles or event.after.roles]), colour = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
+                    emb = discord.Embed(title = 'РОЛЬ_ЗАБРАНА', description = ', '.join([getattr(r, "mention", r.id) for r in event.before.roles or event.after.roles]), colour = discord.Color.orange(), timestamp = datetime.datetime.utcnow()) # ROLE_REMOVED
                 elif a < b:
-                    emb = discord.Embed(title = 'РОЛЬ_ВЫДАНА', description = ', '.join([getattr(r, "mention", r.id) for r in event.before.roles or event.after.roles]), colour = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
+                    emb = discord.Embed(title = 'РОЛЬ_ВЫДАНА', description = ', '.join([getattr(r, "mention", r.id) for r in event.before.roles or event.after.roles]), colour = discord.Color.orange(), timestamp = datetime.datetime.utcnow()) # ROLE_GIVEN
                 emb.set_author(name = before, icon_url = before.avatar_url)
                 emb.set_footer(text = f'ID: {before.id}')
             await channel.send(embed = emb)
@@ -180,14 +180,14 @@ async def on_member_update(before, after):
 @client.event
 async def on_member_join(member):
     if member.bot == False:
-        chmo = 'УЧАСТНИК'
+        chmo = 'УЧАСТНИК' # MEMBER
     else:
-        chmo = 'БОТ'
+        chmo = 'БОТ' # BOT
     lchannel = client.get_channel(714175791033876490)
-    emb = discord.Embed(title = f'{chmo}\_ЗАШЁЛ\_НА_СЕРВЕР', colour = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
+    emb = discord.Embed(title = f'{chmo}\_ЗАШЁЛ\_НА_СЕРВЕР', colour = discord.Color.orange(), timestamp = datetime.datetime.utcnow()) # {chmo}_ENTERED_THE_SERVER
     emb.add_field(name = f'{chmo}', value = member)
-    emb.add_field(name = 'УПОМИНАНИЕ', value = member.mention)
-    emb.add_field(name = 'СЕРВЕР', value = member.guild.name)
+    emb.add_field(name = 'УПОМИНАНИЕ', value = member.mention) # MENTION
+    emb.add_field(name = 'СЕРВЕР', value = member.guild.name) # SERVER
     emb.set_footer(text = f'ID: {member.id}')
     await lchannel.send(embed = emb)
     if member.bot == False:
@@ -200,10 +200,10 @@ async def on_member_join(member):
             await channel.send(embed = emb)
             if role != None:
                 await member.add_roles(role, role1, role2)
-                emb1 = discord.Embed(title = 'ВЫДАЧА\_РОЛЕЙ\_ЧЕРЕЗ\_АВТО_РОЛЬ', colour = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
-                emb1.add_field(name = 'УЧАСТНИК', value = member)
-                emb1.add_field(name = 'УПОМИНАНИЕ', value = member.mention)
-                emb1.add_field(name = 'РОЛИ', value = f'{role.mention}, {role1.mention}, {role2.mention}')
+                emb1 = discord.Embed(title = 'ВЫДАЧА\_РОЛЕЙ\_ЧЕРЕЗ\_АВТО_РОЛЬ', colour = discord.Color.orange(), timestamp = datetime.datetime.utcnow()) # AUTO_ROLES_ADDED
+                emb1.add_field(name = 'УЧАСТНИК', value = member) # MEMBER
+                emb1.add_field(name = 'УПОМИНАНИЕ', value = member.mention) # MENTION
+                emb1.add_field(name = 'РОЛИ', value = f'{role.mention}, {role1.mention}, {role2.mention}') # ROLES
                 emb1.set_footer(text = f'ID: {member.id}')
                 await lchannel.send(embed = emb1)
     else:
@@ -214,14 +214,14 @@ async def on_member_join(member):
 @client.event
 async def on_member_remove(member):
     if member.bot == False:
-        chmo = 'УЧАСТНИК'
+        chmo = 'УЧАСТНИК' # MEMBER
     else:
-        chmo = 'БОТ'
+        chmo = 'БОТ' # BOT
     channel = client.get_channel(714175791033876490)
-    emb = discord.Embed(title = f'{chmo}\_ВЫШЕЛ\_С_СЕРВЕРА', colour = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
+    emb = discord.Embed(title = f'{chmo}\_ВЫШЕЛ\_С_СЕРВЕРА', colour = discord.Color.orange(), timestamp = datetime.datetime.utcnow()) # {chmo}_LEFT_THE_SERVER
     emb.add_field(name = f'{chmo}', value = member)
-    emb.add_field(name = 'УПОМИНАНИЕ', value = member.mention)
-    emb.add_field(name = 'СЕРВЕР', value = member.guild.name)
+    emb.add_field(name = 'УПОМИНАНИЕ', value = member.mention) # MENTION
+    emb.add_field(name = 'СЕРВЕР', value = member.guild.name) # SERVER
     emb.set_footer(text = f'ID: {member.id}')
     await channel.send(embed = emb)
     if member.guild.id == 693929822543675455 and member.bot == False:
@@ -232,28 +232,28 @@ async def on_member_remove(member):
 @client.event
 async def on_guild_remove(guild):
     channel = client.get_channel(714175791033876490)
-    emb = discord.Embed(title = 'ВЫХОД\_С_СЕРВЕРА', colour = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
-    emb.add_field(name = 'СЕРВЕР', value = guild.name)
+    emb = discord.Embed(title = 'ВЫХОД\_С_СЕРВЕРА', colour = discord.Color.orange(), timestamp = datetime.datetime.utcnow()) # CLIENT_LEFT_SERVER
+    emb.add_field(name = 'СЕРВЕР', value = guild.name) # SERVER
     emb.set_footer(text = f'ID: {guild.id}')
     await channel.send(embed = emb)
 
 @client.event
 async def on_guild_join(guild):
     channel = client.get_channel(714175791033876490)
-    emb = discord.Embed(title = 'ДОБАВЛЕНИЕ\_НА_СЕРВЕР', colour = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
-    emb.add_field(name = 'СЕРВЕР', value = guild.name)
+    emb = discord.Embed(title = 'ДОБАВЛЕНИЕ\_НА_СЕРВЕР', colour = discord.Color.orange(), timestamp = datetime.datetime.utcnow()) # CLIENT_ADDED_TO_SERVER
+    emb.add_field(name = 'СЕРВЕР', value = guild.name) # SERVER
     emb.set_footer(text = f'ID: {guild.id}')
     await channel.send(embed = emb)
 
 @client.event
 async def on_voice_state_update(member, before, after):
     try:
-        if after.channel.name == 'Создать канал':
+        if after.channel.name == 'Создать канал': # Create channel
             await after.channel.edit(user_limit = 1)
             if member.bot == True:
-                room = 'Чего бля'
+                room = 'Чего бля' # wtf
             else:
-                room = f'Комната {member}'
+                room = f'Комната {member}' # {member}`s room
             channel = await member.guild.create_voice_channel(name = room, category = after.channel.category)
             await member.move_to(channel)
             await channel.set_permissions(member, mute_members = True, move_members = True, manage_channels = True)
@@ -268,7 +268,7 @@ async def on_voice_state_update(member, before, after):
 async def on_message(message):
     if message.content.lower().startswith('cy|'):
         channel = client.get_channel(714175791033876490)
-        emb = discord.Embed(title = 'ВОЗМОЖНОЕ\_ВЫПОЛНЕНИЕ_КОМАНДЫ', color = discord.Color.orange())
+        emb = discord.Embed(title = 'ВОЗМОЖНОЕ\_ВЫПОЛНЕНИЕ_КОМАНДЫ', color = discord.Color.orange()) 
         emb.add_field(name = 'ВОЗМОЖНОЕ_НАЗВАНИЕ', value = message.content.strip()[3:].strip())
         emb.add_field(name = 'ВОЗМОЖНЫЙ_ИСПОЛНИТЕЛЬ', value = f'{message.author.mention} ({message.author.name})')
         emb.add_field(name = 'КАНАЛ', value = f'{message.channel.mention} ({message.channel.name})')
