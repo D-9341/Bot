@@ -208,7 +208,7 @@ async def on_member_join(member):
                 await lchannel.send(embed = emb1)
         if member.guild.id == 818758712163827723:
             channel = client.get_channel(818776092013887508)
-            emb = discord.Embed(description = f'{member.mention} ({member.name}) пришёл к нам!', color discord.Color.orange(), timestamp = datetime.datetime.utcnow())
+            emb = discord.Embed(description = f'{member.mention} ({member.name}) пришёл к нам!', color = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
             await channel.send(embed = emb)
     else:
         role = discord.utils.get(member.guild.roles, id = 693933516831850527)
