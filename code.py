@@ -207,6 +207,8 @@ async def on_member_join(member):
                 emb1.set_footer(text = f'ID: {member.id}')
                 await lchannel.send(embed = emb1)
         if member.guild.id == 818758712163827723:
+            role = discord.utils.get(member.guild.roles, id = 818762863287074826)
+            await member.add_roles(role)
             channel = client.get_channel(818776092013887508)
             emb = discord.Embed(description = f'{member.mention} ({member.name}) пришёл к нам!', color = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
             await channel.send(embed = emb)
