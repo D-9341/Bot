@@ -206,6 +206,10 @@ async def on_member_join(member):
                 emb1.add_field(name = 'РОЛИ', value = f'{role.mention}, {role1.mention}, {role2.mention}') # ROLES
                 emb1.set_footer(text = f'ID: {member.id}')
                 await lchannel.send(embed = emb1)
+        if member.guild.id == 818758712163827723:
+            channel = client.get_channel(818776092013887508)
+            emb = discord.Embed(description = f'{member.mention} ({member.name}) пришёл к нам!', color discord.Color.orange(), timestamp = datetime.datetime.utcnow())
+            await channel.send(embed = emb)
     else:
         role = discord.utils.get(member.guild.roles, id = 693933516831850527)
         role1 = discord.utils.get(member.guild.roles, id = 693933511412940800)
@@ -227,6 +231,10 @@ async def on_member_remove(member):
     if member.guild.id == 693929822543675455 and member.bot == False:
         channel = client.get_channel(693929823030214658)
         emb = discord.Embed(description = f'{member.mention} ({member.name}) покинул нас...', colour = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
+        await channel.send(embed = emb)
+    if member.guild.id == 818758712163827723 and member.bot == False:
+        channel = client.get_channel(818776092013887508)
+        emb = discord.Embed(description = f'{member.mention} ({member.name}) покинул нас...', color = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
         await channel.send(embed = emb)
 
 @client.event
