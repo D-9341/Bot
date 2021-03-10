@@ -15,7 +15,7 @@ client.remove_command('help')
 
 @client.event
 async def on_ready():
-    await client.change_presence(status = discord.Status.idle, activity = discord.Activity(type = discord.ActivityType.watching, name = 'Discord API'))
+    await client.change_presence(status = discord.Status.idle, activity = discord.Activity(type = discord.ActivityType.watching, name = 'Slash Commands'))
 
 time_regex = re.compile(r"(?:(\d{1,5})(h|s|m|d))+?")
 time_dict = {'h': 3600, 's': 1, 'm': 60, 'd': 86400}
