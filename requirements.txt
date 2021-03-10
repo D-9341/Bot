@@ -1,5 +1,6 @@
 discord.py[voice]
 discord.py
+discord-py-slash-command
 aiohttp
 websockets
 chardet
