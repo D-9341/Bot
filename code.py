@@ -294,7 +294,7 @@ async def on_message(message):
         await client.process_commands(message)
     def _check(m):
         return (m.author == message.author and len(m.mentions) and (datetime.datetime.utcnow() - m.created_at).seconds < 2)
-    if len(list(filter(lambda m: _check(m), client.cached_messages))) >= 3 and message.author.id:
+    if len(list(filter(lambda m: _check(m), client.cached_messages))) >= 2 and message.author.id:
         if not message.author.bot:
             role = discord.utils.get(message.guild.roles, name = 'Muted')
             role3 = discord.utils.get(message.guild.roles, name = '----------Предупреждения----------')
@@ -303,7 +303,7 @@ async def on_message(message):
             if role != None and role1 != None and role2 != None and role3 != None:
                 if role not in message.author.roles:
                     if role1 not in message.author.roles and role2 not in message.author.roles:
-                        await message.channel.send(f'{message.author.mention} Был замучен на 10 минут за спам упоминаниями. Больше так не делай!')
+                        await message.channel.send(f'{message.author.mention} Был заглушён на 10 минут за спам упоминаниями. Больше так не делай!')
                         await message.author.add_roles(role, role1, role3)
                         channel = client.get_channel(714175791033876490)
                         emb = discord.Embed(title = 'СРАБОТАЛ\_АВТО_МУТ', color = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
@@ -320,7 +320,7 @@ async def on_message(message):
                         else:
                             await message.channel.send(f'Невозможно снять заглушение у {message.author.mention}, т.к. роль `Muted` была удалена.')
                     if role1 in message.author.roles and role2 not in message.author.roles:
-                        await message.channel.send(f'{message.author.mention} Был замучен на 30 минут за спам упоминаниями. Последнее предупреждение.')
+                        await message.channel.send(f'{message.author.mention} Был заглушён на 30 минут за спам упоминаниями. Последнее предупреждение.')
                         await message.author.remove_roles(role1)
                         await message.author.add_roles(role, role2, role3)
                         channel = client.get_channel(714175791033876490)
@@ -338,7 +338,7 @@ async def on_message(message):
                         else:
                             await message.channel.send(f'Невозможно снять заглушение у {message.author.mention}, т.к. роль `Muted` была удалена.')
                     if role2 in message.author.roles:
-                        await message.channel.send(f'{message.author.mention} Был замучен навсегда за спам упоминаниями.')
+                        await message.channel.send(f'{message.author.mention} Был заглушён навсегда за спам упоминаниями.')
                         await message.author.add_roles(role)
                         await message.author.remove_roles(role2, role3)
                         channel = client.get_channel(714175791033876490)
