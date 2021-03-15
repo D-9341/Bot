@@ -2297,7 +2297,7 @@ async def on_command_error(ctx, error):
         await ctx.message.delete()
         emb = discord.Embed(description = f'{ctx.author.mention}, команда не обнаружена. Может, пропишите cy/help?\n||{ctx.message.content}||', colour = discord.Color.orange())
         await ctx.send(embed = emb)
-    elif isinstance(error, commands.BotMissingPermissions):
+    elif isinstance(error, commands.ClientMissingPermissions):
         emb = discord.Embed(description = f'{ctx.author.mention}, Случилась ошибка BotMissingPermissions! Возможные решения:\nВыдать боту роль с правами администратора\nВыдать роли бота права администратора', color = discord.Color.orange())
         await ctx.send(embed = emb)
     elif isinstance(error, commands.MissingPermissions):
