@@ -293,8 +293,8 @@ async def on_message(message):
         await message.channel.send(f'чё звал {message.author.mention} ||`cy/`||')
         await client.process_commands(message)
     def _check(m):
-        return (m.author == message.author and len(m.mentions) and (datetime.datetime.utcnow() - m.created_at).seconds < 1)
-    if len(list(filter(lambda m: _check(m), client.cached_messages))) >= 2 and message.author.id:
+        return (m.author == message.author and len(m.mentions) and (datetime.datetime.utcnow() - m.created_at).seconds < 2)
+    if len(list(filter(lambda m: _check(m), client.cached_messages))) >= 3 and message.author.id:
         if not message.author.bot:
             role = discord.utils.get(message.guild.roles, name = 'Muted')
             role3 = discord.utils.get(message.guild.roles, name = '----------Предупреждения----------')
