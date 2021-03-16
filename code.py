@@ -15,6 +15,7 @@ from discord_slash import SlashCommand, SlashContext
 
 client = commands.Bot(command_prefix = commands.when_mentioned_or('cy/'), intents = discord.Intents.all(), owner_id = 338714886001524737)
 client.remove_command('help')
+slash = SlashCommand(client, sync_commands = True)
 
 @client.event
 async def on_ready():
