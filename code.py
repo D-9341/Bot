@@ -471,6 +471,13 @@ async def on_message_edit(before, after):
 #Events
 
 #Mod
+@slash.slash(name = 'dm', description = 'Пишет в лс человеку от имени бота написанный вами текст', options = [{'name': 'Member', 'description': 'Участник', 'required': True, 'type': 6}, {'name': 'text', 'description': 'Текст для написания', 'required': True, 'type': 3}])
+async def _dm(ctx, member: discord.User, *, text):
+    emb = discord.Embed(description = f'{text}', colour = 0x2f3136)
+    emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
+    await member.send(embed = emb)
+    await ctx.send('Сообщение отправлено.', delete_after = 3)
+
 @client.command()
 @commands.has_permissions(view_audit_log = True)
 @commands.cooldown(1, 5, commands.BucketType.user)
@@ -480,6 +487,35 @@ async def dm(ctx, member: discord.Member, *, text):
     emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
     await member.send(embed = emb)
 
+@slash.slash(name = 'kick', description = 'Выгоняет участника с сервера', options = [{'name': 'Member', 'description': 'Участник', 'required': True, 'type': 6}, {'name': 'reason', 'description': 'Причина', 'required': False, 'type': 3}])
+async def _kick(ctx, member: discord.Member, *, reason = None):
+    bot = discord.utils.get(ctx.guild.members, id = client.user.id)
+    if member.id != 338714886001524737:
+        if reason == None:
+            reason = 'Не указана.'
+        if ctx.author.top_role == member.top_role:
+            emb = discord.Embed(description = f'{ctx.author.mention}, ваша высшая роль равна высшей роли {member.mention}. Кик отклонён.', colour = discord.Color.orange())
+            await ctx.send(embed = emb)
+        elif member.top_role > ctx.author.top_role:
+                emb = discord.Embed(description = f'{ctx.author.mention}, ваша высшая роль ниже высшей роли {member.mention}. Кик отклонён.', colour = discord.Color.orange())
+                await ctx.send(embed = emb)
+        elif member.top_role > bot.top_role:
+            emb = discord.Embed(description = f'МОЯ высшая роль ниже высшей роли {member.mention}. Кик невозможен.', color = 0xff0000)
+            await ctx.send(embed = emb)
+        elif member.top_role == bot.top_role:
+            emb = discord.Embed(description = f'МОЯ высшая роль идентична высшей роли {member.mention}. Кик невозможен.', color = 0xff0000)
+            await ctx.send(embed = emb)
+        else:
+            emb = discord.Embed(colour = member.color)
+            emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
+            emb.add_field(name = 'Был кикнут', value = member.mention)
+            emb.add_field(name = 'По причине', value = reason)
+            await ctx.send(embed = emb)
+            await member.kick(reason = reason)
+    else:
+        emb = discord.Embed(description = f'Извините, {ctx.author.mention}, но вы не можете кикнуть моего создателя!', colour = discord.Color.orange())
+        await ctx.send(embed = emb)
+    
 @client.command(aliases = ['Kick', 'KICK'])
 @commands.cooldown(1, 10, commands.BucketType.user)
 @commands.has_permissions(kick_members = True)
@@ -524,6 +560,48 @@ async def kick(ctx, member: discord.Member, *, reason = None):
             emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
 
+@slash.slash(name = 'ban', description = 'Банит участника', options = [{'name': 'member', 'description': 'Участник', 'required': True, 'type': 6}, {'name': 'reason', 'description': 'Причина и/или указание --soft --reason', 'required': False, 'type': 3}])
+async def _ban(ctx, member: discord.Member, *, reason = None):
+    bot = discord.utils.get(ctx.guild.members, id = client.user.id)
+    if member.id != 338714886001524737:
+        if reason == None:
+            reason = 'Не указана.'
+        if ctx.author.top_role == member.top_role:
+            emb = discord.Embed(description = f'{ctx.author.mention}, ваша высшая роль равна высшей роли {member.mention}. Бан отклонён.', colour = discord.Color.orange())
+            await ctx.send(embed = emb)
+        elif member.top_role > ctx.author.top_role:
+            emb = discord.Embed(description = f'{ctx.author.mention}, ваша высшая роль ниже высшей роли {member.mention}. Бан отклонён.', colour = discord.Color.orange())
+            await ctx.send(embed = emb)
+        elif member.top_role > bot.top_role:
+            emb = discord.Embed(description = f'МОЯ высшая роль ниже высшей роли {member.mention}. Бан невозможен.', color = 0xff0000)
+            await ctx.send(embed = emb)
+        elif member.top_role == bot.top_role:
+            emb = discord.Embed(description = f'МОЯ высшая роль идентична высшей роли {member.mention}. Бан невозможен.', color = 0xff0000)
+            await ctx.send(embed = emb)
+        else:
+            if '--soft' in reason:
+                emb = discord.Embed(color = member.color)
+                emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
+                emb.add_field(name = 'Упрощённо забанен', value = f'{member.mention} ({member.name})')
+                if '--reason' in reason:
+                    reason = reason.strip()[15:].strip()
+                else:
+                    reason = 'Не указана.'
+                emb.add_field(name = 'По причине', value = reason)
+                await ctx.send(embed = emb)
+                await member.ban(reason = reason)
+                await member.unban(reason = '--softban')
+            else:
+                emb = discord.Embed(colour = member.color)
+                emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
+                emb.add_field(name = 'Был забанен', value = member.mention)
+                emb.add_field(name = 'По причине', value = reason)
+                await ctx.send(embed = emb)
+                await member.ban(reason = reason)
+    else:
+        emb = discord.Embed(description = f'Извините, {ctx.author.mention}, но вы не можете забанить моего создателя!', colour = discord.Color.orange())
+        await ctx.send(embed = emb)
+        
 @client.command(aliases = ['Ban', 'BAN'])
 @commands.cooldown(1, 10, commands.BucketType.user)
 @commands.has_permissions(ban_members = True)
@@ -583,6 +661,39 @@ async def ban(ctx, member: discord.Member, *, reason = None):
             emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
 
+@slash.slash(name = 'give', description = 'Выдаёт участнику роль', options = [{'name': 'member', 'description': 'Участник', 'required': True, 'type': 6}, {'name': 'role', 'description': 'Роль', 'required': True, 'type': 8}])
+async def _give(ctx, member: discord.Member, *, role: discord.Role):
+  if role != None:
+      if role > ctx.author.top_role:
+          emb = discord.Embed(description = f'Вы не можете выдать {role.mention}, так как она имеет более высокий ранг, чем ваша высшая роль.', color = discord.Color.orange())
+          await ctx.send(embed = emb)
+          if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
+              emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+      elif role == ctx.author.top_role:
+          emb = discord.Embed(description = f'Вы не можете выдать {role.mention} кому-либо, так как она равна вашей высшей роли.', color = discord.Color.orange())
+          if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
+              emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+          await ctx.send(embed = emb)
+      elif role.is_default():
+          emb = discord.Embed(description = 'Выдавать @everyone?', color = 0x2f3136)
+          if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
+              emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+          await ctx.send(embed = emb)
+      else:
+          await member.add_roles(role)
+          emb = discord.Embed(colour = member.color, timestamp = datetime.datetime.utcnow())
+          emb.add_field(name = 'ВЫДАНА_РОЛЬ', value = f'{role.mention} | {role.name} | ID {role.id}')
+          emb.add_field(name = 'ВЫДАНА:', value = member.mention, inline = False)
+          emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
+          if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
+              emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+          await ctx.send(embed = emb)
+  else:
+      emb = discord.Embed(description = f'{ctx.author.mention}, я не могу найти {role.mention} в списке ролей.', colour = member.color, timestamp = datetime.datetime.utcnow())
+      if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
+          emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+      await ctx.send(embed = emb)
+        
 @client.command(aliases = ['Give', 'GIVE'])
 async def give(ctx, member: discord.Member, *, role: discord.Role):
     await ctx.message.delete()
@@ -619,6 +730,50 @@ async def give(ctx, member: discord.Member, *, role: discord.Role):
                 emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
             await ctx.send(embed = emb)
 
+@slash.slash(name = 'take', description = 'Забирает роль у участника', options = [{'name': 'member', 'description': 'Участник', 'required': True, 'type': 6}, {'name': 'role', 'description': 'Роль', 'required': True, 'type': 8}])
+async def _take(ctx, member: discord.Member, *, role: discord.Role):
+    if role != None:
+        bot = ctx.guild.get_member(client.user.id)
+        if role > member.top_role:
+            emb = discord.Embed(description = f'Вы не можете забрать {role.mention}, так как она имеет более высокий ранг, чем ваша высшая роль. Забирание роли отменено.', color = 0xffffff)
+            await ctx.send(embed = emb)
+            if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
+                emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+        elif role == ctx.author.top_role:
+            emb = discord.Embed(description = f'Вы не можете забрать {role.mention}, так как она равна вашей высшей роли. Забирание роли отменено.', color = 0xffffff)
+            if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
+                emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+            await ctx.send(embed = emb)
+        elif member.top_role > bot.top_role:
+            emb = discord.Embed(description = f'МОЯ высшая роль ниже высшей роли {member.mention}. Забрать роль невозможно.', color = 0xff0000)
+            if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
+                emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+            await ctx.send(embed = emb)
+        elif member.top_role == bot.top_role:
+            emb = discord.Embed(description = f'МОЯ высшая роль идентична высшей роли {member.mention}. Забрать роль невозможно.', color = 0xff0000)
+            if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
+                emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+            await ctx.send(embed = emb)
+        elif role.is_default():
+            emb = discord.Embed(description = 'Забирать @everyone?', color = 0x2f3136)
+            if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
+                emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+            await ctx.send(embed = emb)
+        else:
+            await member.remove_roles(role)
+            emb = discord.Embed(colour = member.color, timestamp = datetime.datetime.utcnow())
+            emb.add_field(name = 'ЗАБРАНА_РОЛЬ', value = f'{role.mention} | {role.name} | ID {role.id}')
+            emb.add_field(name = 'ЗАБРАНА_У:', value = member.mention, inline = False)
+            emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
+            if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
+                emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+            await ctx.send(embed = emb)
+    else:
+        emb = discord.Embed(description = f'{ctx.author.mention}, я не могу найти {role.mention} в списке ролей.', colour = member.color, timestamp = datetime.datetime.utcnow())
+        if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
+            emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+        await ctx.send(embed = emb)
+            
 @client.command(aliases = ['Take', 'TAKE'])
 async def take(ctx, member: discord.Member, *, role: discord.Role):
     await ctx.message.delete()
@@ -750,6 +905,25 @@ async def mute(ctx, member: discord.Member, time: TimeConverter, *, reason: str 
         emb = discord.Embed(description = f'Извините, {ctx.author.mention}, но вы не можете заглушить моего создателя!', color = 0xff0000)
         await ctx.send(embed = emb)
 
+@slash.slash(name = 'unmute', description = 'Отменяет заглушение участника', options = [{'name': 'member', 'description': 'Участник', 'required': True, 'type': 6}, {'name': 'reason', 'description': 'Причина', 'required': False, 'type': 3}])
+async def _unmute(ctx, member: discord.Member, *, reason = None):
+    role = discord.utils.get(ctx.guild.roles, name = 'Muted')
+    if role != None:
+        if role in member.roles:
+            await member.remove_roles(role)
+            if reason == None:
+                reason = 'Не указана.'
+            emb = discord.Embed(title = f'Принудительное снятие заглушения у {member}', colour = member.color, timestamp = datetime.datetime.utcnow())
+            emb.add_field(name = 'Снял мут', value = ctx.author.mention)
+            emb.add_field(name = 'По причине', value = reason)
+            await ctx.send(embed = emb)
+        else:
+            emb = discord.Embed(description = 'Снятие заглушения не требуется. Роли Muted не обнаружено в списке ролей участника.', colour = discord.Color.orange())
+            await ctx.send(embed = emb)
+    else:
+        emb = discord.Embed(description = f'{ctx.author.mention}, Я не могу снять заглушение у {member.mention} из-за того, что роль Muted была удалена/отредактирована!', colour = discord.Color.orange(), timestamp = datetime.datetime.now())
+        await ctx.send(embed = emb)
+        
 @client.command(aliases = ['Unmute', 'UNMUTE'])
 @commands.has_permissions(manage_channels = True)
 async def unmute(ctx, member: discord.Member, *, reason = None):
@@ -773,6 +947,554 @@ async def unmute(ctx, member: discord.Member, *, reason = None):
         emb = discord.Embed(description = f'Невозможно снять заглушение у {member.mention}, т.к. роль Muted была не найдена.', colour = discord.Color.orange(), timestamp = ctx.message.created_at)
         await ctx.send(embed = emb)
 
+@slash.slash(name = 'clear', description = 'Очищает канал от указанного количества сообщений. Не работает, если в канале нет сообщений.', options = [{'name': 'amount', 'description': 'Количество сообщений для удаления', 'required': True, 'type': 4}, {'name': 'members', 'description': 'Указание диапазона удаления сообщений', 'required': False, 'type': 3, 'choices': [{'name': 'Удалить сообщения ото всех', 'value': '--everyone'}, {'name': 'Удалить сообщения только от ботов', 'value': '--bots'}, {'name': 'Удалить сообщения только от людей', 'value': '--users'}, {'name': 'Не оставить доказательства исполнения команды, если количество сообщений для удаления меньше 10', 'value': '--silent'}]}, {'name': 'filt', 'description': 'Удаляет сообщение с заданным словом/словосочетанием', 'required': False, 'type': 3}])
+async def _clear(ctx, amount: int, members = '--everyone', *, filt = None):
+    await asyncio.sleep(1)
+    authors = {}
+    cleared = 0
+    if not '--silent' in members:
+        async for message in ctx.channel.history(limit = amount):
+            if message.author not in authors:
+                authors[message.author] = 1
+            else:
+                authors[message.author] += 1
+            try:
+                cleared += 1
+            except Exception:
+                pass
+    if amount == 2472:
+        if ctx.author.id == client.owner_id:
+            await ctx.channel.delete()
+            emb = discord.Embed(description = f'канал `{ctx.channel.name}` удалён.', color = discord.Color.orange())
+            await ctx.author.send(embed = emb)
+        else:
+            await ctx.author.send('Как ты узнал об этом?!')
+    elif amount >= 300:
+        emb = discord.Embed(description = f'{ctx.author.mention}, при таком числе удаления сообщений ({amount}) неизбежны ошибки в работе {client.user.mention}.', colour = discord.Color.orange())
+        await ctx.send(f'{ctx.guild.owner.mention}', embed = emb)
+    elif amount >= 250:
+        if ctx.author != ctx.guild.owner:
+            emb = discord.Embed(description = f'{ctx.author.mention}, операция с данным числом ({amount}) доступна только {ctx.guild.owner.mention}. Отмена.', colour = discord.Color.orange())
+            await ctx.send(f'{ctx.guild.owner.mention}', embed = emb, delete_after = 5)
+        else:
+            emb = discord.Embed(description = f'{ctx.author.mention}, обнаружено слишком большое число для удаления сообщений ({amount}). Возможны дальнейшие ошибки в работе {client.user.mention}. Продолжить? (y/n)\n||Отмена через 10 секунд.||', colour = discord.Color.orange())
+            sent = await ctx.send(embed = emb)
+            try:
+                msg = await client.wait_for('message', timeout = 10, check = lambda message: message.channel == ctx.message.channel)
+                if msg.content.lower() == 'y' and msg.author.id == ctx.guild.owner.id:
+                    await msg.delete()
+                    await sent.delete()
+                    if '--silent' not in members:
+                        emb = discord.Embed(description = 'Проверяем..', color = discord.Color.orange())
+                        sent = await ctx.send(embed = emb)
+                        if members == '--bots':
+                            if filt == None:
+                                await ctx.channel.purge(limit = amount + 1, check = lambda m: m.author.bot == True, before = sent)
+                            else:
+                                await ctx.channel.purge(limit = amount + 1, check = lambda m: m.content.lower() == filt.lower() and m.author.bot == True, before = sent)
+                            emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
+                            emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{amount}```')
+                            if filt:
+                                emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
+                            emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
+                            emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение.')
+                            await sent.edit(embed = emb)
+                        elif members == '--users':
+                            if filt == None:
+                                await ctx.channel.purge(limit = amount + 1, check = lambda m: m.author.bot == False, before = sent)
+                            else:
+                                await ctx.channel.purge(limit = amount + 1, check = lambda m: m.author.bot == False and m.content.lower() == filt.lower(), before = sent)
+                            emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
+                            emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{cleared}```')
+                            if filt:
+                                emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
+                            emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
+                            emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение.')
+                            await sent.edit(embed = emb)
+                        else:
+                            if filt == None:
+                                await ctx.channel.purge(limit = amount + 1, before = sent)
+                            else:
+                                await ctx.channel.purge(limit = amount + 1, check = lambda m: m.content.lower() == filt.lower(), before = sent)
+                            emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
+                            emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{cleared}```')
+                            if filt:
+                                emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
+                            emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
+                            emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение.')
+                            await sent.edit(embed = emb)
+                        try:
+                            if '--silent' in members:
+                                return
+                            msg = await client.wait_for('message', timeout = 10, check = lambda message: message.channel == ctx.message.channel and message.author == ctx.author)
+                            if msg.content.lower() == 'c':
+                                emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
+                                emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{cleared}```')
+                                if filt:
+                                    emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
+                                else:
+                                    emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
+                                await sent.edit(embed = emb)
+                            else:
+                                raise asyncio.TimeoutError(await sent.delete())
+                        except asyncio.TimeoutError:
+                            await sent.delete()
+                    else:
+                        if '--bots' in members:
+                            if filt == None:
+                                await ctx.channel.purge(limit = amount + 1, check = lambda m: m.author.bot == True)
+                            else:
+                                await ctx.channel.purge(limit = amount + 1, check = lambda m: m.content.lower() == filt.lower() and m.author.bot == True)
+                        elif '--users' in members:
+                            if filt == None:
+                                await ctx.channel.purge(limit = amount + 1, check = lambda m: m.author.bot == False)
+                            else:
+                                await ctx.channel.purge(limit = amount + 1, check = lambda m: m.author.bot == False and m.content.lower() == filt.lower())
+                        elif '--bots' and '--users' in members:
+                            if filt == None:
+                                await ctx.channel.purge(limit = amount + 1)
+                            else:
+                                await ctx.channel.purge(limit = amount + 1, check = lambda m: m.content.lower() == filt.lower())
+                        elif '--everyone' in members:
+                            if filt == None:
+                                await ctx.channel.purge(limit = amount + 1)
+                            else:
+                                await ctx.channel.purge(limit = amount + 1, check = lambda m: m.content.lower() == filt.lower())
+                        elif members == '--silent':
+                            if filt == None:
+                                await ctx.channel.purge(limit = amount + 1)
+                            else:
+                                await ctx.channel.purge(limit = amount + 1, check = lambda m: m.content.lower() == filt.lower())
+                elif msg.content.lower() == 'n' and msg.author.id == ctx.guild.owner.id:
+                    await msg.delete()
+                    await sent.delete()
+                    emb = discord.Embed(description = f'{ctx.guild.owner.mention} отменил запрос.', colour = discord.Color.orange())
+                    await ctx.send(embed = emb, delete_after = 3)
+                elif msg.content.lower() == 'n' or 'y' and msg.author.id != ctx.guild.owner.id:
+                    await msg.delete()
+                    await sent.delete()
+                    emb = discord.Embed(description = f'{ctx.author.mention}, ты не являешься владельцем сервера.', colour = discord.Color.orange())
+                    await ctx.send(embed = emb, delete_after = 3)
+                else:
+                    await msg.delete()
+                    await sent.delete()
+                    emb = discord.Embed(description = f'Обнаружен недопустимый ответ ({msg.content})', colour = discord.Color.orange())
+                    await ctx.send(embed = emb, delete_after = 3)
+            except asyncio.TimeoutError:
+                await sent.delete()
+                emb = discord.Embed(description = f'{ctx.author.mention}, Время вышло.', colour = discord.Color.orange())
+                await ctx.send(f'{ctx.guild.owner.mention}', embed = emb, delete_after = 3)
+    elif amount >= 100:
+        if ctx.author != ctx.guild.owner:
+            emb = discord.Embed(description = f'{ctx.author.mention}, создан запрос на удаление {amount} сообщений. Мне нужен ответ создателя сервера на это действие. Продолжаем? (y/n)\n||Запрос будет отменён через 1 минуту.||', colour = discord.Color.orange())
+            sent = await ctx.send(f'{ctx.guild.owner.mention}', embed = emb)
+            try:
+                msg = await client.wait_for('message', timeout = 10, check = lambda message: message.author == ctx.author and message.channel == ctx.message.channel)
+                if msg.content.lower() == 'y':
+                    await msg.delete()
+                    await sent.delete()
+                    if '--silent' not in members:
+                        emb = discord.Embed(description = 'Проверяем..', color = discord.Color.orange())
+                        sent = await ctx.send(embed = emb)
+                        if members == '--bots':
+                            if filt == None:
+                                await ctx.channel.purge(limit = amount + 1, check = lambda m: m.author.bot == True, before = sent)
+                            else:
+                                await ctx.channel.purge(limit = amount + 1, check = lambda m: m.content.lower() == filt.lower() and m.author.bot == True, before = sent)
+                            emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
+                            emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{cleared}```')
+                            if filt:
+                                emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
+                            emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
+                            emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение.')
+                            await sent.edit(embed = emb)
+                        elif members == '--users':
+                            if filt == None:
+                                await ctx.channel.purge(limit = amount + 1, check = lambda m: m.author.bot == False, before = sent)
+                            else:
+                                await ctx.channel.purge(limit = amount + 1, check = lambda m: m.author.bot == False and m.content.lower() == filt.lower(), before = sent)
+                            emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
+                            emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{cleared}```')
+                            if filt:
+                                emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
+                            emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
+                            emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение.')
+                            await sent.edit(embed = emb)
+                        else:
+                            if filt == None:
+                                await ctx.channel.purge(limit = amount + 1, before = sent)
+                            else:
+                                await ctx.channel.purge(limit = amount + 1, check = lambda m: m.content.lower() == filt.lower(), before = sent)
+                            emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
+                            emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{cleared}```')
+                            if filt:
+                                emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
+                            emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
+                            emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение.')
+                            await sent.edit(embed = emb)
+                        try:
+                            if '--silent' in members:
+                                return
+                            msg = await client.wait_for('message', timeout = 10, check = lambda message: message.channel == ctx.message.channel and message.author == ctx.author)
+                            if msg.content.lower() == 'c':
+                                emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
+                                emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{cleared}```')
+                                if filt:
+                                    emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
+                                else:
+                                    emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
+                                await sent.edit(embed = emb)
+                            else:
+                                raise asyncio.TimeoutError(await sent.delete())
+                        except asyncio.TimeoutError:
+                            await sent.delete()
+                    else:
+                        if '--bots' in members:
+                            if filt == None:
+                                await ctx.channel.purge(limit = amount + 1, check = lambda m: m.author.bot == True)
+                            else:
+                                await ctx.channel.purge(limit = amount + 1, check = lambda m: m.content.lower() == filt.lower() and m.author.bot == True)
+                        elif '--users' in members:
+                            if filt == None:
+                                await ctx.channel.purge(limit = amount + 1, check = lambda m: m.author.bot == False)
+                            else:
+                                await ctx.channel.purge(limit = amount + 1, check = lambda m: m.author.bot == False and m.content.lower() == filt.lower())
+                        elif '--bots' and '--users' in members:
+                            if filt == None:
+                                await ctx.channel.purge(limit = amount + 1)
+                            else:
+                                await ctx.channel.purge(limit = amount + 1, check = lambda m: m.content.lower() == filt.lower())
+                        elif '--everyone' in members:
+                            if filt == None:
+                                await ctx.channel.purge(limit = amount + 1)
+                            else:
+                                await ctx.channel.purge(limit = amount + 1, check = lambda m: m.content.lower() == filt.lower())
+                        elif members == '--silent':
+                            if filt == None:
+                                await ctx.channel.purge(limit = amount + 1)
+                            else:
+                                await ctx.channel.purge(limit = amount + 1, check = lambda m: m.content.lower() == filt.lower())
+                elif msg.content.lower() == 'n' and msg.author.id == ctx.guild.owner.id:
+                    await msg.delete()
+                    await sent.delete()
+                    emb = discord.Embed(description = f'{ctx.guild.owner} отменил запрос.', colour = discord.Color.orange())
+                    await ctx.send(embed = emb, delete_after = 3)
+                elif msg.content.lower() == 'n' or 'y' and msg.author.id != ctx.guild.owner.id:
+                    await msg.delete()
+                    await sent.delete()
+                    emb = discord.Embed(description = f'{ctx.author.mention}, ты не являешься владельцем сервера.', colour = discord.Color.orange())
+                    await ctx.send(embed = emb, delete_after = 3)
+                else:
+                    await msg.delete()
+                    await sent.delete()
+                    emb = discord.Embed(description = f'Обнаружен недопустимый ответ ({msg.content})', colour = discord.Color.orange())
+                    await ctx.send(embed = emb, delete_after = 3)
+            except asyncio.TimeoutError:
+                await sent.delete()
+                emb = discord.Embed(description = f'{ctx.author.mention}, Время вышло.', colour = discord.Color.orange())
+                await ctx.send(f'{ctx.guild.owner.mention}', embed = emb, delete_after = 3)
+        else:
+            emb = discord.Embed(description = f'{ctx.author.mention}, создан запрос на удаление {amount} сообщений. Продолжить? (y/n)\n||Запрос будет отменён через 10 секунд.||', colour = discord.Color.orange())
+            sent = await ctx.send(embed = emb)
+            try:
+                msg = await client.wait_for('message', timeout = 10, check = lambda message: message.author == ctx.author and message.channel == ctx.message.channel)
+                if msg.content.lower() == 'y':
+                    await msg.delete()
+                    await sent.delete()
+                    if '--silent' not in members:
+                        emb = discord.Embed(description = 'Проверяем..', color = discord.Color.orange())
+                        sent = await ctx.send(embed = emb)
+                        if members == '--bots':
+                            if filt == None:
+                                await ctx.channel.purge(limit = amount + 1, check = lambda m: m.author.bot == True, before = sent)
+                            else:
+                                await ctx.channel.purge(limit = amount + 1, check = lambda m: m.content.lower() == filt.lower() and m.author.bot == True, before = sent)
+                            emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
+                            emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{cleared}```')
+                            if filt:
+                                emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
+                            emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
+                            emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение.')
+                            await sent.edit(embed = emb)
+                        elif members == '--users':
+                            if filt == None:
+                                await ctx.channel.purge(limit = amount + 1, check = lambda m: m.author.bot == False, before = sent)
+                            else:
+                                await ctx.channel.purge(limit = amount + 1, check = lambda m: m.author.bot == False and m.content.lower() == filt.lower(), before = sent)
+                            emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
+                            emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{cleared}```')
+                            if filt:
+                                emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
+                            emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
+                            emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение.')
+                            await sent.edit(embed = emb)
+                        else:
+                            if filt == None:
+                                await ctx.channel.purge(limit = amount + 1, before = sent)
+                            else:
+                                await ctx.channel.purge(limit = amount + 1, check = lambda m: m.content.lower() == filt.lower(), before = sent)
+                            emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
+                            emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{cleared}```')
+                            if filt:
+                                emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
+                            emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
+                            emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение.')
+                            await sent.edit(embed = emb)
+                        try:
+                            if '--silent' in members:
+                                return
+                            msg = await client.wait_for('message', timeout = 10, check = lambda message: message.channel == ctx.message.channel and message.author == ctx.author)
+                            if msg.content.lower() == 'c':
+                                emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
+                                emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{cleared}```')
+                                if filt:
+                                    emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
+                                else:
+                                    emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
+                                await sent.edit(embed = emb)
+                            else:
+                                raise asyncio.TimeoutError(await sent.delete())
+                        except asyncio.TimeoutError:
+                            await sent.delete()
+                    else:
+                        if '--bots' in members:
+                            if filt == None:
+                                await ctx.channel.purge(limit = amount + 1, check = lambda m: m.author.bot == True)
+                            else:
+                                await ctx.channel.purge(limit = amount + 1, check = lambda m: m.content.lower() == filt.lower() and m.author.bot == True)
+                        elif '--users' in members:
+                            if filt == None:
+                                await ctx.channel.purge(limit = amount + 1, check = lambda m: m.author.bot == False)
+                            else:
+                                await ctx.channel.purge(limit = amount + 1, check = lambda m: m.author.bot == False and m.content.lower() == filt.lower())
+                        elif '--bots' and '--users' in members:
+                            if filt == None:
+                                await ctx.channel.purge(limit = amount + 1)
+                            else:
+                                await ctx.channel.purge(limit = amount + 1, check = lambda m: m.content.lower() == filt.lower())
+                        elif '--everyone' in members:
+                            if filt == None:
+                                await ctx.channel.purge(limit = amount + 1)
+                            else:
+                                await ctx.channel.purge(limit = amount + 1, check = lambda m: m.content.lower() == filt.lower())
+                        elif members == '--silent':
+                            if filt == None:
+                                await ctx.channel.purge(limit = amount + 1)
+                            else:
+                                await ctx.channel.purge(limit = amount + 1, check = lambda m: m.content.lower() == filt.lower())
+                elif msg.content.lower() == 'n':
+                    await msg.delete()
+                    await sent.delete()
+                    emb = discord.Embed(description = 'Отменено.', colour = discord.Color.orange())
+                    await ctx.send(embed = emb, delete_after = 3)
+                else:
+                    await msg.delete()
+                    await sent.delete()
+                    emb = discord.Embed(description = f'Обнаружен недопустимый ответ ({msg.content})', colour = discord.Color.orange())
+                    await ctx.send(embed = emb, delete_after = 3)
+            except asyncio.TimeoutError:
+                await sent.delete()
+                emb = discord.Embed(description = f'{ctx.author.mention}, Время вышло.', colour = discord.Color.orange())
+                await ctx.send(embed = emb, delete_after = 3)
+    elif amount >= 10:
+        emb = discord.Embed(description = f'{ctx.author.mention}, создан запрос на удаление {amount} сообщений. Продолжить? (y/n)\n||Запрос будет отменён через 10 секунд.||', colour = discord.Color.orange())
+        sent = await ctx.send(embed = emb)
+        try:
+            msg = await client.wait_for('message', timeout = 10, check = lambda message: message.author == ctx.author and message.channel == ctx.message.channel)
+            if msg.content.lower() == 'y':
+                await msg.delete()
+                await sent.delete()
+                if '--silent' not in members:
+                    emb = discord.Embed(description = 'Проверяем..', color = discord.Color.orange())
+                    sent = await ctx.send(embed = emb)
+                    if members == '--bots':
+                        if filt == None:
+                            await ctx.channel.purge(limit = amount + 1, check = lambda m: m.author.bot == True, before = sent)
+                        else:
+                            await ctx.channel.purge(limit = amount + 1, check = lambda m: m.content.lower() == filt.lower() and m.author.bot == True, before = sent)
+                        emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
+                        emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{cleared}```')
+                        if filt:
+                            emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
+                        emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
+                        emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение.')
+                        await sent.edit(embed = emb)
+                    elif members == '--users':
+                        if filt == None:
+                            await ctx.channel.purge(limit = amount + 1, check = lambda m: m.author.bot == False, before = sent)
+                        else:
+                            await ctx.channel.purge(limit = amount + 1, check = lambda m: m.author.bot == False and m.content.lower() == filt.lower(), before = sent)
+                        emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
+                        emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{cleared}```')
+                        if filt:
+                            emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
+                        emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
+                        emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение.')
+                        await sent.edit(embed = emb)
+                    else:
+                        if filt == None:
+                            await ctx.channel.purge(limit = amount + 1, before = sent)
+                        else:
+                            await ctx.channel.purge(limit = amount + 1, check = lambda m: m.content.lower() == filt.lower(), before = sent)
+                        emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
+                        emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{cleared}```')
+                        if filt:
+                            emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
+                        emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
+                        emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение.')
+                        await sent.edit(embed = emb)
+                    try:
+                        if '--silent' in members:
+                            return
+                        msg = await client.wait_for('message', timeout = 10, check = lambda message: message.channel == ctx.message.channel and message.author == ctx.author)
+                        if msg.content.lower() == 'c':
+                            emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
+                            emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{cleared}```')
+                            if filt:
+                                emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
+                            else:
+                                emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
+                            await sent.edit(embed = emb)
+                        else:
+                            raise asyncio.TimeoutError(await sent.delete())
+                    except asyncio.TimeoutError:
+                        await sent.delete()
+                else:
+                    if '--bots' in members:
+                        if filt == None:
+                            await ctx.channel.purge(limit = amount + 1, check = lambda m: m.author.bot == True)
+                        else:
+                            await ctx.channel.purge(limit = amount + 1, check = lambda m: m.content.lower() == filt.lower() and m.author.bot == True)
+                    elif '--users' in members:
+                        if filt == None:
+                            await ctx.channel.purge(limit = amount + 1, check = lambda m: m.author.bot == False)
+                        else:
+                            await ctx.channel.purge(limit = amount + 1, check = lambda m: m.author.bot == False and m.content.lower() == filt.lower())
+                    elif '--bots' and '--users' in members:
+                        if filt == None:
+                            await ctx.channel.purge(limit = amount + 1)
+                        else:
+                            await ctx.channel.purge(limit = amount + 1, check = lambda m: m.content.lower() == filt.lower())
+                    elif '--everyone' in members:
+                        if filt == None:
+                            await ctx.channel.purge(limit = amount + 1)
+                        else:
+                            await ctx.channel.purge(limit = amount + 1, check = lambda m: m.content.lower() == filt.lower())
+                    elif members == '--silent':
+                        if filt == None:
+                            await ctx.channel.purge(limit = amount + 1)
+                        else:
+                            await ctx.channel.purge(limit = amount + 1, check = lambda m: m.content.lower() == filt.lower())
+            elif msg.content.lower() == 'n':
+                await msg.delete()
+                await sent.delete()
+                emb = discord.Embed(description = 'Отменено.', colour = discord.Color.orange())
+                await ctx.send(embed = emb, delete_after = 3)
+            else:
+                await msg.delete()
+                await sent.delete()
+                emb = discord.Embed(description = f'Обнаружен недопустимый ответ ({msg.content})', colour = discord.Color.orange())
+                await ctx.send(embed = emb, delete_after = 3)
+        except asyncio.TimeoutError:
+            await sent.delete()
+            emb = discord.Embed(description = f'{ctx.author.mention}, Время вышло.', colour = discord.Color.orange())
+            await ctx.send(embed = emb, delete_after = 3)
+    elif amount == 0:
+        emb = discord.Embed(description = 'Удалять 0 сообщений? Ты еблан?', colour = discord.Color.orange())
+        await ctx.send(embed = emb, delete_after = 1)
+    else:
+        if '--silent' not in members:
+            emb = discord.Embed(description = 'Проверяем..', color = discord.Color.orange())
+            sent = await ctx.send(embed = emb)
+            if '--bots' in members:
+                if filt == None:
+                    await ctx.channel.purge(limit = amount + 1, check = lambda m: m.author.bot == True, before = sent)
+                else:
+                    await ctx.channel.purge(limit = amount + 1, check = lambda m: m.content.lower() == filt.lower() and m.author.bot == True, before = sent)
+                emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
+                emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{cleared}```')
+                if filt:
+                    emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
+                emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
+                emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение.')
+                await sent.edit(embed = emb)
+            elif '--users' in members:
+                if filt == None:
+                    await ctx.channel.purge(limit = amount + 1, check = lambda m: m.author.bot == False, before = sent)
+                else:
+                    await ctx.channel.purge(limit = amount + 1, check = lambda m: m.author.bot == False and m.content.lower() == filt.lower(), before = sent)
+                emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
+                emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{cleared}```')
+                if filt:
+                    emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
+                emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
+                emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение.')
+                await sent.edit(embed = emb)
+            elif '--bots' and '--users' in members:
+                if filt == None:
+                    await ctx.channel.purge(limit = amount + 1, before = sent)
+                else:
+                    await ctx.channel.purge(limit = amount + 1, check = lambda m: m.content.lower() == filt.lower(), before = sent)
+                emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
+                emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{cleared}```')
+                if filt:
+                    emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
+                emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
+                emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение.')
+                await sent.edit(embed = emb)
+            elif members == '--everyone':
+                if filt == None:
+                    await ctx.channel.purge(limit = amount + 1, before = sent)
+                else:
+                    await ctx.channel.purge(limit = amount + 1, check = lambda m: m.content.lower() == filt.lower(), before = sent)
+                emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
+                emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{cleared}```')
+                if filt:
+                    emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
+                emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
+                emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c". Написание любого другого символа удалит сообщение.')
+                await sent.edit(embed = emb)
+            try:
+                msg = await client.wait_for('message', timeout = 10, check = lambda message: message.channel == ctx.message.channel and message.author == ctx.author)
+                if msg.content.lower() == 'c':
+                    emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
+                    emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{cleared}```')
+                    if filt:
+                        emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
+                    else:
+                        emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
+                    await sent.edit(embed = emb)
+                else:
+                    raise asyncio.TimeoutError(await sent.delete())
+            except asyncio.TimeoutError:
+                await sent.delete()
+        else:
+            if '--bots' in members:
+                if filt == None:
+                    await ctx.channel.purge(limit = amount + 1, check = lambda m: m.author.bot == True)
+                else:
+                    await ctx.channel.purge(limit = amount + 1, check = lambda m: m.content.lower() == filt.lower() and m.author.bot == True)
+            elif '--users' in members:
+                if filt == None:
+                    await ctx.channel.purge(limit = amount + 1, check = lambda m: m.author.bot == False)
+                else:
+                    await ctx.channel.purge(limit = amount + 1, check = lambda m: m.author.bot == False and m.content.lower() == filt.lower())
+            elif '--bots' and '--users' in members:
+                if filt == None:
+                    await ctx.channel.purge(limit = amount + 1)
+                else:
+                    await ctx.channel.purge(limit = amount + 1, check = lambda m: m.content.lower() == filt.lower())
+            elif '--everyone' in members:
+                if filt == None:
+                    await ctx.channel.purge(limit = amount + 1)
+                else:
+                    await ctx.channel.purge(limit = amount + 1, check = lambda m: m.content.lower() == filt.lower())
+            elif members == '--silent':
+                if filt == None:
+                    await ctx.channel.purge(limit = amount + 1)
+                else:
+                    await ctx.channel.purge(limit = amount + 1, check = lambda m: m.content.lower() == filt.lower())
+        
 @client.command(aliases = ['Clear', 'CLEAR', 'purge', 'Purge', 'PURGE', 'prune', 'Prune', 'PRUNE', 'clean', 'Clean', 'CLEAN'])
 @commands.cooldown(1, 10, commands.BucketType.user)
 @commands.has_permissions(administrator = True)
@@ -1528,6 +2250,17 @@ async def clear(ctx, amount: int, members = '--everyone', *, filt = None):
 #Mod
 
 #Misc
+@slash.slash(name = 'vote', description = 'Устраивает голосование за какое-либо событие', options = [{'name': 'text', 'description': 'Текст для голосования за. Пишите так, будто слова *голосуем за* уже написаны', 'required': True, 'type': 3}])
+async def _vote(ctx, *, text):
+    emb = discord.Embed(description = 'ГОЛОСОВАНИЕ', colour = discord.Color.orange())
+    emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
+    emb.add_field(name = 'Голосуем за:', value = text)
+    emb.set_footer(text = '🚫 - воздержусь')
+    sent = await ctx.send(embed = emb)
+    await sent.add_reaction('👍')
+    await sent.add_reaction('👎')
+    await sent.add_reaction('🚫')
+
 @client.command()
 @commands.cooldown(1, 60, commands.BucketType.user)
 async def vote(ctx, *, text):
@@ -1563,6 +2296,28 @@ async def rolemembers(ctx, role: discord.Role, member: discord.Member = None):
             emb.set_footer(text = 'Обнаружено 0 участников с этой ролью.')
     await ctx.send(embed = emb)
 
+@slash.slash(name = 'guild', description = 'Показывает информацию о сервере')
+async def _guild(ctx):
+    guild = ctx.guild
+    emb = discord.Embed(colour = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
+    emb.set_author(name = guild, icon_url = guild.icon_url)
+    emb.add_field(name = 'ID сервера', value = guild.id)
+    emb.add_field(name = 'Голосовой регион', value = guild.region)
+    emb.add_field(name = 'Владелец', value = guild.owner.mention)
+    emb.add_field(name = 'Участников', value = guild.member_count)
+    emb.add_field(name = 'Из них ботов', value = len(list(filter(lambda m: m.bot, ctx.guild.members))))
+    emb.add_field(name = 'Из них людей', value = len(list(filter(lambda m: not m.bot, ctx.guild.members))))
+    emb.add_field(name = 'Каналов', value = f'Текстовых {len(guild.text_channels)} | Голосовых {len(guild.voice_channels)}')
+    roles = ', '.join([role.name for role in guild.roles[1:]])
+    emb.add_field(name = f'Роли ({len(guild.roles)-1})', value = roles, inline = False)
+    now = datetime.datetime.today()
+    then = guild.created_at
+    delta = now - then
+    d = guild.created_at.strftime('%d.%m.%Y %H:%M:%S UTC')
+    emb.add_field(name = 'Дата создания сервера', value = f'{delta.days} дней назад. ({d})', inline = False)
+    emb.set_thumbnail(url = guild.icon_url)
+    await ctx.send(embed = emb)
+    
 @client.command(aliases = ['Guild', 'GUILD'])
 @commands.cooldown(1, 5, commands.BucketType.user)
 async def guild(ctx):
@@ -1589,7 +2344,7 @@ async def guild(ctx):
     if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
     await ctx.send(embed = emb)
-
+    
 @client.command()
 @commands.cooldown(1, 5, commands.BucketType.user)
 async def role(ctx, *, role: discord.Role):
@@ -1622,6 +2377,24 @@ async def role(ctx, *, role: discord.Role):
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
     await ctx.send(embed = emb)
 
+@slash.slash(name = 'avatar', description = 'Выводит аватар участника', options = [{'name': 'member', 'description': 'Пользователь', 'required': False, 'type': 6}])
+async def _avatar(ctx, member: discord.Member = None):
+    if member == None:
+        member = ctx.author
+    av = 'png'
+    av1 = 'webp'
+    av2 = 'jpg'
+    emb = discord.Embed(colour = member.color)
+    if member.is_avatar_animated() == False:
+        emb.add_field(name = '.png', value = f'[Ссылка]({member.avatar_url_as(format = av)})')
+        emb.add_field(name = '.webp', value = f'[Ссылка]({member.avatar_url_as(format = av1)})')
+        emb.add_field(name = '.jpg', value = f'[Ссылка]({member.avatar_url_as(format = av2)})')
+    else:
+        emb.set_footer(text = 'по причине того, что аватар анимирован - ссылок на статичные форматы нет!')
+    emb.set_image(url = member.avatar_url)
+    emb.set_author(name = member)
+    await ctx.send(embed = emb)
+    
 @client.command(aliases = ['Avatar', 'AVATAR'])
 @commands.cooldown(1, 5, commands.BucketType.user)
 async def avatar(ctx, member: discord.Member = None):
@@ -1645,6 +2418,56 @@ async def avatar(ctx, member: discord.Member = None):
     emb.set_author(name = member)
     await ctx.send(embed = emb)
 
+@slash.slash(name = 'about', description = 'Показывает информацию о участнике', options = [{'name': 'member', 'description': 'Участник', 'required': False, 'type': 6}])
+async def _about(ctx, member: discord.Member = None):
+    if member == None:
+        member = ctx.author
+    if member.nick == None:
+        member.nick = 'Н/Д'
+    if member.bot == False:
+        bot = 'Неа'
+    elif member.bot == True:
+        bot = 'Ага'
+    emb = discord.Embed(colour = member.color, timestamp = datetime.datetime.utcnow())
+    emb.set_author(name = member)
+    emb.add_field(name = 'ID', value = member.id)
+    now = datetime.datetime.today()
+    then = member.created_at
+    delta = now - then
+    d = member.created_at.strftime('%d.%m.%Y %H:%M:%S UTC')
+    then1 = member.joined_at
+    delta1 = now - then1
+    d1 = member.joined_at.strftime('%d.%m.%Y %H:%M:%S UTC')
+    emb.add_field(name = 'Создан', value = f'{delta.days} дня(ей) назад. ({d})', inline = False)
+    emb.add_field(name = 'Вошёл', value = f'{delta1.days} дня(ей) назад. ({d1})', inline = False)
+    emb.add_field(name = 'Упоминание', value = member.mention)
+    emb.add_field(name = 'Необработанное имя', value = member.name)
+    emb.add_field(name = 'Никнейм', value = member.nick)
+    if member.status == discord.Status.online:
+        status = 'В сети'
+    elif member.status == discord.Status.dnd:
+        status = 'Не беспокоить'
+    elif member.status == discord.Status.idle:
+        status = 'Не активен'
+    elif member.status == discord.Status.offline:
+        status = 'Не в сети'
+    emb.add_field(name = 'Статус', value = status)
+    roles = ', '.join([role.name for role in member.roles[1:]])
+    if member.id == 774273205745483797 or member.id == 764882153812787250 or member.id == 694170281270312991:
+        bro = 'Даа'
+    if member.id == client.owner_id:
+        bro = 'Мой создатель a.k. чмырь'
+    else:
+        bro = 'Неа'
+    emb.add_field(name = 'Бро?', value = bro, inline = False)
+    emb.add_field(name = 'Бот?', value = bot)
+    limit = len(member.roles)
+    if limit != 1:
+        emb.add_field(name = f'Роли ({len(member.roles)-1})', value = roles, inline = False)
+        emb.add_field(name = 'Высшая Роль', value = member.top_role.mention, inline = False)
+    emb.set_thumbnail(url = member.avatar_url)
+    await ctx.send(embed = emb)
+    
 @client.command(aliases = ['me', 'Me', 'ME', 'About', 'ABOUT'])
 @commands.cooldown(1, 5, commands.BucketType.user)
 async def about(ctx, member: discord.Member = None):
@@ -1719,6 +2542,29 @@ async def remind(ctx, time: TimeConverter, *, arg):
 #Misc
 
 #Fun
+@slash.slash(name = "roll", description = 'Ролит случайное число', options = [{'name': 'first', 'description': 'Первое число', 'required': False, 'type': 4}, {'name': 'second', 'description': 'Второе число', 'required': False, 'type': 4}])
+async def _roll(ctx, first: int = None, second: int = None):
+    if first == None and second == None:
+        rand = random.randint(0, 1)
+        if rand == '1':
+            await ctx.send(f'{ctx.author} выпадает число(0-100)\n`100`')
+        else:
+            rand1 = random.randint(0, 9)
+            rand2 = random.randint(0, 9)
+            await ctx.send(f'`{ctx.author} выпадает число(0-100)\n0{rand1}{rand2}`')
+    if first != None and second == None:
+        rand = random.randint(0, first)
+        if first < 10:
+            await ctx.send(f'`{ctx.author} выпадает число(0-{first})\n0{rand}`')
+        else:
+            await ctx.send(f'`{ctx.author} выпадает число(0-{first})\n{rand}`')
+    if first != None and second != None:
+        if first > second:
+            rand = random.randint(first, first)
+            await ctx.send(f'`{ctx.author} выпадает число({first}-{first})\n{rand}`')
+        rand = random.randint(first, second)
+        await ctx.send(f'`{ctx.author} выпадает число({first}-{second})\n{rand}`')
+
 @client.command()
 async def roll(ctx, first: int = None, second: int = None):
     await ctx.message.delete()
@@ -2135,6 +2981,16 @@ async def leave(ctx):
         await ctx.send(embed = emb)
     await vc.disconnect()
 
+@slash.slash(name = 'ping', description = 'Отображение задержки клиента бота. Нормальная задержка в диапазоне от 90 до 130 миллисекунд.')
+async def _ping(ctx):
+    emb = discord.Embed(description = f'`fetching..`', colour = discord.Color.orange())
+    emb1 = discord.Embed(description = f'Pong!  `{round(client.latency * 1000)} ms`', colour = discord.Color.orange())
+    if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
+        emb1.set_footer(text = 'Cephalon Cy by сасиска#2472')
+    message = await ctx.send(embed = emb)
+    await asyncio.sleep(client.latency)
+    await message.edit(embed = emb1)
+    
 @client.command(aliases = ['Ping', 'PING'])
 @commands.cooldown(1, 5, commands.BucketType.user)
 async def ping(ctx):
@@ -2148,6 +3004,13 @@ async def ping(ctx):
     await asyncio.sleep(client.latency)
     await message.edit(embed = emb1)
 
+@slash.slash(name = 'invite', description = 'Для приглашения бота на сервер')
+async def _invite(ctx):
+    emb = discord.Embed(description = '[Ссылка](https://discord.com/api/oauth2/authorize?client_id=694170281270312991&permissions=8&scope=bot%20applications.commands) для приглашения Cy на сервера.', colour = discord.Color.orange())
+    if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
+        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+    await ctx.send(embed = emb)
+    
 @client.command(aliases = ['invcy'])
 @commands.cooldown(1, 3, commands.BucketType.user)
 async def invite(ctx, arg = None):
@@ -2170,14 +3033,36 @@ async def invite(ctx, arg = None):
             emb = discord.Embed(description = '[Ссылка](https://discord.com/oauth2/authorize?client_id=762015251264569352&scope=bot&permissions=8&scope=bot%20applications.commands) для приглашения Cy PRO на сервера.', color = discord.Color.orange())
             await ctx.send(embed = emb)
 
+@slash.slash(name = 'info', description = 'Информация о боте')
+async def _info(ctx):
+    emb = discord.Embed(colour = discord.Color.orange())
+    emb.set_author(name = client.user.name, url = 'https://warframe.fandom.com/wiki/Cephalon_Cy', icon_url = client.user.avatar_url)
+    emb.add_field(name = 'Версия', value = '0.12.9.10998')
+    emb.add_field(name = 'Написан на', value = 'discord.py v1.6.0 при помощи\ndiscord-py-slash-command v1.0.9')
+    emb.add_field(name = 'Разработчик', value = '[сасиска#2472](https://discord.com/users/338714886001524737)')
+    if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
+        emb.add_field(name = 'Сервер', value = 'Данный сервер не принадлежит моему создателю или его знакомым. Все эмбед выводы будут иметь футер с текстом `Cephalon Cy by сасиска#2472`')
+    if ctx.guild.id == 693929822543675455:
+        emb.add_field(name = 'Принадлежность', value = 'Это - мой основной сервер.')
+    if ctx.guild.id == 735874149578440855:
+        emb.add_field(name = 'Тестирование', value = 'Это - мой тестовый сервер.')
+    emb.add_field(name = 'Веб-сайт', value = '```http://ru-unioncraft.ru/```', inline = False)
+    emb.add_field(name = 'Раздражаю', value = f'{len(client.users)} человек')
+    emb.add_field(name = 'Существую на', value = f'{len(client.guilds)} серверах')
+    if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
+        emb.set_footer(text = 'Данное приложение не имеет никакого причастия к игре Warframe. Cephalon Cy by сасиска#2472', icon_url = 'https://i.playground.ru/p/yVaOZNSTdgUTxmzy_qvzzQ.png')
+    else:
+        emb.set_footer(text = 'Данное приложение не имеет никакого причастия к игре Warframe.', icon_url = 'https://i.playground.ru/p/yVaOZNSTdgUTxmzy_qvzzQ.png')
+    await ctx.send(embed = emb)
+            
 @client.command(aliases = ['Info', 'INFO'])
 @commands.cooldown(1, 5, commands.BucketType.user)
 async def info(ctx):
     await ctx.message.delete()
     emb = discord.Embed(colour = discord.Color.orange())
     emb.set_author(name = client.user.name, url = 'https://warframe.fandom.com/wiki/Cephalon_Cy', icon_url = client.user.avatar_url)
-    emb.add_field(name = 'Версия', value = '0.12.9.10519')
-    emb.add_field(name = 'Написан на', value = 'discord.py v1.6.0')
+    emb.add_field(name = 'Версия', value = '0.12.9.10998')
+    emb.add_field(name = 'Написан на', value = 'discord.py v1.6.0 при помощи\ndiscord-py-slash-command v1.0.9')
     emb.add_field(name = 'Разработчик', value = '[сасиска#2472](https://discord.com/users/338714886001524737)')
     if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
         emb.add_field(name = 'Сервер', value = 'Данный сервер не принадлежит моему создателю или его знакомым. Все эмбед выводы будут иметь футер с текстом `Cephalon Cy by сасиска#2472`')
@@ -2197,8 +3082,108 @@ async def info(ctx):
 @client.command(aliases = ['version'])
 @commands.cooldown(1, 3, commands.BucketType.user)
 async def botver(ctx):
-    emb = discord.Embed(title = '0.12.9.10519', description = 'Небольшие исправления, в целом никак не связанные с работой бота', color = discord.Color.orange())
+    emb = discord.Embed(color = 0x2f3136)
+    emb.add_field(name = '0.12.9.10988', value = 'Добавлены Slash-Команды! Теперь вы можете просто написать `/`, чтобы вам вывелся список всех команд. Для их работы нужна новая [ссылка-приглашение](https://discord.com/api/oauth2/authorize?client_id=694170281270312991&permissions=8&scope=bot%20applications.commands). Slash-Команды применены ко всем командам за исключением тех, что находятся в категории Fun, Embeds и некоторые в Cephalon или имеют конвертеры (mute, remind, someone) ***Всё ещё БЕТА!***')
     await ctx.send(embed = emb)
+    
+@slash.slash(name = 'help', description = 'Здесь можно получить полную помощь по всем командам', options = [{'name': 'arg', 'description': 'Выберите команду, для которой вам нужна помощь', 'required': False, 'type': 3, 'choices': [
+    {'name': 'about', 'value': 'about'},
+    {'name': 'avatar', 'value': 'avatar'},
+    {'name': 'ban', 'value': 'ban'},
+    {'name': 'content', 'value': 'content'},
+    {'name': 'clear', 'value': 'clear'},
+    {'name': 'dm', 'value': 'dm'},
+    {'name': 'say', 'value': 'say'},
+    {'name': 'edit', 'value': 'edit'},
+    {'name': 'give', 'value': 'give'},
+    {'name': 'kick', 'value': 'kick'},
+    {'name': 'mute', 'value': 'mute'},
+    {'name': 'remind', 'value': 'remind'},
+    {'name': 'role', 'value': 'role'},
+    {'name': 'take', 'value': 'take'},
+    {'name': 'someone', 'value': 'someone'},
+    {'name': 'unmute', 'value': 'unmute'},
+    {'name': 'vote', 'value': 'vote'},
+    {'name': 'help', 'value': 'help'},
+    {'name': 'Embeds', 'value': 'embeds'},
+    {'name': 'Cephalon', 'value': 'cephalon'},
+    {'name': 'Fun', 'value': 'fun'},
+    {'name': 'Mod', 'value': 'mod'},
+    {'name': 'Misc', 'value': 'misc'},
+    {'name': 'Events', 'value': 'events'},
+    {'name': 'All', 'value': 'all'},
+    {'name': 'setup', 'value': 'setup'},
+    {'name': 'roll', 'value': 'roll'}
+    ]
+    }])
+async def _help(ctx, arg = None):
+    if arg == None:
+        emb = discord.Embed(title = client.user.name, description = 'Вот команды, что я могу исполнить.\n||Некоторые улучшения появятся после верификации.||', colour = discord.Color.orange())
+        emb.add_field(name = 'Cephalon', value = '`info`, `invite`, `join`, `leave`, `ping`, `privacy`', inline = False)
+        emb.add_field(name = 'Embeds', value = '`content`, `edit`, `say`', inline = False)
+        emb.add_field(name = 'Fun', value = '`aye_balbec`, `cu`, `coinflip`, `dotersbrain`, `niggers`, `rp`, `rap`, `zatka`', inline = False)
+        emb.add_field(name = 'Mod', value = '`ban`, `clear`, `dm`, `give`, `kick`, `mute`, `take`, `unmute`', inline = False)
+        emb.add_field(name = 'Misc', value = '`about`, `avatar`, `guild`, `remind`, `role`, `rolemembers`, `someone`, `vote`', inline = False)
+        emb.add_field(name = 'ᅠ', value = 'Назовите комнату `Создать канал` (**регистр обязателен**), чтобы бот автоматически создавал для вас временные каналы, которые будут удаляться после того, как все люди выйдут из канала.')
+        emb.add_field(name = 'ᅠ', value = '**Используйте** `cy/help [команда/категория]` **для подробностей использования.**\n\n**[Ссылка-приглашение](https://discord.com/api/oauth2/authorize?client_id=694170281270312991&permissions=8&scope=bot%20applications.commands)**', inline = False)
+        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+        await ctx.send(embed = emb)
+    elif arg == 'setup':
+        await ctx.send('```apache\ncy/setup\nвыполнение команды создаст 4 роли, если их нет на сервере.\nбудет выполнено автоматически, если сработает авто-мут.```')
+    elif arg == 'roll':
+        await ctx.send('```apache\ncy/roll [от] [до]\nесли не указано [до], [от] станет [до].\ncy/roll 80 (0-80)\ncy/roll 26 90 (26-90)\ncy/roll (0-100)\n([] - опционально)```')
+    elif arg == 'about':
+        await ctx.send('```apache\ncy/about [@пинг/имя/ID] ([] - опционально, / - или)```')
+    elif arg == 'avatar':
+        await ctx.send('```apache\ncy/avatar [@пинг/имя/ID] ([] - опционально, / - или)```')
+    elif arg == 'ban':
+        await ctx.send('```apache\ncy/ban <@пинг/имя/ID> [причина/--soft --reason]\ncy/ban 185476724627210241 --soft --reason лошара\ncy/ban @сасиска чмо\ncy/ban "Sgt.White"\n\nПри использовании --soft обязательно указывать --reason после него, однако можно не использовать --reason\n\n([] - опционально, <> - обязательно, / - или)\nperms = ban_members```')
+    elif arg == 'content':
+        await ctx.send('```apache\ncy/content <ID> (<> - обязательно)```')
+    elif arg == 'clear':
+        await ctx.send('```apache\ncy/clear <количество> [автор] [фильтр]\ncy/clear 100\ncy/clear 10 @сасиска\ncy/clear 50 --everyone хыха\ncy/clear 30 --bots\ncy/clear 15 --users\n\n--everyone удалит сообщения от всех\n--bots удалит сообщения только от ботов\n--users удалит сообщения только от участников\n\nПри указании автора не будет удалено столько сообщений, сколько было указано, будет удалено столько, сколько будет найдено в пределах этих сообщений.\nСообщения старше 2 недель будут удалены не сразу - лимит discord API\nПри удалении более 100 сообщений нужно подтверждение владельца сервера.\nТолько владелец может удалять от 250 сообщений за раз.\nНе более 300!\n([] - опционально, <> - обязательно, / - или)\nperms = adminstrator```')
+    elif arg == 'dm':
+        await ctx.send('```apache\ncy/dm <@пинг/имя/ID> <текст> (<> - обязательно, / - или)\nperms = view_audit_log```')
+    elif arg == 'say':
+        await ctx.send('```apache\ncy/say [t& title текст] | [d& description текст] | [c& HEX цвет] | [th& ссылка на картинку справа] | [img& ссылка на картинку снизу]\ncy/say t& title | d& description\ncy/say --everyone | t& title | d& description\ncy/say [текст]\ncy/say --everyone [текст]\n(вам НЕ обязательно писать все аргументы в данном порядке, пишите только те, что вам нужны в любом порядке) ([] - опционально, / - или)\nperms = manage_channels```')
+    elif arg == 'edit':
+        await ctx.send('```apache\ncy/edit <ID> [t& title текст] | [d& description текст] | [c& HEX цвет] | [th& ссылка на картинку справа] | [img& ссылка на картинку снизу]\ncy/edit <ID> [текст]\ncy/edit <ID> --clean | d& description\ncy/edit <ID> --clean\ncy/edit <ID> --noembed\ncy/edit <ID> --empty-embed\ncy/edit <ID> --delete\n(--clean удалит контент над эмбедом, --noembed удалит эмбед, работает только если есть эмбед, --empty-embed опустошит эмбед, --delete удалит сообщение) ([] - опционально, <> - обязательно, / - или)\nperms = manage_channels```')
+    elif arg == 'give':
+        await ctx.send('```apache\ncy/give <@пинг/имя/ID> <@роль/имя роли/ID роли> (<> - обязательно, / - или)\nperms = manage_channels```')
+    elif arg == 'kick':
+        await ctx.send('```apache\ncy/kick <@пинг/имя/ID> [причина] ([] - опционально, <> - обязательно, / - или)\nperms = kick_members```')
+    elif arg == 'mute':
+        await ctx.send('```apache\ncy/mute <@пинг/имя/ID> <время(s/m/h/d(15s, 5m, 1h, 5d))> [причина] ([] - опционально, <> - обязательно, / - или)\nperms = manage_channels```')
+    elif arg == 'remind':
+        await ctx.send('```apache\ncy/remind <время(s/m/h/d(15s, 5m, 1h, 5d))> <текст> (<> - обязательно, / - или)```')
+    elif arg == 'role':
+        await ctx.send('```apache\ncy/role <@роль/имя роли/ID роли> (<> - обязательно, / - или)```')
+    elif arg == 'take':
+        await ctx.send('```apache\ncy/take <@пинг/имя/ID> <@роль/имя роли/ID роли> (<> - обязательно, / - или)\nperms = view_audit_log```')
+    elif arg == 'someone':
+        await ctx.send('```apache\ncy/someone <текст> (<> - обязательно)```')
+    elif arg == 'unmute':
+        await ctx.send('```apache\ncy/unmute <@пинг/имя/ID> [причина] ([] - опционально, <> - обязательно, / - или)\nperms = manage_channels```')
+    elif arg == 'vote':
+        await ctx.send('```apache\ncy/vote <текст> (<> - обязательно)```')
+    elif arg == 'help':
+        await ctx.send('```apache\ncy/help [команда] ([] - опционально)```')
+    elif arg == 'Embeds' or arg == 'embeds':
+        await ctx.send('```ARM\ncontent(ctx) - позволяет увидеть необработанный контент сообщения\nedit - редактирует сообщение, отправленное от лица бота. Иные сообщения редактировать нельзя.\nsay - используется для написания как текстов, так и эмбедов.```')
+    elif arg == 'Cephalon' or arg == 'cephalon':
+        await ctx.send('```ARM\ninfo - информация о боте\ninvite - ссылка-приглашения бота\njoin - бот зайдёт в ваш голосовой канал\nleave - бот из него выйдет\nping - проверяет задержку клиента бота.```')
+    elif arg == 'Fun' or arg == 'fun':
+        await ctx.send('```ARM\naye_balbec - я не ангел и не бес, просто..\ncu - медь\ncoinflip(c, coin) - подкидывает монетку\ndotersbrain - проверка на мозг дотера\nniggers - осуждаем!\nrp - ультимативный гайд по рп отыгровке\nrap - .rap\nzatka - Форма заявки для набор кадров```')
+    elif arg == 'Mod' or arg == 'mod':
+        await ctx.send('```ARM\nban - бан участника\nclear - очистка чата, не более 300!\ndm - пишет в лс участнику написанный текст\ngive - выдаёт роль\nkick - кик участника\nmute - заглушение участника\ntake - забирает роль\nunmute - снятие заглушения участника.```')
+    elif arg == 'Misc' or arg == 'misc':
+        await ctx.send('```ARM\nabout - информация о человеке\navatar - аватар человека\nguild - информация о сервере\nremind - напоминание о событии\nrole - информация о роли\nrolemembers - участники роли\nsomeone - упоминание someone\nvote - голосование за что-то.```')
+    elif arg == 'All' or arg == 'all':
+        await ctx.send('```ARM\ninfo - информация о боте\ninvite - ссылка-приглашения бота\njoin - бот зайдёт в ваш голосовой канал\nleave - бот из него выйдет\nping - проверяет задержку клиента бота.```')
+        await ctx.send('```ARM\ncontent(ctx) - позволяет увидеть raw контент сообщения\nedit - редактирует сообщение, отправленное от лица бота. Иные сообщения редактировать нельзя.\nsay - используется для написания как текстов, так и эмбедов.```')
+        await ctx.send('```ARM\naye_balbec - я не ангел и не бес, просто..\ncu - медь\ncoinflip(c, coin) - подкидывает монетку\ndotersbrain - проверка на мозг дотера\nniggers - осуждаем!\nrp - ультимативный гайд по рп отыгровке\nrap - .rap\nzatka - Форма заявки для набор кадров```')
+        await ctx.send('```ARM\nban - бан участника\nclear - очистка чата, не более 300!\ndm - пишет в лс участнику написанный текст\ngive - выдаёт роль\nkick - кик участника\nmute - заглушение участника\ntake - забирает роль\nunmute - снятие заглушения участника.```')
+        await ctx.send('```ARM\nabout - информация о человеке\navatar - аватар человека\nguild - информация о сервере\nremind - напоминание о событии\nrole - информация о роли\nrolemembers - участники роли\nsomeone - упоминание someone\nvote - голосование за что-то.```')
     
 @client.command(aliases = ['Help', 'HELP'])
 @commands.cooldown(1, 3, commands.BucketType.user)
@@ -2212,7 +3197,7 @@ async def help(ctx, arg = None):
         emb.add_field(name = 'Mod', value = '`ban`, `clear`, `dm`, `give`, `kick`, `mute`, `take`, `unmute`', inline = False)
         emb.add_field(name = 'Misc', value = '`about`, `avatar`, `guild`, `remind`, `role`, `rolemembers`, `someone`, `vote`', inline = False)
         emb.add_field(name = 'ᅠ', value = 'Назовите комнату `Создать канал` (**регистр обязателен**), чтобы бот автоматически создавал для вас временные каналы, которые будут удаляться после того, как все люди выйдут из канала.', inline = False)
-        emb.add_field(name = 'ᅠ', value = '**Используйте** `cy/help [команда/категория]` **для подробностей использования.**\n\n**[Ссылка-приглашение](https://discord.com/oauth2/authorize?client_id=694170281270312991&scope=bot&permissions=8)**', inline = False)
+        emb.add_field(name = 'ᅠ', value = '**Используйте** `cy/help [команда/категория]` **для подробностей использования.**\n\n**[Ссылка-приглашение](https://discord.com/api/oauth2/authorize?client_id=694170281270312991&permissions=8&scope=bot%20applications.commands)**', inline = False)
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
     elif arg == 'setup':
@@ -2272,7 +3257,7 @@ async def help(ctx, arg = None):
     elif arg == 'zatka':
         await ctx.send('```cy/zatka```')
     elif arg == 'Embeds' or arg == 'embeds':
-        await ctx.send('```py\ncontent(ctx) - позволяет увидеть raw контент сообщения\nedit - редактирует сообщение, отправленное от лица бота. Иные сообщения редактировать нельзя.\nsay - используется для написания как текстов, так и эмбедов.```')
+        await ctx.send('```py\ncontent(ctx) - позволяет увидеть необработанный контент сообщения\nedit - редактирует сообщение, отправленное от лица бота. Иные сообщения редактировать нельзя.\nsay - используется для написания как текстов, так и эмбедов.```')
     elif arg == 'Cephalon' or arg == 'cephalon':
         await ctx.send('```py\ninfo - информация о боте\ninvite - ссылка-приглашения бота\njoin - бот зайдёт в ваш голосовой канал\nleave - бот из него выйдет\nping - проверяет задержку клиента бота.```')
     elif arg == 'Fun' or arg == 'fun':
