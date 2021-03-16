@@ -3087,7 +3087,7 @@ async def botver(ctx):
     emb.add_field(name = '0.12.9.10988', value = 'Добавлены Slash-Команды! Теперь вы можете просто написать `/`, чтобы вам вывелся список всех команд. Для их работы нужна новая [ссылка-приглашение](https://discord.com/api/oauth2/authorize?client_id=694170281270312991&permissions=8&scope=bot%20applications.commands). Slash-Команды применены ко всем командам за исключением тех, что находятся в категории Fun, Embeds и некоторые в Cephalon или имеют конвертеры (mute, remind, someone) ***Всё ещё БЕТА!***')
     await ctx.send(embed = emb)
     
-@slash.slash(name = 'help', description = 'Здесь можно получить полную помощь по всем командам', options = [{'name': 'arg', 'description': 'Выберите команду, для которой вам нужна помощь', 'required': False, 'type': 3, 'choices': [
+@slash.slash(name = 'help', description = 'Здесь можно получить полную помощь по всем командам', options = [{'name': 'arg', 'description': 'ВВыберите команду для помощи.', 'required': False, 'type': 3, 'choices': [
     {'name': 'about', 'value': 'about'},
     {'name': 'avatar', 'value': 'avatar'},
     {'name': 'ban', 'value': 'ban'},
