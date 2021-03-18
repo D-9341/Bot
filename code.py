@@ -364,7 +364,7 @@ async def on_message(message):
     if ('сделать') in message.content.lower() or ('предлагаю') in message.content.lower() or ('предложение') in message.content.lower() and message.author.bot == False:
         await message.add_reaction('👍')
         await message.add_reaction('👎')
-    if ('поздравляю') or ('поздравим') or ('поздравляем') in message.content.lower() and message.author.bot == False:
+    if ('поздравляю') in message.content.lower() or ('поздравим') in message.content.lower() or ('поздравляем') in message.content.lower() and message.author.bot == False:
         await message.add_reaction('🥳')
     elif message.channel.id == 750372413102883028: #EFT
         if message.author.bot == True and message.author.id != 694170281270312991:
