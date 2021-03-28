@@ -490,7 +490,7 @@ async def dm(ctx, member: discord.Member, *, text):
         await ctx.message.delete()
         warning = ''
     else:
-        warning = '\n Для правильной работы бота необходимо выдать ему роль с правами администратора. Некоторые функции у бота со стандартными разрешениями будут: написание текстов, редактирование сообщений. Все остальные функции будут заблокированы.'
+        warning = '\nДля правильной работы бота необходимо выдать ему роль с правами администратора.'
     emb = discord.Embed(description = f'{text}', colour = 0x2f3136)
     emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
     await member.send(embed = emb)
@@ -3208,9 +3208,14 @@ async def _help(ctx, arg = None):
 @client.command(aliases = ['Help', 'HELP'])
 @commands.cooldown(1, 3, commands.BucketType.user)
 async def help(ctx, arg = None):
-    await ctx.message.delete()
+    bot = discord.utils.get(ctx.guild.members, id = client.user.id)
+    if bot.guild_permissions.manage_messages:
+        await ctx.message.delete()
+        warning = ''
+    else:
+        warning = '\nДля правильной работы бота необходимо выдать ему роль с правами администратора.'
     if arg == None:
-        emb = discord.Embed(title = client.user.name, description = 'Вот команды, что я могу исполнить.\n||Некоторые улучшения появятся после верификации.||', colour = discord.Color.orange())
+        emb = discord.Embed(title = client.user.name, description = f'Вот команды, что я могу исполнить.\n||Некоторые улучшения появятся после верификации.||{warning}', colour = discord.Color.orange())
         emb.add_field(name = 'Cephalon', value = '`info`, `invite`, `join`, `leave`, `ping`, `setup`', inline = False)
         emb.add_field(name = 'Embeds', value = '`content`, `edit`, `say`', inline = False)
         emb.add_field(name = 'Fun', value = '`aye_balbec`, `cu`, `coinflip`, `dotersbrain`, `niggers`, `rp`, `rap`, `roll`, `zatka`', inline = False)
