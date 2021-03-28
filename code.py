@@ -484,7 +484,7 @@ async def _dm(ctx, member: discord.User, *, text):
 @client.command()
 @commands.has_permissions(view_audit_log = True)
 @commands.cooldown(1, 5, commands.BucketType.user)
-async def dm(ctx, member: discord.Member, *, text):
+async def dm(ctx, member: discord.User, *, text):
     bot = discord.utils.get(ctx.guild.members, id = client.user.id)
     if bot.guild_permissions.manage_messages:
         await ctx.message.delete()
