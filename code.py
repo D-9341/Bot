@@ -494,7 +494,7 @@ async def dm(ctx, member: discord.User, *, text):
     emb = discord.Embed(description = f'{text}', colour = 0x2f3136)
     emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
     await member.send(embed = emb)
-    await ctx.send(f'Сообщение отправлено.{warning}', delete_after = 20)
+    await ctx.send(f'Сообщение отправлено.{warning}', delete_after = 5)
 
 @slash.slash(name = 'kick', description = 'Выгоняет участника с сервера', options = [{'name': 'Member', 'description': 'Участник', 'required': True, 'type': 6}, {'name': 'reason', 'description': 'Причина', 'required': False, 'type': 3}])
 async def _kick(ctx, member: discord.Member, *, reason = None):
@@ -529,8 +529,13 @@ async def _kick(ctx, member: discord.Member, *, reason = None):
 @commands.cooldown(1, 10, commands.BucketType.user)
 @commands.has_permissions(kick_members = True)
 async def kick(ctx, member: discord.Member, *, reason = None):
-    await ctx.message.delete()
     bot = discord.utils.get(ctx.guild.members, id = client.user.id)
+    if bot.guild_permissions.manage_messages:
+        await ctx.message.delete()
+        warning = ''
+    else:
+        warning = 'Для правильной работы бота необходимо выдать ему роль с правами администратора.'
+        await ctx.send(warning)
     if member.id != 338714886001524737:
         if reason == None:
             reason = 'Не указана.'
@@ -615,8 +620,13 @@ async def _ban(ctx, member: discord.Member, *, reason = None):
 @commands.cooldown(1, 10, commands.BucketType.user)
 @commands.has_permissions(ban_members = True)
 async def ban(ctx, member: discord.Member, *, reason = None):
-    await ctx.message.delete()
     bot = discord.utils.get(ctx.guild.members, id = client.user.id)
+    if bot.guild_permissions.manage_messages:
+        await ctx.message.delete()
+        warning = ''
+    else:
+        warning = 'Для правильной работы бота необходимо выдать ему роль с правами администратора.'
+        await ctx.send(warning)
     if member.id != 338714886001524737:
         if reason == None:
             reason = 'Не указана.'
@@ -2287,7 +2297,13 @@ async def _vote(ctx, *, text):
 @client.command()
 @commands.cooldown(1, 60, commands.BucketType.user)
 async def vote(ctx, *, text):
-    await ctx.message.delete()
+    bot = discord.utils.get(ctx.guild.members, id = client.user.id)
+    if bot.guild_permissions.manage_messages:
+        await ctx.message.delete()
+        warning = ''
+    else:
+        warning = '\nДля правильной работы бота необходимо выдать ему роль с правами администратора.'
+        await ctx.send(warning)
     emb = discord.Embed(description = 'ГОЛОСОВАНИЕ', colour = discord.Color.orange())
     emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
     emb.add_field(name = 'Голосуем за:', value = text)
@@ -2308,7 +2324,13 @@ async def someone(ctx, *, text: Slapper):
 @client.command()
 @commands.cooldown(1, 5, commands.BucketType.user)
 async def rolemembers(ctx, role: discord.Role, member: discord.Member = None):
-    await ctx.message.delete()
+    bot = discord.utils.get(ctx.guild.members, id = client.user.id)
+    if bot.guild_permissions.manage_messages:
+        await ctx.message.delete()
+        warning = ''
+    else:
+        warning = 'Для правильной работы бота необходимо выдать ему роль с правами администратора.'
+        await ctx.send(warning)
     emb = discord.Embed(colour = discord.Color.orange())
     if len(role.members) != 0:
         emb.add_field(name = f'Участники с ролью {role} ({len(role.members)})', value = ', '.join([member.mention for member in role.members]))
@@ -2344,7 +2366,13 @@ async def _guild(ctx):
 @client.command(aliases = ['Guild', 'GUILD'])
 @commands.cooldown(1, 5, commands.BucketType.user)
 async def guild(ctx):
-    await ctx.message.delete()
+    bot = discord.utils.get(ctx.guild.members, id = client.user.id)
+    if bot.guild_permissions.manage_messages:
+        await ctx.message.delete()
+        warning = ''
+    else:
+        warning = 'Для правильной работы бота необходимо выдать ему роль с правами администратора.'
+        await ctx.send(warning)
     guild = ctx.guild
     statuses = [len(list(filter(lambda m: str(m.status) == "online", ctx.guild.members))), len(list(filter(lambda m: str(m.status) == "idle", ctx.guild.members))), len(list(filter(lambda m: str(m.status) == "dnd", ctx.guild.members))), len(list(filter(lambda m: str(m.status) == "offline", ctx.guild.members)))]
     emb = discord.Embed(colour = discord.Color.orange(), timestamp = ctx.message.created_at)
@@ -2371,7 +2399,13 @@ async def guild(ctx):
 @client.command()
 @commands.cooldown(1, 5, commands.BucketType.user)
 async def role(ctx, *, role: discord.Role):
-    await ctx.message.delete()
+    bot = discord.utils.get(ctx.guild.members, id = client.user.id)
+    if bot.guild_permissions.manage_messages:
+        await ctx.message.delete()
+        warning = ''
+    else:
+        warning = 'Для правильной работы бота необходимо выдать ему роль с правами администратора.'
+        await ctx.send(warning)
     if role.mentionable == False:
         role.mentionable = 'Нет'
     elif role.mentionable == True:
@@ -2421,7 +2455,13 @@ async def _avatar(ctx, member: discord.Member = None):
 @client.command(aliases = ['Avatar', 'AVATAR'])
 @commands.cooldown(1, 5, commands.BucketType.user)
 async def avatar(ctx, member: discord.Member = None):
-    await ctx.message.delete()
+    bot = discord.utils.get(ctx.guild.members, id = client.user.id)
+    if bot.guild_permissions.manage_messages:
+        await ctx.message.delete()
+        warning = ''
+    else:
+        warning = 'Для правильной работы бота необходимо выдать ему роль с правами администратора.'
+        await ctx.send(warning)
     if member == None:
         member = ctx.author
     av = 'png'
@@ -2494,7 +2534,13 @@ async def _about(ctx, member: discord.Member = None):
 @client.command(aliases = ['me', 'Me', 'ME', 'About', 'ABOUT'])
 @commands.cooldown(1, 5, commands.BucketType.user)
 async def about(ctx, member: discord.Member = None):
-    await ctx.message.delete()
+    bot = discord.utils.get(ctx.guild.members, id = client.user.id)
+    if bot.guild_permissions.manage_messages:
+        await ctx.message.delete()
+        warning = ''
+    else:
+        warning = 'Для правильной работы бота необходимо выдать ему роль с правами администратора.'
+        await ctx.send(warning)
     if member == None:
         member = ctx.author
     if member.nick == None:
@@ -2548,7 +2594,13 @@ async def about(ctx, member: discord.Member = None):
 @client.command()
 @commands.cooldown(1, 5, commands.BucketType.user)
 async def remind(ctx, time: TimeConverter, *, arg):
-    await ctx.message.delete()
+    bot = discord.utils.get(ctx.guild.members, id = client.user.id)
+    if bot.guild_permissions.manage_messages:
+        await ctx.message.delete()
+        warning = ''
+    else:
+        warning = 'Для правильной работы бота необходимо выдать ему роль с правами администратора.'
+        await ctx.send(warning)
     emb = discord.Embed(colour = ctx.author.color, timestamp = ctx.message.created_at)
     emb.add_field(name = 'Напомню через', value = f'{time}s')
     emb.add_field(name = 'О чём напомню?', value = arg)
@@ -2590,7 +2642,13 @@ async def _roll(ctx, first: int = None, second: int = None):
 
 @client.command()
 async def roll(ctx, first: int = None, second: int = None):
-    await ctx.message.delete()
+    bot = discord.utils.get(ctx.guild.members, id = client.user.id)
+    if bot.guild_permissions.manage_messages:
+        await ctx.message.delete()
+        warning = ''
+    else:
+        warning = 'Для правильной работы бота необходимо выдать ему роль с правами администратора.'
+        await ctx.send(warning)
     if first == None and second == None:
         rand = random.randint(0, 1)
         if rand == '1':
@@ -2614,7 +2672,13 @@ async def roll(ctx, first: int = None, second: int = None):
 
 @client.command()
 async def dotersbrain(ctx):
-    await ctx.message.delete()
+    bot = discord.utils.get(ctx.guild.members, id = client.user.id)
+    if bot.guild_permissions.manage_messages:
+        await ctx.message.delete()
+        warning = ''
+    else:
+        warning = 'Для правильной работы бота необходимо выдать ему роль с правами администратора.'
+        return await ctx.send(warning)
     sent1 = await ctx.send(f'{ctx.author.mention}, через 5 секунд появится одно из слов (чё, а, да, нет, ок), на которое вам нужно будет правильно ответить. На размышление 4 секунды.')
     await asyncio.sleep(5)
     words = ['чё', 'а', 'да', 'нет', 'ок']
@@ -2654,7 +2718,13 @@ async def dotersbrain(ctx):
 @client.command()
 @commands.cooldown(1, 3, commands.BucketType.user)
 async def niggers(ctx):
-    await ctx.message.delete()
+    bot = discord.utils.get(ctx.guild.members, id = client.user.id)
+    if bot.guild_permissions.manage_messages:
+        await ctx.message.delete()
+        warning = ''
+    else:
+        warning = 'Для правильной работы бота необходимо выдать ему роль с правами администратора.'
+        await ctx.send(warning)
     emb = discord.Embed(description = '[осуждающее видео](https://www.youtube.com/watch?v=167apVK8Suw)', colour = discord.Color.orange())
     if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
@@ -2663,7 +2733,13 @@ async def niggers(ctx):
 @client.command()
 @commands.cooldown(1, 3, commands.BucketType.user)
 async def aye_balbec(ctx):
-    await ctx.message.delete()
+    bot = discord.utils.get(ctx.guild.members, id = client.user.id)
+    if bot.guild_permissions.manage_messages:
+        await ctx.message.delete()
+        warning = ''
+    else:
+        warning = 'Для правильной работы бота необходимо выдать ему роль с правами администратора.'
+        await ctx.send(warning)
     emb = discord.Embed(colour = ctx.author.color)
     emb.set_image(url = 'https://sun9-61.userapi.com/tja5cuQthduwgxq2yMigLiUxfYq_5fqiA6cJWg/sZOkbPajoSY.jpg')
     if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
@@ -2673,7 +2749,13 @@ async def aye_balbec(ctx):
 @client.command()
 @commands.cooldown(1, 3, commands.BucketType.user)
 async def rp(ctx):
-    await ctx.message.delete()
+    bot = discord.utils.get(ctx.guild.members, id = client.user.id)
+    if bot.guild_permissions.manage_messages:
+        await ctx.message.delete()
+        warning = ''
+    else:
+        warning = 'Для правильной работы бота необходимо выдать ему роль с правами администратора.'
+        await ctx.send(warning)
     emb = discord.Embed(description = '[Ныа](https://www.youtube.com/watch?v=idmTSW9mfYI)', colour = discord.Color.orange())
     if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
@@ -2682,7 +2764,13 @@ async def rp(ctx):
 @client.command(aliases = ['.rap'])
 @commands.cooldown(1, 5, commands.BucketType.user)
 async def rap(ctx):
-    await ctx.message.delete()
+    bot = discord.utils.get(ctx.guild.members, id = client.user.id)
+    if bot.guild_permissions.manage_messages:
+        await ctx.message.delete()
+        warning = ''
+    else:
+        warning = 'Для правильной работы бота необходимо выдать ему роль с правами администратора.'
+        await ctx.send(warning)
     emb = discord.Embed(colour = ctx.author.color)
     emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
     emb.set_image(url = 'https://thumbs.gfycat.com/MessyCarefreeHousefly-size_restricted.gif')
@@ -2693,7 +2781,13 @@ async def rap(ctx):
 @client.command()
 @commands.cooldown(1, 5, commands.BucketType.user)
 async def zatka(ctx):
-    await ctx.message.delete()
+    bot = discord.utils.get(ctx.guild.members, id = client.user.id)
+    if bot.guild_permissions.manage_messages:
+        await ctx.message.delete()
+        warning = ''
+    else:
+        warning = 'Для правильной работы бота необходимо выдать ему роль с правами администратора.'
+        await ctx.send(warning)
     emb = discord.Embed(title = 'Форма заявки для Набор кадров', colour = ctx.author.color)
     emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
     emb.add_field(name = '(1). ZATKA в STEAM.  ZATKA_KING#8406 в Discord.', value = 'возраст 14+  часовой пояс IL +0.', inline = False)
@@ -2710,13 +2804,24 @@ async def zatka(ctx):
 @client.command(aliases = ['Cu', 'CU'])
 @commands.cooldown(1, 5, commands.BucketType.user)
 async def cu(ctx):
-    await ctx.message.delete()
-    await ctx.send('Медь')
+    bot = discord.utils.get(ctx.guild.members, id = client.user.id)
+    if bot.guild_permissions.manage_messages:
+        await ctx.message.delete()
+        warning = ''
+    else:
+        warning = '\nДля правильной работы бота необходимо выдать ему роль с правами администратора.'
+    await ctx.send(f'Медь{warning}')
 
 @client.command(aliases = ['c', 'C', 'coin', 'Coin', 'COIN', 'Coinflip', 'COINFLIP'])
 @commands.cooldown(3, 3, commands.BucketType.user)
 async def coinflip(ctx):
-    await ctx.message.delete()
+    bot = discord.utils.get(ctx.guild.members, id = client.user.id)
+    if bot.guild_permissions.manage_messages:
+        await ctx.message.delete()
+        warning = ''
+    else:
+        warning = 'Для правильной работы бота необходимо выдать ему роль с правами администратора.'
+        await ctx.send(warning)
     emb = discord.Embed(description = 'Орёл!', colour = discord.Color.orange())
     emb.set_image(url = 'https://cdn.discordapp.com/attachments/524213591084105729/763835275930632252/-removebg-preview.png')
     emb1 = discord.Embed(description = 'Решка!', colour = discord.Color.orange())
@@ -2733,7 +2838,13 @@ async def coinflip(ctx):
 @client.command(aliases = ['ctx'])
 @commands.cooldown(1, 5, commands.BucketType.user)
 async def content(ctx, arg, channel: discord.TextChannel = None):
-    await ctx.message.delete()
+    bot = discord.utils.get(ctx.guild.members, id = client.user.id)
+    if bot.guild_permissions.manage_messages:
+        await ctx.message.delete()
+        warning = ''
+    else:
+        warning = 'Для правильной работы бота необходимо выдать ему роль с правами администратора.'
+        await ctx.send(warning)
     if channel == None:
         channel = ctx.message.channel
     message = await channel.fetch_message(id = arg)
@@ -2826,7 +2937,13 @@ async def content(ctx, arg, channel: discord.TextChannel = None):
 @client.command(aliases = ['Say', 'SAY'])
 @commands.has_permissions(manage_channels = True)
 async def say(ctx, *, msg):
-    await ctx.message.delete()
+    bot = discord.utils.get(ctx.guild.members, id = client.user.id)
+    if bot.guild_permissions.manage_messages:
+        await ctx.message.delete()
+        warning = ''
+    else:
+        warning = 'Для правильной работы бота необходимо выдать ему роль с правами администратора.'
+        await ctx.send(warning)
     title = description = image = thumbnail = color = None
     embed_values = msg.split('|')
     for i in embed_values:
@@ -2874,7 +2991,13 @@ async def say(ctx, *, msg):
 @client.command(aliases = ['Edit', 'EDIT'])
 @commands.has_permissions(manage_channels = True)
 async def edit(ctx, arg, *, msg = None):
-    await ctx.message.delete()
+    bot = discord.utils.get(ctx.guild.members, id = client.user.id)
+    if bot.guild_permissions.manage_messages:
+        await ctx.message.delete()
+        warning = ''
+    else:
+        warning = 'Для правильной работы бота необходимо выдать ему роль с правами администратора.'
+        await ctx.send(warning)
     message = await ctx.fetch_message(id = arg)
     if message:
         title = description = image = thumbnail = color = author = None
@@ -2952,7 +3075,13 @@ async def edit(ctx, arg, *, msg = None):
 #Cephalon
 @client.command()
 async def setup(ctx):
-    await ctx.message.delete()
+    bot = discord.utils.get(ctx.guild.members, id = client.user.id)
+    if bot.guild_permissions.manage_messages:
+        await ctx.message.delete()
+        warning = ''
+    else:
+        warning = 'Для правильной работы бота необходимо выдать ему роль с правами администратора.'
+        await ctx.send(warning)
     role3 = discord.utils.get(ctx.guild.roles, name = '----------Предупреждения----------')
     role1 = discord.utils.get(ctx.guild.roles, name = '1')
     role2 = discord.utils.get(ctx.guild.roles, name = '2')
@@ -2973,7 +3102,13 @@ async def setup(ctx):
 
 @client.command()
 async def generate(ctx):
-    await ctx.message.delete()
+    bot = discord.utils.get(ctx.guild.members, id = client.user.id)
+    if bot.guild_permissions.manage_messages:
+        await ctx.message.delete()
+        warning = ''
+    else:
+        warning = 'Для правильной работы бота необходимо выдать ему роль с правами администратора.'
+        await ctx.send(warning)
     token = ''.join([secrets.choice('QWERTYUIOPASDFGHJKLZXCVBNM1234567890') for i in range(4)])
     token1 = ''.join([secrets.choice('QWERTYUIOPASDFGHJKLZXCVBNM1234567890') for i in range(4)])
     token2 = ''.join([secrets.choice('QWERTYUIOPASDFGHJKLZXCVBNM1234567890') for i in range(4)])
@@ -3017,7 +3152,13 @@ async def _ping(ctx):
 @client.command(aliases = ['Ping', 'PING'])
 @commands.cooldown(1, 5, commands.BucketType.user)
 async def ping(ctx):
-    await ctx.message.delete()
+    bot = discord.utils.get(ctx.guild.members, id = client.user.id)
+    if bot.guild_permissions.manage_messages:
+        await ctx.message.delete()
+        warning = ''
+    else:
+        warning = 'Для правильной работы бота необходимо выдать ему роль с правами администратора.'
+        await ctx.send(warning)
     emb = discord.Embed(description = f'`fetching..`', colour = discord.Color.orange())
     emb1 = discord.Embed(description = f'Pong!  `{round(client.latency * 1000)} ms`', colour = discord.Color.orange())
     message = await ctx.send(embed = emb)
@@ -3037,7 +3178,13 @@ async def _invite(ctx):
 @client.command(aliases = ['invcy'])
 @commands.cooldown(1, 3, commands.BucketType.user)
 async def invite(ctx, arg = None):
-    await ctx.message.delete()
+    bot = discord.utils.get(ctx.guild.members, id = client.user.id)
+    if bot.guild_permissions.manage_messages:
+        await ctx.message.delete()
+        warning = ''
+    else:
+        warning = 'Для правильной работы бота необходимо выдать ему роль с правами администратора.'
+        await ctx.send(warning)
     if arg == None:
         emb = discord.Embed(description = '[Ссылка](https://discord.com/api/oauth2/authorize?client_id=694170281270312991&permissions=8&scope=bot%20applications.commands) для приглашения Cy на сервера.', colour = discord.Color.orange())
         if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
@@ -3081,7 +3228,13 @@ async def _info(ctx):
 @client.command(aliases = ['Info', 'INFO'])
 @commands.cooldown(1, 5, commands.BucketType.user)
 async def info(ctx):
-    await ctx.message.delete()
+    bot = discord.utils.get(ctx.guild.members, id = client.user.id)
+    if bot.guild_permissions.manage_messages:
+        await ctx.message.delete()
+        warning = ''
+    else:
+        warning = 'Для правильной работы бота необходимо выдать ему роль с правами администратора.'
+        await ctx.send(warning)
     emb = discord.Embed(colour = discord.Color.orange())
     emb.set_author(name = client.user.name, url = 'https://warframe.fandom.com/wiki/Cephalon_Cy', icon_url = client.user.avatar_url)
     emb.add_field(name = 'Версия', value = '0.12.9.10998')
@@ -3105,8 +3258,16 @@ async def info(ctx):
 @client.command(aliases = ['version'])
 @commands.cooldown(1, 3, commands.BucketType.user)
 async def botver(ctx):
+    bot = discord.utils.get(ctx.guild.members, id = client.user.id)
+    if bot.guild_permissions.manage_messages:
+        await ctx.message.delete()
+        warning = ''
+    else:
+        warning = 'Для правильной работы бота необходимо выдать ему роль с правами администратора.'
+        await ctx.send(warning)
     emb = discord.Embed(color = 0x2f3136)
-    emb.add_field(name = '0.12.9.10988', value = 'Добавлены Slash-Команды! Теперь вы можете просто написать `/`, чтобы вам вывелся список всех команд. Для их работы нужна новая [ссылка-приглашение](https://discord.com/api/oauth2/authorize?client_id=694170281270312991&permissions=8&scope=bot%20applications.commands). Slash-Команды применены ко всем командам за исключением тех, что находятся в категории Fun, Embeds и некоторые в Cephalon или имеют конвертеры (mute, remind, someone) ***Всё ещё БЕТА!***')
+    emb.add_field(name = '0.12.9.11410 (Текущая версия, маленькое обновление)', value = 'Некоторые исправления и добавление скрытых фич.')
+    emb.add_field(name = '0.12.9.10988 (Предыдущая версия, крупное обновление)', value = 'Добавлены Slash-Команды! Теперь вы можете просто написать `/`, чтобы вам вывелся список всех команд. Для их работы нужна новая [ссылка-приглашение](https://discord.com/api/oauth2/authorize?client_id=694170281270312991&permissions=8&scope=bot%20applications.commands). Slash-Команды применены ко всем командам за исключением тех, что находятся в категории Fun, Embeds и некоторые в Cephalon или имеют конвертеры (mute, remind, someone) ***Всё ещё БЕТА!***')
     await ctx.send(embed = emb)
     
 @slash.slash(name = 'help', description = 'Здесь можно получить полную помощь по всем командам', options = [{'name': 'arg', 'description': 'Выберите команду для подробной помощи', 'required': False, 'type': 3, 'choices': [
