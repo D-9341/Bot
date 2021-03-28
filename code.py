@@ -494,7 +494,7 @@ async def dm(ctx, member: discord.Member, *, text):
     emb = discord.Embed(description = f'{text}', colour = 0x2f3136)
     emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
     await member.send(embed = emb)
-    await ctx.send(f'Сообщение отправлено.{warning}', delete_after = 3)
+    await ctx.send(f'Сообщение отправлено.{warning}', delete_after = 20)
 
 @slash.slash(name = 'kick', description = 'Выгоняет участника с сервера', options = [{'name': 'Member', 'description': 'Участник', 'required': True, 'type': 6}, {'name': 'reason', 'description': 'Причина', 'required': False, 'type': 3}])
 async def _kick(ctx, member: discord.Member, *, reason = None):
