@@ -3237,7 +3237,7 @@ async def info(ctx):
         await ctx.send(warning)
     emb = discord.Embed(colour = discord.Color.orange())
     emb.set_author(name = client.user.name, url = 'https://warframe.fandom.com/wiki/Cephalon_Cy', icon_url = client.user.avatar_url)
-    emb.add_field(name = 'Версия', value = '0.12.9.10998')
+    emb.add_field(name = 'Версия', value = '0.12.9.11410')
     emb.add_field(name = 'Написан на', value = 'discord.py v1.6.0 при помощи\ndiscord-py-slash-command v1.0.9')
     emb.add_field(name = 'Разработчик', value = '[сасиска#2472](https://discord.com/users/338714886001524737)')
     if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
@@ -3300,7 +3300,7 @@ async def botver(ctx):
 async def _help(ctx, arg = None):
     if arg == None:
         emb = discord.Embed(title = client.user.name, description = 'Вот команды, что я могу исполнить.\n||Некоторые улучшения появятся после верификации.||', colour = discord.Color.orange())
-        emb.add_field(name = 'Cephalon', value = '`info`, `invite`, `join`, `leave`, `ping`, `privacy`', inline = False)
+        emb.add_field(name = 'Cephalon', value = '`botver`, `info`, `invite`, `join`, `leave`, `ping`, `privacy`', inline = False)
         emb.add_field(name = 'Embeds', value = '`content`, `edit`, `say`', inline = False)
         emb.add_field(name = 'Fun', value = '`aye_balbec`, `cu`, `coinflip`, `dotersbrain`, `niggers`, `rp`, `rap`, `zatka`', inline = False)
         emb.add_field(name = 'Mod', value = '`ban`, `clear`, `dm`, `give`, `kick`, `mute`, `take`, `unmute`', inline = False)
@@ -3377,7 +3377,7 @@ async def help(ctx, arg = None):
         warning = '\nДля правильной работы бота необходимо выдать ему роль с правами администратора.'
     if arg == None:
         emb = discord.Embed(title = client.user.name, description = f'Вот команды, что я могу исполнить.\n||Некоторые улучшения появятся после верификации.||{warning}', colour = discord.Color.orange())
-        emb.add_field(name = 'Cephalon', value = '`info`, `invite`, `join`, `leave`, `ping`, `setup`', inline = False)
+        emb.add_field(name = 'Cephalon', value = '`botver`, `info`, `invite`, `join`, `leave`, `ping`, `setup`', inline = False)
         emb.add_field(name = 'Embeds', value = '`content`, `edit`, `say`', inline = False)
         emb.add_field(name = 'Fun', value = '`aye_balbec`, `cu`, `coinflip`, `dotersbrain`, `niggers`, `rp`, `rap`, `roll`, `zatka`', inline = False)
         emb.add_field(name = 'Mod', value = '`ban`, `clear`, `dm`, `give`, `kick`, `mute`, `take`, `unmute`', inline = False)
