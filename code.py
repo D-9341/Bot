@@ -295,7 +295,7 @@ async def on_message(message):
         await client.process_commands(message)
     def _check(m):
         return (m.author == message.author and len(m.mentions) and (datetime.datetime.utcnow() - m.created_at).seconds < 2)
-    if len(list(filter(lambda m: _check(m), client.cached_messages))) >= 2 and message.author.id:
+    if len(list(filter(lambda m: _check(m), client.cached_messages))) >= 3 and message.author.id:
         if not message.author.bot:
             role = discord.utils.get(message.guild.roles, name = 'Muted')
             role3 = discord.utils.get(message.guild.roles, name = '----------Предупреждения----------')
@@ -309,35 +309,43 @@ async def on_message(message):
                         channel = client.get_channel(714175791033876490)
                         emb = discord.Embed(title = 'СРАБОТАЛ\_АВТО_МУТ', color = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
                         emb.add_field(name = 'СЕРВЕР', value = message.guild.name)
+                        emb.add_field(name = 'ПРЕДУПРЕЖДЕНИЕ', value = 'ПЕРВОЕ')
                         emb.add_field(name = 'УЧАСТНИК', value = message.author)
                         await channel.send(embed = emb)
                         await asyncio.sleep(600)
                         if role != None:
                             if role in message.author.roles:
                                 await message.author.remove_roles(role)
-                                await message.channel.send(f'{message.author.mention} Был размучен.')
+                                emb = discord.Embed(description = f'{message.author.mention} Был разглушён.', color = 0x2f3136)
+                                await message.channel.send(embed = emb)
                             else:
-                                await message.channel.send(f'Роли Muted не было обнаружено в списке ролей {message.author.mention}.')
+                                emb = discord.Embed(description = f'Роли Muted не было обнаружено в списке ролей {message.author.mention}.', color = 0x2f3136)
+                                await message.channel.send(embed = emb)
                         else:
-                            await message.channel.send(f'Невозможно снять заглушение у {message.author.mention}, т.к. роль `Muted` была удалена.')
-                    if role1 in message.author.roles and role2 not in message.author.roles:
+                            emb = discord.Embed(description = f'Невозможно снять заглушение у {message.author.mention}, т.к. роль `Muted` была удалена.', color = 0x2f3136)
+                            await message.channel.send(embed = emb)
+                     if role1 in message.author.roles and role2 not in message.author.roles:
                         await message.channel.send(f'{message.author.mention} Был заглушён на 30 минут за спам упоминаниями. Последнее предупреждение.')
                         await message.author.remove_roles(role1)
                         await message.author.add_roles(role, role2, role3)
                         channel = client.get_channel(714175791033876490)
                         emb = discord.Embed(title = 'СРАБОТАЛ\_АВТО_МУТ', color = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
                         emb.add_field(name = 'СЕРВЕР', value = message.guild.name)
+                        emb.add_field(name = 'ПРЕДУПРЕЖДЕНИЕ', value = 'ПОСЛЕДНЕЕ')
                         emb.add_field(name = 'УЧАСТНИК', value = message.author)
                         await channel.send(embed = emb)
                         await asyncio.sleep(1800)
                         if role != None:
                             if role in message.author.roles:
                                 await message.author.remove_roles(role)
-                                await message.channel.send(f'{message.author.mention} Был размучен.')
+                                emb = discord.Embed(description = f'{message.author.mention} Был разглушён.', color = 0x2f3136)
+                                await message.channel.send(embed = emb)
                             else:
-                                await message.channel.send(f'Роли Muted не было обнаружено в списке ролей {message.author.mention}.')
+                                emb = discord.Embed(description = f'Роли Muted не было обнаружено в списке ролей {message.author.mention}.', color = 0x2f3136)
+                                await message.channel.send(embed = emb)
                         else:
-                            await message.channel.send(f'Невозможно снять заглушение у {message.author.mention}, т.к. роль `Muted` была удалена.')
+                            emb = discord.Embed(description = f'Невозможно снять заглушение у {message.author.mention}, т.к. роль `Muted` была удалена.', color = 0x2f3136)
+                            await message.channel.send(embed = emb)
                     if role2 in message.author.roles:
                         await message.channel.send(f'{message.author.mention} Был заглушён навсегда за спам упоминаниями.')
                         await message.author.add_roles(role)
@@ -3305,7 +3313,7 @@ async def _help(ctx, arg = None):
         emb.add_field(name = 'Fun', value = '`aye_balbec`, `cu`, `coinflip`, `dotersbrain`, `niggers`, `rp`, `rap`, `zatka`', inline = False)
         emb.add_field(name = 'Mod', value = '`ban`, `clear`, `dm`, `give`, `kick`, `mute`, `take`, `unmute`', inline = False)
         emb.add_field(name = 'Misc', value = '`about`, `avatar`, `guild`, `remind`, `role`, `rolemembers`, `someone`, `vote`', inline = False)
-        emb.add_field(name = 'ᅠ', value = 'Назовите комнату `Создать канал` (**регистр обязателен**), чтобы бот автоматически создавал для вас временные каналы, которые будут удаляться после того, как все люди выйдут из канала.')
+        emb.add_field(name = 'ᅠ', value = 'Назовите войс `Создать канал`, чтобы бот автоматически создавал для вас временные каналы, которые будут удаляться после того, как все люди выйдут из канала.')
         emb.add_field(name = 'ᅠ', value = '**Используйте** `cy/help [команда/категория]` **для подробностей использования.**\n\n**[Ссылка-приглашение](https://discord.com/api/oauth2/authorize?client_id=694170281270312991&permissions=8&scope=bot%20applications.commands)**', inline = False)
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
@@ -3382,7 +3390,7 @@ async def help(ctx, arg = None):
         emb.add_field(name = 'Fun', value = '`aye_balbec`, `cu`, `coinflip`, `dotersbrain`, `niggers`, `rp`, `rap`, `roll`, `zatka`', inline = False)
         emb.add_field(name = 'Mod', value = '`ban`, `clear`, `dm`, `give`, `kick`, `mute`, `take`, `unmute`', inline = False)
         emb.add_field(name = 'Misc', value = '`about`, `avatar`, `guild`, `remind`, `role`, `rolemembers`, `someone`, `vote`', inline = False)
-        emb.add_field(name = 'ᅠ', value = 'Назовите комнату `Создать канал` (**регистр обязателен**), чтобы бот автоматически создавал для вас временные каналы, которые будут удаляться после того, как все люди выйдут из канала.', inline = False)
+        emb.add_field(name = 'ᅠ', value = 'Назовите войс `Создать канал`, чтобы бот автоматически создавал для вас временные каналы, которые будут удаляться после того, как все люди выйдут из канала.', inline = False)
         emb.add_field(name = 'ᅠ', value = '**Используйте** `cy/help [команда/категория]` **для подробностей использования.**\n\n**[Ссылка-приглашение](https://discord.com/api/oauth2/authorize?client_id=694170281270312991&permissions=8&scope=bot%20applications.commands)**', inline = False)
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
