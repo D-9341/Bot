@@ -3096,7 +3096,7 @@ async def setup(ctx):
     role = discord.utils.get(ctx.guild.roles, name = 'Muted')
     if role and role1 and role2 and role3 != None:
         emb = discord.Embed(description = 'Все нужные роли уже присутсвуют на сервере.', color = discord.Color.orange())
-        await ctx.send(embed = emb)
+        return await ctx.send(embed = emb)
     emb = discord.Embed(description = 'С написанием этой команды на сервер будут добавлены несколько ролей, если их нет (4). Они нужны для правильной работы авто и обычного мута. Не следует их изменять или удалять, так как они будут созданы снова, из-за чего будет много одинаковых ролей.', color = discord.Color.orange())
     await ctx.send(embed = emb)
     if role == None:
@@ -3224,7 +3224,6 @@ async def _info(ctx):
         emb.add_field(name = 'Принадлежность', value = 'Это - мой основной сервер.')
     if ctx.guild.id == 735874149578440855:
         emb.add_field(name = 'Тестирование', value = 'Это - мой тестовый сервер.')
-    emb.add_field(name = 'Веб-сайт', value = '```http://ru-unioncraft.ru/```', inline = False)
     emb.add_field(name = 'Раздражаю', value = f'{len(client.users)} человек')
     emb.add_field(name = 'Существую на', value = f'{len(client.guilds)} серверах')
     if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
@@ -3254,7 +3253,6 @@ async def info(ctx):
         emb.add_field(name = 'Принадлежность', value = 'Это - мой основной сервер.')
     if ctx.guild.id == 735874149578440855:
         emb.add_field(name = 'Тестирование', value = 'Это - мой тестовый сервер.')
-    emb.add_field(name = 'Веб-сайт', value = '```http://ru-unioncraft.ru/```', inline = False)
     emb.add_field(name = 'Раздражаю', value = f'{len(client.users)} человек')
     emb.add_field(name = 'Существую на', value = f'{len(client.guilds)} серверах')
     if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
@@ -3291,7 +3289,7 @@ async def botver(ctx):
     {'name': 'kick', 'value': 'kick'},
     {'name': 'mute', 'value': 'mute'},
     {'name': 'remind', 'value': 'remind'},
-    {'name': 'role', 'value': 'role'},
+    {'name': 'roleinfo', 'value': 'roleinfo'},
     {'name': 'take', 'value': 'take'},
     {'name': 'unmute', 'value': 'unmute'},
     {'name': 'vote', 'value': 'vote'},
@@ -3307,12 +3305,12 @@ async def botver(ctx):
     }])
 async def _help(ctx, arg = None):
     if arg == None:
-        emb = discord.Embed(title = client.user.name, description = 'Вот команды, что я могу исполнить.\n||Некоторые улучшения появятся после верификации.||', colour = discord.Color.orange())
+        emb = discord.Embed(title = client.user.name, description = 'Вот команды, что я могу исполнить.', colour = discord.Color.orange())
         emb.add_field(name = 'Cephalon', value = '`botver`, `info`, `invite`, `join`, `leave`, `ping`', inline = False)
         emb.add_field(name = 'Embeds', value = '`content`, `edit`, `say`', inline = False)
         emb.add_field(name = 'Fun', value = '`aye_balbec`, `cu`, `coinflip`, `dotersbrain`, `niggers`, `rp`, `rap`, `zatka`', inline = False)
         emb.add_field(name = 'Mod', value = '`ban`, `clear`, `dm`, `give`, `kick`, `mute`, `take`, `unmute`', inline = False)
-        emb.add_field(name = 'Misc', value = '`about`, `avatar`, `guild`, `remind`, `role`, `rolemembers`, `someone`, `vote`', inline = False)
+        emb.add_field(name = 'Misc', value = '`about`, `avatar`, `guild`, `remind`, `roleinfo`, `rolemembers`, `someone`, `vote`', inline = False)
         emb.add_field(name = 'ᅠ', value = 'Назовите войс `Создать канал`, чтобы бот автоматически создавал для вас временные каналы, которые будут удаляться после того, как все люди выйдут из канала.')
         emb.add_field(name = 'ᅠ', value = '**Используйте** `cy/help [команда/категория]` **для подробностей использования.**\n\n**[Ссылка-приглашение](https://discord.com/api/oauth2/authorize?client_id=694170281270312991&permissions=8&scope=bot%20applications.commands)**', inline = False)
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
@@ -3345,8 +3343,8 @@ async def _help(ctx, arg = None):
         await ctx.send('```apache\ncy/mute <@пинг/имя/ID> <время(s/m/h/d(15s, 5m, 1h, 5d))> [причина] ([] - опционально, <> - обязательно, / - или)\nperms = manage_channels```')
     elif arg == 'remind':
         await ctx.send('```apache\ncy/remind <время(s/m/h/d(15s, 5m, 1h, 5d))> <текст> (<> - обязательно, / - или)```')
-    elif arg == 'role':
-        await ctx.send('```apache\ncy/role <@роль/имя роли/ID роли> (<> - обязательно, / - или)```')
+    elif arg == 'roleinfo':
+        await ctx.send('```apache\ncy/roleinfo <@роль/имя роли/ID роли> (<> - обязательно, / - или)```')
     elif arg == 'take':
         await ctx.send('```apache\ncy/take <@пинг/имя/ID> <@роль/имя роли/ID роли> (<> - обязательно, / - или)\nperms = view_audit_log```')
     elif arg == 'someone':
@@ -3366,13 +3364,13 @@ async def _help(ctx, arg = None):
     elif arg == 'Mod' or arg == 'mod':
         await ctx.send('```ARM\nban - бан участника\nclear - очистка чата, не более 300!\ndm - пишет в лс участнику написанный текст\ngive - выдаёт роль\nkick - кик участника\nmute - заглушение участника\ntake - забирает роль\nunmute - снятие заглушения участника.```')
     elif arg == 'Misc' or arg == 'misc':
-        await ctx.send('```ARM\nabout - информация о человеке\navatar - аватар человека\nguild - информация о сервере\nremind - напоминание о событии\nrole - информация о роли\nrolemembers - участники роли\nsomeone - упоминание someone\nvote - голосование за что-то.```')
+        await ctx.send('```ARM\nabout - информация о человеке\navatar - аватар человека\nguild - информация о сервере\nremind - напоминание о событии\nroleinfo - информация о роли\nrolemembers - участники роли\nsomeone - упоминание someone\nvote - голосование за что-то.```')
     elif arg == 'All' or arg == 'all':
         await ctx.send('```ARM\ninfo - информация о боте\ninvite - ссылка-приглашения бота\njoin - бот зайдёт в ваш голосовой канал\nleave - бот из него выйдет\nping - проверяет задержку клиента бота.```')
         await ctx.send('```ARM\ncontent(ctx) - позволяет увидеть raw контент сообщения\nedit - редактирует сообщение, отправленное от лица бота. Иные сообщения редактировать нельзя.\nsay - используется для написания как текстов, так и эмбедов.```')
         await ctx.send('```ARM\naye_balbec - я не ангел и не бес, просто..\ncu - медь\ncoinflip(c, coin) - подкидывает монетку\ndotersbrain - проверка на мозг дотера\nniggers - осуждаем!\nrp - ультимативный гайд по рп отыгровке\nrap - .rap\nzatka - Форма заявки для набор кадров```')
         await ctx.send('```ARM\nban - бан участника\nclear - очистка чата, не более 300!\ndm - пишет в лс участнику написанный текст\ngive - выдаёт роль\nkick - кик участника\nmute - заглушение участника\ntake - забирает роль\nunmute - снятие заглушения участника.```')
-        await ctx.send('```ARM\nabout - информация о человеке\navatar - аватар человека\nguild - информация о сервере\nremind - напоминание о событии\nrole - информация о роли\nrolemembers - участники роли\nsomeone - упоминание someone\nvote - голосование за что-то.```')
+        await ctx.send('```ARM\nabout - информация о человеке\navatar - аватар человека\nguild - информация о сервере\nremind - напоминание о событии\nroleinfo - информация о роли\nrolemembers - участники роли\nsomeone - упоминание someone\nvote - голосование за что-то.```')
     
 @client.command(aliases = ['Help', 'HELP'])
 @commands.cooldown(1, 3, commands.BucketType.user)
@@ -3384,12 +3382,12 @@ async def help(ctx, arg = None):
     else:
         warning = '\nДля правильной работы бота необходимо выдать ему роль с правами администратора.'
     if arg == None:
-        emb = discord.Embed(title = client.user.name, description = f'Вот команды, что я могу исполнить.\n||Некоторые улучшения появятся после верификации.||{warning}', colour = discord.Color.orange())
+        emb = discord.Embed(title = client.user.name, description = f'Вот команды, что я могу исполнить.{warning}', colour = discord.Color.orange())
         emb.add_field(name = 'Cephalon', value = '`botver`, `info`, `invite`, `join`, `leave`, `ping`, `setup`', inline = False)
         emb.add_field(name = 'Embeds', value = '`content`, `edit`, `say`', inline = False)
         emb.add_field(name = 'Fun', value = '`aye_balbec`, `cu`, `coinflip`, `dotersbrain`, `niggers`, `rp`, `rap`, `roll`, `zatka`', inline = False)
         emb.add_field(name = 'Mod', value = '`ban`, `clear`, `dm`, `give`, `kick`, `mute`, `take`, `unmute`', inline = False)
-        emb.add_field(name = 'Misc', value = '`about`, `avatar`, `guild`, `remind`, `role`, `rolemembers`, `someone`, `vote`', inline = False)
+        emb.add_field(name = 'Misc', value = '`about`, `avatar`, `guild`, `remind`, `roleinfo`, `rolemembers`, `someone`, `vote`', inline = False)
         emb.add_field(name = 'ᅠ', value = 'Назовите войс `Создать канал`, чтобы бот автоматически создавал для вас временные каналы, которые будут удаляться после того, как все люди выйдут из канала.', inline = False)
         emb.add_field(name = 'ᅠ', value = '**Используйте** `cy/help [команда/категория]` **для подробностей использования.**\n\n**[Ссылка-приглашение](https://discord.com/api/oauth2/authorize?client_id=694170281270312991&permissions=8&scope=bot%20applications.commands)**', inline = False)
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
@@ -3422,8 +3420,8 @@ async def help(ctx, arg = None):
         await ctx.send('```apache\ncy/mute <@пинг/имя/ID> <время(s/m/h/d(15s, 5m, 1h, 5d))> [причина] ([] - опционально, <> - обязательно, / - или)\nperms = view_audit_log```')
     elif arg == 'remind':
         await ctx.send('```apache\ncy/remind <время(s/m/h/d(15s, 5m, 1h, 5d))> <текст> (<> - обязательно, / - или)```')
-    elif arg == 'role':
-        await ctx.send('```apache\ncy/role <@роль/имя роли/ID роли> (<> - обязательно, / - или)```')
+    elif arg == 'roleinfo':
+        await ctx.send('```apache\ncy/roleinfo <@роль/имя роли/ID роли> (<> - обязательно, / - или)```')
     elif arg == 'take':
         await ctx.send('```apache\ncy/take <@пинг/имя/ID> <@роль/имя роли/ID роли> (<> - обязательно, / - или)\nperms = manage_channels```')
     elif arg == 'someone':
@@ -3459,13 +3457,13 @@ async def help(ctx, arg = None):
     elif arg == 'Mod' or arg == 'mod':
         await ctx.send('```py\nban - бан участника\nclear - очистка чата, не более 300!\ndm - пишет в лс участнику написанный текст\ngive - выдаёт роль\nkick - кик участника\nmute - мут участника\ntake - забирает роль\nunmute - снятие мута участника.```')
     elif arg == 'Misc' or arg == 'misc':
-        await ctx.send('```py\nabout - информация о человеке\navatar - аватар человека\nguild - информация о сервере\nremind - напоминание о событии\nrole - информация о роли\nrolemembers - участники роли\nsomeone - упоминание someone\nvote - голосование за что-то.```')
+        await ctx.send('```py\nabout - информация о человеке\navatar - аватар человека\nguild - информация о сервере\nremind - напоминание о событии\nroleinfo - информация о роли\nrolemembers - участники роли\nsomeone - упоминание someone\nvote - голосование за что-то.```')
     elif arg == 'All' or arg == 'all':
         await ctx.send('```py\ninfo - информация о боте\ninvite - ссылка-приглашения бота\njoin - бот зайдёт в ваш голосовой канал\nleave - бот из него выйдет\nping - проверяет задержку клиента бота.```')
         await ctx.send('```py\ncontent(ctx) - позволяет увидеть raw контент сообщения\nedit - редактирует сообщение, отправленное от лица бота. Иные сообщения редактировать нельзя.\nsay - используется для написания как текстов, так и эмбедов.```')
         await ctx.send('```py\naye_balbec - я не ангел и не бес, просто..\ncu - медь\ncoinflip(c, coin) - подкидывает монетку\ndotersbrain - проверка на мозг дотера\nniggers - осуждаем!\nrp - ультимативный гайд по рп отыгровке\nrap - .rap\nzatka - Форма заявки для набор кадров```')
         await ctx.send('```py\nban - бан участника\nclear - очистка чата, не более 300!\ndm - пишет в лс участнику написанный текст\ngive - выдаёт роль\nkick - кик участника\nmute - мут участника\ntake - забирает роль\nunmute - снятие мута участника.```')
-        await ctx.send('```py\nabout - информация о человеке\navatar - аватар человека\nguild - информация о сервере\nremind - напоминание о событии\nrole - информация о роли\nrolemembers - участники роли\nsomeone - упоминание someone\nvote - голосование за что-то.```')
+        await ctx.send('```py\nabout - информация о человеке\navatar - аватар человека\nguild - информация о сервере\nremind - напоминание о событии\nroleinfo - информация о роли\nrolemembers - участники роли\nsomeone - упоминание someone\nvote - голосование за что-то.```')
     else:
         emb = discord.Embed(description = f'Команда `{arg}` не обнаружена.', color = discord.Color.orange())
         await ctx.send(embed = emb)
@@ -3484,7 +3482,7 @@ async def on_command_error(ctx, error):
         await ctx.message.delete()
         s = error.retry_after
         choises = ['Its not time yet..', 'I am not ready..', 'Not yet..']
-        choices1 = ['Its. Not. Time. Yet.', 'I. Am. Not. Ready.', 'Not. Yet.']
+        choices1 = ['Its Not Time Yet.', 'I Am Not Ready.', 'Not Yet.']
         choices2 = ['ITS NOT TIME YET!', 'I AM NOT READY!', 'NOT YET!']
         rand = random.choice(choises)
         rand1 = random.choice(choices1)
