@@ -324,7 +324,7 @@ async def on_message(message):
                         else:
                             emb = discord.Embed(description = f'Невозможно снять заглушение у {message.author.mention}, т.к. роль `Muted` была удалена.', color = 0x2f3136)
                             await message.channel.send(embed = emb)
-                     if role1 in message.author.roles and role2 not in message.author.roles:
+                    if role1 in message.author.roles and role2 not in message.author.roles:
                         await message.channel.send(f'{message.author.mention} Был заглушён на 30 минут за спам упоминаниями. Последнее предупреждение.')
                         await message.author.remove_roles(role1)
                         await message.author.add_roles(role, role2, role3)
