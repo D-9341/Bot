@@ -1,4 +1,4 @@
-# coding=utf-8
+# coding=utf-8 // сука
 import asyncio
 import datetime
 import json
