@@ -2366,7 +2366,7 @@ async def _guild(ctx):
     now = datetime.datetime.today()
     then = guild.created_at
     delta = now - then
-    d = guild.created_at.strftime('%d.%m.%Y %H:%M:%S UTC')
+    d = guild.created_at.strftime('%d.%m.%Y %H:%M:%S GMT')
     emb.add_field(name = 'Дата создания сервера', value = f'{delta.days} дней назад. ({d})', inline = False)
     emb.set_thumbnail(url = guild.icon_url)
     await ctx.send(embed = emb)
@@ -2397,7 +2397,7 @@ async def guild(ctx):
     now = datetime.datetime.today()
     then = guild.created_at
     delta = now - then
-    d = guild.created_at.strftime('%d.%m.%Y %H:%M:%S UTC')
+    d = guild.created_at.strftime('%d.%m.%Y %H:%M:%S GMT')
     emb.add_field(name = 'Дата создания сервера', value = f'{delta.days} дней назад. ({d})', inline = False)
     emb.set_thumbnail(url = guild.icon_url)
     if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
@@ -2435,7 +2435,7 @@ async def roleinfo(ctx, *, role: discord.Role):
     now = datetime.datetime.today()
     then = role.created_at
     delta = now - then
-    d = role.created_at.strftime('%d.%m.%Y %H:%M:%S UTC')
+    d = role.created_at.strftime('%d.%m.%Y %H:%M:%S GMT')
     emb.add_field(name = 'Создана', value = f'{delta.days} дня(ей) назад. ({d})', inline = False)
     emb.add_field(name = 'Показывает участников отдельно?', value = role.hoist)
     if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
@@ -2505,10 +2505,10 @@ async def _about(ctx, member: discord.Member = None):
     now = datetime.datetime.today()
     then = member.created_at
     delta = now - then
-    d = member.created_at.strftime('%d.%m.%Y %H:%M:%S UTC')
+    d = member.created_at.strftime('%d.%m.%Y %H:%M:%S GMT')
     then1 = member.joined_at
     delta1 = now - then1
-    d1 = member.joined_at.strftime('%d.%m.%Y %H:%M:%S UTC')
+    d1 = member.joined_at.strftime('%d.%m.%Y %H:%M:%S GMT')
     emb.add_field(name = 'Создан', value = f'{delta.days} дня(ей) назад. ({d})', inline = False)
     emb.add_field(name = 'Вошёл', value = f'{delta1.days} дня(ей) назад. ({d1})', inline = False)
     emb.add_field(name = 'Упоминание', value = member.mention)
@@ -2563,10 +2563,10 @@ async def about(ctx, member: discord.Member = None):
     now = datetime.datetime.today()
     then = member.created_at
     delta = now - then
-    d = member.created_at.strftime('%d.%m.%Y %H:%M:%S UTC')
+    d = member.created_at.strftime('%d.%m.%Y %H:%M:%S GMT')
     then1 = member.joined_at
     delta1 = now - then1
-    d1 = member.joined_at.strftime('%d.%m.%Y %H:%M:%S UTC')
+    d1 = member.joined_at.strftime('%d.%m.%Y %H:%M:%S GMT')
     emb.add_field(name = 'Создан', value = f'{delta.days} дня(ей) назад. ({d})', inline = False)
     emb.add_field(name = 'Вошёл', value = f'{delta1.days} дня(ей) назад. ({d1})', inline = False)
     emb.add_field(name = 'Упоминание', value = member.mention)
