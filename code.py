@@ -987,6 +987,7 @@ async def unmute(ctx, member: discord.Member, *, reason = None):
     else:
         emb = discord.Embed(description = f'Невозможно снять заглушение у {member.mention}, т.к. роль Muted была не найдена.', colour = discord.Color.orange(), timestamp = ctx.message.created_at)
         await ctx.send(embed = emb)
+        
 @client.command(aliases = ['Clear', 'CLEAR', 'purge', 'Purge', 'PURGE', 'prune', 'Prune', 'PRUNE', 'clean', 'Clean', 'CLEAN'])
 @commands.cooldown(1, 10, commands.BucketType.user)
 @commands.has_permissions(administrator = True)
