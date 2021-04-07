@@ -1030,7 +1030,7 @@ async def clear(ctx, amount: int, members = '--everyone', *, filt = None):
         await ctx.send(f'{ctx.guild.owner.mention}', embed = emb)
     elif amount >= 250:
         if ctx.author != ctx.guild.owner:
-            emb = discord.Embed(description = f'{ctx.author.mention}, операция с данным числом ({amount}) доступна только {ctx.guild.owner.mention}. Отмена.', colour = discord.Color.orange())
+            emb = discord.Embed(description = f'{ctx.author.mention}, операция с данным числом ({amount}) доступна только {ctx.guild.owner.mention}.', colour = discord.Color.orange())
             if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
                 emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
             await ctx.send(f'{ctx.guild.owner.mention}', embed = emb, delete_after = 5)
@@ -1112,7 +1112,7 @@ async def clear(ctx, amount: int, members = '--everyone', *, filt = None):
                         try:
                             if '--silent' in members:
                                 return
-                            msg = await client.wait_for('message', timeout = 10, check = lambda message: message.channel == ctx.message.channel and message.author == ctx.author and message.content == 'c')
+                            msg = await client.wait_for('message', timeout = 10, check = lambda message: message.channel == ctx.message.channel and message.author == ctx.author and message.content.lower() == 'c')
                             emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
                             emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{cleared}```')
                             if filt:
@@ -1260,7 +1260,7 @@ async def clear(ctx, amount: int, members = '--everyone', *, filt = None):
                         try:
                             if '--silent' in members:
                                 return
-                            msg = await client.wait_for('message', timeout = 10, check = lambda message: message.channel == ctx.message.channel and message.author == ctx.author and message.content == 'c')
+                            msg = await client.wait_for('message', timeout = 10, check = lambda message: message.channel == ctx.message.channel and message.author == ctx.author and message.content.lower() == 'c')
                             emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
                             emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{cleared}```')
                             if filt:
@@ -1407,7 +1407,7 @@ async def clear(ctx, amount: int, members = '--everyone', *, filt = None):
                         try:
                             if '--silent' in members:
                                 return
-                            msg = await client.wait_for('message', timeout = 10, check = lambda message: message.channel == ctx.message.channel and message.author == ctx.author and message.content == 'c')
+                            msg = await client.wait_for('message', timeout = 10, check = lambda message: message.channel == ctx.message.channel and message.author == ctx.author and message.content.lower() == 'c')
                             emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
                             emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{cleared}```')
                             if filt:
@@ -1547,7 +1547,7 @@ async def clear(ctx, amount: int, members = '--everyone', *, filt = None):
                     try:
                         if '--silent' in members:
                             return
-                        msg = await client.wait_for('message', timeout = 10, check = lambda message: message.channel == ctx.message.channel and message.author == ctx.author and message.content == 'c')
+                        msg = await client.wait_for('message', timeout = 10, check = lambda message: message.channel == ctx.message.channel and message.author == ctx.author and message.content.lower() == 'c')
                         emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
                         emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{cleared}```')
                         if filt:
@@ -1698,7 +1698,7 @@ async def clear(ctx, amount: int, members = '--everyone', *, filt = None):
             try:
                 if '--silent' in members:
                     return
-                msg = await client.wait_for('message', timeout = 10, check = lambda message: message.channel == ctx.message.channel and message.author == ctx.author and message.content == 'c')
+                msg = await client.wait_for('message', timeout = 10, check = lambda message: message.channel == ctx.message.channel and message.author == ctx.author and message.content.lower() == 'c')
                 emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
                 emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{cleared}```')
                 if filt:
