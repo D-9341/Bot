@@ -2395,7 +2395,6 @@ async def content(ctx, arg, channel: discord.TextChannel = None):
                 await ctx.send(f'```{content}{title}{description}{footer}{color}{author}{image}{thumb}```')
 
 @client.command(aliases = ['Say', 'SAY'])
-@commands.has_permissions(manage_channels = True)
 async def say(ctx, *, msg):
     bot = discord.utils.get(ctx.guild.members, id = client.user.id)
     if bot.guild_permissions.manage_messages:
@@ -2417,10 +2416,13 @@ async def say(ctx, *, msg):
             thumbnail = i.strip()[3:].strip()
         elif i.strip().lower().startswith('c&'):
             color = i.strip()[2:].strip()
+        elif i.strip().lower().startswith('msg&'):
+            message = i.strip()[4:].strip()
     if color == None:
         color = 0x2f3136
     else:
-        color = int('0x' + color, 16)
+        if not color.startswith('0x'):
+            color = '0x' + color
     emb = discord.Embed(title = title, description = description, color = color)
     for i in embed_values:
         emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
@@ -2430,7 +2432,7 @@ async def say(ctx, *, msg):
             emb.set_thumbnail(url = thumbnail)
         if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
             emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-        if 't&' not in msg and 'd&' not in msg and 'img&' not in msg and 'th&' not in msg and 'c&' not in msg:
+        if 't&' not in msg and 'd&' not in msg and 'img&' not in msg and 'th&' not in msg and 'c&' not in msg and 'msg&' not in msg:
             if '--everyone' in msg:
                 return await ctx.send(f'@everyone {msg.strip()[10:].strip()}')
             else:
@@ -2439,7 +2441,10 @@ async def say(ctx, *, msg):
             if '--everyone' in msg:
                 return await ctx.send('@everyone', embed = emb)
             else:
-                return await ctx.send(embed = emb)
+                if message:
+                    return await ctx.send(f'{message}', embed = emb)
+                else:
+                    return await ctx.send(embed = emb)
 
 @client.command(aliases = ['Edit', 'EDIT'])
 @commands.has_permissions(manage_channels = True)
