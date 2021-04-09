@@ -2899,7 +2899,7 @@ async def say(ctx, *, msg):
     else:
         warning = 'Для правильной работы бота необходимо выдать ему роль с правами администратора.'
         await ctx.send(warning)
-    title = description = image = thumbnail = color = None
+    title = description = image = thumbnail = color = message = None
     embed_values = msg.split('|')
     for i in embed_values:
         if i.strip().lower().startswith('t&'):
