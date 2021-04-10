@@ -1020,7 +1020,7 @@ async def _clear(ctx, amount: int, members = '--everyone', *, filt = None):
             emb = discord.Embed(description = f'{ctx.author.mention}, обнаружено слишком большое число для удаления сообщений ({amount}). Возможны дальнейшие ошибки в работе {client.user.mention}. Продолжить? (y/n)\n||Отмена через 10 секунд.||', colour = discord.Color.orange())
             sent = await ctx.send(embed = emb)
             try:
-                msg = await client.wait_for('message', timeout = 10, check = lambda message: message.channel == ctx.message.channel)
+                msg = await client.wait_for('message', timeout = 10, check = lambda message: message.channel == ctx.channel)
                 if msg.content.lower() == 'y' and msg.author.id == ctx.guild.owner.id:
                     await msg.delete()
                     await sent.delete()
@@ -1066,7 +1066,7 @@ async def _clear(ctx, amount: int, members = '--everyone', *, filt = None):
                         try:
                             if '--silent' in members:
                                 return
-                            msg = await client.wait_for('message', timeout = 10, check = lambda message: message.channel == ctx.message.channel and message.author == ctx.author and message.content.lower() == 'c')
+                            msg = await client.wait_for('message', timeout = 10, check = lambda message: message.channel == ctx.channel and message.author == ctx.author and message.content.lower() == 'c')
                             emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
                             emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{cleared}```')
                             if filt:
@@ -1120,7 +1120,7 @@ async def _clear(ctx, amount: int, members = '--everyone', *, filt = None):
             emb = discord.Embed(description = f'{ctx.author.mention}, создан запрос на удаление {amount} сообщений. Мне нужен ответ создателя сервера на это действие. Продолжаем? (y/n)\n||Запрос будет отменён через 1 минуту.||', colour = discord.Color.orange())
             sent = await ctx.send(f'{ctx.guild.owner.mention}', embed = emb)
             try:
-                msg = await client.wait_for('message', timeout = 10, check = lambda message: message.author == ctx.author and message.channel == ctx.message.channel)
+                msg = await client.wait_for('message', timeout = 10, check = lambda message: message.author == ctx.author and message.channel == ctx.channel)
                 if msg.content.lower() == 'y':
                     await msg.delete()
                     await sent.delete()
@@ -1166,7 +1166,7 @@ async def _clear(ctx, amount: int, members = '--everyone', *, filt = None):
                         try:
                             if '--silent' in members:
                                 return
-                            msg = await client.wait_for('message', timeout = 10, check = lambda message: message.channel == ctx.message.channel and message.author == ctx.author and message.content.lower() == 'c')
+                            msg = await client.wait_for('message', timeout = 10, check = lambda message: message.channel == ctx.channel and message.author == ctx.author and message.content.lower() == 'c')
                             emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
                             emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{cleared}```')
                             if filt:
@@ -1220,7 +1220,7 @@ async def _clear(ctx, amount: int, members = '--everyone', *, filt = None):
             emb = discord.Embed(description = f'{ctx.author.mention}, создан запрос на удаление {amount} сообщений. Продолжить? (y/n)\n||Запрос будет отменён через 10 секунд.||', colour = discord.Color.orange())
             sent = await ctx.send(embed = emb)
             try:
-                msg = await client.wait_for('message', timeout = 10, check = lambda message: message.author == ctx.author and message.channel == ctx.message.channel)
+                msg = await client.wait_for('message', timeout = 10, check = lambda message: message.author == ctx.author and message.channel == ctx.channel)
                 if msg.content.lower() == 'y':
                     await msg.delete()
                     await sent.delete()
@@ -1266,7 +1266,7 @@ async def _clear(ctx, amount: int, members = '--everyone', *, filt = None):
                         try:
                             if '--silent' in members:
                                 return
-                            msg = await client.wait_for('message', timeout = 10, check = lambda message: message.channel == ctx.message.channel and message.author == ctx.author and message.content.lower() == 'c')
+                            msg = await client.wait_for('message', timeout = 10, check = lambda message: message.channel == ctx.channel and message.author == ctx.author and message.content.lower() == 'c')
                             emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
                             emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{cleared}```')
                             if filt:
@@ -1315,7 +1315,7 @@ async def _clear(ctx, amount: int, members = '--everyone', *, filt = None):
         emb = discord.Embed(description = f'{ctx.author.mention}, создан запрос на удаление {amount} сообщений. Продолжить? (y/n)\n||Запрос будет отменён через 10 секунд.||', colour = discord.Color.orange())
         sent = await ctx.send(embed = emb)
         try:
-            msg = await client.wait_for('message', timeout = 10, check = lambda message: message.author == ctx.author and message.channel == ctx.message.channel)
+            msg = await client.wait_for('message', timeout = 10, check = lambda message: message.author == ctx.author and message.channel == ctx.channel)
             if msg.content.lower() == 'y':
                 await msg.delete()
                 await sent.delete()
@@ -1361,7 +1361,7 @@ async def _clear(ctx, amount: int, members = '--everyone', *, filt = None):
                     try:
                         if '--silent' in members:
                             return
-                        msg = await client.wait_for('message', timeout = 10, check = lambda message: message.channel == ctx.message.channel and message.author == ctx.author and message.content.lower() == 'c')
+                        msg = await client.wait_for('message', timeout = 10, check = lambda message: message.channel == ctx.channel and message.author == ctx.author and message.content.lower() == 'c')
                         emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
                         emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{cleared}```')
                         if filt:
@@ -1452,7 +1452,7 @@ async def _clear(ctx, amount: int, members = '--everyone', *, filt = None):
             try:
                 if '--silent' in members:
                     return
-                msg = await client.wait_for('message', timeout = 10, check = lambda message: message.channel == ctx.message.channel and message.author == ctx.author and message.content.lower() == 'c')
+                msg = await client.wait_for('message', timeout = 10, check = lambda message: message.channel == ctx.channel and message.author == ctx.author and message.content.lower() == 'c')
                 emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
                 emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{cleared}```')
                 if filt:
@@ -2791,18 +2791,10 @@ async def coinflip(ctx):
 #Fun
 
 #Embeds
-@client.command(aliases = ['ctx'])
-@commands.cooldown(1, 5, commands.BucketType.user)
-async def content(ctx, arg, channel: discord.TextChannel = None):
-    bot = discord.utils.get(ctx.guild.members, id = client.user.id)
-    if bot.guild_permissions.manage_messages:
-        await ctx.message.delete()
-        warning = ''
-    else:
-        warning = 'Для правильной работы бота необходимо выдать ему роль с правами администратора.'
-        await ctx.send(warning)
+@slash.slash(name = 'content', description = 'Позволяет получить необработанный контент сообщения, в том числе и эмбедов', options = [{'name': 'arg', 'description': 'ID сообщения', 'required': True, 'type': 3}, {'name': 'channel', 'description': 'Канал, из которого нужно достать сообщение', 'required': False, 'type': 7}])
+async def _content(ctx, arg, channel: discord.TextChannel = None):
     if channel == None:
-        channel = ctx.message.channel
+        channel = ctx.channel
     message = await channel.fetch_message(id = arg)
     if message.author.id in botversions:
         if message.embeds == []:
@@ -2829,7 +2821,11 @@ async def content(ctx, arg, channel: discord.TextChannel = None):
                         t = f'| t& {emb.title}'
                     else:
                         t = ''
-                    await ctx.send(f'```py\ncy/say --everyone {t}{d}{th}{img}```')
+                    if emb.footer != emb.Empty:
+                        f = f' | f& {emb.footer.text}'
+                    else:
+                        f = ''
+                    await ctx.send(f'```py\ncy/say --everyone {t}{d}{f}{th}{img}```')
                 else:
                     if emb.image.url != emb.Empty:
                         img = f' | img& {emb.image.url}'
@@ -2847,11 +2843,15 @@ async def content(ctx, arg, channel: discord.TextChannel = None):
                         t = f't& {emb.title}'
                     else:
                         t = ''
-                    await ctx.send(f'```cy/say {t}{d}{th}{img}```')
+                    if emb.footer != emb.Empty:
+                        f = f' | f& {emb.footer.text}'
+                    else:
+                        f = ''
+                    await ctx.send(f'```cy/say {t}{d}{f}{th}{img}```')
     else:
         if message.embeds == []:
             if '```' in message.content:
-                await ctx.send(f'{message.author} {message.content}')
+                await ctx.send(f'@{message.author} {message.content}')
             else:
                 await ctx.send(f'```@{message.author} {message.content}```')
         else:
@@ -2890,8 +2890,9 @@ async def content(ctx, arg, channel: discord.TextChannel = None):
                     author = ''
                 await ctx.send(f'```{content}{title}{description}{footer}{color}{author}{image}{thumb}```')
 
-@client.command(aliases = ['Say', 'SAY'])
-async def say(ctx, *, msg):
+@client.command(aliases = ['ctx'])
+@commands.cooldown(1, 5, commands.BucketType.user)
+async def content(ctx, arg, channel: discord.TextChannel = None):
     bot = discord.utils.get(ctx.guild.members, id = client.user.id)
     if bot.guild_permissions.manage_messages:
         await ctx.message.delete()
@@ -2899,7 +2900,108 @@ async def say(ctx, *, msg):
     else:
         warning = 'Для правильной работы бота необходимо выдать ему роль с правами администратора.'
         await ctx.send(warning)
-    title = description = image = thumbnail = color = message = None
+    if channel == None:
+        channel = ctx.message.channel
+    message = await channel.fetch_message(id = arg)
+    if message.author.id in botversions:
+        if message.embeds == []:
+            if '@everyone' in message.content:
+                await ctx.send(f'```cy/say --everyone {message.content.strip()[10:].strip()}```')
+            else:
+                await ctx.send(f'```cy/say {message.content}```')
+        else:
+            for emb in message.embeds:
+                if '@everyone' in message.content:
+                    if emb.image.url != emb.Empty:
+                        img = f' | img& {emb.image.url}'
+                    else:
+                        img = ''
+                    if emb.thumbnail.url != emb.Empty:
+                        th = f' | th& {emb.thumbnail.url}'
+                    else:
+                        th = ''
+                    if emb.description != emb.Empty:
+                        d = f' | d& {emb.description}'
+                    else:
+                        d = ''
+                    if emb.title != emb.Empty:
+                        t = f'| t& {emb.title}'
+                    else:
+                        t = ''
+                    if emb.footer != emb.Empty:
+                        f = f' | f& {emb.footer.text}'
+                    else:
+                        f = ''
+                    await ctx.send(f'```py\ncy/say --everyone {t}{d}{f}{th}{img}```')
+                else:
+                    if emb.image.url != emb.Empty:
+                        img = f' | img& {emb.image.url}'
+                    else:
+                        img = ''
+                    if emb.thumbnail.url != emb.Empty:
+                        th = f' | th& {emb.thumbnail.url}'
+                    else:
+                        th = ''
+                    if emb.description != emb.Empty:
+                        d = f' | d& {emb.description}'
+                    else:
+                        d = ''
+                    if emb.title != emb.Empty:
+                        t = f't& {emb.title}'
+                    else:
+                        t = ''
+                    if emb.footer != emb.Empty:
+                        f = f' | f& {emb.footer.text}'
+                    else:
+                        f = ''
+                    await ctx.send(f'```cy/say {t}{d}{f}{th}{img}```')
+    else:
+        if message.embeds == []:
+            if '```' in message.content:
+                await ctx.send(f'@{message.author} {message.content}')
+            else:
+                await ctx.send(f'```@{message.author} {message.content}```')
+        else:
+            for emb in message.embeds:
+                if message.content == None:
+                    content = ''
+                else:
+                    content = f'content {message.content}'
+                if emb.title != emb.Empty:
+                    title = f' title {emb.title}'
+                else:
+                    title = ''
+                if emb.description != emb.Empty:
+                    description = f' description {emb.description}'
+                else:
+                    description = ''
+                if emb.footer.text != emb.Empty:
+                    footer = f' footer {emb.footer.text}'
+                else:
+                    footer = ''
+                if emb.image.url != emb.Empty:
+                    image = f' image {emb.image.url}'
+                else:
+                    image = ''
+                if emb.thumbnail.url != emb.Empty:
+                    thumb = f' thumbnail {emb.thumbnail.url}'
+                else:
+                    thumb = ''
+                if emb.color != emb.Empty:
+                    color = f' color {emb.color}'
+                else:
+                    color = ''
+                if emb.author.name != emb.Empty:
+                    author = f' author {emb.author.name}'
+                else:
+                    author = ''
+                await ctx.send(f'```{content}{title}{description}{footer}{color}{author}{image}{thumb}```')
+
+@slash.slash(name = 'say', description = 'Пишет от лица бота сообщение или эмбед. Используйте cy/help say для подробностей использования.', options = [{'name': 'msg', 'description': 'Аргументы/текст для написания', 'required': True, 'type': 3}])
+async def _say(ctx, *, msg):
+    title = ''
+    description = ''
+    image = thumbnail = color = message = footer = None
     embed_values = msg.split('|')
     for i in embed_values:
         if i.strip().lower().startswith('t&'):
@@ -2914,6 +3016,8 @@ async def say(ctx, *, msg):
             color = i.strip()[2:].strip()
         elif i.strip().lower().startswith('msg&'):
             message = i.strip()[4:].strip()
+        elif i.strip().lower().startswith('f&'):
+            footer = i.strip()[2:].strip()
     if color == None:
         color = 0x2f3136
     else:
@@ -2926,9 +3030,69 @@ async def say(ctx, *, msg):
             emb.set_image(url = image)
         if thumbnail:
             emb.set_thumbnail(url = thumbnail)
+        if footer:
+            emb.set_footer(text = footer)
         if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
             emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-        if 't&' not in msg and 'd&' not in msg and 'img&' not in msg and 'th&' not in msg and 'c&' not in msg and 'msg&' not in msg:
+        if 't&' not in msg and 'd&' not in msg and 'img&' not in msg and 'th&' not in msg and 'c&' not in msg and 'msg&' not in msg and 'f&' not in msg:
+            if '--everyone' in msg:
+                return await ctx.send(f'@everyone {msg.strip()[10:].strip()}')
+            else:
+                return await ctx.send(msg)
+        else:
+            if '--everyone' in msg:
+                return await ctx.send('@everyone', embed = emb)
+            else:
+                if message:
+                    return await ctx.send(f'{message}', embed = emb)
+                else:
+                    return await ctx.send(embed = emb)
+                
+@client.command(aliases = ['Say', 'SAY'])
+async def say(ctx, *, msg):
+    bot = discord.utils.get(ctx.guild.members, id = client.user.id)
+    if bot.guild_permissions.manage_messages:
+        await ctx.message.delete()
+        warning = ''
+    else:
+        warning = 'Для правильной работы бота необходимо выдать ему роль с правами администратора.'
+        await ctx.send(warning)
+    title = ''
+    description = ''
+    image = thumbnail = color = message = footer = None
+    embed_values = msg.split('|')
+    for i in embed_values:
+        if i.strip().lower().startswith('t&'):
+            title = i.strip()[2:].strip()
+        elif i.strip().lower().startswith('d&'):
+            description = i.strip()[2:].strip()
+        elif i.strip().lower().startswith('img&'):
+            image = i.strip()[4:].strip()
+        elif i.strip().lower().startswith('th&'):
+            thumbnail = i.strip()[3:].strip()
+        elif i.strip().lower().startswith('c&'):
+            color = i.strip()[2:].strip()
+        elif i.strip().lower().startswith('msg&'):
+            message = i.strip()[4:].strip()
+        elif i.strip().lower().startswith('f&'):
+            footer = i.strip()[2:].strip()
+    if color == None:
+        color = 0x2f3136
+    else:
+        if not color.startswith('0x'):
+            color = '0x' + color
+    emb = discord.Embed(title = title, description = description, color = color)
+    for i in embed_values:
+        emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
+        if image:
+            emb.set_image(url = image)
+        if thumbnail:
+            emb.set_thumbnail(url = thumbnail)
+        if footer:
+            emb.set_footer(text = footer)
+        if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
+            emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+        if 't&' not in msg and 'd&' not in msg and 'img&' not in msg and 'th&' not in msg and 'c&' not in msg and 'msg&' not in msg and 'f&' not in msg:
             if '--everyone' in msg:
                 return await ctx.send(f'@everyone {msg.strip()[10:].strip()}')
             else:
@@ -2942,19 +3106,14 @@ async def say(ctx, *, msg):
                 else:
                     return await ctx.send(embed = emb)
 
-@client.command(aliases = ['Edit', 'EDIT'])
+@slash.slash(name = 'edit', description = 'Изменяет сообщение, отправленое ботом.', options = [{'name': 'arg', 'description': 'ID сообщения', 'required': True, 'type': 3}, {'name': 'msg', 'description': 'аргументы или текст, на который нужно заменить исходный', 'required': True, 'type': 3}])
 @commands.has_permissions(manage_channels = True)
-async def edit(ctx, arg, *, msg = None):
-    bot = discord.utils.get(ctx.guild.members, id = client.user.id)
-    if bot.guild_permissions.manage_messages:
-        await ctx.message.delete()
-        warning = ''
-    else:
-        warning = 'Для правильной работы бота необходимо выдать ему роль с правами администратора.'
-        await ctx.send(warning)
-    message = await ctx.fetch_message(id = arg)
-    if message:
-        title = description = image = thumbnail = color = author = None
+async def _edit(ctx, arg, *, msg):
+    message = await ctx.channel.fetch_message(id = arg)
+    if message != None:
+        title = ''
+        description = ''
+        image = thumbnail = color = None
         embed_values = msg.split('|')
         for i in embed_values:
             if i.strip().lower().startswith('t&'):
@@ -2971,15 +3130,89 @@ async def edit(ctx, arg, *, msg = None):
             color = 0x2f3136
         else:
             color = int('0x' + color, 16)
-        emb = discord.Embed(title = title, description = description, color = color)
+        emb = discord.Embed(title = title, description = description, color = color, timestamp = datetime.datetime.utcnow())
         for i in embed_values:
             emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
             if image:
                 emb.set_image(url = image)
             if thumbnail:
                 emb.set_thumbnail(url = thumbnail)
-            if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
-                emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+            if 't&' not in msg and 'd&' not in msg and 'img&' not in msg and 'th&' not in msg and 'c&' not in msg:
+                if message.author == client.user:
+                    if '--clean' in msg:
+                        await message.edit(content = None)
+                    if '--delete' in msg:
+                        await message.delete()
+                    if '--noembed' in msg:
+                        if message.embeds != []:
+                            await message.edit(embed = None)
+                        else:
+                            return await ctx.send(f'{ctx.author.mention}, нечего удалять. Возможно, вы имели ввиду cy/edit {message.id} --delete ?', delete_after = 8)
+                    if '--empty-embed' in msg:
+                        if message.embeds != []:
+                            emb = discord.Embed(title = None, description = None, color = ctx.author.color)
+                            emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
+                            await message.edit(embed = emb)
+                        else:
+                            return await ctx.send(f'{ctx.author.mention}, нечего очищать. Возможно, вы имели ввиду cy/edit {message.id} --delete ?')
+                    else:
+                        await message.edit(content = msg)
+                else:
+                    return await ctx.send(f'{message.id} не является сообщением от {client.user}')
+            else:
+                if message.author == client.user:
+                    if '--clean' in msg:
+                        await message.edit(content = None, embed = emb)
+                    if '--noembed' in msg:
+                        if message.embeds != []:
+                            await message.edit(embed = None)
+                        else:
+                            return await ctx.send(f'{ctx.author.mention}, нечего удалять. Возможно, вы имели ввиду cy/edit {message.id} --delete ?', delete_after = 8)
+                    else:
+                        await message.edit(embed = emb)
+                else:
+                    return await ctx.send(f'{message.id} не является сообщением от {client.user}')
+    else:
+        await ctx.send(f'сообщение {message.id} не обнаружено.')
+                
+@client.command(aliases = ['Edit', 'EDIT'])
+@commands.has_permissions(manage_channels = True)
+async def edit(ctx, arg, *, msg = None):
+    bot = discord.utils.get(ctx.guild.members, id = client.user.id)
+    if bot.guild_permissions.manage_messages:
+        await ctx.message.delete()
+        warning = ''
+    else:
+        warning = 'Для правильной работы бота необходимо выдать ему роль с правами администратора.'
+        await ctx.send(warning)
+    message = await ctx.fetch_message(id = arg)
+    if message != None:
+        title = ''
+        description = ''
+        image = thumbnail = color = None
+        embed_values = msg.split('|')
+        for i in embed_values:
+            if i.strip().lower().startswith('t&'):
+                title = i.strip()[2:].strip()
+            elif i.strip().lower().startswith('d&'):
+                description = i.strip()[2:].strip()
+            elif i.strip().lower().startswith('img&'):
+                image = i.strip()[4:].strip()
+            elif i.strip().lower().startswith('th&'):
+                thumbnail = i.strip()[3:].strip()
+            elif i.strip().lower().startswith('c&'):
+                color = i.strip()[2:].strip()
+        if color == None:
+            color = 0x2f3136
+        else:
+            color = int('0x' + color, 16)
+        emb = discord.Embed(title = title, description = description, color = color, timestamp = ctx.message.created_at)
+        for i in embed_values:
+            emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
+            if image:
+                emb.set_image(url = image)
+            if thumbnail:
+                emb.set_thumbnail(url = thumbnail)
             if 't&' not in msg and 'd&' not in msg and 'img&' not in msg and 'th&' not in msg and 'c&' not in msg:
                 if message.author == client.user:
                     if '--clean' in msg:
@@ -3446,9 +3679,9 @@ async def on_command_error(ctx, error):
         if ctx.command.name == 'clear':
             await ctx.send('```apache\ncy/clear <количество> [автор] [фильтр]\ncy/clear 100\ncy/clear 10 @сасиска\ncy/clear 50 --everyone хыха\ncy/clear 30 --bots\ncy/clear 15 --users\ncy/clear 5 --silent\ncy/clear 200 "--silent --everyone" хыха\n\n--everyone удалит сообщения от всех\n--bots удалит сообщения только от ботов\n--users удалит сообщения только от участников\n--silent не оставит доказательств выполнения команды, исключение - количество >= 10\n\nПри указании автора не будет удалено столько сообщений, сколько было указано, будет удалено столько, сколько будет найдено в пределах этих сообщений.\nСообщения старше 2 недель будут удалены не сразу - лимит discord API\nПри удалении более 100 сообщений нужно подтверждение владельца сервера.\nТолько владелец может удалять от 250 сообщений за раз.\nНе более 300!\n([] - опционально, <> - обязательно, / - или)\nperms = adminstrator```')
         elif ctx.command.name == 'say':
-            await ctx.send('```apache\ncy/say [t& title текст] | [d& description текст] | [c& HEX цвет] | [th& ссылка на картинку справа] | [img& ссылка на картинку снизу]\ncy/say t& title | d& description\ncy/say --everyone | t& title | d& description\ncy/say [текст]\ncy/say --everyone [текст]\n(вам НЕ обязательно писать все аргументы в данном порядке, пишите только те, что вам нужны в любом порядке) ([] - опционально)\nperms = manage_channels```')
+            await ctx.send('```apache\ncy/say [обычный текст] [t& title текст] | [d& description текст] | [c& HEX цвет] | [th& ссылка на картинку справа] | [img& ссылка на картинку снизу] [f& footer текст] [msg& сообщение над эмбедом]\ncy/say t& title | d& description\ncy/say --everyone | t& title | d& description\ncy/say [текст]\ncy/say --everyone [текст]\n(вам НЕ обязательно писать все аргументы в данном порядке, пишите только те, что вам нужны в любом порядке) ([] - опционально)```')
         elif ctx.command.name == 'edit':
-            await ctx.send('```apache\ncy/edit <ID> [t& title текст] | [d& description текст] | [c& HEX цвет] | [th& ссылка на картинку справа] | [img& ссылка на картинку снизу]\ncy/edit <ID> [текст]\ncy/edit <ID> --clean | d& description\ncy/edit <ID> --clean\ncy/edit <ID> --noembed\ncy/edit <ID> --empty-embed\ncy/edit <ID> --delete\n(--clean удалит контент над эмбедом, --noembed удалит эмбед, работает только если есть эмбед, --empty-embed опустошит эмбед, --delete удалит сообщение) ([] - опционально, <> - обязательно)\nperms = manage_channels```')
+            await ctx.send('```apache\ncy/edit <ID> [обычный текст] [t& title текст] | [d& description текст] | [c& HEX цвет] | [th& ссылка на картинку справа] | [img& ссылка на картинку снизу]\ncy/edit <ID> [текст]\ncy/edit <ID> --clean | d& description\ncy/edit <ID> --clean\ncy/edit <ID> --noembed\ncy/edit <ID> --empty-embed\ncy/edit <ID> --delete\n(--clean удалит контент над эмбедом, --noembed удалит эмбед, работает только если есть эмбед, --empty-embed опустошит эмбед, --delete удалит сообщение) ([] - опционально, <> - обязательно)\nperms = manage_channels```')
         elif ctx.command.name == 'ban':
             await ctx.send('```apache\ncy/ban <@пинг/имя/ID> [причина/--soft --reason]\ncy/ban 185476724627210241 --soft --reason лошара\ncy/ban @сасиска чмо\ncy/ban "Sgt White"\ncy/ban @крипочек --soft\n\nПри использовании --soft обязательно указывать --reason ПОСЛЕ --soft\n\n([] - опционально, <> - обязательно, / - или)\nperms = ban_members```')
         else:
