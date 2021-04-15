@@ -3140,40 +3140,40 @@ async def _edit(ctx, arg, *, msg):
             if 't&' not in msg and 'd&' not in msg and 'img&' not in msg and 'th&' not in msg and 'c&' not in msg:
                 if message.author == client.user:
                     if '--clean' in msg:
-                        await message.edit(content = None)
+                        return await message.edit(content = None)
                     if '--delete' in msg:
-                        await message.delete()
+                        return await message.delete()
                     if '--noembed' in msg:
                         if message.embeds != []:
-                            await message.edit(embed = None)
+                            return await message.edit(embed = None)
                         else:
-                            return await ctx.send(f'{ctx.author.mention}, нечего удалять. Возможно, вы имели ввиду cy/edit {message.id} --delete ?', delete_after = 8)
+                            return await ctx.send(f'{ctx.author.mention}, нечего удалять. Возможно, вы имели ввиду cy/edit {message.id} --delete ?')
                     if '--empty-embed' in msg:
                         if message.embeds != []:
-                            emb = discord.Embed(title = None, description = None, color = ctx.author.color)
+                            emb = discord.Embed(title = None, description = None, color = 0x2f3136)
                             emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
-                            await message.edit(embed = emb)
+                            return await message.edit(embed = emb)
                         else:
                             return await ctx.send(f'{ctx.author.mention}, нечего очищать. Возможно, вы имели ввиду cy/edit {message.id} --delete ?')
                     else:
-                        await message.edit(content = msg)
+                        return await message.edit(content = msg)
                 else:
                     return await ctx.send(f'{message.id} не является сообщением от {client.user}')
             else:
                 if message.author == client.user:
                     if '--clean' in msg:
-                        await message.edit(content = None, embed = emb)
+                        return await message.edit(content = None, embed = emb)
                     if '--noembed' in msg:
                         if message.embeds != []:
-                            await message.edit(embed = None)
+                            return await message.edit(embed = None)
                         else:
-                            return await ctx.send(f'{ctx.author.mention}, нечего удалять. Возможно, вы имели ввиду cy/edit {message.id} --delete ?', delete_after = 8)
+                            return await ctx.send(f'{ctx.author.mention}, нечего удалять. Возможно, вы имели ввиду cy/edit {message.id} --delete ?')
                     else:
-                        await message.edit(embed = emb)
+                        return await message.edit(embed = emb)
                 else:
                     return await ctx.send(f'{message.id} не является сообщением от {client.user}')
     else:
-        await ctx.send(f'сообщение {message.id} не обнаружено.')
+        return await ctx.send(f'сообщение {message.id} не обнаружено.')
                 
 @client.command(aliases = ['Edit', 'EDIT'])
 @commands.has_permissions(manage_channels = True)
@@ -3216,40 +3216,40 @@ async def edit(ctx, arg, *, msg = None):
             if 't&' not in msg and 'd&' not in msg and 'img&' not in msg and 'th&' not in msg and 'c&' not in msg:
                 if message.author == client.user:
                     if '--clean' in msg:
-                        await message.edit(content = None)
+                        return await message.edit(content = None)
                     if '--delete' in msg:
-                        await message.delete()
+                        return await message.delete()
                     if '--noembed' in msg:
                         if message.embeds != []:
-                            await message.edit(embed = None)
+                            return await message.edit(embed = None)
                         else:
-                            return await ctx.send(f'{ctx.author.mention}, нечего удалять. Возможно, вы имели ввиду cy/edit {message.id} --delete ?', delete_after = 8)
+                            return await ctx.send(f'{ctx.author.mention}, нечего удалять. Возможно, вы имели ввиду cy/edit {message.id} --delete ?')
                     if '--empty-embed' in msg:
                         if message.embeds != []:
-                            emb = discord.Embed(title = None, description = None, color = ctx.author.color)
+                            emb = discord.Embed(title = None, description = None, color = 0x2f3136)
                             emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
-                            await message.edit(embed = emb)
+                            return await message.edit(embed = emb)
                         else:
                             return await ctx.send(f'{ctx.author.mention}, нечего очищать. Возможно, вы имели ввиду cy/edit {message.id} --delete ?')
                     else:
-                        await message.edit(content = msg)
+                        return await message.edit(content = msg)
                 else:
                     return await ctx.send(f'{message.id} не является сообщением от {client.user}')
             else:
                 if message.author == client.user:
                     if '--clean' in msg:
-                        await message.edit(content = None, embed = emb)
+                        return await message.edit(content = None, embed = emb)
                     if '--noembed' in msg:
                         if message.embeds != []:
-                            await message.edit(embed = None)
+                            return await message.edit(embed = None)
                         else:
-                            return await ctx.send(f'{ctx.author.mention}, нечего удалять. Возможно, вы имели ввиду cy/edit {message.id} --delete ?', delete_after = 8)
+                            return await ctx.send(f'{ctx.author.mention}, нечего удалять. Возможно, вы имели ввиду cy/edit {message.id} --delete ?')
                     else:
-                        await message.edit(embed = emb)
+                        return await message.edit(embed = emb)
                 else:
                     return await ctx.send(f'{message.id} не является сообщением от {client.user}')
     else:
-        await ctx.send(f'сообщение {message.id} не обнаружено.')
+        return await ctx.send(f'сообщение {message.id} не обнаружено.')
 #Embeds
 
 #Cephalon
