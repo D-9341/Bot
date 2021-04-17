@@ -493,16 +493,10 @@ async def _dm(ctx, member: discord.User, *, text):
 @commands.has_permissions(view_audit_log = True)
 @commands.cooldown(1, 5, commands.BucketType.user)
 async def dm(ctx, member: discord.User, *, text):
-    bot = discord.utils.get(ctx.guild.members, id = client.user.id)
-    if bot.guild_permissions.manage_messages:
-        await ctx.message.delete()
-        warning = ''
-    else:
-        warning = '\nДля правильной работы бота необходимо выдать ему роль с правами администратора.'
     emb = discord.Embed(description = f'{text}', colour = 0x2f3136)
     emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
     await member.send(embed = emb)
-    await ctx.send(f'Сообщение отправлено.{warning}', delete_after = 5)
+    await ctx.send(f'Сообщение отправлено.', delete_after = 3)
 
 @slash.slash(name = 'kick', description = 'Выгоняет участника с сервера', options = [{'name': 'Member', 'description': 'Участник', 'required': True, 'type': 6}, {'name': 'reason', 'description': 'Причина', 'required': False, 'type': 3}])
 async def _kick(ctx, member: discord.Member, *, reason = None):
@@ -537,13 +531,6 @@ async def _kick(ctx, member: discord.Member, *, reason = None):
 @commands.cooldown(1, 10, commands.BucketType.user)
 @commands.has_permissions(kick_members = True)
 async def kick(ctx, member: discord.Member, *, reason = None):
-    bot = discord.utils.get(ctx.guild.members, id = client.user.id)
-    if bot.guild_permissions.manage_messages:
-        await ctx.message.delete()
-        warning = ''
-    else:
-        warning = 'Для правильной работы бота необходимо выдать ему роль с правами администратора.'
-        await ctx.send(warning)
     if member.id != 338714886001524737:
         if reason == None:
             reason = 'Не указана.'
@@ -628,13 +615,6 @@ async def _ban(ctx, member: discord.Member, *, reason = None):
 @commands.cooldown(1, 10, commands.BucketType.user)
 @commands.has_permissions(ban_members = True)
 async def ban(ctx, member: discord.Member, *, reason = None):
-    bot = discord.utils.get(ctx.guild.members, id = client.user.id)
-    if bot.guild_permissions.manage_messages:
-        await ctx.message.delete()
-        warning = ''
-    else:
-        warning = 'Для правильной работы бота необходимо выдать ему роль с правами администратора.'
-        await ctx.send(warning)
     if member.id != 338714886001524737:
         if reason == None:
             reason = 'Не указана.'
@@ -724,7 +704,6 @@ async def _give(ctx, member: discord.Member, *, role: discord.Role):
         
 @client.command(aliases = ['Give', 'GIVE'])
 async def give(ctx, member: discord.Member, *, role: discord.Role):
-    await ctx.message.delete()
     if ctx.message.author.guild_permissions.manage_channels or ctx.author.id == client.owner_id:
         if role != None:
             bot = ctx.guild.get_member(client.user.id)
@@ -811,7 +790,6 @@ async def _take(ctx, member: discord.Member, *, role: discord.Role):
             
 @client.command(aliases = ['Take', 'TAKE'])
 async def take(ctx, member: discord.Member, *, role: discord.Role):
-    await ctx.message.delete()
     if ctx.message.author.guild_permissions.manage_channels or ctx.author.id == client.owner_id:
         if role != None:
             bot = ctx.guild.get_member(client.user.id)
@@ -864,7 +842,6 @@ async def take(ctx, member: discord.Member, *, role: discord.Role):
 @client.command(aliases = ['Mute', 'MUTE'])
 @commands.has_permissions(view_audit_log = True)
 async def mute(ctx, member: discord.Member, time: TimeConverter, *, reason: str = None):
-    await ctx.message.delete()
     if time < 300:
         color = 0x2f3136
     if time >= 300:
@@ -968,7 +945,6 @@ async def _unmute(ctx, member: discord.Member, *, reason = None):
 @client.command(aliases = ['Unmute', 'UNMUTE'])
 @commands.has_permissions(manage_channels = True)
 async def unmute(ctx, member: discord.Member, *, reason = None):
-    await ctx.message.delete()
     role = discord.utils.get(ctx.guild.roles, name = 'Muted')
     if role != None:
         if role in member.roles:
@@ -2253,13 +2229,6 @@ async def _vote(ctx, *, text):
 @client.command()
 @commands.cooldown(1, 60, commands.BucketType.user)
 async def vote(ctx, *, text):
-    bot = discord.utils.get(ctx.guild.members, id = client.user.id)
-    if bot.guild_permissions.manage_messages:
-        await ctx.message.delete()
-        warning = ''
-    else:
-        warning = '\nДля правильной работы бота необходимо выдать ему роль с правами администратора.'
-        await ctx.send(warning)
     emb = discord.Embed(description = 'ГОЛОСОВАНИЕ', colour = discord.Color.orange())
     emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
     emb.add_field(name = 'Голосуем за:', value = text)
@@ -2274,19 +2243,11 @@ async def vote(ctx, *, text):
 
 @client.command()
 async def someone(ctx, *, text: Slapper):
-    await ctx.message.delete()
     await ctx.send(embed = text)
 
 @client.command()
 @commands.cooldown(1, 5, commands.BucketType.user)
 async def rolemembers(ctx, role: discord.Role, member: discord.Member = None):
-    bot = discord.utils.get(ctx.guild.members, id = client.user.id)
-    if bot.guild_permissions.manage_messages:
-        await ctx.message.delete()
-        warning = ''
-    else:
-        warning = 'Для правильной работы бота необходимо выдать ему роль с правами администратора.'
-        await ctx.send(warning)
     emb = discord.Embed(colour = discord.Color.orange())
     if len(role.members) != 0:
         emb.add_field(name = f'Участники с ролью {role} ({len(role.members)})', value = ', '.join([member.mention for member in role.members]))
@@ -2322,13 +2283,6 @@ async def _guild(ctx):
 @client.command(aliases = ['Guild', 'GUILD'])
 @commands.cooldown(1, 5, commands.BucketType.user)
 async def guild(ctx):
-    bot = discord.utils.get(ctx.guild.members, id = client.user.id)
-    if bot.guild_permissions.manage_messages:
-        await ctx.message.delete()
-        warning = ''
-    else:
-        warning = 'Для правильной работы бота необходимо выдать ему роль с правами администратора.'
-        await ctx.send(warning)
     guild = ctx.guild
     statuses = [len(list(filter(lambda m: str(m.status) == "online", ctx.guild.members))), len(list(filter(lambda m: str(m.status) == "idle", ctx.guild.members))), len(list(filter(lambda m: str(m.status) == "dnd", ctx.guild.members))), len(list(filter(lambda m: str(m.status) == "offline", ctx.guild.members)))]
     emb = discord.Embed(colour = discord.Color.orange(), timestamp = ctx.message.created_at)
@@ -2355,13 +2309,6 @@ async def guild(ctx):
 @client.command()
 @commands.cooldown(1, 5, commands.BucketType.user)
 async def roleinfo(ctx, *, role: discord.Role):
-    bot = discord.utils.get(ctx.guild.members, id = client.user.id)
-    if bot.guild_permissions.manage_messages:
-        await ctx.message.delete()
-        warning = ''
-    else:
-        warning = 'Для правильной работы бота необходимо выдать ему роль с правами администратора.'
-        await ctx.send(warning)
     if role.mentionable == False:
         role.mentionable = 'Нет'
     elif role.mentionable == True:
@@ -2411,13 +2358,6 @@ async def _avatar(ctx, member: discord.Member = None):
 @client.command(aliases = ['Avatar', 'AVATAR'])
 @commands.cooldown(1, 5, commands.BucketType.user)
 async def avatar(ctx, member: discord.Member = None):
-    bot = discord.utils.get(ctx.guild.members, id = client.user.id)
-    if bot.guild_permissions.manage_messages:
-        await ctx.message.delete()
-        warning = ''
-    else:
-        warning = 'Для правильной работы бота необходимо выдать ему роль с правами администратора.'
-        await ctx.send(warning)
     if member == None:
         member = ctx.author
     av = 'png'
@@ -2490,13 +2430,6 @@ async def _about(ctx, member: discord.Member = None):
 @client.command(aliases = ['me', 'Me', 'ME', 'About', 'ABOUT'])
 @commands.cooldown(1, 5, commands.BucketType.user)
 async def about(ctx, member: discord.Member = None):
-    bot = discord.utils.get(ctx.guild.members, id = client.user.id)
-    if bot.guild_permissions.manage_messages:
-        await ctx.message.delete()
-        warning = ''
-    else:
-        warning = 'Для правильной работы бота необходимо выдать ему роль с правами администратора.'
-        await ctx.send(warning)
     if member == None:
         member = ctx.author
     if member.nick == None:
@@ -2550,13 +2483,6 @@ async def about(ctx, member: discord.Member = None):
 @client.command()
 @commands.cooldown(1, 5, commands.BucketType.user)
 async def remind(ctx, time: TimeConverter, *, arg):
-    bot = discord.utils.get(ctx.guild.members, id = client.user.id)
-    if bot.guild_permissions.manage_messages:
-        await ctx.message.delete()
-        warning = ''
-    else:
-        warning = 'Для правильной работы бота необходимо выдать ему роль с правами администратора.'
-        await ctx.send(warning)
     emb = discord.Embed(colour = ctx.author.color, timestamp = ctx.message.created_at)
     emb.add_field(name = 'Напомню через', value = f'{time}s')
     emb.add_field(name = 'О чём напомню?', value = arg)
@@ -2598,13 +2524,6 @@ async def _roll(ctx, first: int = None, second: int = None):
 
 @client.command()
 async def roll(ctx, first: int = None, second: int = None):
-    bot = discord.utils.get(ctx.guild.members, id = client.user.id)
-    if bot.guild_permissions.manage_messages:
-        await ctx.message.delete()
-        warning = ''
-    else:
-        warning = 'Для правильной работы бота необходимо выдать ему роль с правами администратора.'
-        await ctx.send(warning)
     if first == None and second == None:
         rand = random.randint(0, 1)
         if rand == '1':
@@ -2628,13 +2547,6 @@ async def roll(ctx, first: int = None, second: int = None):
 
 @client.command()
 async def dotersbrain(ctx):
-    bot = discord.utils.get(ctx.guild.members, id = client.user.id)
-    if bot.guild_permissions.manage_messages:
-        await ctx.message.delete()
-        warning = ''
-    else:
-        warning = 'Для правильной работы бота необходимо выдать ему роль с правами администратора.'
-        return await ctx.send(warning)
     sent1 = await ctx.send(f'{ctx.author.mention}, через 5 секунд появится одно из слов (чё, а, да, нет, ок), на которое вам нужно будет правильно ответить. На размышление 4 секунды.')
     await asyncio.sleep(5)
     words = ['чё', 'а', 'да', 'нет', 'ок']
@@ -2674,13 +2586,6 @@ async def dotersbrain(ctx):
 @client.command()
 @commands.cooldown(1, 3, commands.BucketType.user)
 async def niggers(ctx):
-    bot = discord.utils.get(ctx.guild.members, id = client.user.id)
-    if bot.guild_permissions.manage_messages:
-        await ctx.message.delete()
-        warning = ''
-    else:
-        warning = 'Для правильной работы бота необходимо выдать ему роль с правами администратора.'
-        await ctx.send(warning)
     emb = discord.Embed(description = '[осуждающее видео](https://www.youtube.com/watch?v=167apVK8Suw)', colour = discord.Color.orange())
     if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
@@ -2689,13 +2594,6 @@ async def niggers(ctx):
 @client.command()
 @commands.cooldown(1, 3, commands.BucketType.user)
 async def aye_balbec(ctx):
-    bot = discord.utils.get(ctx.guild.members, id = client.user.id)
-    if bot.guild_permissions.manage_messages:
-        await ctx.message.delete()
-        warning = ''
-    else:
-        warning = 'Для правильной работы бота необходимо выдать ему роль с правами администратора.'
-        await ctx.send(warning)
     emb = discord.Embed(colour = ctx.author.color)
     emb.set_image(url = 'https://sun9-61.userapi.com/tja5cuQthduwgxq2yMigLiUxfYq_5fqiA6cJWg/sZOkbPajoSY.jpg')
     if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
@@ -2705,13 +2603,6 @@ async def aye_balbec(ctx):
 @client.command()
 @commands.cooldown(1, 3, commands.BucketType.user)
 async def rp(ctx):
-    bot = discord.utils.get(ctx.guild.members, id = client.user.id)
-    if bot.guild_permissions.manage_messages:
-        await ctx.message.delete()
-        warning = ''
-    else:
-        warning = 'Для правильной работы бота необходимо выдать ему роль с правами администратора.'
-        await ctx.send(warning)
     emb = discord.Embed(description = '[Ныа](https://www.youtube.com/watch?v=idmTSW9mfYI)', colour = discord.Color.orange())
     if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
@@ -2720,13 +2611,6 @@ async def rp(ctx):
 @client.command(aliases = ['.rap'])
 @commands.cooldown(1, 5, commands.BucketType.user)
 async def rap(ctx):
-    bot = discord.utils.get(ctx.guild.members, id = client.user.id)
-    if bot.guild_permissions.manage_messages:
-        await ctx.message.delete()
-        warning = ''
-    else:
-        warning = 'Для правильной работы бота необходимо выдать ему роль с правами администратора.'
-        await ctx.send(warning)
     emb = discord.Embed(colour = ctx.author.color)
     emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
     emb.set_image(url = 'https://thumbs.gfycat.com/MessyCarefreeHousefly-size_restricted.gif')
@@ -2737,13 +2621,6 @@ async def rap(ctx):
 @client.command()
 @commands.cooldown(1, 5, commands.BucketType.user)
 async def zatka(ctx):
-    bot = discord.utils.get(ctx.guild.members, id = client.user.id)
-    if bot.guild_permissions.manage_messages:
-        await ctx.message.delete()
-        warning = ''
-    else:
-        warning = 'Для правильной работы бота необходимо выдать ему роль с правами администратора.'
-        await ctx.send(warning)
     emb = discord.Embed(title = 'Форма заявки для Набор кадров', colour = ctx.author.color)
     emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
     emb.add_field(name = '(1). ZATKA в STEAM.  ZATKA_KING#8406 в Discord.', value = 'возраст 14+  часовой пояс IL +0.', inline = False)
@@ -2760,24 +2637,11 @@ async def zatka(ctx):
 @client.command(aliases = ['Cu', 'CU'])
 @commands.cooldown(1, 5, commands.BucketType.user)
 async def cu(ctx):
-    bot = discord.utils.get(ctx.guild.members, id = client.user.id)
-    if bot.guild_permissions.manage_messages:
-        await ctx.message.delete()
-        warning = ''
-    else:
-        warning = '\nДля правильной работы бота необходимо выдать ему роль с правами администратора.'
-    await ctx.send(f'Медь{warning}')
+    await ctx.send(f'Медь')
 
 @client.command(aliases = ['c', 'C', 'coin', 'Coin', 'COIN', 'Coinflip', 'COINFLIP'])
 @commands.cooldown(3, 3, commands.BucketType.user)
 async def coinflip(ctx):
-    bot = discord.utils.get(ctx.guild.members, id = client.user.id)
-    if bot.guild_permissions.manage_messages:
-        await ctx.message.delete()
-        warning = ''
-    else:
-        warning = 'Для правильной работы бота необходимо выдать ему роль с правами администратора.'
-        await ctx.send(warning)
     emb = discord.Embed(description = 'Орёл!', colour = discord.Color.orange())
     emb.set_image(url = 'https://cdn.discordapp.com/attachments/524213591084105729/763835275930632252/-removebg-preview.png')
     emb1 = discord.Embed(description = 'Решка!', colour = discord.Color.orange())
@@ -2893,13 +2757,6 @@ async def _content(ctx, arg, channel: discord.TextChannel = None):
 @client.command(aliases = ['ctx'])
 @commands.cooldown(1, 5, commands.BucketType.user)
 async def content(ctx, arg, channel: discord.TextChannel = None):
-    bot = discord.utils.get(ctx.guild.members, id = client.user.id)
-    if bot.guild_permissions.manage_messages:
-        await ctx.message.delete()
-        warning = ''
-    else:
-        warning = 'Для правильной работы бота необходимо выдать ему роль с правами администратора.'
-        await ctx.send(warning)
     if channel == None:
         channel = ctx.message.channel
     message = await channel.fetch_message(id = arg)
@@ -3001,7 +2858,7 @@ async def content(ctx, arg, channel: discord.TextChannel = None):
 async def _say(ctx, *, msg):
     title = ''
     description = ''
-    image = thumbnail = color = message = footer = None
+    image = thumbnail = message = footer = None
     embed_values = msg.split('|')
     for i in embed_values:
         if i.strip().lower().startswith('t&'):
@@ -3012,18 +2869,11 @@ async def _say(ctx, *, msg):
             image = i.strip()[4:].strip()
         elif i.strip().lower().startswith('th&'):
             thumbnail = i.strip()[3:].strip()
-        elif i.strip().lower().startswith('c&'):
-            color = i.strip()[2:].strip()
         elif i.strip().lower().startswith('msg&'):
             message = i.strip()[4:].strip()
         elif i.strip().lower().startswith('f&'):
             footer = i.strip()[2:].strip()
-    if color == None:
-        color = 0x2f3136
-    else:
-        if not color.startswith('0x'):
-            color = '0x' + color
-    emb = discord.Embed(title = title, description = description, color = color)
+    emb = discord.Embed(title = title, description = description, color = 0x2f3136)
     for i in embed_values:
         emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
         if image:
@@ -3034,7 +2884,7 @@ async def _say(ctx, *, msg):
             emb.set_footer(text = footer)
         if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
             emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-        if 't&' not in msg and 'd&' not in msg and 'img&' not in msg and 'th&' not in msg and 'c&' not in msg and 'msg&' not in msg and 'f&' not in msg:
+        if 't&' not in msg and 'd&' not in msg and 'img&' not in msg and 'th&' not in msg and 'msg&' not in msg and 'f&' not in msg:
             if '--everyone' in msg:
                 return await ctx.send(f'@everyone {msg.strip()[10:].strip()}')
             else:
@@ -3047,19 +2897,12 @@ async def _say(ctx, *, msg):
                     return await ctx.send(f'{message}', embed = emb)
                 else:
                     return await ctx.send(embed = emb)
-                
+
 @client.command(aliases = ['Say', 'SAY'])
 async def say(ctx, *, msg):
-    bot = discord.utils.get(ctx.guild.members, id = client.user.id)
-    if bot.guild_permissions.manage_messages:
-        await ctx.message.delete()
-        warning = ''
-    else:
-        warning = 'Для правильной работы бота необходимо выдать ему роль с правами администратора.'
-        await ctx.send(warning)
     title = ''
     description = ''
-    image = thumbnail = color = message = footer = None
+    image = thumbnail = message = footer = None
     embed_values = msg.split('|')
     for i in embed_values:
         if i.strip().lower().startswith('t&'):
@@ -3070,18 +2913,11 @@ async def say(ctx, *, msg):
             image = i.strip()[4:].strip()
         elif i.strip().lower().startswith('th&'):
             thumbnail = i.strip()[3:].strip()
-        elif i.strip().lower().startswith('c&'):
-            color = i.strip()[2:].strip()
         elif i.strip().lower().startswith('msg&'):
             message = i.strip()[4:].strip()
         elif i.strip().lower().startswith('f&'):
             footer = i.strip()[2:].strip()
-    if color == None:
-        color = 0x2f3136
-    else:
-        if not color.startswith('0x'):
-            color = '0x' + color
-    emb = discord.Embed(title = title, description = description, color = color)
+    emb = discord.Embed(title = title, description = description, color = 0x2f3136)
     for i in embed_values:
         emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
         if image:
@@ -3092,7 +2928,7 @@ async def say(ctx, *, msg):
             emb.set_footer(text = footer)
         if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
             emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-        if 't&' not in msg and 'd&' not in msg and 'img&' not in msg and 'th&' not in msg and 'c&' not in msg and 'msg&' not in msg and 'f&' not in msg:
+        if 't&' not in msg and 'd&' not in msg and 'img&' not in msg and 'th&' not in msg and 'msg&' not in msg and 'f&' not in msg:
             if '--everyone' in msg:
                 return await ctx.send(f'@everyone {msg.strip()[10:].strip()}')
             else:
@@ -3124,20 +2960,14 @@ async def _edit(ctx, arg, *, msg):
                 image = i.strip()[4:].strip()
             elif i.strip().lower().startswith('th&'):
                 thumbnail = i.strip()[3:].strip()
-            elif i.strip().lower().startswith('c&'):
-                color = i.strip()[2:].strip()
-        if color == None:
-            color = 0x2f3136
-        else:
-            color = int('0x' + color, 16)
-        emb = discord.Embed(title = title, description = description, color = color, timestamp = datetime.datetime.utcnow())
+        emb = discord.Embed(title = title, description = description, color = 0x2f3136, timestamp = datetime.datetime.utcnow())
         for i in embed_values:
             emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
             if image:
                 emb.set_image(url = image)
             if thumbnail:
                 emb.set_thumbnail(url = thumbnail)
-            if 't&' not in msg and 'd&' not in msg and 'img&' not in msg and 'th&' not in msg and 'c&' not in msg:
+            if 't&' not in msg and 'd&' not in msg and 'img&' not in msg and 'th&' not in msg:
                 if message.author == client.user:
                     if '--clean' in msg:
                         return await message.edit(content = None)
@@ -3178,18 +3008,11 @@ async def _edit(ctx, arg, *, msg):
 @client.command(aliases = ['Edit', 'EDIT'])
 @commands.has_permissions(manage_channels = True)
 async def edit(ctx, arg, *, msg = None):
-    bot = discord.utils.get(ctx.guild.members, id = client.user.id)
-    if bot.guild_permissions.manage_messages:
-        await ctx.message.delete()
-        warning = ''
-    else:
-        warning = 'Для правильной работы бота необходимо выдать ему роль с правами администратора.'
-        await ctx.send(warning)
     message = await ctx.fetch_message(id = arg)
     if message != None:
         title = ''
         description = ''
-        image = thumbnail = color = None
+        image = thumbnail = None
         embed_values = msg.split('|')
         for i in embed_values:
             if i.strip().lower().startswith('t&'):
@@ -3200,20 +3023,14 @@ async def edit(ctx, arg, *, msg = None):
                 image = i.strip()[4:].strip()
             elif i.strip().lower().startswith('th&'):
                 thumbnail = i.strip()[3:].strip()
-            elif i.strip().lower().startswith('c&'):
-                color = i.strip()[2:].strip()
-        if color == None:
-            color = 0x2f3136
-        else:
-            color = int('0x' + color, 16)
-        emb = discord.Embed(title = title, description = description, color = color, timestamp = ctx.message.created_at)
+        emb = discord.Embed(title = title, description = description, color = 0x2f3136, timestamp = ctx.message.created_at)
         for i in embed_values:
             emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
             if image:
                 emb.set_image(url = image)
             if thumbnail:
                 emb.set_thumbnail(url = thumbnail)
-            if 't&' not in msg and 'd&' not in msg and 'img&' not in msg and 'th&' not in msg and 'c&' not in msg:
+            if 't&' not in msg and 'd&' not in msg and 'img&' not in msg and 'th&' not in msg:
                 if message.author == client.user:
                     if '--clean' in msg:
                         return await message.edit(content = None)
@@ -3255,13 +3072,6 @@ async def edit(ctx, arg, *, msg = None):
 #Cephalon
 @client.command()
 async def setup(ctx):
-    bot = discord.utils.get(ctx.guild.members, id = client.user.id)
-    if bot.guild_permissions.manage_messages:
-        await ctx.message.delete()
-        warning = ''
-    else:
-        warning = 'Для правильной работы бота необходимо выдать ему роль с правами администратора.'
-        await ctx.send(warning)
     role3 = discord.utils.get(ctx.guild.roles, name = '----------Предупреждения----------')
     role1 = discord.utils.get(ctx.guild.roles, name = '1')
     role2 = discord.utils.get(ctx.guild.roles, name = '2')
@@ -3282,13 +3092,6 @@ async def setup(ctx):
 
 @client.command()
 async def generate(ctx):
-    bot = discord.utils.get(ctx.guild.members, id = client.user.id)
-    if bot.guild_permissions.manage_messages:
-        await ctx.message.delete()
-        warning = ''
-    else:
-        warning = 'Для правильной работы бота необходимо выдать ему роль с правами администратора.'
-        await ctx.send(warning)
     token = ''.join([secrets.choice('QWERTYUIOPASDFGHJKLZXCVBNM1234567890') for i in range(4)])
     token1 = ''.join([secrets.choice('QWERTYUIOPASDFGHJKLZXCVBNM1234567890') for i in range(4)])
     token2 = ''.join([secrets.choice('QWERTYUIOPASDFGHJKLZXCVBNM1234567890') for i in range(4)])
@@ -3296,7 +3099,6 @@ async def generate(ctx):
 
 @client.command(aliases = ['Join', 'JOIN'])
 async def join(ctx):
-    await ctx.message.delete()
     if ctx.author.voice and ctx.author.voice.channel:
         channel = ctx.author.voice.channel
     else:
@@ -3309,7 +3111,6 @@ async def join(ctx):
 
 @client.command()
 async def leave(ctx):
-    await ctx.message.delete()
     if ctx.author.voice and ctx.author.voice.channel:
         pass
     else:
@@ -3332,13 +3133,6 @@ async def _ping(ctx):
 @client.command(aliases = ['Ping', 'PING'])
 @commands.cooldown(1, 5, commands.BucketType.user)
 async def ping(ctx):
-    bot = discord.utils.get(ctx.guild.members, id = client.user.id)
-    if bot.guild_permissions.manage_messages:
-        await ctx.message.delete()
-        warning = ''
-    else:
-        warning = 'Для правильной работы бота необходимо выдать ему роль с правами администратора.'
-        await ctx.send(warning)
     emb = discord.Embed(description = f'`fetching..`', colour = discord.Color.orange())
     emb1 = discord.Embed(description = f'Pong!  `{round(client.latency * 1000)} ms`', colour = discord.Color.orange())
     message = await ctx.send(embed = emb)
@@ -3358,13 +3152,6 @@ async def _invite(ctx):
 @client.command(aliases = ['invcy'])
 @commands.cooldown(1, 3, commands.BucketType.user)
 async def invite(ctx, arg = None):
-    bot = discord.utils.get(ctx.guild.members, id = client.user.id)
-    if bot.guild_permissions.manage_messages:
-        await ctx.message.delete()
-        warning = ''
-    else:
-        warning = 'Для правильной работы бота необходимо выдать ему роль с правами администратора.'
-        await ctx.send(warning)
     if arg == None:
         emb = discord.Embed(description = '[Ссылка](https://discord.com/api/oauth2/authorize?client_id=694170281270312991&permissions=8&scope=bot%20applications.commands) для приглашения Cy на сервера.', colour = discord.Color.orange())
         if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
@@ -3387,11 +3174,11 @@ async def invite(ctx, arg = None):
 async def _info(ctx):
     emb = discord.Embed(colour = discord.Color.orange())
     emb.set_author(name = client.user.name, url = 'https://warframe.fandom.com/wiki/Cephalon_Cy', icon_url = client.user.avatar_url)
-    emb.add_field(name = 'Версия', value = '0.12.9.11410')
-    emb.add_field(name = 'Написан на', value = 'discord.py v1.6.0 при помощи\ndiscord-py-slash-command v1.0.9')
+    emb.add_field(name = 'Версия', value = '0.12.10.1.11661')
+    emb.add_field(name = 'Написан на', value = 'discord.py v1.7.0 при помощи\ndiscord-py-slash-command v1.1.0')
     emb.add_field(name = 'Разработчик', value = '[сасиска#2472](https://discord.com/users/338714886001524737)')
     if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
-        emb.add_field(name = 'Сервер', value = 'Данный сервер не принадлежит моему создателю или его знакомым. Все эмбед выводы будут иметь футер с текстом `Cephalon Cy by сасиска#2472`')
+        emb.add_field(name = 'Сервер', value = 'Данный сервер не принадлежит моему Создателю или его знакомым. Все эмбед выводы будут иметь футер с текстом `Cephalon Cy by сасиска#2472`')
     if ctx.guild.id == 693929822543675455:
         emb.add_field(name = 'Принадлежность', value = 'Это - мой основной сервер.')
     if ctx.guild.id == 735874149578440855:
@@ -3407,20 +3194,13 @@ async def _info(ctx):
 @client.command(aliases = ['Info', 'INFO'])
 @commands.cooldown(1, 5, commands.BucketType.user)
 async def info(ctx):
-    bot = discord.utils.get(ctx.guild.members, id = client.user.id)
-    if bot.guild_permissions.manage_messages:
-        await ctx.message.delete()
-        warning = ''
-    else:
-        warning = 'Для правильной работы бота необходимо выдать ему роль с правами администратора.'
-        await ctx.send(warning)
     emb = discord.Embed(colour = discord.Color.orange())
     emb.set_author(name = client.user.name, url = 'https://warframe.fandom.com/wiki/Cephalon_Cy', icon_url = client.user.avatar_url)
-    emb.add_field(name = 'Версия', value = '0.12.9.11410')
-    emb.add_field(name = 'Написан на', value = 'discord.py v1.6.0 при помощи\ndiscord-py-slash-command v1.0.9')
+    emb.add_field(name = 'Версия', value = '0.12.10.1.11661')
+    emb.add_field(name = 'Написан на', value = 'discord.py v1.7.0 при помощи\ndiscord-py-slash-command v1.1.0')
     emb.add_field(name = 'Разработчик', value = '[сасиска#2472](https://discord.com/users/338714886001524737)')
     if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
-        emb.add_field(name = 'Сервер', value = 'Данный сервер не принадлежит моему создателю или его знакомым. Все эмбед выводы будут иметь футер с текстом `Cephalon Cy by сасиска#2472`')
+        emb.add_field(name = 'Сервер', value = 'Данный сервер не принадлежит моему Создателю или его знакомым. Все эмбед выводы будут иметь футер с текстом `Cephalon Cy by сасиска#2472`')
     if ctx.guild.id == 693929822543675455:
         emb.add_field(name = 'Принадлежность', value = 'Это - мой основной сервер.')
     if ctx.guild.id == 735874149578440855:
@@ -3433,20 +3213,40 @@ async def info(ctx):
         emb.set_footer(text = 'Данное приложение не имеет никакого причастия к игре Warframe.', icon_url = 'https://i.playground.ru/p/yVaOZNSTdgUTxmzy_qvzzQ.png')
     await ctx.send(embed = emb)
 
-@client.command(aliases = ['version'])
-@commands.cooldown(1, 3, commands.BucketType.user)
+@client.command()
 async def botver(ctx):
-    bot = discord.utils.get(ctx.guild.members, id = client.user.id)
-    if bot.guild_permissions.manage_messages:
-        await ctx.message.delete()
-        warning = ''
-    else:
-        warning = 'Для правильной работы бота необходимо выдать ему роль с правами администратора.'
-        await ctx.send(warning)
     emb = discord.Embed(color = 0x2f3136) # будут маленькое, нормальное и крупное обновления
-    emb.add_field(name = '0.12.9.11410 (Текущая версия, маленькое обновление)', value = 'Некоторые исправления и добавление скрытых фич.')
-    emb.add_field(name = '0.12.9.10988 (Предыдущая версия, крупное обновление)', value = 'Добавлены Slash-Команды! Теперь вы можете просто написать `/`, чтобы вам вывелся список всех команд. Для их работы нужна новая [ссылка-приглашение](https://discord.com/api/oauth2/authorize?client_id=694170281270312991&permissions=8&scope=bot%20applications.commands). Slash-Команды применены ко всем командам за исключением тех, что находятся в категории Fun, Embeds и некоторые в Cephalon или имеют конвертеры (mute, remind, someone) ***Всё ещё БЕТА!***')
+    emb.add_field(name = '0.12.10.1.11661 (Текущая версия, крупное обновление)', value = 'Slash-Команды теперь применены ко всем командам, кроме тех, что используют конвертеры. Также, исправлены недоработки старых Slash-Команд и созданы новые (при написании некоторых команд будет ответ **Ошибка взаимодействия**, даже если команда была выполнена правильно)\n\n**Say/Edit**\n\nУбран аргумент `c&`, добавлен аргумент `f&` - текст в самом низу эмбеда.\n\n**Иное**\n\nТеперь команды пользователя не будут удаляться - это решение связано с рядом причин.', inline = False)
+    emb.add_field(name = '0.12.9.11410 (Предыдущая версия, маленькое обновление)', value = 'Некоторые исправления и добавление скрытых фич.', inline = False)
     await ctx.send(embed = emb)
+
+@slash.slash(name = 'botver', description = 'Позволяет узнать текущую версию бота', options = [{'name': 'version', 'description': 'Версия', 'required': False, 'type': 3, 'choices': [
+    {'name': '0.12.9.10519', 'value': '0.12.9.10519'}, 
+    {'name': '0.12.9.10988', 'value': '0.12.9.10988'}, 
+    {'name': '0.12.9.11410', 'value': '0.12.9.11410'},
+    {'name': '0.12.10.1.11661', 'value': '0.12.10.1.11661'}]}])
+async def _botver(ctx, version = None):
+    if version == None:
+        emb = discord.Embed(color = 0x2f3136) # будут маленькое, нормальное и крупное обновления
+        emb.add_field(name = '0.12.10.1.11661 (Текущая версия, крупное обновление)', value = 'Slash-Команды теперь применены ко всем командам, кроме тех, что используют конвертеры. Также, исправлены недоработки старых Slash-Команд и созданы новые (при написании некоторых команд будет ответ **Ошибка взаимодействия**, даже если команда была выполнена правильно).\n\n**Say/Edit**\n\nУбран аргумент `c&`, добавлен аргумент `f&` - текст в самом низу эмбеда.\n\n**Иное**\n\nТеперь команды пользователя не будут удаляться - это решение связано с рядом причин.', inline = False)
+        emb.add_field(name = '0.12.9.11410 (Предыдущая версия, маленькое обновление)', value = 'Некоторые исправления и добавление скрытых фич.', inline = False)
+        await ctx.send(embed = emb)
+    if version == '0.12.9.10519':
+        emb = discord.Embed(color = 0x2f3136)
+        emb.add_field(name = '0.12.9.10519', value = 'Небольшие исправления, в целом никак не связанные с работой бота.')
+        await ctx.send(embed = emb)
+    if version == '0.12.9.10988':
+        emb = discord.Embed(color = 0x2f3136)
+        emb.add_field(name = '0.12.9.10988', value = 'Добавлены Slash-Команды! Теперь вы можете просто написать `/`, чтобы вам вывелся список всех команд. Для их работы нужна новая [ссылка-приглашение](https://discord.com/api/oauth2/authorize?client_id=694170281270312991&permissions=8&scope=bot%20applications.commands). Slash-Команды применены ко всем командам за исключением тех, что находятся в категории Fun, Embeds и некоторые в Cephalon или имеют конвертеры (mute, remind, someone) ***Всё ещё БЕТА!***', inline = False)
+        await ctx.send(embed = emb)
+    if version == '0.12.9.11410':
+        emb = discord.Embed(color = 0x2f3136)
+        emb.add_field(name = '0.12.9.11410', value = 'Некоторые исправления и добавление скрытых фич.')
+        await ctx.send(embed = emb)
+    if version == '0.12.10.1.11661':
+        emb = discord.Embed(color = 0x2f3136)
+        emb.add_field(name = '0.12.10.1.11661', value = 'Slash-Команды теперь применены ко всем командам, кроме тех, что используют конвертеры. Также, исправлены недоработки старых Slash-Команд и созданы новые (при написании некоторых команд будет ответ **Ошибка взаимодействия**, даже если команда была выполнена правильно).\n\n**Say**\n\nУбран аргумент `c&`, добавлен аргумент `f&` - текст в самом низу эмбеда.\n\n**Иное**\n\nТеперь команды пользователя не будут удаляться - это решение связано с рядом причин.')
+        await ctx.send(embed = emb)
     
 @slash.slash(name = 'help', description = 'Здесь можно получить полную помощь по всем командам', options = [{'name': 'arg', 'description': 'Выберите команду для подробной помощи', 'required': False, 'type': 3, 'choices': [
     {'name': 'about', 'value': 'about'},
@@ -3483,7 +3283,7 @@ async def _help(ctx, arg = None):
         emb.add_field(name = 'Fun', value = '`aye_balbec`, `cu`, `coinflip`, `dotersbrain`, `niggers`, `rp`, `rap`, `zatka`', inline = False)
         emb.add_field(name = 'Mod', value = '`ban`, `clear`, `dm`, `give`, `kick`, `mute`, `take`, `unmute`', inline = False)
         emb.add_field(name = 'Misc', value = '`about`, `avatar`, `guild`, `remind`, `roleinfo`, `rolemembers`, `someone`, `vote`', inline = False)
-        emb.add_field(name = 'ᅠ', value = 'Назовите войс `Создать канал`, чтобы бот автоматически создавал для вас временные каналы, которые будут удаляться после того, как все люди выйдут из канала.')
+        emb.add_field(name = 'ᅠ', value = 'Назовите войс `Создать канал`, чтобы бот автоматически создавал для вас временные каналы, которые будут удаляться после того, как все люди выйдут из него.')
         emb.add_field(name = 'ᅠ', value = '**Используйте** `cy/help [команда/категория]` **для подробностей использования.**\n\n**[Ссылка-приглашение](https://discord.com/api/oauth2/authorize?client_id=694170281270312991&permissions=8&scope=bot%20applications.commands)**', inline = False)
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
@@ -3504,9 +3304,9 @@ async def _help(ctx, arg = None):
     elif arg == 'dm':
         await ctx.send('```apache\ncy/dm <@пинг/имя/ID> <текст> (<> - обязательно, / - или)\nperms = view_audit_log```')
     elif arg == 'say':
-        await ctx.send('```apache\ncy/say [t& title текст] | [d& description текст] | [c& HEX цвет] | [th& ссылка на картинку справа] | [img& ссылка на картинку снизу]\ncy/say t& title | d& description\ncy/say --everyone | t& title | d& description\ncy/say [текст]\ncy/say --everyone [текст]\n(вам НЕ обязательно писать все аргументы в данном порядке, пишите только те, что вам нужны в любом порядке) ([] - опционально, / - или)\nperms = manage_channels```')
+            await ctx.send('```apache\ncy/say [обычный текст] [t& title текст] | [d& description текст] | [th& ссылка на картинку справа] | [img& ссылка на картинку снизу] [f& footer текст] [msg& сообщение над эмбедом]\ncy/say t& title | d& description\ncy/say --everyone | t& title | d& description\ncy/say [текст]\ncy/say --everyone [текст]\n(вам НЕ обязательно писать все аргументы в данном порядке, пишите только те, что вам нужны в любом порядке) ([] - опционально)```')
     elif arg == 'edit':
-        await ctx.send('```apache\ncy/edit <ID> [t& title текст] | [d& description текст] | [c& HEX цвет] | [th& ссылка на картинку справа] | [img& ссылка на картинку снизу]\ncy/edit <ID> [текст]\ncy/edit <ID> --clean | d& description\ncy/edit <ID> --clean\ncy/edit <ID> --noembed\ncy/edit <ID> --empty-embed\ncy/edit <ID> --delete\n(--clean удалит контент над эмбедом, --noembed удалит эмбед, работает только если есть эмбед, --empty-embed опустошит эмбед, --delete удалит сообщение) ([] - опционально, <> - обязательно, / - или)\nperms = manage_channels```')
+            await ctx.send('```apache\ncy/edit <ID> [обычный текст] [t& title текст] | [d& description текст] | [th& ссылка на картинку справа] | [img& ссылка на картинку снизу]\ncy/edit <ID> [текст]\ncy/edit <ID> --clean | d& description\ncy/edit <ID> --clean\ncy/edit <ID> --noembed\ncy/edit <ID> --empty-embed\ncy/edit <ID> --delete\n--clean удалит контент над эмбедом, --noembed удалит эмбед, работает только если есть эмбед, --empty-embed опустошит эмбед, --delete удалит сообщение\nесли у сообщения есть эмбед и в команде нет агрументов, автоматически будет заменён msg&\n([] - опционально, <> - обязательно)\nperms = manage_channels```')
     elif arg == 'give':
         await ctx.send('```apache\ncy/give <@пинг/имя/ID> <@роль/имя роли/ID роли> (<> - обязательно, / - или)\nperms = manage_channels```')
     elif arg == 'kick':
@@ -3547,20 +3347,14 @@ async def _help(ctx, arg = None):
 @client.command(aliases = ['Help', 'HELP'])
 @commands.cooldown(1, 3, commands.BucketType.user)
 async def help(ctx, arg = None):
-    bot = discord.utils.get(ctx.guild.members, id = client.user.id)
-    if bot.guild_permissions.manage_messages:
-        await ctx.message.delete()
-        warning = ''
-    else:
-        warning = '\nДля правильной работы бота необходимо выдать ему роль с правами администратора.'
     if arg == None:
-        emb = discord.Embed(title = client.user.name, description = f'Вот команды, что я могу исполнить.{warning}', colour = discord.Color.orange())
+        emb = discord.Embed(title = client.user.name, description = f'Вот команды, что я могу исполнить.', colour = discord.Color.orange())
         emb.add_field(name = 'Cephalon', value = '`botver`, `info`, `invite`, `join`, `leave`, `ping`, `setup`', inline = False)
         emb.add_field(name = 'Embeds', value = '`content`, `edit`, `say`', inline = False)
         emb.add_field(name = 'Fun', value = '`aye_balbec`, `cu`, `coinflip`, `dotersbrain`, `niggers`, `rp`, `rap`, `roll`, `zatka`', inline = False)
         emb.add_field(name = 'Mod', value = '`ban`, `clear`, `dm`, `give`, `kick`, `mute`, `take`, `unmute`', inline = False)
         emb.add_field(name = 'Misc', value = '`about`, `avatar`, `guild`, `remind`, `roleinfo`, `rolemembers`, `someone`, `vote`', inline = False)
-        emb.add_field(name = 'ᅠ', value = 'Назовите войс `Создать канал`, чтобы бот автоматически создавал для вас временные каналы, которые будут удаляться после того, как все люди выйдут из канала.', inline = False)
+        emb.add_field(name = 'ᅠ', value = 'Назовите войс `Создать канал`, чтобы бот автоматически создавал для вас временные каналы, которые будут удаляться после того, как все люди выйдут из него.', inline = False)
         emb.add_field(name = 'ᅠ', value = '**Используйте** `cy/help [команда/категория]` **для подробностей использования.**\n\n**[Ссылка-приглашение](https://discord.com/api/oauth2/authorize?client_id=694170281270312991&permissions=8&scope=bot%20applications.commands)**', inline = False)
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
@@ -3581,9 +3375,9 @@ async def help(ctx, arg = None):
     elif arg == 'dm':
         await ctx.send('```apache\ncy/dm <@пинг/имя/ID> <текст> (<> - обязательно, / - или)\nperms = view_audit_log```')
     elif arg == 'say':
-        await ctx.send('```apache\ncy/say [t& title текст] | [d& description текст] | [c& HEX цвет] | [th& ссылка на картинку справа] | [img& ссылка на картинку снизу]\ncy/say t& title | d& description | img& https://cdn.discordapp.com/avatars/694170281270312991/e27e0909a72cdc6a98d4234ecbfe9a91.webp?size=1024\ncy/say --everyone | t& title | d& description\ncy/say [текст]\ncy/say --everyone [текст]\n(вам НЕ обязательно писать все аргументы в данном порядке, пишите только те, что вам нужны в любом порядке) ([] - опционально, / - или)\nperms = manage_channels```')
+            await ctx.send('```apache\ncy/say [обычный текст] [t& title текст] | [d& description текст] | [th& ссылка на картинку справа] | [img& ссылка на картинку снизу] [f& footer текст] [msg& сообщение над эмбедом]\ncy/say t& title | d& description\ncy/say --everyone | t& title | d& description\ncy/say [текст]\ncy/say --everyone [текст]\n(вам НЕ обязательно писать все аргументы в данном порядке, пишите только те, что вам нужны в любом порядке) ([] - опционально)```')
     elif arg == 'edit':
-        await ctx.send('```apache\ncy/edit <ID> [t& title текст] | [d& description текст] | [c& HEX цвет] | [th& ссылка на картинку справа] | [img& ссылка на картинку снизу]\ncy/edit <ID> [текст]\ncy/edit <ID> --clean | d& description\ncy/edit <ID> --clean\ncy/edit <ID> --noembed\ncy/edit <ID> --empty-embed\ncy/edit <ID> --delete\n(--clean удалит контент над эмбедом, --noembed удалит эмбед, работает только если есть эмбед, --empty-embed опустошит эмбед, --delete удалит сообщение) ([] - опционально, <> - обязательно, / - или)\nperms = manage_channels```')
+            await ctx.send('```apache\ncy/edit <ID> [обычный текст] [t& title текст] | [d& description текст] | [th& ссылка на картинку справа] | [img& ссылка на картинку снизу]\ncy/edit <ID> [текст]\ncy/edit <ID> --clean | d& description\ncy/edit <ID> --clean\ncy/edit <ID> --noembed\ncy/edit <ID> --empty-embed\ncy/edit <ID> --delete\n--clean удалит контент над эмбедом, --noembed удалит эмбед, работает только если есть эмбед, --empty-embed опустошит эмбед, --delete удалит сообщение\nесли у сообщения есть эмбед и в команде нет агрументов, автоматически будет заменён msg&\n([] - опционально, <> - обязательно)\nperms = manage_channels```')
     elif arg == 'give':
         await ctx.send('```apache\ncy/give <@пинг/имя/ID> <@роль/имя роли/ID роли> (<> - обязательно, / - или)\nperms = manage_channels```')
     elif arg == 'kick':
@@ -3643,15 +3437,12 @@ async def help(ctx, arg = None):
 @client.event
 async def on_command_error(ctx, error):
     if isinstance(error, commands.CommandNotFound):
-        await ctx.message.delete()
         emb = discord.Embed(description = f'{ctx.author.mention}, команда не обнаружена. Может, пропишите cy/help?\n||{ctx.message.content}||', colour = discord.Color.orange())
         await ctx.send(embed = emb)
     elif isinstance(error, commands.MissingPermissions):
-        await ctx.message.delete()
         emb = discord.Embed(description = f'{ctx.author.mention}, у вас недостаточно прав на выполнение команды `{ctx.command.name}`', colour = discord.Color.orange())
         await ctx.send(embed = emb)
     elif isinstance(error, commands.CommandOnCooldown):
-        await ctx.message.delete()
         s = error.retry_after
         choises = ['Its not time yet..', 'I am not ready..', 'Not yet..']
         choices1 = ['Its Not Time Yet.', 'I Am Not Ready.', 'Not Yet.']
@@ -3675,13 +3466,12 @@ async def on_command_error(ctx, error):
                 emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
             await ctx.send(embed = emb)
     elif isinstance(error, commands.MissingRequiredArgument):
-        await ctx.message.delete()
         if ctx.command.name == 'clear':
             await ctx.send('```apache\ncy/clear <количество> [автор] [фильтр]\ncy/clear 100\ncy/clear 10 @сасиска\ncy/clear 50 --everyone хыха\ncy/clear 30 --bots\ncy/clear 15 --users\ncy/clear 5 --silent\ncy/clear 200 "--silent --everyone" хыха\n\n--everyone удалит сообщения от всех\n--bots удалит сообщения только от ботов\n--users удалит сообщения только от участников\n--silent не оставит доказательств выполнения команды, исключение - количество >= 10\n\nПри указании автора не будет удалено столько сообщений, сколько было указано, будет удалено столько, сколько будет найдено в пределах этих сообщений.\nСообщения старше 2 недель будут удалены не сразу - лимит discord API\nПри удалении более 100 сообщений нужно подтверждение владельца сервера.\nТолько владелец может удалять от 250 сообщений за раз.\nНе более 300!\n([] - опционально, <> - обязательно, / - или)\nperms = adminstrator```')
         elif ctx.command.name == 'say':
-            await ctx.send('```apache\ncy/say [обычный текст] [t& title текст] | [d& description текст] | [c& HEX цвет] | [th& ссылка на картинку справа] | [img& ссылка на картинку снизу] [f& footer текст] [msg& сообщение над эмбедом]\ncy/say t& title | d& description\ncy/say --everyone | t& title | d& description\ncy/say [текст]\ncy/say --everyone [текст]\n(вам НЕ обязательно писать все аргументы в данном порядке, пишите только те, что вам нужны в любом порядке) ([] - опционально)```')
+            await ctx.send('```apache\ncy/say [обычный текст] [t& title текст] | [d& description текст] | [th& ссылка на картинку справа] | [img& ссылка на картинку снизу] [f& footer текст] [msg& сообщение над эмбедом]\ncy/say t& title | d& description\ncy/say --everyone | t& title | d& description\ncy/say [текст]\ncy/say --everyone [текст]\n(вам НЕ обязательно писать все аргументы в данном порядке, пишите только те, что вам нужны в любом порядке) ([] - опционально)```')
         elif ctx.command.name == 'edit':
-            await ctx.send('```apache\ncy/edit <ID> [обычный текст] [t& title текст] | [d& description текст] | [c& HEX цвет] | [th& ссылка на картинку справа] | [img& ссылка на картинку снизу]\ncy/edit <ID> [текст]\ncy/edit <ID> --clean | d& description\ncy/edit <ID> --clean\ncy/edit <ID> --noembed\ncy/edit <ID> --empty-embed\ncy/edit <ID> --delete\n(--clean удалит контент над эмбедом, --noembed удалит эмбед, работает только если есть эмбед, --empty-embed опустошит эмбед, --delete удалит сообщение) ([] - опционально, <> - обязательно)\nperms = manage_channels```')
+            await ctx.send('```apache\ncy/edit <ID> [обычный текст] [t& title текст] | [d& description текст] | [th& ссылка на картинку справа] | [img& ссылка на картинку снизу]\ncy/edit <ID> [текст]\ncy/edit <ID> --clean | d& description\ncy/edit <ID> --clean\ncy/edit <ID> --noembed\ncy/edit <ID> --empty-embed\ncy/edit <ID> --delete\n--clean удалит контент над эмбедом, --noembed удалит эмбед, работает только если есть эмбед, --empty-embed опустошит эмбед, --delete удалит сообщение\nесли у сообщения есть эмбед и в команде нет агрументов, автоматически будет заменён msg&\n([] - опционально, <> - обязательно)\nperms = manage_channels```')
         elif ctx.command.name == 'ban':
             await ctx.send('```apache\ncy/ban <@пинг/имя/ID> [причина/--soft --reason]\ncy/ban 185476724627210241 --soft --reason лошара\ncy/ban @сасиска чмо\ncy/ban "Sgt White"\ncy/ban @крипочек --soft\n\nПри использовании --soft обязательно указывать --reason ПОСЛЕ --soft\n\n([] - опционально, <> - обязательно, / - или)\nperms = ban_members```')
         else:
@@ -3690,7 +3480,6 @@ async def on_command_error(ctx, error):
                 emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
             await ctx.send(embed = emb)
     elif isinstance(error, commands.BadArgument):
-        await ctx.message.delete()
         emb = discord.Embed(description = f'{ctx.author.mention}, обнаружен неверный аргумент для `{ctx.command.name}`. Попробуйте cy/help `{ctx.command.name}`', colour = discord.Color.orange())
         if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
             emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
