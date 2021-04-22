@@ -459,7 +459,21 @@ async def on_message(message):
             else:
                 emb.add_field(name = 'НА_СЕРВЕРЕ', value = message.guild)
                 emb.add_field(name = 'В_КАНАЛЕ', value = f'{message.channel.mention} ({message.channel.name})')
-            emb.add_field(name = 'НАПИСАНО', value = message.content, inline = False)
+            if len(message.content) >= 1924:
+                content = f'{message.content.strip()[:len(message.content) - 1200].strip()}\n||Сообщение было слишком длинным, поэтому я обрезал его на 1200 символов (итого - {len(message.content) - 1200})||'
+            elif len(message.content) >= 1724:
+                content = f'{message.content.strip()[:len(message.content) - 1000].strip()}\n||Сообщение было слишком длинным, поэтому я обрезал его на 1000 символов (итого - {len(message.content) - 1000})||'
+            elif len(message.content) >= 1524:
+                content = f'{message.content.strip()[:len(message.content) - 800].strip()}\n||Сообщение было слишком длинным, поэтому я обрезал его на 800 символов (итого - {len(message.content) - 800})||'
+            elif len(message.content) >= 1324:
+                content = f'{message.content.strip()[:len(message.content) - 600].strip()}\n||Сообщение было слишком длинным, поэтому я обрезал его на 600 символов (итого - {len(message.content) - 600})||'
+            elif len(message.content) >= 1124:
+                content = f'{message.content.strip()[:len(message.content) - 400].strip()}\n||Сообщение было слишком длинным, поэтому я обрезал его на 400 символов (итого - {len(message.content) - 400})||'
+            elif len(message.content) >= 924:
+                content = f'{message.content.strip()[:len(message.content) - 200].strip()}\n||Сообщение было слишком длинным, поэтому я обрезал его на 200 символов (итого - {len(message.content) - 200})||'
+            else:
+                content = f'{message.content}\n\n||{len(message.content)} символов||'
+            emb.add_field(name = 'НАПИСАНО', value = f'{content}', inline = False)
             await client.process_commands(message)
             try:
                 await channel.send(embed = emb)
