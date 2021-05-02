@@ -2961,9 +2961,10 @@ async def say(ctx, *, msg):
 async def _edit(ctx, arg, *, msg):
     message = await ctx.channel.fetch_message(id = arg)
     if message != None:
-        title = ''
-        description = ''
-        image = thumbnail = color = None
+        old_embed = message.embeds[0]
+        title = old_embed.title
+        description = old_embed.description
+        image = thumbnail = None
         embed_values = msg.split('|')
         for i in embed_values:
             if i.strip().lower().startswith('t&'):
@@ -3024,8 +3025,9 @@ async def _edit(ctx, arg, *, msg):
 async def edit(ctx, arg, *, msg = None):
     message = await ctx.fetch_message(id = arg)
     if message != None:
-        title = ''
-        description = ''
+        old_embed = message.embeds[0]
+        title = old_embed.title
+        description = old_embed.description
         image = thumbnail = None
         embed_values = msg.split('|')
         for i in embed_values:
