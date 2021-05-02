@@ -20,7 +20,7 @@ slash = SlashCommand(client, sync_commands = True)
 @client.event
 async def on_ready():
     channel = client.get_channel(714175791033876490)
-    embed = discord.Embed(description = 'В сети, поверхностная проверка не выявила ошибок.', color = 0x2f3136, timestamp = datetime.datetime.utcnow())
+    emb = discord.Embed(description = 'В сети, поверхностная проверка не выявила ошибок.', color = 0x2f3136, timestamp = datetime.datetime.utcnow())
     emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
     await channel.send(embed = emb)
 
