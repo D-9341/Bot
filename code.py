@@ -13,13 +13,16 @@ from discord.ext import commands
 from discord.utils import get
 from discord_slash import SlashCommand, SlashContext
 
-client = commands.Bot(command_prefix = commands.when_mentioned_or('cy/'), intents = discord.Intents.all(), owner_id = 338714886001524737)
+client = commands.Bot(command_prefix = commands.when_mentioned_or('cy/'), intents = discord.Intents.all(), owner_id = 338714886001524737, status = discord.Status.idle, activity = discord.Activity(type = discord.ActivityType.watching, name = 'Slash Commands'))
 client.remove_command('help')
 slash = SlashCommand(client, sync_commands = True)
 
 @client.event
 async def on_ready():
-    await client.change_presence(status = discord.Status.idle, activity = discord.Activity(type = discord.ActivityType.watching, name = 'Slash Commands'))
+    channel = client.get_channel(714175791033876490)
+    embed = discord.Embed(description = 'В сети, поверхностная проверка не выявила ошибок.', color = 0x2f3136, timestamp = datetime.datetime.utcnow())
+    emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+    await channel.send(embed = emb)
 
 time_regex = re.compile(r"(?:(\d{1,5})(h|s|m|d))+?")
 time_dict = {'h': 3600, 's': 1, 'm': 60, 'd': 86400}
@@ -2959,12 +2962,12 @@ async def say(ctx, *, msg):
 @slash.slash(name = 'edit', description = 'Изменяет сообщение, отправленое ботом.', options = [{'name': 'arg', 'description': 'ID сообщения', 'required': True, 'type': 3}, {'name': 'msg', 'description': 'аргументы или текст, на который нужно заменить исходный', 'required': True, 'type': 3}])
 @commands.has_permissions(manage_channels = True)
 async def _edit(ctx, arg, *, msg):
-    message = await ctx.channel.fetch_message(id = arg)
+    message = await ctx.fetch_message(id = arg)
     if message != None:
         old_embed = message.embeds[0]
         title = old_embed.title
         description = old_embed.description
-        image = thumbnail = None
+        image = thumbnail = footer = None
         embed_values = msg.split('|')
         for i in embed_values:
             if i.strip().lower().startswith('t&'):
@@ -2975,14 +2978,18 @@ async def _edit(ctx, arg, *, msg):
                 image = i.strip()[4:].strip()
             elif i.strip().lower().startswith('th&'):
                 thumbnail = i.strip()[3:].strip()
-        emb = discord.Embed(title = title, description = description, color = 0x2f3136, timestamp = datetime.datetime.utcnow())
+            elif i.strip().lower().startswith('f&'):
+                footer = i.strip()[2:].strip()
+        emb = discord.Embed(title = title, description = description, color = 0x2f3136, timestamp = ctx.message.created_at)
         for i in embed_values:
             emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
             if image:
                 emb.set_image(url = image)
             if thumbnail:
                 emb.set_thumbnail(url = thumbnail)
-            if 't&' not in msg and 'd&' not in msg and 'img&' not in msg and 'th&' not in msg:
+            if footer:
+                emb.set_footer(text = footer)
+            if 't&' not in msg and 'd&' not in msg and 'img&' not in msg and 'th&' not in msg and 'f&' not in msg:
                 if message.author == client.user:
                     if '--clean' in msg:
                         return await message.edit(content = None)
@@ -3028,7 +3035,7 @@ async def edit(ctx, arg, *, msg = None):
         old_embed = message.embeds[0]
         title = old_embed.title
         description = old_embed.description
-        image = thumbnail = None
+        image = thumbnail = footer = None
         embed_values = msg.split('|')
         for i in embed_values:
             if i.strip().lower().startswith('t&'):
@@ -3039,6 +3046,8 @@ async def edit(ctx, arg, *, msg = None):
                 image = i.strip()[4:].strip()
             elif i.strip().lower().startswith('th&'):
                 thumbnail = i.strip()[3:].strip()
+            elif i.strip().lower().startswith('f&'):
+                footer = i.strip()[2:].strip()
         emb = discord.Embed(title = title, description = description, color = 0x2f3136, timestamp = ctx.message.created_at)
         for i in embed_values:
             emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
@@ -3046,7 +3055,9 @@ async def edit(ctx, arg, *, msg = None):
                 emb.set_image(url = image)
             if thumbnail:
                 emb.set_thumbnail(url = thumbnail)
-            if 't&' not in msg and 'd&' not in msg and 'img&' not in msg and 'th&' not in msg:
+            if footer:
+                emb.set_footer(text = footer)
+            if 't&' not in msg and 'd&' not in msg and 'img&' not in msg and 'th&' not in msg and 'f&' not in msg:
                 if message.author == client.user:
                     if '--clean' in msg:
                         return await message.edit(content = None)
@@ -3452,12 +3463,23 @@ async def help(ctx, arg = None):
 
 @client.event
 async def on_command_error(ctx, error):
+    channel = client.get_channel(838506478108803112)
     if isinstance(error, commands.CommandNotFound):
         emb = discord.Embed(description = f'{ctx.author.mention}, команда не обнаружена. Может, пропишите cy/help?\n||{ctx.message.content}||', colour = discord.Color.orange())
         await ctx.send(embed = emb)
+        eemb = discord.Embed(description = 'Поймана ошибка `CommandNotFound`', color = 0xff0000, timestamp = ctx.message.created_at)
+        eemb.add_field(name = 'Сервер', value = ctx.guild.name)
+        eemb.add_field(name = 'Вызвавший ошибку', value = f'{ctx.author.mention} ({ctx.author.name})', inline = False)
+        eemb.add_field(name = 'Команда', value = ctx.command.name, inline = False)
+        await channel.send(embed = eemb)
     elif isinstance(error, commands.MissingPermissions):
         emb = discord.Embed(description = f'{ctx.author.mention}, у вас недостаточно прав на выполнение команды `{ctx.command.name}`', colour = discord.Color.orange())
         await ctx.send(embed = emb)
+        eemb = discord.Embed(description = 'Поймана ошибка `MissingPermissions`', color = 0xff0000, timestamp = ctx.message.created_at)
+        eemb.add_field(name = 'Сервер', value = ctx.guild.name)
+        eemb.add_field(name = 'Вызвавший ошибку', value = f'{ctx.author.mention} ({ctx.author.name})', inline = False)
+        eemb.add_field(name = 'Команда', value = ctx.command.name, inline = False)
+        await channel.send(embed = eemb)
     elif isinstance(error, commands.CommandOnCooldown):
         s = error.retry_after
         choises = ['Its not time yet..', 'I am not ready..', 'Not yet..']
@@ -3481,6 +3503,12 @@ async def on_command_error(ctx, error):
             if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
                 emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
             await ctx.send(embed = emb)
+        eemb = discord.Embed(description = 'Поймана ошибка `CommandOnCooldown`', color = 0xff0000, timestamp = ctx.message.created_at)
+        eemb.add_field(name = 'Сервер', value = ctx.guild.name)
+        eemb.add_field(name = 'Вызвавший ошибку', value = f'{ctx.author.mention} ({ctx.author.name})', inline = False)
+        eemb.add_field(name = 'Команда', value = ctx.command.name, inline = False)
+        eemb.add_field(name = 'Оставалось времени', value = s * 1000, inline = False)
+        await channel.send(embed = eemb)
     elif isinstance(error, commands.MissingRequiredArgument):
         if ctx.command.name == 'clear':
             await ctx.send('```apache\ncy/clear <количество> [автор] [фильтр]\ncy/clear 100\ncy/clear 10 @сасиска\ncy/clear 50 --everyone хыха\ncy/clear 30 --bots\ncy/clear 15 --users\ncy/clear 5 --silent\ncy/clear 200 "--silent --everyone" хыха\n\n--everyone удалит сообщения от всех\n--bots удалит сообщения только от ботов\n--users удалит сообщения только от участников\n--silent не оставит доказательств выполнения команды, исключение - количество >= 10\n\nПри указании автора не будет удалено столько сообщений, сколько было указано, будет удалено столько, сколько будет найдено в пределах этих сообщений.\nСообщения старше 2 недель будут удалены не сразу - лимит discord API\nПри удалении более 100 сообщений нужно подтверждение владельца сервера.\nТолько владелец может удалять от 250 сообщений за раз.\nНе более 300!\n([] - опционально, <> - обязательно, / - или)\nperms = adminstrator```')
@@ -3495,16 +3523,31 @@ async def on_command_error(ctx, error):
             if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
                 emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
             await ctx.send(embed = emb)
+        eemb = discord.Embed(description = 'Поймана ошибка `MissingRequiredArgument`', color = 0xff0000, timestamp = ctx.message.created_at)
+        eemb.add_field(name = 'Сервер', value = ctx.guild.name)
+        eemb.add_field(name = 'Вызвавший ошибку', value = f'{ctx.author.mention} ({ctx.author.name})', inline = False)
+        eemb.add_field(name = 'Команда', value = ctx.command.name, inline = False)
+        await channel.send(embed = eemb)
     elif isinstance(error, commands.MemberNotFound):
         emb = discord.Embed(description = f'{ctx.author.mention}, участник не обнаружен.', color = discord.Color.orange())
         if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
             emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
+        eemb = discord.Embed(description = 'Поймана ошибка `MemberNotFound`', color = 0xff0000, timestamp = ctx.message.created_at)
+        eemb.add_field(name = 'Сервер', value = ctx.guild.name)
+        eemb.add_field(name = 'Вызвавший ошибку', value = f'{ctx.author.mention} ({ctx.author.name})', inline = False)
+        eemb.add_field(name = 'Команда', value = ctx.command.name, inline = False)
+        await channel.send(embed = eemb)
     elif isinstance(error, commands.BadArgument):
         emb = discord.Embed(description = f'{ctx.author.mention}, обнаружен неверный аргумент для `{ctx.command.name}`. Попробуйте cy/help `{ctx.command.name}`', colour = discord.Color.orange())
         if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
             emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
+        eemb = discord.Embed(description = 'Поймана ошибка `BadArgument`', color = 0xff0000, timestamp = ctx.message.created_at)
+        eemb.add_field(name = 'Сервер', value = ctx.guild.name)
+        eemb.add_field(name = 'Вызвавший ошибку', value = f'{ctx.author.mention} ({ctx.author.name})', inline = False)
+        eemb.add_field(name = 'Команда', value = ctx.command.name, inline = False)
+        await channel.send(embed = eemb)
 
 t = os.environ.get('t')
 client.run(t)
