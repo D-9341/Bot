@@ -9,6 +9,7 @@ import secrets
 
 import discord
 import discord_slash
+from pymongo import MongoClient
 from discord.ext import commands
 from discord.utils import get
 from discord_slash import SlashCommand, SlashContext
@@ -16,6 +17,9 @@ from discord_slash import SlashCommand, SlashContext
 client = commands.Bot(command_prefix = commands.when_mentioned_or('cy/'), intents = discord.Intents.all(), owner_id = 338714886001524737, status = discord.Status.idle, activity = discord.Activity(type = discord.ActivityType.watching, name = 'Slash Commands'))
 client.remove_command('help')
 slash = SlashCommand(client, sync_commands = True)
+passw = os.environ.get('passw')
+cluster = MongoClient(f"mongodb+srv://cephalon:{passw}@locale.ttokw.mongodb.net/Locale?retryWrites=true&w=majority")
+collection = cluster.Locale.locale
 
 @client.event
 async def on_ready():
@@ -23,7 +27,14 @@ async def on_ready():
     emb = discord.Embed(description = 'В сети, поверхностная проверка не выявила ошибок.', color = 0x2f3136, timestamp = datetime.datetime.utcnow())
     emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
     await channel.send(embed = emb)
-
+    for guild in client.guilds:
+        post = {
+            '_id': guild.id
+            'locale': 'ru',
+        }
+    if collection.count_documents({'_id': guild.id}) == 0:
+        collection.insert_one(post)
+        
 time_regex = re.compile(r"(?:(\d{1,5})(h|s|m|d))+?")
 time_dict = {'h': 3600, 's': 1, 'm': 60, 'd': 86400}
 
@@ -2350,7 +2361,6 @@ async def roleinfo(ctx, *, role: discord.Role):
     d = role.created_at.strftime('%d.%m.%Y %H:%M:%S GMT')
     emb.add_field(name = 'Создана', value = f'{delta.days} дня(ей) назад. ({d})', inline = False)
     emb.add_field(name = 'Показывает участников отдельно?', value = role.hoist)
-    emb.add_field(namw = 'Ключевое право', value = role.permissions[0], inline = False)
     if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
     await ctx.send(embed = emb)
@@ -2442,7 +2452,6 @@ async def _about(ctx, member: discord.Member = None):
     if limit != 1:
         emb.add_field(name = f'Роли ({len(member.roles)-1})', value = roles, inline = False)
         emb.add_field(name = 'Высшая Роль', value = member.top_role.mention, inline = False)
-        emb.add_field(namw = 'Ключевое право высшей роли', value = member.top_role.permissions[0], inline = False)
     emb.set_thumbnail(url = member.avatar_url)
     await ctx.send(embed = emb)
 
@@ -2494,7 +2503,6 @@ async def about(ctx, member: discord.Member = None):
     if len(member.roles) != 1:
         emb.add_field(name = f'Роли ({len(member.roles)-1})', value = roles, inline = False)
         emb.add_field(name = 'Высшая Роль', value = member.top_role.mention, inline = False)
-        emb.add_field(namw = 'Ключевое право высшей роли', value = member.top_role.permissions[0], inline = False)
     emb.set_thumbnail(url = member.avatar_url)
     if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
@@ -3100,6 +3108,10 @@ async def edit(ctx, arg, *, msg = None):
 #Embeds
 
 #Cephalon
+@client.command() #ru, en, gnida
+async def locale(ctx, locale):
+    pass
+
 @client.command()
 async def setup(ctx):
     role3 = discord.utils.get(ctx.guild.roles, name = '----------Предупреждения----------')
