@@ -34,7 +34,7 @@ async def on_ready():
         }
     if collection.count_documents({'_id': guild.id}) == 0:
         collection.insert_one(post)
-        
+
 time_regex = re.compile(r"(?:(\d{1,5})(h|s|m|d))+?")
 time_dict = {'h': 3600, 's': 1, 'm': 60, 'd': 86400}
 
