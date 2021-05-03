@@ -3115,7 +3115,7 @@ async def edit(ctx, arg, *, msg = None):
 
 #Cephalon
 @client.command() #ru, gnida
-async def locale(ctx, locale == None):
+async def locale(ctx, locale = None):
     if locale == 'gnida':
         if collection.find_one({"locale": 'gnida'}):
             await ctx.send('Ты чё, ебанутый? Локаль **уже** стоит на `gnida`!')
