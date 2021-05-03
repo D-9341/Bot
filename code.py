@@ -256,8 +256,8 @@ async def on_guild_remove(guild):
             '_id': guild.id,
             'locale': 'ru'
         }
-    if collection.count_documents({'_id': guild.id}) == 0:
-        collection.insert_one(post)
+    if collection.count_documents({'_id': guild.id}) == 1:
+        collection.delete_one(post)
     channel = client.get_channel(714175791033876490)
     emb = discord.Embed(title = 'ВЫХОД\_С_СЕРВЕРА', colour = discord.Color.orange(), timestamp = datetime.datetime.utcnow()) # CLIENT_LEFT_SERVER
     emb.add_field(name = 'СЕРВЕР', value = guild.name) # SERVER
@@ -3117,7 +3117,7 @@ async def edit(ctx, arg, *, msg = None):
 @client.command() #ru, gnida
 async def locale(ctx, locale = None):
     if locale == 'gnida':
-        rlocale = collection.find_one({"_id": ctx.guild.id})
+        rlocale = collection.find_one({"_id": ctx.guild.id})["locale"]
         collection.update_one({"locale": 'ru', '_id': ctx.guild.id}, {"$set": {'locale': 'gnida'}})
         await ctx.send('Твоя ёбаная локаль была установлена на `gnida`!')
     if locale == 'ru':
@@ -3126,6 +3126,14 @@ async def locale(ctx, locale = None):
         await ctx.send('Ваша локаль была установлена на `ru`.')
     if locale == None:
         await ctx.send('Возможные локали:\nru\ngnida\n\nПри установке локали на `gnida` будут прикольные штуки!')
+        
+@client.command()
+async def locale_test(ctx):
+    rlocale = collection.find_one({"_id": ctx.guild.id})["locale"]
+    if rlocale == 'ru':
+        await ctx.send('Ваша локаль `ru`')
+    if rlocale == 'gnida':
+        await ctx.send('Твоя ёбаная локаль `gnida`')
         
 @client.command()
 async def setup(ctx):
