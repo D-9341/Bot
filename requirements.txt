@@ -5,4 +5,4 @@ aiohttp
 websockets
 chardet
 asyncpg
-pymongo
+pymongo[srv]
