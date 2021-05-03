@@ -3114,10 +3114,23 @@ async def edit(ctx, arg, *, msg = None):
 #Embeds
 
 #Cephalon
-@client.command() #ru, en, gnida
-async def locale(ctx, locale):
-    pass
-
+@client.command() #ru, gnida
+async def locale(ctx, locale == None):
+    if locale == 'gnida':
+        if collection.find_one({"locale": 'gnida'}):
+            await ctx.send('Ты чё, ебанутый? Локаль **уже** стоит на `gnida`!')
+        else:
+            collection.update_one({"locale": 'ru'}, {"$set": {'locale': 'gnida'}})
+            await ctx.send('Твоя ёбаная локаль была установлена на `gnida`!')
+    if locale == 'ru':
+        if collection.find_one({'locale': 'ru'}):
+            await ctx.send('Ваша локаль уже установлена на `ru`.')
+        else:
+            collection.update_one({"locale": 'gnida'}, {"$set": {'locale': 'ru'}})
+            await ctx.send('Ваша локаль была установлена на `ru`.')
+    if locale == None:
+        await ctx.send('Возможные локали:\nru\ngnida\nПри установке локали на `gnida` будут прикольные штуки!')
+        
 @client.command()
 async def setup(ctx):
     role3 = discord.utils.get(ctx.guild.roles, name = '----------Предупреждения----------')
