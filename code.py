@@ -3117,13 +3117,13 @@ async def edit(ctx, arg, *, msg = None):
 @client.command() #ru, gnida
 async def locale(ctx, locale = None):
     if locale == 'gnida':
-        if collection.find_one({"locale": 'gnida'}):
+        if collection.find_one({"locale": 'gnida'}, {'_id': ctx.guild.id}):
             await ctx.send('Ты чё, ебанутый? Локаль **уже** стоит на `gnida`!')
         else:
             collection.update_one({"locale": 'ru'}, {"$set": {'locale': 'gnida'}})
             await ctx.send('Твоя ёбаная локаль была установлена на `gnida`!')
     if locale == 'ru':
-        if collection.find_one({'locale': 'ru'}):
+        if collection.find_one({'locale': 'ru'}, {'_id': ctx.guild.id}):
             await ctx.send('Ваша локаль уже установлена на `ru`.')
         else:
             collection.update_one({"locale": 'gnida'}, {"$set": {'locale': 'ru'}})
