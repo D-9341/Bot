@@ -2350,6 +2350,7 @@ async def roleinfo(ctx, *, role: discord.Role):
     d = role.created_at.strftime('%d.%m.%Y %H:%M:%S GMT')
     emb.add_field(name = 'Создана', value = f'{delta.days} дня(ей) назад. ({d})', inline = False)
     emb.add_field(name = 'Показывает участников отдельно?', value = role.hoist)
+    emb.add_field(namw = 'Ключевое право', value = role.permissions[0], inline = False)
     if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
     await ctx.send(embed = emb)
@@ -2441,9 +2442,10 @@ async def _about(ctx, member: discord.Member = None):
     if limit != 1:
         emb.add_field(name = f'Роли ({len(member.roles)-1})', value = roles, inline = False)
         emb.add_field(name = 'Высшая Роль', value = member.top_role.mention, inline = False)
+        emb.add_field(namw = 'Ключевое право высшей роли', value = member.top_role.permissions[0], inline = False)
     emb.set_thumbnail(url = member.avatar_url)
     await ctx.send(embed = emb)
-    
+
 @client.command(aliases = ['me', 'Me', 'ME', 'About', 'ABOUT'])
 @commands.cooldown(1, 5, commands.BucketType.user)
 async def about(ctx, member: discord.Member = None):
@@ -2492,6 +2494,7 @@ async def about(ctx, member: discord.Member = None):
     if len(member.roles) != 1:
         emb.add_field(name = f'Роли ({len(member.roles)-1})', value = roles, inline = False)
         emb.add_field(name = 'Высшая Роль', value = member.top_role.mention, inline = False)
+        emb.add_field(namw = 'Ключевое право высшей роли', value = member.top_role.permissions[0], inline = False)
     emb.set_thumbnail(url = member.avatar_url)
     if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
