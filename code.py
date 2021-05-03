@@ -3507,7 +3507,7 @@ async def on_command_error(ctx, error):
         eemb.add_field(name = 'Сервер', value = ctx.guild.name)
         eemb.add_field(name = 'Вызвавший ошибку', value = f'{ctx.author.mention} ({ctx.author.name})', inline = False)
         eemb.add_field(name = 'Команда', value = ctx.command.name, inline = False)
-        eemb.add_field(name = 'Оставалось времени', value = s * 1000, inline = False)
+        eemb.add_field(name = 'Оставалось времени', value = round(s), inline = False)
         await channel.send(embed = eemb)
     elif isinstance(error, commands.MissingRequiredArgument):
         if ctx.command.name == 'clear':
