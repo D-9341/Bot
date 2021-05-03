@@ -516,12 +516,16 @@ async def on_message_edit(before, after):
 #Events
 
 #Mod
-@slash.slash(name = 'dm', description = 'Пишет в лс человеку от имени бота написанный вами текст', options = [{'name': 'Member', 'description': 'Участник', 'required': True, 'type': 6}, {'name': 'text', 'description': 'Текст для написания', 'required': True, 'type': 3}])
+@slash.slash(name = 'dm', description = 'Пишет в лс человеку от имени бота написанный текст', options = [{'name': 'Member', 'description': 'Участник', 'required': True, 'type': 6}, {'name': 'text', 'description': 'Текст для написания', 'required': True, 'type': 3}])
 async def _dm(ctx, member: discord.User, *, text):
     emb = discord.Embed(description = f'{text}', colour = 0x2f3136)
     emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
     await member.send(embed = emb)
-    await ctx.send('Сообщение отправлено.', delete_after = 3)
+    rlocale = collection.find_one({"_id": ctx.guild.id})["locale"]
+    if rlocale == 'ru':
+        await ctx.send('Сообщение отправлено.')
+    if rlocale == 'gnida':
+        await ctx.send('Твоя хуйня отправлена')
 
 @client.command()
 @commands.has_permissions(view_audit_log = True)
@@ -530,7 +534,11 @@ async def dm(ctx, member: discord.User, *, text):
     emb = discord.Embed(description = f'{text}', colour = 0x2f3136)
     emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
     await member.send(embed = emb)
-    await ctx.send(f'Сообщение отправлено.', delete_after = 3)
+    rlocale = collection.find_one({"_id": ctx.guild.id})["locale"]
+    if rlocale == 'ru':
+        await ctx.send('Сообщение отправлено.')
+    if rlocale == 'gnida':
+        await ctx.send('Твоя хуйня отправлена')
 
 @slash.slash(name = 'kick', description = 'Выгоняет участника с сервера', options = [{'name': 'Member', 'description': 'Участник', 'required': True, 'type': 6}, {'name': 'reason', 'description': 'Причина', 'required': False, 'type': 3}])
 async def _kick(ctx, member: discord.Member, *, reason = None):
@@ -2620,10 +2628,17 @@ async def dotersbrain(ctx):
 @client.command()
 @commands.cooldown(1, 3, commands.BucketType.user)
 async def niggers(ctx):
-    emb = discord.Embed(description = '[осуждающее видео](https://www.youtube.com/watch?v=167apVK8Suw)', colour = discord.Color.orange())
-    if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
-        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-    await ctx.send(embed = emb)
+    rlocale = collection.find_one({"_id": ctx.guild.id})["locale"]
+    if rlocale == 'ru':
+        emb = discord.Embed(description = '[осуждающее видео](https://www.youtube.com/watch?v=167apVK8Suw)', colour = discord.Color.orange())
+        if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
+            emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+        await ctx.send(embed = emb)
+    if rlocale == 'gnida'
+        emb = discord.Embed(description = '[негры пидарасы, и извинятся за это не буду!](https://www.youtube.com/watch?v=167apVK8Suw)', colour = discord.Color.orange())
+        if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
+            emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+        await ctx.send(embed = emb)
 
 @client.command()
 @commands.cooldown(1, 3, commands.BucketType.user)
@@ -3343,7 +3358,7 @@ async def _botver(ctx, version = None):
 async def _help(ctx, arg = None):
     if arg == None:
         emb = discord.Embed(title = client.user.name, description = 'Вот команды, что я могу исполнить.', colour = discord.Color.orange())
-        emb.add_field(name = 'Cephalon', value = '`botver`, `info`, `invite`, `join`, `leave`, `ping`', inline = False)
+        emb.add_field(name = 'Cephalon', value = '`botver`, `info`, `invite`, `join`, `leave`, `locale`, `ping`', inline = False)
         emb.add_field(name = 'Embeds', value = '`content`, `edit`, `say`', inline = False)
         emb.add_field(name = 'Fun', value = '`aye_balbec`, `cu`, `coinflip`, `dotersbrain`, `niggers`, `rp`, `rap`, `zatka`', inline = False)
         emb.add_field(name = 'Mod', value = '`ban`, `clear`, `dm`, `give`, `kick`, `mute`, `take`, `unmute`', inline = False)
@@ -3352,6 +3367,8 @@ async def _help(ctx, arg = None):
         emb.add_field(name = 'ᅠ', value = '**Используйте** `cy/help [команда/категория]` **для подробностей использования.**\n\n**[Ссылка-приглашение](https://discord.com/api/oauth2/authorize?client_id=694170281270312991&permissions=8&scope=bot%20applications.commands)**', inline = False)
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
+    elif arg == 'locale':
+        await ctx.send('```apache\ncy/locale [ru/gnida]\n([] - опционально)```')
     elif arg == 'setup':
         await ctx.send('```apache\ncy/setup\nвыполнение команды создаст 4 роли, если их нет на сервере.\nбудет выполнено автоматически, если сработает авто-мут.```')
     elif arg == 'roll':
@@ -3414,7 +3431,7 @@ async def _help(ctx, arg = None):
 async def help(ctx, arg = None):
     if arg == None:
         emb = discord.Embed(title = client.user.name, description = f'Вот команды, что я могу исполнить.', colour = discord.Color.orange())
-        emb.add_field(name = 'Cephalon', value = '`botver`, `info`, `invite`, `join`, `leave`, `ping`, `setup`', inline = False)
+        emb.add_field(name = 'Cephalon', value = '`botver`, `info`, `invite`, `join`, `leave`, `locale`, `ping`, `setup`', inline = False)
         emb.add_field(name = 'Embeds', value = '`content`, `edit`, `say`', inline = False)
         emb.add_field(name = 'Fun', value = '`aye_balbec`, `cu`, `coinflip`, `dotersbrain`, `niggers`, `rp`, `rap`, `roll`, `zatka`', inline = False)
         emb.add_field(name = 'Mod', value = '`ban`, `clear`, `dm`, `give`, `kick`, `mute`, `take`, `unmute`', inline = False)
@@ -3423,6 +3440,8 @@ async def help(ctx, arg = None):
         emb.add_field(name = 'ᅠ', value = '**Используйте** `cy/help [команда/категория]` **для подробностей использования.**\n\n**[Ссылка-приглашение](https://discord.com/api/oauth2/authorize?client_id=694170281270312991&permissions=8&scope=bot%20applications.commands)**', inline = False)
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
+    elif arg == 'locale':
+        await ctx.send('```apache\nlocale [ru/gnida]\n([] - опционально)```')
     elif arg == 'setup':
         await ctx.send('```apache\ncy/setup\nвыполнение команды создаст 4 роли, если их нет на сервере.\nбудет выполнено автоматически, если сработает авто-мут.```')
     elif arg == 'roll':
