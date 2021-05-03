@@ -3117,19 +3117,15 @@ async def edit(ctx, arg, *, msg = None):
 @client.command() #ru, gnida
 async def locale(ctx, locale = None):
     if locale == 'gnida':
-        if collection.find_one({"locale": 'gnida'}, {'_id': ctx.guild.id}):
-            await ctx.send('Ты чё, ебанутый? Локаль **уже** стоит на `gnida`!')
-        else:
-            collection.update_one({"locale": 'ru'}, {"$set": {'locale': 'gnida'}})
-            await ctx.send('Твоя ёбаная локаль была установлена на `gnida`!')
+        rlocale = collection.find_one({"_id": ctx.guild.id})
+        collection.update_one({"locale": 'ru', '_id': ctx.guild.id}, {"$set": {'locale': 'gnida'}})
+        await ctx.send('Твоя ёбаная локаль была установлена на `gnida`!')
     if locale == 'ru':
-        if collection.find_one({'locale': 'ru'}, {'_id': ctx.guild.id}):
-            await ctx.send('Ваша локаль уже установлена на `ru`.')
-        else:
-            collection.update_one({"locale": 'gnida'}, {"$set": {'locale': 'ru'}})
-            await ctx.send('Ваша локаль была установлена на `ru`.')
+        glocale = collection.find_one({"_id": ctx.guild.id})["locale"]
+        collection.update_one({"locale": 'gnida', '_id': ctx.guild.id}, {"$set": {'locale': 'ru'}})
+        await ctx.send('Ваша локаль была установлена на `ru`.')
     if locale == None:
-        await ctx.send('Возможные локали:\nru\ngnida\nПри установке локали на `gnida` будут прикольные штуки!')
+        await ctx.send('Возможные локали:\nru\ngnida\n\nПри установке локали на `gnida` будут прикольные штуки!')
         
 @client.command()
 async def setup(ctx):
