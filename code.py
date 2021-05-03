@@ -29,8 +29,8 @@ async def on_ready():
     await channel.send(embed = emb)
     for guild in client.guilds:
         post = {
-            '_id': guild.id
-            'locale': 'ru',
+            '_id': guild.id,
+            'locale': 'ru'
         }
     if collection.count_documents({'_id': guild.id}) == 0:
         collection.insert_one(post)
