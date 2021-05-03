@@ -2634,7 +2634,7 @@ async def niggers(ctx):
         if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
             emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
-    if rlocale == 'gnida'
+    if rlocale == 'gnida':
         emb = discord.Embed(description = '[негры пидарасы, и извинятся за это не буду!](https://www.youtube.com/watch?v=167apVK8Suw)', colour = discord.Color.orange())
         if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
             emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
