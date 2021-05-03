@@ -210,20 +210,12 @@ async def on_member_join(member):
     await lchannel.send(embed = emb)
     if member.bot == False:
         role = discord.utils.get(member.guild.roles, id = 693933516294979704)
-        role1 = discord.utils.get(member.guild.roles, id = 775265053162209300)
-        role2 = discord.utils.get(member.guild.roles, id = 693933511412940800)
         if member.guild.id == 693929822543675455 and member.bot == False:
             channel = client.get_channel(693929823030214658)
             emb = discord.Embed(description = f'{member.mention} ({member.name}) пришёл к нам!', colour = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
             await channel.send(embed = emb)
             if role != None:
-                await member.add_roles(role, role1, role2)
-                emb1 = discord.Embed(title = 'ВЫДАЧА\_РОЛЕЙ\_ЧЕРЕЗ\_АВТО_РОЛЬ', colour = discord.Color.orange(), timestamp = datetime.datetime.utcnow()) # AUTO_ROLES_ADDED
-                emb1.add_field(name = 'УЧАСТНИК', value = member) # MEMBER
-                emb1.add_field(name = 'УПОМИНАНИЕ', value = member.mention) # MENTION
-                emb1.add_field(name = 'РОЛИ', value = f'{role.mention}, {role1.mention}, {role2.mention}') # ROLES
-                emb1.set_footer(text = f'ID: {member.id}')
-                await lchannel.send(embed = emb1)
+                await member.add_roles(role)
         if member.guild.id == 818758712163827723:
             role = discord.utils.get(member.guild.roles, id = 818762863287074826)
             await member.add_roles(role)
@@ -259,6 +251,13 @@ async def on_member_remove(member):
 
 @client.event
 async def on_guild_remove(guild):
+    for guild in client.guilds:
+        post = {
+            '_id': guild.id,
+            'locale': 'ru'
+        }
+    if collection.count_documents({'_id': guild.id}) == 0:
+        collection.insert_one(post)
     channel = client.get_channel(714175791033876490)
     emb = discord.Embed(title = 'ВЫХОД\_С_СЕРВЕРА', colour = discord.Color.orange(), timestamp = datetime.datetime.utcnow()) # CLIENT_LEFT_SERVER
     emb.add_field(name = 'СЕРВЕР', value = guild.name) # SERVER
@@ -267,6 +266,13 @@ async def on_guild_remove(guild):
 
 @client.event
 async def on_guild_join(guild):
+    for guild in client.guilds:
+        post = {
+            '_id': guild.id,
+            'locale': 'ru'
+        }
+    if collection.count_documents({'_id': guild.id}) == 0:
+        collection.insert_one(post)
     channel = client.get_channel(714175791033876490)
     emb = discord.Embed(title = 'ДОБАВЛЕНИЕ\_НА_СЕРВЕР', colour = discord.Color.orange(), timestamp = datetime.datetime.utcnow()) # CLIENT_ADDED_TO_SERVER
     emb.add_field(name = 'СЕРВЕР', value = guild.name) # SERVER
