@@ -883,7 +883,7 @@ async def _give(ctx, member: discord.Member, *, role: discord.Role):
         await ctx.send(embed = emb)
         
 @client.command(aliases = ['Give', 'GIVE'])
-@command.has_permissions(manage_channels = True)
+@commands.has_permissions(manage_channels = True)
 async def give(ctx, member: discord.Member, *, role: discord.Role):
     if role.name == 'Muted':
         if member.id != client.owner_id:
@@ -975,7 +975,7 @@ async def _take(ctx, member: discord.Member, *, role: discord.Role):
         await ctx.send(embed = emb)
             
 @client.command(aliases = ['Take', 'TAKE'])
-@command.has_permissions(manage_channels = True)
+@commands.has_permissions(manage_channels = True)
 async def take(ctx, member: discord.Member, *, role: discord.Role):
         if role != None:
             bot = ctx.guild.get_member(client.user.id)
