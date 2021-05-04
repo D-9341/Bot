@@ -27,17 +27,13 @@ async def on_ready():
     emb = discord.Embed(description = 'В сети, поверхностная проверка не выявила ошибок.', color = 0x2f3136, timestamp = datetime.datetime.utcnow())
     emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
     await channel.send(embed = emb)
-    for guild in client.guilds: # локали
-        for member in guild.members:
-            if member.bot == True:
-                return
-            else:
-                post = { 
-                    '_id': member.id,
-                    'locale': 'ru'
-                }
-            if collection.count_documents({'_id': member.id}) == 0:
-                collection.insert_one(post)
+    for guild in client.guilds:
+        post = {
+            '_id': guild.id,
+            'locale': 'ru'
+        }
+    if collection.count_documents({'_id': guild.id}) == 0:
+        collection.insert_one(post)
 
 time_regex = re.compile(r"(?:(\d{1,5})(h|s|m|d))+?")
 time_dict = {'h': 3600, 's': 1, 'm': 60, 'd': 86400}
@@ -201,17 +197,6 @@ async def on_member_update(before, after):
 
 @client.event
 async def on_member_join(member):
-    for guild in client.guilds:
-        for member in guild.members:
-            if member.bot == True:
-                return
-            else:
-                post = {
-                    '_id': member.id,
-                    'locale': 'ru'
-                }
-            if collection.count_documents({'_id': member.id}) == 0:
-                collection.insert_one(post)
     if member.bot == False:
         chmo = 'УЧАСТНИК' # MEMBER
     else:
@@ -244,14 +229,6 @@ async def on_member_join(member):
 
 @client.event
 async def on_member_remove(member):
-    for guild in client.guilds:
-        for member in guild.members:
-            post = {
-                '_id': member.id,
-                'locale': 'ru'
-            }
-        if collection.count_documents({'_id': member.id}) == 1:
-            collection.remove_one(post)
     if member.bot == False:
         chmo = 'УЧАСТНИК' # MEMBER
     else:
@@ -275,7 +252,12 @@ async def on_member_remove(member):
 @client.event
 async def on_guild_remove(guild):
     for guild in client.guilds:
-        pass #задел на будущее
+        post = {
+            '_id': guild.id,
+            'locale': 'ru'
+        }
+    if collection.count_documents({'_id': guild.id}) == 1:
+        collection.delete_one(post)
     channel = client.get_channel(714175791033876490)
     emb = discord.Embed(title = 'ВЫХОД\_С_СЕРВЕРА', colour = discord.Color.orange(), timestamp = datetime.datetime.utcnow()) # CLIENT_LEFT_SERVER
     emb.add_field(name = 'СЕРВЕР', value = guild.name) # SERVER
@@ -285,7 +267,12 @@ async def on_guild_remove(guild):
 @client.event
 async def on_guild_join(guild):
     for guild in client.guilds:
-        pass
+        post = {
+            '_id': guild.id,
+            'locale': 'ru'
+        }
+    if collection.count_documents({'_id': guild.id}) == 0:
+        collection.insert_one(post)
     channel = client.get_channel(714175791033876490)
     emb = discord.Embed(title = 'ДОБАВЛЕНИЕ\_НА_СЕРВЕР', colour = discord.Color.orange(), timestamp = datetime.datetime.utcnow()) # CLIENT_ADDED_TO_SERVER
     emb.add_field(name = 'СЕРВЕР', value = guild.name) # SERVER
@@ -3145,17 +3132,19 @@ async def edit(ctx, arg, *, msg = None):
 @client.command() #ru, gnida
 async def locale(ctx, locale = None):
     if locale == 'gnida':
-        collection.update_one({"locale": 'ru', '_id': ctx.author.id}, {"$set": {'locale': 'gnida'}})
+        rlocale = collection.find_one({"_id": ctx.guild.id})["locale"]
+        collection.update_one({"locale": 'ru', '_id': ctx.guild.id}, {"$set": {'locale': 'gnida'}})
         await ctx.send('Твоя ёбаная локаль была установлена на `gnida`!')
     if locale == 'ru':
-        collection.update_one({"locale": 'gnida', '_id': ctx.author.id}, {"$set": {'locale': 'ru'}})
+        glocale = collection.find_one({"_id": ctx.guild.id})["locale"]
+        collection.update_one({"locale": 'gnida', '_id': ctx.guild.id}, {"$set": {'locale': 'ru'}})
         await ctx.send('Ваша локаль была установлена на `ru`.')
     if locale == None:
         await ctx.send('Возможные локали:\nru\ngnida\n\nПри установке локали на `gnida` будут прикольные штуки!')
         
 @client.command()
 async def locale_test(ctx):
-    rlocale = collection.find_one({"_id": ctx.author.id})["locale"]
+    rlocale = collection.find_one({"_id": ctx.guild.id})["locale"]
     if rlocale == 'ru':
         await ctx.send('Ваша локаль `ru`')
     if rlocale == 'gnida':
