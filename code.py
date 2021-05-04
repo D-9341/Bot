@@ -3131,27 +3131,47 @@ async def edit(ctx, arg, *, msg = None):
 #Cephalon
 @client.command() #ru, gnida
 async def locale(ctx, locale = None):
-    if locale == 'gnida':
+    if ctx.author.id == ctx.guild.owner.id:
+        if locale == 'gnida':
+            rlocale = collection.find_one({"_id": ctx.guild.id})["locale"]
+            collection.update_one({"locale": 'ru', '_id': ctx.guild.id}, {"$set": {'locale': 'gnida'}})
+            await ctx.send('Твоя ёбаная локаль была установлена на `gnida`!')
+        if locale == 'ru':
+            glocale = collection.find_one({"_id": ctx.guild.id})["locale"]
+            collection.update_one({"locale": 'gnida', '_id': ctx.guild.id}, {"$set": {'locale': 'ru'}})
+            await ctx.send('Ваша локаль была установлена на `ru`.')
+        if locale == None:
+            await ctx.send('Возможные локали:\nru\ngnida\n\nПри установке локали на `gnida` будут прикольные штуки!\n\nЛокаль изменяется на весь сервер, это означает то, что у каждого пользователя будет использоваться одна из локалей')
+    else:
         rlocale = collection.find_one({"_id": ctx.guild.id})["locale"]
-        collection.update_one({"locale": 'ru', '_id': ctx.guild.id}, {"$set": {'locale': 'gnida'}})
-        await ctx.send('Твоя ёбаная локаль была установлена на `gnida`!')
-    if locale == 'ru':
-        glocale = collection.find_one({"_id": ctx.guild.id})["locale"]
-        collection.update_one({"locale": 'gnida', '_id': ctx.guild.id}, {"$set": {'locale': 'ru'}})
-        await ctx.send('Ваша локаль была установлена на `ru`.')
-    if locale == None:
-        await ctx.send('Возможные локали:\nru\ngnida\n\nПри установке локали на `gnida` будут прикольные штуки!')
+        if rlocale == 'ru':
+            await ctx.send('Только владелец сервера может изменять локали.')
+        if rlocale == 'gnida':
+            await ctx.send(f'Пошёл нахуй, только {ctx.guild.owner.mention} может менять локали!')
         
 @client.command()
 async def locale_test(ctx):
     rlocale = collection.find_one({"_id": ctx.guild.id})["locale"]
+    if rlocale == None:
+        post = {
+            '_id': ctx.guild.id,
+            'locale': 'ru'
+        }
+        if collection.count_documents({'_id': ctx.guild.id}) == 0:
+            collection.insert_one(post)
     if rlocale == 'ru':
-        await ctx.send('Ваша локаль `ru`')
+        await ctx.send('Серверная локаль `ru`')
     if rlocale == 'gnida':
-        await ctx.send('Твоя ёбаная локаль `gnida`')
+        await ctx.send('Ёбаная локаль `gnida`')
         
 @client.command()
 async def setup(ctx):
+    post = {
+        '_id': ctx.guild.id,
+        'locale': 'ru'
+    }
+    if collection.count_documents({'_id': ctx.guild.id}) == 0:
+        collection.insert_one(post)
     role3 = discord.utils.get(ctx.guild.roles, name = '----------Предупреждения----------')
     role1 = discord.utils.get(ctx.guild.roles, name = '1')
     role2 = discord.utils.get(ctx.guild.roles, name = '2')
@@ -3159,7 +3179,7 @@ async def setup(ctx):
     if role and role1 and role2 and role3 != None:
         emb = discord.Embed(description = 'Все нужные роли уже присутсвуют на сервере.', color = discord.Color.orange())
         return await ctx.send(embed = emb)
-    emb = discord.Embed(description = 'С написанием этой команды на сервер будут добавлены несколько ролей, если их нет (4). Они нужны для правильной работы авто и обычного мута. Не следует их изменять или удалять, так как они будут созданы снова, из-за чего будет много одинаковых ролей.', color = discord.Color.orange())
+    emb = discord.Embed(description = 'С написанием этой команды на сервер будут добавлены несколько ролей, если их нет. Они нужны для правильной работы авто и обычного мута. Не следует их удалять, так как они будут созданы снова, но уже автоматически.', color = discord.Color.orange())
     await ctx.send(embed = emb)
     if role == None:
         await ctx.guild.create_role(name = 'Muted', colour = discord.Colour(0x000001), reason = 'Создано командой setup.')
