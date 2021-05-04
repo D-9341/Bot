@@ -14,7 +14,7 @@ from discord.ext import commands
 from discord.utils import get
 from discord_slash import SlashCommand, SlashContext
 
-client = commands.Bot(command_prefix = commands.when_mentioned_or('cy/'), intents = discord.Intents.all(), owner_id = 338714886001524737, status = discord.Status.idle, activity = discord.Activity(type = discord.ActivityType.watching, name = 'Slash Commands'))
+client = commands.Bot(command_prefix = commands.when_mentioned_or('cy/'), intents = discord.Intents.all(), owner_id = 338714886001524737, status = discord.Status.idle, activity = discord.Activity(type = discord.ActivityType.watching, name = 'Slash Commands'), allowed_mentions = discord.AllowedMentions.none())
 client.remove_command('help')
 slash = SlashCommand(client, sync_commands = True)
 passw = os.environ.get('passw')
@@ -542,62 +542,117 @@ async def dm(ctx, member: discord.User, *, text):
 
 @slash.slash(name = 'kick', description = 'Выгоняет участника с сервера', options = [{'name': 'Member', 'description': 'Участник', 'required': True, 'type': 6}, {'name': 'reason', 'description': 'Причина', 'required': False, 'type': 3}])
 async def _kick(ctx, member: discord.Member, *, reason = None):
+    rlocale = collection.find_one({"_id": ctx.guild.id})["locale"]
     bot = discord.utils.get(ctx.guild.members, id = client.user.id)
     if member.id != 338714886001524737:
         if reason == None:
-            reason = 'Не указана.'
+            if rlocale == 'ru':
+                reason = 'Не указана.'
+            if rlocale == 'gnida':
+                reason = 'Я не ебу'
         if ctx.author.top_role == member.top_role:
-            emb = discord.Embed(description = f'{ctx.author.mention}, ваша высшая роль равна высшей роли {member.mention}. Кик отклонён.', colour = discord.Color.orange())
-            await ctx.send(embed = emb)
+            if rlocale == 'ru':
+                emb = discord.Embed(description = f'{ctx.author.mention}, ваша высшая роль равна высшей роли {member.mention}. Кик отклонён.', colour = discord.Color.orange())
+                await ctx.send(embed = emb)
+            if rlocale == 'gnida':
+                emb = discord.Embed(description = f'Твоя высшая роль равна высшей роли {member.mention}. Пошёл нахуй.', colour = discord.Color.orange())
+                await ctx.send(embed = emb)
         elif member.top_role > ctx.author.top_role:
+            if rlocale == 'ru':
                 emb = discord.Embed(description = f'{ctx.author.mention}, ваша высшая роль ниже высшей роли {member.mention}. Кик отклонён.', colour = discord.Color.orange())
                 await ctx.send(embed = emb)
+            if rlocale == 'gnida':
+                emb = discord.Embed(description = f'Твоя высшая роль ниже высшей роли {member.mention}. Пошёл нахуй.', colour = discord.Color.orange())
+                await ctx.send(embed = emb)
         elif member.top_role > bot.top_role:
-            emb = discord.Embed(description = f'МОЯ высшая роль ниже высшей роли {member.mention}. Кик невозможен.', color = 0xff0000)
-            await ctx.send(embed = emb)
+            if rlocale == 'ru':
+                emb = discord.Embed(description = f'МОЯ высшая роль ниже высшей роли {member.mention}. Кик невозможен.', color = 0xff0000)
+                await ctx.send(embed = emb)
+            if locale == 'gnida':
+                emb = discord.Embed(description = f'МОЯ высшая роль ниже высшей роли {member.mention}. Сука.', color = 0xff0000)
+                await ctx.send(embed = emb)
         elif member.top_role == bot.top_role:
-            emb = discord.Embed(description = f'МОЯ высшая роль идентична высшей роли {member.mention}. Кик невозможен.', color = 0xff0000)
-            await ctx.send(embed = emb)
+            if rlocale == 'ru':
+                emb = discord.Embed(description = f'МОЯ высшая роль идентична высшей роли {member.mention}. Кик невозможен.', color = 0xff0000)
+                await ctx.send(embed = emb)
+            if locale == 'gnida':
+                emb = discord.Embed(description = f'МОЯ высшая роль идентична высшей роли {member.mention}. Сука.', color = 0xff0000)
+                await ctx.send(embed = emb)
         else:
             emb = discord.Embed(colour = member.color)
             emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
             emb.add_field(name = 'Был кикнут', value = member.mention)
             emb.add_field(name = 'По причине', value = reason)
+            if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
+                emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
             await ctx.send(embed = emb)
             await member.kick(reason = reason)
     else:
-        emb = discord.Embed(description = f'Извините, {ctx.author.mention}, но вы не можете кикнуть моего создателя!', colour = discord.Color.orange())
-        await ctx.send(embed = emb)
+        if rlocale == 'ru':
+            emb = discord.Embed(description = f'Извините, {ctx.author.mention}, но вы не можете кикнуть моего создателя!', colour = discord.Color.orange())
+            await ctx.send(embed = emb)
+        if rlocale == 'gnida':
+            emb = discord.Embed(description = 'Ого! Пошёл нахуй!', colour = discord.Color.orange())
+            await ctx.send(embed = emb)
     
 @client.command(aliases = ['Kick', 'KICK'])
 @commands.cooldown(1, 10, commands.BucketType.user)
 @commands.has_permissions(kick_members = True)
 async def kick(ctx, member: discord.Member, *, reason = None):
+    rlocale = collection.find_one({"_id": ctx.guild.id})["locale"]
+    bot = discord.utils.get(ctx.guild.members, id = client.user.id)
     if member.id != 338714886001524737:
         if reason == None:
-            reason = 'Не указана.'
-        if ctx.author.top_role == member.top_role and ctx.message.author.id != 338714886001524737:
-            emb = discord.Embed(description = f'{ctx.author.mention}, ваша высшая роль равна высшей роли {member.mention}. Кик отклонён.', colour = discord.Color.orange())
-            if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
-                emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-            await ctx.send(embed = emb)
-        elif member.top_role > ctx.author.top_role and ctx.message.author.id != 338714886001524737:
+            if rlocale == 'ru':
+                reason = 'Не указана.'
+            if rlocale == 'gnida':
+                reason = 'Я не ебу'
+        if ctx.author.top_role == member.top_role:
+            if rlocale == 'ru':
+                emb = discord.Embed(description = f'{ctx.author.mention}, ваша высшая роль равна высшей роли {member.mention}. Кик отклонён.', colour = discord.Color.orange())
+                if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
+                    emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+                await ctx.send(embed = emb)
+            if rlocale == 'gnida':
+                emb = discord.Embed(description = f'Твоя высшая роль равна высшей роли {member.mention}. Пошёл нахуй.', colour = discord.Color.orange())
+                if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
+                    emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+                await ctx.send(embed = emb)
+        elif member.top_role > ctx.author.top_role:
+            if rlocale == 'ru':
                 emb = discord.Embed(description = f'{ctx.author.mention}, ваша высшая роль ниже высшей роли {member.mention}. Кик отклонён.', colour = discord.Color.orange())
                 if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
                     emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
                 await ctx.send(embed = emb)
+            if rlocale == 'gnida':
+                emb = discord.Embed(description = f'Твоя высшая роль ниже высшей роли {member.mention}. Пошёл нахуй.', colour = discord.Color.orange())
+                if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
+                    emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+                await ctx.send(embed = emb)
         elif member.top_role > bot.top_role:
-            emb = discord.Embed(description = f'МОЯ высшая роль ниже высшей роли {member.mention}. Кик невозможен.', color = 0xff0000)
-            if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
-                emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-            await ctx.send(embed = emb)
+            if rlocale == 'ru':
+                emb = discord.Embed(description = f'МОЯ высшая роль ниже высшей роли {member.mention}. Кик невозможен.', color = 0xff0000)
+                if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
+                    emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+                await ctx.send(embed = emb)
+            if locale == 'gnida':
+                emb = discord.Embed(description = f'МОЯ высшая роль ниже высшей роли {member.mention}. Сука.', color = 0xff0000)
+                if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
+                    emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+                await ctx.send(embed = emb)
         elif member.top_role == bot.top_role:
-            emb = discord.Embed(description = f'МОЯ высшая роль идентична высшей роли {member.mention}. Кик невозможен.', color = 0xff0000)
-            if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
-                emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-            await ctx.send(embed = emb)
+            if rlocale == 'ru':
+                emb = discord.Embed(description = f'МОЯ высшая роль идентична высшей роли {member.mention}. Кик невозможен.', color = 0xff0000)
+                if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
+                    emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+                await ctx.send(embed = emb)
+            if locale == 'gnida':
+                emb = discord.Embed(description = f'МОЯ высшая роль идентична высшей роли {member.mention}. Сука.', color = 0xff0000)
+                if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
+                    emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+                await ctx.send(embed = emb)
         else:
-            emb = discord.Embed(colour = 0x2f3136)
+            emb = discord.Embed(colour = member.color)
             emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
             emb.add_field(name = 'Был кикнут', value = member.mention)
             emb.add_field(name = 'По причине', value = reason)
@@ -606,32 +661,58 @@ async def kick(ctx, member: discord.Member, *, reason = None):
             await ctx.send(embed = emb)
             await member.kick(reason = reason)
     else:
-        emb = discord.Embed(description = f'Извините, {ctx.author.mention}, но вы не можете кикнуть моего создателя!', colour = discord.Color.orange())
-        if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
-            emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-        await ctx.send(embed = emb)
+        if rlocale == 'ru':
+            emb = discord.Embed(description = f'Извините, {ctx.author.mention}, но вы не можете кикнуть моего создателя!', colour = discord.Color.orange())
+            if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
+                emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+            await ctx.send(embed = emb)
+        if rlocale == 'gnida':
+            emb = discord.Embed(description = 'Ого! Пошёл нахуй!', colour = discord.Color.orange())
+            if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
+                emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+            await ctx.send(embed = emb)
 
 @slash.slash(name = 'ban', description = 'Банит участника', options = [{'name': 'member', 'description': 'Участник', 'required': True, 'type': 6}, {'name': 'reason', 'description': 'Причина и/или указание --soft --reason', 'required': False, 'type': 3}])
 async def _ban(ctx, member: discord.Member, *, reason = None):
+    rlocale = collection.find_one({"_id": ctx.guild.id})["locale"]
     bot = discord.utils.get(ctx.guild.members, id = client.user.id)
     if member.id != 338714886001524737:
         if reason == None:
-            reason = 'Не указана.'
+            if rlocale == 'ru':
+                reason = 'Не указана.'
+            if rlocale == 'gnida':
+                reason = 'Я не ебу'
         if ctx.author.top_role == member.top_role:
-            emb = discord.Embed(description = f'{ctx.author.mention}, ваша высшая роль равна высшей роли {member.mention}. Бан отклонён.', colour = discord.Color.orange())
-            await ctx.send(embed = emb)
+            if rlocale == 'ru':
+                emb = discord.Embed(description = f'{ctx.author.mention}, ваша высшая роль равна высшей роли {member.mention}. Бан отклонён.', colour = discord.Color.orange())
+                await ctx.send(embed = emb)
+            if rlocale == 'gnida':
+                emb = discord.Embed(description = f'Твоя высшая роль равна высшей роли {member.mention}. Саси.', colour = discord.Color.orange())
+                await ctx.send(embed = emb)
         elif member.top_role > ctx.author.top_role:
-            emb = discord.Embed(description = f'{ctx.author.mention}, ваша высшая роль ниже высшей роли {member.mention}. Бан отклонён.', colour = discord.Color.orange())
-            await ctx.send(embed = emb)
+            if rlocale == 'ru':
+                emb = discord.Embed(description = f'{ctx.author.mention}, ваша высшая роль ниже высшей роли {member.mention}. Бан отклонён.', colour = discord.Color.orange())
+                await ctx.send(embed = emb)
+            if rlocale == 'gnida':
+                emb = discord.Embed(description = f'Твоя высшая роль ниже высшей роли {member.mention}. Саси.', colour = discord.Color.orange())
+                await ctx.send(embed = emb)
         elif member.top_role > bot.top_role:
-            emb = discord.Embed(description = f'МОЯ высшая роль ниже высшей роли {member.mention}. Бан невозможен.', color = 0xff0000)
-            await ctx.send(embed = emb)
+            if rlocale == 'ru':
+                emb = discord.Embed(description = f'МОЯ высшая роль ниже высшей роли {member.mention}. Бан невозможен.', color = 0xff0000)
+                await ctx.send(embed = emb)
+            if rlocale == 'gnida':
+                emb = discord.Embed(description = f'МОЯ высшая роль ниже высшей роли {member.mention}. Блять.', color = 0xff0000)
+                await ctx.send(embed = emb)
         elif member.top_role == bot.top_role:
-            emb = discord.Embed(description = f'МОЯ высшая роль идентична высшей роли {member.mention}. Бан невозможен.', color = 0xff0000)
-            await ctx.send(embed = emb)
+            if rlocale == 'ru':
+                emb = discord.Embed(description = f'МОЯ высшая роль идентична высшей роли {member.mention}. Бан невозможен.', color = 0xff0000)
+                await ctx.send(embed = emb)
+            if rlocale == 'gnida':
+                emb = discord.Embed(description = f'МОЯ высшая роль идентична высшей роли {member.mention}. Блять.', color = 0xff0000)
+                await ctx.send(embed = emb)
         else:
             if '--soft' in reason:
-                emb = discord.Embed(color = member.color)
+                emb = discord.Embed(color = 0x2f3136)
                 emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
                 emb.add_field(name = 'Упрощённо забанен', value = f'{member.mention} ({member.name})')
                 if '--reason' in reason:
@@ -643,46 +724,79 @@ async def _ban(ctx, member: discord.Member, *, reason = None):
                 await member.ban(reason = reason)
                 await member.unban(reason = '--softban')
             else:
-                emb = discord.Embed(colour = member.color)
+                emb = discord.Embed(colour = 0x2f3136)
                 emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
                 emb.add_field(name = 'Был забанен', value = member.mention)
                 emb.add_field(name = 'По причине', value = reason)
                 await ctx.send(embed = emb)
                 await member.ban(reason = reason)
     else:
-        emb = discord.Embed(description = f'Извините, {ctx.author.mention}, но вы не можете забанить моего создателя!', colour = discord.Color.orange())
-        await ctx.send(embed = emb)
+        if rlocale == 'ru':
+            emb = discord.Embed(description = f'Извините, {ctx.author.mention}, но вы не можете забанить моего создателя!', colour = discord.Color.orange())
+            await ctx.send(embed = emb)
+        if rlocale == 'gnida':
+            emb = discord.Embed(description = 'А ты не прихуел даже ПЫТАТЬСЯ это сделать?!', colour = discord.Color.orange())
+            await ctx.send(embed = emb)
         
 @client.command(aliases = ['Ban', 'BAN'])
 @commands.cooldown(1, 10, commands.BucketType.user)
 @commands.has_permissions(ban_members = True)
 async def ban(ctx, member: discord.Member, *, reason = None):
+    rlocale = collection.find_one({"_id": ctx.guild.id})["locale"]
+    bot = discord.utils.get(ctx.guild.members, id = client.user.id)
     if member.id != 338714886001524737:
         if reason == None:
-            reason = 'Не указана.'
-        if ctx.author.top_role == member.top_role and ctx.message.author.id != 338714886001524737:
-            emb = discord.Embed(description = f'{ctx.author.mention}, ваша высшая роль равна высшей роли {member.mention}. Бан отклонён.', colour = discord.Color.orange())
-            if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
-                emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-            await ctx.send(embed = emb)
-        elif member.top_role > ctx.author.top_role and ctx.message.author.id != 338714886001524737:
-            emb = discord.Embed(description = f'{ctx.author.mention}, ваша высшая роль ниже высшей роли {member.mention}. Бан отклонён.', colour = discord.Color.orange())
-            if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
-                emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-            await ctx.send(embed = emb)
+            if rlocale == 'ru':
+                reason = 'Не указана.'
+            if rlocale == 'gnida':
+                reason = 'Я не ебу'
+        if ctx.author.top_role == member.top_role:
+            if rlocale == 'ru':
+                emb = discord.Embed(description = f'{ctx.author.mention}, ваша высшая роль равна высшей роли {member.mention}. Бан отклонён.', colour = discord.Color.orange())
+                if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
+                    emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+                await ctx.send(embed = emb)
+            if rlocale == 'gnida':
+                emb = discord.Embed(description = f'Твоя высшая роль равна высшей роли {member.mention}. Саси.', colour = discord.Color.orange())
+                if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
+                    emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+                await ctx.send(embed = emb)
+        elif member.top_role > ctx.author.top_role:
+            if rlocale == 'ru':
+                emb = discord.Embed(description = f'{ctx.author.mention}, ваша высшая роль ниже высшей роли {member.mention}. Бан отклонён.', colour = discord.Color.orange())
+                if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
+                    emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+                await ctx.send(embed = emb)
+            if rlocale == 'gnida':
+                emb = discord.Embed(description = f'Твоя высшая роль ниже высшей роли {member.mention}. Саси.', colour = discord.Color.orange())
+                if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
+                    emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+                await ctx.send(embed = emb)
         elif member.top_role > bot.top_role:
-            emb = discord.Embed(description = f'МОЯ высшая роль ниже высшей роли {member.mention}. Бан невозможен.', color = 0xff0000)
-            if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
-                emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-            await ctx.send(embed = emb)
+            if rlocale == 'ru':
+                emb = discord.Embed(description = f'МОЯ высшая роль ниже высшей роли {member.mention}. Бан невозможен.', color = 0xff0000)
+                if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
+                    emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+                await ctx.send(embed = emb)
+            if rlocale == 'gnida':
+                emb = discord.Embed(description = f'МОЯ высшая роль ниже высшей роли {member.mention}. Блять.', color = 0xff0000)
+                if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
+                    emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+                await ctx.send(embed = emb)
         elif member.top_role == bot.top_role:
-            emb = discord.Embed(description = f'МОЯ высшая роль идентична высшей роли {member.mention}. Бан невозможен.', color = 0xff0000)
-            if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
-                emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-            await ctx.send(embed = emb)
+            if rlocale == 'ru':
+                emb = discord.Embed(description = f'МОЯ высшая роль идентична высшей роли {member.mention}. Бан невозможен.', color = 0xff0000)
+                if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
+                    emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+                await ctx.send(embed = emb)
+            if rlocale == 'gnida':
+                emb = discord.Embed(description = f'МОЯ высшая роль идентична высшей роли {member.mention}. Блять.', color = 0xff0000)
+                if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
+                    emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+                await ctx.send(embed = emb)
         else:
             if '--soft' in reason:
-                emb = discord.Embed(color = 0x00ff00)
+                emb = discord.Embed(color = 0x2f3136)
                 emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
                 emb.add_field(name = 'Упрощённо забанен', value = f'{member.mention} ({member.name})')
                 if '--reason' in reason:
@@ -696,7 +810,7 @@ async def ban(ctx, member: discord.Member, *, reason = None):
                 await member.ban(reason = reason)
                 await member.unban(reason = '--softban')
             else:
-                emb = discord.Embed(colour = 0xff0000)
+                emb = discord.Embed(colour = 0x2f3136)
                 emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
                 emb.add_field(name = 'Был забанен', value = member.mention)
                 emb.add_field(name = 'По причине', value = reason)
@@ -705,35 +819,59 @@ async def ban(ctx, member: discord.Member, *, reason = None):
                 await ctx.send(embed = emb)
                 await member.ban(reason = reason)
     else:
-        emb = discord.Embed(description = f'Извините, {ctx.author.mention}, но вы не можете забанить моего создателя!', colour = discord.Color.orange())
-        if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
-            emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-        await ctx.send(embed = emb)
+        if rlocale == 'ru':
+            emb = discord.Embed(description = f'Извините, {ctx.author.mention}, но вы не можете забанить моего создателя!', colour = discord.Color.orange())
+            if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
+                emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+            await ctx.send(embed = emb)
+        if rlocale == 'gnida':
+            emb = discord.Embed(description = 'А ты не прихуел даже ПЫТАТЬСЯ это сделать?!', colour = discord.Color.orange())
+            if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
+                emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+            await ctx.send(embed = emb)
 
 @slash.slash(name = 'give', description = 'Выдаёт участнику роль', options = [{'name': 'member', 'description': 'Участник', 'required': True, 'type': 6}, {'name': 'role', 'description': 'Роль', 'required': True, 'type': 8}])
 async def _give(ctx, member: discord.Member, *, role: discord.Role):
     if role.name == 'Muted':
         if member.id != client.owner_id:
             await member.add_roles(role)
-            emb = discord.Embed(description = f'{member.mention} был перманентно заглушён {ctx.author.mention}', color = 0x2f3136)
-            if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
-                emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-            return await ctx.send(embed = emb)
+            if rlocale == 'ru':
+                emb = discord.Embed(description = f'{member.mention} был перманентно заглушён {ctx.author.mention}', color = 0x2f3136)
+                if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
+                    emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+                return await ctx.send(embed = emb)
+            if rlocale == 'gnida':
+                emb = discord.Embed(description = f'{member.mention} получает мут в ебало от {ctx.author.mention}', color = 0x2f3136)
+                if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
+                    emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+                return await ctx.send(embed = emb)
         else:
             emb = discord.Embed(description = 'Ты думал мой Создатель тебе по зубам? ОН!?', color = 0xff0000)
             if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
                 emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
             return await ctx.send(embed = emb)
     if role > ctx.author.top_role:
-        emb = discord.Embed(description = f'Вы не можете выдать {role.mention}, так как она имеет более высокий ранг, чем ваша высшая роль.', color = discord.Color.orange())
-        await ctx.send(embed = emb)
-        if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
-            emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+        if rlocale == 'ru':
+            emb = discord.Embed(description = f'Вы не можете выдать {role.mention}, так как она имеет более высокий ранг, чем ваша высшая роль.', color = discord.Color.orange())
+            if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
+                emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+            await ctx.send(embed = emb)
+        if rlocale == 'gnida':
+            emb = discord.Embed(description = f'Дебилам вроде тебя запрещено выдавать {role.mention}, так как эта роль выше твоей высшей роли.', color = discord.Color.orange())
+            if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
+                emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+            await ctx.send(embed = emb)
     elif role == ctx.author.top_role:
-        emb = discord.Embed(description = f'Вы не можете выдать {role.mention} кому-либо, так как она равна вашей высшей роли.', color = discord.Color.orange())
-        if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
-            emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-        await ctx.send(embed = emb)
+        if rlocale == 'ru':
+            emb = discord.Embed(description = f'Вы не можете выдать {role.mention} кому-либо, так как она равна вашей высшей роли.', color = discord.Color.orange())
+            if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
+                emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+            await ctx.send(embed = emb)
+        if rlocale == 'gnida':
+            emb = discord.Embed(description = f'Дебилам вроде тебя запрещено выдавать {role.mention}, так как она равна твоей высшей роли.', color = discord.Color.orange())
+            if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
+                emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+            await ctx.send(embed = emb)
     else:
         await member.add_roles(role)
         emb = discord.Embed(colour = member.color, timestamp = datetime.datetime.utcnow())
@@ -745,51 +883,57 @@ async def _give(ctx, member: discord.Member, *, role: discord.Role):
         await ctx.send(embed = emb)
         
 @client.command(aliases = ['Give', 'GIVE'])
+@command.has_permissions(manage_channels = True)
 async def give(ctx, member: discord.Member, *, role: discord.Role):
-    if ctx.message.author.guild_permissions.manage_channels or ctx.author.id == client.owner_id:
-        if role != None:
-            bot = ctx.guild.get_member(client.user.id)
-            if role.name == 'Muted':
-                if member.id != client.owner_id:
-                    await member.add_roles(role)
-                    emb = discord.Embed(description = f'{member.mention} был перманентно заглушён {ctx.author.mention}', color = 0x2f3136)
-                    if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
-                        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-                    return await ctx.send(embed = emb)
-                else:
-                    emb = discord.Embed(description = 'Ты думал мой Создатель тебе по зубам? ОН!?', color = 0xff0000)
-                    if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
-                        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-                    return await ctx.send(embed = emb)
-            if role > member.top_role and ctx.message.author.id != 338714886001524737:
-                emb = discord.Embed(description = f'Вы не можете выдать {role.mention}, так как она имеет более высокий ранг, чем ваша высшая роль.', color = discord.Color.orange())
-                await ctx.send(embed = emb)
+    if role.name == 'Muted':
+        if member.id != client.owner_id:
+            await member.add_roles(role)
+            if rlocale == 'ru':
+                emb = discord.Embed(description = f'{member.mention} был перманентно заглушён {ctx.author.mention}', color = 0x2f3136)
                 if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
                     emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-            elif role == ctx.author.top_role and ctx.message.author.id != 338714886001524737:
-                emb = discord.Embed(description = f'Вы не можете выдать {role.mention} кому-либо, так как она равна вашей высшей роли.', color = discord.Color.orange())
+                return await ctx.send(embed = emb)
+            if rlocale == 'gnida':
+                emb = discord.Embed(description = f'{member.mention} получает мут в ебало от {ctx.author.mention}', color = 0x2f3136)
                 if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
                     emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-                await ctx.send(embed = emb)
-            elif role.is_default():
-                emb = discord.Embed(description = 'Выдать @everyone?', color = 0x2f3136)
-                if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
-                    emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-                await ctx.send(embed = emb)
-            else:
-                await member.add_roles(role)
-                emb = discord.Embed(colour = member.color, timestamp = ctx.message.created_at)
-                emb.add_field(name = 'ВЫДАНА_РОЛЬ', value = f'{role.mention} | {role.name} | ID {role.id}')
-                emb.add_field(name = 'ВЫДАНА:', value = member.mention, inline = False)
-                emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
-                if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
-                    emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-                await ctx.send(embed = emb)
+                return await ctx.send(embed = emb)
         else:
-            emb = discord.Embed(description = f'{ctx.author.mention}, я не могу найти {role.mention} в списке ролей.', colour = member.color, timestamp = ctx.message.created_at)
+            emb = discord.Embed(description = 'Ты думал мой Создатель тебе по зубам? ОН!?', color = 0xff0000)
+            if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
+                emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+            return await ctx.send(embed = emb)
+    if role > ctx.author.top_role:
+        if rlocale == 'ru':
+            emb = discord.Embed(description = f'Вы не можете выдать {role.mention}, так как она имеет более высокий ранг, чем ваша высшая роль.', color = discord.Color.orange())
             if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
                 emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
             await ctx.send(embed = emb)
+        if rlocale == 'gnida':
+            emb = discord.Embed(description = f'Дебилам вроде тебя запрещено выдавать {role.mention}, так как эта роль выше твоей высшей роли.', color = discord.Color.orange())
+            if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
+                emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+            await ctx.send(embed = emb)
+    elif role == ctx.author.top_role:
+        if rlocale == 'ru':
+            emb = discord.Embed(description = f'Вы не можете выдать {role.mention} кому-либо, так как она равна вашей высшей роли.', color = discord.Color.orange())
+            if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
+                emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+            await ctx.send(embed = emb)
+        if rlocale == 'gnida':
+            emb = discord.Embed(description = f'Дебилам вроде тебя запрещено выдавать {role.mention}, так как она равна твоей высшей роли.', color = discord.Color.orange())
+            if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
+                emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+            await ctx.send(embed = emb)
+    else:
+        await member.add_roles(role)
+        emb = discord.Embed(colour = member.color, timestamp = datetime.datetime.utcnow())
+        emb.add_field(name = 'ВЫДАНА_РОЛЬ', value = f'{role.mention} | {role.name} | ID {role.id}')
+        emb.add_field(name = 'ВЫДАНА:', value = member.mention, inline = False)
+        emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
+        if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
+            emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+        await ctx.send(embed = emb)
 
 @slash.slash(name = 'take', description = 'Забирает роль у участника', options = [{'name': 'member', 'description': 'Участник', 'required': True, 'type': 6}, {'name': 'role', 'description': 'Роль', 'required': True, 'type': 8}])
 async def _take(ctx, member: discord.Member, *, role: discord.Role):
@@ -831,8 +975,8 @@ async def _take(ctx, member: discord.Member, *, role: discord.Role):
         await ctx.send(embed = emb)
             
 @client.command(aliases = ['Take', 'TAKE'])
+@command.has_permissions(manage_channels = True)
 async def take(ctx, member: discord.Member, *, role: discord.Role):
-    if ctx.message.author.guild_permissions.manage_channels or ctx.author.id == client.owner_id:
         if role != None:
             bot = ctx.guild.get_member(client.user.id)
             if role.name == 'Muted':
@@ -2734,11 +2878,7 @@ async def _content(ctx, arg, channel: discord.TextChannel = None):
                         t = f'| t& {emb.title}'
                     else:
                         t = ''
-                    if emb.footer != emb.Empty:
-                        f = f' | f& {emb.footer.text}'
-                    else:
-                        f = ''
-                    await ctx.send(f'```py\ncy/say --everyone {t}{d}{f}{th}{img}```')
+                    await ctx.send(f'```py\ncy/say --everyone {t}{d}{th}{img}```')
                 else:
                     if emb.image.url != emb.Empty:
                         img = f' | img& {emb.image.url}'
@@ -2756,11 +2896,7 @@ async def _content(ctx, arg, channel: discord.TextChannel = None):
                         t = f't& {emb.title}'
                     else:
                         t = ''
-                    if emb.footer != emb.Empty:
-                        f = f' | f& {emb.footer.text}'
-                    else:
-                        f = ''
-                    await ctx.send(f'```cy/say {t}{d}{f}{th}{img}```')
+                    await ctx.send(f'```cy/say {t}{d}{th}{img}```')
     else:
         if message.embeds == []:
             if '```' in message.content:
@@ -2769,7 +2905,7 @@ async def _content(ctx, arg, channel: discord.TextChannel = None):
                 await ctx.send(f'```@{message.author} {message.content}```')
         else:
             for emb in message.embeds:
-                if message.content == None:
+                if message.content == '':
                     content = ''
                 else:
                     content = f'content {message.content}'
@@ -2834,10 +2970,6 @@ async def content(ctx, arg, channel: discord.TextChannel = None):
                         t = f'| t& {emb.title}'
                     else:
                         t = ''
-                    if emb.footer != emb.Empty:
-                        f = f' | f& {emb.footer.text}'
-                    else:
-                        f = ''
                     await ctx.send(f'```py\ncy/say --everyone {t}{d}{f}{th}{img}```')
                 else:
                     if emb.image.url != emb.Empty:
@@ -2856,10 +2988,6 @@ async def content(ctx, arg, channel: discord.TextChannel = None):
                         t = f't& {emb.title}'
                     else:
                         t = ''
-                    if emb.footer != emb.Empty:
-                        f = f' | f& {emb.footer.text}'
-                    else:
-                        f = ''
                     await ctx.send(f'```cy/say {t}{d}{f}{th}{img}```')
     else:
         if message.embeds == []:
@@ -2869,7 +2997,7 @@ async def content(ctx, arg, channel: discord.TextChannel = None):
                 await ctx.send(f'```@{message.author} {message.content}```')
         else:
             for emb in message.embeds:
-                if message.content == None:
+                if message.content == '':
                     content = ''
                 else:
                     content = f'content {message.content}'
@@ -2934,18 +3062,12 @@ async def _say(ctx, *, msg):
         if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
             emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         if 't&' not in msg and 'd&' not in msg and 'img&' not in msg and 'th&' not in msg and 'msg&' not in msg and 'f&' not in msg:
-            if '--everyone' in msg:
-                return await ctx.send(f'@everyone {msg.strip()[10:].strip()}')
-            else:
-                return await ctx.send(msg)
+            return await ctx.send(msg)
         else:
-            if '--everyone' in msg:
-                return await ctx.send('@everyone', embed = emb)
+            if message:
+                return await ctx.send(f'{message}', embed = emb)
             else:
-                if message:
-                    return await ctx.send(f'{message}', embed = emb)
-                else:
-                    return await ctx.send(embed = emb)
+                return await ctx.send(embed = emb)
 
 @client.command(aliases = ['Say', 'SAY'])
 async def say(ctx, *, msg):
@@ -2978,18 +3100,12 @@ async def say(ctx, *, msg):
         if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
             emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         if 't&' not in msg and 'd&' not in msg and 'img&' not in msg and 'th&' not in msg and 'msg&' not in msg and 'f&' not in msg:
-            if '--everyone' in msg:
-                return await ctx.send(f'@everyone {msg.strip()[10:].strip()}')
-            else:
-                return await ctx.send(msg)
+            return await ctx.send(msg)
         else:
-            if '--everyone' in msg:
-                return await ctx.send('@everyone', embed = emb)
+            if message:
+                return await ctx.send(f'{message}', embed = emb)
             else:
-                if message:
-                    return await ctx.send(f'{message}', embed = emb)
-                else:
-                    return await ctx.send(embed = emb)
+                return await ctx.send(embed = emb)
 
 @slash.slash(name = 'edit', description = 'Изменяет сообщение, отправленое ботом.', options = [{'name': 'arg', 'description': 'ID сообщения', 'required': True, 'type': 3}, {'name': 'msg', 'description': 'аргументы или текст, на который нужно заменить исходный', 'required': True, 'type': 3}])
 @commands.has_permissions(manage_channels = True)
@@ -3316,20 +3432,21 @@ async def info(ctx):
 @client.command()
 async def botver(ctx):
     emb = discord.Embed(color = 0x2f3136) # будут маленькое, нормальное и крупное обновления
-    emb.add_field(name = '0.12.10.1.11661 (Текущая версия, крупное обновление)', value = 'Slash-Команды теперь применены ко всем командам, кроме тех, что используют конвертеры. Также, исправлены недоработки старых Slash-Команд и созданы новые (при написании некоторых команд будет ответ **Ошибка взаимодействия**, даже если команда была выполнена правильно)\n\n**Say/Edit**\n\nУбран аргумент `c&`, добавлен аргумент `f&` - текст в самом низу эмбеда.\n\n**Иное**\n\nТеперь команды пользователя не будут удаляться - это решение связано с рядом причин.', inline = False)
-    emb.add_field(name = '0.12.9.11410 (Предыдущая версия, маленькое обновление)', value = 'Некоторые исправления и добавление скрытых фич.', inline = False)
+    emb.add_field(name = '0.12.10.2.11856 (Текущая версия, нормальное обновление)', value = 'Добавлена команда locale для изменения локали. Пока доступны только `ru` (по умолчанию) и `gnida`.\nSay/Edit\nУбран аргумент --everyone и запрещено упоминание @everyone каким-либо способом.', inline = False)
+    emb.add_field(name = '0.12.10.1.11661 (Предыдущая версия, крупное обновление)', value = 'Slash-Команды теперь применены ко всем командам, кроме тех, что используют конвертеры. Также, исправлены недоработки старых Slash-Команд и созданы новые (при написании некоторых команд будет ответ **Ошибка взаимодействия**, даже если команда была выполнена правильно).\n\n**Say/Edit**\n\nУбран аргумент `c&`, добавлен аргумент `f&` - текст в самом низу эмбеда.\n\n**Иное**\n\nТеперь команды пользователя не будут удаляться - это решение связано с рядом причин.', inline = False)
     await ctx.send(embed = emb)
 
 @slash.slash(name = 'botver', description = 'Позволяет узнать текущую версию бота', options = [{'name': 'version', 'description': 'Версия', 'required': False, 'type': 3, 'choices': [
     {'name': '0.12.9.10519', 'value': '0.12.9.10519'}, 
     {'name': '0.12.9.10988', 'value': '0.12.9.10988'}, 
     {'name': '0.12.9.11410', 'value': '0.12.9.11410'},
-    {'name': '0.12.10.1.11661', 'value': '0.12.10.1.11661'}]}])
+    {'name': '0.12.10.1.11661', 'value': '0.12.10.1.11661'},
+    {'name': '0.12.10.2.11856', 'value': '0.12.10.2.11856'}]}])
 async def _botver(ctx, version = None):
     if version == None:
         emb = discord.Embed(color = 0x2f3136) # будут маленькое, нормальное и крупное обновления
-        emb.add_field(name = '0.12.10.1.11661 (Текущая версия, крупное обновление)', value = 'Slash-Команды теперь применены ко всем командам, кроме тех, что используют конвертеры. Также, исправлены недоработки старых Slash-Команд и созданы новые (при написании некоторых команд будет ответ **Ошибка взаимодействия**, даже если команда была выполнена правильно).\n\n**Say/Edit**\n\nУбран аргумент `c&`, добавлен аргумент `f&` - текст в самом низу эмбеда.\n\n**Иное**\n\nТеперь команды пользователя не будут удаляться - это решение связано с рядом причин.', inline = False)
-        emb.add_field(name = '0.12.9.11410 (Предыдущая версия, маленькое обновление)', value = 'Некоторые исправления и добавление скрытых фич.', inline = False)
+        emb.add_field(name = '0.12.10.2.11856 (Текущая версия, нормальное обновление)', value = 'Добавлена команда locale для изменения локали. Пока доступны только `ru` (по умолчанию) и `gnida`.\nSay/Edit\nУбран аргумент --everyone и запрещено упоминание @everyone каким-либо способом.', inline = False)
+        emb.add_field(name = '0.12.10.1.11661 (Предыдущая версия, крупное обновление)', value = 'Slash-Команды теперь применены ко всем командам, кроме тех, что используют конвертеры. Также, исправлены недоработки старых Slash-Команд и созданы новые (при написании некоторых команд будет ответ **Ошибка взаимодействия**, даже если команда была выполнена правильно).\n\n**Say/Edit**\n\nУбран аргумент `c&`, добавлен аргумент `f&` - текст в самом низу эмбеда.\n\n**Иное**\n\nТеперь команды пользователя не будут удаляться - это решение связано с рядом причин.', inline = False)
         await ctx.send(embed = emb)
     if version == '0.12.9.10519':
         emb = discord.Embed(color = 0x2f3136)
@@ -3346,6 +3463,10 @@ async def _botver(ctx, version = None):
     if version == '0.12.10.1.11661':
         emb = discord.Embed(color = 0x2f3136)
         emb.add_field(name = '0.12.10.1.11661', value = 'Slash-Команды теперь применены ко всем командам, кроме тех, что используют конвертеры. Также, исправлены недоработки старых Slash-Команд и созданы новые (при написании некоторых команд будет ответ **Ошибка взаимодействия**, даже если команда была выполнена правильно).\n\n**Say**\n\nУбран аргумент `c&`, добавлен аргумент `f&` - текст в самом низу эмбеда.\n\n**Иное**\n\nТеперь команды пользователя не будут удаляться - это решение связано с рядом причин.')
+        await ctx.send(embed = emb)
+    if version == '0.12.10.2.11856':
+        emb = discord.Embed(color = 0x2f3136)
+        emb.add_field(name = '0.12.10.2.11856', value = 'Добавлена команда locale для изменения локали. Пока доступны только `ru` (по умолчанию) и `gnida`.\nSay/Edit\nУбран аргумент --everyone и запрещено упоминание @everyone каким-либо способом.')
         await ctx.send(embed = emb)
     
 @slash.slash(name = 'help', description = 'Здесь можно получить полную помощь по всем командам', options = [{'name': 'arg', 'description': 'Выберите команду для подробной помощи', 'required': False, 'type': 3, 'choices': [
@@ -3406,7 +3527,7 @@ async def _help(ctx, arg = None):
     elif arg == 'dm':
         await ctx.send('```apache\ncy/dm <@пинг/имя/ID> <текст> (<> - обязательно, / - или)\nperms = view_audit_log```')
     elif arg == 'say':
-            await ctx.send('```apache\ncy/say [обычный текст] [t& title текст] | [d& description текст] | [th& ссылка на картинку справа] | [img& ссылка на картинку снизу] [f& footer текст] [msg& сообщение над эмбедом]\ncy/say t& title | d& description\ncy/say --everyone | t& title | d& description\ncy/say [текст]\ncy/say --everyone [текст]\n(вам НЕ обязательно писать все аргументы в данном порядке, пишите только те, что вам нужны в любом порядке) ([] - опционально)```')
+            await ctx.send('```apache\ncy/say [обычный текст] [t& title текст] | [d& description текст] | [th& ссылка на картинку справа] | [img& ссылка на картинку снизу] [f& footer текст] [msg& сообщение над эмбедом]\ncy/say t& title | d& description\ncy/say [текст]\n(вам НЕ обязательно писать все аргументы в данном порядке, пишите только те, что вам нужны в любом порядке. Однако необходимо написать хоть что-то для выполнения команды) ([] - опционально)```')
     elif arg == 'edit':
             await ctx.send('```apache\ncy/edit <ID> [обычный текст] [t& title текст] | [d& description текст] | [th& ссылка на картинку справа] | [img& ссылка на картинку снизу]\ncy/edit <ID> [текст]\ncy/edit <ID> --clean | d& description\ncy/edit <ID> --clean\ncy/edit <ID> --noembed\ncy/edit <ID> --empty-embed\ncy/edit <ID> --delete\n--clean удалит контент над эмбедом, --noembed удалит эмбед, работает только если есть эмбед, --empty-embed опустошит эмбед, --delete удалит сообщение\nесли у сообщения есть эмбед и в команде нет агрументов, автоматически будет заменён msg&\n([] - опционально, <> - обязательно)\nperms = manage_channels```')
     elif arg == 'give':
@@ -3479,7 +3600,7 @@ async def help(ctx, arg = None):
     elif arg == 'dm':
         await ctx.send('```apache\ncy/dm <@пинг/имя/ID> <текст> (<> - обязательно, / - или)\nperms = view_audit_log```')
     elif arg == 'say':
-            await ctx.send('```apache\ncy/say [обычный текст] [t& title текст] | [d& description текст] | [th& ссылка на картинку справа] | [img& ссылка на картинку снизу] [f& footer текст] [msg& сообщение над эмбедом]\ncy/say t& title | d& description\ncy/say --everyone | t& title | d& description\ncy/say [текст]\ncy/say --everyone [текст]\n(вам НЕ обязательно писать все аргументы в данном порядке, пишите только те, что вам нужны в любом порядке) ([] - опционально)```')
+            await ctx.send('```apache\ncy/say [обычный текст] [t& title текст] | [d& description текст] | [th& ссылка на картинку справа] | [img& ссылка на картинку снизу] [f& footer текст] [msg& сообщение над эмбедом]\ncy/say t& title | d& description\ncy/say [текст]\n(вам НЕ обязательно писать все аргументы в данном порядке, пишите только те, что вам нужны в любом порядке. Однако необходимо написать хоть что-то для выполнения команды) ([] - опционально)```')
     elif arg == 'edit':
             await ctx.send('```apache\ncy/edit <ID> [обычный текст] [t& title текст] | [d& description текст] | [th& ссылка на картинку справа] | [img& ссылка на картинку снизу]\ncy/edit <ID> [текст]\ncy/edit <ID> --clean | d& description\ncy/edit <ID> --clean\ncy/edit <ID> --noembed\ncy/edit <ID> --empty-embed\ncy/edit <ID> --delete\n--clean удалит контент над эмбедом, --noembed удалит эмбед, работает только если есть эмбед, --empty-embed опустошит эмбед, --delete удалит сообщение\nесли у сообщения есть эмбед и в команде нет агрументов, автоматически будет заменён msg&\n([] - опционально, <> - обязательно)\nperms = manage_channels```')
     elif arg == 'give':
