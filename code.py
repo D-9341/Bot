@@ -635,7 +635,7 @@ async def kick(ctx, member: discord.Member, *, reason = None):
                 if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
                     emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
                 await ctx.send(embed = emb)
-            if locale == 'gnida':
+            if rlocale == 'gnida':
                 emb = discord.Embed(description = f'МОЯ высшая роль ниже высшей роли {member.mention}. Сука.', color = 0xff0000)
                 if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
                     emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
@@ -646,7 +646,7 @@ async def kick(ctx, member: discord.Member, *, reason = None):
                 if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
                     emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
                 await ctx.send(embed = emb)
-            if locale == 'gnida':
+            if rlocale == 'gnida':
                 emb = discord.Embed(description = f'МОЯ высшая роль идентична высшей роли {member.mention}. Сука.', color = 0xff0000)
                 if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
                     emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
