@@ -718,7 +718,10 @@ async def _ban(ctx, member: discord.Member, *, reason = None):
                 if '--reason' in reason:
                     reason = reason.strip()[15:].strip()
                 else:
-                    reason = 'Не указана.'
+                    if rlocale == 'ru':
+                        reason = 'Не указана.'
+                    if rlocale == 'gnida':
+                        reason == 'Я не ебу'
                 emb.add_field(name = 'По причине', value = reason)
                 await ctx.send(embed = emb)
                 await member.ban(reason = reason)
@@ -802,7 +805,10 @@ async def ban(ctx, member: discord.Member, *, reason = None):
                 if '--reason' in reason:
                     reason = reason.strip()[15:].strip()
                 else:
-                    reason = 'Не указана.'
+                    if rlocale == 'ru':
+                        reason = 'Не указана.'
+                    if rlocale == 'gnida':
+                        reason == 'Я не ебу'
                 emb.add_field(name = 'По причине', value = reason)
                 if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
                     emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
