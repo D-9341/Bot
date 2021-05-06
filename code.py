@@ -14,7 +14,7 @@ from discord.ext import commands
 from discord.utils import get
 from discord_slash import SlashCommand, SlashContext
 
-client = commands.Bot(command_prefix = commands.when_mentioned_or('cy/'), intents = discord.Intents.all(), owner_id = 338714886001524737, status = discord.Status.idle, activity = discord.Activity(type = discord.ActivityType.watching, name = 'Slash Commands'), allowed_mentions = discord.AllowedMentions.none())
+client = commands.Bot(command_prefix = commands.when_mentioned_or('cy/'), intents = discord.Intents.all(), owner_id = 338714886001524737, status = discord.Status.idle, activity = discord.Activity(type = discord.ActivityType.watching, name = 'Slash Commands'), allowed_mentions = discord.AllowedMentions(everyone = False))
 client.remove_command('help')
 slash = SlashCommand(client, sync_commands = True)
 passw = os.environ.get('passw')
