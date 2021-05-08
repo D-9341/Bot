@@ -3507,7 +3507,7 @@ async def _help(ctx, arg = None):
         emb = discord.Embed(title = client.user.name, description = 'Вот команды, что я могу исполнить.', colour = discord.Color.orange())
         emb.add_field(name = 'Cephalon', value = '`botver`, `info`, `invite`, `join`, `leave`, `locale`, `ping`', inline = False)
         emb.add_field(name = 'Embeds', value = '`content`, `edit`, `say`', inline = False)
-        emb.add_field(name = 'Fun', value = '`aye_balbec`, `cu`, `coinflip`, `dotersbrain`, `niggers`, `rp`, `rap`, `zatka`', inline = False)
+        emb.add_field(name = 'Fun', value = '`aye_balbec`, `cu`, `coinflip`, `dotersbrain`, `rp`, `rap`, `zatka`', inline = False)
         emb.add_field(name = 'Mod', value = '`ban`, `clear`, `dm`, `give`, `kick`, `mute`, `take`, `unmute`', inline = False)
         emb.add_field(name = 'Misc', value = '`about`, `avatar`, `guild`, `remind`, `roleinfo`, `rolemembers`, `someone`, `vote`', inline = False)
         emb.add_field(name = 'ᅠ', value = 'Назовите войс `Создать канал`, чтобы бот автоматически создавал для вас временные каналы, которые будут удаляться после того, как все люди выйдут из него.')
@@ -3580,7 +3580,7 @@ async def help(ctx, arg = None):
         emb = discord.Embed(title = client.user.name, description = f'Вот команды, что я могу исполнить.', colour = discord.Color.orange())
         emb.add_field(name = 'Cephalon', value = '`botver`, `info`, `invite`, `join`, `leave`, `locale`, `ping`, `setup`', inline = False)
         emb.add_field(name = 'Embeds', value = '`content`, `edit`, `say`', inline = False)
-        emb.add_field(name = 'Fun', value = '`aye_balbec`, `cu`, `coinflip`, `dotersbrain`, `niggers`, `rp`, `rap`, `roll`, `zatka`', inline = False)
+        emb.add_field(name = 'Fun', value = '`aye_balbec`, `cu`, `coinflip`, `dotersbrain`, `rp`, `rap`, `roll`, `zatka`', inline = False)
         emb.add_field(name = 'Mod', value = '`ban`, `clear`, `dm`, `give`, `kick`, `mute`, `take`, `unmute`', inline = False)
         emb.add_field(name = 'Misc', value = '`about`, `avatar`, `guild`, `remind`, `roleinfo`, `rolemembers`, `someone`, `vote`', inline = False)
         emb.add_field(name = 'ᅠ', value = 'Назовите войс `Создать канал`, чтобы бот автоматически создавал для вас временные каналы, которые будут удаляться после того, как все люди выйдут из него.', inline = False)
@@ -3669,7 +3669,7 @@ async def help(ctx, arg = None):
 async def on_command_error(ctx, error):
     channel = client.get_channel(838506478108803112)
     if isinstance(error, commands.CommandNotFound):
-        emb = discord.Embed(description = f'{ctx.author.mention}, команда не обнаружена. Может, пропишите cy/help?\n||{ctx.message.content}||', colour = discord.Color.orange())
+        emb = discord.Embed(description = f'{ctx.author.mention}, команда не обнаружена. Может, пропишите cy/help?', colour = discord.Color.orange())
         await ctx.send(embed = emb)
         eemb = discord.Embed(description = 'Поймана ошибка `CommandNotFound`', color = 0xff0000, timestamp = ctx.message.created_at)
         eemb.add_field(name = 'Сервер', value = ctx.guild.name)
@@ -3694,18 +3694,15 @@ async def on_command_error(ctx, error):
         rand2 = random.choice(choices2)
         if round(s) >= 5:
             emb = discord.Embed(description = f'{rand} Команда `{ctx.command.name}` будет доступна через {round(s)} секунд..', colour = discord.Color.orange())
-            if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
-                emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
             await ctx.send(embed = emb)
         elif round(s) >= 2:
             emb = discord.Embed(description = f'{rand1} Команда `{ctx.command.name}` будет доступна через {round(s)} секунды.', colour = discord.Color.orange())
-            if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
-                emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
             await ctx.send(embed = emb)
         elif round(s) >= 1:
             emb = discord.Embed(description = f'{rand2} Команда `{ctx.command.name}` будет доступна через {round(s)} секунду!', colour = discord.Color.orange())
-            if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
-                emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+            await ctx.send(embed = emb)
+        elif round(s) <= 0:
+            emb = discord.Embed(description = 'Ебать ты тайминг поймал конечно ||До перезарядки команды оставалось чуть больше, чем 0 секунд||', colour = discord.Color.orange())
             await ctx.send(embed = emb)
         eemb = discord.Embed(description = 'Поймана ошибка `CommandOnCooldown`', color = 0xff0000, timestamp = ctx.message.created_at)
         eemb.add_field(name = 'Сервер', value = ctx.guild.name)
