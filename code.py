@@ -67,6 +67,11 @@ class Slapper(commands.Converter):
             emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         return await ctx.send(f'@someone ||{mention.mention}||', embed = emb)
 
+def revert_cooldown(command: commands.Command, message: discord.Message) -> None:
+    if command._buckets.valid:
+        bucket = command._buckets.get_bucket(message)
+        bucket._tokens = min(bucket.rate, bucket._tokens + 1)
+    
 #Events
 @client.event
 async def on_guild_role_update(before, after):
@@ -3711,6 +3716,7 @@ async def on_command_error(ctx, error):
         eemb.add_field(name = 'Оставалось времени', value = round(s), inline = False)
         await channel.send(embed = eemb)
     elif isinstance(error, commands.MissingRequiredArgument):
+        revert_cooldown(ctx.command, ctx.message)
         if ctx.command.name == 'clear':
             await ctx.send('```apache\ncy/clear <количество> [автор] [фильтр]\ncy/clear 100\ncy/clear 10 @сасиска\ncy/clear 50 --everyone хыха\ncy/clear 30 --bots\ncy/clear 15 --users\ncy/clear 5 --silent\ncy/clear 200 "--silent --everyone" хыха\n\n--everyone удалит сообщения от всех\n--bots удалит сообщения только от ботов\n--users удалит сообщения только от участников\n--silent не оставит доказательств выполнения команды, исключение - количество >= 10\n\nПри указании автора не будет удалено столько сообщений, сколько было указано, будет удалено столько, сколько будет найдено в пределах этих сообщений.\nСообщения старше 2 недель будут удалены не сразу - лимит discord API\nПри удалении более 100 сообщений нужно подтверждение владельца сервера.\nТолько владелец может удалять от 250 сообщений за раз.\nНе более 300!\n([] - опционально, <> - обязательно, / - или)\nperms = adminstrator```')
         elif ctx.command.name == 'say':
@@ -3721,8 +3727,7 @@ async def on_command_error(ctx, error):
             await ctx.send('```apache\ncy/ban <@пинг/имя/ID> [причина/--soft --reason]\ncy/ban 185476724627210241 --soft --reason лошара\ncy/ban @сасиска чмо\ncy/ban "Sgt White"\ncy/ban @крипочек --soft\n\nПри использовании --soft обязательно указывать --reason ПОСЛЕ --soft\n\n([] - опционально, <> - обязательно, / - или)\nperms = ban_members```')
         else:
             emb = discord.Embed(description = f'{ctx.author.mention}, обнаружен недостаток аргументов для `{ctx.command.name}`. Попробуйте cy/help `{ctx.command.name}`', colour = discord.Color.orange())
-            if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
-                emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+            emb.set_footer(text = 'Задержка команды сброшена, так как была вызвана ошибка при вводе пользователя.')
             await ctx.send(embed = emb)
         eemb = discord.Embed(description = 'Поймана ошибка `MissingRequiredArgument`', color = 0xff0000, timestamp = ctx.message.created_at)
         eemb.add_field(name = 'Сервер', value = ctx.guild.name)
@@ -3730,9 +3735,9 @@ async def on_command_error(ctx, error):
         eemb.add_field(name = 'Команда', value = ctx.command.name, inline = False)
         await channel.send(embed = eemb)
     elif isinstance(error, commands.MemberNotFound):
+        revert_cooldown(ctx.command, ctx.message)
         emb = discord.Embed(description = f'{ctx.author.mention}, участник не обнаружен.', color = discord.Color.orange())
-        if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
-            emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+        emb.set_footer(text = 'Задержка команды сброшена, так как была вызвана ошибка при вводе пользователя.')
         await ctx.send(embed = emb)
         eemb = discord.Embed(description = 'Поймана ошибка `MemberNotFound`', color = 0xff0000, timestamp = ctx.message.created_at)
         eemb.add_field(name = 'Сервер', value = ctx.guild.name)
@@ -3740,9 +3745,9 @@ async def on_command_error(ctx, error):
         eemb.add_field(name = 'Команда', value = ctx.command.name, inline = False)
         await channel.send(embed = eemb)
     elif isinstance(error, commands.BadArgument):
+        revert_cooldown(ctx.command, ctx.message)
         emb = discord.Embed(description = f'{ctx.author.mention}, обнаружен неверный аргумент для `{ctx.command.name}`. Попробуйте cy/help `{ctx.command.name}`', colour = discord.Color.orange())
-        if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
-            emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+        emb.set_footer(text = 'Задержка команды сброшена, так как была вызвана ошибка при вводе пользователя.')
         await ctx.send(embed = emb)
         eemb = discord.Embed(description = 'Поймана ошибка `BadArgument`', color = 0xff0000, timestamp = ctx.message.created_at)
         eemb.add_field(name = 'Сервер', value = ctx.guild.name)
