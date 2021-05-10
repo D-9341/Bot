@@ -955,7 +955,7 @@ async def _take(ctx, member: discord.Member, *, role: discord.Role):
         if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
             emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         return await ctx.send(embed = emb)
-    if role > member.top_role:
+    if role > ctx.author.top_role:
         emb = discord.Embed(description = f'Вы не можете забрать {role.mention}, так как она имеет более высокий ранг, чем ваша высшая роль. Забирание роли отменено.', color = 0x2f3136)
         if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
             emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
@@ -996,7 +996,7 @@ async def take(ctx, member: discord.Member, *, role: discord.Role):
                 if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
                     emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
                 return await ctx.send(embed = emb)
-            if role > member.top_role and ctx.message.author.id != 338714886001524737:
+            if role > ctx.author.top_role and ctx.message.author.id != 338714886001524737:
                 emb = discord.Embed(description = f'Вы не можете забрать {role.mention}, так как она имеет более высокий ранг, чем ваша высшая роль. Забирание роли отменено.', color = 0x2f3136)
                 await ctx.send(embed = emb)
                 if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
@@ -1070,7 +1070,7 @@ async def mute(ctx, member: discord.Member, time: TimeConverter, *, reason: str 
                 if role != None:
                     if role in member.roles:
                         emb = discord.Embed(colour = color, timestamp = ctx.message.created_at)
-                        emb.add_field(name = 'Размучен по истечению времени', value = member.mention)
+                        emb.add_field(name = 'Разглушён по истечению времени', value = member.mention)
                         emb.add_field(name = 'Был заглушён по причине', value = reason)
                         emb.add_field(name = 'Время заглушения составляло', value = f'{time}s')
                         if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
@@ -1103,7 +1103,7 @@ async def mute(ctx, member: discord.Member, time: TimeConverter, *, reason: str 
                 if role != None:
                     if role in member.roles:
                         emb = discord.Embed(colour = color, timestamp = ctx.message.created_at)
-                        emb.add_field(name = 'Размучен по истечению времени', value = member.mention)
+                        emb.add_field(name = 'Разглушён по истечению времени', value = member.mention)
                         emb.add_field(name = 'Был заглушён по причине', value = reason)
                         emb.add_field(name = 'Время заглушения составляло', value = f'{time}s')
                         if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
@@ -3509,14 +3509,15 @@ async def _botver(ctx, version = None):
     }])
 async def _help(ctx, arg = None):
     if arg == None:
-        emb = discord.Embed(title = client.user.name, description = 'Вот команды, что я могу исполнить.', colour = discord.Color.orange())
-        emb.add_field(name = 'Cephalon', value = '`botver`, `info`, `invite`, `join`, `leave`, `locale`, `ping`', inline = False)
+        emb = discord.Embed(description = f'Вот команды, что я могу исполнить.', colour = discord.Color.orange())
+        emb.set_author(name = client.user.name, url = 'https://discord.com/api/oauth2/authorize?client_id=694170281270312991&permissions=8&scope=bot%20applications.commands')
+        emb.add_field(name = 'Cephalon', value = '`botver`, `info`, `invite`, `join`, `leave`, `ping`', inline = False)
         emb.add_field(name = 'Embeds', value = '`content`, `edit`, `say`', inline = False)
         emb.add_field(name = 'Fun', value = '`aye_balbec`, `cu`, `coinflip`, `dotersbrain`, `rp`, `rap`, `zatka`', inline = False)
         emb.add_field(name = 'Mod', value = '`ban`, `clear`, `dm`, `give`, `kick`, `mute`, `take`, `unmute`', inline = False)
         emb.add_field(name = 'Misc', value = '`about`, `avatar`, `guild`, `remind`, `roleinfo`, `rolemembers`, `someone`, `vote`', inline = False)
         emb.add_field(name = 'ᅠ', value = 'Назовите войс `Создать канал`, чтобы бот автоматически создавал для вас временные каналы, которые будут удаляться после того, как все люди выйдут из него.')
-        emb.add_field(name = 'ᅠ', value = '**Используйте** `cy/help [команда/категория]` **для подробностей использования.**\n\n**[Ссылка-приглашение](https://discord.com/api/oauth2/authorize?client_id=694170281270312991&permissions=8&scope=bot%20applications.commands)**', inline = False)
+        emb.add_field(name = 'ᅠ', value = '**Используйте** `cy/help [команда/категория]` **для подробностей использования.**\n\n[Ссылка-приглашение](https://discord.com/api/oauth2/authorize?client_id=694170281270312991&permissions=8&scope=bot%20applications.commands)', inline = False)
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
     elif arg == 'locale':
@@ -3582,14 +3583,15 @@ async def _help(ctx, arg = None):
 @commands.cooldown(1, 3, commands.BucketType.user)
 async def help(ctx, arg = None):
     if arg == None:
-        emb = discord.Embed(title = client.user.name, description = f'Вот команды, что я могу исполнить.', colour = discord.Color.orange())
-        emb.add_field(name = 'Cephalon', value = '`botver`, `info`, `invite`, `join`, `leave`, `locale`, `ping`, `setup`', inline = False)
+        emb = discord.Embed(description = f'Вот команды, что я могу исполнить.', colour = discord.Color.orange())
+        emb.set_author(name = client.user.name, url = 'https://discord.com/api/oauth2/authorize?client_id=694170281270312991&permissions=8&scope=bot%20applications.commands')
+        emb.add_field(name = 'Cephalon', value = '`botver`, `info`, `invite`, `join`, `leave`, `ping`, `setup`', inline = False)
         emb.add_field(name = 'Embeds', value = '`content`, `edit`, `say`', inline = False)
         emb.add_field(name = 'Fun', value = '`aye_balbec`, `cu`, `coinflip`, `dotersbrain`, `rp`, `rap`, `roll`, `zatka`', inline = False)
         emb.add_field(name = 'Mod', value = '`ban`, `clear`, `dm`, `give`, `kick`, `mute`, `take`, `unmute`', inline = False)
         emb.add_field(name = 'Misc', value = '`about`, `avatar`, `guild`, `remind`, `roleinfo`, `rolemembers`, `someone`, `vote`', inline = False)
         emb.add_field(name = 'ᅠ', value = 'Назовите войс `Создать канал`, чтобы бот автоматически создавал для вас временные каналы, которые будут удаляться после того, как все люди выйдут из него.', inline = False)
-        emb.add_field(name = 'ᅠ', value = '**Используйте** `cy/help [команда/категория]` **для подробностей использования.**\n\n**[Ссылка-приглашение](https://discord.com/api/oauth2/authorize?client_id=694170281270312991&permissions=8&scope=bot%20applications.commands)**', inline = False)
+        emb.add_field(name = 'ᅠ', value = '**Используйте** `cy/help [команда/категория]` **для подробностей использования.**\n\n[Ссылка-приглашение](https://discord.com/api/oauth2/authorize?client_id=694170281270312991&permissions=8&scope=bot%20applications.commands)', inline = False)
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
     elif arg == 'locale':
