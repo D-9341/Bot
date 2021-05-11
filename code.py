@@ -27,13 +27,6 @@ async def on_ready():
     emb = discord.Embed(description = 'В сети, поверхностная проверка не выявила ошибок.', color = 0x2f3136, timestamp = datetime.datetime.utcnow())
     emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
     await channel.send(embed = emb)
-    for guild in client.guilds:
-        post = {
-            '_id': guild.id,
-            'locale': 'ru'
-        }
-    if collection.count_documents({'_id': guild.id}) == 0:
-        collection.insert_one(post)
 
 time_regex = re.compile(r"(?:(\d{1,5})(h|s|m|d))+?")
 time_dict = {'h': 3600, 's': 1, 'm': 60, 'd': 86400}
@@ -256,13 +249,6 @@ async def on_member_remove(member):
 
 @client.event
 async def on_guild_remove(guild):
-    for guild in client.guilds:
-        post = {
-            '_id': guild.id,
-            'locale': 'ru'
-        }
-    if collection.count_documents({'_id': guild.id}) == 1:
-        collection.delete_one(post)
     channel = client.get_channel(714175791033876490)
     emb = discord.Embed(title = 'ВЫХОД\_С_СЕРВЕРА', colour = discord.Color.orange(), timestamp = datetime.datetime.utcnow()) # CLIENT_LEFT_SERVER
     emb.add_field(name = 'СЕРВЕР', value = guild.name) # SERVER
@@ -271,13 +257,6 @@ async def on_guild_remove(guild):
 
 @client.event
 async def on_guild_join(guild):
-    for guild in client.guilds:
-        post = {
-            '_id': guild.id,
-            'locale': 'ru'
-        }
-    if collection.count_documents({'_id': guild.id}) == 0:
-        collection.insert_one(post)
     channel = client.get_channel(714175791033876490)
     emb = discord.Embed(title = 'ДОБАВЛЕНИЕ\_НА_СЕРВЕР', colour = discord.Color.orange(), timestamp = datetime.datetime.utcnow()) # CLIENT_ADDED_TO_SERVER
     emb.add_field(name = 'СЕРВЕР', value = guild.name) # SERVER
@@ -305,6 +284,12 @@ async def on_voice_state_update(member, before, after):
 
 @client.event
 async def on_message(message):
+    post = {
+        '_id': message.author.id,
+        'locale': 'ru'
+    }
+    if collection.count_documents({'_id': message.author.id}) == 0 and message.author.bot == False:
+        collection.insert_one(post)
     if message.content.lower().startswith('cy|'):
         channel = client.get_channel(714175791033876490)
         emb = discord.Embed(title = 'ВОЗМОЖНОЕ\_ВЫПОЛНЕНИЕ_КОМАНДЫ', color = discord.Color.orange()) 
@@ -547,7 +532,7 @@ async def dm(ctx, member: discord.User, *, text):
 
 @slash.slash(name = 'kick', description = 'Выгоняет участника с сервера', options = [{'name': 'Member', 'description': 'Участник', 'required': True, 'type': 6}, {'name': 'reason', 'description': 'Причина', 'required': False, 'type': 3}])
 async def _kick(ctx, member: discord.Member, *, reason = None):
-    rlocale = collection.find_one({"_id": ctx.guild.id})["locale"]
+    rlocale = collection.find_one({"_id": ctx.author.id})["locale"]
     bot = discord.utils.get(ctx.guild.members, id = client.user.id)
     if member.id != 338714886001524737:
         if reason == None:
@@ -604,7 +589,7 @@ async def _kick(ctx, member: discord.Member, *, reason = None):
 @commands.cooldown(1, 10, commands.BucketType.user)
 @commands.has_permissions(kick_members = True)
 async def kick(ctx, member: discord.Member, *, reason = None):
-    rlocale = collection.find_one({"_id": ctx.guild.id})["locale"]
+    rlocale = collection.find_one({"_id": ctx.author.id})["locale"]
     bot = discord.utils.get(ctx.guild.members, id = client.user.id)
     if member.id != 338714886001524737:
         if reason == None:
@@ -679,7 +664,7 @@ async def kick(ctx, member: discord.Member, *, reason = None):
 
 @slash.slash(name = 'ban', description = 'Банит участника', options = [{'name': 'member', 'description': 'Участник', 'required': True, 'type': 6}, {'name': 'reason', 'description': 'Причина и/или указание --soft --reason', 'required': False, 'type': 3}])
 async def _ban(ctx, member: discord.Member, *, reason = None):
-    rlocale = collection.find_one({"_id": ctx.guild.id})["locale"]
+    rlocale = collection.find_one({"_id": ctx.author.id})["locale"]
     bot = discord.utils.get(ctx.guild.members, id = client.user.id)
     if member.id != 338714886001524737:
         if reason == None:
@@ -750,7 +735,7 @@ async def _ban(ctx, member: discord.Member, *, reason = None):
 @commands.cooldown(1, 10, commands.BucketType.user)
 @commands.has_permissions(ban_members = True)
 async def ban(ctx, member: discord.Member, *, reason = None):
-    rlocale = collection.find_one({"_id": ctx.guild.id})["locale"]
+    rlocale = collection.find_one({"_id": ctx.author.id})["locale"]
     bot = discord.utils.get(ctx.guild.members, id = client.user.id)
     if member.id != 338714886001524737:
         if reason == None:
@@ -843,6 +828,7 @@ async def ban(ctx, member: discord.Member, *, reason = None):
 
 @slash.slash(name = 'give', description = 'Выдаёт участнику роль', options = [{'name': 'member', 'description': 'Участник', 'required': True, 'type': 6}, {'name': 'role', 'description': 'Роль', 'required': True, 'type': 8}])
 async def _give(ctx, member: discord.Member, *, role: discord.Role):
+    rlocale = collection.find_one({"_id": ctx.author.id})["locale"]
     if role.name == 'Muted':
         if member.id != client.owner_id:
             await member.add_roles(role)
@@ -896,6 +882,7 @@ async def _give(ctx, member: discord.Member, *, role: discord.Role):
 @client.command(aliases = ['Give', 'GIVE'])
 @commands.has_permissions(manage_channels = True)
 async def give(ctx, member: discord.Member, *, role: discord.Role):
+    rlocale = collection.find_one({"_id": ctx.author.id})["locale"]
     if role.name == 'Muted':
         if member.id != client.owner_id:
             await member.add_roles(role)
@@ -2783,7 +2770,7 @@ async def dotersbrain(ctx):
 @client.command()
 @commands.cooldown(1, 3, commands.BucketType.user)
 async def niggers(ctx):
-    rlocale = collection.find_one({"_id": ctx.guild.id})["locale"]
+    rlocale = collection.find_one({"_id": ctx.author.id})["locale"]
     if rlocale == 'ru':
         emb = discord.Embed(description = '[осуждающее видео](https://www.youtube.com/watch?v=167apVK8Suw)', colour = discord.Color.orange())
         if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
@@ -3258,46 +3245,39 @@ async def edit(ctx, arg, *, msg = None):
 #Cephalon
 @client.command() #ru, gnida
 async def locale(ctx, locale = None):
-    if ctx.author.id == ctx.guild.owner.id:
-        if locale == 'gnida':
-            rlocale = collection.find_one({"_id": ctx.guild.id})["locale"]
-            collection.update_one({"locale": 'ru', '_id': ctx.guild.id}, {"$set": {'locale': 'gnida'}})
-            await ctx.send('Твоя ёбаная локаль была установлена на `gnida`!')
-        if locale == 'ru':
-            glocale = collection.find_one({"_id": ctx.guild.id})["locale"]
-            collection.update_one({"locale": 'gnida', '_id': ctx.guild.id}, {"$set": {'locale': 'ru'}})
-            await ctx.send('Ваша локаль была установлена на `ru`.')
-        if locale == None:
-            await ctx.send('Возможные локали:\nru\ngnida\n\nПри установке локали на `gnida` будут прикольные штуки!\n\nЛокаль изменяется на весь сервер, это означает то, что у каждого пользователя будет использоваться одна из локалей')
-    else:
-        rlocale = collection.find_one({"_id": ctx.guild.id})["locale"]
-        if rlocale == 'ru':
-            await ctx.send('Только владелец сервера может изменять локали.')
-        if rlocale == 'gnida':
-            await ctx.send(f'Пошёл нахуй, только {ctx.guild.owner.mention} может менять локали!')
+    if locale == 'gnida':
+        rlocale = collection.find_one({"_id": ctx.author.id})["locale"]
+        collection.update_one({"locale": 'ru', '_id': ctx.author.id}, {"$set": {'locale': 'gnida'}})
+        await ctx.send('Твоя ёбаная локаль была установлена на `gnida`!')
+    if locale == 'ru':
+        glocale = collection.find_one({"_id": ctx.author.id})["locale"]
+        collection.update_one({"locale": 'gnida', '_id': ctx.author.id}, {"$set": {'locale': 'ru'}})
+        await ctx.send('Ваша локаль была установлена на `ru`.')
+    if locale == None:
+        await ctx.send('Возможные локали:\nru\ngnida\n\nПри установке локали на `gnida` будут прикольные штуки!')
         
 @client.command()
 async def locale_test(ctx):
-    rlocale = collection.find_one({"_id": ctx.guild.id})["locale"]
+    rlocale = collection.find_one({"_id": ctx.author.id})["locale"]
     if rlocale == None:
         post = {
-            '_id': ctx.guild.id,
+            '_id': ctx.author.id,
             'locale': 'ru'
         }
-        if collection.count_documents({'_id': ctx.guild.id}) == 0:
+        if collection.count_documents({'_id': ctx.author.id}) == 0:
             collection.insert_one(post)
     if rlocale == 'ru':
-        await ctx.send('Серверная локаль `ru`')
+        await ctx.send('Ваша локаль равна `ru`')
     if rlocale == 'gnida':
-        await ctx.send('Ёбаная локаль `gnida`')
+        await ctx.send('Твоя ёбаная локаль равна `gnida`')
         
 @client.command()
 async def setup(ctx):
     post = {
-        '_id': ctx.guild.id,
+        '_id': ctx.author.id,
         'locale': 'ru'
     }
-    if collection.count_documents({'_id': ctx.guild.id}) == 0:
+    if collection.count_documents({'_id': ctx.author.id}) == 0:
         collection.insert_one(post)
     role3 = discord.utils.get(ctx.guild.roles, name = '----------Предупреждения----------')
     role1 = discord.utils.get(ctx.guild.roles, name = '1')
