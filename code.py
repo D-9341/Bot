@@ -511,7 +511,7 @@ async def _dm(ctx, member: discord.User, *, text):
     emb = discord.Embed(description = f'{text}', colour = 0x2f3136)
     emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
     await member.send(embed = emb)
-    rlocale = collection.find_one({"_id": ctx.guild.id})["locale"]
+    rlocale = collection.find_one({"_id": ctx.author.id})["locale"]
     if rlocale == 'ru':
         await ctx.send('Сообщение отправлено.')
     if rlocale == 'gnida':
@@ -524,7 +524,7 @@ async def dm(ctx, member: discord.User, *, text):
     emb = discord.Embed(description = f'{text}', colour = 0x2f3136)
     emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
     await member.send(embed = emb)
-    rlocale = collection.find_one({"_id": ctx.guild.id})["locale"]
+    rlocale = collection.find_one({"_id": ctx.author.id})["locale"]
     if rlocale == 'ru':
         await ctx.send('Сообщение отправлено.')
     if rlocale == 'gnida':
