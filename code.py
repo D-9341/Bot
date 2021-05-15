@@ -14,7 +14,7 @@ from discord.ext import commands
 from discord.utils import get
 from discord_slash import SlashCommand, SlashContext
 
-client = commands.Bot(command_prefix = commands.when_mentioned_or('cy/'), intents = discord.Intents.all(), owner_id = 338714886001524737, status = discord.Status.idle, activity = discord.Activity(type = discord.ActivityType.watching, name = 'Slash Commands'), allowed_mentions = discord.AllowedMentions(everyone = False))
+client = commands.Bot(command_prefix = commands.when_mentioned_or('cy/'), intents = discord.Intents.all(), owner_id = 338714886001524737, status = discord.Status.idle, activity = discord.Activity(type = discord.ActivityType.watching, name = 'Slash Commands'), allowed_mentions = discord.AllowedMentions(everyone = False), case_insensitive = True)
 client.remove_command('help')
 slash = SlashCommand(client, sync_commands = True)
 passw = os.environ.get('passw')
@@ -59,11 +59,6 @@ class Slapper(commands.Converter):
         if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
             emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         return await ctx.send(f'@someone ||{mention.mention}||', embed = emb)
-
-def revert_cooldown(command: commands.Command, message: discord.Message) -> None:
-    if command._buckets.valid:
-        bucket = command._buckets.get_bucket(message)
-        bucket._tokens = min(bucket.rate, bucket._tokens + 1)
     
 #Events
 @client.event
