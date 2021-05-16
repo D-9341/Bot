@@ -874,7 +874,7 @@ async def _give(ctx, member: discord.Member, *, role: discord.Role):
             emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
         
-@client.command(aliases = ['Give', 'GIVE'])
+@client.command()
 @commands.has_permissions(manage_channels = True)
 async def give(ctx, member: discord.Member, *, role: discord.Role):
     rlocale = collection.find_one({"_id": ctx.author.id})["locale"]
@@ -967,7 +967,7 @@ async def _take(ctx, member: discord.Member, *, role: discord.Role):
             emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
             
-@client.command(aliases = ['Take', 'TAKE'])
+@client.command()
 @commands.has_permissions(manage_channels = True)
 async def take(ctx, member: discord.Member, *, role: discord.Role):
         if role != None:
@@ -1018,7 +1018,7 @@ async def take(ctx, member: discord.Member, *, role: discord.Role):
                 emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
             await ctx.send(embed = emb)
 
-@client.command(aliases = ['Mute', 'MUTE'])
+@client.command()
 @commands.has_permissions(view_audit_log = True)
 async def mute(ctx, member: discord.Member, time: TimeConverter, *, reason: str = None):
     if time < 300:
@@ -1121,7 +1121,7 @@ async def _unmute(ctx, member: discord.Member, *, reason = None):
         emb = discord.Embed(description = f'{ctx.author.mention}, Я не могу снять заглушение у {member.mention} из-за того, что роль Muted была удалена/отредактирована!', colour = discord.Color.orange(), timestamp = datetime.datetime.now())
         await ctx.send(embed = emb)
         
-@client.command(aliases = ['Unmute', 'UNMUTE'])
+@client.command()
 @commands.has_permissions(manage_channels = True)
 async def unmute(ctx, member: discord.Member, *, reason = None):
     role = discord.utils.get(ctx.guild.roles, name = 'Muted')
@@ -1639,7 +1639,7 @@ async def _clear(ctx, amount: int, members = '--everyone', *, filt = None):
                 else:
                     await ctx.channel.purge(limit = amount, check = lambda m: m.content.lower() == filt.lower())
         
-@client.command(aliases = ['Clear', 'CLEAR', 'purge', 'Purge', 'PURGE', 'prune', 'Prune', 'PRUNE', 'clean', 'Clean', 'CLEAN'])
+@client.command(aliases = ['purge', 'prune'])
 @commands.cooldown(1, 10, commands.BucketType.user)
 @commands.has_permissions(administrator = True)
 async def clear(ctx, amount: int, members = '--everyone', *, filt = None):
@@ -2471,7 +2471,7 @@ async def _guild(ctx):
     emb.set_thumbnail(url = guild.icon_url)
     await ctx.send(embed = emb)
     
-@client.command(aliases = ['Guild', 'GUILD'])
+@client.command()
 @commands.cooldown(1, 5, commands.BucketType.user)
 async def guild(ctx):
     guild = ctx.guild
@@ -2574,7 +2574,7 @@ async def _avatar(ctx, member: discord.Member = None):
     emb.set_author(name = member)
     await ctx.send(embed = emb)
     
-@client.command(aliases = ['Avatar', 'AVATAR'])
+@client.command()
 @commands.cooldown(1, 5, commands.BucketType.user)
 async def avatar(ctx, member: discord.Member = None):
     if member == None:
@@ -2646,7 +2646,7 @@ async def _about(ctx, member: discord.Member = None):
     emb.set_thumbnail(url = member.avatar_url)
     await ctx.send(embed = emb)
 
-@client.command(aliases = ['me', 'Me', 'ME', 'About', 'ABOUT'])
+@client.command(aliases = ['me'])
 @commands.cooldown(1, 5, commands.BucketType.user)
 async def about(ctx, member: discord.Member = None):
     if member == None:
@@ -2948,7 +2948,7 @@ async def zatka(ctx):
 async def _cu(ctx):
     await ctx.send('Медь')
 
-@client.command(aliases = ['Cu', 'CU'])
+@client.command()
 @commands.cooldown(1, 5, commands.BucketType.user)
 async def cu(ctx):
     await ctx.send(f'Медь')
@@ -2963,7 +2963,7 @@ async def _coinflip(ctx):
     rancoin = random.choice(choices)
     await ctx.send(embed = rancoin)
 
-@client.command(aliases = ['c', 'C', 'coin', 'Coin', 'COIN', 'Coinflip', 'COINFLIP'])
+@client.command(aliases = ['c', 'coin'])
 @commands.cooldown(3, 3, commands.BucketType.user)
 async def coinflip(ctx):
     emb = discord.Embed(description = 'Орёл!', colour = discord.Color.orange())
@@ -3200,7 +3200,7 @@ async def _say(ctx, *, msg):
             else:
                 return await ctx.send(embed = emb)
 
-@client.command(aliases = ['Say', 'SAY'])
+@client.command()
 async def say(ctx, *, msg):
     title = ''
     description = ''
@@ -3306,7 +3306,7 @@ async def _edit(ctx, arg, *, msg):
     else:
         return await ctx.send(f'сообщение {message.id} не обнаружено.')
                 
-@client.command(aliases = ['Edit', 'EDIT'])
+@client.command()
 @commands.has_permissions(manage_channels = True)
 async def edit(ctx, arg, *, msg = None):
     message = await ctx.fetch_message(id = arg)
@@ -3431,7 +3431,7 @@ async def generate(ctx):
     token2 = ''.join([secrets.choice('QWERTYUIOPASDFGHJKLZXCVBNM1234567890') for i in range(4)])
     await ctx.send(f'```{token}-{token1}-{token2}```')
 
-@client.command(aliases = ['Join', 'JOIN'])
+@client.command()
 async def join(ctx):
     if ctx.author.voice and ctx.author.voice.channel:
         channel = ctx.author.voice.channel
@@ -3464,7 +3464,7 @@ async def _ping(ctx):
     await asyncio.sleep(client.latency)
     await message.edit(embed = emb1)
     
-@client.command(aliases = ['Ping', 'PING'])
+@client.command()
 @commands.cooldown(1, 5, commands.BucketType.user)
 async def ping(ctx):
     emb = discord.Embed(description = f'`fetching..`', colour = discord.Color.orange())
@@ -3525,7 +3525,7 @@ async def _info(ctx):
         emb.set_footer(text = 'Данное приложение не имеет никакого причастия к игре Warframe.', icon_url = 'https://i.playground.ru/p/yVaOZNSTdgUTxmzy_qvzzQ.png')
     await ctx.send(embed = emb)
             
-@client.command(aliases = ['Info', 'INFO'])
+@client.command()
 @commands.cooldown(1, 5, commands.BucketType.user)
 async def info(ctx):
     emb = discord.Embed(colour = discord.Color.orange())
@@ -3686,7 +3686,7 @@ async def _help(ctx, arg = None):
         await ctx.send('```ARM\nban - бан участника\nclear - очистка чата, не более 300!\ndm - пишет в лс участнику написанный текст\ngive - выдаёт роль\nkick - кик участника\nmute - заглушение участника\ntake - забирает роль\nunmute - снятие заглушения участника.```')
         await ctx.send('```ARM\nabout - информация о человеке\navatar - аватар человека\nguild - информация о сервере\nremind - напоминание о событии\nroleinfo - информация о роли\nrolemembers - участники роли\nsomeone - упоминание someone\nvote - голосование за что-то.```')
     
-@client.command(aliases = ['Help', 'HELP'])
+@client.command()
 @commands.cooldown(1, 3, commands.BucketType.user)
 async def help(ctx, arg = None):
     if arg == None:
