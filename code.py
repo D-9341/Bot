@@ -14,7 +14,7 @@ from discord.ext import commands
 from discord.utils import get
 from discord_slash import SlashCommand, SlashContext
 
-client = commands.Bot(command_prefix = commands.when_mentioned_or('cy/'), intents = discord.Intents.all(), owner_id = 338714886001524737, status = discord.Status.idle, activity = discord.Activity(type = discord.ActivityType.watching, name = 'Slash Commands'), allowed_mentions = discord.AllowedMentions(everyone = False), case_insensitive = False)
+client = commands.Bot(command_prefix = commands.when_mentioned_or('cy/'), intents = discord.Intents.all(), owner_id = 338714886001524737, status = discord.Status.idle, activity = discord.Activity(type = discord.ActivityType.watching, name = 'Slash Commands'), allowed_mentions = discord.AllowedMentions(everyone = False), case_insensitive = True)
 client.remove_command('help')
 slash = SlashCommand(client, sync_commands = True)
 passw = os.environ.get('passw')
@@ -580,7 +580,7 @@ async def _kick(ctx, member: discord.Member, *, reason = None):
             emb = discord.Embed(description = 'Ого! Пошёл нахуй!', colour = discord.Color.orange())
             await ctx.send(embed = emb)
     
-@client.command(aliases = ['Kick', 'KICK'])
+@client.command()
 @commands.cooldown(1, 10, commands.BucketType.user)
 @commands.has_permissions(kick_members = True)
 async def kick(ctx, member: discord.Member, *, reason = None):
@@ -726,7 +726,7 @@ async def _ban(ctx, member: discord.Member, *, reason = None):
             emb = discord.Embed(description = 'А ты не прихуел даже ПЫТАТЬСЯ это сделать?!', colour = discord.Color.orange())
             await ctx.send(embed = emb)
         
-@client.command(aliases = ['Ban', 'BAN'])
+@client.command()
 @commands.cooldown(1, 10, commands.BucketType.user)
 @commands.has_permissions(ban_members = True)
 async def ban(ctx, member: discord.Member, *, reason = None):
