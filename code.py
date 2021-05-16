@@ -2424,6 +2424,18 @@ async def vote(ctx, *, text):
 async def someone(ctx, *, text: Slapper):
     await ctx.send(embed = text)
 
+@slash.slash(name = 'rolemembers', description = 'Показывает участников с определённой ролью', options = [{'name': 'role', 'description': 'Роль для поиска', 'required': True, 'type': 8}])
+async def _rolemembers(ctx, role: discord.Role, member: discord.Member = None):
+    emb = discord.Embed(colour = discord.Color.orange())
+    if len(role.members) != 0:
+        emb.add_field(name = f'Участники с ролью {role} ({len(role.members)})', value = ', '.join([member.mention for member in role.members]))
+    else:
+        if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
+            emb.set_footer(text = 'Обнаружено 0 участников с этой ролью. Cephalon Cy by сасиска#2472')
+        else:
+            emb.set_footer(text = 'Обнаружено 0 участников с этой ролью.')
+    await ctx.send(embed = emb)
+    
 @client.command()
 @commands.cooldown(1, 5, commands.BucketType.user)
 async def rolemembers(ctx, role: discord.Role, member: discord.Member = None):
@@ -2485,6 +2497,34 @@ async def guild(ctx):
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
     await ctx.send(embed = emb)
     
+@slash.slash(name = 'roleinfo', description = 'Информация о роли', options = [{'name': 'role', 'description': 'Роль', 'required': True, 'type': 8}])
+async def roleinfo(ctx, *, role: discord.Role):
+    if role.mentionable == False:
+        role.mentionable = 'Нет'
+    elif role.mentionable == True:
+        role.mentionable = 'Да'
+    if role.managed == False:
+        role.managed = 'Нет'
+    elif role.managed == True:
+        role.managed = 'Да'
+    if role.hoist == False:
+        role.hoist = 'Нет'
+    elif role.hoist == True:
+        role.hoist = 'Да'
+    emb = discord.Embed(title = role.name, colour = role.colour)
+    emb.add_field(name = 'ID', value = role.id)
+    emb.add_field(name = 'Цвет', value = role.color)
+    emb.add_field(name = 'Упоминается?', value = role.mentionable)
+    emb.add_field(name = 'Управляется интеграцией?', value = role.managed)
+    emb.add_field(name = 'Позиция в списке', value = role.position)
+    now = datetime.datetime.today()
+    then = role.created_at
+    delta = now - then
+    d = role.created_at.strftime('%d.%m.%Y %H:%M:%S GMT')
+    emb.add_field(name = 'Создана', value = f'{delta.days} дня(ей) назад. ({d})', inline = False)
+    emb.add_field(name = 'Показывает участников отдельно?', value = role.hoist)
+    await ctx.send(embed = emb)
+
 @client.command()
 @commands.cooldown(1, 5, commands.BucketType.user)
 async def roleinfo(ctx, *, role: discord.Role):
@@ -2515,7 +2555,7 @@ async def roleinfo(ctx, *, role: discord.Role):
     if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
     await ctx.send(embed = emb)
-
+    
 @slash.slash(name = 'avatar', description = 'Выводит аватар участника', options = [{'name': 'member', 'description': 'Пользователь', 'required': False, 'type': 6}])
 async def _avatar(ctx, member: discord.Member = None):
     if member == None:
@@ -2529,7 +2569,7 @@ async def _avatar(ctx, member: discord.Member = None):
         emb.add_field(name = '.webp', value = f'[Ссылка]({member.avatar_url_as(format = av1)})')
         emb.add_field(name = '.jpg', value = f'[Ссылка]({member.avatar_url_as(format = av2)})')
     else:
-        emb.set_footer(text = 'по причине того, что аватар анимирован - ссылок на статичные форматы нет!')
+        emb.set_footer(text = 'по причине того, что аватар анимирован - ссылок на статичные форматы нет.')
     emb.set_image(url = member.avatar_url)
     emb.set_author(name = member)
     await ctx.send(embed = emb)
@@ -2549,9 +2589,9 @@ async def avatar(ctx, member: discord.Member = None):
         emb.add_field(name = '.jpg', value = f'[Ссылка]({member.avatar_url_as(format = av2)})')
     else:
         if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
-            emb.set_footer(text = 'По причине того, что аватар анимирован - ссылок на статичные форматы нет! Cephalon Cy by сасиска#2472')
+            emb.set_footer(text = 'По причине того, что аватар анимирован - ссылок на статичные форматы нет. Cephalon Cy by сасиска#2472')
         else:
-            emb.set_footer(text = 'По причине того, что аватар анимирован - ссылок на статичные форматы нет!')
+            emb.set_footer(text = 'По причине того, что аватар анимирован - ссылок на статичные форматы нет.')
     emb.set_image(url = member.avatar_url)
     emb.set_author(name = member)
     await ctx.send(embed = emb)
@@ -2724,6 +2764,44 @@ async def roll(ctx, first: int = None, second: int = None):
         rand = random.randint(first, second)
         await ctx.send(f'`{ctx.author} выпадает число({first}-{second})\n{rand}`')
 
+@slash.slash(name = 'dotersbrain', description = 'Полезно для проверки на мозг дотера')
+async def dotersbrain(ctx):
+    sent1 = await ctx.send(f'{ctx.author.mention}, через 5 секунд появится одно из слов (чё, а, да, нет, ок), на которое вам нужно будет правильно ответить. На размышление 4 секунды.')
+    await asyncio.sleep(5)
+    words = ['чё', 'а', 'да', 'нет', 'ок']
+    rand = random.choice(words)
+    sent = await ctx.send(rand)
+    try:
+        msg = await client.wait_for('message', timeout = 4, check = lambda message: message.author == ctx.author and message.channel == ctx.message.channel)
+        if msg.content.lower() == 'хуй через плечо' and sent.content == 'чё':
+            await ctx.send(f'Поздравляю, у вас 3 стадия рака!')
+            await sent1.delete()
+            await sent.delete()
+        elif sent.content == 'а' and msg.content.lower() == 'хуй на':
+            await ctx.send(f'Поздравляю, у вас 3 стадия рака!')
+            await sent1.delete()
+            await sent.delete()
+        elif sent.content == 'да' and msg.content.lower() == 'пизда':
+            await ctx.send(f'Поздравляю, у вас 3 стадия рака!')
+            await sent1.delete()
+            await sent.delete()
+        elif sent.content == 'нет' and msg.content.lower() == 'пидора ответ':
+            await ctx.send(f'Поздравляю, у вас 3 стадия рака!')
+            await sent1.delete()
+            await sent.delete()
+        elif sent.content == 'ок' and msg.content.lower() == 'хуй намок':
+            await ctx.send(f'Поздравляю, у вас 3 стадия рака!')
+            await sent1.delete()
+            await sent.delete()
+        else:
+            await ctx.send('Вы совершенно здоровый человек! ||попробуйте cy/help dotersbrain||')
+            await sent1.delete()
+            await sent.delete()
+    except asyncio.TimeoutError:
+        await ctx.send(f'{ctx.author.mention}, Слишком медленно.')
+        await sent1.delete()
+        await sent.delete()
+        
 @client.command()
 async def dotersbrain(ctx):
     sent1 = await ctx.send(f'{ctx.author.mention}, через 5 секунд появится одно из слов (чё, а, да, нет, ок), на которое вам нужно будет правильно ответить. На размышление 4 секунды.')
@@ -2762,6 +2840,20 @@ async def dotersbrain(ctx):
         await sent1.delete()
         await sent.delete()
 
+@slash.slash(name = 'niggers', description = 'Осуждаем!')
+async def _niggers(ctx):
+    rlocale = collection.find_one({"_id": ctx.author.id})["locale"]
+    if rlocale == 'ru':
+        emb = discord.Embed(description = '[осуждающее видео](https://www.youtube.com/watch?v=167apVK8Suw)', colour = discord.Color.orange())
+        if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
+            emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+        await ctx.send(embed = emb)
+    if rlocale == 'gnida':
+        emb = discord.Embed(description = '[негры пидарасы, и извинятся за это не буду!](https://www.youtube.com/watch?v=167apVK8Suw)', colour = discord.Color.orange())
+        if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
+            emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+        await ctx.send(embed = emb)
+
 @client.command()
 @commands.cooldown(1, 3, commands.BucketType.user)
 async def niggers(ctx):
@@ -2777,6 +2869,13 @@ async def niggers(ctx):
             emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
 
+@slash.slash(name = 'ayebalbec', description = 'Я не ангел и не бес, просто..')
+async def balbec(ctx):
+    emb = discord.Embed(colour = ctx.author.color)
+    emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
+    emb.set_image(url = 'https://sun9-61.userapi.com/tja5cuQthduwgxq2yMigLiUxfYq_5fqiA6cJWg/sZOkbPajoSY.jpg')
+    await ctx.send(embed = emb)
+
 @client.command()
 @commands.cooldown(1, 3, commands.BucketType.user)
 async def aye_balbec(ctx):
@@ -2784,6 +2883,11 @@ async def aye_balbec(ctx):
     emb.set_image(url = 'https://sun9-61.userapi.com/tja5cuQthduwgxq2yMigLiUxfYq_5fqiA6cJWg/sZOkbPajoSY.jpg')
     if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+    await ctx.send(embed = emb)
+
+@slash.slash(name = 'rp', description = 'Ультимативный гайд по рп отыгровке')
+async def _rp(ctx):
+    emb = discord.Embed(description = '[Ныа](https://www.youtube.com/watch?v=idmTSW9mfYI)', colour = discord.Color.orange())
     await ctx.send(embed = emb)
 
 @client.command()
@@ -2794,6 +2898,13 @@ async def rp(ctx):
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
     await ctx.send(embed = emb)
 
+@slash.slash(name = 'rap', description = '.rap')
+async def _rap(ctx):
+    emb = discord.Embed(colour = ctx.author.color)
+    emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
+    emb.set_image(url = 'https://thumbs.gfycat.com/MessyCarefreeHousefly-size_restricted.gif')
+    await ctx.send(embed = emb)
+
 @client.command(aliases = ['.rap'])
 @commands.cooldown(1, 5, commands.BucketType.user)
 async def rap(ctx):
@@ -2802,6 +2913,19 @@ async def rap(ctx):
     emb.set_image(url = 'https://thumbs.gfycat.com/MessyCarefreeHousefly-size_restricted.gif')
     if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+    await ctx.send(embed = emb)
+
+@slash.slash(name = 'zatka', description = 'Форма заявки для Набор кадров')
+async def _zatka(ctx):
+    emb = discord.Embed(title = 'Форма заявки для Набор кадров', colour = ctx.author.color)
+    emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
+    emb.add_field(name = '(1). ZATKA в STEAM.  ZATKA_KING#8406 в Discord.', value = 'возраст 14+  часовой пояс IL +0.', inline = False)
+    emb.add_field(name = '(2). Интересующая управление:', value = 'Discord', inline = False)
+    emb.add_field(name = '(3). Опыт администрирования:', value = 'Есть.', inline = False)
+    emb.add_field(name = 'творческие:', value = 'Есть.', inline = False)
+    emb.add_field(name = 'технические навыки:', value = 'Нет.', inline = False)
+    emb.add_field(name = '(4). Сколько часов готовы уделять работе', value = '[ 15+ в неделю ]', inline = False)
+    emb.add_field(name = 'в какое время дня свободны', value = '16:00 до 22:00+', inline = False)
     await ctx.send(embed = emb)
 
 @client.command()
@@ -2820,10 +2944,24 @@ async def zatka(ctx):
         emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
     await ctx.send(embed = emb)
 
+@slash.slash(name = 'cu', description = 'Медь')
+async def _cu(ctx):
+    await ctx.send('Медь')
+
 @client.command(aliases = ['Cu', 'CU'])
 @commands.cooldown(1, 5, commands.BucketType.user)
 async def cu(ctx):
     await ctx.send(f'Медь')
+
+@slash.slash(name = 'coinflip', description = 'Подкидывает монетку')
+async def _coinflip(ctx):
+    emb = discord.Embed(description = 'Орёл!', colour = discord.Color.orange())
+    emb.set_image(url = 'https://cdn.discordapp.com/attachments/524213591084105729/763835275930632252/-removebg-preview.png')
+    emb1 = discord.Embed(description = 'Решка!', colour = discord.Color.orange())
+    emb1.set_image(url = 'https://cdn.discordapp.com/attachments/524213591084105729/763837699240099890/-removebg-preview.png')
+    choices = [emb, emb1]
+    rancoin = random.choice(choices)
+    await ctx.send(embed = rancoin)
 
 @client.command(aliases = ['c', 'C', 'coin', 'Coin', 'COIN', 'Coinflip', 'COINFLIP'])
 @commands.cooldown(3, 3, commands.BucketType.user)
@@ -3268,12 +3406,6 @@ async def locale_test(ctx):
         
 @client.command()
 async def setup(ctx):
-    post = {
-        '_id': ctx.author.id,
-        'locale': 'ru'
-    }
-    if collection.count_documents({'_id': ctx.author.id}) == 0:
-        collection.insert_one(post)
     role3 = discord.utils.get(ctx.guild.roles, name = '----------Предупреждения----------')
     role1 = discord.utils.get(ctx.guild.roles, name = '1')
     role2 = discord.utils.get(ctx.guild.roles, name = '2')
@@ -3693,7 +3825,6 @@ async def on_command_error(ctx, error):
         eemb.add_field(name = 'Оставалось времени', value = round(s), inline = False)
         await channel.send(embed = eemb)
     elif isinstance(error, commands.MissingRequiredArgument):
-        revert_cooldown(ctx.command, ctx.message)
         if ctx.command.name == 'clear':
             await ctx.send('```apache\ncy/clear <количество> [автор] [фильтр]\ncy/clear 100\ncy/clear 10 @сасиска\ncy/clear 50 --everyone хыха\ncy/clear 30 --bots\ncy/clear 15 --users\ncy/clear 5 --silent\ncy/clear 200 "--silent --everyone" хыха\n\n--everyone удалит сообщения от всех\n--bots удалит сообщения только от ботов\n--users удалит сообщения только от участников\n--silent не оставит доказательств выполнения команды, исключение - количество >= 10\n\nПри указании автора не будет удалено столько сообщений, сколько было указано, будет удалено столько, сколько будет найдено в пределах этих сообщений.\nСообщения старше 2 недель будут удалены не сразу - лимит discord API\nПри удалении более 100 сообщений нужно подтверждение владельца сервера.\nТолько владелец может удалять от 250 сообщений за раз.\nНе более 300!\n([] - опционально, <> - обязательно, / - или)\nperms = adminstrator```')
         elif ctx.command.name == 'say':
@@ -3704,7 +3835,6 @@ async def on_command_error(ctx, error):
             await ctx.send('```apache\ncy/ban <@пинг/имя/ID> [причина/--soft --reason]\ncy/ban 185476724627210241 --soft --reason лошара\ncy/ban @сасиска чмо\ncy/ban "Sgt White"\ncy/ban @крипочек --soft\n\nПри использовании --soft обязательно указывать --reason ПОСЛЕ --soft\n\n([] - опционально, <> - обязательно, / - или)\nperms = ban_members```')
         else:
             emb = discord.Embed(description = f'{ctx.author.mention}, обнаружен недостаток аргументов для `{ctx.command.name}`. Попробуйте cy/help `{ctx.command.name}`', colour = discord.Color.orange())
-            emb.set_footer(text = 'Задержка команды сброшена, так как была вызвана ошибка при вводе пользователя.')
             await ctx.send(embed = emb)
         eemb = discord.Embed(description = 'Поймана ошибка `MissingRequiredArgument`', color = 0xff0000, timestamp = ctx.message.created_at)
         eemb.add_field(name = 'Сервер', value = ctx.guild.name)
@@ -3712,9 +3842,7 @@ async def on_command_error(ctx, error):
         eemb.add_field(name = 'Команда', value = ctx.command.name, inline = False)
         await channel.send(embed = eemb)
     elif isinstance(error, commands.MemberNotFound):
-        revert_cooldown(ctx.command, ctx.message)
         emb = discord.Embed(description = f'{ctx.author.mention}, участник не обнаружен.', color = discord.Color.orange())
-        emb.set_footer(text = 'Задержка команды сброшена, так как была вызвана ошибка при вводе пользователя.')
         await ctx.send(embed = emb)
         eemb = discord.Embed(description = 'Поймана ошибка `MemberNotFound`', color = 0xff0000, timestamp = ctx.message.created_at)
         eemb.add_field(name = 'Сервер', value = ctx.guild.name)
@@ -3722,9 +3850,7 @@ async def on_command_error(ctx, error):
         eemb.add_field(name = 'Команда', value = ctx.command.name, inline = False)
         await channel.send(embed = eemb)
     elif isinstance(error, commands.BadArgument):
-        revert_cooldown(ctx.command, ctx.message)
         emb = discord.Embed(description = f'{ctx.author.mention}, обнаружен неверный аргумент для `{ctx.command.name}`. Попробуйте cy/help `{ctx.command.name}`', colour = discord.Color.orange())
-        emb.set_footer(text = 'Задержка команды сброшена, так как была вызвана ошибка при вводе пользователя.')
         await ctx.send(embed = emb)
         eemb = discord.Embed(description = 'Поймана ошибка `BadArgument`', color = 0xff0000, timestamp = ctx.message.created_at)
         eemb.add_field(name = 'Сервер', value = ctx.guild.name)
