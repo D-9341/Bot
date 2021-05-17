@@ -501,7 +501,7 @@ async def on_message_edit(before, after):
 #Events
 
 #Mod
-@slash.slash(name = 'dm', description = 'Пишет в лс человеку от имени бота написанный текст', options = [{'name': 'Member', 'description': 'Участник', 'required': True, 'type': 6}, {'name': 'text', 'description': 'Текст для написания', 'required': True, 'type': 3}])
+@slash.slash(name = 'dm', description = 'Пишет в лс человеку от имени бота написанный текст', options = [{'name': 'member', 'description': 'Участник', 'required': True, 'type': 6}, {'name': 'text', 'description': 'Текст для написания', 'required': True, 'type': 3}])
 async def _dm(ctx, member: discord.User, *, text):
     emb = discord.Embed(description = f'{text}', colour = 0x2f3136)
     emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
@@ -525,7 +525,7 @@ async def dm(ctx, member: discord.User, *, text):
     if rlocale == 'gnida':
         await ctx.send('Твоя хуйня отправлена')
 
-@slash.slash(name = 'kick', description = 'Выгоняет участника с сервера', options = [{'name': 'Member', 'description': 'Участник', 'required': True, 'type': 6}, {'name': 'reason', 'description': 'Причина', 'required': False, 'type': 3}])
+@slash.slash(name = 'kick', description = 'Выгоняет участника с сервера', options = [{'name': 'member', 'description': 'Участник', 'required': True, 'type': 6}, {'name': 'reason', 'description': 'Причина', 'required': False, 'type': 3}])
 async def _kick(ctx, member: discord.Member, *, reason = None):
     rlocale = collection.find_one({"_id": ctx.author.id})["locale"]
     bot = discord.utils.get(ctx.guild.members, id = client.user.id)
