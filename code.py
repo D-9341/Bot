@@ -1175,8 +1175,8 @@ async def _clear(ctx, amount: int, members = '--everyone', *, filt = None):
             emb = discord.Embed(description = f'{ctx.author.mention}, обнаружено слишком большое число для удаления сообщений ({amount}). Возможны дальнейшие ошибки в работе {client.user.mention}. Продолжить? (y/n)\n||Отмена через 10 секунд.||', colour = discord.Color.orange())
             sent = await ctx.send(embed = emb)
             try:
-                msg = await client.wait_for('message', timeout = 10, check = lambda message: message.channel == ctx.channel)
-                if msg.content.lower() == 'y' and msg.author.id == ctx.guild.owner.id:
+                msg = await client.wait_for('message', timeout = 10, check = lambda message: message.channel == ctx.channel and message.author.id == ctx.guild.owner.id)
+                if msg.content.lower() == 'y':
                     await msg.delete()
                     await sent.delete()
                     if '--silent' not in members:
@@ -1275,7 +1275,7 @@ async def _clear(ctx, amount: int, members = '--everyone', *, filt = None):
             emb = discord.Embed(description = f'{ctx.author.mention}, создан запрос на удаление {amount} сообщений. Мне нужен ответ создателя сервера на это действие. Продолжаем? (y/n)\n||Запрос будет отменён через 1 минуту.||', colour = discord.Color.orange())
             sent = await ctx.send(f'{ctx.guild.owner.mention}', embed = emb)
             try:
-                msg = await client.wait_for('message', timeout = 10, check = lambda message: message.author == ctx.author and message.channel == ctx.channel)
+                msg = await client.wait_for('message', timeout = 10, check = lambda message: message.channel == ctx.channel and message.author.id == ctx.guild.owner.id)
                 if msg.content.lower() == 'y':
                     await msg.delete()
                     await sent.delete()
