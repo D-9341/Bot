@@ -5,6 +5,7 @@ import json
 import os
 import random
 import re
+import regex
 import secrets
 
 import discord
@@ -59,6 +60,11 @@ class Slapper(commands.Converter):
         if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
             emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         return await ctx.send(f'@someone ||{mention.mention}||', embed = emb)
+    
+def revert_cooldown(command: commands.Command, message: discord.Message) -> None:
+    if command._buckets.valid:
+        bucket = command._buckets.get_bucket(message)
+        bucket._tokens = min(bucket.rate, bucket._tokens + 1)
     
 #Events
 @client.event
@@ -2984,50 +2990,54 @@ async def _content(ctx, arg, channel: discord.TextChannel = None):
     if channel == None:
         channel = ctx.channel
     message = await channel.fetch_message(id = arg)
+    for emb in message.embeds:
+        if emb.color != emb.Empty:
+            color = f' color {emb.color}'
+        else:
+            color = ''
+        if emb.author.name != emb.Empty:
+            author = f' author {emb.author.name}'
+        else:
+            author = ''
+        if message.content == '':
+            content = ''
+        else:
+            content = f'content {message.content}'
+        if emb.image.url != emb.Empty:
+            img = f' | img& {emb.image.url}'
+            image = f' image {emb.image.url}'
+        else:
+            img = ''
+            image = ''
+        if emb.thumbnail.url != emb.Empty:
+            th = f' | th& {emb.thumbnail.url}'
+            thumb = f' thumbnail {emb.thumbnail.url}'
+        else:
+            th = ''
+            thumb = ''
+        if emb.description != emb.Empty:
+            d = f' | d& {emb.description}'
+            description = f' description {emb.description}'
+        else:
+            d = ''
+            description = ''
+        if emb.title != emb.Empty:
+            t = f't& {emb.title}'
+            title = f' title {emb.title}'
+        else:
+            t = ''
+            title = ''
+        if emb.footer.text != emb.Empty:
+            f = f' | f& {emb.footer.text}'
+            footer = f' footer {emb.footer.text}'
+        else:
+            f = ''
+            footer = ''
     if message.author.id in botversions:
         if message.embeds == []:
-            if '@everyone' in message.content:
-                await ctx.send(f'```cy/say --everyone {message.content.strip()[10:].strip()}```')
-            else:
-                await ctx.send(f'```cy/say {message.content}```')
+            await ctx.send(f'```cy/say {message.content}```')
         else:
-            for emb in message.embeds:
-                if '@everyone' in message.content:
-                    if emb.image.url != emb.Empty:
-                        img = f' | img& {emb.image.url}'
-                    else:
-                        img = ''
-                    if emb.thumbnail.url != emb.Empty:
-                        th = f' | th& {emb.thumbnail.url}'
-                    else:
-                        th = ''
-                    if emb.description != emb.Empty:
-                        d = f' | d& {emb.description}'
-                    else:
-                        d = ''
-                    if emb.title != emb.Empty:
-                        t = f'| t& {emb.title}'
-                    else:
-                        t = ''
-                    await ctx.send(f'```py\ncy/say --everyone {t}{d}{th}{img}```')
-                else:
-                    if emb.image.url != emb.Empty:
-                        img = f' | img& {emb.image.url}'
-                    else:
-                        img = ''
-                    if emb.thumbnail.url != emb.Empty:
-                        th = f' | th& {emb.thumbnail.url}'
-                    else:
-                        th = ''
-                    if emb.description != emb.Empty:
-                        d = f' | d& {emb.description}'
-                    else:
-                        d = ''
-                    if emb.title != emb.Empty:
-                        t = f't& {emb.title}'
-                    else:
-                        t = ''
-                    await ctx.send(f'```cy/say {t}{d}{th}{img}```')
+            await ctx.send(f'```cy/say {t}{d}{f}{th}{img}```')
     else:
         if message.embeds == []:
             if '```' in message.content:
@@ -3035,91 +3045,62 @@ async def _content(ctx, arg, channel: discord.TextChannel = None):
             else:
                 await ctx.send(f'```@{message.author} {message.content}```')
         else:
-            for emb in message.embeds:
-                if message.content == '':
-                    content = ''
-                else:
-                    content = f'content {message.content}'
-                if emb.title != emb.Empty:
-                    title = f' title {emb.title}'
-                else:
-                    title = ''
-                if emb.description != emb.Empty:
-                    description = f' description {emb.description}'
-                else:
-                    description = ''
-                if emb.footer.text != emb.Empty:
-                    footer = f' footer {emb.footer.text}'
-                else:
-                    footer = ''
-                if emb.image.url != emb.Empty:
-                    image = f' image {emb.image.url}'
-                else:
-                    image = ''
-                if emb.thumbnail.url != emb.Empty:
-                    thumb = f' thumbnail {emb.thumbnail.url}'
-                else:
-                    thumb = ''
-                if emb.color != emb.Empty:
-                    color = f' color {emb.color}'
-                else:
-                    color = ''
-                if emb.author.name != emb.Empty:
-                    author = f' author {emb.author.name}'
-                else:
-                    author = ''
-                await ctx.send(f'```{content}{title}{description}{footer}{color}{author}{image}{thumb}```')
+            await ctx.send(f'```{content}{title}{description}{footer}{color}{author}{image}{thumb}```')
 
-@client.command(aliases = ['ctx'])
+@client.command(aliases = ['cnt'])
 @commands.cooldown(1, 5, commands.BucketType.user)
 async def content(ctx, arg, channel: discord.TextChannel = None):
     if channel == None:
         channel = ctx.message.channel
     message = await channel.fetch_message(id = arg)
+    for emb in message.embeds:
+        if emb.color != emb.Empty:
+            color = f' color {emb.color}'
+        else:
+            color = ''
+        if emb.author.name != emb.Empty:
+            author = f' author {emb.author.name}'
+        else:
+            author = ''
+        if message.content == '':
+            content = ''
+        else:
+            content = f'content {message.content}'
+        if emb.image.url != emb.Empty:
+            img = f' | img& {emb.image.url}'
+            image = f' image {emb.image.url}'
+        else:
+            img = ''
+            image = ''
+        if emb.thumbnail.url != emb.Empty:
+            th = f' | th& {emb.thumbnail.url}'
+            thumb = f' thumbnail {emb.thumbnail.url}'
+        else:
+            th = ''
+            thumb = ''
+        if emb.description != emb.Empty:
+            d = f' | d& {emb.description}'
+            description = f' description {emb.description}'
+        else:
+            d = ''
+            description = ''
+        if emb.title != emb.Empty:
+            t = f't& {emb.title}'
+            title = f' title {emb.title}'
+        else:
+            t = ''
+            title = ''
+        if emb.footer.text != emb.Empty:
+            f = f' | f& {emb.footer.text}'
+            footer = f' footer {emb.footer.text}'
+        else:
+            f = ''
+            footer = ''
     if message.author.id in botversions:
         if message.embeds == []:
-            if '@everyone' in message.content:
-                await ctx.send(f'```cy/say --everyone {message.content.strip()[10:].strip()}```')
-            else:
-                await ctx.send(f'```cy/say {message.content}```')
+            await ctx.send(f'```cy/say {message.content}```')
         else:
-            for emb in message.embeds:
-                if '@everyone' in message.content:
-                    if emb.image.url != emb.Empty:
-                        img = f' | img& {emb.image.url}'
-                    else:
-                        img = ''
-                    if emb.thumbnail.url != emb.Empty:
-                        th = f' | th& {emb.thumbnail.url}'
-                    else:
-                        th = ''
-                    if emb.description != emb.Empty:
-                        d = f' | d& {emb.description}'
-                    else:
-                        d = ''
-                    if emb.title != emb.Empty:
-                        t = f'| t& {emb.title}'
-                    else:
-                        t = ''
-                    await ctx.send(f'```py\ncy/say --everyone {t}{d}{f}{th}{img}```')
-                else:
-                    if emb.image.url != emb.Empty:
-                        img = f' | img& {emb.image.url}'
-                    else:
-                        img = ''
-                    if emb.thumbnail.url != emb.Empty:
-                        th = f' | th& {emb.thumbnail.url}'
-                    else:
-                        th = ''
-                    if emb.description != emb.Empty:
-                        d = f' | d& {emb.description}'
-                    else:
-                        d = ''
-                    if emb.title != emb.Empty:
-                        t = f't& {emb.title}'
-                    else:
-                        t = ''
-                    await ctx.send(f'```cy/say {t}{d}{f}{th}{img}```')
+            await ctx.send(f'```cy/say {t}{d}{f}{th}{img}```')
     else:
         if message.embeds == []:
             if '```' in message.content:
@@ -3127,42 +3108,9 @@ async def content(ctx, arg, channel: discord.TextChannel = None):
             else:
                 await ctx.send(f'```@{message.author} {message.content}```')
         else:
-            for emb in message.embeds:
-                if message.content == '':
-                    content = ''
-                else:
-                    content = f'content {message.content}'
-                if emb.title != emb.Empty:
-                    title = f' title {emb.title}'
-                else:
-                    title = ''
-                if emb.description != emb.Empty:
-                    description = f' description {emb.description}'
-                else:
-                    description = ''
-                if emb.footer.text != emb.Empty:
-                    footer = f' footer {emb.footer.text}'
-                else:
-                    footer = ''
-                if emb.image.url != emb.Empty:
-                    image = f' image {emb.image.url}'
-                else:
-                    image = ''
-                if emb.thumbnail.url != emb.Empty:
-                    thumb = f' thumbnail {emb.thumbnail.url}'
-                else:
-                    thumb = ''
-                if emb.color != emb.Empty:
-                    color = f' color {emb.color}'
-                else:
-                    color = ''
-                if emb.author.name != emb.Empty:
-                    author = f' author {emb.author.name}'
-                else:
-                    author = ''
-                await ctx.send(f'```{content}{title}{description}{footer}{color}{author}{image}{thumb}```')
+            await ctx.send(f'```{content}{title}{description}{footer}{color}{author}{image}{thumb}```')
 
-@slash.slash(name = 'say', description = 'Пишет от лица бота сообщение или эмбед. Используйте cy/help say для подробностей использования.', options = [{'name': 'msg', 'description': 'Аргументы/текст для написания', 'required': True, 'type': 3}])
+@slash.slash(name = 'say', description = 'Пишет от лица бота сообщение и/или эмбед. Используйте cy/help say для подробностей использования.', options = [{'name': 'msg', 'description': 'Аргументы/текст для написания', 'required': True, 'type': 3}])
 async def _say(ctx, *, msg):
     title = ''
     description = ''
@@ -3825,6 +3773,7 @@ async def on_command_error(ctx, error):
         eemb.add_field(name = 'Оставалось времени', value = round(s), inline = False)
         await channel.send(embed = eemb)
     elif isinstance(error, commands.MissingRequiredArgument):
+        revert_cooldown(ctx.command, ctx.message)
         if ctx.command.name == 'clear':
             await ctx.send('```apache\ncy/clear <количество> [автор] [фильтр]\ncy/clear 100\ncy/clear 10 @сасиска\ncy/clear 50 --everyone хыха\ncy/clear 30 --bots\ncy/clear 15 --users\ncy/clear 5 --silent\ncy/clear 200 "--silent --everyone" хыха\n\n--everyone удалит сообщения от всех\n--bots удалит сообщения только от ботов\n--users удалит сообщения только от участников\n--silent не оставит доказательств выполнения команды, исключение - количество >= 10\n\nПри указании автора не будет удалено столько сообщений, сколько было указано, будет удалено столько, сколько будет найдено в пределах этих сообщений.\nСообщения старше 2 недель будут удалены не сразу - лимит discord API\nПри удалении более 100 сообщений нужно подтверждение владельца сервера.\nТолько владелец может удалять от 250 сообщений за раз.\nНе более 300!\n([] - опционально, <> - обязательно, / - или)\nperms = adminstrator```')
         elif ctx.command.name == 'say':
@@ -3835,6 +3784,7 @@ async def on_command_error(ctx, error):
             await ctx.send('```apache\ncy/ban <@пинг/имя/ID> [причина/--soft --reason]\ncy/ban 185476724627210241 --soft --reason лошара\ncy/ban @сасиска чмо\ncy/ban "Sgt White"\ncy/ban @крипочек --soft\n\nПри использовании --soft обязательно указывать --reason ПОСЛЕ --soft\n\n([] - опционально, <> - обязательно, / - или)\nperms = ban_members```')
         else:
             emb = discord.Embed(description = f'{ctx.author.mention}, обнаружен недостаток аргументов для `{ctx.command.name}`. Попробуйте cy/help `{ctx.command.name}`', colour = discord.Color.orange())
+            emb.set_footer(text = 'Задержка команды сброшена, так как была вызвана ошибка при вводе пользователя')
             await ctx.send(embed = emb)
         eemb = discord.Embed(description = 'Поймана ошибка `MissingRequiredArgument`', color = 0xff0000, timestamp = ctx.message.created_at)
         eemb.add_field(name = 'Сервер', value = ctx.guild.name)
@@ -3842,7 +3792,9 @@ async def on_command_error(ctx, error):
         eemb.add_field(name = 'Команда', value = ctx.command.name, inline = False)
         await channel.send(embed = eemb)
     elif isinstance(error, commands.MemberNotFound):
+        revert_cooldown(ctx.command, ctx.message)
         emb = discord.Embed(description = f'{ctx.author.mention}, участник не обнаружен.', color = discord.Color.orange())
+        emb.set_footer(text = 'Задержка команды сброшена, так как была вызвана ошибка при вводе пользователя')
         await ctx.send(embed = emb)
         eemb = discord.Embed(description = 'Поймана ошибка `MemberNotFound`', color = 0xff0000, timestamp = ctx.message.created_at)
         eemb.add_field(name = 'Сервер', value = ctx.guild.name)
@@ -3850,7 +3802,9 @@ async def on_command_error(ctx, error):
         eemb.add_field(name = 'Команда', value = ctx.command.name, inline = False)
         await channel.send(embed = eemb)
     elif isinstance(error, commands.BadArgument):
+        revert_cooldown(ctx.command, ctx.message)
         emb = discord.Embed(description = f'{ctx.author.mention}, обнаружен неверный аргумент для `{ctx.command.name}`. Попробуйте cy/help `{ctx.command.name}`', colour = discord.Color.orange())
+        emb.set_footer(text = 'Задержка команды сброшена, так как была вызвана ошибка при вводе пользователя')
         await ctx.send(embed = emb)
         eemb = discord.Embed(description = 'Поймана ошибка `BadArgument`', color = 0xff0000, timestamp = ctx.message.created_at)
         eemb.add_field(name = 'Сервер', value = ctx.guild.name)
