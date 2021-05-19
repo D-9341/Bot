@@ -6,3 +6,4 @@ websockets
 chardet
 asyncpg
 pymongo[srv]
+regex
