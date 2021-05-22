@@ -3456,8 +3456,8 @@ async def invite(ctx, arg = None):
 async def _info(ctx):
     emb = discord.Embed(colour = discord.Color.orange())
     emb.set_author(name = client.user.name, url = 'https://warframe.fandom.com/wiki/Cephalon_Cy', icon_url = client.user.avatar_url)
-    emb.add_field(name = 'Версия', value = '0.12.10.1.11661')
-    emb.add_field(name = 'Написан на', value = 'discord.py v1.7.0 при помощи\ndiscord-py-slash-command v1.1.0')
+    emb.add_field(name = 'Версия', value = '0.12.10.2.11856')
+    emb.add_field(name = 'Написан на', value = 'discord.py v1.7.2 при помощи\ndiscord-py-slash-command v1.1.0')
     emb.add_field(name = 'Разработчик', value = '[сасиска#2472](https://discord.com/users/338714886001524737)')
     if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
         emb.add_field(name = 'Сервер', value = 'Данный сервер не принадлежит моему Создателю или его знакомым. Все эмбед выводы будут иметь футер с текстом `Cephalon Cy by сасиска#2472`')
@@ -3472,14 +3472,14 @@ async def _info(ctx):
     else:
         emb.set_footer(text = 'Данное приложение не имеет никакого причастия к игре Warframe.', icon_url = 'https://i.playground.ru/p/yVaOZNSTdgUTxmzy_qvzzQ.png')
     await ctx.send(embed = emb)
-            
+
 @client.command()
 @commands.cooldown(1, 5, commands.BucketType.user)
 async def info(ctx):
     emb = discord.Embed(colour = discord.Color.orange())
     emb.set_author(name = client.user.name, url = 'https://warframe.fandom.com/wiki/Cephalon_Cy', icon_url = client.user.avatar_url)
-    emb.add_field(name = 'Версия', value = '0.12.10.1.11661')
-    emb.add_field(name = 'Написан на', value = 'discord.py v1.7.0 при помощи\ndiscord-py-slash-command v1.1.0')
+    emb.add_field(name = 'Версия', value = '0.12.10.2.11856')
+    emb.add_field(name = 'Написан на', value = 'discord.py v1.7.2 при помощи\ndiscord-py-slash-command v1.1.0')
     emb.add_field(name = 'Разработчик', value = '[сасиска#2472](https://discord.com/users/338714886001524737)')
     if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
         emb.add_field(name = 'Сервер', value = 'Данный сервер не принадлежит моему Создателю или его знакомым. Все эмбед выводы будут иметь футер с текстом `Cephalon Cy by сасиска#2472`')
