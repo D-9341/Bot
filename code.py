@@ -7,7 +7,7 @@ import random
 import re
 import regex
 import secrets
-
+ 
 import discord
 import discord_slash
 from pathlib import Path
