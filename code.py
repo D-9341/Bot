@@ -10,6 +10,7 @@ import secrets
 
 import discord
 import discord_slash
+from pathlib import Path
 from pymongo import MongoClient
 from discord.ext import commands
 from discord.utils import get
@@ -21,6 +22,8 @@ slash = SlashCommand(client, sync_commands = True)
 passw = os.environ.get('passw')
 cluster = MongoClient(f"mongodb+srv://cephalon:{passw}@locale.ttokw.mongodb.net/Locale?retryWrites=true&w=majority")
 collection = cluster.Locale.locale
+cwd = Path(__file__).parents[0]
+cwd = str(cwd)
 
 @client.event
 async def on_ready():
@@ -2097,5 +2100,10 @@ async def on_command_error(ctx, error):
         eemb.add_field(name = 'Команда', value = ctx.command.name, inline = False)
         await channel.send(embed = eemb)
 
+if __name__ == '__main__':
+    for file in os.listdir(cwd+"/cogs"):
+        if file.endswith(".py") and not file.startswith("_"):
+            client.load_extension(f"cogs.{file[:-3]}")
+        
 t = os.environ.get('t')
 client.run(t)
