@@ -1,11 +1,32 @@
-import discord
-from discord.ext import commands
-import datetime
 import asyncio
+import datetime
+import os
+import random
 import re
 
-time_regex = re.compile("(?:(\d{1,5})(h|s|m|d))+?")
+import discord
+from discord.ext import commands
+from pymongo import MongoClient
+
+passw = os.environ.get('passw')
+cluster = MongoClient(f"mongodb+srv://cephalon:{passw}@locale.ttokw.mongodb.net/Locale?retryWrites=true&w=majority")
+collection = cluster.Locale.locale
+
+time_regex = re.compile(r"(?:(\d{1,5})(h|s|m|d))+?")
 time_dict = {'h': 3600, 's': 1, 'm': 60, 'd': 86400}
+
+friends = [351071668241956865, 417362845303439360]
+
+guilds = [693929822543675455, 735874149578440855, 818758712163827723]
+
+botversions = [764882153812787250, 694170281270312991, 762015251264569352]
+
+class Slapper(commands.Converter):
+    async def convert(self, ctx, argument):
+        mention = random.choice(ctx.guild.members)
+        emb = discord.Embed(description = f'{argument}', colour =  0x2f3136, timestamp = ctx.message.created_at)
+        emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
+        return await ctx.send(f'@someone ||{mention.mention}||', embed = emb)
 
 class TimeConverter(commands.Converter):
     async def convert(self, ctx, argument):
@@ -16,56 +37,79 @@ class TimeConverter(commands.Converter):
             try:
                 time += time_dict[value] * float(key)
             except KeyError:
-                raise commands.BadArgument(f'{value} не является правильным аргументом! Правильные: h|m|s|d')
+                await ctx.send(f'{value} не является правильным аргументом! Правильные: h|m|s|d')
             except ValueError:
-                raise commands.BadArgument(f'{key} не число!')
+                await ctx.send(f'{key} не число!')
         return time
 
 class Misc(commands.Cog):
     def __init__(self, client):
         self.client = client
-        
+
     @commands.Cog.listener()
     async def on_ready(self):
-        print('Дополнение Misc успешно загружено.')
+        print('Модуль Misc загружен')
 
-    @commands.command(aliases = ['Guild', 'GUILD'])
-    @commands.cooldown(1, 5, commands.BucketType.default)
+    @commands.command()
+    @commands.cooldown(1, 60, commands.BucketType.guild)
+    async def vote(self, ctx, *, text):
+        emb = discord.Embed(description = 'ГОЛОСОВАНИЕ', colour = discord.Color.orange())
+        emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
+        emb.add_field(name = 'Голосуем за:', value = text)
+        if ctx.guild.owner.id != self.client.owner_id and ctx.guild.owner.id not in friends:
+            emb.set_footer(text = '🚫 - воздержусь. Cephalon Cy by сасиска#2472')
+        else:
+            emb.set_footer(text = '🚫 - воздержусь')
+        sent = await ctx.send(embed = emb)
+        await sent.add_reaction('👍')
+        await sent.add_reaction('👎')
+        await sent.add_reaction('🚫')
+
+    @commands.command()
+    async def someone(self, ctx, text: Slapper):
+        await ctx.send(embed = text)
+
+    @commands.command()
+    @commands.cooldown(1, 5, commands.BucketType.user)
+    async def rolemembers(self, ctx, role: discord.Role, member: discord.Member = None):
+        emb = discord.Embed(colour = discord.Color.orange())
+        if len(role.members) != 0:
+            emb.add_field(name = f'Участники с ролью {role} ({len(role.members)})', value = ', '.join([member.mention for member in role.members]))
+        else:
+            if ctx.guild.owner.id != self.client.owner_id and ctx.guild.owner.id not in friends:
+                emb.set_footer(text = 'Обнаружено 0 участников с этой ролью. Cephalon Cy by сасиска#2472')
+            else:
+                emb.set_footer(text = 'Обнаружено 0 участников с этой ролью.')
+        await ctx.send(embed = emb)
+
+    @commands.command()
+    @commands.cooldown(1, 5, commands.BucketType.user)
     async def guild(self, ctx):
-        await ctx.message.delete()
         guild = ctx.guild
         emb = discord.Embed(colour = discord.Color.orange(), timestamp = ctx.message.created_at)
         emb.set_author(name = guild, icon_url = guild.icon_url)
         emb.add_field(name = 'ID сервера', value = guild.id)
         emb.add_field(name = 'Голосовой регион', value = guild.region)
+        emb.add_field(name = 'Владелец', value = guild.owner.mention)
         emb.add_field(name = 'Участников', value = guild.member_count)
+        emb.add_field(name = 'Из них ботов', value = len(list(filter(lambda m: m.bot, guild.members))))
+        emb.add_field(name = 'Из них людей', value = len(list(filter(lambda m: not m.bot, guild.members))))
         emb.add_field(name = 'Каналов', value = f'Текстовых {len(guild.text_channels)} | Голосовых {len(guild.voice_channels)}')
-        limit = len(guild.roles)
-        if limit > 21:
-            emb.add_field(name = 'Роли', value = f'Слишком много для отрисовки ({len(guild.roles)-1}) [лимит 20]', inline = False)
-        elif limit == 21:
-            emb.add_field(name = f'Роли ({len(guild.roles)-1}) [лимит достигнут]', value = ', '.join([role.mention for role in guild.roles[1:]]), inline = False)
-        elif limit == 20:
-            emb.add_field(name = f'Роли ({len(guild.roles)-1}) [1 до лимита]', value = ', '.join([role.mention for role in guild.roles[1:]]), inline = False)
-        elif limit == 19:
-            emb.add_field(name = f'Роли ({len(guild.roles)-1}) [2 до лимита]', value = ', '.join([role.mention for role in guild.roles[1:]]), inline = False)
-        elif limit == 18:
-            emb.add_field(name = f'Роли ({len(guild.roles)-1}) [3 до лимита]', value = ', '.join([role.mention for role in guild.roles[1:]]), inline = False)
-        else:
-            emb.add_field(name = f'Роли ({len(guild.roles)-1})', value = ', '.join([role.mention for role in guild.roles[1:]]), inline = False)
+        roles = ', '.join([role.name for role in guild.roles[1:]])
+        emb.add_field(name = f'Роли ({len(guild.roles)-1})', value = roles, inline = False)
         now = datetime.datetime.today()
         then = guild.created_at
         delta = now - then
-        d = guild.created_at.strftime('%d/%m/%Y %H:%M:%S UTC')
+        d = guild.created_at.strftime('%d.%m.%Y %H:%M:%S UTC')
         emb.add_field(name = 'Дата создания сервера', value = f'{delta.days} дней назад. ({d})', inline = False)
-        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+        if ctx.guild.owner.id != self.client.owner_id and ctx.guild.owner.id not in friends:
+            emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         emb.set_thumbnail(url = guild.icon_url)
         await ctx.send(embed = emb)
-    
+
     @commands.command()
-    @commands.cooldown(1, 5, commands.BucketType.default)
-    async def role(self, ctx, *, role: discord.Role):
-        await ctx.message.delete()
+    @commands.cooldown(1, 5, commands.BucketType.user)
+    async def roleinfo(self, ctx, role: discord.Role):
         if role.mentionable == False:
             role.mentionable = 'Нет'
         elif role.mentionable == True:
@@ -80,8 +124,6 @@ class Misc(commands.Cog):
             role.hoist = 'Да'
         emb = discord.Embed(title = role.name, colour = role.colour)
         emb.add_field(name = 'ID', value = role.id)
-        if role.is_default():
-            emb.add_field(name = '@everyone', value = 'Является ролью, что имеют все участники сервера.')
         emb.add_field(name = 'Цвет', value = role.color)
         emb.add_field(name = 'Упоминается?', value = role.mentionable)
         emb.add_field(name = 'Управляется интеграцией?', value = role.managed)
@@ -89,38 +131,39 @@ class Misc(commands.Cog):
         now = datetime.datetime.today()
         then = role.created_at
         delta = now - then
-        d = role.created_at.strftime('%d/%m/%Y %H:%M:%S UTC')
+        d = role.created_at.strftime('%d.%m.%Y %H:%M:%S GMT')
         emb.add_field(name = 'Создана', value = f'{delta.days} дня(ей) назад. ({d})', inline = False)
         emb.add_field(name = 'Показывает участников отдельно?', value = role.hoist)
-        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+        if ctx.guild.owner.id != self.client.owner_id and ctx.guild.owner.id not in friends:
+            emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
-    
-    @commands.command(aliases = ['Avatar', 'AVATAR'])
-    @commands.cooldown(1, 5, commands.BucketType.default)
-    async def avatar(self, ctx, *, member: discord.Member = None):
-        await ctx.message.delete()
+
+    @commands.command(aliases = ['av'])
+    @commands.cooldown(1, 5, commands.BucketType.user)
+    async def avatar(self, ctx, member: discord.Member = None):
         if member == None:
             member = ctx.author
         av = 'png'
         av1 = 'webp'
         av2 = 'jpg'
         emb = discord.Embed(colour = member.color)
-        emb.add_field(name = '.png', value = f'[Ссылка]({member.avatar_url_as(format = av)})')
-        emb.add_field(name = '.webp', value = f'[Ссылка]({member.avatar_url_as(format = av1)})')
-        emb.add_field(name = '.jpg', value = f'[Ссылка]({member.avatar_url_as(format = av2)})')
+        if member.is_avatar_animated() == False:
+            emb.add_field(name = '.png', value = f'[Ссылка]({member.avatar_url_as(format = av)})')
+            emb.add_field(name = '.webp', value = f'[Ссылка]({member.avatar_url_as(format = av1)})')
+            emb.add_field(name = '.jpg', value = f'[Ссылка]({member.avatar_url_as(format = av2)})')
+        else:
+            emb.set_footer(text = 'По причине того, что аватар анимирован ссылок на статичные форматы нет')
         emb.set_image(url = member.avatar_url)
         emb.set_author(name = member)
-        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
-    
-    @commands.command(aliases = ['me', 'Me', 'ME', 'About', 'ABOUT'])
-    @commands.cooldown(1, 5, commands.BucketType.default)
-    async def about(self, ctx, *, member: discord.Member = None):
-        await ctx.message.delete()
+
+    @commands.command(aliases = ['me'])
+    @commands.cooldown(1, 5, commands.BucketType.user)
+    async def about(self, ctx, member: discord.Member = None):
         if member == None:
             member = ctx.author
         if member.nick == None:
-            member.nick = 'Не указан'
+            member.nick = 'Н/Д'
         if member.bot == False:
             bot = 'Неа'
         elif member.bot == True:
@@ -131,56 +174,45 @@ class Misc(commands.Cog):
         now = datetime.datetime.today()
         then = member.created_at
         delta = now - then
-        d = member.created_at.strftime('%d/%m/%Y %H:%M:%S UTC')
+        d = member.created_at.strftime('%d.%m.%Y %H:%M:%S UTC')
         then1 = member.joined_at
         delta1 = now - then1
-        d1 = member.joined_at.strftime('%d/%m/%Y %H:%M:%S UTC')
+        d1 = member.joined_at.strftime('%d.%m.%Y %H:%M:%S UTC')
         emb.add_field(name = 'Создан', value = f'{delta.days} дня(ей) назад. ({d})', inline = False)
         emb.add_field(name = 'Вошёл', value = f'{delta1.days} дня(ей) назад. ({d1})', inline = False)
         emb.add_field(name = 'Упоминание', value = member.mention)
         emb.add_field(name = 'Raw имя', value = member.name)
         emb.add_field(name = 'Никнейм', value = member.nick)
-        limit = len(member.roles)
-        if limit > 21:
-            emb.add_field(name = 'Роли', value = f'Слишком много для отрисовки ({len(member.roles)-1}) [лимит 20]', inline = False)
-        elif limit == 21:
-            emb.add_field(name = f'Роли ({len(member.roles)-1}) [лимит достигнут]', value = ', '.join([role.mention for role in member.roles[1:]]), inline = False)
-        elif limit == 20:
-            emb.add_field(name = f'Роли ({len(member.roles)-1}) [1 до лимита]', value = ', '.join([role.mention for role in member.roles[1:]]), inline = False)
-        elif limit == 19:
-            emb.add_field(name = f'Роли ({len(member.roles)-1}) [2 до лимита]', value = ', '.join([role.mention for role in member.roles[1:]]), inline = False)
-        elif limit == 18:
-            emb.add_field(name = f'Роли ({len(member.roles)-1}) [3 до лимита]', value = ', '.join([role.mention for role in member.roles[1:]]), inline = False)
-        else:
-            emb.add_field(name = f'Роли ({len(member.roles)-1})', value = ', '.join([role.mention for role in member.roles[1:]]), inline = False)
-        emb.add_field(name = 'Высшая Роль', value = member.top_role.mention, inline = False)
+        if member.status == discord.Status.online:
+            status = 'В сети'
+        elif member.status == discord.Status.dnd:
+            status = 'Не беспокоить'
+        elif member.status == discord.Status.idle:
+            status = 'Не активен'
+        elif member.status == discord.Status.offline:
+            status = 'Не в сети'
+        emb.add_field(name = 'Статус', value = status)
+        roles = ', '.join([role.name for role in member.roles[1:]])
         emb.add_field(name = 'Бот?', value = bot)
+        limit = len(member.roles)
+        if limit > 1:
+            emb.add_field(name = f'Роли ({len(member.roles)-1})', value = roles, inline = False)
+            emb.add_field(name = 'Высшая Роль', value = member.top_role.mention, inline = False)
         emb.set_thumbnail(url = member.avatar_url)
-        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
-        
+
     @commands.command()
-    @commands.cooldown(1, 5, commands.BucketType.default)
-    async def remind(self, ctx, time: TimeConverter, *, arg):
-        await ctx.message.delete()
+    @commands.cooldown(1, 5, commands.BucketType.user)
+    async def remind(self, ctx, time: TimeConverter, *, text):
         emb = discord.Embed(colour = ctx.author.color, timestamp = ctx.message.created_at)
         emb.add_field(name = 'Напомню через', value = f'{time}s')
-        emb.add_field(name = 'О чём напомню?', value = arg)
-        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+        emb.add_field(name = 'О чём напомню?', value = text)
         await ctx.send(embed = emb, delete_after = time)
         await asyncio.sleep(time)
         emb = discord.Embed(colour = ctx.author.color, timestamp = ctx.message.created_at)
         emb.add_field(name = 'Напомнил через', value = f'{time}s')
-        emb.add_field(name = 'Напоминаю о', value = arg)
-        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-        await ctx.send(f'{ctx.author.mention}', embed = emb) 
-
-    @commands.Cog.listener()
-    async def on_command_error(self, ctx, error):
-        if isinstance(error, commands.CommandOnCooldown):
-            await ctx.message.delete()
-            emb = discord.Embed(description = f'{ctx.author.mention}, команда в кд, потерпи чутка!', colour = discord.Color.orange())
-            await ctx.send(embed = emb)
+        emb.add_field(name = 'Напоминаю о', value = text)
+        await ctx.send(f'{ctx.author.mention}', embed = emb)
 
 def setup(client):
     client.add_cog(Misc(client))
