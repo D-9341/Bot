@@ -7,7 +7,7 @@ import random
 import re
 import regex
 import secrets
- 
+
 import discord
 import discord_slash
 from pathlib import Path
@@ -54,15 +54,6 @@ class TimeConverter(commands.Converter):
             except ValueError:
                 await ctx.send(f'{key} не число!') #{key} not a number!
         return time
-
-class Slapper(commands.Converter):
-    async def convert(self, ctx, argument):
-        mention = random.choice(ctx.guild.members)
-        emb = discord.Embed(description = f'{argument}', colour =  ctx.author.colour, timestamp = ctx.message.created_at)
-        emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
-        if ctx.guild.owner.id != client.owner_id and ctx.guild.owner.id not in friends:
-            emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-        return await ctx.send(f'@someone ||{mention.mention}||', embed = emb)
     
 def revert_cooldown(command: commands.Command, message: discord.Message) -> None:
     if command._buckets.valid:
@@ -1262,10 +1253,6 @@ async def _vote(ctx, *, text):
     await sent.add_reaction('👍')
     await sent.add_reaction('👎')
     await sent.add_reaction('🚫')
-
-@client.command()
-async def someone(ctx, *, text: Slapper):
-    await ctx.send(embed = text)
 
 @slash.slash(name = 'rolemembers', description = 'Показывает участников с определённой ролью', options = [{'name': 'role', 'description': 'Роль для поиска', 'required': True, 'type': 8}])
 async def _rolemembers(ctx, role: discord.Role, member: discord.Member = None):
