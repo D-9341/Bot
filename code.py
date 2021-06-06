@@ -264,6 +264,8 @@ async def on_voice_state_update(member, before, after):
             await after.channel.edit(user_limit = 1)
             if member.bot == True:
                 room = 'Чего бля' # wtf
+            if member.id == client.owner_id:
+                room = 'Комната моего Создателя'
             else:
                 room = f'Комната {member}' # {member}`s room
             channel = await member.guild.create_voice_channel(name = room, category = after.channel.category)
