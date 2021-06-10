@@ -439,6 +439,7 @@ class Mod(commands.Cog):
     @commands.cooldown(1, 10, commands.BucketType.user)
     @commands.has_permissions(administrator = True)
     async def clear(self, ctx, amount: int, members = '--everyone', *, filt = None):
+        await ctx.message.delete()
         authors = {}
         cleared = 0
         if "--everyone" not in members and '--bots' not in members and '--users' not in members and '--silent' not in members:
