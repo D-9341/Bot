@@ -25,7 +25,7 @@ class Fun(commands.Cog):
         if first == None and second == None:
             rand = random.randint(0, 1)
             if rand == 1:
-                await ctx.send(f'{ctx.author} выпадает число(0-100)\n`100`')
+                await ctx.send(f'`{ctx.author} выпадает число(0-100)\n100`')
             else:
                 rand1 = random.randint(0, 9)
                 rand2 = random.randint(0, 9)
