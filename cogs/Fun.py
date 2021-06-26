@@ -23,8 +23,8 @@ class Fun(commands.Cog):
     @commands.command()
     async def roll(self, ctx, first: int = None, second: int = None):
         if first == None and second == None:
-            rand = random.randint(0, 9)
-            if rand == 9:
+            rand = random.randint(0, 100)
+            if rand == 69:
                 await ctx.send(f'`{ctx.author} выпадает число(0-100)\n100`')
             else:
                 rand1 = random.randint(0, 9)
