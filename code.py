@@ -98,65 +98,6 @@ async def on_command_completion(ctx):
     await lchannel.send(embed = emb)
 
 @client.event
-async def on_guild_channel_delete(channel):
-    if channel.guild.id == 693929822543675455:
-        lchannel = client.get_channel(714175791033876490)
-        emb = discord.Embed(title = 'УДАЛЕНИЕ_КАНАЛА', color = discord.Color.orange(), timestamp = datetime.datetime.utcnow()) # CHANNEL_DELETED
-        emb.add_field(name = 'НАЗВАНИЕ', value = channel.name) # NAME
-        if channel.type == discord.ChannelType.voice:
-            typ = 'ГОЛОСОВОЙ' # VOICE
-        if channel.type == discord.ChannelType.text:
-            typ = 'ТЕКСТОВЫЙ' # TEXT
-        emb.add_field(name = 'ТИП', value = typ) # TYPE
-        emb.set_footer(text = f'ID: {channel.id}')
-        await lchannel.send(embed = emb)
-
-@client.event
-async def on_guild_channel_create(channel):
-    if channel.guild.id == 693929822543675455:
-        lchannel = client.get_channel(714175791033876490)
-        emb = discord.Embed(title = 'СОЗДАНИЕ_КАНАЛА', color = discord.Color.orange(), timestamp = datetime.datetime.utcnow()) # CHANNEL_CREATED
-        emb.add_field(name = 'НАЗВАНИЕ', value = channel.name) # NAME
-        if channel.type == discord.ChannelType.voice:
-            typ = 'ГОЛОСОВОЙ' # VOICE
-        if channel.type == discord.ChannelType.text:
-            typ = 'ТЕКСТОВЫЙ' # TEXT
-        emb.add_field(name = 'ТИП', value = typ) # TYPE
-        emb.set_footer(text = f'ID: {channel.id}')
-        await lchannel.send(embed = emb)
-
-@client.event
-async def on_guild_channel_update(before, after):
-    channel = client.get_channel(714175791033876490)
-    if before.guild.id == 693929822543675455:
-        if before.type == discord.ChannelType.voice:
-            emb = discord.Embed(title = r'ИЗМЕНЕНИЕ\_ГОЛОСОВОГО_КАНАЛА', color = discord.Color.orange(), timestamp = datetime.datetime.utcnow()) # VOICE_CHANNEL_EDITED
-            if before.name != after.name:
-                emb.add_field(name = 'НАЗВАНИЕ_ДО', value = before.name) # NAME_BEFORE
-                emb.add_field(name = 'НАЗВАНИЕ_ПОСЛЕ', value = after.name) # NAME_AFTER
-                emb.set_footer(text = f'ID: {before.id}')
-                await channel.send(embed = emb)
-            if before.position != after.position:
-                emb.add_field(name = 'НАЗВАНИЕ', value = before.name, inline = False) # NAME
-                emb.add_field(name = 'ПОЗИЦИЯ_ДО', value = before.position) # POSITION_BEFORE
-                emb.add_field(name = 'ПОЗИЦИЯ_ПОСЛЕ', value = after.position) # POSITION_AFTER
-                emb.set_footer(text = f'ID: {before.id}')
-                await channel.send(embed = emb)
-        elif before.type == discord.ChannelType.text:
-            emb = discord.Embed(title = r'ИЗМЕНЕНИЕ\_ТЕКСТОВОГО_КАНАЛА', color = discord.Color.orange(), timestamp = datetime.datetime.utcnow()) # TEXT_CHANNEL_EDITED
-            if before.name != after.name:
-                emb.add_field(name = 'НАЗВАНИЕ_ДО', value = before.name) # NAME_BEFORE
-                emb.add_field(name = 'НАЗВАНИЕ_ПОСЛЕ', value = after.name) # NAME_AFTER
-                emb.set_footer(text = f'ID: {before.id}')
-                await channel.send(embed = emb)
-            if before.position != after.position:
-                emb.add_field(name = 'НАЗВАНИЕ', value = before.name, inline = False) # NAME
-                emb.add_field(name = 'ПОЗИЦИЯ_ДО', value = before.position) # POSITION_BEFORE
-                emb.add_field(name = 'ПОЗИЦИЯ_ПОСЛЕ', value = after.position) # POSITION_AFTER
-                emb.set_footer(text = f'ID: {before.id}')
-                await channel.send(embed = emb)
-
-@client.event
 async def on_member_update(before, after):
     channel = client.get_channel(714175791033876490)
     if before.bot == False:
@@ -389,27 +330,9 @@ async def on_message(message):
             emb = discord.Embed(title = 'ОПОВЕЩЕНИЕ\_ОБ_ОБНОВЛЕНИИ', color = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
             emb.add_field(name = 'ОПОВЕЩЕНЫ', value = role.mention)
             await channel.send(embed = emb)
-    elif message.channel.id == 750371693779746826: #RSS
-        if message.author.bot == True and message.author.id != 694170281270312991:
-            role = discord.utils.get(message.guild.roles, id = 750372161134264400)
-            sent = await message.channel.send(role.mention)
-            await sent.delete()
-            channel = client.get_channel(714175791033876490)
-            emb = discord.Embed(title = 'ОПОВЕЩЕНИЕ\_ОБ_ОБНОВЛЕНИИ', color = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
-            emb.add_field(name = 'ОПОВЕЩЕНЫ', value = role.mention)
-            await channel.send(embed = emb)
     elif message.channel.id == 750368033578680361: #OV
         if message.author.bot == True and message.author.id != 694170281270312991:
             role = discord.utils.get(message.guild.roles, id = 750366804689420319)
-            sent = await message.channel.send(role.mention)
-            await sent.delete()
-            channel = client.get_channel(714175791033876490)
-            emb = discord.Embed(title = 'ОПОВЕЩЕНИЕ\_ОБ_ОБНОВЛЕНИИ', color = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
-            emb.add_field(name = 'ОПОВЕЩЕНЫ', value = role.mention)
-            await channel.send(embed = emb)
-    elif message.channel.id == 750362487224008846: #L.O.L. HAHA
-        if message.author.bot == True and message.author.id != 694170281270312991:
-            role = discord.utils.get(message.guild.roles, id = 750056065474887852)
             sent = await message.channel.send(role.mention)
             await sent.delete()
             channel = client.get_channel(714175791033876490)
@@ -428,15 +351,6 @@ async def on_message(message):
     elif message.channel.id == 750373602460827730: #MC
         if message.author.bot == True and message.author.id != 694170281270312991:
             role = discord.utils.get(message.guild.roles, id = 750373687479238787)
-            sent = await message.channel.send(role.mention)
-            await sent.delete()
-            channel = client.get_channel(714175791033876490)
-            emb = discord.Embed(title = 'ОПОВЕЩЕНИЕ\_ОБ_ОБНОВЛЕНИИ', color = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
-            emb.add_field(name = 'ОПОВЕЩЕНЫ', value = role.mention)
-            await channel.send(embed = emb)
-    elif message.channel.id == 750373213447389194: #DCP
-        if message.author.bot == True and message.author.id != 694170281270312991:
-            role = discord.utils.get(message.guild.roles, id = 750379151210446949)
             sent = await message.channel.send(role.mention)
             await sent.delete()
             channel = client.get_channel(714175791033876490)
