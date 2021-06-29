@@ -25,23 +25,19 @@ class Fun(commands.Cog):
         if first == None and second == None:
             rand = random.randint(0, 100)
             if rand == 69:
-                await ctx.send(f'`{ctx.author} выпадает число(0-100)\n100`')
+                await ctx.send(f'`{ctx.author} получает случайное число(0-100)\n100`')
             else:
                 rand1 = random.randint(0, 9)
                 rand2 = random.randint(0, 9)
-                await ctx.send(f'`{ctx.author} выпадает число(0-100)\n0{rand1}{rand2}`')
+                await ctx.send(f'`{ctx.author} получает случайное число(0-100)\n0{rand1}{rand2}`')
         if first != None and second == None:
             rand = random.randint(0, first)
-            if first < 10:
-                await ctx.send(f'`{ctx.author} выпадает число(0-{first})\n0{rand}`')
-            else:
-                await ctx.send(f'`{ctx.author} выпадает число(0-{first})\n{rand}`')
+            await ctx.send(f'`{ctx.author} получает случайное число(0-{first})\n{rand}`')
         if first != None and second != None:
             if first > second:
-                rand = random.randint(first, first)
-                await ctx.send(f'`{ctx.author} выпадает число({first}-{first})\n{rand}`')
+                await ctx.send(f'`{ctx.author} получает случайное число({first}-{first})\n{first}`')
             rand = random.randint(first, second)
-            await ctx.send(f'`{ctx.author} выпадает число({first}-{second})\n{rand}`')
+            await ctx.send(f'`{ctx.author} получает случайное число({first}-{second})\n{rand}`')
 
     @commands.command()
     async def dotersbrain(self, ctx):
