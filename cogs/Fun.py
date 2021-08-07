@@ -126,9 +126,7 @@ class Fun(commands.Cog):
     @commands.command(aliases = ['c', 'coin'])
     async def coinflip(self, ctx):
         emb = discord.Embed(description = 'Орёл!', colour = discord.Color.orange())
-        emb.set_image(url = 'https://cdn.discordapp.com/attachments/524213591084105729/763835275930632252/-removebg-preview.png')
         emb1 = discord.Embed(description = 'Решка!', colour = discord.Color.orange())
-        emb1.set_image(url = 'https://cdn.discordapp.com/attachments/524213591084105729/763837699240099890/-removebg-preview.png')
         choices = [emb, emb1]
         rancoin = random.choice(choices)
         await ctx.send(embed = rancoin)
