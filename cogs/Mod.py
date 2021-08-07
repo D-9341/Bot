@@ -417,7 +417,7 @@ class Mod(commands.Cog):
 
     @commands.command()
     @commands.has_permissions(manage_channels = True)
-    async def unmute(self, ctx, member: discord.Embed, *, reason = None):
+    async def unmute(self, ctx, member: discord.Member, *, reason = None):
         role = discord.utils.get(ctx.guild.roles, name = 'Muted')
         if role != None:
             if role in member.roles:
@@ -470,7 +470,7 @@ class Mod(commands.Cog):
             else:
                 await ctx.author.send('Как ты узнал об этом?!')
         elif amount >= 300:
-            emb = discord.Embed(description = f'{ctx.author.mention}, при таком числе удаления сообщений ({amount}) неизбежны ошибки в работе {self.client.user.mention}.', colour = discord.Color.orange())
+            emb = discord.Embed(description = f'{ctx.author.mention}, при таком числе удаления сообщений ({amount}) возможно большое время ожидания ответа {self.client.user.mention}. Отмена.', colour = discord.Color.orange())
             await ctx.send(f'{ctx.guild.owner.mention}', embed = emb)
         elif amount >= 250:
             if ctx.author != ctx.guild.owner:
