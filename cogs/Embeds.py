@@ -60,7 +60,7 @@ class Embeds(commands.Cog):
             old_embed = message.embeds[0]
             title = old_embed.title
             description = old_embed.description
-            image = thumbnail = color = None
+            image = thumbnail = footer = None
             embed_values = msg.split('|')
             for i in embed_values:
                 if i.strip().lower().startswith('t&'):
@@ -71,20 +71,20 @@ class Embeds(commands.Cog):
                     image = i.strip()[4:].strip()
                 elif i.strip().lower().startswith('th&'):
                     thumbnail = i.strip()[3:].strip()
-                elif i.strip().lower().startswith('c&'):
-                    color = i.strip()[2:].strip()
-            if color == None:
-                color = 0x2f3136
+                elif i.strip().lower().startswith('f&'):
+                    footer = i.strip()[2:].strip()
             else:
                 color = int('0x' + color, 16)
-            emb = discord.Embed(title = title, description = description, color = color, timestamp = ctx.message.created_at)
+            emb = discord.Embed(title = title, description = description, color = 0x2f3136, timestamp = ctx.message.created_at)
             for i in embed_values:
                 emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
                 if image:
                     emb.set_image(url = image)
                 if thumbnail:
                     emb.set_thumbnail(url = thumbnail)
-                if 't&' not in msg and 'd&' not in msg and 'img&' not in msg and 'th&' not in msg and 'c&' not in msg:
+                if footer:
+                    emb.set_footer(text = footer)
+                if 't&' not in msg and 'd&' not in msg and 'img&' not in msg and 'th&' not in msg and 'f&' not in msg:
                     if message.author == self.client.user:
                         if '--clean' in msg:
                             await message.edit(content = None)
