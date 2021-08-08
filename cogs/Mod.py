@@ -352,35 +352,34 @@ class Mod(commands.Cog):
             return await ctx.send(embed = emb)
         if member.id != 338714886001524737:
             if ctx.author.top_role == member.top_role and ctx.message.author.id != 338714886001524737:
-                emb = discord.Embed(description = f'{ctx.author.mention}, ваша высшая роль равна высшей роли {member.mention}. Мут отклонён.', colour = discord.Color.orange())
+                emb = discord.Embed(description = f'{ctx.author.mention}, ваша высшая роль равна высшей роли {member.mention}. Заглушение отклонено.', colour = discord.Color.orange())
                 await ctx.send(embed = emb)
             elif ctx.author.top_role < member.top_role and ctx.message.author.id != 338714886001524737:
-                emb = discord.Embed(description = f'{ctx.author.mention}, ваша высшая роль ниже высшей роли {member.mention}. Мут отклонён.', colour = discord.Color.orange())
+                emb = discord.Embed(description = f'{ctx.author.mention}, ваша высшая роль ниже высшей роли {member.mention}. Заглушение отклонено.', colour = discord.Color.orange())
                 await ctx.send(embed = emb)
             else:
                 if role != None:
                     await member.add_roles(role)
                     emb = discord.Embed(colour = color, timestamp = ctx.message.created_at)
                     emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
-                    emb.add_field(name = 'В муте', value = f'{member.mention}')
+                    emb.add_field(name = 'Заглушён', value = f'{member.mention}')
                     emb.add_field(name = 'По причине', value = reason)
-                    emb.add_field(name = 'Время мута', value = f'{time}s')
-                    emb.add_field(name = 'raw контент', value = ctx.message.content)
+                    emb.add_field(name = 'Время заглушения', value = f'{time}s')
                     await ctx.send(embed = emb, delete_after = time)
                     await asyncio.sleep(time)
                     if role != None:
                         if role in member.roles:
                             emb = discord.Embed(colour = color, timestamp = ctx.message.created_at)
-                            emb.add_field(name = 'Размучен по истечению времени', value = member.mention)
-                            emb.add_field(name = 'Был в муте по причине', value = reason)
-                            emb.add_field(name = 'Время мута составляло', value = f'{time}s')
+                            emb.add_field(name = 'Разглушён по истечению времени', value = member.mention)
+                            emb.add_field(name = 'Был заглушён по причине', value = reason)
+                            emb.add_field(name = 'Время заглушения составляло', value = f'{time}s')
                             await member.remove_roles(role)
                             await ctx.send(f'{member.mention}', embed = emb)
                         else:
-                            emb = discord.Embed(description = f'Снятие мута для {member.mention} не требуется. Роли Muted не обнаружено в списке ролей участника.', colour = discord.Color.orange())
+                            emb = discord.Embed(description = f'Снятие заглушения для {member.mention} не требуется. Роли Muted не обнаружено в списке ролей участника.', colour = discord.Color.orange())
                             await ctx.send(embed = emb)
                     else:
-                        emb = discord.Embed(description = f'Невозможно снять мут у {member.mention}, т.к. роль Muted была удалена.', colour = discord.Color.orange(), timestamp = ctx.message.created_at)
+                        emb = discord.Embed(description = f'Невозможно снять заглушение у {member.mention}, т.к. роль Muted была удалена.', colour = discord.Color.orange(), timestamp = ctx.message.created_at)
                         await ctx.send(embed = emb)
                 else:
                     await ctx.guild.create_role(name = 'Muted', colour = discord.Colour(0x000001))
@@ -390,31 +389,86 @@ class Mod(commands.Cog):
                     await ctx.send(embed = emb1, delete_after = 3)
                     await asyncio.sleep(3)
                     await member.add_roles(role)
-                    emb = discord.Embed(colour = color, timestamp = ctx.message.created_at)
+                    emb = discord.Embed(color = color, timestamp = ctx.message.created_at)
                     emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
-                    emb.add_field(name = 'В муте', value = f'{member.mention}')
+                    emb.add_field(name = 'Заглушён', value = f'{member.mention}')
                     emb.add_field(name = 'По причине', value = reason)
-                    emb.add_field(name = 'Время мута', value = f'{time}s')
+                    emb.add_field(name = 'Время заглушения', value = f'{time}s')
                     await ctx.send(embed = emb, delete_after = time)
                     await asyncio.sleep(time)
                     if role != None:
                         if role in member.roles:
-                            emb = discord.Embed(colour = color, timestamp = ctx.message.created_at)
-                            emb.add_field(name = 'Размучен по истечению времени', value = member.mention)
-                            emb.add_field(name = 'По причине', value = reason)
-                            emb.add_field(name = 'Время мута составляло', value = f'{time}s')
+                            emb = discord.Embed(color = color, timestamp = ctx.message.created_at)
+                            emb.add_field(name = 'Разглушён по истечению времени', value = member.mention)
+                            emb.add_field(name = 'Был заглушён по причине', value = reason)
+                            emb.add_field(name = 'Время заглушения составляло', value = f'{time}s')
                             await ctx.send(f'{member.mention}', embed = emb)
                             await member.remove_roles(role)
                         else:
-                            emb = discord.Embed(description = f'Снятие мута для {member.mention} не требуется. Роли Muted не обнаружено в списке ролей участника.', colour = discord.Color.orange())
+                            emb = discord.Embed(description = f'Снятие заглушения для {member.mention} не требуется. Роли Muted не обнаружено в списке ролей участника.', colour = discord.Color.orange())
                             await ctx.send(embed = emb)
                     else:
-                        emb = discord.Embed(description = f'Невозможно снять мут у {member.mention}, т.к. роль Muted была удалена.', colour = discord.Color.orange(), timestamp = ctx.message.created_at)
+                        emb = discord.Embed(description = f'Невозможно снять заглушение у {member.mention}, т.к. роль Muted была удалена.', colour = discord.Color.orange(), timestamp = ctx.message.created_at)
                         await ctx.send(embed = emb)
         else:
-            emb = discord.Embed(description = f'Извините, {ctx.author.mention}, но вы не можете замутить моего создателя!', colour = discord.Color.orange())
+            emb = discord.Embed(description = f'Извините, {ctx.author.mention}, но вы не можете заглушить моего создателя!', colour = discord.Color.orange())
             await ctx.send(embed = emb)
 
+    @commands.command()
+    @commands.has_permissions(manage_channels = True)
+    async def deaf(self, ctx, member: discord.Member, *, reason = None):
+        role = discord.utils.get(ctx.guild.roles, name = 'Deafened')
+        if reason == None:
+            reason = 'Не указана.'
+        if role in member.roles:
+            emb = discord.Embed(description = 'Роль Deafened уже есть в списке ролей участника.', color = 0x2f3136)
+            return await ctx.send(embed = emb)
+        if member.id != self.client.owner_id:
+            if ctx.author.top_role == member.top_role and ctx.message.author.id != 338714886001524737:
+                emb = discord.Embed(description = f'{ctx.author.mention}, ваша высшая роль равна высшей роли {member.mention}. Заглушение отклонено.', colour = discord.Color.orange())
+                await ctx.send(embed = emb)
+            elif ctx.author.top_role < member.top_role and ctx.message.author.id != 338714886001524737:
+                emb = discord.Embed(description = f'{ctx.author.mention}, ваша высшая роль ниже высшей роли {member.mention}. Заглушение отклонено.', colour = discord.Color.orange())
+                await ctx.send(embed = emb)
+            else:
+                if role != None:
+                    await member.add_roles(role)
+                    emb = discord.Embed(color = 0x2f3136, timestamp = ctx.message.created_at)
+                    emb.add_field(name = 'Заглушён', value = member.mention)
+                    emb.add_field(name = 'Причина', value = reason)
+                    await ctx.send(embed = emb)
+                else:
+                    role = await ctx.guild.create_role(name = 'Deafened', color = 0x000001, reason = 'Создано автоматически командой deaf')
+                    await member.add_roles(role)
+                    emb = discord.Embed(color = 0x2f3136, timestamp = ctx.message.created_at)
+                    emb.add_field(name = 'Заглушён', value = member.mention)
+                    emb.add_field(name = 'Причина', value = reason)
+                    await ctx.send(embed = emb)
+        else:
+            emb = discord.Embed(description = f'Извините, {ctx.author.mention}, но вы не можете заглушить моего создателя!', colour = discord.Color.orange())
+            await ctx.send(embed = emb)
+
+    @commands.command()
+    @commands.has_permissions(manage_channels = True)
+    async def undeaf(self, ctx, member: discord.Member, *, reason = None):
+        role = discord.utils.get(ctx.guild.roles, name = 'Deafened')
+        if reason == None:
+            reason = 'Не указана.'
+        if member.id != self.client.owner_id:
+            if role != None:
+                if role in member.roles:
+                    await member.remove_roles(role)
+                    emb = discord.Embed(title = f'Принудительное снятие заглушения у {member}', color = 0x2f3136, timestamp = ctx.message.created_at)
+                    emb.add_field(name = 'Снял заглушение', value = ctx.author.mention)
+                    emb.add_field(name = 'Причина', value = reason)
+                    await ctx.send(embed = emb)
+                else:
+                    emb = discord.Embed(description = 'Снятие заглушения не требуется. Роли Deafened не обнаружено в списке ролей участника.', colour = discord.Color.orange())
+                    await ctx.send(embed = emb)
+            else:
+                emb = discord.Embed(description = f'{ctx.author.mention}, Я не могу снять заглушение у {member.mention} из-за того, что роль Deafened была удалена', colour = discord.Color.orange(), timestamp = ctx.message.created_at)
+                await ctx.send(embed = emb)
+            
     @commands.command()
     @commands.has_permissions(manage_channels = True)
     async def unmute(self, ctx, member: discord.Member, *, reason = None):
@@ -425,7 +479,7 @@ class Mod(commands.Cog):
                 if reason == None:
                     reason = 'Не указана.'
                 emb = discord.Embed(title = f'Принудительное снятие заглушения у {member}', colour = member.color, timestamp = ctx.message.created_at)
-                emb.add_field(name = 'Снял мут', value = ctx.author.mention)
+                emb.add_field(name = 'Снял заглушение', value = ctx.author.mention)
                 emb.add_field(name = 'По причине', value = reason)
                 await ctx.send(embed = emb)
             else:
