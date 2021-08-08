@@ -219,7 +219,7 @@ async def on_voice_state_update(member, before, after):
             await channel.delete()
         if role in member.roles:
             await member.edit(mute = True, reason = 'Заглушён командой deaf')
-    except AttributeError:
+    except Exception:
         pass
 
 @client.event
