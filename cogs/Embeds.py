@@ -73,8 +73,6 @@ class Embeds(commands.Cog):
                     thumbnail = i.strip()[3:].strip()
                 elif i.strip().lower().startswith('f&'):
                     footer = i.strip()[2:].strip()
-            else:
-                color = int('0x' + color, 16)
             emb = discord.Embed(title = title, description = description, color = 0x2f3136, timestamp = ctx.message.created_at)
             for i in embed_values:
                 emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
