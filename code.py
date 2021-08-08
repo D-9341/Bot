@@ -200,6 +200,7 @@ async def on_guild_join(guild):
 
 @client.event
 async def on_voice_state_update(member, before, after):
+    role = discord.utils.get(member.guild.roles, name = 'Deafened')
     try:
         if after.channel.name == 'Создать канал': # Create channel
             await after.channel.edit(user_limit = 1)
@@ -216,6 +217,8 @@ async def on_voice_state_update(member, before, after):
                 return len(channel.members) == 0
             await client.wait_for('voice_state_update', check = check)
             await channel.delete()
+        if role in member.roles:
+            await member.edit(mute = True, reason = 'Заглушён командой deaf')
     except AttributeError:
         pass
 
