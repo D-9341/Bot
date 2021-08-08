@@ -371,7 +371,7 @@ class Mod(commands.Cog):
                         if role in member.roles:
                             emb = discord.Embed(colour = color, timestamp = ctx.message.created_at)
                             emb.add_field(name = 'Разглушён по истечению времени', value = member.mention)
-                            emb.add_field(name = 'Был заглушён по причине', value = reason)
+                            emb.add_field(name = 'По причине', value = reason)
                             emb.add_field(name = 'Время заглушения составляло', value = f'{time}s')
                             await member.remove_roles(role)
                             await ctx.send(f'{member.mention}', embed = emb)
@@ -382,14 +382,9 @@ class Mod(commands.Cog):
                         emb = discord.Embed(description = f'Невозможно снять заглушение у {member.mention}, т.к. роль Muted была удалена.', colour = discord.Color.orange(), timestamp = ctx.message.created_at)
                         await ctx.send(embed = emb)
                 else:
-                    await ctx.guild.create_role(name = 'Muted', colour = discord.Colour(0x000001))
-                    role = discord.utils.get(ctx.guild.roles, name = 'Muted')
-                    emb1 = discord.Embed(description = f'{ctx.author.mention}, По причине того, что я не нашёл нужную роль, была создана роль {role.name} с цветом {role.colour}.', colour = discord.Color.orange(), timestamp = ctx.message.created_at)
-                    emb1.set_footer(text = 'Это сообщение должно показываться только 1 раз. Иначе, роль была удалена/отредактирована')
-                    await ctx.send(embed = emb1, delete_after = 3)
-                    await asyncio.sleep(3)
+                    role = await ctx.guild.create_role(name = 'Muted', colour = 0x000001, reason = 'Создано автоматически командой mute')
                     await member.add_roles(role)
-                    emb = discord.Embed(color = color, timestamp = ctx.message.created_at)
+                    emb = discord.Embed(colour = color, timestamp = ctx.message.created_at)
                     emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
                     emb.add_field(name = 'Заглушён', value = f'{member.mention}')
                     emb.add_field(name = 'По причине', value = reason)
@@ -398,9 +393,9 @@ class Mod(commands.Cog):
                     await asyncio.sleep(time)
                     if role != None:
                         if role in member.roles:
-                            emb = discord.Embed(color = color, timestamp = ctx.message.created_at)
+                            emb = discord.Embed(colour = color, timestamp = ctx.message.created_at)
                             emb.add_field(name = 'Разглушён по истечению времени', value = member.mention)
-                            emb.add_field(name = 'Был заглушён по причине', value = reason)
+                            emb.add_field(name = 'По причине', value = reason)
                             emb.add_field(name = 'Время заглушения составляло', value = f'{time}s')
                             await ctx.send(f'{member.mention}', embed = emb)
                             await member.remove_roles(role)
