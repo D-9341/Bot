@@ -125,20 +125,18 @@ class sCephalon(commands.Cog):
         ]
         }])
     async def _help(self, ctx, arg = None):
-        if arg == None:
-            emb = discord.Embed(title = self.client.user.name, description = 'Вот команды, что я могу исполнить.\n||Некоторые улучшения появятся после верификации.||', colour = discord.Color.orange())
-            emb.add_field(name = 'Cephalon', value = '`info`, `invite`, `join`, `leave`, `ping`, `privacy`', inline = False)
-            emb.add_field(name = 'Embeds', value = '`content`, `edit`, `say`', inline = False)
-            if not (ctx.guild.owner.id != self.client.owner_id and ctx.guild.owner.id not in friends):
-                emb.add_field(name = 'Fun', value = '`aye_balbec`, `cu`, `coinflip`, `dotersbrain`, `niggers`, `rp`, `rap`, `zatka`', inline = False)
-            emb.add_field(name = 'Mod', value = '`ban`, `clear`, `dm`, `give`, `kick`, `mute`, `take`, `unmute`', inline = False)
-            emb.add_field(name = 'Misc', value = '`about`, `avatar`, `guild`, `remind`, `role`, `rolemembers`, `someone`, `vote`', inline = False)
-            emb.add_field(name = 'ᅠ', value = 'Назовите комнату `Создать канал` (**регистр обязателен**), чтобы бот автоматически создавал для вас временные каналы, которые будут удаляться после того, как все люди выйдут из канала.')
-            emb.add_field(name = 'ᅠ', value = '**Используйте** `cy/help [команда/категория]` **для подробностей использования.**\n\n**[Ссылка-приглашение](https://discord.com/api/oauth2/authorize?client_id=694170281270312991&permissions=8&scope=bot%20applications.commands)**', inline = False)
-            emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-            await ctx.send(embed = emb)
-            if arg == 'setup':
-                await ctx.send('```apache\ncy/setup\nвыполнение команды создаст 4 роли, если их нет на сервере.\nбудет выполнено автоматически, если сработает авто-мут.```')
+            if arg == None:
+                emb = discord.Embed(title = self.client.user.name, description = 'Вот команды, что я могу исполнить.\n||Некоторые улучшения появятся после верификации.||', colour = discord.Color.orange())
+                emb.add_field(name = 'Cephalon', value = '`info`, `invite`, `join`, `leave`, `ping`, `privacy`', inline = False)
+                emb.add_field(name = 'Embeds', value = '`content`, `edit`, `say`', inline = False)
+                if not (ctx.guild.owner.id != self.client.owner_id and ctx.guild.owner.id not in friends):
+                    emb.add_field(name = 'Fun', value = '`aye_balbec`, `cu`, `coinflip`, `dotersbrain`, `niggers`, `rp`, `rap`, `zatka`', inline = False)
+                emb.add_field(name = 'Mod', value = '`ban`, `clear`, `dm`, `give`, `kick`, `mute`, `take`, `unmute`', inline = False)
+                emb.add_field(name = 'Misc', value = '`about`, `avatar`, `guild`, `remind`, `role`, `rolemembers`, `someone`, `vote`', inline = False)
+                emb.add_field(name = 'ᅠ', value = 'Назовите комнату `Создать канал` (**регистр обязателен**), чтобы бот автоматически создавал для вас временные каналы, которые будут удаляться после того, как все люди выйдут из канала.')
+                emb.add_field(name = 'ᅠ', value = '**Используйте** `cy/help [команда/категория]` **для подробностей использования.**\n\n**[Ссылка-приглашение](https://discord.com/api/oauth2/authorize?client_id=694170281270312991&permissions=8&scope=bot%20applications.commands)**', inline = False)
+                emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+                return await ctx.send(embed = emb)
             elif arg == 'roll':
                 await ctx.send('```apache\ncy/roll [от] [до]\nесли не указано [до], [от] станет [до].\ncy/roll 80 (0-80)\ncy/roll 26 90 (26-90)\ncy/roll (0-100)\n([] - опционально)```')
             elif arg == 'about':
