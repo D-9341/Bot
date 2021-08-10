@@ -111,74 +111,74 @@ class sMod(commands.Cog):
                 emb = discord.Embed(description = 'Ого! Пошёл нахуй!', colour = discord.Color.orange())
                 await ctx.send(embed = emb)
 
-@slash.cog_slash(name = 'ban', description = 'Банит участника', options = [{'name': 'member', 'description': 'Участник', 'required': True, 'type': 6}, {'name': 'reason', 'description': 'Причина и/или указание --soft --reason', 'required': False, 'type': 3}])
-async def _ban(self, ctx, member: discord.Member, *, reason = None):
-    rlocale = collection.find_one({"_id": ctx.author.id})["locale"]
-    bot = discord.utils.get(ctx.guild.members, id = self.client.user.id)
-    if member.id != 338714886001524737:
-        if reason == None:
-            if rlocale == 'ru':
-                reason = 'Не указана.'
-            if rlocale == 'gnida':
-                reason = 'Я не ебу'
-        if ctx.author.top_role == member.top_role:
-            if rlocale == 'ru':
-                emb = discord.Embed(description = f'{ctx.author.mention}, ваша высшая роль равна высшей роли {member.mention}. Бан отклонён.', colour = discord.Color.orange())
-                await ctx.send(embed = emb)
-            if rlocale == 'gnida':
-                emb = discord.Embed(description = f'Твоя высшая роль равна высшей роли {member.mention}. Саси.', colour = discord.Color.orange())
-                await ctx.send(embed = emb)
-        elif member.top_role > ctx.author.top_role:
-            if rlocale == 'ru':
-                emb = discord.Embed(description = f'{ctx.author.mention}, ваша высшая роль ниже высшей роли {member.mention}. Бан отклонён.', colour = discord.Color.orange())
-                await ctx.send(embed = emb)
-            if rlocale == 'gnida':
-                emb = discord.Embed(description = f'Твоя высшая роль ниже высшей роли {member.mention}. Саси.', colour = discord.Color.orange())
-                await ctx.send(embed = emb)
-        elif member.top_role > bot.top_role:
-            if rlocale == 'ru':
-                emb = discord.Embed(description = f'МОЯ высшая роль ниже высшей роли {member.mention}. Бан невозможен.', color = 0xff0000)
-                await ctx.send(embed = emb)
-            if rlocale == 'gnida':
-                emb = discord.Embed(description = f'МОЯ высшая роль ниже высшей роли {member.mention}. Блять.', color = 0xff0000)
-                await ctx.send(embed = emb)
-        elif member.top_role == bot.top_role:
-            if rlocale == 'ru':
-                emb = discord.Embed(description = f'МОЯ высшая роль идентична высшей роли {member.mention}. Бан невозможен.', color = 0xff0000)
-                await ctx.send(embed = emb)
-            if rlocale == 'gnida':
-                emb = discord.Embed(description = f'МОЯ высшая роль идентична высшей роли {member.mention}. Блять.', color = 0xff0000)
-                await ctx.send(embed = emb)
-        else:
-            if '--soft' in reason:
-                emb = discord.Embed(color = 0x2f3136)
-                emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
-                emb.add_field(name = 'Упрощённо забанен', value = f'{member.mention} ({member.name})')
-                if '--reason' in reason:
-                    reason = reason.strip()[15:].strip()
-                else:
-                    if rlocale == 'ru':
-                        reason = 'Не указана.'
-                    if rlocale == 'gnida':
-                        reason == 'Я не ебу'
-                emb.add_field(name = 'По причине', value = reason)
-                await ctx.send(embed = emb)
-                await member.ban(reason = reason)
-                await member.unban(reason = '--softban')
+    @slash.cog_slash(name = 'ban', description = 'Банит участника', options = [{'name': 'member', 'description': 'Участник', 'required': True, 'type': 6}, {'name': 'reason', 'description': 'Причина и/или указание --soft --reason', 'required': False, 'type': 3}])
+    async def _ban(self, ctx, member: discord.Member, *, reason = None):
+        rlocale = collection.find_one({"_id": ctx.author.id})["locale"]
+        bot = discord.utils.get(ctx.guild.members, id = self.client.user.id)
+        if member.id != 338714886001524737:
+            if reason == None:
+                if rlocale == 'ru':
+                    reason = 'Не указана.'
+                if rlocale == 'gnida':
+                    reason = 'Я не ебу'
+            if ctx.author.top_role == member.top_role:
+                if rlocale == 'ru':
+                    emb = discord.Embed(description = f'{ctx.author.mention}, ваша высшая роль равна высшей роли {member.mention}. Бан отклонён.', colour = discord.Color.orange())
+                    await ctx.send(embed = emb)
+                if rlocale == 'gnida':
+                    emb = discord.Embed(description = f'Твоя высшая роль равна высшей роли {member.mention}. Саси.', colour = discord.Color.orange())
+                    await ctx.send(embed = emb)
+            elif member.top_role > ctx.author.top_role:
+                if rlocale == 'ru':
+                    emb = discord.Embed(description = f'{ctx.author.mention}, ваша высшая роль ниже высшей роли {member.mention}. Бан отклонён.', colour = discord.Color.orange())
+                    await ctx.send(embed = emb)
+                if rlocale == 'gnida':
+                    emb = discord.Embed(description = f'Твоя высшая роль ниже высшей роли {member.mention}. Саси.', colour = discord.Color.orange())
+                    await ctx.send(embed = emb)
+            elif member.top_role > bot.top_role:
+                if rlocale == 'ru':
+                    emb = discord.Embed(description = f'МОЯ высшая роль ниже высшей роли {member.mention}. Бан невозможен.', color = 0xff0000)
+                    await ctx.send(embed = emb)
+                if rlocale == 'gnida':
+                    emb = discord.Embed(description = f'МОЯ высшая роль ниже высшей роли {member.mention}. Блять.', color = 0xff0000)
+                    await ctx.send(embed = emb)
+            elif member.top_role == bot.top_role:
+                if rlocale == 'ru':
+                    emb = discord.Embed(description = f'МОЯ высшая роль идентична высшей роли {member.mention}. Бан невозможен.', color = 0xff0000)
+                    await ctx.send(embed = emb)
+                if rlocale == 'gnida':
+                    emb = discord.Embed(description = f'МОЯ высшая роль идентична высшей роли {member.mention}. Блять.', color = 0xff0000)
+                    await ctx.send(embed = emb)
             else:
-                emb = discord.Embed(colour = 0x2f3136)
-                emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
-                emb.add_field(name = 'Был забанен', value = member.mention)
-                emb.add_field(name = 'По причине', value = reason)
+                if '--soft' in reason:
+                    emb = discord.Embed(color = 0x2f3136)
+                    emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
+                    emb.add_field(name = 'Упрощённо забанен', value = f'{member.mention} ({member.name})')
+                    if '--reason' in reason:
+                        reason = reason.strip()[15:].strip()
+                    else:
+                        if rlocale == 'ru':
+                            reason = 'Не указана.'
+                        if rlocale == 'gnida':
+                            reason == 'Я не ебу'
+                    emb.add_field(name = 'По причине', value = reason)
+                    await ctx.send(embed = emb)
+                    await member.ban(reason = reason)
+                    await member.unban(reason = '--softban')
+                else:
+                    emb = discord.Embed(colour = 0x2f3136)
+                    emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
+                    emb.add_field(name = 'Был забанен', value = member.mention)
+                    emb.add_field(name = 'По причине', value = reason)
+                    await ctx.send(embed = emb)
+                    await member.ban(reason = reason)
+        else:
+            if rlocale == 'ru':
+                emb = discord.Embed(description = f'Извините, {ctx.author.mention}, но вы не можете забанить моего создателя!', colour = discord.Color.orange())
                 await ctx.send(embed = emb)
-                await member.ban(reason = reason)
-    else:
-        if rlocale == 'ru':
-            emb = discord.Embed(description = f'Извините, {ctx.author.mention}, но вы не можете забанить моего создателя!', colour = discord.Color.orange())
-            await ctx.send(embed = emb)
-        if rlocale == 'gnida':
-            emb = discord.Embed(description = 'А ты не прихуел даже ПЫТАТЬСЯ это сделать?!', colour = discord.Color.orange())
-            await ctx.send(embed = emb)
+            if rlocale == 'gnida':
+                emb = discord.Embed(description = 'А ты не прихуел даже ПЫТАТЬСЯ это сделать?!', colour = discord.Color.orange())
+                await ctx.send(embed = emb)
 
     @slash.cog_slash(name = 'give', description = 'Выдаёт участнику роль', options = [{'name': 'member', 'description': 'Участник', 'required': True, 'type': 6}, {'name': 'role', 'description': 'Роль', 'required': True, 'type': 8}])
     async def _give(self, ctx, member: discord.Member, *, role: discord.Role):
