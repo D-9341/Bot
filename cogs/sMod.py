@@ -278,7 +278,62 @@ class sMod(commands.Cog):
                 emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
             await ctx.send(embed = emb)
 
-    @slash.cog_slash(name = 'unmute', description = 'Отменяет заглушение участника', options = [{'name': 'member', 'description': 'Участник', 'required': True, 'type': 6}, {'name': 'reason', 'description': 'Причина', 'required': False, 'type': 3}])
+    @slash.cog_ext(name = 'deaf', description = 'Заглушает участника, из-за чего он не может общаться в голосовом канале. Будет применено только при следующем заходе участника в канал.', options = [{'name': 'member', 'description': 'Участник', 'required': True, 'type': 6, {'name': 'reason', 'description': 'Причина', 'required': False, 'type': 3}])
+    @commands.has_permissions(manage_channels = True)
+    async def _deaf(self, ctx, member: discord.Member, *, reason = None):
+        role = discord.utils.get(ctx.guild.roles, name = 'Deafened')
+        if reason == None:
+            reason = 'Не указана.'
+        if role in member.roles:
+            emb = discord.Embed(description = 'Роль Deafened уже есть в списке ролей участника.', color = 0x2f3136)
+            return await ctx.send(embed = emb)
+        if member.id != self.client.owner_id:
+            if ctx.author.top_role == member.top_role and ctx.message.author.id != 338714886001524737:
+                emb = discord.Embed(description = f'{ctx.author.mention}, ваша высшая роль равна высшей роли {member.mention}. Заглушение отклонено.', colour = discord.Color.orange())
+                await ctx.send(embed = emb)
+            elif ctx.author.top_role < member.top_role and ctx.message.author.id != 338714886001524737:
+                emb = discord.Embed(description = f'{ctx.author.mention}, ваша высшая роль ниже высшей роли {member.mention}. Заглушение отклонено.', colour = discord.Color.orange())
+                await ctx.send(embed = emb)
+            else:
+                if role != None:
+                    await member.add_roles(role)
+                    emb = discord.Embed(color = 0x2f3136, timestamp = ctx.message.created_at)
+                    emb.add_field(name = 'Заглушён', value = member.mention)
+                    emb.add_field(name = 'Причина', value = reason)
+                    await ctx.send(embed = emb)
+                else:
+                    role = await ctx.guild.create_role(name = 'Deafened', color = 0x000001, reason = 'Создано автоматически командой deaf')
+                    await member.add_roles(role)
+                    emb = discord.Embed(color = 0x2f3136, timestamp = ctx.message.created_at)
+                    emb.add_field(name = 'Заглушён', value = member.mention)
+                    emb.add_field(name = 'Причина', value = reason)
+                    await ctx.send(embed = emb)
+        else:
+            emb = discord.Embed(description = f'Извините, {ctx.author.mention}, но вы не можете заглушить моего создателя!', colour = discord.Color.orange())
+            await ctx.send(embed = emb)
+
+    @slash.cog_slash(name = 'undeaf', description = 'Забирает роль Deafened', options = [{'name': 'member', 'description': 'Участник', 'required': True, 'type': 6, {'name': 'reason', 'description': 'Причина', 'required': False, 'type': 3}])
+    @commands.has_permissions(manage_channels = True)
+    async def _undeaf(self, ctx, member: discord.Member, *, reason = None):
+        role = discord.utils.get(ctx.guild.roles, name = 'Deafened')
+        if reason == None:
+            reason = 'Не указана.'
+        if member.id != self.client.owner_id:
+            if role != None:
+                if role in member.roles:
+                    await member.remove_roles(role)
+                    emb = discord.Embed(title = f'Снятие заглушения у {member}', color = 0x2f3136, timestamp = datetime.datetime.utcnow())
+                    emb.add_field(name = 'Снял заглушение', value = ctx.author.mention)
+                    emb.add_field(name = 'Причина', value = reason)
+                    await ctx.send(embed = emb)
+                else:
+                    emb = discord.Embed(description = 'Снятие заглушения не требуется. Роли Deafened не обнаружено в списке ролей участника.', colour = discord.Color.orange())
+                    await ctx.send(embed = emb)
+            else:
+                emb = discord.Embed(description = f'{ctx.author.mention}, Я не могу снять заглушение у {member.mention} из-за того, что роль Deafened была удалена', colour = discord.Color.orange(), timestamp = ctx.message.created_at)
+                await ctx.send(embed = emb)
+            
+    @slash.cog_slash(name = 'unmute', description = 'Забирает роль Muted', options = [{'name': 'member', 'description': 'Участник', 'required': True, 'type': 6}, {'name': 'reason', 'description': 'Причина', 'required': False, 'type': 3}])
     @commands.has_permissions(manage_channels = True)
     async def _unmute(self, ctx, member: discord.Member, *, reason = None):
         role = discord.utils.get(ctx.guild.roles, name = 'Muted')
