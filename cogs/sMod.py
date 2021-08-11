@@ -278,7 +278,7 @@ class sMod(commands.Cog):
                 emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
             await ctx.send(embed = emb)
 
-    @slash.cog_slash(name = 'deaf', description = 'Заглушает участника, из-за чего он не может общаться в голосовом канале. Будет применено только при следующем заходе участника в канал.', options = [{'name': 'member', 'description': 'Участник', 'required': True, 'type': 6}, {'name': 'reason', 'description': 'Причина', 'required': False, 'type': 3}])
+    @slash.cog_slash(name = 'deaf', description = 'Заглушает участника, запрещая общаться в голосовом канале. Применяется при заходе в канал', options = [{'name': 'member', 'description': 'Участник', 'required': True, 'type': 6}, {'name': 'reason', 'description': 'Причина', 'required': False, 'type': 3}])
     @commands.has_permissions(manage_channels = True)
     async def _deaf(self, ctx, member: discord.Member, *, reason = None):
         role = discord.utils.get(ctx.guild.roles, name = 'Deafened')
