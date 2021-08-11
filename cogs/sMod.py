@@ -312,7 +312,7 @@ class sMod(commands.Cog):
             emb = discord.Embed(description = f'Извините, {ctx.author.mention}, но вы не можете заглушить моего создателя!', colour = discord.Color.orange())
             await ctx.send(embed = emb)
 
-    @slash.cog_slash(name = 'undeaf', description = 'Забирает роль Deafened', options = [{'name': 'member', 'description': 'Участник', 'required': True, 'type': 6, {'name': 'reason', 'description': 'Причина', 'required': False, 'type': 3}])
+    @slash.cog_slash(name = 'undeaf', description = 'Забирает роль Deafened', options = [{'name': 'member', 'description': 'Участник', 'required': True, 'type': 6}, {'name': 'reason', 'description': 'Причина', 'required': False, 'type': 3}])
     @commands.has_permissions(manage_channels = True)
     async def _undeaf(self, ctx, member: discord.Member, *, reason = None):
         role = discord.utils.get(ctx.guild.roles, name = 'Deafened')
