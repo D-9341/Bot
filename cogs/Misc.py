@@ -140,13 +140,13 @@ class Misc(commands.Cog):
 
     @commands.command(aliases = ['av'])
     @commands.cooldown(1, 5, commands.BucketType.user)
-    async def avatar(self, ctx, member: discord.Member = None):
+    async def avatar(self, ctx, member: discord.User = None):
         if member == None:
             member = ctx.author
         av = 'png'
         av1 = 'webp'
         av2 = 'jpg'
-        emb = discord.Embed(colour = member.color)
+        emb = discord.Embed(colour = 0x2f3136)
         if member.is_avatar_animated() == False:
             emb.add_field(name = '.png', value = f'[Ссылка]({member.avatar_url_as(format = av)})')
             emb.add_field(name = '.webp', value = f'[Ссылка]({member.avatar_url_as(format = av1)})')
@@ -159,7 +159,7 @@ class Misc(commands.Cog):
 
     @commands.command(aliases = ['me'])
     @commands.cooldown(1, 5, commands.BucketType.user)
-    async def about(self, ctx, member: discord.Member = None):
+    async def about(self, ctx, member: discord.User = None):
         if member == None:
             member = ctx.author
         if member.nick == None:
@@ -168,7 +168,7 @@ class Misc(commands.Cog):
             bot = 'Неа'
         elif member.bot == True:
             bot = 'Ага'
-        emb = discord.Embed(colour = member.color, timestamp = ctx.message.created_at)
+        emb = discord.Embed(colour = 0x2f3136, timestamp = ctx.message.created_at)
         emb.set_author(name = member)
         emb.add_field(name = 'ID', value = member.id)
         now = datetime.datetime.today()
