@@ -532,8 +532,7 @@ class sMod(commands.Cog):
                                 emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{len(cleared)}```')
                                 if filt:
                                     emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
-                                else:
-                                    emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
+                                emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
                                 await sent.edit(embed = emb)
                             except asyncio.TimeoutError:
                                 await sent.delete()
@@ -632,8 +631,7 @@ class sMod(commands.Cog):
                                 emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{len(cleared)}```')
                                 if filt:
                                     emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
-                                else:
-                                    emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
+                                emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
                                 await sent.edit(embed = emb)
                             except asyncio.TimeoutError:
                                 await sent.delete()
@@ -727,8 +725,7 @@ class sMod(commands.Cog):
                             emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{len(cleared)}```')
                             if filt:
                                 emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
-                            else:
-                                emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
+                            emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
                             await sent.edit(embed = emb)
                         except asyncio.TimeoutError:
                             await sent.delete()
@@ -818,8 +815,7 @@ class sMod(commands.Cog):
                     emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{len(cleared)}```')
                     if filt:
                         emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
-                    else:
-                        emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
+                    emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
                     await sent.edit(embed = emb)
                 except asyncio.TimeoutError:
                     await sent.delete()
