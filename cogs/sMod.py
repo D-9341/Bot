@@ -397,7 +397,7 @@ class sMod(commands.Cog):
                                 emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{len(cleared)}```')
                                 if filt:
                                     emb.add_field(name = 'Применён фильтр:', value = f'```{filt}``` ({members})', inline = True)
-                                emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
+                                emb.add_field(name = 'Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
                                 emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c".')
                                 await sent.edit(embed = emb)
                             elif members == '--users':
@@ -409,7 +409,7 @@ class sMod(commands.Cog):
                                 emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{len(cleared)}```')
                                 if filt:
                                     emb.add_field(name = 'Применён фильтр:', value = f'```{filt}``` ({members})', inline = True)
-                                emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
+                                emb.add_field(name = 'Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
                                 emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c".')
                                 await sent.edit(embed = emb)
                             else:
@@ -421,7 +421,7 @@ class sMod(commands.Cog):
                                 emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{len(cleared)}```')
                                 if filt:
                                     emb.add_field(name = 'Применён фильтр:', value = f'```{filt}``` ({members})', inline = True)
-                                emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
+                                emb.add_field(name = 'Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
                                 emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c".')
                                 await sent.edit(embed = emb)
                             try:
@@ -432,7 +432,7 @@ class sMod(commands.Cog):
                                 emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{len(cleared)}```')
                                 if filt:
                                     emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
-                                emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
+                                emb.add_field(name = 'Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
                                 await sent.edit(embed = emb)
                             except asyncio.TimeoutError:
                                 await sent.delete()
@@ -497,7 +497,7 @@ class sMod(commands.Cog):
                                 emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{len(cleared)}```')
                                 if filt:
                                     emb.add_field(name = 'Применён фильтр:', value = f'```{filt}``` ({members})', inline = True)
-                                emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
+                                emb.add_field(name = 'Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
                                 emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c".')
                                 await sent.edit(embed = emb)
                             elif members == '--users':
@@ -509,7 +509,7 @@ class sMod(commands.Cog):
                                 emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{len(cleared)}```')
                                 if filt:
                                     emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
-                                emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
+                                emb.add_field(name = 'Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
                                 emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c".')
                                 await sent.edit(embed = emb)
                             else:
@@ -521,7 +521,7 @@ class sMod(commands.Cog):
                                 emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{len(cleared)}```')
                                 if filt:
                                     emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
-                                emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
+                                emb.add_field(name = 'Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
                                 emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c".')
                                 await sent.edit(embed = emb)
                             try:
@@ -532,7 +532,7 @@ class sMod(commands.Cog):
                                 emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{len(cleared)}```')
                                 if filt:
                                     emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
-                                emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
+                                emb.add_field(name = 'Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
                                 await sent.edit(embed = emb)
                             except asyncio.TimeoutError:
                                 await sent.delete()
@@ -596,7 +596,7 @@ class sMod(commands.Cog):
                                 emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{len(cleared)}```')
                                 if filt:
                                     emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
-                                emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
+                                emb.add_field(name = 'Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
                                 emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c".')
                                 await sent.edit(embed = emb)
                             elif members == '--users':
@@ -608,7 +608,7 @@ class sMod(commands.Cog):
                                 emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{len(cleared)}```')
                                 if filt:
                                     emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
-                                emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
+                                emb.add_field(name = 'Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
                                 emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c".')
                                 await sent.edit(embed = emb)
                             else:
@@ -620,7 +620,7 @@ class sMod(commands.Cog):
                                 emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{len(cleared)}```')
                                 if filt:
                                     emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
-                                emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
+                                emb.add_field(name = 'Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
                                 emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c".')
                                 await sent.edit(embed = emb)
                             try:
@@ -631,7 +631,7 @@ class sMod(commands.Cog):
                                 emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{len(cleared)}```')
                                 if filt:
                                     emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
-                                emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
+                                emb.add_field(name = 'Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
                                 await sent.edit(embed = emb)
                             except asyncio.TimeoutError:
                                 await sent.delete()
@@ -690,7 +690,7 @@ class sMod(commands.Cog):
                             emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{len(cleared)}```')
                             if filt:
                                 emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
-                            emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
+                            emb.add_field(name = 'Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
                             emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c".')
                             await sent.edit(embed = emb)
                         elif members == '--users':
@@ -702,7 +702,7 @@ class sMod(commands.Cog):
                             emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{len(cleared)}```')
                             if filt:
                                 emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
-                            emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
+                            emb.add_field(name = 'Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
                             emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c".')
                             await sent.edit(embed = emb)
                         else:
@@ -714,7 +714,7 @@ class sMod(commands.Cog):
                             emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{len(cleared)}```')
                             if filt:
                                 emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
-                            emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
+                            emb.add_field(name = 'Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
                             emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c".')
                             await sent.edit(embed = emb)
                         try:
@@ -725,7 +725,7 @@ class sMod(commands.Cog):
                             emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{len(cleared)}```')
                             if filt:
                                 emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
-                            emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
+                            emb.add_field(name = 'Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
                             await sent.edit(embed = emb)
                         except asyncio.TimeoutError:
                             await sent.delete()
@@ -780,7 +780,7 @@ class sMod(commands.Cog):
                     emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{len(cleared)}```')
                     if filt:
                         emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
-                    emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
+                    emb.add_field(name = 'Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
                     emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c".')
                     await sent.edit(embed = emb)
                 elif '--users' in members:
@@ -792,7 +792,7 @@ class sMod(commands.Cog):
                     emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{len(cleared)}```')
                     if filt:
                         emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
-                    emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
+                    emb.add_field(name = 'Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
                     emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c".')
                     await sent.edit(embed = emb)
                 elif members == '--everyone':
@@ -804,7 +804,7 @@ class sMod(commands.Cog):
                     emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{len(cleared)}```')
                     if filt:
                         emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
-                    emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
+                    emb.add_field(name = 'Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
                     emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c".')
                     await sent.edit(embed = emb)
                 try:
@@ -815,7 +815,7 @@ class sMod(commands.Cog):
                     emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{len(cleared)}```')
                     if filt:
                         emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
-                    emb.add_field(name = 'Удалены/Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
+                    emb.add_field(name = 'Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
                     await sent.edit(embed = emb)
                 except asyncio.TimeoutError:
                     await sent.delete()
