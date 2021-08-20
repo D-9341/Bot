@@ -155,7 +155,7 @@ class sMisc(commands.Cog):
             bot = 'Неа'
         elif member.bot == True:
             bot = 'Ага'
-        emb = discord.Embed(colour = member.color, timestamp = ctx.message.created_at)
+        emb = discord.Embed(colour = member.color, timestamp = datetime.datetime.utcnow())
         emb.set_author(name = member)
         emb.add_field(name = 'ID', value = member.id)
         now = datetime.datetime.today()
