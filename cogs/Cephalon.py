@@ -27,7 +27,7 @@ class Cephalon(commands.Cog):
     async def info(self, ctx):
         emb = discord.Embed(colour = discord.Color.orange())
         emb.set_author(name = self.client.user.name, url = 'https://warframe.fandom.com/wiki/Cephalon_Cy', icon_url = self.client.user.avatar_url)
-        emb.add_field(name = 'Версия', value = '0.12.10.2.12528')
+        emb.add_field(name = 'Версия', value = '0.12.11.2.13771)
         emb.add_field(name = 'Написан на', value = 'discord.py v1.7.2 при помощи\ndiscord-py-slash-command v1.1.0')
         emb.add_field(name = 'Разработчик', value = '[сасиска#2472](https://discord.com/users/338714886001524737)')
         if ctx.guild.owner.id != self.client.owner_id and ctx.guild.owner.id not in friends:
@@ -110,9 +110,9 @@ class Cephalon(commands.Cog):
     @commands.command()
     async def help(self, ctx, arg = None):
         if arg == None:
-            emb = discord.Embed(description = f'Вот команды, что я могу исполнить.', colour = discord.Color.orange())
+            emb = discord.Embed(description = f'Доступные команды.', color = discord.Color.orange())
             emb.set_author(name = self.client.user.name, url = 'https://discord.com/api/oauth2/authorize?client_id=694170281270312991&permissions=8&scope=bot%20applications.commands')
-            emb.add_field(name = 'Cephalon', value = '`botver`, `info`, `invite`, `join`, `leave`, `ping`, `setup`', inline = False)
+            emb.add_field(name = 'Cephalon', value = '`botver`, `info`, `invite`, `join`, `leave`, `locale`, `ping`, `setup`', inline = False)
             emb.add_field(name = 'Embeds', value = '`content`, `edit`, `say`', inline = False)
             if not (ctx.guild.owner.id != self.client.owner_id and ctx.guild.owner.id not in friends):
                 emb.add_field(name = 'Fun', value = '`aye_balbec`, `cu`, `coinflip`, `dotersbrain`, `niggers`, `rp`, `rap`, `roll`, `zatka`', inline = False)
