@@ -77,7 +77,7 @@ class sCephalon(commands.Cog):
     async def _info(self, ctx):
         emb = discord.Embed(colour = discord.Color.orange())
         emb.set_author(name = self.client.user.name, url = 'https://warframe.fandom.com/wiki/Cephalon_Cy', icon_url = self.client.user.avatar_url)
-        emb.add_field(name = 'Версия', value = '0.12.10.2.12528')
+        emb.add_field(name = 'Версия', value = '0.12.11.2.13771)
         emb.add_field(name = 'Написан на', value = 'discord.py v1.7.3 при помощи\ndiscord-py-slash-command v2.0.0')
         emb.add_field(name = 'Разработчик', value = '[сасиска#2472](https://discord.com/users/338714886001524737)')
         if ctx.guild.owner.id != self.client.owner_id and ctx.guild.owner.id not in friends:
@@ -110,9 +110,7 @@ class sCephalon(commands.Cog):
         {'name': 'edit', 'value': 'edit'},
         {'name': 'give', 'value': 'give'},
         {'name': 'kick', 'value': 'kick'},
-        {'name': 'mute', 'value': 'mute'},
-        {'name': 'remind', 'value': 'remind'},
-        {'name': 'role', 'value': 'role'},
+        {'name': 'roleinfo', 'value': 'roleinfo'},
         {'name': 'take', 'value': 'take'},
         {'name': 'unmute', 'value': 'unmute'},
         {'name': 'vote', 'value': 'vote'},
@@ -126,13 +124,13 @@ class sCephalon(commands.Cog):
         }])
     async def _help(self, ctx, arg = None):
             if arg == None:
-                emb = discord.Embed(title = self.client.user.name, description = 'Вот команды, что я могу исполнить.\n||Некоторые улучшения появятся после верификации.||', colour = discord.Color.orange())
-                emb.add_field(name = 'Cephalon', value = '`info`, `invite`, `join`, `leave`, `ping`, `privacy`', inline = False)
+                emb = discord.Embed(title = self.client.user.name, description = 'Доступные Slash-команды.', color = discord.Color.orange())
+                emb.add_field(name = 'Cephalon', value = '`info`, `invite`, `join`, `leave`, `ping`', inline = False)
                 emb.add_field(name = 'Embeds', value = '`content`, `edit`, `say`', inline = False)
                 if not (ctx.guild.owner.id != self.client.owner_id and ctx.guild.owner.id not in friends):
                     emb.add_field(name = 'Fun', value = '`aye_balbec`, `cu`, `coinflip`, `dotersbrain`, `niggers`, `rp`, `rap`, `zatka`', inline = False)
-                emb.add_field(name = 'Mod', value = '`ban`, `clear`, `dm`, `give`, `kick`, `mute`, `take`, `unmute`', inline = False)
-                emb.add_field(name = 'Misc', value = '`about`, `avatar`, `guild`, `remind`, `role`, `rolemembers`, `someone`, `vote`', inline = False)
+                emb.add_field(name = 'Mod', value = '`ban`, `clear`, `dm`, `give`, `kick`, `take`, `unmute`', inline = False)
+                emb.add_field(name = 'Misc', value = '`about`, `avatar`, `guild`, `role`, `rolemembers`, `vote`', inline = False)
                 emb.add_field(name = 'ᅠ', value = 'Назовите комнату `Создать канал` (**регистр обязателен**), чтобы бот автоматически создавал для вас временные каналы, которые будут удаляться после того, как все люди выйдут из канала.')
                 emb.add_field(name = 'ᅠ', value = '**Используйте** `cy/help [команда/категория]` **для подробностей использования.**\n\n**[Ссылка-приглашение](https://discord.com/api/oauth2/authorize?client_id=694170281270312991&permissions=8&scope=bot%20applications.commands)**', inline = False)
                 emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
@@ -159,16 +157,10 @@ class sCephalon(commands.Cog):
                 await ctx.send('```apache\ncy/give <@пинг/имя/ID> <@роль/имя роли/ID роли> (<> - обязательно, / - или)\nperms = manage_channels```')
             elif arg == 'kick':
                 await ctx.send('```apache\ncy/kick <@пинг/имя/ID> [причина] ([] - опционально, <> - обязательно, / - или)\nperms = kick_members```')
-            elif arg == 'mute':
-                await ctx.send('```apache\ncy/mute <@пинг/имя/ID> <время(s/m/h/d(15s, 5m, 1h, 5d))> [причина] ([] - опционально, <> - обязательно, / - или)\nperms = view_audit_log```')
-            elif arg == 'remind':
-                await ctx.send('```apache\ncy/remind <время(s/m/h/d(15s, 5m, 1h, 5d))> <текст> (<> - обязательно, / - или)```')
             elif arg == 'roleinfo':
                 await ctx.send('```apache\ncy/roleinfo <@роль/имя роли/ID роли> (<> - обязательно, / - или)```')
             elif arg == 'take':
                 await ctx.send('```apache\ncy/take <@пинг/имя/ID> <@роль/имя роли/ID роли> (<> - обязательно, / - или)\nperms = manage_channels```')
-            elif arg == 'someone':
-                await ctx.send('```apache\ncy/someone <текст> (<> - обязательно)```')
             elif arg == 'unmute':
                 await ctx.send('```apache\ncy/unmute <@пинг/имя/ID> [причина] ([] - опционально, <> - обязательно, / - или)\nperms = manage_channels```')
             elif arg == 'vote':
