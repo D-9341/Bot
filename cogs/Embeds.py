@@ -19,7 +19,7 @@ class Embeds(commands.Cog):
     async def say(self, ctx, *, msg):
         title = ''
         description = ''
-        image = thumbnail = message = footer = None
+        image = thumbnail = message = footer =  author = None
         embed_values = msg.split('|')
         for i in embed_values:
             if i.strip().lower().startswith('t&'):
@@ -34,9 +34,13 @@ class Embeds(commands.Cog):
                 message = i.strip()[4:].strip()
             elif i.strip().lower().startswith('f&'):
                 footer = i.strip()[2:].strip()
+            elif i.strip().lower().startswith('a&'):
+                author = i.strip()[2:].strip()
+        if not author:
+            author = ctx.author
         emb = discord.Embed(title = title, description = description, color = 0x2f3136)
         for i in embed_values:
-            emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
+            emb.set_author(name = author, icon_url = author.avatar_url)
             if image:
                 emb.set_image(url = image)
             if thumbnail:
