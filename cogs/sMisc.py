@@ -128,7 +128,7 @@ class sMisc(commands.Cog):
         await ctx.send(embed = emb)
 
     @slash.cog_slash(name = 'avatar', description = 'Выводит аватар участника', options = [{'name': 'member', 'description': 'Пользователь', 'required': False, 'type': 6}])
-    async def _avatar(self, ctx, member: discord.Member = None):
+    async def _avatar(self, ctx, member: discord.User = None):
         if member == None:
             member = ctx.author
         av = 'png'
@@ -146,7 +146,7 @@ class sMisc(commands.Cog):
         await ctx.send(embed = emb)
 
     @slash.cog_slash(name = 'about', description = 'Показывает информацию о участнике', options = [{'name': 'member', 'description': 'Участник', 'required': False, 'type': 6}])
-    async def _about(self, ctx, member: discord.Member = None):
+    async def _about(self, ctx, member: discord.User = None):
         if member == None:
             member = ctx.author
         if member.nick == None:
@@ -155,7 +155,7 @@ class sMisc(commands.Cog):
             bot = 'Неа'
         elif member.bot == True:
             bot = 'Ага'
-        emb = discord.Embed(colour = member.color, timestamp = datetime.datetime.utcnow())
+        emb = discord.Embed(colour = 0x2f3136, timestamp = datetime.datetime.utcnow())
         emb.set_author(name = member)
         emb.add_field(name = 'ID', value = member.id)
         now = datetime.datetime.today()
