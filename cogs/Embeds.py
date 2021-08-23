@@ -49,7 +49,7 @@ class Embeds(commands.Cog):
                 emb.set_footer(text = footer)
             if ctx.guild.owner.id != self.client.owner_id and ctx.guild.owner.id not in friends:
                 emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-            if 't&' not in msg and 'd&' not in msg and 'img&' not in msg and 'th&' not in msg and 'msg&' not in msg and 'f&' not in msg:
+            if 't&' not in msg and 'd&' not in msg and 'img&' not in msg and 'th&' not in msg and 'msg&' not in msg and 'f&' not in msg and 'a&' not in msg:
                 return await ctx.send(msg)
             else:
                 if message:
