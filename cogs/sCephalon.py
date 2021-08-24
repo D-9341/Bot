@@ -86,7 +86,6 @@ class sCephalon(commands.Cog):
             emb.add_field(name = 'Принадлежность', value = 'Это - мой основной сервер.')
         if ctx.guild.id == 735874149578440855:
             emb.add_field(name = 'Тестирование', value = 'Это - мой тестовый сервер.')
-        emb.add_field(name = 'Веб-сайт', value = '```http://ru-unioncraft.ru/```', inline = False)
         emb.add_field(name = 'Раздражаю', value = f'{len(self.client.users)} человек')
         emb.add_field(name = 'Существую на', value = f'{len(self.client.guilds)} серверах')
         emb.set_footer(text = 'Данное приложение не имеет никакого причастия к игре Warframe.', icon_url = 'https://i.playground.ru/p/yVaOZNSTdgUTxmzy_qvzzQ.png')
