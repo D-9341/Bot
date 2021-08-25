@@ -23,7 +23,7 @@ class Cephalon(commands.Cog):
         print('Модуль Cephalon загружен')
 
     @commands.command() #ru, gnida
-    async def locale(ctx, locale = None):
+    async def locale(self, ctx, locale = None):
         if locale == 'gnida':
             rlocale = collection.find_one({"_id": ctx.author.id})["locale"]
             collection.update_one({"locale": 'ru', '_id': ctx.author.id}, {"$set": {'locale': 'gnida'}})
@@ -36,7 +36,7 @@ class Cephalon(commands.Cog):
             await ctx.send('Возможные локали:\nru\ngnida\n\nПри установке локали на `gnida` будут прикольные штуки!')
 
     @commands.command()
-    async def locale_test(ctx):
+    async def locale_test(self, ctx):
         rlocale = collection.find_one({"_id": ctx.author.id})["locale"]
         if rlocale == None:
             post = {
@@ -51,7 +51,7 @@ class Cephalon(commands.Cog):
             await ctx.send('Твоя ёбаная локаль равна `gnida`')
 
     @commands.command()
-    async def setup(ctx):
+    async def setup(self, ctx):
         post = {
             '_id': ctx.author.id,
             'locale': 'ru'
@@ -77,7 +77,7 @@ class Cephalon(commands.Cog):
             await ctx.guild.create_role(name = '2', color = discord.Color(0xff0000), reason = 'Создано командой setup.')
 
     @commands.command()
-    async def generate(ctx):
+    async def generate(self, ctx):
         token = ''.join([secrets.choice('QWERTYUIOPASDFGHJKLZXCVBNM1234567890') for i in range(4)])
         token1 = ''.join([secrets.choice('QWERTYUIOPASDFGHJKLZXCVBNM1234567890') for i in range(4)])
         token2 = ''.join([secrets.choice('QWERTYUIOPASDFGHJKLZXCVBNM1234567890') for i in range(4)])
