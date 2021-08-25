@@ -22,6 +22,67 @@ class Cephalon(commands.Cog):
     async def on_ready(self):
         print('Модуль Cephalon загружен')
 
+    @commands.command() #ru, gnida
+    async def locale(ctx, locale = None):
+        if locale == 'gnida':
+            rlocale = collection.find_one({"_id": ctx.author.id})["locale"]
+            collection.update_one({"locale": 'ru', '_id': ctx.author.id}, {"$set": {'locale': 'gnida'}})
+            await ctx.send('Твоя ёбаная локаль была установлена на `gnida`!')
+        if locale == 'ru':
+            glocale = collection.find_one({"_id": ctx.author.id})["locale"]
+            collection.update_one({"locale": 'gnida', '_id': ctx.author.id}, {"$set": {'locale': 'ru'}})
+            await ctx.send('Ваша локаль была установлена на `ru`.')
+        if locale == None:
+            await ctx.send('Возможные локали:\nru\ngnida\n\nПри установке локали на `gnida` будут прикольные штуки!')
+
+    @commands.command()
+    async def locale_test(ctx):
+        rlocale = collection.find_one({"_id": ctx.author.id})["locale"]
+        if rlocale == None:
+            post = {
+                '_id': ctx.author.id,
+                'locale': 'ru'
+            }
+            if collection.count_documents({'_id': ctx.author.id}) == 0:
+                collection.insert_one(post)
+        if rlocale == 'ru':
+            await ctx.send('Ваша локаль равна `ru`')
+        if rlocale == 'gnida':
+            await ctx.send('Твоя ёбаная локаль равна `gnida`')
+
+    @commands.command()
+    async def setup(ctx):
+        post = {
+            '_id': ctx.author.id,
+            'locale': 'ru'
+        }
+        if collection.count_documents({'_id': ctx.author.id}) == 0:
+            collection.insert_one(post)
+        role3 = discord.utils.get(ctx.guild.roles, name = '----------Предупреждения----------')
+        role1 = discord.utils.get(ctx.guild.roles, name = '1')
+        role2 = discord.utils.get(ctx.guild.roles, name = '2')
+        role = discord.utils.get(ctx.guild.roles, name = 'Muted')
+        if role and role1 and role2 and role3 != None:
+            emb = discord.Embed(description = 'Все нужные роли уже присутсвуют на сервере.', color = discord.Color.orange())
+            return await ctx.send(embed = emb)
+        emb = discord.Embed(description = 'С написанием этой команды на сервер будут добавлены несколько ролей, если их нет. Они нужны для правильной работы авто и обычного мута. Не следует их удалять, так как они будут созданы снова, но уже автоматически.', color = discord.Color.orange())
+        await ctx.send(embed = emb)
+        if role == None:
+            await ctx.guild.create_role(name = 'Muted', colour = discord.Colour(0x000001), reason = 'Создано командой setup.')
+        if role3 == None:
+            await ctx.guild.create_role(name = '----------Предупреждения----------', color = discord.Color(0x2f3136), reason = 'Создано командой setup.')
+        if role1 == None:
+            await ctx.guild.create_role(name = '1', color = discord.Color(0xff0000), reason = 'Создано командой setup.')
+        if role2 == None:
+            await ctx.guild.create_role(name = '2', color = discord.Color(0xff0000), reason = 'Создано командой setup.')
+
+    @commands.command()
+    async def generate(ctx):
+        token = ''.join([secrets.choice('QWERTYUIOPASDFGHJKLZXCVBNM1234567890') for i in range(4)])
+        token1 = ''.join([secrets.choice('QWERTYUIOPASDFGHJKLZXCVBNM1234567890') for i in range(4)])
+        token2 = ''.join([secrets.choice('QWERTYUIOPASDFGHJKLZXCVBNM1234567890') for i in range(4)])
+        await ctx.send(f'```{token}-{token1}-{token2}```')
+
     @commands.command()
     @commands.cooldown(1, 5, commands.BucketType.user)
     async def info(self, ctx):
@@ -80,8 +141,8 @@ class Cephalon(commands.Cog):
     @commands.command()
     async def botver(self, ctx):
         emb = discord.Embed(color = 0x2f3136)
-        emb.add_field(name = '0.12.10.2.12528 (Текущая версия, полная перепись кода)', value = 'Отдельные куски кода были рассортированы по разным файлам.', inline = False)
-        emb.add_field(name = '0.12.10.2.11856 (Предыдущая версия, нормальное обновление)', value = 'Добавлена команда locale для изменения локали. Пока доступны только `ru` (по умолчанию) и `gnida`.\n\n**Say/Edit**\n\nУбран аргумент --everyone и запрещено упоминание @everyone каким-либо способом.', inline = False)
+        emb.add_field(name = '0.12.11.2.13771 (Текущая версия, нормальное обновление)', value = 'Deaf/Undeaf:\nЗаглушает участника в голосовом канале, когда в его ролях есть Deafened\nHelp:\nТеперь указывает список команд, применимый для способа вызова Help. Таким образом, Slash-help будет показывать команды только без конвертеров, а обычная Help все команды.\nТакже, многочисленные исправления', inline = False)
+        emb.add_field(name = '0.12.10.2.12528 (Предыдущая версия, полная перепись кода)', value = 'Отдельные куски кода были рассортированы по разным файлам.', inline = False)
         await ctx.send(embed = emb)
 
     @commands.command()
