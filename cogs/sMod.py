@@ -66,14 +66,14 @@ class sMod(commands.Cog):
                     reason = 'Не указана.'
                 if rlocale == 'gnida':
                     reason = 'Я не ебу'
-            if ctx.author.top_role == member.top_role and ctx.author.id != client.owner_id:
+            if ctx.author.top_role == member.top_role and ctx.author.id != self.client.owner_id:
                 if rlocale == 'ru':
                     emb = discord.Embed(description = f'{ctx.author.mention}, ваша высшая роль равна высшей роли {member.mention}. Кик отклонён.', colour = discord.Color.orange())
                     await ctx.send(embed = emb)
                 if rlocale == 'gnida':
                     emb = discord.Embed(description = f'Твоя высшая роль равна высшей роли {member.mention}. Пошёл нахуй.', colour = discord.Color.orange())
                     await ctx.send(embed = emb)
-            elif member.top_role > ctx.author.top_role and ctx.author.id != client.owner_id:
+            elif member.top_role > ctx.author.top_role and ctx.author.id != self.client.owner_id:
                 if rlocale == 'ru':
                     emb = discord.Embed(description = f'{ctx.author.mention}, ваша высшая роль ниже высшей роли {member.mention}. Кик отклонён.', colour = discord.Color.orange())
                     await ctx.send(embed = emb)
@@ -121,14 +121,14 @@ class sMod(commands.Cog):
                     reason = 'Не указана.'
                 if rlocale == 'gnida':
                     reason = 'Я не ебу'
-            if ctx.author.top_role == member.top_role and ctx.author.id != client.owner_id:
+            if ctx.author.top_role == member.top_role and ctx.author.id != self.client.owner_id:
                 if rlocale == 'ru':
                     emb = discord.Embed(description = f'{ctx.author.mention}, ваша высшая роль равна высшей роли {member.mention}. Бан отклонён.', colour = discord.Color.orange())
                     await ctx.send(embed = emb)
                 if rlocale == 'gnida':
                     emb = discord.Embed(description = f'Твоя высшая роль равна высшей роли {member.mention}. Саси.', colour = discord.Color.orange())
                     await ctx.send(embed = emb)
-            elif member.top_role > ctx.author.top_role and ctx.author.id != client.owner_id:
+            elif member.top_role > ctx.author.top_role and ctx.author.id != self.client.owner_id:
                 if rlocale == 'ru':
                     emb = discord.Embed(description = f'{ctx.author.mention}, ваша высшая роль ниже высшей роли {member.mention}. Бан отклонён.', colour = discord.Color.orange())
                     await ctx.send(embed = emb)
