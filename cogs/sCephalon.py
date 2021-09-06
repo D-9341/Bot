@@ -30,7 +30,8 @@ class sCephalon(commands.Cog):
         {'name': '0.12.9.11410', 'value': '0.12.9.11410'},
         {'name': '0.12.10.1.11661', 'value': '0.12.10.1.11661'},
         {'name': '0.12.10.2.11856', 'value': '0.12.10.2.11856'},
-        {'name': '0.12.10.2.12528', 'value': '0.12.10.2.12528'}]}])
+        {'name': '0.12.10.2.12528', 'value': '0.12.10.2.12528'},
+        {'name': '0.12.10.2.12528', 'value': '0.12.11.2.13771'}]}])
     async def _botver(self, ctx, version = None):
         if version == None:
             emb = discord.Embed(color = 0x2f3136) # будут маленькое, нормальное и крупное обновления
@@ -61,7 +62,11 @@ class sCephalon(commands.Cog):
             emb = discord.Embed(color = discord.Color.blurple())
             emb.add_field(name = '0.12.10.2.12528', value = 'Отдельные куски кода были рассортированы по разным файлам.')
             await ctx.send(embed = emb)
-
+        if version == '0.12.11.2.13771':
+            emb = discord.Embed(color = 0x2f3136)
+            emb.add_field(name = '', value = 'Deaf/Undeaf:\nЗаглушает участника в голосовом канале, когда в его ролях есть Deafened\nHelp:\nТеперь указывает список команд, применимый для способа вызова Help. Таким образом, Slash-help будет показывать команды только без конвертеров, а обычная Help все команды.\nТакже, многочисленные исправления')
+            await ctx.send(embed = emb)
+            
     @slash.cog_slash(name = 'ping', description = 'Отображение задержки клиента бота. Нормальная задержка в диапазоне от 90 до 130 миллисекунд.')
     async def _ping(self, ctx):
         emb = discord.Embed(description = f'`fetching..`', colour = discord.Color.orange())
@@ -86,7 +91,7 @@ class sCephalon(commands.Cog):
             emb.add_field(name = 'Принадлежность', value = 'Это - мой основной сервер.')
         if ctx.guild.id == 735874149578440855:
             emb.add_field(name = 'Тестирование', value = 'Это - мой тестовый сервер.')
-        emb.add_field(name = 'Раздражаю', value = f'{len(self.client.users)} человек')
+        emb.add_field(name = 'Обслуживаю', value = f'{len(self.client.users)} человек')
         emb.add_field(name = 'Существую на', value = f'{len(self.client.guilds)} серверах')
         emb.set_footer(text = 'Данное приложение не имеет никакого причастия к игре Warframe.', icon_url = 'https://i.playground.ru/p/yVaOZNSTdgUTxmzy_qvzzQ.png')
         await ctx.send(embed = emb)
