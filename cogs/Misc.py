@@ -56,10 +56,7 @@ class Misc(commands.Cog):
         emb = discord.Embed(description = 'ГОЛОСОВАНИЕ', colour = discord.Color.orange())
         emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
         emb.add_field(name = 'Голосуем за:', value = text)
-        if ctx.guild.owner.id != self.client.owner_id and ctx.guild.owner.id not in friends:
-            emb.set_footer(text = '🚫 - воздержусь. Cephalon Cy by сасиска#2472')
-        else:
-            emb.set_footer(text = '🚫 - воздержусь')
+        emb.set_footer(text = '🚫 - воздержусь')
         sent = await ctx.send(embed = emb)
         await sent.add_reaction('👍')
         await sent.add_reaction('👎')
@@ -76,10 +73,7 @@ class Misc(commands.Cog):
         if len(role.members) != 0:
             emb.add_field(name = f'Участники с ролью {role} ({len(role.members)})', value = ', '.join([member.mention for member in role.members]))
         else:
-            if ctx.guild.owner.id != self.client.owner_id and ctx.guild.owner.id not in friends:
-                emb.set_footer(text = 'Обнаружено 0 участников с этой ролью. Cephalon Cy by сасиска#2472')
-            else:
-                emb.set_footer(text = 'Обнаружено 0 участников с этой ролью.')
+            emb.set_footer(text = 'Обнаружено 0 участников с этой ролью.')
         await ctx.send(embed = emb)
 
     @commands.command()
@@ -102,8 +96,6 @@ class Misc(commands.Cog):
         delta = now - then
         d = guild.created_at.strftime('%d.%m.%Y %H:%M:%S UTC')
         emb.add_field(name = 'Дата создания сервера', value = f'{delta.days} дней назад. ({d})', inline = False)
-        if ctx.guild.owner.id != self.client.owner_id and ctx.guild.owner.id not in friends:
-            emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         emb.set_thumbnail(url = guild.icon_url)
         await ctx.send(embed = emb)
 
@@ -134,8 +126,6 @@ class Misc(commands.Cog):
         d = role.created_at.strftime('%d.%m.%Y %H:%M:%S GMT')
         emb.add_field(name = 'Создана', value = f'{delta.days} дня(ей) назад. ({d})', inline = False)
         emb.add_field(name = 'Показывает участников отдельно?', value = role.hoist)
-        if ctx.guild.owner.id != self.client.owner_id and ctx.guild.owner.id not in friends:
-            emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
 
     @commands.command(aliases = ['av'])
