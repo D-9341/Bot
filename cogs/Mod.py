@@ -67,72 +67,48 @@ class Mod(commands.Cog):
                     reason = 'Я не ебу'
             if ctx.author == member:
                 emb = discord.Embed(description = 'Ты **не** можешь кикнуть себя.', color = discord.Color.blurple())
-                if ctx.guild.owner.id != self.client.owner_id and ctx.guild.owner.id not in friends:
-                    emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
                 await ctx.send(embed = emb)
             if ctx.author.top_role == member.top_role and ctx.author.id != client.owner_id:
                 if rlocale == 'ru':
                     emb = discord.Embed(description = f'{ctx.author.mention}, ваша высшая роль равна высшей роли {member.mention}. Кик отклонён.', colour = discord.Color.orange())
-                    if ctx.guild.owner.id != self.client.owner_id and ctx.guild.owner.id not in friends:
-                        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
                     await ctx.send(embed = emb)
                 if rlocale == 'gnida':
                     emb = discord.Embed(description = f'Твоя высшая роль равна высшей роли {member.mention}. Пошёл нахуй.', colour = discord.Color.orange())
-                    if ctx.guild.owner.id != self.client.owner_id and ctx.guild.owner.id not in friends:
-                        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
                     await ctx.send(embed = emb)
             elif member.top_role > ctx.author.top_role and ctx.author.id != client.owner_id:
                 if rlocale == 'ru':
                     emb = discord.Embed(description = f'{ctx.author.mention}, ваша высшая роль ниже высшей роли {member.mention}. Кик отклонён.', colour = discord.Color.orange())
-                    if ctx.guild.owner.id != self.client.owner_id and ctx.guild.owner.id not in friends:
-                        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
                     await ctx.send(embed = emb)
                 if rlocale == 'gnida':
                     emb = discord.Embed(description = f'Твоя высшая роль ниже высшей роли {member.mention}. Пошёл нахуй.', colour = discord.Color.orange())
-                    if ctx.guild.owner.id != self.client.owner_id and ctx.guild.owner.id not in friends:
-                        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
                     await ctx.send(embed = emb)
             elif member.top_role > bot.top_role and ctx.author.id != client.owner_id:
                 if rlocale == 'ru':
                     emb = discord.Embed(description = f'МОЯ высшая роль ниже высшей роли {member.mention}. Кик невозможен.', color = 0xff0000)
-                    if ctx.guild.owner.id != self.client.owner_id and ctx.guild.owner.id not in friends:
-                        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
                     await ctx.send(embed = emb)
                 if rlocale == 'gnida':
                     emb = discord.Embed(description = f'МОЯ высшая роль ниже высшей роли {member.mention}. Сука.', color = 0xff0000)
-                    if ctx.guild.owner.id != self.client.owner_id and ctx.guild.owner.id not in friends:
-                        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
                     await ctx.send(embed = emb)
             elif member.top_role == bot.top_role and ctx.author.id != client.owner_id:
                 if rlocale == 'ru':
                     emb = discord.Embed(description = f'МОЯ высшая роль идентична высшей роли {member.mention}. Кик невозможен.', color = 0xff0000)
-                    if ctx.guild.owner.id != self.client.owner_id and ctx.guild.owner.id not in friends:
-                        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
                     await ctx.send(embed = emb)
                 if rlocale == 'gnida':
                     emb = discord.Embed(description = f'МОЯ высшая роль идентична высшей роли {member.mention}. Сука.', color = 0xff0000)
-                    if ctx.guild.owner.id != self.client.owner_id and ctx.guild.owner.id not in friends:
-                        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
                     await ctx.send(embed = emb)
             else:
                 emb = discord.Embed(colour = member.color)
                 emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
                 emb.add_field(name = 'Был кикнут', value = member.mention)
                 emb.add_field(name = 'По причине', value = reason)
-                if ctx.guild.owner.id != self.client.owner_id and ctx.guild.owner.id not in friends:
-                    emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
                 await ctx.send(embed = emb)
                 await member.kick(reason = reason)
         else:
             if rlocale == 'ru':
                 emb = discord.Embed(description = f'Извините, {ctx.author.mention}, но вы не можете кикнуть моего создателя!', colour = discord.Color.orange())
-                if ctx.guild.owner.id != self.client.owner_id and ctx.guild.owner.id not in friends:
-                    emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
                 await ctx.send(embed = emb)
             if rlocale == 'gnida':
                 emb = discord.Embed(description = 'Ого! Пошёл нахуй!', colour = discord.Color.orange())
-                if ctx.guild.owner.id != self.client.owner_id and ctx.guild.owner.id not in friends:
-                    emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
                 await ctx.send(embed = emb)
 
     @commands.command()
@@ -149,52 +125,34 @@ class Mod(commands.Cog):
                     reason = 'Я не ебу'
             if ctx.author == member:
                 emb = discord.Embed(description = 'Ты **не** можешь забанить себя.', color = discord.Color.blurple())
-                if ctx.guild.owner.id != self.client.owner_id and ctx.guild.owner.id not in friends:
-                    emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
                 await ctx.send(embed = emb)
             if ctx.author.top_role == member.top_role and ctx.author.id != client.owner_id:
                 if rlocale == 'ru':
                     emb = discord.Embed(description = f'{ctx.author.mention}, ваша высшая роль равна высшей роли {member.mention}. Бан отклонён.', colour = discord.Color.orange())
-                    if ctx.guild.owner.id != self.client.owner_id and ctx.guild.owner.id not in friends:
-                        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
                     await ctx.send(embed = emb)
                 if rlocale == 'gnida':
                     emb = discord.Embed(description = f'Твоя высшая роль равна высшей роли {member.mention}. Саси.', colour = discord.Color.orange())
-                    if ctx.guild.owner.id != self.client.owner_id and ctx.guild.owner.id not in friends:
-                        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
                     await ctx.send(embed = emb)
             elif member.top_role > ctx.author.top_role and ctx.author.id != client.owner_id:
                 if rlocale == 'ru':
                     emb = discord.Embed(description = f'{ctx.author.mention}, ваша высшая роль ниже высшей роли {member.mention}. Бан отклонён.', colour = discord.Color.orange())
-                    if ctx.guild.owner.id != self.client.owner_id and ctx.guild.owner.id not in friends:
-                        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
                     await ctx.send(embed = emb)
                 if rlocale == 'gnida':
                     emb = discord.Embed(description = f'Твоя высшая роль ниже высшей роли {member.mention}. Саси.', colour = discord.Color.orange())
-                    if ctx.guild.owner.id != self.client.owner_id and ctx.guild.owner.id not in friends:
-                        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
                     await ctx.send(embed = emb)
             elif member.top_role > bot.top_role and ctx.author.id != client.owner_id:
                 if rlocale == 'ru':
                     emb = discord.Embed(description = f'МОЯ высшая роль ниже высшей роли {member.mention}. Бан невозможен.', color = 0xff0000)
-                    if ctx.guild.owner.id != self.client.owner_id and ctx.guild.owner.id not in friends:
-                        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
                     await ctx.send(embed = emb)
                 if rlocale == 'gnida':
                     emb = discord.Embed(description = f'МОЯ высшая роль ниже высшей роли {member.mention}. Блять.', color = 0xff0000)
-                    if ctx.guild.owner.id != self.client.owner_id and ctx.guild.owner.id not in friends:
-                        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
                     await ctx.send(embed = emb)
             elif member.top_role == bot.top_role and ctx.author.id != client.owner_id:
                 if rlocale == 'ru':
                     emb = discord.Embed(description = f'МОЯ высшая роль идентична высшей роли {member.mention}. Бан невозможен.', color = 0xff0000)
-                    if ctx.guild.owner.id != self.client.owner_id and ctx.guild.owner.id not in friends:
-                        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
                     await ctx.send(embed = emb)
                 if rlocale == 'gnida':
                     emb = discord.Embed(description = f'МОЯ высшая роль идентична высшей роли {member.mention}. Блять.', color = 0xff0000)
-                    if ctx.guild.owner.id != self.client.owner_id and ctx.guild.owner.id not in friends:
-                        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
                     await ctx.send(embed = emb)
             else:
                 if '--soft' in reason:
@@ -209,8 +167,6 @@ class Mod(commands.Cog):
                         if rlocale == 'gnida':
                             reason == 'Я не ебу'
                     emb.add_field(name = 'По причине', value = reason)
-                    if ctx.guild.owner.id != self.client.owner_id and ctx.guild.owner.id not in friends:
-                        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
                     await ctx.send(embed = emb)
                     await member.ban(reason = reason)
                     await member.unban(reason = '--softban')
@@ -219,8 +175,6 @@ class Mod(commands.Cog):
                     emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
                     emb.add_field(name = 'Был забанен', value = member.mention)
                     emb.add_field(name = 'По причине', value = reason)
-                    if ctx.guild.owner.id != self.client.owner_id and ctx.guild.owner.id not in friends:
-                        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
                     await ctx.send(embed = emb)
                     await member.ban(reason = reason)
 
@@ -234,40 +188,26 @@ class Mod(commands.Cog):
                     await member.add_roles(role)
                     if rlocale == 'ru':
                         emb = discord.Embed(description = f'{member.mention} был перманентно заглушён {ctx.author.mention}', color = 0x2f3136)
-                        if ctx.guild.owner.id != self.client.owner_id and ctx.guild.owner.id not in friends:
-                            emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
                         return await ctx.send(embed = emb)
                     if rlocale == 'gnida':
                         emb = discord.Embed(description = f'{member.mention} получает мут в ебало от {ctx.author.mention}', color = 0x2f3136)
-                        if ctx.guild.owner.id != self.client.owner_id and ctx.guild.owner.id not in friends:
-                            emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
                         return await ctx.send(embed = emb)
                 else:
                     emb = discord.Embed(description = 'Ты думал мой Создатель тебе по зубам? ОН!?', color = 0xff0000)
-                    if ctx.guild.owner.id != self.client.owner_id and ctx.guild.owner.id not in friends:
-                        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
                     return await ctx.send(embed = emb)
             if role > ctx.author.top_role:
                 if rlocale == 'ru':
                     emb = discord.Embed(description = f'Вы не можете выдать {role.mention}, так как она имеет более высокий ранг, чем ваша высшая роль.', color = discord.Color.orange())
-                    if ctx.guild.owner.id != self.client.owner_id and ctx.guild.owner.id not in friends:
-                        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
                     await ctx.send(embed = emb)
                 if rlocale == 'gnida':
                     emb = discord.Embed(description = f'Дебилам вроде тебя запрещено выдавать {role.mention}, так как эта роль выше твоей высшей роли.', color = discord.Color.orange())
-                    if ctx.guild.owner.id != self.client.owner_id and ctx.guild.owner.id not in friends:
-                        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
                     await ctx.send(embed = emb)
             elif role == ctx.author.top_role:
                 if rlocale == 'ru':
                     emb = discord.Embed(description = f'Вы не можете выдать {role.mention} кому-либо, так как она равна вашей высшей роли.', color = discord.Color.orange())
-                    if ctx.guild.owner.id != self.client.owner_id and ctx.guild.owner.id not in friends:
-                        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
                     await ctx.send(embed = emb)
                 if rlocale == 'gnida':
                     emb = discord.Embed(description = f'Дебилам вроде тебя запрещено выдавать {role.mention}, так как она равна твоей высшей роли.', color = discord.Color.orange())
-                    if ctx.guild.owner.id != self.client.owner_id and ctx.guild.owner.id not in friends:
-                        emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
                     await ctx.send(embed = emb)
             else:
                 await member.add_roles(role)
@@ -275,13 +215,9 @@ class Mod(commands.Cog):
                 emb.add_field(name = 'ВЫДАНА_РОЛЬ', value = f'{role.mention} | {role.name} | ID {role.id}')
                 emb.add_field(name = 'ВЫДАНА:', value = member.mention, inline = False)
                 emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
-                if ctx.guild.owner.id != self.client.owner_id and ctx.guild.owner.id not in friends:
-                    emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
                 await ctx.send(embed = emb)
         else:
             emb = discord.Embed(description = f'{ctx.author.mention}, я не могу найти {role.mention} в списке ролей.', colour = member.color, timestamp = ctx.message.created_at)
-            if ctx.guild.owner.id != self.client.owner_id and ctx.guild.owner.id not in friends:
-                emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
             await ctx.send(embed = emb)
 
     @commands.command()
@@ -292,33 +228,21 @@ class Mod(commands.Cog):
             if role.name == 'Muted':
                 await member.remove_roles(role)
                 emb = discord.Embed(description = f'{member.mention} был разглушён {ctx.author.mention}', color = 0x2f3136)
-                if ctx.guild.owner.id != self.client.owner_id and ctx.guild.owner.id not in friends:
-                    emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
                 return await ctx.send(embed = emb)
             if role > ctx.author.top_role and ctx.message.author.id != 338714886001524737:
                 emb = discord.Embed(description = f'Вы не можете забрать {role.mention}, так как она имеет более высокий ранг, чем ваша высшая роль. Забирание роли отменено.', color = 0x2f3136)
                 await ctx.send(embed = emb)
-                if ctx.guild.owner.id != self.client.owner_id and ctx.guild.owner.id not in friends:
-                    emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
             elif role == ctx.author.top_role and ctx.message.author.id != 338714886001524737:
                 emb = discord.Embed(description = f'Вы не можете забрать {role.mention}, так как она равна вашей высшей роли. Забирание роли отменено.', color = 0x2f3136)
-                if ctx.guild.owner.id != self.client.owner_id and ctx.guild.owner.id not in friends:
-                    emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
                 await ctx.send(embed = emb)
             elif member.top_role > bot.top_role:
                 emb = discord.Embed(description = f'МОЯ высшая роль ниже высшей роли {member.mention}. Забрать роль невозможно.', color = 0xff0000)
-                if ctx.guild.owner.id != self.client.owner_id and ctx.guild.owner.id not in friends:
-                    emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
                 await ctx.send(embed = emb)
             elif member.top_role == bot.top_role:
                 emb = discord.Embed(description = f'МОЯ высшая роль идентична высшей роли {member.mention}. Забрать роль невозможно.', color = 0xff0000)
-                if ctx.guild.owner.id != self.client.owner_id and ctx.guild.owner.id not in friends:
-                    emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
                 await ctx.send(embed = emb)
             elif role.is_default():
                 emb = discord.Embed(description = 'Забрать @everyone?', color = 0x2f3136)
-                if ctx.guild.owner.id != self.client.owner_id and ctx.guild.owner.id not in friends:
-                    emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
                 await ctx.send(embed = emb)
             else:
                 await member.remove_roles(role)
@@ -326,13 +250,9 @@ class Mod(commands.Cog):
                 emb.add_field(name = 'ЗАБРАНА_РОЛЬ', value = f'{role.mention} | {role.name} | ID {role.id}')
                 emb.add_field(name = 'ЗАБРАНА_У:', value = member.mention, inline = False)
                 emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
-                if ctx.guild.owner.id != self.client.owner_id and ctx.guild.owner.id not in friends:
-                    emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
                 await ctx.send(embed = emb)
         else:
             emb = discord.Embed(description = f'{ctx.author.mention}, я не могу найти {role.mention} в списке ролей.', colour = member.color, timestamp = ctx.message.created_at)
-            if ctx.guild.owner.id != self.client.owner_id and ctx.guild.owner.id not in friends:
-                emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
             await ctx.send(embed = emb)
 
     @commands.command()
