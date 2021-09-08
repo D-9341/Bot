@@ -72,9 +72,6 @@ class sCephalon(commands.Cog):
         emb = discord.Embed(description = f'`fetching..`', colour = discord.Color.orange())
         emb1 = discord.Embed(description = f'Pong!  `{round(self.client.latency * 1000)} ms`', colour = discord.Color.orange())
         message = await ctx.send(embed = emb)
-        if ctx.guild.owner.id != self.client.owner_id and ctx.guild.owner.id not in friends:
-            emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-            emb1.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await asyncio.sleep(self.client.latency)
         await message.edit(embed = emb1)
 
@@ -85,8 +82,6 @@ class sCephalon(commands.Cog):
         emb.add_field(name = 'Версия', value = '0.12.11.2.13771')
         emb.add_field(name = 'Написан на', value = 'discord.py v1.7.3 при помощи\ndiscord-py-slash-command v2.0.0')
         emb.add_field(name = 'Разработчик', value = '[сасиска#2472](https://discord.com/users/338714886001524737)')
-        if ctx.guild.owner.id != self.client.owner_id and ctx.guild.owner.id not in friends:
-            emb.add_field(name = 'Сервер', value = 'Данный сервер не принадлежит моему создателю или его знакомым. Все эмбед выводы будут иметь футер с текстом `Cephalon Cy by сасиска#2472`')
         if ctx.guild.id == 693929822543675455:
             emb.add_field(name = 'Принадлежность', value = 'Это - мой основной сервер.')
         if ctx.guild.id == 735874149578440855:
@@ -99,8 +94,6 @@ class sCephalon(commands.Cog):
     @slash.cog_slash(name = 'invite', description = 'Для приглашения бота на сервер')
     async def _invite(self, ctx):
         emb = discord.Embed(description = '[Ссылка](https://discord.com/api/oauth2/authorize?client_id=694170281270312991&permissions=8&scope=bot%20applications.commands) для приглашения Cy на сервера.', colour = discord.Color.orange())
-        if ctx.guild.owner.id != self.client.owner_id and ctx.guild.owner.id not in friends:
-            emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await ctx.send(embed = emb)
 
     @slash.cog_slash(name = 'help', description = 'Здесь можно получить полную помощь по всем командам', options = [{'name': 'arg', 'description': 'Выбор команды для помощи', 'required': False, 'type': 3, 'choices': [
@@ -137,7 +130,7 @@ class sCephalon(commands.Cog):
                 emb.add_field(name = 'Misc', value = '`about`, `avatar`, `guild`, `role`, `rolemembers`, `vote`', inline = False)
                 emb.add_field(name = 'ᅠ', value = 'Назовите комнату `Создать канал` (**регистр обязателен**), чтобы бот автоматически создавал для вас временные каналы, которые будут удаляться после того, как все люди выйдут из канала.')
                 emb.add_field(name = 'ᅠ', value = '**Используйте** `cy/help [команда/категория]` **для подробностей использования.**\n\n**[Ссылка-приглашение](https://discord.com/api/oauth2/authorize?client_id=694170281270312991&permissions=8&scope=bot%20applications.commands)**', inline = False)
-                emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+                emb.set_footer(text = 'Cephalon Cy © сасиска#2472')
                 return await ctx.send(embed = emb)
             elif arg == 'roll':
                 await ctx.send('```apache\ncy/roll [от] [до]\nесли не указано [до], [от] станет [до].\ncy/roll 80 (0-80)\ncy/roll 26 90 (26-90)\ncy/roll (0-100)\n([] - опционально)```')
