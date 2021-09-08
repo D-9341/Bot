@@ -71,10 +71,7 @@ class sMisc(commands.Cog):
             if ctx.guild.owner.id != self.client.owner_id and ctx.guild.owner.id not in friends:
                 emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         else:
-            if ctx.guild.owner.id != self.client.owner_id and ctx.guild.owner.id not in friends:
-                emb.set_footer(text = 'Обнаружено 0 участников с этой ролью. Cephalon Cy by сасиска#2472')
-            else:
-                emb.set_footer(text = 'Обнаружено 0 участников с этой ролью.')
+            emb.set_footer(text = 'Обнаружено 0 участников с этой ролью.')
         await ctx.send(embed = emb)
 
     @slash.cog_slash(name = 'guild', description = 'Показывает информацию о сервере')
