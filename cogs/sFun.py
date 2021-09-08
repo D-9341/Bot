@@ -84,13 +84,9 @@ class sFun(commands.Cog):
         rlocale = rlocale = collection.find_one({"_id": ctx.author.id})["locale"]
         if rlocale == 'ru':
             emb = discord.Embed(description = '[осуждающее видео](https://www.youtube.com/watch?v=167apVK8Suw)', colour = discord.Color.orange())
-            if ctx.guild.owner.id != self.client.owner_id and ctx.guild.owner.id not in friends:
-                emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
             await ctx.send(embed = emb)
         if rlocale == 'gnida':
             emb = discord.Embed(description = '[негры пидарасы, и извинятся за это не буду](https://www.youtube.com/watch?v=167apVK8Suw)', colour = discord.Color.orange())
-            if ctx.guild.owner.id != self.client.owner_id and ctx.guild.owner.id not in friends:
-                emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
             await ctx.send(embed = emb)
 
     @slash.cog_slash(name = 'ayebalbec', description = 'Я не ангел и не бес, просто..')
