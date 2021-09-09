@@ -10,8 +10,6 @@ passw = os.environ.get('passw')
 cluster = MongoClient(f"mongodb+srv://cephalon:{passw}@locale.ttokw.mongodb.net/Locale?retryWrites=true&w=majority")
 collection = cluster.Locale.locale
 
-friends = [351071668241956865, 417362845303439360]
-
 guilds = [693929822543675455, 735874149578440855, 818758712163827723]
 
 class Cephalon(commands.Cog):
@@ -89,20 +87,15 @@ class Cephalon(commands.Cog):
         emb = discord.Embed(colour = discord.Color.orange())
         emb.set_author(name = self.client.user.name, url = 'https://warframe.fandom.com/wiki/Cephalon_Cy', icon_url = self.client.user.avatar_url)
         emb.add_field(name = 'Версия', value = '0.12.11.2.13771')
-        emb.add_field(name = 'Написан на', value = 'discord.py v1.7.3 при помощи\ndiscord-py-slash-command v2.0.0.')
+        emb.add_field(name = 'Написан на', value = 'discord.py v1.7.3 при помощи\ndiscord-py-slash-command v3.1.0.')
         emb.add_field(name = 'Разработчик', value = '[сасиска#2472](https://discord.com/users/338714886001524737)')
-        if ctx.guild.owner.id != self.client.owner_id and ctx.guild.owner.id not in friends:
-            emb.add_field(name = 'Сервер', value = 'Данный сервер не принадлежит моему Создателю или его знакомым. Все эмбед выводы будут иметь футер с текстом `Cephalon Cy by сасиска#2472`')
         if ctx.guild.id == 693929822543675455:
             emb.add_field(name = 'Принадлежность', value = 'Это - мой основной сервер.')
         if ctx.guild.id == 735874149578440855:
             emb.add_field(name = 'Тестирование', value = 'Это - мой тестовый сервер.')
         emb.add_field(name = 'Обслуживаю', value = f'{len(self.client.users)} человек')
         emb.add_field(name = 'Существую на', value = f'{len(self.client.guilds)} серверах')
-        if ctx.guild.owner.id != self.client.owner_id and ctx.guild.owner.id not in friends:
-            emb.set_footer(text = 'Данное приложение не имеет никакого причастия к игре Warframe. Cephalon Cy by сасиска#2472', icon_url = 'https://i.playground.ru/p/yVaOZNSTdgUTxmzy_qvzzQ.png')
-        else:
-            emb.set_footer(text = 'Данное приложение не имеет никакого причастия к игре Warframe.', icon_url = 'https://i.playground.ru/p/yVaOZNSTdgUTxmzy_qvzzQ.png')
+        emb.set_footer(text = 'Данное приложение не имеет никакого причастия к игре Warframe.', icon_url = 'https://i.playground.ru/p/yVaOZNSTdgUTxmzy_qvzzQ.png')
         await ctx.send(embed = emb)
     
     @commands.command(aliases = ['invcy'])
@@ -110,13 +103,9 @@ class Cephalon(commands.Cog):
     async def invite(self, ctx, arg = None):
         if arg == None:
             emb = discord.Embed(description = '[Ссылка](https://discord.com/api/oauth2/authorize?client_id=694170281270312991&permissions=8&scope=bot%20applications.commands) для приглашения Cy на сервера.', colour = discord.Color.orange())
-            if ctx.guild.owner.id != self.client.owner_id and ctx.guild.owner.id not in friends:
-                emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
             await ctx.send(embed = emb)
         if arg == 'beta':
             emb = discord.Embed(description = '[Ссылка](https://discord.com/oauth2/authorize?client_id=764882153812787250&scope=bot&permissions=8&scope=bot%20applications.commands) для приглашения Cy Beta на сервера.', color = discord.Color.orange())
-            if ctx.guild.owner.id != self.client.owner_id and ctx.guild.owner.id not in friends:
-                emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
             await ctx.send(embed = emb)
         if arg == 'pro':
             if ctx.guild.id not in guilds:
@@ -132,9 +121,6 @@ class Cephalon(commands.Cog):
         emb = discord.Embed(description = f'`fetching..`', colour = discord.Color.orange())
         emb1 = discord.Embed(description = f'Pong!  `{round(self.client.latency * 1000)} ms`', colour = discord.Color.orange())
         message = await ctx.send(embed = emb)
-        if ctx.guild.owner.id != self.client.owner_id and ctx.guild.owner.id not in friends:
-            emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
-            emb1.set_footer(text = 'Cephalon Cy by сасиска#2472')
         await asyncio.sleep(self.client.latency)
         await message.edit(embed = emb1)
         
@@ -151,8 +137,6 @@ class Cephalon(commands.Cog):
             channel = ctx.author.voice.channel
         else:
             emb = discord.Embed(description = 'Ты должен быть в канале, чтобы использовать это.', colour = discord.Color.orange())
-            if ctx.guild.owner.id != self.client.owner_id and ctx.guild.owner.id not in friends:
-                emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
             await ctx.send(embed = emb)
         global vc
         vc = await channel.connect()
@@ -163,8 +147,6 @@ class Cephalon(commands.Cog):
             pass
         else:
             emb = discord.Embed(description = 'Ты должен быть в канале, чтобы использовать это.', colour = discord.Color.orange())
-            if ctx.guild.owner.id != self.client.owner_id and ctx.guild.owner.id not in friends:
-                emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
             await ctx.send(embed = emb)
         await vc.disconnect()
 
