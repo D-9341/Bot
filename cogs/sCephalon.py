@@ -31,7 +31,7 @@ class sCephalon(commands.Cog):
         {'name': '0.12.10.1.11661', 'value': '0.12.10.1.11661'},
         {'name': '0.12.10.2.11856', 'value': '0.12.10.2.11856'},
         {'name': '0.12.10.2.12528', 'value': '0.12.10.2.12528'},
-        {'name': '0.12.10.2.12528', 'value': '0.12.11.2.13771'}]}])
+        {'name': '0.12.11.2.13771', 'value': '0.12.11.2.13771'}]}])
     async def _botver(self, ctx, version = None):
         if version == None:
             emb = discord.Embed(color = 0x2f3136) # будут маленькое, нормальное и крупное обновления
