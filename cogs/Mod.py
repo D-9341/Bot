@@ -43,7 +43,7 @@ class Mod(commands.Cog):
     @commands.command()
     @commands.has_permissions(view_audit_log = True)
     @commands.cooldown(1, 5, commands.BucketType.user)
-    async def dm(self, ctx, member: discord.Member, * , text):
+    async def dm(self, ctx, member: discord.User, * , text):
         emb = discord.Embed(description = f'{text}', colour = 0x2f3136)
         emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
         await member.send(embed = emb)
