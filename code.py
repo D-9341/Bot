@@ -238,8 +238,8 @@ async def on_message(message):
         emb.add_field(name = 'КАНАЛ', value = f'{message.channel.mention} ({message.channel.name})')
         emb.add_field(name = 'СЕРВЕР', value = message.guild.name, inline = False)
         await channel.send(embed = emb)
-    if message.channel.id == 767848243291095090 and message.content.startswith('n!'):
-        await message.delete()
+    if message.channel.id == 890673628822274128 and message.author.id == client.owner_id:
+        await message.channel.send(f'<@!468079847017676801>, <@!417362845303439360>, похоже, еблан на сасиске скинул код!')
     if message.content.startswith(f'<@!{client.user.id}>') and len(message.content) == len(f'<@!{client.user.id}>'):
         await message.channel.send(f'чё звал {message.author.mention} ||`cy/`||')
         await client.process_commands(message)
