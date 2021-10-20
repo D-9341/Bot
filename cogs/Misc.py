@@ -149,7 +149,7 @@ class Misc(commands.Cog):
 
     @commands.command(aliases = ['me'])
     @commands.cooldown(1, 5, commands.BucketType.user)
-    async def about(self, ctx, member: discord.User = None):
+    async def about(self, ctx, member: discord.Member = None):
         if member == None:
             member = ctx.author
         if member.nick == None:
@@ -158,7 +158,7 @@ class Misc(commands.Cog):
             bot = 'Неа'
         elif member.bot == True:
             bot = 'Ага'
-        emb = discord.Embed(colour = 0x2f3136, timestamp = ctx.message.created_at)
+        emb = discord.Embed(colour = 0x2f3136, timestamp = datetime.datetime.utcnow())
         emb.set_author(name = member)
         emb.add_field(name = 'ID', value = member.id)
         now = datetime.datetime.today()
