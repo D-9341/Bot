@@ -98,37 +98,6 @@ async def on_command_completion(ctx):
     await lchannel.send(embed = emb)
 
 @client.event
-async def on_member_update(before, after):
-    channel = client.get_channel(714175791033876490)
-    if before.bot == False:
-        chmo = 'УЧАСТНИК' # MEMBER
-    else:
-        chmo = 'БОТ' # BOT
-    if before.guild.id == 693929822543675455:
-        if before.nick != after.nick:
-            emb = discord.Embed(title = 'ИЗМЕНЕНИЕ_НИКНЕЙМА', color = discord.Colour.orange(), timestamp = datetime.datetime.utcnow()) # NICKNAME_CHANGED
-            if before.nick == None:
-                before.nick = 'НЕ\_БЫЛ_УКАЗАН' # WAS_NONE
-            if after.nick == None:
-                after.nick = 'НЕ_УКАЗАН' # NOW_NONE
-            emb.add_field(name = f'{chmo}', value = before)
-            emb.add_field(name = 'БЫЛ', value = before.nick) # WAS
-            emb.add_field(name = 'СТАЛ', value = after.nick) # NOW
-            emb.set_footer(text = f'ID: {before.id}')
-            await channel.send(embed = emb)
-        if before.roles != after.roles:
-            a = set(before.roles)
-            b = set(after.roles)
-            async for event in before.guild.audit_logs(limit = 1, action = discord.AuditLogAction.member_role_update):
-                if a > b:
-                    emb = discord.Embed(title = 'РОЛЬ_ЗАБРАНА', description = ', '.join([getattr(r, "mention", r.id) for r in event.before.roles or event.after.roles]), colour = discord.Color.orange(), timestamp = datetime.datetime.utcnow()) # ROLE_REMOVED
-                elif a < b:
-                    emb = discord.Embed(title = 'РОЛЬ_ВЫДАНА', description = ', '.join([getattr(r, "mention", r.id) for r in event.before.roles or event.after.roles]), colour = discord.Color.orange(), timestamp = datetime.datetime.utcnow()) # ROLE_GIVEN
-                emb.set_author(name = before, icon_url = before.avatar_url)
-                emb.set_footer(text = f'ID: {before.id}')
-            await channel.send(embed = emb)
-
-@client.event
 async def on_member_join(member):
     if member.bot == False:
         chmo = 'УЧАСТНИК' # MEMBER
@@ -141,24 +110,6 @@ async def on_member_join(member):
     emb.add_field(name = 'СЕРВЕР', value = member.guild.name) # SERVER
     emb.set_footer(text = f'ID: {member.id}')
     await lchannel.send(embed = emb)
-    if member.bot == False:
-        role = discord.utils.get(member.guild.roles, id = 693933516294979704)
-        if member.guild.id == 693929822543675455 and member.bot == False:
-            channel = client.get_channel(693929823030214658)
-            emb = discord.Embed(description = f'{member.mention} ({member.name}) пришёл к нам!', colour = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
-            await channel.send(embed = emb)
-            if role != None:
-                await member.add_roles(role)
-        if member.guild.id == 818758712163827723:
-            role = discord.utils.get(member.guild.roles, id = 818762863287074826)
-            await member.add_roles(role)
-            channel = client.get_channel(818776092013887508)
-            emb = discord.Embed(description = f'{member.mention} ({member.name}) пришёл к нам!', color = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
-            await channel.send(embed = emb)
-    else:
-        role = discord.utils.get(member.guild.roles, id = 693933516831850527)
-        role1 = discord.utils.get(member.guild.roles, id = 693933511412940800)
-        await member.add_roles(role, role1)
 
 @client.event
 async def on_member_remove(member):
@@ -173,14 +124,6 @@ async def on_member_remove(member):
     emb.add_field(name = 'СЕРВЕР', value = member.guild.name) # SERVER
     emb.set_footer(text = f'ID: {member.id}')
     await channel.send(embed = emb)
-    if member.guild.id == 693929822543675455 and member.bot == False:
-        channel = client.get_channel(693929823030214658)
-        emb = discord.Embed(description = f'{member.mention} ({member.name}) покинул нас...', colour = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
-        await channel.send(embed = emb)
-    if member.guild.id == 818758712163827723 and member.bot == False:
-        channel = client.get_channel(818776092013887508)
-        emb = discord.Embed(description = f'{member.mention} ({member.name}) покинул нас...', color = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
-        await channel.send(embed = emb)
 
 @client.event
 async def on_guild_remove(guild):
@@ -230,14 +173,6 @@ async def on_message(message):
     }
     if collection.count_documents({'_id': message.author.id}) == 0 and message.author.bot == False:
         collection.insert_one(post)
-    if message.content.lower().startswith('cy|'):
-        channel = client.get_channel(714175791033876490)
-        emb = discord.Embed(title = 'ВОЗМОЖНОЕ\_ВЫПОЛНЕНИЕ_КОМАНДЫ', color = discord.Color.orange()) 
-        emb.add_field(name = 'ВОЗМОЖНОЕ_НАЗВАНИЕ', value = message.content.strip()[3:].strip())
-        emb.add_field(name = 'ВОЗМОЖНЫЙ_ИСПОЛНИТЕЛЬ', value = f'{message.author.mention} ({message.author.name})')
-        emb.add_field(name = 'КАНАЛ', value = f'{message.channel.mention} ({message.channel.name})')
-        emb.add_field(name = 'СЕРВЕР', value = message.guild.name, inline = False)
-        await channel.send(embed = emb)
     if message.channel.id == 890673628822274128 and message.author.id == client.owner_id:
         await message.channel.send(f'<@!468079847017676801>, <@!417362845303439360>, похоже, еблан на сасиске скинул код!')
     if message.content.startswith(f'<@!{client.user.id}>') and len(message.content) == len(f'<@!{client.user.id}>'):
@@ -360,12 +295,6 @@ async def on_message(message):
             emb = discord.Embed(title = 'ОПОВЕЩЕНИЕ\_ОБ_ОБНОВЛЕНИИ', color = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
             emb.add_field(name = 'ОПОВЕЩЕНЫ', value = role.mention)
             await channel.send(embed = emb)
-    if message.channel.id == 693931411815661608:
-        await message.add_reaction('👍')
-        await message.add_reaction('👎')
-    elif message.channel.id == 747838996729692160:
-        await message.add_reaction('👍')
-        await message.add_reaction('👎')
     elif message.channel.id == 707498623981715557:
         await message.add_reaction('👍')
         await message.add_reaction('👎')
