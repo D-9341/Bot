@@ -265,14 +265,14 @@ class sMod(commands.Cog):
             else:
                 if role != None:
                     await member.add_roles(role)
-                    emb = discord.Embed(color = 0x2f3136, timestamp = ctx.message.created_at)
+                    emb = discord.Embed(color = 0x2f3136, timestamp = datetime.datetime.utcnow())
                     emb.add_field(name = 'Заглушён', value = member.mention)
                     emb.add_field(name = 'Причина', value = reason)
                     await ctx.send(embed = emb)
                 else:
                     role = await ctx.guild.create_role(name = 'Deafened', color = 0x000001, reason = 'Создано автоматически командой deaf')
                     await member.add_roles(role)
-                    emb = discord.Embed(color = 0x2f3136, timestamp = ctx.message.created_at)
+                    emb = discord.Embed(color = 0x2f3136, timestamp = datetime.datetime.utcnow())
                     emb.add_field(name = 'Заглушён', value = member.mention)
                     emb.add_field(name = 'Причина', value = reason)
                     await ctx.send(embed = emb)
@@ -298,7 +298,7 @@ class sMod(commands.Cog):
                     emb = discord.Embed(description = 'Снятие заглушения не требуется. Роли Deafened не обнаружено в списке ролей участника.', colour = discord.Color.orange())
                     await ctx.send(embed = emb)
             else:
-                emb = discord.Embed(description = f'{ctx.author.mention}, Я не могу снять заглушение у {member.mention} из-за того, что роль Deafened была удалена', colour = discord.Color.orange(), timestamp = ctx.message.created_at)
+                emb = discord.Embed(description = f'{ctx.author.mention}, Я не могу снять заглушение у {member.mention} из-за того, что роль Deafened была удалена', colour = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
                 await ctx.send(embed = emb)
             
     @slash.cog_slash(name = 'unmute', description = 'Забирает роль Muted', options = [{'name': 'member', 'description': 'Участник', 'required': True, 'type': 6}, {'name': 'reason', 'description': 'Причина', 'required': False, 'type': 3}])
