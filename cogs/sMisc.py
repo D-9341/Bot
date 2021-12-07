@@ -87,7 +87,8 @@ class sMisc(commands.Cog):
         emb.add_field(name = 'Из них людей', value = len(list(filter(lambda m: not m.bot, ctx.guild.members))))
         emb.add_field(name = 'Каналов', value = f'Текстовых {len(guild.text_channels)} | Голосовых {len(guild.voice_channels)}')
         roles = ', '.join([role.name for role in guild.roles[1:]])
-        emb.add_field(name = f'Роли ({len(guild.roles)-1})', value = roles, inline = False)
+        if 50 > roles > 1:
+            emb.add_field(name = f'Роли ({len(guild.roles)-1})', value = roles, inline = False)
         now = datetime.datetime.today()
         then = guild.created_at
         delta = now - then
@@ -128,17 +129,11 @@ class sMisc(commands.Cog):
     async def _avatar(self, ctx, member: discord.User = None):
         if member == None:
             member = ctx.author
-        av = 'png'
-        av1 = 'webp'
-        av2 = 'jpg'
         emb = discord.Embed(colour = member.color)
-        if member.is_avatar_animated() == False:
-            emb.add_field(name = '.png', value = f'[Ссылка]({member.avatar_url_as(format = av)})')
-            emb.add_field(name = '.webp', value = f'[Ссылка]({member.avatar_url_as(format = av1)})')
-            emb.add_field(name = '.jpg', value = f'[Ссылка]({member.avatar_url_as(format = av2)})')
-        else:
-            emb.set_footer(text = 'по причине того, что аватар анимирован - ссылок на статичные форматы нет!')
-        emb.set_image(url = member.avatar_url)
+        if not member.is_avatar_animated():
+            emb.set_image(url = member.avatar_url_as(format = 'png')
+       else:
+            emb.set_image(url = member.avatar_url)
         emb.set_author(name = member)
         await ctx.send(embed = emb)
 
@@ -165,7 +160,7 @@ class sMisc(commands.Cog):
         emb.add_field(name = 'Создан', value = f'{delta.days} дня(ей) назад. ({d})', inline = False)
         emb.add_field(name = 'Вошёл', value = f'{delta1.days} дня(ей) назад. ({d1})', inline = False)
         emb.add_field(name = 'Упоминание', value = member.mention)
-        emb.add_field(name = 'Raw имя', value = member.name)
+        emb.add_field(name = 'Необработанное имя', value = member.name)
         emb.add_field(name = 'Никнейм', value = member.nick)
         if member.status == discord.Status.online:
             status = 'В сети'
@@ -179,7 +174,7 @@ class sMisc(commands.Cog):
         roles = ', '.join([role.name for role in member.roles[1:]])
         emb.add_field(name = 'Бот?', value = bot)
         limit = len(member.roles)
-        if limit > 1:
+        if 50 > limit > 1:
             emb.add_field(name = f'Роли ({len(member.roles)-1})', value = roles, inline = False)
             emb.add_field(name = 'Высшая Роль', value = member.top_role.mention, inline = False)
         emb.set_thumbnail(url = member.avatar_url)
