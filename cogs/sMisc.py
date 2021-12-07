@@ -131,7 +131,7 @@ class sMisc(commands.Cog):
             member = ctx.author
         emb = discord.Embed(colour = member.color)
         if not member.is_avatar_animated():
-            emb.set_image(url = member.avatar_url_as(format = 'png')
+            emb.set_image(url = member.avatar_url_as(format = 'png'))
         else:
             emb.set_image(url = member.avatar_url)
         emb.set_author(name = member)
