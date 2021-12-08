@@ -256,10 +256,10 @@ class sMod(commands.Cog):
             emb = discord.Embed(description = 'Роль Deafened уже есть в списке ролей участника.', color = 0x2f3136)
             return await ctx.send(embed = emb)
         if member.id != self.client.owner_id:
-            if ctx.author.top_role == member.top_role and ctx.message.author.id != 338714886001524737:
+            if ctx.author.top_role == member.top_role and ctx.author.id != 338714886001524737:
                 emb = discord.Embed(description = f'{ctx.author.mention}, ваша высшая роль равна высшей роли {member.mention}. Заглушение отклонено.', colour = discord.Color.orange())
                 await ctx.send(embed = emb)
-            elif ctx.author.top_role < member.top_role and ctx.message.author.id != 338714886001524737:
+            elif ctx.author.top_role < member.top_role and ctx.author.id != 338714886001524737:
                 emb = discord.Embed(description = f'{ctx.author.mention}, ваша высшая роль ниже высшей роли {member.mention}. Заглушение отклонено.', colour = discord.Color.orange())
                 await ctx.send(embed = emb)
             else:
