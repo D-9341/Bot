@@ -68,34 +68,34 @@ class sMod(commands.Cog):
                     reason = 'Я не ебу'
             if ctx.author.top_role == member.top_role and ctx.author.id != self.client.owner_id:
                 if rlocale == 'ru':
-                    emb = discord.Embed(description = f'{ctx.author.mention}, ваша высшая роль равна высшей роли {member.mention}. Кик отклонён.', colour = discord.Color.orange())
+                    emb = discord.Embed(description = f'{ctx.author.mention}, ваша высшая роль равна высшей роли {member.mention}. Кик отклонён.', colour = 0x2f3136)
                     await ctx.send(embed = emb)
                 if rlocale == 'gnida':
                     emb = discord.Embed(description = f'Твоя высшая роль равна высшей роли {member.mention}. Пошёл нахуй.', colour = discord.Color.orange())
                     await ctx.send(embed = emb)
             elif member.top_role > ctx.author.top_role and ctx.author.id != self.client.owner_id:
                 if rlocale == 'ru':
-                    emb = discord.Embed(description = f'{ctx.author.mention}, ваша высшая роль ниже высшей роли {member.mention}. Кик отклонён.', colour = discord.Color.orange())
+                    emb = discord.Embed(description = f'{ctx.author.mention}, ваша высшая роль ниже высшей роли {member.mention}. Кик отклонён.', colour = 0x2f3136)
                     await ctx.send(embed = emb)
                 if rlocale == 'gnida':
-                    emb = discord.Embed(description = f'Твоя высшая роль ниже высшей роли {member.mention}. Пошёл нахуй.', colour = discord.Color.orange())
+                    emb = discord.Embed(description = f'Твоя высшая роль ниже высшей роли {member.mention}. Пошёл нахуй.', colour = 0x2f3136)
                     await ctx.send(embed = emb)
             elif member.top_role > bot.top_role:
                 if rlocale == 'ru':
-                    emb = discord.Embed(description = f'МОЯ высшая роль ниже высшей роли {member.mention}. Кик невозможен.', color = 0xff0000)
+                    emb = discord.Embed(description = f'МОЯ высшая роль ниже высшей роли {member.mention}. Кик невозможен.', color = 0x2f3136)
                     await ctx.send(embed = emb)
                 if rlocale == 'gnida':
-                    emb = discord.Embed(description = f'МОЯ высшая роль ниже высшей роли {member.mention}. Сука.', color = 0xff0000)
+                    emb = discord.Embed(description = f'МОЯ высшая роль ниже высшей роли {member.mention}. Сука.', color = 0x2f3136)
                     await ctx.send(embed = emb)
             elif member.top_role == bot.top_role:
                 if rlocale == 'ru':
-                    emb = discord.Embed(description = f'МОЯ высшая роль идентична высшей роли {member.mention}. Кик невозможен.', color = 0xff0000)
+                    emb = discord.Embed(description = f'МОЯ высшая роль идентична высшей роли {member.mention}. Кик невозможен.', color = 0x2f3136)
                     await ctx.send(embed = emb)
                 if rlocale == 'gnida':
-                    emb = discord.Embed(description = f'МОЯ высшая роль идентична высшей роли {member.mention}. Сука.', color = 0xff0000)
+                    emb = discord.Embed(description = f'МОЯ высшая роль идентична высшей роли {member.mention}. Сука.', color = 0x2f3136)
                     await ctx.send(embed = emb)
             else:
-                emb = discord.Embed(colour = member.color)
+                emb = discord.Embed(colour = 0x2f3136)
                 emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
                 emb.add_field(name = 'Был кикнут', value = member.mention)
                 emb.add_field(name = 'По причине', value = reason)
@@ -103,10 +103,10 @@ class sMod(commands.Cog):
                 await member.kick(reason = reason)
         else:
             if rlocale == 'ru':
-                emb = discord.Embed(description = f'Извините, {ctx.author.mention}, но вы не можете кикнуть моего создателя!', colour = discord.Color.orange())
+                emb = discord.Embed(description = f'Извините, {ctx.author.mention}, но вы не можете кикнуть моего создателя!', colour = 0x2f3136)
                 await ctx.send(embed = emb)
             if rlocale == 'gnida':
-                emb = discord.Embed(description = 'Ого! Пошёл нахуй!', colour = discord.Color.orange())
+                emb = discord.Embed(description = 'Ого! Пошёл нахуй!', colour = 0x2f3136)
                 await ctx.send(embed = emb)
 
     @slash.cog_slash(name = 'ban', description = 'Банит участника', options = [{'name': 'member', 'description': 'Участник', 'required': True, 'type': 6}, {'name': 'reason', 'description': 'Причина и/или указание --soft --reason', 'required': False, 'type': 3}])
@@ -121,31 +121,31 @@ class sMod(commands.Cog):
                     reason = 'Я не ебу'
             if ctx.author.top_role == member.top_role and ctx.author.id != self.client.owner_id:
                 if rlocale == 'ru':
-                    emb = discord.Embed(description = f'{ctx.author.mention}, ваша высшая роль равна высшей роли {member.mention}. Бан отклонён.', colour = discord.Color.orange())
+                    emb = discord.Embed(description = f'{ctx.author.mention}, ваша высшая роль равна высшей роли {member.mention}. Бан отклонён.', colour = 0x2f3136)
                     await ctx.send(embed = emb)
                 if rlocale == 'gnida':
-                    emb = discord.Embed(description = f'Твоя высшая роль равна высшей роли {member.mention}. Саси.', colour = discord.Color.orange())
+                    emb = discord.Embed(description = f'Твоя высшая роль равна высшей роли {member.mention}. Саси.', colour = 0x2f3136)
                     await ctx.send(embed = emb)
             elif member.top_role > ctx.author.top_role and ctx.author.id != self.client.owner_id:
                 if rlocale == 'ru':
-                    emb = discord.Embed(description = f'{ctx.author.mention}, ваша высшая роль ниже высшей роли {member.mention}. Бан отклонён.', colour = discord.Color.orange())
+                    emb = discord.Embed(description = f'{ctx.author.mention}, ваша высшая роль ниже высшей роли {member.mention}. Бан отклонён.', colour = 0x2f3136)
                     await ctx.send(embed = emb)
                 if rlocale == 'gnida':
-                    emb = discord.Embed(description = f'Твоя высшая роль ниже высшей роли {member.mention}. Саси.', colour = discord.Color.orange())
+                    emb = discord.Embed(description = f'Твоя высшая роль ниже высшей роли {member.mention}. Саси.', colour = 0x2f3136)
                     await ctx.send(embed = emb)
             elif member.top_role > bot.top_role:
                 if rlocale == 'ru':
-                    emb = discord.Embed(description = f'МОЯ высшая роль ниже высшей роли {member.mention}. Бан невозможен.', color = 0xff0000)
+                    emb = discord.Embed(description = f'МОЯ высшая роль ниже высшей роли {member.mention}. Бан невозможен.', color = 0x2f3136)
                     await ctx.send(embed = emb)
                 if rlocale == 'gnida':
-                    emb = discord.Embed(description = f'МОЯ высшая роль ниже высшей роли {member.mention}. Блять.', color = 0xff0000)
+                    emb = discord.Embed(description = f'МОЯ высшая роль ниже высшей роли {member.mention}. Блять.', color = 0x2f3136)
                     await ctx.send(embed = emb)
             elif member.top_role == bot.top_role:
                 if rlocale == 'ru':
-                    emb = discord.Embed(description = f'МОЯ высшая роль идентична высшей роли {member.mention}. Бан невозможен.', color = 0xff0000)
+                    emb = discord.Embed(description = f'МОЯ высшая роль идентична высшей роли {member.mention}. Бан невозможен.', color = 0x2f3136)
                     await ctx.send(embed = emb)
                 if rlocale == 'gnida':
-                    emb = discord.Embed(description = f'МОЯ высшая роль идентична высшей роли {member.mention}. Блять.', color = 0xff0000)
+                    emb = discord.Embed(description = f'МОЯ высшая роль идентична высшей роли {member.mention}. Блять.', color = 0x2f3136)
                     await ctx.send(embed = emb)
             else:
                 if '--soft' in reason:
@@ -172,10 +172,10 @@ class sMod(commands.Cog):
                     await member.ban(reason = reason)
         else:
             if rlocale == 'ru':
-                emb = discord.Embed(description = f'Извините, {ctx.author.mention}, но вы не можете забанить моего создателя!', colour = discord.Color.orange())
+                emb = discord.Embed(description = f'Извините, {ctx.author.mention}, но вы не можете забанить моего создателя!', colour = 0x2f3136)
                 await ctx.send(embed = emb)
             if rlocale == 'gnida':
-                emb = discord.Embed(description = 'А ты не прихуел даже ПЫТАТЬСЯ это сделать?!', colour = discord.Color.orange())
+                emb = discord.Embed(description = 'А ты не прихуел даже ПЫТАТЬСЯ это сделать?!', colour = 0x2f3136)
                 await ctx.send(embed = emb)
 
     @slash.cog_slash(name = 'give', description = 'Выдаёт участнику роль', options = [{'name': 'member', 'description': 'Участник', 'required': True, 'type': 6}, {'name': 'role', 'description': 'Роль', 'required': True, 'type': 8}])
@@ -191,25 +191,25 @@ class sMod(commands.Cog):
                     emb = discord.Embed(description = f'{member.mention} получает мут в ебало от {ctx.author.mention}', color = 0x2f3136)
                     return await ctx.send(embed = emb)
             else:
-                emb = discord.Embed(description = 'Ты думал мой Создатель тебе по зубам? ОН!?', color = 0xff0000)
+                emb = discord.Embed(description = 'Ты думал мой Создатель тебе по зубам? ОН!?', color = 0x2f3136)
                 return await ctx.send(embed = emb)
         if role > ctx.author.top_role:
             if rlocale == 'ru':
-                emb = discord.Embed(description = f'Вы не можете выдать {role.mention}, так как она имеет более высокий ранг, чем ваша высшая роль.', color = discord.Color.orange())
+                emb = discord.Embed(description = f'Вы не можете выдать {role.mention}, так как она имеет более высокий ранг, чем ваша высшая роль.', color = 0x2f3136)
                 await ctx.send(embed = emb)
             if rlocale == 'gnida':
-                emb = discord.Embed(description = f'Дебилам вроде тебя запрещено выдавать {role.mention}, так как эта роль выше твоей высшей роли.', color = discord.Color.orange())
+                emb = discord.Embed(description = f'Дебилам вроде тебя запрещено выдавать {role.mention}, так как эта роль выше твоей высшей роли.', color = 0x2f3136)
                 await ctx.send(embed = emb)
         elif role == ctx.author.top_role:
             if rlocale == 'ru':
-                emb = discord.Embed(description = f'Вы не можете выдать {role.mention} кому-либо, так как она равна вашей высшей роли.', color = discord.Color.orange())
+                emb = discord.Embed(description = f'Вы не можете выдать {role.mention} кому-либо, так как она равна вашей высшей роли.', color = 0x2f3136)
                 await ctx.send(embed = emb)
             if rlocale == 'gnida':
-                emb = discord.Embed(description = f'Дебилам вроде тебя запрещено выдавать {role.mention}, так как она равна твоей высшей роли.', color = discord.Color.orange())
+                emb = discord.Embed(description = f'Дебилам вроде тебя запрещено выдавать {role.mention}, так как она равна твоей высшей роли.', color = 0x2f3136)
                 await ctx.send(embed = emb)
         else:
             await member.add_roles(role)
-            emb = discord.Embed(colour = member.color, timestamp = datetime.datetime.utcnow())
+            emb = discord.Embed(colour = 0x2f3136, timestamp = datetime.datetime.utcnow())
             emb.add_field(name = 'ВЫДАНА_РОЛЬ', value = f'{role.mention} | {role.name} | ID {role.id}')
             emb.add_field(name = 'ВЫДАНА:', value = member.mention, inline = False)
             emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
@@ -221,29 +221,29 @@ class sMod(commands.Cog):
         if role != None:
             bot = ctx.guild.get_member(self.client.user.id)
             if role > member.top_role:
-                emb = discord.Embed(description = f'Вы не можете забрать {role.mention}, так как она имеет более высокий ранг, чем ваша высшая роль. Забирание роли отменено.', color = 0xffffff)
+                emb = discord.Embed(description = f'Вы не можете забрать {role.mention}, так как она имеет более высокий ранг, чем ваша высшая роль. Забирание роли отменено.', color = 0x2f3136)
                 await ctx.send(embed = emb)
             elif role == ctx.author.top_role:
-                emb = discord.Embed(description = f'Вы не можете забрать {role.mention}, так как она равна вашей высшей роли. Забирание роли отменено.', color = 0xffffff)
+                emb = discord.Embed(description = f'Вы не можете забрать {role.mention}, так как она равна вашей высшей роли. Забирание роли отменено.', color = 0x2f3136)
                 await ctx.send(embed = emb)
             elif member.top_role > bot.top_role:
-                emb = discord.Embed(description = f'МОЯ высшая роль ниже высшей роли {member.mention}. Забрать роль невозможно.', color = 0xff0000)
+                emb = discord.Embed(description = f'МОЯ высшая роль ниже высшей роли {member.mention}. Забрать роль невозможно.', color = 0x2f3136)
                 await ctx.send(embed = emb)
             elif member.top_role == bot.top_role:
-                emb = discord.Embed(description = f'МОЯ высшая роль идентична высшей роли {member.mention}. Забрать роль невозможно.', color = 0xff0000)
+                emb = discord.Embed(description = f'МОЯ высшая роль идентична высшей роли {member.mention}. Забрать роль невозможно.', color = 0x2f3136)
                 await ctx.send(embed = emb)
             elif role.is_default():
                 emb = discord.Embed(description = 'Забирать @everyone?', color = 0x2f3136)
                 await ctx.send(embed = emb)
             else:
                 await member.remove_roles(role)
-                emb = discord.Embed(colour = member.color, timestamp = datetime.datetime.utcnow())
+                emb = discord.Embed(colour = 0x2f3136, timestamp = datetime.datetime.utcnow())
                 emb.add_field(name = 'ЗАБРАНА_РОЛЬ', value = f'{role.mention} | {role.name} | ID {role.id}')
                 emb.add_field(name = 'ЗАБРАНА_У:', value = member.mention, inline = False)
                 emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
                 await ctx.send(embed = emb)
         else:
-            emb = discord.Embed(description = f'{ctx.author.mention}, я не могу найти {role.mention} в списке ролей.', colour = member.color, timestamp = datetime.datetime.utcnow())
+            emb = discord.Embed(description = f'{ctx.author.mention}, я не могу найти {role.mention} в списке ролей.', colour = 0x2f3136, timestamp = datetime.datetime.utcnow())
             await ctx.send(embed = emb)
 
     @slash.cog_slash(name = 'deaf', description = 'Заглушает участника, запрещая общаться в голосовом канале. Применяется при заходе в канал', options = [{'name': 'member', 'description': 'Участник', 'required': True, 'type': 6}, {'name': 'reason', 'description': 'Причина', 'required': False, 'type': 3}])
@@ -257,10 +257,10 @@ class sMod(commands.Cog):
             return await ctx.send(embed = emb)
         if member.id != self.client.owner_id:
             if ctx.author.top_role == member.top_role and ctx.author.id != 338714886001524737:
-                emb = discord.Embed(description = f'{ctx.author.mention}, ваша высшая роль равна высшей роли {member.mention}. Заглушение отклонено.', colour = discord.Color.orange())
+                emb = discord.Embed(description = f'{ctx.author.mention}, ваша высшая роль равна высшей роли {member.mention}. Заглушение отклонено.', colour = 0x2f3136)
                 await ctx.send(embed = emb)
             elif ctx.author.top_role < member.top_role and ctx.author.id != 338714886001524737:
-                emb = discord.Embed(description = f'{ctx.author.mention}, ваша высшая роль ниже высшей роли {member.mention}. Заглушение отклонено.', colour = discord.Color.orange())
+                emb = discord.Embed(description = f'{ctx.author.mention}, ваша высшая роль ниже высшей роли {member.mention}. Заглушение отклонено.', colour = 0x2f3136)
                 await ctx.send(embed = emb)
             else:
                 if role != None:
@@ -277,7 +277,7 @@ class sMod(commands.Cog):
                     emb.add_field(name = 'Причина', value = reason)
                     await ctx.send(embed = emb)
         else:
-            emb = discord.Embed(description = f'Извините, {ctx.author.mention}, но вы не можете заглушить моего создателя!', colour = discord.Color.orange())
+            emb = discord.Embed(description = f'Извините, {ctx.author.mention}, но вы не можете заглушить моего создателя!', colour = 0x2f3136)
             await ctx.send(embed = emb)
 
     @slash.cog_slash(name = 'undeaf', description = 'Забирает роль Deafened', options = [{'name': 'member', 'description': 'Участник', 'required': True, 'type': 6}, {'name': 'reason', 'description': 'Причина', 'required': False, 'type': 3}])
@@ -295,10 +295,10 @@ class sMod(commands.Cog):
                     emb.add_field(name = 'Причина', value = reason)
                     await ctx.send(embed = emb)
                 else:
-                    emb = discord.Embed(description = 'Снятие заглушения не требуется. Роли Deafened не обнаружено в списке ролей участника.', colour = discord.Color.orange())
+                    emb = discord.Embed(description = 'Снятие заглушения не требуется. Роли Deafened не обнаружено в списке ролей участника.', colour = 0x2f3136)
                     await ctx.send(embed = emb)
             else:
-                emb = discord.Embed(description = f'{ctx.author.mention}, Я не могу снять заглушение у {member.mention} из-за того, что роль Deafened была удалена', colour = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
+                emb = discord.Embed(description = f'{ctx.author.mention}, Я не могу снять заглушение у {member.mention} из-за того, что роль Deafened была удалена', colour = 0x2f3136, timestamp = datetime.datetime.utcnow())
                 await ctx.send(embed = emb)
             
     @slash.cog_slash(name = 'unmute', description = 'Забирает роль Muted', options = [{'name': 'member', 'description': 'Участник', 'required': True, 'type': 6}, {'name': 'reason', 'description': 'Причина', 'required': False, 'type': 3}])
@@ -310,15 +310,15 @@ class sMod(commands.Cog):
                 await member.remove_roles(role)
                 if reason == None:
                     reason = 'Не указана.'
-                emb = discord.Embed(title = f'Принудительное снятие заглушения у {member}', colour = member.color, timestamp = datetime.datetime.utcnow())
+                emb = discord.Embed(title = f'Принудительное снятие заглушения у {member}', colour = 0x2f3136, timestamp = datetime.datetime.utcnow())
                 emb.add_field(name = 'Снял мут', value = ctx.author.mention)
                 emb.add_field(name = 'По причине', value = reason)
                 await ctx.send(embed = emb)
             else:
-                emb = discord.Embed(description = 'Снятие заглушения не требуется. Роли Muted не обнаружено в списке ролей участника.', colour = discord.Color.orange())
+                emb = discord.Embed(description = 'Снятие заглушения не требуется. Роли Muted не обнаружено в списке ролей участника.', colour = 0x2f3136)
                 await ctx.send(embed = emb)
         else:
-            emb = discord.Embed(description = f'{ctx.author.mention}, Я не могу снять заглушение у {member.mention} из-за того, что роль Muted была удалена', colour = discord.Color.orange(), timestamp = datetime.datetime.now())
+            emb = discord.Embed(description = f'{ctx.author.mention}, Я не могу снять заглушение у {member.mention} из-за того, что роль Muted была удалена', colour = 0x2f3136, timestamp = datetime.datetime.now())
             await ctx.send(embed = emb)
 
     @slash.cog_slash(name = 'clear', description = 'Очищает канал от указанного количества сообщений. Не работает, если в канале нет сообщений.', options = [{'name': 'amount', 'description': 'Количество сообщений для удаления', 'required': True, 'type': 4}, {'name': 'members', 'description': 'Указание диапазона удаления сообщений', 'required': False, 'type': 3, 'choices': [{'name': 'Удалить сообщения ото всех', 'value': '--everyone'}, {'name': 'Удалить сообщения только от ботов', 'value': '--bots'}, {'name': 'Удалить сообщения только от людей', 'value': '--users'}, {'name': 'Не оставить доказательства исполнения команды, если количество сообщений для удаления меньше 10', 'value': '--silent'}]}, {'name': 'filt', 'description': 'Удаляет сообщение с заданным словом/словосочетанием', 'required': False, 'type': 3}])
@@ -334,19 +334,19 @@ class sMod(commands.Cog):
         if amount == 2472:
             if ctx.author.id == self.client.owner_id:
                 await ctx.channel.delete()
-                emb = discord.Embed(description = f'канал `{ctx.channel.name}` удалён.', color = discord.Color.orange())
+                emb = discord.Embed(description = f'канал `{ctx.channel.name}` удалён.', color = 0x2f3136)
                 await ctx.author.send(embed = emb)
             else:
                 await ctx.author.send('Как ты узнал об этом?!')
         elif amount >= 300:
-            emb = discord.Embed(description = f'{ctx.author.mention}, при таком числе удаления сообщений ({amount}) возможно большое время ожидания ответа {self.client.user.mention}.', colour = discord.Color.orange())
+            emb = discord.Embed(description = f'{ctx.author.mention}, при таком числе удаления сообщений ({amount}) возможно большое время ожидания ответа {self.client.user.mention}.', colour = 0x2f3136)
             await ctx.send(f'{ctx.guild.owner.mention}', embed = emb)
         elif amount >= 250:
             if ctx.author != ctx.guild.owner:
-                emb = discord.Embed(description = f'{ctx.author.mention}, операция с данным числом ({amount}) доступна только {ctx.guild.owner.mention}.', colour = discord.Color.orange())
+                emb = discord.Embed(description = f'{ctx.author.mention}, операция с данным числом ({amount}) доступна только {ctx.guild.owner.mention}.', colour = 0x2f3136)
                 await ctx.send(f'{ctx.guild.owner.mention}', embed = emb, delete_after = 5)
             else:
-                emb = discord.Embed(description = f'{ctx.author.mention}, обнаружено слишком большое число для удаления сообщений ({amount}). Возможны дальнейшие ошибки в работе {self.client.user.mention}. Продолжить? (y/n)\n||Отмена через 10 секунд.||', colour = discord.Color.orange())
+                emb = discord.Embed(description = f'{ctx.author.mention}, обнаружено слишком большое число для удаления сообщений ({amount}). Возможны дальнейшие ошибки в работе {self.client.user.mention}. Продолжить? (y/n)\n||Отмена через 10 секунд.||', colour = 0x2f3136)
                 sent = await ctx.send(embed = emb)
                 try:
                     msg = await self.client.wait_for('message', timeout = 10, check = lambda message: message.channel == ctx.message.channel)
@@ -354,14 +354,14 @@ class sMod(commands.Cog):
                         await msg.delete()
                         await sent.delete()
                         if '--silent' not in members:
-                            emb = discord.Embed(description = 'Проверяем..', color = discord.Color.orange())
+                            emb = discord.Embed(description = 'Проверяем..', color = 0x2f3136)
                             sent = await ctx.send(embed = emb)
                             if members == '--bots':
                                 if filt == None:
                                     cleared = await ctx.channel.purge(limit = amount, check = lambda m: m.author.bot == True, before = sent)
                                 else:
                                     cleared = await ctx.channel.purge(limit = amount, check = lambda m: m.content.lower() == filt.lower() and m.author.bot == True, before = sent)
-                                emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
+                                emb = discord.Embed(title = 'Результаты удаления сообщений', color = 0x2f3136)
                                 emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{len(cleared)}```')
                                 if filt:
                                     emb.add_field(name = 'Применён фильтр:', value = f'```{filt}``` ({members})', inline = True)
@@ -373,7 +373,7 @@ class sMod(commands.Cog):
                                     cleared = await ctx.channel.purge(limit = amount, check = lambda m: m.author.bot == False, before = sent)
                                 else:
                                     cleared = await ctx.channel.purge(limit = amount, check = lambda m: m.author.bot == False and m.content.lower() == filt.lower(), before = sent)
-                                emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
+                                emb = discord.Embed(title = 'Результаты удаления сообщений', color = 0x2f3136)
                                 emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{len(cleared)}```')
                                 if filt:
                                     emb.add_field(name = 'Применён фильтр:', value = f'```{filt}``` ({members})', inline = True)
@@ -385,7 +385,7 @@ class sMod(commands.Cog):
                                     cleared = await ctx.channel.purge(limit = amount, before = sent)
                                 else:
                                     cleared = await ctx.channel.purge(limit = amount, check = lambda m: m.content.lower() == filt.lower(), before = sent)
-                                emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
+                                emb = discord.Embed(title = 'Результаты удаления сообщений', color = 0x2f3136)
                                 emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{len(cleared)}```')
                                 if filt:
                                     emb.add_field(name = 'Применён фильтр:', value = f'```{filt}``` ({members})', inline = True)
@@ -396,7 +396,7 @@ class sMod(commands.Cog):
                                 if '--silent' in members:
                                     return
                                 msg = await self.client.wait_for('message', timeout = 10, check = lambda message: message.channel == ctx.message.channel and message.author == ctx.author and message.content.lower() == 'c')
-                                emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
+                                emb = discord.Embed(title = 'Результаты удаления сообщений', color = 0x2f3136)
                                 emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{len(cleared)}```')
                                 if filt:
                                     emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
@@ -428,25 +428,25 @@ class sMod(commands.Cog):
                     elif msg.content.lower() == 'n' and msg.author.id == ctx.guild.owner.id:
                         await msg.delete()
                         await sent.delete()
-                        emb = discord.Embed(description = f'{ctx.guild.owner.mention} отменил запрос.', colour = discord.Color.orange())
+                        emb = discord.Embed(description = f'{ctx.guild.owner.mention} отменил запрос.', colour = 0x2f3136)
                         await ctx.send(embed = emb, delete_after = 3)
                     elif msg.content.lower() == 'n' or 'y' and msg.author.id != ctx.guild.owner.id:
                         await msg.delete()
                         await sent.delete()
-                        emb = discord.Embed(description = f'{ctx.author.mention}, ты не являешься владельцем сервера.', colour = discord.Color.orange())
+                        emb = discord.Embed(description = f'{ctx.author.mention}, ты не являешься владельцем сервера.', colour = 0x2f3136)
                         await ctx.send(embed = emb, delete_after = 3)
                     else:
                         await msg.delete()
                         await sent.delete()
-                        emb = discord.Embed(description = f'Обнаружен недопустимый ответ ({msg.content})', colour = discord.Color.orange())
+                        emb = discord.Embed(description = f'Обнаружен недопустимый ответ ({msg.content})', colour = 0x2f3136)
                         await ctx.send(embed = emb, delete_after = 3)
                 except asyncio.TimeoutError:
                     await sent.delete()
-                    emb = discord.Embed(description = f'{ctx.author.mention}, Время вышло.', colour = discord.Color.orange())
+                    emb = discord.Embed(description = f'{ctx.author.mention}, Время вышло.', colour = 0x2f3136)
                     await ctx.send(f'{ctx.guild.owner.mention}', embed = emb, delete_after = 3)
         elif amount >= 100:
             if ctx.author != ctx.guild.owner:
-                emb = discord.Embed(description = f'{ctx.author.mention}, создан запрос на удаление {amount} сообщений. Мне нужен ответ создателя сервера на это действие. Продолжаем? (y/n)\n||Запрос будет отменён через 1 минуту.||', colour = discord.Color.orange())
+                emb = discord.Embed(description = f'{ctx.author.mention}, создан запрос на удаление {amount} сообщений. Мне нужен ответ создателя сервера на это действие. Продолжаем? (y/n)\n||Запрос будет отменён через 1 минуту.||', colour = 0x2f3136)
                 sent = await ctx.send(f'{ctx.guild.owner.mention}', embed = emb)
                 try:
                     msg = await self.client.wait_for('message', timeout = 10, check = lambda message: message.author == ctx.author and message.channel == ctx.message.channel)
@@ -454,14 +454,14 @@ class sMod(commands.Cog):
                         await msg.delete()
                         await sent.delete()
                         if '--silent' not in members:
-                            emb = discord.Embed(description = 'Проверяем..', color = discord.Color.orange())
+                            emb = discord.Embed(description = 'Проверяем..', color = 0x2f3136)
                             sent = await ctx.send(embed = emb)
                             if members == '--bots':
                                 if filt == None:
                                     cleared = await ctx.channel.purge(limit = amount, check = lambda m: m.author.bot == True, before = sent)
                                 else:
                                     cleared = await ctx.channel.purge(limit = amount, check = lambda m: m.content.lower() == filt.lower() and m.author.bot == True, before = sent)
-                                emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
+                                emb = discord.Embed(title = 'Результаты удаления сообщений', color = 0x2f3136)
                                 emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{len(cleared)}```')
                                 if filt:
                                     emb.add_field(name = 'Применён фильтр:', value = f'```{filt}``` ({members})', inline = True)
@@ -473,7 +473,7 @@ class sMod(commands.Cog):
                                     cleared = await ctx.channel.purge(limit = amount, check = lambda m: m.author.bot == False, before = sent)
                                 else:
                                     cleared = await ctx.channel.purge(limit = amount, check = lambda m: m.author.bot == False and m.content.lower() == filt.lower(), before = sent)
-                                emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
+                                emb = discord.Embed(title = 'Результаты удаления сообщений', color = 0x2f3136)
                                 emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{len(cleared)}```')
                                 if filt:
                                     emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
@@ -485,7 +485,7 @@ class sMod(commands.Cog):
                                     cleared = await ctx.channel.purge(limit = amount, before = sent)
                                 else:
                                     cleared = await ctx.channel.purge(limit = amount, check = lambda m: m.content.lower() == filt.lower(), before = sent)
-                                emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
+                                emb = discord.Embed(title = 'Результаты удаления сообщений', color = 0x2f3136)
                                 emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{len(cleared)}```')
                                 if filt:
                                     emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
@@ -496,7 +496,7 @@ class sMod(commands.Cog):
                                 if '--silent' in members:
                                     return
                                 msg = await self.client.wait_for('message', timeout = 10, check = lambda message: message.channel == ctx.message.channel and message.author == ctx.author and message.content.lower() == 'c')
-                                emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
+                                emb = discord.Embed(title = 'Результаты удаления сообщений', color = 0x2f3136)
                                 emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{len(cleared)}```')
                                 if filt:
                                     emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
@@ -528,24 +528,24 @@ class sMod(commands.Cog):
                     elif msg.content.lower() == 'n' and msg.author.id == ctx.guild.owner.id:
                         await msg.delete()
                         await sent.delete()
-                        emb = discord.Embed(description = f'{ctx.guild.owner} отменил запрос.', colour = discord.Color.orange())
+                        emb = discord.Embed(description = f'{ctx.guild.owner} отменил запрос.', colour = 0x2f3136)
                         await ctx.send(embed = emb, delete_after = 3)
                     elif msg.content.lower() == 'n' or 'y' and msg.author.id != ctx.guild.owner.id:
                         await msg.delete()
                         await sent.delete()
-                        emb = discord.Embed(description = f'{ctx.author.mention}, ты не являешься владельцем сервера.', colour = discord.Color.orange())
+                        emb = discord.Embed(description = f'{ctx.author.mention}, ты не являешься владельцем сервера.', colour = 0x2f3136)
                         await ctx.send(embed = emb, delete_after = 3)
                     else:
                         await msg.delete()
                         await sent.delete()
-                        emb = discord.Embed(description = f'Обнаружен недопустимый ответ ({msg.content})', colour = discord.Color.orange())
+                        emb = discord.Embed(description = f'Обнаружен недопустимый ответ ({msg.content})', colour = 0x2f3136)
                         await ctx.send(embed = emb, delete_after = 3)
                 except asyncio.TimeoutError:
                     await sent.delete()
-                    emb = discord.Embed(description = f'{ctx.author.mention}, Время вышло.', colour = discord.Color.orange())
+                    emb = discord.Embed(description = f'{ctx.author.mention}, Время вышло.', colour = 0x2f3136)
                     await ctx.send(f'{ctx.guild.owner.mention}', embed = emb, delete_after = 3)
             else:
-                emb = discord.Embed(description = f'{ctx.author.mention}, создан запрос на удаление {amount} сообщений. Продолжить? (y/n)\n||Запрос будет отменён через 10 секунд.||', colour = discord.Color.orange())
+                emb = discord.Embed(description = f'{ctx.author.mention}, создан запрос на удаление {amount} сообщений. Продолжить? (y/n)\n||Запрос будет отменён через 10 секунд.||', colour = 0x2f3136)
                 sent = await ctx.send(embed = emb)
                 try:
                     msg = await self.client.wait_for('message', timeout = 10, check = lambda message: message.author == ctx.author and message.channel == ctx.message.channel)
@@ -553,14 +553,14 @@ class sMod(commands.Cog):
                         await msg.delete()
                         await sent.delete()
                         if '--silent' not in members:
-                            emb = discord.Embed(description = 'Проверяем..', color = discord.Color.orange())
+                            emb = discord.Embed(description = 'Проверяем..', color = 0x2f3136)
                             sent = await ctx.send(embed = emb)
                             if members == '--bots':
                                 if filt == None:
                                     cleared = await ctx.channel.purge(limit = amount, check = lambda m: m.author.bot == True, before = sent)
                                 else:
                                     cleared = await ctx.channel.purge(limit = amount, check = lambda m: m.content.lower() == filt.lower() and m.author.bot == True, before = sent)
-                                emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
+                                emb = discord.Embed(title = 'Результаты удаления сообщений', color = 0x2f3136)
                                 emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{len(cleared)}```')
                                 if filt:
                                     emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
@@ -572,7 +572,7 @@ class sMod(commands.Cog):
                                     cleared = await ctx.channel.purge(limit = amount, check = lambda m: m.author.bot == False, before = sent)
                                 else:
                                     cleared = await ctx.channel.purge(limit = amount, check = lambda m: m.author.bot == False and m.content.lower() == filt.lower(), before = sent)
-                                emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
+                                emb = discord.Embed(title = 'Результаты удаления сообщений', color = 0x2f3136)
                                 emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{len(cleared)}```')
                                 if filt:
                                     emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
@@ -584,7 +584,7 @@ class sMod(commands.Cog):
                                     cleared = await ctx.channel.purge(limit = amount, before = sent)
                                 else:
                                     cleared = await ctx.channel.purge(limit = amount, check = lambda m: m.content.lower() == filt.lower(), before = sent)
-                                emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
+                                emb = discord.Embed(title = 'Результаты удаления сообщений', color = 0x2f3136)
                                 emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{len(cleared)}```')
                                 if filt:
                                     emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
@@ -595,7 +595,7 @@ class sMod(commands.Cog):
                                 if '--silent' in members:
                                     return
                                 msg = await self.client.wait_for('message', timeout = 10, check = lambda message: message.channel == ctx.message.channel and message.author == ctx.author and message.content.lower() == 'c')
-                                emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
+                                emb = discord.Embed(title = 'Результаты удаления сообщений', color = 0x2f3136)
                                 emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{len(cleared)}```')
                                 if filt:
                                     emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
@@ -627,19 +627,19 @@ class sMod(commands.Cog):
                     elif msg.content.lower() == 'n':
                         await msg.delete()
                         await sent.delete()
-                        emb = discord.Embed(description = 'Отменено.', colour = discord.Color.orange())
+                        emb = discord.Embed(description = 'Отменено.', colour = 0x2f3136)
                         await ctx.send(embed = emb, delete_after = 3)
                     else:
                         await msg.delete()
                         await sent.delete()
-                        emb = discord.Embed(description = f'Обнаружен недопустимый ответ ({msg.content})', colour = discord.Color.orange())
+                        emb = discord.Embed(description = f'Обнаружен недопустимый ответ ({msg.content})', colour = 0x2f3136)
                         await ctx.send(embed = emb, delete_after = 3)
                 except asyncio.TimeoutError:
                     await sent.delete()
-                    emb = discord.Embed(description = f'{ctx.author.mention}, Время вышло.', colour = discord.Color.orange())
+                    emb = discord.Embed(description = f'{ctx.author.mention}, Время вышло.', colour = 0x2f3136)
                     await ctx.send(embed = emb, delete_after = 3)
         elif amount >= 10:
-            emb = discord.Embed(description = f'{ctx.author.mention}, создан запрос на удаление {amount} сообщений. Продолжить? (y/n)\n||Запрос будет отменён через 10 секунд.||', colour = discord.Color.orange())
+            emb = discord.Embed(description = f'{ctx.author.mention}, создан запрос на удаление {amount} сообщений. Продолжить? (y/n)\n||Запрос будет отменён через 10 секунд.||', colour = 0x2f3136)
             sent = await ctx.send(embed = emb)
             try:
                 msg = await self.client.wait_for('message', timeout = 10, check = lambda message: message.author == ctx.author and message.channel == ctx.message.channel)
@@ -647,14 +647,14 @@ class sMod(commands.Cog):
                     await msg.delete()
                     await sent.delete()
                     if '--silent' not in members:
-                        emb = discord.Embed(description = 'Проверяем..', color = discord.Color.orange())
+                        emb = discord.Embed(description = 'Проверяем..', color = 0x2f3136)
                         sent = await ctx.send(embed = emb)
                         if members == '--bots':
                             if filt == None:
                                 cleared = await ctx.channel.purge(limit = amount, check = lambda m: m.author.bot == True, before = sent)
                             else:
                                 cleared = await ctx.channel.purge(limit = amount, check = lambda m: m.content.lower() == filt.lower() and m.author.bot == True, before = sent)
-                            emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
+                            emb = discord.Embed(title = 'Результаты удаления сообщений', color = 0x2f3136)
                             emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{len(cleared)}```')
                             if filt:
                                 emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
@@ -666,7 +666,7 @@ class sMod(commands.Cog):
                                 cleared = await ctx.channel.purge(limit = amount, check = lambda m: m.author.bot == False, before = sent)
                             else:
                                 cleared = await ctx.channel.purge(limit = amount, check = lambda m: m.author.bot == False and m.content.lower() == filt.lower(), before = sent)
-                            emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
+                            emb = discord.Embed(title = 'Результаты удаления сообщений', color = 0x2f3136)
                             emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{len(cleared)}```')
                             if filt:
                                 emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
@@ -678,7 +678,7 @@ class sMod(commands.Cog):
                                 cleared = await ctx.channel.purge(limit = amount, before = sent)
                             else:
                                 cleared = await ctx.channel.purge(limit = amount, check = lambda m: m.content.lower() == filt.lower(), before = sent)
-                            emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
+                            emb = discord.Embed(title = 'Результаты удаления сообщений', color = 0x2f3136)
                             emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{len(cleared)}```')
                             if filt:
                                 emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
@@ -689,7 +689,7 @@ class sMod(commands.Cog):
                             if '--silent' in members:
                                 return
                             msg = await self.client.wait_for('message', timeout = 10, check = lambda message: message.channel == ctx.message.channel and message.author == ctx.author and message.content.lower() == 'c')
-                            emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
+                            emb = discord.Embed(title = 'Результаты удаления сообщений', color = 0x2f3136)
                             emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{len(cleared)}```')
                             if filt:
                                 emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
@@ -721,30 +721,30 @@ class sMod(commands.Cog):
                 elif msg.content.lower() == 'n':
                     await msg.delete()
                     await sent.delete()
-                    emb = discord.Embed(description = 'Отменено.', colour = discord.Color.orange())
+                    emb = discord.Embed(description = 'Отменено.', colour = 0x2f3136)
                     await ctx.send(embed = emb, delete_after = 3)
                 else:
                     await msg.delete()
                     await sent.delete()
-                    emb = discord.Embed(description = f'Обнаружен недопустимый ответ ({msg.content})', colour = discord.Color.orange())
+                    emb = discord.Embed(description = f'Обнаружен недопустимый ответ ({msg.content})', colour = 0x2f3136)
                     await ctx.send(embed = emb, delete_after = 3)
             except asyncio.TimeoutError:
                 await sent.delete()
-                emb = discord.Embed(description = f'{ctx.author.mention}, Время вышло.', colour = discord.Color.orange())
+                emb = discord.Embed(description = f'{ctx.author.mention}, Время вышло.', colour = 0x2f3136)
                 await ctx.send(embed = emb, delete_after = 3)
         elif amount == 0:
-            emb = discord.Embed(description = 'Удалять 0 сообщений? Ты еблан?', colour = discord.Color.orange())
+            emb = discord.Embed(description = 'Удалять 0 сообщений? Ты еблан?', colour = 0x2f3136)
             await ctx.send(embed = emb, delete_after = 1)
         else:
             if '--silent' not in members:
-                emb = discord.Embed(description = 'Проверяем..', color = discord.Color.orange())
+                emb = discord.Embed(description = 'Проверяем..', color = 0x2f3136)
                 sent = await ctx.send(embed = emb)
                 if '--bots' in members:
                     if filt == None:
                         cleared = await ctx.channel.purge(limit = amount, check = lambda m: m.author.bot == True, before = sent)
                     else:
                         cleared = await ctx.channel.purge(limit = amount, check = lambda m: m.content.lower() == filt.lower() and m.author.bot == True, before = sent)
-                    emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
+                    emb = discord.Embed(title = 'Результаты удаления сообщений', color = 0x2f3136)
                     emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{len(cleared)}```')
                     if filt:
                         emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
@@ -756,7 +756,7 @@ class sMod(commands.Cog):
                         cleared = await ctx.channel.purge(limit = amount, check = lambda m: m.author.bot == False, before = sent)
                     else:
                         cleared = await ctx.channel.purge(limit = amount, check = lambda m: m.author.bot == False and m.content.lower() == filt.lower(), before = sent)
-                    emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
+                    emb = discord.Embed(title = 'Результаты удаления сообщений', color = 0x2f3136)
                     emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{len(cleared)}```')
                     if filt:
                         emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
@@ -768,7 +768,7 @@ class sMod(commands.Cog):
                         cleared = await ctx.channel.purge(limit = amount, before = sent)
                     else:
                         cleared = await ctx.channel.purge(limit = amount, check = lambda m: m.content.lower() == filt.lower(), before = sent)
-                    emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
+                    emb = discord.Embed(title = 'Результаты удаления сообщений', color = 0x2f3136)
                     emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{len(cleared)}```')
                     if filt:
                         emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
@@ -779,7 +779,7 @@ class sMod(commands.Cog):
                     if '--silent' in members:
                         return
                     msg = await self.client.wait_for('message', timeout = 10, check = lambda message: message.channel == ctx.message.channel and message.author == ctx.author and message.content.lower() == 'c')
-                    emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
+                    emb = discord.Embed(title = 'Результаты удаления сообщений', color = 0x2f3136)
                     emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{len(cleared)}```')
                     if filt:
                         emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
