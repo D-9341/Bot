@@ -83,7 +83,7 @@ class Fun(commands.Cog):
     @commands.command(aliases = ['.rap'])
     async def rap(self, ctx):
         emb = disnake.Embed(colour = ctx.author.color)
-        emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
+        emb.set_author(name = ctx.author, icon_url = ctx.author.avatar.url)
         emb.set_image(url = 'https://thumbs.gfycat.com/MessyCarefreeHousefly-size_restricted.gif')
         await ctx.send(embed = emb)
 
