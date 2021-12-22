@@ -2,8 +2,8 @@ import asyncio
 import os
 import random
 
-import discord
-from discord.ext import commands
+import disnake
+from disnake.ext import commands
 from pymongo import MongoClient
 
 passw = os.environ.get('passw')
@@ -19,25 +19,6 @@ class Fun(commands.Cog):
     @commands.Cog.listener()
     async def on_ready(self):
         print('Модуль Fun загружен')
-
-    @commands.command()
-    async def roll(self, ctx, first: int = None, second: int = None):
-        if first == None and second == None:
-            rand = random.randint(0, 100)
-            if rand == 69:
-                await ctx.send(f'`{ctx.author} получает случайное число(0-100)\n100`')
-            else:
-                rand1 = random.randint(0, 9)
-                rand2 = random.randint(0, 9)
-                await ctx.send(f'`{ctx.author} получает случайное число(0-100)\n0{rand1}{rand2}`')
-        if first != None and second == None:
-            rand = random.randint(0, first)
-            await ctx.send(f'`{ctx.author} получает случайное число(0-{first})\n{rand}`')
-        if first != None and second != None:
-            if first > second:
-                await ctx.send(f'`{ctx.author} получает случайное число({first}-{first})\n{first}`')
-            rand = random.randint(first, second)
-            await ctx.send(f'`{ctx.author} получает случайное число({first}-{second})\n{rand}`')
 
     @commands.command()
     async def dotersbrain(self, ctx):
@@ -81,39 +62,35 @@ class Fun(commands.Cog):
     async def niggers(self, ctx):
         rlocale = rlocale = collection.find_one({"_id": ctx.author.id})["locale"]
         if rlocale == 'ru':
-            emb = discord.Embed(description = '[осуждающее видео](https://www.youtube.com/watch?v=167apVK8Suw)', colour = discord.Color.orange())
-            if ctx.guild.owner.id != self.client.owner_id and ctx.guild.owner.id not in friends:
-                emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+            emb = disnake.Embed(description = '[осуждающее видео](https://www.youtube.com/watch?v=167apVK8Suw)', colour = disnake.Color.orange())
             await ctx.send(embed = emb)
         if rlocale == 'gnida':
-            emb = discord.Embed(description = '[негры пидарасы, и извинятся за это не буду!](https://www.youtube.com/watch?v=167apVK8Suw)', colour = discord.Color.orange())
-            if ctx.guild.owner.id != self.client.owner_id and ctx.guild.owner.id not in friends:
-                emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+            emb = disnake.Embed(description = '[негры пидарасы, и извинятся за это не буду!](https://www.youtube.com/watch?v=167apVK8Suw)', colour = disnake.Color.orange())
             await ctx.send(embed = emb)
 
     @commands.command()
     async def aye_balbec(self, ctx):
-        emb = discord.Embed(colour = ctx.author.color)
-        emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
+        emb = disnake.Embed(colour = ctx.author.color)
+        emb.set_author(name = ctx.author, icon_url = ctx.author.avatar.url)
         emb.set_image(url = 'https://sun9-61.userapi.com/tja5cuQthduwgxq2yMigLiUxfYq_5fqiA6cJWg/sZOkbPajoSY.jpg')
         await ctx.send(embed = emb)
 
     @commands.command()
     async def rp(self, ctx):
-        emb = discord.Embed(description = '[Ныа](https://www.youtube.com/watch?v=idmTSW9mfYI)', colour = discord.Color.orange())
+        emb = disnake.Embed(description = '[Ныа](https://www.youtube.com/watch?v=idmTSW9mfYI)', colour = disnake.Color.orange())
         await ctx.send(embed = emb)
 
     @commands.command(aliases = ['.rap'])
     async def rap(self, ctx):
-        emb = discord.Embed(colour = ctx.author.color)
+        emb = disnake.Embed(colour = ctx.author.color)
         emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
         emb.set_image(url = 'https://thumbs.gfycat.com/MessyCarefreeHousefly-size_restricted.gif')
         await ctx.send(embed = emb)
 
     @commands.command()
     async def zatka(self, ctx):
-        emb = discord.Embed(title = 'Форма заявки для Набор кадров', colour = ctx.author.color)
-        emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
+        emb = disnake.Embed(title = 'Форма заявки для Набор кадров', colour = ctx.author.color)
+        emb.set_author(name = ctx.author, icon_url = ctx.author.avatar.url)
         emb.add_field(name = '(1). ZATKA в STEAM.  ZATKA_KING#8406 в Discord.', value = 'возраст 14+  часовой пояс IL +0.', inline = False)
         emb.add_field(name = '(2). Интересующая управление:', value = 'Discord', inline = False)
         emb.add_field(name = '(3). Опыт администрирования:', value = 'Есть.', inline = False)
@@ -125,8 +102,8 @@ class Fun(commands.Cog):
 
     @commands.command(aliases = ['c', 'coin'])
     async def coinflip(self, ctx):
-        emb = discord.Embed(description = f'{ctx.author.mention} подбрасывает монетку: ОРЁЛ', colour = discord.Color.orange())
-        emb1 = discord.Embed(description = f'{ctx.author.mention} подбрасывает монетку: РЕШКА', colour = discord.Color.orange())
+        emb = disnake.Embed(description = f'{ctx.author.mention} подбрасывает монетку: ОРЁЛ', colour = disnake.Color.orange())
+        emb1 = disnake.Embed(description = f'{ctx.author.mention} подбрасывает монетку: РЕШКА', colour = disnake.Color.orange())
         choices = [emb, emb1]
         rancoin = random.choice(choices)
         await ctx.send(embed = rancoin)
