@@ -1,7 +1,7 @@
 import asyncio
 
-import discord
-from discord.ext import commands
+import disnake
+from disnake.ext import commands
 
 friends = [351071668241956865, 417362845303439360]
 
@@ -19,7 +19,7 @@ class Embeds(commands.Cog):
     async def say(self, ctx, *, msg):
         title = ''
         description = ''
-        image = thumbnail = message = footer =  author = None
+        image = thumbnail = message = footer = None
         embed_values = msg.split('|')
         for i in embed_values:
             if i.strip().lower().startswith('t&'):
@@ -34,21 +34,17 @@ class Embeds(commands.Cog):
                 message = i.strip()[4:].strip()
             elif i.strip().lower().startswith('f&'):
                 footer = i.strip()[2:].strip()
-            elif i.strip().lower().startswith('a&'):
-                author = i.strip()[2:].strip()
-        if not author:
-            author = ctx.author
-        emb = discord.Embed(title = title, description = description, color = 0x2f3136)
+        emb = disnake.Embed(title = title, description = description, color = 0x2f3136)
         for i in embed_values:
-            emb.set_author(name = author, icon_url = author.avatar_url)
+            emb.set_author(name = ctx.author, icon_url = ctx.author.avatar.url)
             if image:
                 emb.set_image(url = image)
             if thumbnail:
                 emb.set_thumbnail(url = thumbnail)
             if footer:
                 emb.set_footer(text = footer)
-            if 't&' not in msg and 'd&' not in msg and 'img&' not in msg and 'th&' not in msg and 'msg&' not in msg and 'f&' not in msg and 'a&' not in msg:
-                return await ctx.send(msg)
+            if 't&' not in msg and 'd&' not in msg and 'img&' not in msg and 'th&' not in msg and 'msg&' not in msg and 'f&' not in msg:
+                await ctx.send(msg)
             else:
                 if message:
                     return await ctx.send(f'{message}', embed = emb)
@@ -75,9 +71,9 @@ class Embeds(commands.Cog):
                     thumbnail = i.strip()[3:].strip()
                 elif i.strip().lower().startswith('f&'):
                     footer = i.strip()[2:].strip()
-            emb = discord.Embed(title = title, description = description, color = 0x2f3136, timestamp = ctx.message.created_at)
+            emb = disnake.Embed(title = title, description = description, color = 0x2f3136, timestamp = disnake.utils.utcnow())
             for i in embed_values:
-                emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
+                emb.set_author(name = ctx.author, icon_url = ctx.author.avatar.url)
                 if image:
                     emb.set_image(url = image)
                 if thumbnail:
@@ -94,11 +90,11 @@ class Embeds(commands.Cog):
                             if message.embeds != []:
                                 await message.edit(embed = None)
                             else:
-                                return await ctx.send(f'{ctx.author.mention}, нечего удалять. Возможно, вы имели ввиду cy/edit {message.id} --delete ?', delete_after = 8)
+                                return await ctx.send(f'{ctx.author.mention}, нечего удалять. Возможно, вы имели ввиду cy/edit {message.id} --delete ?', delete_after = 5)
                         if '--empty-embed' in msg:
                             if message.embeds != []:
-                                emb = discord.Embed(title = None, description = None, color = ctx.author.color)
-                                emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
+                                emb = disnake.Embed(title = None, description = None, color = ctx.author.color)
+                                emb.set_author(name = ctx.author, icon_url = ctx.author.avatar.url)
                                 await message.edit(embed = emb)
                             else:
                                 return await ctx.send(f'{ctx.author.mention}, нечего очищать. Возможно, вы имели ввиду cy/edit {message.id} --delete ?')
@@ -114,7 +110,7 @@ class Embeds(commands.Cog):
                             if message.embeds != []:
                                 await message.edit(embed = None)
                             else:
-                                return await ctx.send(f'{ctx.author.mention}, нечего удалять. Возможно, вы имели ввиду cy/edit {message.id} --delete ?', delete_after = 8)
+                                return await ctx.send(f'{ctx.author.mention}, нечего удалять. Возможно, вы имели ввиду cy/edit {message.id} --delete ?', delete_after = 5)
                         else:
                             await message.edit(embed = emb)
                     else:
@@ -123,7 +119,7 @@ class Embeds(commands.Cog):
             await ctx.send(f'сообщение {message.id} не обнаружено.')
 
     @commands.command(aliases = ['ctx'])
-    async def content(self, ctx, arg, channel: discord.TextChannel = None):
+    async def content(self, ctx, arg, channel: disnake.TextChannel = None):
         if channel == None:
             channel = ctx.message.channel
         message = await channel.fetch_message(id = arg)
