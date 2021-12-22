@@ -1,10 +1,8 @@
 import asyncio
 import datetime
 
-import discord
-import discord_slash
-from discord.ext import commands
-from discord_slash import cog_ext as slash
+import disnake
+from disnake.ext import commands
 
 friends = [351071668241956865, 417362845303439360]
 
@@ -18,13 +16,19 @@ class sEmbeds(commands.Cog):
     async def on_ready(self):
         print('Группа Slash-команд Embeds загружена')
 
-    @slash.cog_slash(name = 'content', description = 'Позволяет получить необработанный контент сообщения, в том числе и эмбедов', options = [{'name': 'arg', 'description': 'ID сообщения', 'required': True, 'type': 3}, {'name': 'channel', 'description': 'Канал, из которого нужно достать сообщение', 'required': False, 'type': 7}, {'name': 'to_dict', 'description': 'Должен ли контент вывестись в словарь? Работает только в сообщениях у которых есть эмбед', 'required': False, 'type': 5}])
-    async def _content(self, ctx, arg, channel: discord.TextChannel = None, to_dict: bool = None):
+    @commands.slash_command(name = 'content')
+    async def _content(self, inter, arg, channel: disnake.TextChannel = None):
+        '''Позволяет получить необработанный контент сообщения, в том числе и эмбедов
+        Parameters
+        ----------
+        arg:
+            ID сообщения
+        amount: :class:`disnake.TextChannel`
+            Канал
+        '''
         if channel == None:
-            channel = ctx.channel
-        message = await channel.fetch_message(id = arg)
-        if not message:
-            await ctx.send(f'Сообщение {arg} не найдено.')
+            channel = inter.channel
+        message = await channel.fetch_message(arg)
         for emb in message.embeds:
             if emb.color != emb.Empty:
                 color = f' color {emb.color}'
@@ -70,22 +74,30 @@ class sEmbeds(commands.Cog):
                 footer = ''
         if message.author.id in botversions:
             if message.embeds == []:
-                await ctx.send(f'```cy/say {message.content}```')
+                await inter.response.send_message(f'```cy/say {message.content}```')
             else:
-                await ctx.send(f'```cy/say {t}{d}{f}{th}{img}```')
+                await inter.response.send_message(f'```cy/say {t}{d}{f}{th}{img}```')
         else:
             if message.embeds == []:
                 if '```' in message.content:
-                    await ctx.send(f'@{message.author} {message.content}')
+                    await inter.response.send_message(f'@{message.author} {message.content}')
                 else:
-                    await ctx.send(f'```@{message.author} {message.content}```')
+                    await inter.response.send_message(f'```@{message.author} {message.content}```')
             else:
-                await ctx.send(f'```{content}{title}{description}{footer}{color}{author}{image}{thumb}```')
+                await inter.response.send_message(f'```{content}{title}{description}{footer}{color}{author}{image}{thumb}```')
 
-    @slash.cog_slash(name = 'edit', description = 'Изменяет сообщение, отправленое ботом.', options = [{'name': 'arg', 'description': 'ID сообщения', 'required': True, 'type': 3}, {'name': 'msg', 'description': 'аргументы или текст, на который нужно заменить исходный', 'required': True, 'type': 3}])
+    @commands.slash_command(name = 'edit')
     @commands.has_permissions(manage_messages = True)
-    async def _edit(self, ctx, arg, *, msg):
-        message = await ctx.channel.fetch_message(id = arg)
+    async def _edit(self, inter, arg, *, msg: str):
+        '''Изменяет сообщение, отправленое ботом.
+        Parameters
+        ----------
+        arg:
+            ID сообщения
+        msg: class: `str`
+            Новый текст/аргументы для вывода эмбеда
+        '''
+        message = await inter.channel.fetch_message(arg)
         if message != None:
             title = ''
             description = ''
@@ -102,55 +114,62 @@ class sEmbeds(commands.Cog):
                     thumbnail = i.strip()[3:].strip()
                 elif i.strip().lower().startswith('f&'):
                     footer = i.strip()[2:].strip()
-            emb = discord.Embed(title = title, description = description, color = 0x2f3136, timestamp = datetime.datetime.utcnow())
+            color = 0x2f3136
+            emb = disnake.Embed(title = title, description = description, color = color, timestamp = disnake.utils.utcnow())
             for i in embed_values:
-                emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
+                emb.set_author(name = inter.author, icon_url = inter.author.avatar.url)
                 if image:
                     emb.set_image(url = image)
                 if thumbnail:
                     emb.set_thumbnail(url = thumbnail)
                 if footer:
                     emb.set_footer(text = footer)
-                if 't&' not in msg and 'd&' not in msg and 'img&' not in msg and 'th&' not in msg and 'c&' not in msg:
+                if 't&' not in msg and 'd&' not in msg and 'img&' not in msg and 'th&' not in msg and 'f&' not in msg:
                     if message.author == self.client.user:
                         if '--clean' in msg:
-                            return await message.edit(content = None)
+                            await message.edit(content = None)
                         if '--delete' in msg:
-                            return await message.delete()
-                        if '--noembed' in msg:
-                            if message.embeds != []:
-                                return await message.edit(embed = None)
-                            else:
-                                return await ctx.send(f'{ctx.author.mention}, нечего удалять. Возможно, вы имели ввиду cy/edit {message.id} --delete ?')
-                        if '--empty-embed' in msg:
-                            if message.embeds != []:
-                                emb = discord.Embed(title = None, description = None, color = ctx.author.color)
-                                emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
-                                return await message.edit(embed = emb)
-                            else:
-                                return await ctx.send(f'{ctx.author.mention}, нечего очищать. Возможно, вы имели ввиду cy/edit {message.id} --delete ?')
-                        else:
-                            return await message.edit(content = msg)
-                    else:
-                        return await ctx.send(f'{message.id} не является сообщением от {self.client.user}')
-                else:
-                    if message.author == self.client.user:
-                        if '--clean' in msg:
-                            return await message.edit(content = None, embed = emb)
+                            await message.delete()
                         if '--noembed' in msg:
                             if message.embeds != []:
                                 await message.edit(embed = None)
                             else:
-                                return await ctx.send(f'{ctx.author.mention}, нечего удалять. Возможно, вы имели ввиду cy/edit {message.id} --delete ?')
+                                return await inter.response.send_message(f'{inter.author.mention}, нечего удалять. Возможно, вы имели ввиду cy/edit {message.id} --delete ?')
+                        if '--empty-embed' in msg:
+                            if message.embeds != []:
+                                emb = disnake.Embed(title = None, description = None, color = inter.author.color)
+                                emb.set_author(name = inter.author, icon_url = inter.author.avatar.url)
+                                await message.edit(embed = emb)
+                            else:
+                                return await inter.response.send_message(f'{inter.author.mention}, нечего очищать. Возможно, вы имели ввиду cy/edit {message.id} --delete ?')
+                        else:
+                            await message.edit(content = msg)
+                    else:
+                        return await inter.response.send_message(f'{message.id} не является сообщением от {self.client.user}')
+                else:
+                    if message.author == self.client.user:
+                        if '--clean' in msg:
+                            await message.edit(content = None, embed = emb)
+                        if '--noembed' in msg:
+                            if message.embeds != []:
+                                await message.edit(embed = None)
+                            else:
+                                return await inter.response.send_message(f'{inter.author.mention}, нечего удалять. Возможно, вы имели ввиду cy/edit {message.id} --delete ?')
                         else:
                             await message.edit(embed = emb)
                     else:
-                        return await ctx.send(f'{message.id} не является сообщением от {self.client.user}')
+                        return await inter.response.send_message(f'{message.id} не является сообщением от {self.client.user}')
         else:
-            await ctx.send(f'сообщение {message.id} не обнаружено.')
+            await inter.response.send_message(f'сообщение {message.id} не обнаружено.')
 
-    @slash.cog_slash(name = 'say', description = 'Пишет от лица бота сообщение или эмбед. Используйте cy/help say для подробностей использования.', options = [{'name': 'msg', 'description': 'Аргументы/текст для написания', 'required': True, 'type': 3}])
-    async def _say(self, ctx, *, msg):
+    @commands.slash_command(name = 'say', description = 'Пишет от лица бота сообщение или эмбед. Используйте cy/help say для подробностей использования.')
+    async def _say(self, inter, *, msg: str):
+        '''        
+        Parameters
+        ----------
+        msg: :class: `str`
+            Текст/аргументы для вывода эмбеда
+        '''
         title = ''
         description = ''
         image = thumbnail = message = footer = None
@@ -168,9 +187,9 @@ class sEmbeds(commands.Cog):
                 message = i.strip()[4:].strip()
             elif i.strip().lower().startswith('f&'):
                 footer = i.strip()[2:].strip()
-        emb = discord.Embed(title = title, description = description, color = 0x2f3136)
+        emb = disnake.Embed(title = title, description = description, color = 0x2f3136)
         for i in embed_values:
-            emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
+            emb.set_author(name = inter.author, icon_url = inter.author.avatar.url)
             if image:
                 emb.set_image(url = image)
             if thumbnail:
@@ -178,12 +197,12 @@ class sEmbeds(commands.Cog):
             if footer:
                 emb.set_footer(text = footer)
             if 't&' not in msg and 'd&' not in msg and 'img&' not in msg and 'th&' not in msg and 'msg&' not in msg and 'f&' not in msg:
-                return await ctx.send(msg)
+                return await inter.response.send_message(msg)
             else:
                 if message:
-                    return await ctx.send(f'{message}', embed = emb)
+                    return await inter.response.send_message(f'{message}', embed = emb)
                 else:
-                    return await ctx.send(embed = emb)
+                    return await inter.response.send_message(embed = emb)
 
 def setup(client):
     client.add_cog(sEmbeds(client))
