@@ -81,7 +81,7 @@ class Misc(commands.Cog):
     async def guild(self, ctx):
         guild = ctx.guild
         emb = disnake.Embed(colour = disnake.Color.orange(), timestamp = disnake.utils.utcnow())
-        emb.set_author(name = guild, icon_url = guild.icon_url)
+        emb.set_author(name = guild, icon_url = guild.icon.url)
         emb.add_field(name = 'ID сервера', value = guild.id)
         emb.add_field(name = 'Голосовой регион', value = guild.region)
         emb.add_field(name = 'Владелец', value = guild.owner.mention)
