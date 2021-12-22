@@ -27,41 +27,41 @@ class sCephalon(commands.Cog):
         if version == '0.12.9.10519':
             emb = disnake.Embed(color = 0x2f3136)
             emb.add_field(name = '0.12.9.10519', value = 'Небольшие исправления, в целом никак не связанные с работой бота.')
-            await inter.responce.send_message(embed = emb)
+            await inter.response.send_message(embed = emb)
         if version == '0.12.9.10988':
             emb = disnake.Embed(color = 0x2f3136)
             emb.add_field(name = '0.12.9.10988', value = 'Добавлены Slash-Команды! Теперь вы можете просто написать `/`, чтобы вам вывелся список всех команд. Для их работы нужна новая [ссылка-приглашение](https://discord.com/api/oauth2/authorize?client_id=694170281270312991&permissions=8&scope=bot%20applications.commands). Slash-Команды применены ко всем командам за исключением тех, что находятся в категории Fun, Embeds и некоторые в Cephalon или имеют конвертеры (mute, remind, someone) ***Всё ещё БЕТА!***', inline = False)
-            await inter.responce.send_message(embed = emb)
+            await inter.response.send_message(embed = emb)
         if version == '0.12.9.11410':
             emb = disnake.Embed(color = 0x2f3136)
             emb.add_field(name = '0.12.9.11410', value = 'Некоторые исправления и добавление скрытых фич.')
-            await inter.responce.send_message(embed = emb)
+            await inter.response.send_message(embed = emb)
         if version == '0.12.10.1.11661':
             emb = disnake.Embed(color = 0x2f3136)
             emb.add_field(name = '0.12.10.1.11661', value = 'Slash-Команды теперь применены ко всем командам, кроме тех, что используют конвертеры. Также, исправлены недоработки старых Slash-Команд и созданы новые (при написании некоторых команд будет ответ **Ошибка взаимодействия**, даже если команда была выполнена правильно).\n\n**Say**\n\nУбран аргумент `c&`, добавлен аргумент `f&` - текст в самом низу эмбеда.\n\n**Иное**\n\nТеперь команды пользователя не будут удаляться - это решение связано с рядом причин.')
-            await inter.responce.send_message(embed = emb)
+            await inter.response.send_message(embed = emb)
         if version == '0.12.10.2.11856':
             emb = disnake.Embed(color = 0x2f3136)
             emb.add_field(name = '0.12.10.2.11856', value = 'Добавлена команда locale для изменения локали. Пока доступны только `ru` (по умолчанию) и `gnida`.\nSay/Edit\nУбран аргумент --everyone и запрещено упоминание @everyone каким-либо способом.')
-            await inter.responce.send_message(embed = emb)
+            await inter.response.send_message(embed = emb)
         if version == '0.12.10.2.12528':
             emb = disnake.Embed(color = disnake.Color.blurple())
             emb.add_field(name = '0.12.10.2.12528', value = 'Отдельные куски кода были рассортированы по разным файлам.')
-            await inter.responce.send_message(embed = emb)
+            await inter.response.send_message(embed = emb)
         if version == '0.12.11.2.13771':
             emb = disnake.Embed(color = 0x2f3136)
             emb.add_field(name = '0.12.11.2.13771', value = 'Deaf/Undeaf:\nЗаглушает участника в голосовом канале, когда в его ролях есть Deafened\nHelp:\nТеперь указывает список команд, применимый для способа вызова Help. Таким образом, Slash-help будет показывать команды только без конвертеров, а обычная Help все команды.\nТакже, многочисленные исправления')
-            await inter.responce.send_message(embed = emb)
+            await inter.response.send_message(embed = emb)
         if version == '0.12.12.0.0':
             emb = disnake.Embed(color = 0x2f3136)
             emb.add_field(name = '0.12.12.0.0', value = 'Переход на новую библиотеку, способствующий дальнейшему поддержанию бота в живых. Изменения:\nУбрана команда vote, так как новая либра не даёт мне способов ставить реакции под сообщением, что отправил бот\nНовая команда - timeout\nПозволяет `отправить подумать над своим поведением` пользователя.')
-            await inter.responce.send_message(embed = emb)
+            await inter.response.send_message(embed = emb)
 
     @commands.slash_command(name = 'ping', description = 'Отображение задержки клиента бота. Нормальная задержка в диапазоне от 90 до 130 миллисекунд.')
     async def _ping(self, inter):
         emb = disnake.Embed(description = f'`fetching..`', colour = disnake.Color.orange())
         emb1 = disnake.Embed(description = f'Pong!  `{round(self.client.latency * 1000)}ms`', colour = disnake.Color.orange())
-        message = await inter.responce.send_message(embed = emb)
+        message = await inter.response.send_message(embed = emb)
         await asyncio.sleep(self.client.latency)
         await message.edit(embed = emb1)
 
@@ -79,12 +79,12 @@ class sCephalon(commands.Cog):
         emb.add_field(name = 'Раздражаю', value = f'{len(self.client.users)} человек')
         emb.add_field(name = 'Существую на', value = f'{len(self.client.guilds)} серверах')
         emb.set_footer(text = 'Данное приложение не имеет никакого причастия к игре Warframe.', icon_url = 'https://i.playground.ru/p/yVaOZNSTdgUTxmzy_qvzzQ.png')
-        await inter.responce.send_message(embed = emb)
+        await inter.response.send_message(embed = emb)
 
     @commands.slash_command(name = 'invite', description = 'Для приглашения бота на сервер')
     async def _invite(self, inter):
         emb = disnake.Embed(description = '[Ссылка](https://discord.com/api/oauth2/authorize?client_id=694170281270312991&permissions=8&scope=bot%20applications.commands) для приглашения Cy на сервера.', colour = disnake.Color.orange())
-        await inter.responce.send_message(embed = emb)
+        await inter.response.send_message(embed = emb)
 
     @commands.slash_command(name = 'help', description = 'Здесь можно получить полную помощь по всем командам')
     async def _help(self, inter, arg: str = commands.Param(default = None, choices = {'about': 'about', 'avatar': 'avatar', 'ban': 'ban', 'content': 'content', 'clear': 'clear', 'dm': 'dm', 'say': 'say', 'edit': 'edit', 'give': 'give', 'kick': 'kick', 'mute': 'mute', 'role': 'role', 'take': 'take', 'unmute': 'unmute', 'embeds': 'embeds', 'cephalon': 'cephalon', 'mod': 'mod', 'misc': 'misc', 'all': 'all', 'roll': 'roll'})):
