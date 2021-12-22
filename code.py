@@ -1,24 +1,15 @@
 # coding=utf-8 
 import asyncio
 import datetime
-import json
-import os
-import random
-import re
-import regex
-import secrets
 
-import discord
-import discord_slash
+import disnake
 from pathlib import Path
 from pymongo import MongoClient
-from discord.ext import commands
-from discord.utils import get
-from discord_slash import SlashCommand, SlashContext
+from disnake.ext import commands
+from disnake.utils import get
 
-client = commands.Bot(command_prefix = commands.when_mentioned_or('cy/'), intents = discord.Intents.all(), owner_id = 338714886001524737, status = discord.Status.idle, activity = discord.Activity(type = discord.ActivityType.watching, name = 'На FunClub P-sune'), allowed_mentions = discord.AllowedMentions(everyone = False), case_insensitive = True)
+client = commands.Bot(command_prefix = commands.when_mentioned_or('cy/'), intents = disnake.Intents.all(), owner_id = 338714886001524737, status = disnake.Status.idle, activity = disnake.Activity(type = disnake.ActivityType.playing, name = 'disnake.py'), allowed_mentions = disnake.AllowedMentions(everyone = False), case_insensitive = True)
 client.remove_command('help')
-slash = SlashCommand(client, sync_commands = True)
 passw = os.environ.get('passw')
 cluster = MongoClient(f"mongodb+srv://cephalon:{passw}@locale.ttokw.mongodb.net/Locale?retryWrites=true&w=majority")
 collection = cluster.Locale.locale
@@ -28,8 +19,8 @@ cwd = str(cwd)
 @client.event
 async def on_ready():
     channel = client.get_channel(714175791033876490)
-    emb = discord.Embed(description = 'В сети, поверхностная проверка не выявила ошибок.', color = 0x2f3136, timestamp = datetime.datetime.utcnow())
-    emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
+    emb = disnake.Embed(description = 'В сети, поверхностная проверка не выявила ошибок.', color = 0x2f3136, timestamp = disnake.utils.utcnow())
+    emb.set_footer(text = 'Cephalon Cy © сасиска#2472')
     await channel.send(embed = emb)
 
 time_regex = re.compile(r"(?:(\d{1,5})(h|s|m|d))+?")
@@ -55,7 +46,7 @@ class TimeConverter(commands.Converter):
                 await ctx.send(f'{key} не число!') #{key} not a number!
         return time
     
-def revert_cooldown(command: commands.Command, message: discord.Message) -> None:
+def reset_cooldown(command: commands.Command, message: disnake.Message) -> None:
     if command._buckets.valid:
         bucket = command._buckets.get_bucket(message)
         bucket._tokens = min(bucket.rate, bucket._tokens + 1)
@@ -66,31 +57,31 @@ async def on_guild_role_update(before, after):
         role = before.guild.get_role(after.id)
         if after.name == '2' or after.name == 'Muted':
             await role.delete()
-            g = await before.guild.create_role(name = '1', color = discord.Color(0xff0000), reason = 'Нет, нельзя менять название этой роли на Muted или 2') # it is not allowed to rename this role to Muted or 2
+            g = await before.guild.create_role(name = '1', color = disnake.Color(0xff0000), reason = 'Нет, нельзя менять название этой роли на Muted или 2') # it is not allowed to rename this role to Muted or 2
             await g.edit(position = 2)
         else:
-            await role.edit(name = '1', color = discord.Color(0xff0000), reason = 'Нельзя изменять эту роль.') # it is not allowed to edit this role
+            await role.edit(name = '1', color = disnake.Color(0xff0000), reason = 'Нельзя изменять эту роль.') # it is not allowed to edit this role
     if before.name == '2':
         role = before.guild.get_role(after.id)
         if after.name == '1' or after.name == 'Muted':
             await role.delete()
-            g = await before.guild.create_role(name = '2', color = discord.Color(0xff0000), reason = 'Нет, нельзя менять название этой роли на Muted или 1') # it is not allowed to rename this role to Muted or 1
+            g = await before.guild.create_role(name = '2', color = disnake.Color(0xff0000), reason = 'Нет, нельзя менять название этой роли на Muted или 1') # it is not allowed to rename this role to Muted or 1
             await g.edit(position = 1)
         else:
-            await role.edit(name = '2', color = discord.Color(0xff0000), reason = 'Нельзя изменять эту роль.') # it is not allowed to edit this role
+            await role.edit(name = '2', color = disnake.Color(0xff0000), reason = 'Нельзя изменять эту роль.') # it is not allowed to edit this role
     if before.name == 'Muted':
         role = before.guild.get_role(after.id)
         if after.name == '2' or after.name == '1':
             await role.delete()
-            g = await before.guild.create_role(name = 'Muted', color = discord.Color(0x000001), reason = 'Нет, нельзя менять название этой роли на 1 или 2') # it is not allowed to rename this role to 1 or 2
+            g = await before.guild.create_role(name = 'Muted', color = disnake.Color(0x000001), reason = 'Нет, нельзя менять название этой роли на 1 или 2') # it is not allowed to rename this role to 1 or 2
             await g.edit(position = 4)
         else:
-            await role.edit(name = 'Muted', color = discord.Color(0x000001), reason = 'Нельзя изменять эту роль.') # it is not allowed to edit this role
+            await role.edit(name = 'Muted', color = disnake.Color(0x000001), reason = 'Нельзя изменять эту роль.') # it is not allowed to edit this role
 
 @client.event
 async def on_command_completion(ctx):
     lchannel = client.get_channel(714175791033876490)
-    emb = discord.Embed(title = 'ВЫПОЛНЕНИЕ_КОМАНДЫ', color = discord.Color.orange()) # COMMAND_COMPLETION
+    emb = disnake.Embed(title = 'ВЫПОЛНЕНИЕ_КОМАНДЫ', color = disnake.Color.orange()) # COMMAND_COMPLETION
     emb.add_field(name = 'НАЗВАНИЕ', value = f'```{ctx.command.name}```') # NAME
     emb.add_field(name = 'ИСПОЛНИТЕЛЬ', value = f'{ctx.author.mention} ({ctx.author})') # EXECUTED BY
     emb.add_field(name = 'СЕРВЕР', value = ctx.guild.name, inline = False) # SERVER
@@ -104,7 +95,7 @@ async def on_member_join(member):
     else:
         chmo = 'БОТ' # BOT
     lchannel = client.get_channel(714175791033876490)
-    emb = discord.Embed(title = f'{chmo}\_ЗАШЁЛ\_НА_СЕРВЕР', colour = discord.Color.orange(), timestamp = datetime.datetime.utcnow()) # {chmo}_ENTERED_THE_SERVER
+    emb = disnake.Embed(title = f'{chmo}\_ЗАШЁЛ\_НА_СЕРВЕР', colour = disnake.Color.orange(), timestamp = disnake.utils.utcnow()) # {chmo}_ENTERED_THE_SERVER
     emb.add_field(name = f'{chmo}', value = member)
     emb.add_field(name = 'УПОМИНАНИЕ', value = member.mention) # MENTION
     emb.add_field(name = 'СЕРВЕР', value = member.guild.name) # SERVER
@@ -118,7 +109,7 @@ async def on_member_remove(member):
     else:
         chmo = 'БОТ' # BOT
     channel = client.get_channel(714175791033876490)
-    emb = discord.Embed(title = f'{chmo}\_ВЫШЕЛ\_С_СЕРВЕРА', colour = discord.Color.orange(), timestamp = datetime.datetime.utcnow()) # {chmo}_LEFT_THE_SERVER
+    emb = disnake.Embed(title = f'{chmo}\_ВЫШЕЛ\_С_СЕРВЕРА', colour = disnake.Color.orange(), timestamp = disnake.utils.utcnow()) # {chmo}_LEFT_THE_SERVER
     emb.add_field(name = f'{chmo}', value = member)
     emb.add_field(name = 'УПОМИНАНИЕ', value = member.mention) # MENTION
     emb.add_field(name = 'СЕРВЕР', value = member.guild.name) # SERVER
@@ -128,7 +119,7 @@ async def on_member_remove(member):
 @client.event
 async def on_guild_remove(guild):
     channel = client.get_channel(714175791033876490)
-    emb = discord.Embed(title = 'ВЫХОД\_С_СЕРВЕРА', colour = discord.Color.orange(), timestamp = datetime.datetime.utcnow()) # CLIENT_LEFT_SERVER
+    emb = disnake.Embed(title = 'ВЫХОД\_С_СЕРВЕРА', colour = disnake.Color.orange(), timestamp = disnake.utils.utcnow()) # CLIENT_LEFT_SERVER
     emb.add_field(name = 'СЕРВЕР', value = guild.name) # SERVER
     emb.set_footer(text = f'ID: {guild.id}')
     await channel.send(embed = emb)
@@ -136,14 +127,14 @@ async def on_guild_remove(guild):
 @client.event
 async def on_guild_join(guild):
     channel = client.get_channel(714175791033876490)
-    emb = discord.Embed(title = 'ДОБАВЛЕНИЕ\_НА_СЕРВЕР', colour = discord.Color.orange(), timestamp = datetime.datetime.utcnow()) # CLIENT_ADDED_TO_SERVER
+    emb = disnake.Embed(title = 'ДОБАВЛЕНИЕ\_НА_СЕРВЕР', colour = disnake.Color.orange(), timestamp = disnake.utils.utcnow()) # CLIENT_ADDED_TO_SERVER
     emb.add_field(name = 'СЕРВЕР', value = guild.name) # SERVER
     emb.set_footer(text = f'ID: {guild.id}')
     await channel.send(embed = emb)
 
 @client.event
 async def on_voice_state_update(member, before, after):
-    role = discord.utils.get(member.guild.roles, name = 'Deafened')
+    role = disnake.utils.get(member.guild.roles, name = 'Deafened')
     try:
         if after.channel.name == 'Создать канал': # Create channel
             await after.channel.edit(user_limit = 1)
@@ -182,17 +173,17 @@ async def on_message(message):
         return (m.author == message.author and len(m.mentions) and (datetime.datetime.utcnow() - m.created_at).seconds < 2)
     if len(list(filter(lambda m: _check(m), client.cached_messages))) >= 3:
         if not message.author.bot:
-            role = discord.utils.get(message.guild.roles, name = 'Muted')
-            role3 = discord.utils.get(message.guild.roles, name = '----------Предупреждения----------')
-            role1 = discord.utils.get(message.guild.roles, name = '1')
-            role2 = discord.utils.get(message.guild.roles, name = '2')
+            role = disnake.utils.get(message.guild.roles, name = 'Muted')
+            role3 = disnake.utils.get(message.guild.roles, name = '----------Предупреждения----------')
+            role1 = disnake.utils.get(message.guild.roles, name = '1')
+            role2 = disnake.utils.get(message.guild.roles, name = '2')
             if role != None and role1 != None and role2 != None and role3 != None:
                 if role not in message.author.roles:
                     if role1 not in message.author.roles and role2 not in message.author.roles:
                         await message.channel.send(f'{message.author.mention} Был заглушён на 10 минут за спам упоминаниями. Больше так не делай!')
                         await message.author.add_roles(role, role1, role3)
                         channel = client.get_channel(714175791033876490)
-                        emb = discord.Embed(title = 'СРАБОТАЛ\_АВТО_МУТ', color = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
+                        emb = disnake.Embed(title = 'СРАБОТАЛ\_АВТО_МУТ', color = disnake.Color.orange(), timestamp = disnake.utils.utcnow())
                         emb.add_field(name = 'СЕРВЕР', value = message.guild.name)
                         emb.add_field(name = 'ПРЕДУПРЕЖДЕНИЕ', value = 'ПЕРВОЕ')
                         emb.add_field(name = 'УЧАСТНИК', value = message.author)
@@ -201,20 +192,20 @@ async def on_message(message):
                         if role != None:
                             if role in message.author.roles:
                                 await message.author.remove_roles(role)
-                                emb = discord.Embed(description = f'{message.author.mention} Был разглушён.', color = 0x2f3136)
+                                emb = disnake.Embed(description = f'{message.author.mention} Был разглушён.', color = 0x2f3136)
                                 await message.channel.send(embed = emb)
                             else:
-                                emb = discord.Embed(description = f'Роли Muted не было обнаружено в списке ролей {message.author.mention}.', color = 0x2f3136)
+                                emb = disnake.Embed(description = f'Роли Muted не было обнаружено в списке ролей {message.author.mention}.', color = 0x2f3136)
                                 await message.channel.send(embed = emb)
                         else:
-                            emb = discord.Embed(description = f'Невозможно снять заглушение у {message.author.mention}, т.к. роль `Muted` была удалена.', color = 0x2f3136)
+                            emb = disnake.Embed(description = f'Невозможно снять заглушение у {message.author.mention}, т.к. роль `Muted` была удалена.', color = 0x2f3136)
                             await message.channel.send(embed = emb)
                     if role1 in message.author.roles and role2 not in message.author.roles:
                         await message.channel.send(f'{message.author.mention} Был заглушён на 30 минут за спам упоминаниями. Последнее предупреждение.')
                         await message.author.remove_roles(role1)
                         await message.author.add_roles(role, role2, role3)
                         channel = client.get_channel(714175791033876490)
-                        emb = discord.Embed(title = 'СРАБОТАЛ\_АВТО_МУТ', color = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
+                        emb = disnake.Embed(title = 'СРАБОТАЛ\_АВТО_МУТ', color = disnake.Color.orange(), timestamp = datetime.datetime.utcnow())
                         emb.add_field(name = 'СЕРВЕР', value = message.guild.name)
                         emb.add_field(name = 'ПРЕДУПРЕЖДЕНИЕ', value = 'ПОСЛЕДНЕЕ')
                         emb.add_field(name = 'УЧАСТНИК', value = message.author)
@@ -223,36 +214,36 @@ async def on_message(message):
                         if role != None:
                             if role in message.author.roles:
                                 await message.author.remove_roles(role)
-                                emb = discord.Embed(description = f'{message.author.mention} Был разглушён.', color = 0x2f3136)
+                                emb = disnake.Embed(description = f'{message.author.mention} Был разглушён.', color = 0x2f3136)
                                 await message.channel.send(embed = emb)
                             else:
-                                emb = discord.Embed(description = f'Роли Muted не было обнаружено в списке ролей {message.author.mention}.', color = 0x2f3136)
+                                emb = disnake.Embed(description = f'Роли Muted не было обнаружено в списке ролей {message.author.mention}.', color = 0x2f3136)
                                 await message.channel.send(embed = emb)
                         else:
-                            emb = discord.Embed(description = f'Невозможно снять заглушение у {message.author.mention}, т.к. роль `Muted` была удалена.', color = 0x2f3136)
+                            emb = disnake.Embed(description = f'Невозможно снять заглушение у {message.author.mention}, т.к. роль `Muted` была удалена.', color = 0x2f3136)
                             await message.channel.send(embed = emb)
                     if role2 in message.author.roles:
                         await message.channel.send(f'{message.author.mention} Был заглушён навсегда за спам упоминаниями.')
                         await message.author.add_roles(role)
                         await message.author.remove_roles(role2, role3)
                         channel = client.get_channel(714175791033876490)
-                        emb = discord.Embed(title = 'СРАБОТАЛ\_АВТО_МУТ', color = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
+                        emb = disnake.Embed(title = 'СРАБОТАЛ\_АВТО_МУТ', color = disnake.Color.orange(), timestamp = disnake.utils.utcnow())
                         emb.add_field(name = 'СЕРВЕР', value = message.guild.name)
                         emb.add_field(name = 'УЧАСТНИК', value = message.author)
                         await channel.send(embed = emb)
                 else:
                     return
             elif role == None:
-                r = await message.guild.create_role(name = 'Muted', colour = discord.Colour(0x000001), reason = 'Создано автоматически из-за недостатка ролей.')
+                r = await message.guild.create_role(name = 'Muted', colour = disnake.Colour(0x000001), reason = 'Создано автоматически из-за недостатка ролей.')
                 await r.edit(position = 4)
             elif role3 == None:
-                r1 = await message.guild.create_role(name = '----------Предупреждения----------', colour = discord.Colour(0x2f3136), reason = 'Создано автоматически из-за недостатка ролей.')
+                r1 = await message.guild.create_role(name = '----------Предупреждения----------', colour = disnake.Colour(0x2f3136), reason = 'Создано автоматически из-за недостатка ролей.')
                 r1.edit(position = 3)
             elif role1 == None:
-                r2 = await message.guild.create_role(name = '1', colour = discord.Colour(0xff0000), reason = 'Создано автоматически из-за недостатка ролей.')
+                r2 = await message.guild.create_role(name = '1', colour = disnake.Colour(0xff0000), reason = 'Создано автоматически из-за недостатка ролей.')
                 r2.edit(position = 2)
             elif role2 == None:
-                r3 = await message.guild.create_role(name = '2', colour = discord.Colour(0xff0000), reason = 'Создано автоматически из-за недостатка ролей.')
+                r3 = await message.guild.create_role(name = '2', colour = disnake.Colour(0xff0000), reason = 'Создано автоматически из-за недостатка ролей.')
                 r3.edit(position = 1)
     if ('сделать') in message.content.lower() or ('предлагаю') in message.content.lower() or ('предложение') in message.content.lower() and message.author.bot == False:
         await message.add_reaction('👍')
@@ -261,38 +252,38 @@ async def on_message(message):
         await message.add_reaction('🥳')
     elif message.channel.id == 750372413102883028: #EFT
         if message.author.bot == True and message.author.id != 694170281270312991:
-            role = discord.utils.get(message.guild.roles, id = 750368477671325728)
+            role = disnake.utils.get(message.guild.roles, id = 750368477671325728)
             sent = await message.channel.send(role.mention)
             await sent.delete()
             channel = client.get_channel(714175791033876490)
-            emb = discord.Embed(title = 'ОПОВЕЩЕНИЕ\_ОБ_ОБНОВЛЕНИИ', color = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
+            emb = disnake.Embed(title = 'ОПОВЕЩЕНИЕ\_ОБ_ОБНОВЛЕНИИ', color = disnake.Color.orange(), timestamp = disnake.utils.utcnow())
             emb.add_field(name = 'ОПОВЕЩЕНЫ', value = role.mention)
             await channel.send(embed = emb)
     elif message.channel.id == 750368033578680361: #OV
         if message.author.bot == True and message.author.id != 694170281270312991:
-            role = discord.utils.get(message.guild.roles, id = 750366804689420319)
+            role = disnake.utils.get(message.guild.roles, id = 750366804689420319)
             sent = await message.channel.send(role.mention)
             await sent.delete()
             channel = client.get_channel(714175791033876490)
-            emb = discord.Embed(title = 'ОПОВЕЩЕНИЕ\_ОБ_ОБНОВЛЕНИИ', color = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
+            emb = disnake.Embed(title = 'ОПОВЕЩЕНИЕ\_ОБ_ОБНОВЛЕНИИ', color = disnake.Color.orange(), timestamp = disnake.utils.utcnow())
             emb.add_field(name = 'ОПОВЕЩЕНЫ', value = role.mention)
             await channel.send(embed = emb)
     elif message.channel.id == 750363498290348123: #DOTA 2
         if message.author.bot == True and message.author.id != 694170281270312991:
-            role = discord.utils.get(message.guild.roles, id = 750363797226782802)
+            role = disnake.utils.get(message.guild.roles, id = 750363797226782802)
             sent = await message.channel.send(role.mention)
             await sent.delete()
             channel = client.get_channel(714175791033876490)
-            emb = discord.Embed(title = 'ОПОВЕЩЕНИЕ\_ОБ_ОБНОВЛЕНИИ', color = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
+            emb = disnake.Embed(title = 'ОПОВЕЩЕНИЕ\_ОБ_ОБНОВЛЕНИИ', color = disnake.Color.orange(), timestamp = disnake.utils.utcnow())
             emb.add_field(name = 'ОПОВЕЩЕНЫ', value = role.mention)
             await channel.send(embed = emb)
     elif message.channel.id == 750373602460827730: #MC
         if message.author.bot == True and message.author.id != 694170281270312991:
-            role = discord.utils.get(message.guild.roles, id = 750373687479238787)
+            role = disnake.utils.get(message.guild.roles, id = 750373687479238787)
             sent = await message.channel.send(role.mention)
             await sent.delete()
             channel = client.get_channel(714175791033876490)
-            emb = discord.Embed(title = 'ОПОВЕЩЕНИЕ\_ОБ_ОБНОВЛЕНИИ', color = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
+            emb = disnake.Embed(title = 'ОПОВЕЩЕНИЕ\_ОБ_ОБНОВЛЕНИИ', color = disnake.Color.orange(), timestamp = disnake.utils.utcnow())
             emb.add_field(name = 'ОПОВЕЩЕНЫ', value = role.mention)
             await channel.send(embed = emb)
     elif message.channel.id == 707498623981715557:
@@ -304,9 +295,9 @@ async def on_message(message):
         return
     if not message.author.bot:
         if message.channel.id != 714175791033876490:
-            emb = discord.Embed(colour = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
+            emb = disnake.Embed(colour = disnake.Color.orange(), timestamp = disnake.utils.utcnow())
             emb.set_author(name = message.author, icon_url = message.author.avatar_url)
-            if isinstance(message.channel, discord.channel.DMChannel):
+            if isinstance(message.channel, disnake.channel.DMChannel):
                 emb.add_field(name = 'НА_СЕРВЕРЕ', value = 'ЛС')
             else:
                 emb.add_field(name = 'НА_СЕРВЕРЕ', value = message.guild)
@@ -339,7 +330,7 @@ async def on_message_edit(before, after):
         return
     if not before.author.bot:
         if ('http') not in after.content.lower():
-            emb = discord.Embed(description = f'[ИЗМЕНЕНИЕ_СООБЩЕНИЯ]({before.jump_url})', colour = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
+            emb = disnake.Embed(description = f'[ИЗМЕНЕНИЕ_СООБЩЕНИЯ]({before.jump_url})', colour = disnake.Color.orange(), timestamp = disnake.utils.utcnow())
             emb.set_author(name = before.author, icon_url = before.author.avatar_url)
             emb.add_field(name = 'НА_СЕРВЕРЕ', value = before.guild)
             emb.add_field(name = 'БЫЛО', value = f'```{before.content}```')
@@ -350,17 +341,17 @@ async def on_message_edit(before, after):
 async def on_command_error(ctx, error):
     channel = client.get_channel(838506478108803112)
     if isinstance(error, commands.CommandNotFound):
-        emb = discord.Embed(description = f'{ctx.author.mention}, команда не обнаружена. Может, пропишите cy/help?', colour = discord.Color.orange())
+        emb = disnake.Embed(description = f'{ctx.author.mention}, команда не обнаружена. Может, пропишите cy/help?', colour = disnake.Color.orange())
         await ctx.send(embed = emb)
-        eemb = discord.Embed(description = 'Поймана ошибка `CommandNotFound`', color = 0xff0000, timestamp = ctx.message.created_at)
+        eemb = disnake.Embed(description = 'Поймана ошибка `CommandNotFound`', color = 0xff0000, timestamp = disnake.utils.utcnow())
         eemb.add_field(name = 'Сервер', value = ctx.guild.name)
         eemb.add_field(name = 'Вызвавший ошибку', value = f'{ctx.author.mention} ({ctx.author.name})', inline = False)
         eemb.add_field(name = 'Команда', value = ctx.command.name, inline = False)
         await channel.send(embed = eemb)
     elif isinstance(error, commands.MissingPermissions):
-        emb = discord.Embed(description = f'{ctx.author.mention}, у вас недостаточно прав на выполнение команды `{ctx.command.name}`', colour = discord.Color.orange())
+        emb = disnake.Embed(description = f'{ctx.author.mention}, у вас недостаточно прав на выполнение команды `{ctx.command.name}`', colour = disnake.Color.orange())
         await ctx.send(embed = emb)
-        eemb = discord.Embed(description = 'Поймана ошибка `MissingPermissions`', color = 0xff0000, timestamp = ctx.message.created_at)
+        eemb = disnake.Embed(description = 'Поймана ошибка `MissingPermissions`', color = 0xff0000, timestamp = disnake.utils.utcnow())
         eemb.add_field(name = 'Сервер', value = ctx.guild.name)
         eemb.add_field(name = 'Вызвавший ошибку', value = f'{ctx.author.mention} ({ctx.author.name})', inline = False)
         eemb.add_field(name = 'Команда', value = ctx.command.name, inline = False)
@@ -374,25 +365,25 @@ async def on_command_error(ctx, error):
         rand1 = random.choice(choices1)
         rand2 = random.choice(choices2)
         if round(s) >= 5:
-            emb = discord.Embed(description = f'{rand} Команда `{ctx.command.name}` будет доступна через {round(s)} секунд..', colour = discord.Color.orange())
+            emb = disnake.Embed(description = f'{rand} Команда `{ctx.command.name}` будет доступна через {round(s)} секунд..', colour = disnake.Color.orange())
             await ctx.send(embed = emb)
         elif round(s) >= 2:
-            emb = discord.Embed(description = f'{rand1} Команда `{ctx.command.name}` будет доступна через {round(s)} секунды.', colour = discord.Color.orange())
+            emb = disnake.Embed(description = f'{rand1} Команда `{ctx.command.name}` будет доступна через {round(s)} секунды.', colour = disnake.Color.orange())
             await ctx.send(embed = emb)
         elif round(s) >= 1:
-            emb = discord.Embed(description = f'{rand2} Команда `{ctx.command.name}` будет доступна через {round(s)} секунду!', colour = discord.Color.orange())
+            emb = disnake.Embed(description = f'{rand2} Команда `{ctx.command.name}` будет доступна через {round(s)} секунду!', colour = disnake.Color.orange())
             await ctx.send(embed = emb)
         elif round(s) <= 0:
-            emb = discord.Embed(description = 'Ебать ты тайминг поймал конечно ||До перезарядки команды оставалось чуть больше, чем 0 секунд||', colour = discord.Color.orange())
+            emb = disnake.Embed(description = 'Ебать ты тайминг поймал конечно ||До перезарядки команды оставалось чуть больше, чем 0 секунд||', colour = disnake.Color.orange())
             await ctx.send(embed = emb)
-        eemb = discord.Embed(description = 'Поймана ошибка `CommandOnCooldown`', color = 0xff0000, timestamp = ctx.message.created_at)
+        eemb = disnake.Embed(description = 'Поймана ошибка `CommandOnCooldown`', color = 0xff0000, timestamp = disnake.utils.utcnow())
         eemb.add_field(name = 'Сервер', value = ctx.guild.name)
         eemb.add_field(name = 'Вызвавший ошибку', value = f'{ctx.author.mention} ({ctx.author.name})', inline = False)
         eemb.add_field(name = 'Команда', value = ctx.command.name, inline = False)
         eemb.add_field(name = 'Оставалось времени', value = round(s), inline = False)
         await channel.send(embed = eemb)
     elif isinstance(error, commands.MissingRequiredArgument):
-        revert_cooldown(ctx.command, ctx.message)
+        reset_cooldown(ctx.command, ctx.message)
         if ctx.command.name == 'clear':
             await ctx.send('```apache\ncy/clear <количество> [автор] [фильтр]\ncy/clear 100\ncy/clear 10 @сасиска\ncy/clear 50 --everyone хыха\ncy/clear 30 --bots\ncy/clear 15 --users\ncy/clear 5 --silent\ncy/clear 200 "--silent --everyone" хыха\n\n--everyone удалит сообщения от всех\n--bots удалит сообщения только от ботов\n--users удалит сообщения только от участников\n--silent не оставит доказательств выполнения команды, исключение - количество >= 10\n\nПри указании автора не будет удалено столько сообщений, сколько было указано, будет удалено столько, сколько будет найдено в пределах этих сообщений.\nСообщения старше 2 недель будут удалены не сразу - лимит discord API\nПри удалении более 100 сообщений нужно подтверждение владельца сервера.\nТолько владелец может удалять от 250 сообщений за раз.\nНе более 300!\n([] - опционально, <> - обязательно, / - или)\nperms = adminstrator```')
         elif ctx.command.name == 'say':
@@ -402,30 +393,30 @@ async def on_command_error(ctx, error):
         elif ctx.command.name == 'ban':
             await ctx.send('```apache\ncy/ban <@пинг/имя/ID> [причина/--soft --reason]\ncy/ban 185476724627210241 --soft --reason лошара\ncy/ban @сасиска чмо\ncy/ban "Sgt White"\ncy/ban @крипочек --soft\n\nПри использовании --soft обязательно указывать --reason ПОСЛЕ --soft\n\n([] - опционально, <> - обязательно, / - или)\nperms = ban_members```')
         else:
-            emb = discord.Embed(description = f'{ctx.author.mention}, обнаружен недостаток аргументов для `{ctx.command.name}`. Попробуйте cy/help `{ctx.command.name}`', colour = discord.Color.orange())
+            emb = disnake.Embed(description = f'{ctx.author.mention}, обнаружен недостаток аргументов для `{ctx.command.name}`. Попробуйте cy/help `{ctx.command.name}`', colour = disnake.Color.orange())
             emb.set_footer(text = 'Задержка команды сброшена, так как была вызвана ошибка при вводе пользователя')
             await ctx.send(embed = emb)
-        eemb = discord.Embed(description = 'Поймана ошибка `MissingRequiredArgument`', color = 0xff0000, timestamp = ctx.message.created_at)
+        eemb = disnake.Embed(description = 'Поймана ошибка `MissingRequiredArgument`', color = 0xff0000, timestamp = disnake.utils.utcnow())
         eemb.add_field(name = 'Сервер', value = ctx.guild.name)
         eemb.add_field(name = 'Вызвавший ошибку', value = f'{ctx.author.mention} ({ctx.author.name})', inline = False)
         eemb.add_field(name = 'Команда', value = ctx.command.name, inline = False)
         await channel.send(embed = eemb)
     elif isinstance(error, commands.MemberNotFound):
-        revert_cooldown(ctx.command, ctx.message)
-        emb = discord.Embed(description = f'{ctx.author.mention}, участник не обнаружен.', color = discord.Color.orange())
+        reset_cooldown(ctx.command, ctx.message)
+        emb = disnake.Embed(description = f'{ctx.author.mention}, участник не обнаружен.', color = disnake.Color.orange())
         emb.set_footer(text = 'Задержка команды сброшена, так как была вызвана ошибка при вводе пользователя')
         await ctx.send(embed = emb)
-        eemb = discord.Embed(description = 'Поймана ошибка `MemberNotFound`', color = 0xff0000, timestamp = ctx.message.created_at)
+        eemb = disnake.Embed(description = 'Поймана ошибка `MemberNotFound`', color = 0xff0000, timestamp = disnake.utils.utcnow())
         eemb.add_field(name = 'Сервер', value = ctx.guild.name)
         eemb.add_field(name = 'Вызвавший ошибку', value = f'{ctx.author.mention} ({ctx.author.name})', inline = False)
         eemb.add_field(name = 'Команда', value = ctx.command.name, inline = False)
         await channel.send(embed = eemb)
     elif isinstance(error, commands.BadArgument):
-        revert_cooldown(ctx.command, ctx.message)
-        emb = discord.Embed(description = f'{ctx.author.mention}, обнаружен неверный аргумент для `{ctx.command.name}`. Попробуйте cy/help `{ctx.command.name}`', colour = discord.Color.orange())
+        reset_cooldown(ctx.command, ctx.message)
+        emb = disnake.Embed(description = f'{ctx.author.mention}, обнаружен неверный аргумент для `{ctx.command.name}`. Попробуйте cy/help `{ctx.command.name}`', colour = disnake.Color.orange())
         emb.set_footer(text = 'Задержка команды сброшена, так как была вызвана ошибка при вводе пользователя')
         await ctx.send(embed = emb)
-        eemb = discord.Embed(description = 'Поймана ошибка `BadArgument`', color = 0xff0000, timestamp = ctx.message.created_at)
+        eemb = disnake.Embed(description = 'Поймана ошибка `BadArgument`', color = 0xff0000, timestamp = disnake.utils.utcnow())
         eemb.add_field(name = 'Сервер', value = ctx.guild.name)
         eemb.add_field(name = 'Вызвавший ошибку', value = f'{ctx.author.mention} ({ctx.author.name})', inline = False)
         eemb.add_field(name = 'Команда', value = ctx.command.name, inline = False)
