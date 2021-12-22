@@ -72,9 +72,9 @@ class sCephalon(commands.Cog):
         emb.add_field(name = 'Версия', value = '0.12.12.0.0')
         emb.add_field(name = 'Написан на', value = 'disnake.py v2.3.0')
         emb.add_field(name = 'Разработчик', value = '[сасиска#2472](https://discord.com/users/338714886001524737)')
-        if ctx.guild.id == 693929822543675455:
+        if inter.guild.id == 693929822543675455:
             emb.add_field(name = 'Принадлежность', value = 'Это - мой основной сервер.')
-        if ctx.guild.id == 735874149578440855:
+        if inter.guild.id == 735874149578440855:
             emb.add_field(name = 'Тестирование', value = 'Это - мой тестовый сервер.')
         emb.add_field(name = 'Раздражаю', value = f'{len(self.client.users)} человек')
         emb.add_field(name = 'Существую на', value = f'{len(self.client.guilds)} серверах')
@@ -92,7 +92,7 @@ class sCephalon(commands.Cog):
             emb = disnake.Embed(title = self.client.user.name, description = 'Доступные Slash-команды', colour = disnake.Color.orange())
             emb.add_field(name = 'Cephalon', value = '`info`, `invite`, `join`, `leave`, `ping`', inline = False)
             emb.add_field(name = 'Embeds', value = '`content`, `edit`, `say`', inline = False)
-            if not (ctx.guild.owner.id != self.client.owner_id and ctx.guild.owner.id not in friends):
+            if not (inter.guild.owner.id != self.client.owner_id and inter.guild.owner.id not in friends):
                 emb.add_field(name = 'Fun', value = '`aye_balbec`, `cu`, `coinflip`, `dotersbrain`, `niggers`, `rp`, `rap`, `zatka`', inline = False)
             emb.add_field(name = 'Mod', value = '`ban`, `clear`, `dm`, `give`, `kick`, `mute`, `take`, `unmute`', inline = False)
             emb.add_field(name = 'Misc', value = '`about`, `avatar`, `guild`, `remind`, `role`, `rolemembers`', inline = False)
