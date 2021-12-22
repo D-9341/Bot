@@ -137,7 +137,7 @@ class sEmbeds(commands.Cog):
                                 return await inter.response.send_message(f'{inter.author.mention}, нечего удалять. Возможно, вы имели ввиду cy/edit {message.id} --delete ?')
                         if '--empty-embed' in msg:
                             if message.embeds != []:
-                                emb = disnake.Embed(title = None, description = None, color = inter.author.color)
+                                emb = disnake.Embed(title = None, description = None, color = 0x2f3136)
                                 emb.set_author(name = inter.author, icon_url = inter.author.avatar.url)
                                 await message.edit(embed = emb)
                             else:
