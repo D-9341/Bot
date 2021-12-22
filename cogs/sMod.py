@@ -36,7 +36,7 @@ class sMod(commands.Cog):
             Текст для отправки
         '''
         emb = disnake.Embed(description = f'{text}', colour = 0x2f3136)
-        emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
+        emb.set_author(name = ctx.author, icon_url = ctx.author.avatar.url)
         await member.send(embed = emb)
         rlocale = collection.find_one({"_id": ctx.author.id})["locale"]
         if rlocale == 'ru':
@@ -93,7 +93,7 @@ class sMod(commands.Cog):
                     await ctx.send(embed = emb)
             else:
                 emb = disnake.Embed(colour = 0x2f3136)
-                emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
+                emb.set_author(name = ctx.author, icon_url = ctx.author.avatar.url)
                 emb.add_field(name = 'Был кикнут', value = member.mention)
                 emb.add_field(name = 'По причине', value = reason)
                 await ctx.send(embed = emb)
@@ -155,7 +155,7 @@ class sMod(commands.Cog):
             else:
                 if '--soft' in reason:
                     emb = disnake.Embed(color = 0x2f3136)
-                    emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
+                    emb.set_author(name = ctx.author, icon_url = ctx.author.avatar.url)
                     emb.add_field(name = 'Упрощённо забанен', value = f'{member.mention} ({member.name})')
                     if '--reason' in reason:
                         reason = reason.strip()[15:].strip()
@@ -170,7 +170,7 @@ class sMod(commands.Cog):
                     await member.unban(reason = '--softban')
                 else:
                     emb = disnake.Embed(colour = 0x2f3136)
-                    emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
+                    emb.set_author(name = ctx.author, icon_url = ctx.author.avatar.url)
                     emb.add_field(name = 'Был забанен', value = member.mention)
                     emb.add_field(name = 'По причине', value = reason)
                     await ctx.send(embed = emb)
@@ -225,7 +225,7 @@ class sMod(commands.Cog):
             emb = disnake.Embed(colour = 0x2f3136, timestamp = disnake.utils.utcnow())
             emb.add_field(name = 'ВЫДАНА_РОЛЬ', value = f'{role.mention} | {role.name} | ID {role.id}')
             emb.add_field(name = 'ВЫДАНА:', value = member.mention, inline = False)
-            emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
+            emb.set_author(name = ctx.author, icon_url = ctx.author.avatar.url)
             await ctx.send(embed = emb)
 
     @commands.slash_command(name = 'take', description = 'Забирает роль у участника')
