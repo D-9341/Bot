@@ -25,7 +25,7 @@ class Slapper(commands.Converter):
     async def convert(self, ctx, argument):
         mention = random.choice(ctx.guild.members)
         emb = discord.Embed(description = f'{argument}', colour =  0x2f3136, timestamp = ctx.message.created_at)
-        emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
+        emb.set_author(name = ctx.author, icon_url = ctx.author.avatar.url)
         return await ctx.send(f'@someone ||{mention.mention}||', embed = emb)
 
 class TimeConverter(commands.Converter):
