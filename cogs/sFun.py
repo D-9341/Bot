@@ -71,7 +71,7 @@ class sFun(commands.Cog):
     @commands.slash_command(name = 'ayebalbec', description = 'Я не ангел и не бес, просто..')
     async def balbec(self, inter):
         emb = disnake.Embed(colour = inter.author.color)
-        emb.set_author(name = inter.author, icon_url = inter.author.avatar_url)
+        emb.set_author(name = inter.author, icon_url = inter.author.avatar.url)
         emb.set_image(url = 'https://sun9-61.userapi.com/tja5cuQthduwgxq2yMigLiUxfYq_5fqiA6cJWg/sZOkbPajoSY.jpg')
         await inter.response.send_message(embed = emb)
 
@@ -83,14 +83,14 @@ class sFun(commands.Cog):
     @commands.slash_command(name = 'rap', description = '.rap')
     async def _rap(self, inter):
         emb = disnake.Embed(colour = inter.author.color)
-        emb.set_author(name = inter.author, icon_url = inter.author.avatar_url)
+        emb.set_author(name = inter.author, icon_url = inter.author.avatar.url)
         emb.set_image(url = 'https://thumbs.gfycat.com/MessyCarefreeHousefly-size_restricted.gif')
         await inter.response.send_message(embed = emb)
 
     @commands.slash_command(name = 'zatka', description = 'Форма заявки для Набор кадров')
     async def _zatka(self, inter):
         emb = disnake.Embed(title = 'Форма заявки для Набор кадров', colour = inter.author.color)
-        emb.set_author(name = inter.author, icon_url = inter.author.avatar_url)
+        emb.set_author(name = inter.author, icon_url = inter.author.avatar.url)
         emb.add_field(name = '(1). ZATKA в STEAM.  ZATKA_KING#8406 в Discord.', value = 'возраст 14+  часовой пояс IL +0.', inline = False)
         emb.add_field(name = '(2). Интересующая управление:', value = 'Discord', inline = False)
         emb.add_field(name = '(3). Опыт администрирования:', value = 'Есть.', inline = False)
