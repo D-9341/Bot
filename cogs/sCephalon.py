@@ -87,7 +87,7 @@ class sCephalon(commands.Cog):
         await inter.responce.send_message(embed = emb)
 
     @commands.slash_command(name = 'help', description = 'Здесь можно получить полную помощь по всем командам')
-    async def _help(self, inter, arg: str = commands.Param(choices = {'about': 'about'}, {'avatar': 'avatar'}, {'ban': 'ban'}, {'content': 'content'}, {'clear': 'clear'}, {'dm': 'dm'}, {'say': 'say'}, {'edit': 'edit'}, {'give': 'give'}, {'kick': 'kick'}, {'mute': 'mute'}, {'role': 'role'}, {'take': 'take'}, {'unmute': 'unmute'}, {'embeds': 'embeds'}, {'cephalon': 'cephalon'}, {'mod': 'mod'}, {'misc': 'misc'}, {'all': 'all'}, {'roll': 'roll'})):
+    async def _help(self, inter, arg: str = commands.Param(choices = {'about': 'about', 'avatar': 'avatar', 'ban': 'ban', 'content': 'content', 'clear': 'clear', 'dm': 'dm', 'say': 'say', 'edit': 'edit', 'give': 'give', 'kick': 'kick', 'mute': 'mute', 'role': 'role', 'take': 'take', 'unmute': 'unmute', 'embeds': 'embeds', 'cephalon': 'cephalon', 'mod': 'mod', 'misc': 'misc', 'all': 'all', 'roll': 'roll'})):
         if arg == None:
             emb = disnake.Embed(title = self.client.user.name, description = 'Доступные Slash-команды', colour = disnake.Color.orange())
             emb.add_field(name = 'Cephalon', value = '`info`, `invite`, `join`, `leave`, `ping`', inline = False)
