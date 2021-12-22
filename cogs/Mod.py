@@ -3,8 +3,8 @@ import datetime
 import os
 import re
 
-import discord
-from discord.ext import commands
+import disnake
+from disnake.ext import commands
 from pymongo import MongoClient
 
 passw = os.environ.get('passw')
@@ -43,9 +43,9 @@ class Mod(commands.Cog):
     @commands.command()
     @commands.has_permissions(view_audit_log = True)
     @commands.cooldown(1, 5, commands.BucketType.user)
-    async def dm(self, ctx, member: discord.User, * , text):
-        emb = discord.Embed(description = f'{text}', colour = 0x2f3136)
-        emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
+    async def dm(self, ctx, member: disnake.Member, * , text):
+        emb = disnake.Embed(description = f'{text}', colour = 0x2f3136)
+        emb.set_author(name = ctx.author, icon_url = ctx.author.avatar.url)
         await member.send(embed = emb)
         rlocale = collection.find_one({"_id": ctx.author.id})["locale"]
         if rlocale == 'ru':
@@ -56,9 +56,9 @@ class Mod(commands.Cog):
     @commands.command()
     @commands.cooldown(1, 10, commands.BucketType.user)
     @commands.has_permissions(kick_members = True)
-    async def kick(self, ctx, member: discord.Member, *, reason: str = None):
+    async def kick(self, ctx, member: disnake.Member, *, reason: str = None):
         rlocale = rlocale = collection.find_one({"_id": ctx.author.id})["locale"]
-        bot = discord.utils.get(ctx.guild.members, id = self.client.user.id)
+        bot = disnake.utils.get(ctx.guild.members, id = self.client.user.id)
         if member.id != 338714886001524737:
             if reason == None:
                 if rlocale == 'ru':
@@ -66,38 +66,38 @@ class Mod(commands.Cog):
                 if rlocale == 'gnida':
                     reason = 'Я не ебу'
             if ctx.author == member:
-                emb = discord.Embed(description = 'Ты **не** можешь кикнуть себя.', color = discord.Color.blurple())
+                emb = disnake.Embed(description = 'Ты **не** можешь кикнуть себя.', color = disnake.Color.blurple())
                 await ctx.send(embed = emb)
-            if ctx.author.top_role == member.top_role and ctx.author.id != client.owner_id:
+            if ctx.author.top_role == member.top_role:
                 if rlocale == 'ru':
-                    emb = discord.Embed(description = f'{ctx.author.mention}, ваша высшая роль равна высшей роли {member.mention}. Кик отклонён.', colour = discord.Color.orange())
+                    emb = disnake.Embed(description = f'{ctx.author.mention}, ваша высшая роль равна высшей роли {member.mention}. Кик отклонён.', colour = disnake.Color.orange())
                     await ctx.send(embed = emb)
                 if rlocale == 'gnida':
-                    emb = discord.Embed(description = f'Твоя высшая роль равна высшей роли {member.mention}. Пошёл нахуй.', colour = discord.Color.orange())
+                    emb = disnake.Embed(description = f'Твоя высшая роль равна высшей роли {member.mention}. Пошёл нахуй.', colour = disnake.Color.orange())
                     await ctx.send(embed = emb)
-            elif member.top_role > ctx.author.top_role and ctx.author.id != client.owner_id:
+            elif member.top_role > ctx.author.top_role:
                 if rlocale == 'ru':
-                    emb = discord.Embed(description = f'{ctx.author.mention}, ваша высшая роль ниже высшей роли {member.mention}. Кик отклонён.', colour = discord.Color.orange())
+                    emb = disnake.Embed(description = f'{ctx.author.mention}, ваша высшая роль ниже высшей роли {member.mention}. Кик отклонён.', colour = disnake.Color.orange())
                     await ctx.send(embed = emb)
                 if rlocale == 'gnida':
-                    emb = discord.Embed(description = f'Твоя высшая роль ниже высшей роли {member.mention}. Пошёл нахуй.', colour = discord.Color.orange())
+                    emb = disnake.Embed(description = f'Твоя высшая роль ниже высшей роли {member.mention}. Пошёл нахуй.', colour = disnake.Color.orange())
                     await ctx.send(embed = emb)
-            elif member.top_role > bot.top_role and ctx.author.id != client.owner_id:
+            elif member.top_role > bot.top_role:
                 if rlocale == 'ru':
-                    emb = discord.Embed(description = f'МОЯ высшая роль ниже высшей роли {member.mention}. Кик невозможен.', color = 0xff0000)
+                    emb = disnake.Embed(description = f'МОЯ высшая роль ниже высшей роли {member.mention}. Кик невозможен.', color = 0xff0000)
                     await ctx.send(embed = emb)
                 if rlocale == 'gnida':
-                    emb = discord.Embed(description = f'МОЯ высшая роль ниже высшей роли {member.mention}. Сука.', color = 0xff0000)
+                    emb = disnake.Embed(description = f'МОЯ высшая роль ниже высшей роли {member.mention}. Сука.', color = 0xff0000)
                     await ctx.send(embed = emb)
-            elif member.top_role == bot.top_role and ctx.author.id != client.owner_id:
+            elif member.top_role == bot.top_role:
                 if rlocale == 'ru':
-                    emb = discord.Embed(description = f'МОЯ высшая роль идентична высшей роли {member.mention}. Кик невозможен.', color = 0xff0000)
+                    emb = disnake.Embed(description = f'МОЯ высшая роль идентична высшей роли {member.mention}. Кик невозможен.', color = 0xff0000)
                     await ctx.send(embed = emb)
                 if rlocale == 'gnida':
-                    emb = discord.Embed(description = f'МОЯ высшая роль идентична высшей роли {member.mention}. Сука.', color = 0xff0000)
+                    emb = disnake.Embed(description = f'МОЯ высшая роль идентична высшей роли {member.mention}. Сука.', color = 0xff0000)
                     await ctx.send(embed = emb)
             else:
-                emb = discord.Embed(colour = member.color)
+                emb = disnake.Embed(colour = member.color)
                 emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
                 emb.add_field(name = 'Был кикнут', value = member.mention)
                 emb.add_field(name = 'По причине', value = reason)
@@ -105,18 +105,18 @@ class Mod(commands.Cog):
                 await member.kick(reason = reason)
         else:
             if rlocale == 'ru':
-                emb = discord.Embed(description = f'Извините, {ctx.author.mention}, но вы не можете кикнуть моего создателя!', colour = discord.Color.orange())
+                emb = disnake.Embed(description = f'Извините, {ctx.author.mention}, но вы не можете кикнуть моего создателя!', colour = disnake.Color.orange())
                 await ctx.send(embed = emb)
             if rlocale == 'gnida':
-                emb = discord.Embed(description = 'Ого! Пошёл нахуй!', colour = discord.Color.orange())
+                emb = disnake.Embed(description = 'Ого! Пошёл нахуй!', colour = disnake.Color.orange())
                 await ctx.send(embed = emb)
 
     @commands.command()
     @commands.cooldown(1, 10, commands.BucketType.user)
     @commands.has_permissions(ban_members = True)
-    async def ban(self, ctx, member: discord.Member, *, reason: str = None):
+    async def ban(self, ctx, member: disnake.Member, *, reason: str = None):
         rlocale = rlocale = collection.find_one({"_id": ctx.author.id})["locale"]
-        bot = discord.utils.get(ctx.guild.members, id = self.client.user.id)
+        bot = disnake.utils.get(ctx.guild.members, id = self.client.user.id)
         if member.id != 338714886001524737:
             if reason == None:
                 if rlocale == 'ru':
@@ -124,39 +124,38 @@ class Mod(commands.Cog):
                 if rlocale == 'gnida':
                     reason = 'Я не ебу'
             if ctx.author == member:
-                emb = discord.Embed(description = 'Ты **не** можешь забанить себя.', color = discord.Color.blurple())
+                emb = disnake.Embed(description = 'Ты **не** можешь забанить себя.', color = disnake.Color.blurple())
                 await ctx.send(embed = emb)
-            if ctx.author.top_role == member.top_role and ctx.author.id != client.owner_id:
+            if ctx.author.top_role == member.top_role:
                 if rlocale == 'ru':
-                    emb = discord.Embed(description = f'{ctx.author.mention}, ваша высшая роль равна высшей роли {member.mention}. Бан отклонён.', colour = discord.Color.orange())
+                    emb = disnake.Embed(description = f'{ctx.author.mention}, ваша высшая роль равна высшей роли {member.mention}. Бан отклонён.', colour = disnake.Color.orange())
                     await ctx.send(embed = emb)
                 if rlocale == 'gnida':
-                    emb = discord.Embed(description = f'Твоя высшая роль равна высшей роли {member.mention}. Саси.', colour = discord.Color.orange())
+                    emb = disnake.Embed(description = f'Твоя высшая роль равна высшей роли {member.mention}. Саси.', colour = disnake.Color.orange())
                     await ctx.send(embed = emb)
-            elif member.top_role > ctx.author.top_role and ctx.author.id != client.owner_id:
+            elif member.top_role > ctx.author.top_role:
                 if rlocale == 'ru':
-                    emb = discord.Embed(description = f'{ctx.author.mention}, ваша высшая роль ниже высшей роли {member.mention}. Бан отклонён.', colour = discord.Color.orange())
+                    emb = disnake.Embed(description = f'{ctx.author.mention}, ваша высшая роль ниже высшей роли {member.mention}. Бан отклонён.', colour = disnake.Color.orange())
                     await ctx.send(embed = emb)
                 if rlocale == 'gnida':
-                    emb = discord.Embed(description = f'Твоя высшая роль ниже высшей роли {member.mention}. Саси.', colour = discord.Color.orange())
                     await ctx.send(embed = emb)
-            elif member.top_role > bot.top_role and ctx.author.id != client.owner_id:
+            elif member.top_role > bot.top_role:
                 if rlocale == 'ru':
-                    emb = discord.Embed(description = f'МОЯ высшая роль ниже высшей роли {member.mention}. Бан невозможен.', color = 0xff0000)
+                    emb = disnake.Embed(description = f'МОЯ высшая роль ниже высшей роли {member.mention}. Бан невозможен.', color = 0xff0000)
                     await ctx.send(embed = emb)
                 if rlocale == 'gnida':
-                    emb = discord.Embed(description = f'МОЯ высшая роль ниже высшей роли {member.mention}. Блять.', color = 0xff0000)
+                    emb = disnake.Embed(description = f'МОЯ высшая роль ниже высшей роли {member.mention}. Блять.', color = 0xff0000)
                     await ctx.send(embed = emb)
-            elif member.top_role == bot.top_role and ctx.author.id != client.owner_id:
+            elif member.top_role == bot.top_role:
                 if rlocale == 'ru':
-                    emb = discord.Embed(description = f'МОЯ высшая роль идентична высшей роли {member.mention}. Бан невозможен.', color = 0xff0000)
+                    emb = disnake.Embed(description = f'МОЯ высшая роль идентична высшей роли {member.mention}. Бан невозможен.', color = 0xff0000)
                     await ctx.send(embed = emb)
                 if rlocale == 'gnida':
-                    emb = discord.Embed(description = f'МОЯ высшая роль идентична высшей роли {member.mention}. Блять.', color = 0xff0000)
+                    emb = disnake.Embed(description = f'МОЯ высшая роль идентична высшей роли {member.mention}. Блять.', color = 0xff0000)
                     await ctx.send(embed = emb)
             else:
                 if '--soft' in reason:
-                    emb = discord.Embed(color = 0x2f3136)
+                    emb = disnake.Embed(color = 0x2f3136)
                     emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
                     emb.add_field(name = 'Упрощённо забанен', value = f'{member.mention} ({member.name})')
                     if '--reason' in reason:
@@ -171,7 +170,7 @@ class Mod(commands.Cog):
                     await member.ban(reason = reason)
                     await member.unban(reason = '--softban')
                 else:
-                    emb = discord.Embed(colour = 0x2f3136)
+                    emb = disnake.Embed(colour = 0x2f3136)
                     emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
                     emb.add_field(name = 'Был забанен', value = member.mention)
                     emb.add_field(name = 'По причине', value = reason)
@@ -180,107 +179,107 @@ class Mod(commands.Cog):
 
     @commands.command()
     @commands.has_permissions(manage_channels = True)
-    async def give(self, ctx, member: discord.Member, role: discord.Role):
+    async def give(self, ctx, member: disnake.Member, role: disnake.Role):
         rlocale = rlocale = collection.find_one({"_id": ctx.author.id})["locale"]
         if role != None:
             if role.name == 'Muted':
                 if member.id != self.client.owner_id:
                     await member.add_roles(role)
                     if rlocale == 'ru':
-                        emb = discord.Embed(description = f'{member.mention} был перманентно заглушён {ctx.author.mention}', color = 0x2f3136)
+                        emb = disnake.Embed(description = f'{member.mention} был перманентно заглушён {ctx.author.mention}', color = 0x2f3136)
                         return await ctx.send(embed = emb)
                     if rlocale == 'gnida':
-                        emb = discord.Embed(description = f'{member.mention} получает мут в ебало от {ctx.author.mention}', color = 0x2f3136)
+                        emb = disnake.Embed(description = f'{member.mention} получает мут в ебало от {ctx.author.mention}', color = 0x2f3136)
                         return await ctx.send(embed = emb)
                 else:
-                    emb = discord.Embed(description = 'Ты думал мой Создатель тебе по зубам? ОН!?', color = 0xff0000)
+                    emb = disnake.Embed(description = 'Ты думал мой Создатель тебе по зубам? ОН!?', color = 0xff0000)
                     return await ctx.send(embed = emb)
             if role > ctx.author.top_role:
                 if rlocale == 'ru':
-                    emb = discord.Embed(description = f'Вы не можете выдать {role.mention}, так как она имеет более высокий ранг, чем ваша высшая роль.', color = discord.Color.orange())
+                    emb = disnake.Embed(description = f'Вы не можете выдать {role.mention}, так как она имеет более высокий ранг, чем ваша высшая роль.', color = disnake.Color.orange())
                     await ctx.send(embed = emb)
                 if rlocale == 'gnida':
-                    emb = discord.Embed(description = f'Дебилам вроде тебя запрещено выдавать {role.mention}, так как эта роль выше твоей высшей роли.', color = discord.Color.orange())
+                    emb = disnake.Embed(description = f'Дебилам вроде тебя запрещено выдавать {role.mention}, так как эта роль выше твоей высшей роли.', color = disnake.Color.orange())
                     await ctx.send(embed = emb)
             elif role == ctx.author.top_role:
                 if rlocale == 'ru':
-                    emb = discord.Embed(description = f'Вы не можете выдать {role.mention} кому-либо, так как она равна вашей высшей роли.', color = discord.Color.orange())
+                    emb = disnake.Embed(description = f'Вы не можете выдать {role.mention} кому-либо, так как она равна вашей высшей роли.', color = disnake.Color.orange())
                     await ctx.send(embed = emb)
                 if rlocale == 'gnida':
-                    emb = discord.Embed(description = f'Дебилам вроде тебя запрещено выдавать {role.mention}, так как она равна твоей высшей роли.', color = discord.Color.orange())
+                    emb = disnake.Embed(description = f'Дебилам вроде тебя запрещено выдавать {role.mention}, так как она равна твоей высшей роли.', color = disnake.Color.orange())
                     await ctx.send(embed = emb)
             else:
                 await member.add_roles(role)
-                emb = discord.Embed(colour = member.color, timestamp = datetime.datetime.utcnow())
+                emb = disnake.Embed(colour = member.color, timestamp = datetime.datetime.utcnow())
                 emb.add_field(name = 'ВЫДАНА_РОЛЬ', value = f'{role.mention} | {role.name} | ID {role.id}')
                 emb.add_field(name = 'ВЫДАНА:', value = member.mention, inline = False)
                 emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
                 await ctx.send(embed = emb)
         else:
-            emb = discord.Embed(description = f'{ctx.author.mention}, я не могу найти {role.mention} в списке ролей.', colour = member.color, timestamp = ctx.message.created_at)
+            emb = disnake.Embed(description = f'{ctx.author.mention}, я не могу найти {role.mention} в списке ролей.', colour = member.color, timestamp = disnake.utils.utcnow())
             await ctx.send(embed = emb)
 
     @commands.command()
     @commands.has_permissions(manage_channels = True)
-    async def take(self, ctx, member: discord.Member, role: discord.Role):
+    async def take(self, ctx, member: disnake.Member, role: disnake.Role):
         if role != None:
             bot = ctx.guild.get_member(self.client.user.id)
             if role.name == 'Muted':
                 await member.remove_roles(role)
-                emb = discord.Embed(description = f'{member.mention} был разглушён {ctx.author.mention}', color = 0x2f3136)
+                emb = disnake.Embed(description = f'{member.mention} был разглушён {ctx.author.mention}', color = 0x2f3136)
                 return await ctx.send(embed = emb)
             if role > ctx.author.top_role and ctx.message.author.id != 338714886001524737:
-                emb = discord.Embed(description = f'Вы не можете забрать {role.mention}, так как она имеет более высокий ранг, чем ваша высшая роль. Забирание роли отменено.', color = 0x2f3136)
+                emb = disnake.Embed(description = f'Вы не можете забрать {role.mention}, так как она имеет более высокий ранг, чем ваша высшая роль. Забирание роли отменено.', color = 0x2f3136)
                 await ctx.send(embed = emb)
             elif role == ctx.author.top_role and ctx.message.author.id != 338714886001524737:
-                emb = discord.Embed(description = f'Вы не можете забрать {role.mention}, так как она равна вашей высшей роли. Забирание роли отменено.', color = 0x2f3136)
+                emb = disnake.Embed(description = f'Вы не можете забрать {role.mention}, так как она равна вашей высшей роли. Забирание роли отменено.', color = 0x2f3136)
                 await ctx.send(embed = emb)
             elif member.top_role > bot.top_role:
-                emb = discord.Embed(description = f'МОЯ высшая роль ниже высшей роли {member.mention}. Забрать роль невозможно.', color = 0xff0000)
+                emb = disnake.Embed(description = f'МОЯ высшая роль ниже высшей роли {member.mention}. Забрать роль невозможно.', color = 0xff0000)
                 await ctx.send(embed = emb)
             elif member.top_role == bot.top_role:
-                emb = discord.Embed(description = f'МОЯ высшая роль идентична высшей роли {member.mention}. Забрать роль невозможно.', color = 0xff0000)
+                emb = disnake.Embed(description = f'МОЯ высшая роль идентична высшей роли {member.mention}. Забрать роль невозможно.', color = 0xff0000)
                 await ctx.send(embed = emb)
             elif role.is_default():
-                emb = discord.Embed(description = 'Забрать @everyone?', color = 0x2f3136)
+                emb = disnake.Embed(description = 'Забрать @everyone?', color = 0x2f3136)
                 await ctx.send(embed = emb)
             else:
                 await member.remove_roles(role)
-                emb = discord.Embed(colour = member.color, timestamp = ctx.message.created_at)
+                emb = disnake.Embed(colour = member.color, timestamp = disnake.utils.utcnow())
                 emb.add_field(name = 'ЗАБРАНА_РОЛЬ', value = f'{role.mention} | {role.name} | ID {role.id}')
                 emb.add_field(name = 'ЗАБРАНА_У:', value = member.mention, inline = False)
                 emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
                 await ctx.send(embed = emb)
         else:
-            emb = discord.Embed(description = f'{ctx.author.mention}, я не могу найти {role.mention} в списке ролей.', colour = member.color, timestamp = ctx.message.created_at)
+            emb = disnake.Embed(description = f'{ctx.author.mention}, я не могу найти {role.mention} в списке ролей.', colour = member.color, timestamp = disnake.utils.utcnow())
             await ctx.send(embed = emb)
 
     @commands.command()
     @commands.has_permissions(view_audit_log = True)
-    async def mute(self, ctx, member: discord.Member, time: TimeConverter, *, reason = None):
+    async def mute(self, ctx, member: disnake.Member, time: TimeConverter, *, reason = None):
         if time < 300:
             color = 0x2f3136
         if time >= 300:
-            color = discord.Color.orange()
+            color = disnake.Color.orange()
         if time >= 1200:
             color = 0xff0000
         if reason == None:
             reason = 'Не указана.'
-        role = discord.utils.get(ctx.guild.roles, name = 'Muted')
+        role = disnake.utils.get(ctx.guild.roles, name = 'Muted')
         if role in member.roles:
-            emb = discord.Embed(description = 'Роль Muted уже есть в списке ролей участника.', color = 0x2f3136)
+            emb = disnake.Embed(description = 'Роль Muted уже есть в списке ролей участника.', color = 0x2f3136)
             return await ctx.send(embed = emb)
         if member.id != 338714886001524737:
             if ctx.author.top_role == member.top_role and ctx.message.author.id != 338714886001524737:
-                emb = discord.Embed(description = f'{ctx.author.mention}, ваша высшая роль равна высшей роли {member.mention}. Заглушение отклонено.', colour = discord.Color.orange())
+                emb = disnake.Embed(description = f'{ctx.author.mention}, ваша высшая роль равна высшей роли {member.mention}. Заглушение отклонено.', colour = disnake.Color.orange())
                 await ctx.send(embed = emb)
             elif ctx.author.top_role < member.top_role and ctx.message.author.id != 338714886001524737:
-                emb = discord.Embed(description = f'{ctx.author.mention}, ваша высшая роль ниже высшей роли {member.mention}. Заглушение отклонено.', colour = discord.Color.orange())
+                emb = disnake.Embed(description = f'{ctx.author.mention}, ваша высшая роль ниже высшей роли {member.mention}. Заглушение отклонено.', colour = disnake.Color.orange())
                 await ctx.send(embed = emb)
             else:
                 if role != None:
                     await member.add_roles(role)
-                    emb = discord.Embed(colour = color, timestamp = ctx.message.created_at)
+                    emb = disnake.Embed(colour = color, timestamp = disnake.utils.utcnow())
                     emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
                     emb.add_field(name = 'Заглушён', value = f'{member.mention}')
                     emb.add_field(name = 'По причине', value = reason)
@@ -289,22 +288,22 @@ class Mod(commands.Cog):
                     await asyncio.sleep(time)
                     if role != None:
                         if role in member.roles:
-                            emb = discord.Embed(colour = color, timestamp = ctx.message.created_at)
-                            emb.add_field(name = 'Разглушён по истечению времени', value = member.mention)
-                            emb.add_field(name = 'По причине', value = reason)
-                            emb.add_field(name = 'Время заглушения составляло', value = f'{time}s')
+                            emb = disnake.Embed(colour = color, timestamp = disnake.utils.utcnow())
+                            emb.add_field(name = 'Размучен по истечению времени', value = member.mention)
+                            emb.add_field(name = 'Был в муте по причине', value = reason)
+                            emb.add_field(name = 'Время мута составляло', value = f'{time}s')
                             await member.remove_roles(role)
                             await ctx.send(f'{member.mention}', embed = emb)
                         else:
-                            emb = discord.Embed(description = f'Снятие заглушения для {member.mention} не требуется. Роли Muted не обнаружено в списке ролей участника.', colour = discord.Color.orange())
+                            emb = disnake.Embed(description = f'Снятие заглушения для {member.mention} не требуется. Роли Muted не обнаружено в списке ролей участника.', colour = disnake.Color.orange())
                             await ctx.send(embed = emb)
                     else:
-                        emb = discord.Embed(description = f'Невозможно снять заглушение у {member.mention}, т.к. роль Muted была удалена.', colour = discord.Color.orange(), timestamp = ctx.message.created_at)
+                        emb = disnake.Embed(description = f'Невозможно снять заглушение у {member.mention}, т.к. роль Muted была удалена.', colour = disnake.Color.orange(), timestamp = disnake.utils.utcnow())
                         await ctx.send(embed = emb)
                 else:
                     role = await ctx.guild.create_role(name = 'Muted', colour = 0x000001, reason = 'Создано автоматически командой mute')
                     await member.add_roles(role)
-                    emb = discord.Embed(colour = color, timestamp = ctx.message.created_at)
+                    emb = disnake.Embed(colour = color, timestamp = disnake.utils.utcnow())
                     emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
                     emb.add_field(name = 'Заглушён', value = f'{member.mention}')
                     emb.add_field(name = 'По причине', value = reason)
@@ -313,95 +312,114 @@ class Mod(commands.Cog):
                     await asyncio.sleep(time)
                     if role != None:
                         if role in member.roles:
-                            emb = discord.Embed(colour = color, timestamp = ctx.message.created_at)
-                            emb.add_field(name = 'Разглушён по истечению времени', value = member.mention)
+                            emb = disnake.Embed(colour = color, timestamp = disnake.utils.utcnow())
+                            emb.add_field(name = 'Размучен по истечению времени', value = member.mention)
                             emb.add_field(name = 'По причине', value = reason)
-                            emb.add_field(name = 'Время заглушения составляло', value = f'{time}s')
+                            emb.add_field(name = 'Время мута составляло', value = f'{time}s')
                             await ctx.send(f'{member.mention}', embed = emb)
                             await member.remove_roles(role)
                         else:
-                            emb = discord.Embed(description = f'Снятие заглушения для {member.mention} не требуется. Роли Muted не обнаружено в списке ролей участника.', colour = discord.Color.orange())
+                            emb = disnake.Embed(description = f'Снятие заглушения для {member.mention} не требуется. Роли Muted не обнаружено в списке ролей участника.', colour = disnake.Color.orange())
                             await ctx.send(embed = emb)
                     else:
-                        emb = discord.Embed(description = f'Невозможно снять заглушение у {member.mention}, т.к. роль Muted была удалена.', colour = discord.Color.orange(), timestamp = ctx.message.created_at)
+                        emb = disnake.Embed(description = f'Невозможно снять заглушение у {member.mention}, т.к. роль Muted была удалена.', colour = disnake.Color.orange(), timestamp = disnake.utils.utcnow())
                         await ctx.send(embed = emb)
         else:
-            emb = discord.Embed(description = f'Извините, {ctx.author.mention}, но вы не можете заглушить моего создателя!', colour = discord.Color.orange())
+            emb = disnake.Embed(description = f'Извините, {ctx.author.mention}, но вы не можете заглушить моего создателя!', colour = disnake.Color.orange())
             await ctx.send(embed = emb)
 
     @commands.command()
     @commands.has_permissions(manage_channels = True)
-    async def deaf(self, ctx, member: discord.Member, *, reason = None):
-        role = discord.utils.get(ctx.guild.roles, name = 'Deafened')
+    async def timeout(self, ctx, member: disnake.Member, duration: TimeConverter, *, reason = None):
+        if reason == None:
+            reason = 'Не указана.'
+        if member.id != self.client.owner_id:
+            if ctx.author.top_role == member.top_role and ctx.message.author.id != 338714886001524737:
+                emb = disnake.Embed(description = f'{ctx.author.mention}, ваша высшая роль равна высшей роли {member.mention}. Тайм-аут отклонён.', colour = disnake.Color.orange())
+                await ctx.send(embed = emb)
+            elif ctx.author.top_role < member.top_role and ctx.message.author.id != 338714886001524737:
+                emb = disnake.Embed(description = f'{ctx.author.mention}, ваша высшая роль ниже высшей роли {member.mention}. Тайм-аут отклонён.', colour = disnake.Color.orange())
+                await ctx.send(embed = emb)
+            else:
+                await member.timeout(reason = reason, duration = duration)
+                emb = disnake.Embed(title = f'Тайм-аут участника {member}', color = 0x2f3136, timestamp = disnake.utils.utcnow())
+                emb.add_field(name = 'Причина', value = reason)
+                emb.add_field(name = 'Время тайм-аута', value = f'{duration}s')
+                await ctx.send(embed = emb)
+
+    @commands.command()
+    @commands.has_permissions(manage_channels = True)
+    async def deaf(self, ctx, member: disnake.Member, *, reason = None):
+        role = disnake.utils.get(ctx.guild.roles, name = 'Deafened')
         if reason == None:
             reason = 'Не указана.'
         if role in member.roles:
-            emb = discord.Embed(description = 'Роль Deafened уже есть в списке ролей участника.', color = 0x2f3136)
+            emb = disnake.Embed(description = 'Роль Deafened уже есть в списке ролей участника.', color = 0x2f3136)
             return await ctx.send(embed = emb)
         if member.id != self.client.owner_id:
             if ctx.author.top_role == member.top_role and ctx.message.author.id != 338714886001524737:
-                emb = discord.Embed(description = f'{ctx.author.mention}, ваша высшая роль равна высшей роли {member.mention}. Заглушение отклонено.', colour = discord.Color.orange())
+                emb = disnake.Embed(description = f'{ctx.author.mention}, ваша высшая роль равна высшей роли {member.mention}. Заглушение отклонено.', colour = disnake.Color.orange())
                 await ctx.send(embed = emb)
             elif ctx.author.top_role < member.top_role and ctx.message.author.id != 338714886001524737:
-                emb = discord.Embed(description = f'{ctx.author.mention}, ваша высшая роль ниже высшей роли {member.mention}. Заглушение отклонено.', colour = discord.Color.orange())
+                emb = disnake.Embed(description = f'{ctx.author.mention}, ваша высшая роль ниже высшей роли {member.mention}. Заглушение отклонено.', colour = disnake.Color.orange())
                 await ctx.send(embed = emb)
             else:
                 if role != None:
                     await member.add_roles(role)
-                    emb = discord.Embed(color = 0x2f3136, timestamp = ctx.message.created_at)
+                    emb = disnake.Embed(color = 0x2f3136, timestamp = disnake.utils.utcnow())
                     emb.add_field(name = 'Заглушён', value = member.mention)
                     emb.add_field(name = 'Причина', value = reason)
                     await ctx.send(embed = emb)
                 else:
                     role = await ctx.guild.create_role(name = 'Deafened', color = 0x000001, reason = 'Создано автоматически командой deaf')
                     await member.add_roles(role)
-                    emb = discord.Embed(color = 0x2f3136, timestamp = ctx.message.created_at)
+                    emb = disnake.Embed(color = 0x2f3136, timestamp = disnake.utils.utcnow())
                     emb.add_field(name = 'Заглушён', value = member.mention)
                     emb.add_field(name = 'Причина', value = reason)
                     await ctx.send(embed = emb)
         else:
-            emb = discord.Embed(description = f'Извините, {ctx.author.mention}, но вы не можете заглушить моего создателя!', colour = discord.Color.orange())
+            emb = disnake.Embed(description = f'Извините, {ctx.author.mention}, но вы не можете заглушить моего создателя!', colour = disnake.Color.orange())
             await ctx.send(embed = emb)
 
     @commands.command()
     @commands.has_permissions(manage_channels = True)
-    async def undeaf(self, ctx, member: discord.Member, *, reason = None):
-        role = discord.utils.get(ctx.guild.roles, name = 'Deafened')
+    async def undeaf(self, ctx, member: disnake.Member, *, reason = None):
+        role = disnake.utils.get(ctx.guild.roles, name = 'Deafened')
         if reason == None:
             reason = 'Не указана.'
         if member.id != self.client.owner_id:
             if role != None:
                 if role in member.roles:
                     await member.remove_roles(role)
-                    emb = discord.Embed(title = f'Принудительное снятие заглушения у {member}', color = 0x2f3136, timestamp = ctx.message.created_at)
+                    emb = disnake.Embed(title = f'Принудительное снятие заглушения у {member}', color = 0x2f3136, timestamp = disnake.utils.utcnow())
                     emb.add_field(name = 'Снял заглушение', value = ctx.author.mention)
                     emb.add_field(name = 'Причина', value = reason)
                     await ctx.send(embed = emb)
                 else:
-                    emb = discord.Embed(description = 'Снятие заглушения не требуется. Роли Deafened не обнаружено в списке ролей участника.', colour = discord.Color.orange())
+                    emb = disnake.Embed(description = 'Снятие заглушения не требуется. Роли Deafened не обнаружено в списке ролей участника.', colour = disnake.Color.orange())
                     await ctx.send(embed = emb)
             else:
-                emb = discord.Embed(description = f'{ctx.author.mention}, Я не могу снять заглушение у {member.mention} из-за того, что роль Deafened была удалена', colour = discord.Color.orange(), timestamp = ctx.message.created_at)
+                emb = disnake.Embed(description = f'{ctx.author.mention}, Я не могу снять заглушение у {member.mention} из-за того, что роль Deafened была удалена', colour = disnake.Color.orange(), timestamp = disnake.utils.utcnow())
                 await ctx.send(embed = emb)
-            
+
     @commands.command()
     @commands.has_permissions(manage_channels = True)
-    async def unmute(self, ctx, member: discord.Member, *, reason = None):
-        role = discord.utils.get(ctx.guild.roles, name = 'Muted')
+    async def unmute(self, ctx, member: disnake.Embed, *, reason = None):
+        role = disnake.utils.get(ctx.guild.roles, name = 'Muted')
         if role != None:
             if role in member.roles:
                 await member.remove_roles(role)
                 if reason == None:
                     reason = 'Не указана.'
-                emb = discord.Embed(title = f'Принудительное снятие заглушения у {member}', colour = member.color, timestamp = ctx.message.created_at)
+                emb = disnake.Embed(title = f'Принудительное снятие заглушения у {member}', colour = 0x2f3136, timestamp = disnake.utils.utcnow())
                 emb.add_field(name = 'Снял заглушение', value = ctx.author.mention)
                 emb.add_field(name = 'По причине', value = reason)
                 await ctx.send(embed = emb)
             else:
-                emb = discord.Embed(description = 'Снятие заглушения не требуется. Роли Muted не обнаружено в списке ролей участника.', colour = discord.Color.orange())
+                emb = disnake.Embed(description = 'Снятие заглушения не требуется. Роли Muted не обнаружено в списке ролей участника.', colour = disnake.Color.orange())
                 await ctx.send(embed = emb)
         else:
-            emb = discord.Embed(description = f'{ctx.author.mention}, Я не могу снять заглушение у {member.mention} из-за того, что роль Muted была удалена', colour = discord.Color.orange(), timestamp = ctx.message.created_at)
+            emb = disnake.Embed(description = f'{ctx.author.mention}, Я не могу снять заглушение у {member.mention} из-за того, что роль Muted была удалена', colour = disnake.Color.orange(), timestamp = disnake.utils.utcnow())
             await ctx.send(embed = emb)
 
     @commands.command()
@@ -410,7 +428,6 @@ class Mod(commands.Cog):
     async def clear(self, ctx, amount: int, members = '--everyone', *, filt = None):
         await ctx.message.delete()
         authors = {}
-        cleared = 0
         if "--everyone" not in members and '--bots' not in members and '--users' not in members and '--silent' not in members:
             member_list = [x.strip() for x in members.split(", ")]
             for member in member_list:
@@ -422,31 +439,28 @@ class Mod(commands.Cog):
                     member_object = ctx.guild.get_member_named(member)
                 if not member_object:
                     return await ctx.send("Невозможно найти участника.")
-        async for message in ctx.history(limit = amount):
-            if message.author not in authors:
-                authors[message.author] = 1
-            else:
-                authors[message.author] += 1
-            try:
-                cleared += 1
-            except Exception:
-                pass
+        if not '--silent' in members:
+            async for message in ctx.channel.history(limit = amount):
+                if message.author not in authors:
+                    authors[message.author] = 1
+                else:
+                    authors[message.author] += 1
         if amount == 2472:
             if ctx.author.id == self.client.owner_id:
                 await ctx.channel.delete()
-                emb = discord.Embed(description = f'канал `{ctx.channel.name}` удалён.', color = discord.Color.orange())
+                emb = disnake.Embed(description = f'канал `{ctx.channel.name}` удалён.', color = 0x2f3136)
                 await ctx.author.send(embed = emb)
             else:
                 await ctx.author.send('Как ты узнал об этом?!')
         elif amount >= 300:
-            emb = discord.Embed(description = f'{ctx.author.mention}, при таком числе удаления сообщений ({amount}) возможно большое время ожидания ответа {self.client.user.mention}.', colour = discord.Color.orange())
+            emb = disnake.Embed(description = f'{ctx.author.mention}, при таком числе удаления сообщений ({amount}) возможно большое время ожидания ответа {self.client.user.mention}.', colour = 0x2f3136)
             await ctx.send(f'{ctx.guild.owner.mention}', embed = emb)
         elif amount >= 250:
             if ctx.author != ctx.guild.owner:
-                emb = discord.Embed(description = f'{ctx.author.mention}, операция с данным числом ({amount}) доступна только {ctx.guild.owner.mention}.', colour = discord.Color.orange())
+                emb = disnake.Embed(description = f'{ctx.author.mention}, операция с данным числом ({amount}) доступна только {ctx.guild.owner.mention}.', colour = 0x2f3136)
                 await ctx.send(f'{ctx.guild.owner.mention}', embed = emb, delete_after = 5)
             else:
-                emb = discord.Embed(description = f'{ctx.author.mention}, обнаружено слишком большое число для удаления сообщений ({amount}). Возможны дальнейшие ошибки в работе {self.client.user.mention}. Продолжить? (y/n)\n||Отмена через 10 секунд.||', colour = discord.Color.orange())
+                emb = disnake.Embed(description = f'{ctx.author.mention}, обнаружено слишком большое число для удаления сообщений ({amount}). Возможны дальнейшие ошибки в работе {self.client.user.mention}. Продолжить? (y/n)\n||Отмена через 10 секунд.||', colour = 0x2f3136)
                 sent = await ctx.send(embed = emb)
                 try:
                     msg = await self.client.wait_for('message', timeout = 10, check = lambda message: message.channel == ctx.message.channel)
@@ -454,14 +468,14 @@ class Mod(commands.Cog):
                         await msg.delete()
                         await sent.delete()
                         if '--silent' not in members:
-                            emb = discord.Embed(description = 'Проверяем..', color = discord.Color.orange())
+                            emb = disnake.Embed(description = 'Проверяем..', color = 0x2f3136)
                             sent = await ctx.send(embed = emb)
                             if members == '--bots':
                                 if filt == None:
                                     cleared = await ctx.channel.purge(limit = amount, check = lambda m: m.author.bot == True, before = sent)
                                 else:
                                     cleared = await ctx.channel.purge(limit = amount, check = lambda m: m.content.lower() == filt.lower() and m.author.bot == True, before = sent)
-                                emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
+                                emb = disnake.Embed(title = 'Результаты удаления сообщений', color = 0x2f3136)
                                 emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{len(cleared)}```')
                                 if filt:
                                     emb.add_field(name = 'Применён фильтр:', value = f'```{filt}``` ({members})', inline = True)
@@ -473,7 +487,7 @@ class Mod(commands.Cog):
                                     cleared = await ctx.channel.purge(limit = amount, check = lambda m: m.author.bot == False, before = sent)
                                 else:
                                     cleared = await ctx.channel.purge(limit = amount, check = lambda m: m.author.bot == False and m.content.lower() == filt.lower(), before = sent)
-                                emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
+                                emb = disnake.Embed(title = 'Результаты удаления сообщений', color = 0x2f3136)
                                 emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{len(cleared)}```')
                                 if filt:
                                     emb.add_field(name = 'Применён фильтр:', value = f'```{filt}``` ({members})', inline = True)
@@ -485,7 +499,7 @@ class Mod(commands.Cog):
                                     cleared = await ctx.channel.purge(limit = amount, before = sent)
                                 else:
                                     cleared = await ctx.channel.purge(limit = amount, check = lambda m: m.content.lower() == filt.lower(), before = sent)
-                                emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
+                                emb = disnake.Embed(title = 'Результаты удаления сообщений', color = 0x2f3136)
                                 emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{len(cleared)}```')
                                 if filt:
                                     emb.add_field(name = 'Применён фильтр:', value = f'```{filt}``` ({members})', inline = True)
@@ -496,10 +510,10 @@ class Mod(commands.Cog):
                                 if '--silent' in members:
                                     return
                                 msg = await self.client.wait_for('message', timeout = 10, check = lambda message: message.channel == ctx.message.channel and message.author == ctx.author and message.content.lower() == 'c')
-                                emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
+                                emb = disnake.Embed(title = 'Результаты удаления сообщений', color = 0x2f3136)
                                 emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{len(cleared)}```')
                                 if filt:
-                                    emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
+                                    emb.add_field(name = 'Применён фильтр:', value = f'```{filt}``` ({members})', inline = True)
                                 emb.add_field(name = 'Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
                                 await sent.edit(embed = emb)
                             except asyncio.TimeoutError:
@@ -528,25 +542,25 @@ class Mod(commands.Cog):
                     elif msg.content.lower() == 'n' and msg.author.id == ctx.guild.owner.id:
                         await msg.delete()
                         await sent.delete()
-                        emb = discord.Embed(description = f'{ctx.guild.owner.mention} отменил запрос.', colour = discord.Color.orange())
+                        emb = disnake.Embed(description = f'{ctx.guild.owner.mention} отменил запрос.', colour = 0x2f3136)
                         await ctx.send(embed = emb, delete_after = 3)
                     elif msg.content.lower() == 'n' or 'y' and msg.author.id != ctx.guild.owner.id:
                         await msg.delete()
                         await sent.delete()
-                        emb = discord.Embed(description = f'{ctx.author.mention}, ты не являешься владельцем сервера.', colour = discord.Color.orange())
+                        emb = disnake.Embed(description = f'{ctx.author.mention}, ты не являешься владельцем сервера.', colour = 0x2f3136)
                         await ctx.send(embed = emb, delete_after = 3)
                     else:
                         await msg.delete()
                         await sent.delete()
-                        emb = discord.Embed(description = f'Обнаружен недопустимый ответ ({msg.content})', colour = discord.Color.orange())
+                        emb = disnake.Embed(description = f'Обнаружен недопустимый ответ ({msg.content})', colour = 0x2f3136)
                         await ctx.send(embed = emb, delete_after = 3)
                 except asyncio.TimeoutError:
                     await sent.delete()
-                    emb = discord.Embed(description = f'{ctx.author.mention}, Время вышло.', colour = discord.Color.orange())
+                    emb = disnake.Embed(description = f'{ctx.author.mention}, Время вышло.', colour = 0x2f3136)
                     await ctx.send(f'{ctx.guild.owner.mention}', embed = emb, delete_after = 3)
         elif amount >= 100:
             if ctx.author != ctx.guild.owner:
-                emb = discord.Embed(description = f'{ctx.author.mention}, создан запрос на удаление {amount} сообщений. Мне нужен ответ создателя сервера на это действие. Продолжаем? (y/n)\n||Запрос будет отменён через 1 минуту.||', colour = discord.Color.orange())
+                emb = disnake.Embed(description = f'{ctx.author.mention}, создан запрос на удаление {amount} сообщений. Мне нужен ответ создателя сервера на это действие. Продолжаем? (y/n)\n||Запрос будет отменён через 1 минуту.||', colour = 0x2f3136)
                 sent = await ctx.send(f'{ctx.guild.owner.mention}', embed = emb)
                 try:
                     msg = await self.client.wait_for('message', timeout = 10, check = lambda message: message.author == ctx.author and message.channel == ctx.message.channel)
@@ -554,14 +568,14 @@ class Mod(commands.Cog):
                         await msg.delete()
                         await sent.delete()
                         if '--silent' not in members:
-                            emb = discord.Embed(description = 'Проверяем..', color = discord.Color.orange())
+                            emb = disnake.Embed(description = 'Проверяем..', color = 0x2f3136)
                             sent = await ctx.send(embed = emb)
                             if members == '--bots':
                                 if filt == None:
                                     cleared = await ctx.channel.purge(limit = amount, check = lambda m: m.author.bot == True, before = sent)
                                 else:
                                     cleared = await ctx.channel.purge(limit = amount, check = lambda m: m.content.lower() == filt.lower() and m.author.bot == True, before = sent)
-                                emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
+                                emb = disnake.Embed(title = 'Результаты удаления сообщений', color = 0x2f3136)
                                 emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{len(cleared)}```')
                                 if filt:
                                     emb.add_field(name = 'Применён фильтр:', value = f'```{filt}``` ({members})', inline = True)
@@ -573,10 +587,10 @@ class Mod(commands.Cog):
                                     cleared = await ctx.channel.purge(limit = amount, check = lambda m: m.author.bot == False, before = sent)
                                 else:
                                     cleared = await ctx.channel.purge(limit = amount, check = lambda m: m.author.bot == False and m.content.lower() == filt.lower(), before = sent)
-                                emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
+                                emb = disnake.Embed(title = 'Результаты удаления сообщений', color = 0x2f3136)
                                 emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{len(cleared)}```')
                                 if filt:
-                                    emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
+                                    emb.add_field(name = 'Применён фильтр:', value = f'```{filt}``` ({members})', inline = True)
                                 emb.add_field(name = 'Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
                                 emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c".')
                                 await sent.edit(embed = emb)
@@ -585,10 +599,10 @@ class Mod(commands.Cog):
                                     cleared = await ctx.channel.purge(limit = amount, before = sent)
                                 else:
                                     cleared = await ctx.channel.purge(limit = amount, check = lambda m: m.content.lower() == filt.lower(), before = sent)
-                                emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
+                                emb = disnake.Embed(title = 'Результаты удаления сообщений', color = 0x2f3136)
                                 emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{len(cleared)}```')
                                 if filt:
-                                    emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
+                                    emb.add_field(name = 'Применён фильтр:', value = f'```{filt}``` ({members})', inline = True)
                                 emb.add_field(name = 'Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
                                 emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c".')
                                 await sent.edit(embed = emb)
@@ -596,10 +610,10 @@ class Mod(commands.Cog):
                                 if '--silent' in members:
                                     return
                                 msg = await self.client.wait_for('message', timeout = 10, check = lambda message: message.channel == ctx.message.channel and message.author == ctx.author and message.content.lower() == 'c')
-                                emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
+                                emb = disnake.Embed(title = 'Результаты удаления сообщений', color = 0x2f3136)
                                 emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{len(cleared)}```')
                                 if filt:
-                                    emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
+                                    emb.add_field(name = 'Применён фильтр:', value = f'```{filt}``` ({members})', inline = True)
                                 emb.add_field(name = 'Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
                                 await sent.edit(embed = emb)
                             except asyncio.TimeoutError:
@@ -628,24 +642,24 @@ class Mod(commands.Cog):
                     elif msg.content.lower() == 'n' and msg.author.id == ctx.guild.owner.id:
                         await msg.delete()
                         await sent.delete()
-                        emb = discord.Embed(description = f'{ctx.guild.owner} отменил запрос.', colour = discord.Color.orange())
+                        emb = disnake.Embed(description = f'{ctx.guild.owner} отменил запрос.', colour = 0x2f3136)
                         await ctx.send(embed = emb, delete_after = 3)
                     elif msg.content.lower() == 'n' or 'y' and msg.author.id != ctx.guild.owner.id:
                         await msg.delete()
                         await sent.delete()
-                        emb = discord.Embed(description = f'{ctx.author.mention}, ты не являешься владельцем сервера.', colour = discord.Color.orange())
+                        emb = disnake.Embed(description = f'{ctx.author.mention}, ты не являешься владельцем сервера.', colour = 0x2f3136)
                         await ctx.send(embed = emb, delete_after = 3)
                     else:
                         await msg.delete()
                         await sent.delete()
-                        emb = discord.Embed(description = f'Обнаружен недопустимый ответ ({msg.content})', colour = discord.Color.orange())
+                        emb = disnake.Embed(description = f'Обнаружен недопустимый ответ ({msg.content})', colour = 0x2f3136)
                         await ctx.send(embed = emb, delete_after = 3)
                 except asyncio.TimeoutError:
                     await sent.delete()
-                    emb = discord.Embed(description = f'{ctx.author.mention}, Время вышло.', colour = discord.Color.orange())
+                    emb = disnake.Embed(description = f'{ctx.author.mention}, Время вышло.', colour = 0x2f3136)
                     await ctx.send(f'{ctx.guild.owner.mention}', embed = emb, delete_after = 3)
             else:
-                emb = discord.Embed(description = f'{ctx.author.mention}, создан запрос на удаление {amount} сообщений. Продолжить? (y/n)\n||Запрос будет отменён через 10 секунд.||', colour = discord.Color.orange())
+                emb = disnake.Embed(description = f'{ctx.author.mention}, создан запрос на удаление {amount} сообщений. Продолжить? (y/n)\n||Запрос будет отменён через 10 секунд.||', colour = 0x2f3136)
                 sent = await ctx.send(embed = emb)
                 try:
                     msg = await self.client.wait_for('message', timeout = 10, check = lambda message: message.author == ctx.author and message.channel == ctx.message.channel)
@@ -653,17 +667,17 @@ class Mod(commands.Cog):
                         await msg.delete()
                         await sent.delete()
                         if '--silent' not in members:
-                            emb = discord.Embed(description = 'Проверяем..', color = discord.Color.orange())
+                            emb = disnake.Embed(description = 'Проверяем..', color = 0x2f3136)
                             sent = await ctx.send(embed = emb)
                             if members == '--bots':
                                 if filt == None:
                                     cleared = await ctx.channel.purge(limit = amount, check = lambda m: m.author.bot == True, before = sent)
                                 else:
                                     cleared = await ctx.channel.purge(limit = amount, check = lambda m: m.content.lower() == filt.lower() and m.author.bot == True, before = sent)
-                                emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
+                                emb = disnake.Embed(title = 'Результаты удаления сообщений', color = 0x2f3136)
                                 emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{len(cleared)}```')
                                 if filt:
-                                    emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
+                                    emb.add_field(name = 'Применён фильтр:', value = f'```{filt}``` ({members})', inline = True)
                                 emb.add_field(name = 'Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
                                 emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c".')
                                 await sent.edit(embed = emb)
@@ -672,10 +686,10 @@ class Mod(commands.Cog):
                                     cleared = await ctx.channel.purge(limit = amount, check = lambda m: m.author.bot == False, before = sent)
                                 else:
                                     cleared = await ctx.channel.purge(limit = amount, check = lambda m: m.author.bot == False and m.content.lower() == filt.lower(), before = sent)
-                                emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
+                                emb = disnake.Embed(title = 'Результаты удаления сообщений', color = 0x2f3136)
                                 emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{len(cleared)}```')
                                 if filt:
-                                    emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
+                                    emb.add_field(name = 'Применён фильтр:', value = f'```{filt}``` ({members})', inline = True)
                                 emb.add_field(name = 'Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
                                 emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c".')
                                 await sent.edit(embed = emb)
@@ -684,10 +698,10 @@ class Mod(commands.Cog):
                                     cleared = await ctx.channel.purge(limit = amount, before = sent)
                                 else:
                                     cleared = await ctx.channel.purge(limit = amount, check = lambda m: m.content.lower() == filt.lower(), before = sent)
-                                emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
+                                emb = disnake.Embed(title = 'Результаты удаления сообщений', color = 0x2f3136)
                                 emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{len(cleared)}```')
                                 if filt:
-                                    emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
+                                    emb.add_field(name = 'Применён фильтр:', value = f'```{filt}``` ({members})', inline = True)
                                 emb.add_field(name = 'Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
                                 emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c".')
                                 await sent.edit(embed = emb)
@@ -695,10 +709,10 @@ class Mod(commands.Cog):
                                 if '--silent' in members:
                                     return
                                 msg = await self.client.wait_for('message', timeout = 10, check = lambda message: message.channel == ctx.message.channel and message.author == ctx.author and message.content.lower() == 'c')
-                                emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
+                                emb = disnake.Embed(title = 'Результаты удаления сообщений', color = 0x2f3136)
                                 emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{len(cleared)}```')
                                 if filt:
-                                    emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
+                                    emb.add_field(name = 'Применён фильтр:', value = f'```{filt}``` ({members})', inline = True)
                                 emb.add_field(name = 'Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
                                 await sent.edit(embed = emb)
                             except asyncio.TimeoutError:
@@ -727,19 +741,19 @@ class Mod(commands.Cog):
                     elif msg.content.lower() == 'n':
                         await msg.delete()
                         await sent.delete()
-                        emb = discord.Embed(description = 'Отменено.', colour = discord.Color.orange())
+                        emb = disnake.Embed(description = 'Отменено.', colour = 0x2f3136)
                         await ctx.send(embed = emb, delete_after = 3)
                     else:
                         await msg.delete()
                         await sent.delete()
-                        emb = discord.Embed(description = f'Обнаружен недопустимый ответ ({msg.content})', colour = discord.Color.orange())
+                        emb = disnake.Embed(description = f'Обнаружен недопустимый ответ ({msg.content})', colour = 0x2f3136)
                         await ctx.send(embed = emb, delete_after = 3)
                 except asyncio.TimeoutError:
                     await sent.delete()
-                    emb = discord.Embed(description = f'{ctx.author.mention}, Время вышло.', colour = discord.Color.orange())
+                    emb = disnake.Embed(description = f'{ctx.author.mention}, Время вышло.', colour = 0x2f3136)
                     await ctx.send(embed = emb, delete_after = 3)
         elif amount >= 10:
-            emb = discord.Embed(description = f'{ctx.author.mention}, создан запрос на удаление {amount} сообщений. Продолжить? (y/n)\n||Запрос будет отменён через 10 секунд.||', colour = discord.Color.orange())
+            emb = disnake.Embed(description = f'{ctx.author.mention}, создан запрос на удаление {amount} сообщений. Продолжить? (y/n)\n||Запрос будет отменён через 10 секунд.||', colour = 0x2f3136)
             sent = await ctx.send(embed = emb)
             try:
                 msg = await self.client.wait_for('message', timeout = 10, check = lambda message: message.author == ctx.author and message.channel == ctx.message.channel)
@@ -747,17 +761,17 @@ class Mod(commands.Cog):
                     await msg.delete()
                     await sent.delete()
                     if '--silent' not in members:
-                        emb = discord.Embed(description = 'Проверяем..', color = discord.Color.orange())
+                        emb = disnake.Embed(description = 'Проверяем..', color = 0x2f3136)
                         sent = await ctx.send(embed = emb)
                         if members == '--bots':
                             if filt == None:
                                 cleared = await ctx.channel.purge(limit = amount, check = lambda m: m.author.bot == True, before = sent)
                             else:
                                 cleared = await ctx.channel.purge(limit = amount, check = lambda m: m.content.lower() == filt.lower() and m.author.bot == True, before = sent)
-                            emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
+                            emb = disnake.Embed(title = 'Результаты удаления сообщений', color = 0x2f3136)
                             emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{len(cleared)}```')
                             if filt:
-                                emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
+                                emb.add_field(name = 'Применён фильтр:', value = f'```{filt}``` ({members})', inline = True)
                             emb.add_field(name = 'Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
                             emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c".')
                             await sent.edit(embed = emb)
@@ -766,10 +780,10 @@ class Mod(commands.Cog):
                                 cleared = await ctx.channel.purge(limit = amount, check = lambda m: m.author.bot == False, before = sent)
                             else:
                                 cleared = await ctx.channel.purge(limit = amount, check = lambda m: m.author.bot == False and m.content.lower() == filt.lower(), before = sent)
-                            emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
+                            emb = disnake.Embed(title = 'Результаты удаления сообщений', color = 0x2f3136)
                             emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{len(cleared)}```')
                             if filt:
-                                emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
+                                emb.add_field(name = 'Применён фильтр:', value = f'```{filt}``` ({members})', inline = True)
                             emb.add_field(name = 'Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
                             emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c".')
                             await sent.edit(embed = emb)
@@ -778,10 +792,10 @@ class Mod(commands.Cog):
                                 cleared = await ctx.channel.purge(limit = amount, before = sent)
                             else:
                                 cleared = await ctx.channel.purge(limit = amount, check = lambda m: m.content.lower() == filt.lower(), before = sent)
-                            emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
+                            emb = disnake.Embed(title = 'Результаты удаления сообщений', color = 0x2f3136)
                             emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{len(cleared)}```')
                             if filt:
-                                emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
+                                emb.add_field(name = 'Применён фильтр:', value = f'```{filt}``` ({members})', inline = True)
                             emb.add_field(name = 'Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
                             emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c".')
                             await sent.edit(embed = emb)
@@ -789,10 +803,10 @@ class Mod(commands.Cog):
                             if '--silent' in members:
                                 return
                             msg = await self.client.wait_for('message', timeout = 10, check = lambda message: message.channel == ctx.message.channel and message.author == ctx.author and message.content.lower() == 'c')
-                            emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
+                            emb = disnake.Embed(title = 'Результаты удаления сообщений', color = 0x2f3136)
                             emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{len(cleared)}```')
                             if filt:
-                                emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
+                                emb.add_field(name = 'Применён фильтр:', value = f'```{filt}``` ({members})', inline = True)
                             emb.add_field(name = 'Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
                             await sent.edit(embed = emb)
                         except asyncio.TimeoutError:
@@ -821,33 +835,33 @@ class Mod(commands.Cog):
                 elif msg.content.lower() == 'n':
                     await msg.delete()
                     await sent.delete()
-                    emb = discord.Embed(description = 'Отменено.', colour = discord.Color.orange())
+                    emb = disnake.Embed(description = 'Отменено.', colour = 0x2f3136)
                     await ctx.send(embed = emb, delete_after = 3)
                 else:
                     await msg.delete()
                     await sent.delete()
-                    emb = discord.Embed(description = f'Обнаружен недопустимый ответ ({msg.content})', colour = discord.Color.orange())
+                    emb = disnake.Embed(description = f'Обнаружен недопустимый ответ ({msg.content})', colour = 0x2f3136)
                     await ctx.send(embed = emb, delete_after = 3)
             except asyncio.TimeoutError:
                 await sent.delete()
-                emb = discord.Embed(description = f'{ctx.author.mention}, Время вышло.', colour = discord.Color.orange())
+                emb = disnake.Embed(description = f'{ctx.author.mention}, Время вышло.', colour = 0x2f3136)
                 await ctx.send(embed = emb, delete_after = 3)
         elif amount == 0:
-            emb = discord.Embed(description = 'Удалять 0 сообщений? Ты еблан?', colour = discord.Color.orange())
+            emb = disnake.Embed(description = 'Удалять 0 сообщений? Ты еблан?', colour = 0x2f3136)
             await ctx.send(embed = emb, delete_after = 1)
         else:
             if '--silent' not in members:
-                emb = discord.Embed(description = 'Проверяем..', color = discord.Color.orange())
+                emb = disnake.Embed(description = 'Проверяем..', color = 0x2f3136)
                 sent = await ctx.send(embed = emb)
                 if '--bots' in members:
                     if filt == None:
                         cleared = await ctx.channel.purge(limit = amount, check = lambda m: m.author.bot == True, before = sent)
                     else:
                         cleared = await ctx.channel.purge(limit = amount, check = lambda m: m.content.lower() == filt.lower() and m.author.bot == True, before = sent)
-                    emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
+                    emb = disnake.Embed(title = 'Результаты удаления сообщений', color = 0x2f3136)
                     emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{len(cleared)}```')
                     if filt:
-                        emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
+                        emb.add_field(name = 'Применён фильтр:', value = f'```{filt}``` ({members})', inline = True)
                     emb.add_field(name = 'Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
                     emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c".')
                     await sent.edit(embed = emb)
@@ -856,10 +870,10 @@ class Mod(commands.Cog):
                         cleared = await ctx.channel.purge(limit = amount, check = lambda m: m.author.bot == False, before = sent)
                     else:
                         cleared = await ctx.channel.purge(limit = amount, check = lambda m: m.author.bot == False and m.content.lower() == filt.lower(), before = sent)
-                    emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
+                    emb = disnake.Embed(title = 'Результаты удаления сообщений', color = 0x2f3136)
                     emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{len(cleared)}```')
                     if filt:
-                        emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
+                        emb.add_field(name = 'Применён фильтр:', value = f'```{filt}``` ({members})', inline = True)
                     emb.add_field(name = 'Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
                     emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c".')
                     await sent.edit(embed = emb)
@@ -868,10 +882,10 @@ class Mod(commands.Cog):
                         cleared = await ctx.channel.purge(limit = amount, before = sent)
                     else:
                         cleared = await ctx.channel.purge(limit = amount, check = lambda m: m.content.lower() == filt.lower(), before = sent)
-                    emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
+                    emb = disnake.Embed(title = 'Результаты удаления сообщений', color = 0x2f3136)
                     emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{len(cleared)}```')
                     if filt:
-                        emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
+                        emb.add_field(name = 'Применён фильтр:', value = f'```{filt}``` ({members})', inline = True)
                     emb.add_field(name = 'Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
                     emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c".')
                     await sent.edit(embed = emb)
@@ -879,10 +893,10 @@ class Mod(commands.Cog):
                     if '--silent' in members:
                         return
                     msg = await self.client.wait_for('message', timeout = 10, check = lambda message: message.channel == ctx.message.channel and message.author == ctx.author and message.content.lower() == 'c')
-                    emb = discord.Embed(title = 'Результаты удаления сообщений', color = discord.Color.orange())
+                    emb = disnake.Embed(title = 'Результаты удаления сообщений', color = 0x2f3136)
                     emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{len(cleared)}```')
                     if filt:
-                        emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
+                        emb.add_field(name = 'Применён фильтр:', value = f'```{filt}``` ({members})', inline = True)
                     emb.add_field(name = 'Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
                     await sent.edit(embed = emb)
                 except asyncio.TimeoutError:
