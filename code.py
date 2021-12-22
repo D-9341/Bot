@@ -298,7 +298,7 @@ async def on_message(message):
     if not message.author.bot:
         if message.channel.id != 714175791033876490:
             emb = disnake.Embed(colour = disnake.Color.orange(), timestamp = disnake.utils.utcnow())
-            emb.set_author(name = message.author, icon_url = message.author.avatar_url)
+            emb.set_author(name = message.author, icon_url = message.author.avatar.url)
             if isinstance(message.channel, disnake.channel.DMChannel):
                 emb.add_field(name = 'НА_СЕРВЕРЕ', value = 'ЛС')
             else:
@@ -333,7 +333,7 @@ async def on_message_edit(before, after):
     if not before.author.bot:
         if ('http') not in after.content.lower():
             emb = disnake.Embed(description = f'[ИЗМЕНЕНИЕ_СООБЩЕНИЯ]({before.jump_url})', colour = disnake.Color.orange(), timestamp = disnake.utils.utcnow())
-            emb.set_author(name = before.author, icon_url = before.author.avatar_url)
+            emb.set_author(name = before.author, icon_url = before.author.avatar.url)
             emb.add_field(name = 'НА_СЕРВЕРЕ', value = before.guild)
             emb.add_field(name = 'БЫЛО', value = f'```{before.content}```')
             emb.add_field(name = 'СТАЛО', value = f'```{after.content}```')
