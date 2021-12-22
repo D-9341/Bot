@@ -98,7 +98,7 @@ class Mod(commands.Cog):
                     await ctx.send(embed = emb)
             else:
                 emb = disnake.Embed(colour = member.color)
-                emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
+                emb.set_author(name = ctx.author, icon_url = ctx.author.avatar.url)
                 emb.add_field(name = 'Был кикнут', value = member.mention)
                 emb.add_field(name = 'По причине', value = reason)
                 await ctx.send(embed = emb)
@@ -156,7 +156,7 @@ class Mod(commands.Cog):
             else:
                 if '--soft' in reason:
                     emb = disnake.Embed(color = 0x2f3136)
-                    emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
+                    emb.set_author(name = ctx.author, icon_url = ctx.author.avatar.url)
                     emb.add_field(name = 'Упрощённо забанен', value = f'{member.mention} ({member.name})')
                     if '--reason' in reason:
                         reason = reason.strip()[15:].strip()
@@ -171,7 +171,7 @@ class Mod(commands.Cog):
                     await member.unban(reason = '--softban')
                 else:
                     emb = disnake.Embed(colour = 0x2f3136)
-                    emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
+                    emb.set_author(name = ctx.author, icon_url = ctx.author.avatar.url)
                     emb.add_field(name = 'Был забанен', value = member.mention)
                     emb.add_field(name = 'По причине', value = reason)
                     await ctx.send(embed = emb)
@@ -213,7 +213,7 @@ class Mod(commands.Cog):
                 emb = disnake.Embed(colour = member.color, timestamp = datetime.datetime.utcnow())
                 emb.add_field(name = 'ВЫДАНА_РОЛЬ', value = f'{role.mention} | {role.name} | ID {role.id}')
                 emb.add_field(name = 'ВЫДАНА:', value = member.mention, inline = False)
-                emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
+                emb.set_author(name = ctx.author, icon_url = ctx.author.avatar.url)
                 await ctx.send(embed = emb)
         else:
             emb = disnake.Embed(description = f'{ctx.author.mention}, я не могу найти {role.mention} в списке ролей.', colour = member.color, timestamp = disnake.utils.utcnow())
@@ -248,7 +248,7 @@ class Mod(commands.Cog):
                 emb = disnake.Embed(colour = member.color, timestamp = disnake.utils.utcnow())
                 emb.add_field(name = 'ЗАБРАНА_РОЛЬ', value = f'{role.mention} | {role.name} | ID {role.id}')
                 emb.add_field(name = 'ЗАБРАНА_У:', value = member.mention, inline = False)
-                emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
+                emb.set_author(name = ctx.author, icon_url = ctx.author.avatar.url)
                 await ctx.send(embed = emb)
         else:
             emb = disnake.Embed(description = f'{ctx.author.mention}, я не могу найти {role.mention} в списке ролей.', colour = member.color, timestamp = disnake.utils.utcnow())
@@ -280,7 +280,7 @@ class Mod(commands.Cog):
                 if role != None:
                     await member.add_roles(role)
                     emb = disnake.Embed(colour = color, timestamp = disnake.utils.utcnow())
-                    emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
+                    emb.set_author(name = ctx.author, icon_url = ctx.author.avatar.url)
                     emb.add_field(name = 'Заглушён', value = f'{member.mention}')
                     emb.add_field(name = 'По причине', value = reason)
                     emb.add_field(name = 'Время заглушения', value = f'{time}s')
@@ -304,7 +304,7 @@ class Mod(commands.Cog):
                     role = await ctx.guild.create_role(name = 'Muted', colour = 0x000001, reason = 'Создано автоматически командой mute')
                     await member.add_roles(role)
                     emb = disnake.Embed(colour = color, timestamp = disnake.utils.utcnow())
-                    emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
+                    emb.set_author(name = ctx.author, icon_url = ctx.author.avatar.url)
                     emb.add_field(name = 'Заглушён', value = f'{member.mention}')
                     emb.add_field(name = 'По причине', value = reason)
                     emb.add_field(name = 'Время заглушения', value = f'{time}s')
