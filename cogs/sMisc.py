@@ -4,10 +4,8 @@ import os
 import random
 import re
 
-import discord
-import discord_slash
-from discord.ext import commands
-from discord_slash import cog_ext as slash
+import disnake
+from disnake.ext import commands
 from pymongo import MongoClient
 
 passw = os.environ.get('passw')
@@ -52,53 +50,87 @@ class sMisc(commands.Cog):
     async def on_ready(self):
         print('Группа Slash-команд Misc загружена')
 
-    @slash.cog_slash(name = 'vote', description = 'Устраивает голосование за какое-либо событие', options = [{'name': 'text', 'description': 'Текст для голосования за. Пишите так, будто слова *голосуем за* уже написаны', 'required': True, 'type': 3}])
-    async def _vote(self, ctx, *, text):
-        emb = discord.Embed(description = 'ГОЛОСОВАНИЕ', colour = discord.Color.orange())
-        emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
-        emb.add_field(name = 'Голосуем за:', value = text)
-        emb.set_footer(text = '🚫 - воздержусь')
-        sent = await ctx.send(embed = emb)
-        await sent.add_reaction('👍')
-        await sent.add_reaction('👎')
-        await sent.add_reaction('🚫')
+    @commands.slash_command(name = "roll", description = 'Ролит случайное число')
+    async def _roll(self, inter, first: int = None, second: int = None):
+        '''
+        Parameters
+        ----------
+        first: :class:`str`
+            Первое число
+        second: :class:`str`
+            Второе число
+        '''
+        if first == None and second == None:
+            rand = random.randint(0, 100)
+            if rand == 69:
+                await inter.response.send_message(f'`{inter.author} получает случайное число(0-100)\n100`')
+            else:
+                rand1 = random.randint(0, 9)
+                rand2 = random.randint(0, 9)
+                await inter.response.send_message(f'`{inter.author} получает случайное число(0-100)\n0{rand1}{rand2}`')
+        if first != None and second == None:
+            rand = random.randint(0, first)
+            await inter.response.send_message(f'`{inter.author} получает случайное число(0-{first})\n{rand}`')
+        if first != None and second != None:
+            if first > second:
+                await inter.response.send_message(f'`{inter.author} получает случайное число({first}-{first})\n{first}`')
+            rand = random.randint(first, second)
+            await inter.response.send_message(f'`{inter.author} получает случайное число({first}-{second})\n{rand}`')
 
-    @slash.cog_slash(name = 'rolemembers', description = 'Показывает участников с определённой ролью', options = [{'name': 'role', 'description': 'Роль для поиска', 'required': True, 'type': 8}])
-    async def _rolemembers(self, ctx, role: discord.Role, member: discord.Member = None):
-        emb = discord.Embed(colour = discord.Color.orange())
+    @commands.slash_command(name = 'coinflip', description = 'Подкидывает монетку')
+    async def _coinflip(self, inter):
+        emb = disnake.Embed(description = f'{inter.author.mention} подбрасывает монетку: ОРЁЛ', colour = 0x2f3136)
+        emb1 = disnake.Embed(description = f'{inter.author.mention} подбрасывает монетку: РЕШКА', colour = 0x2f3136)
+        choices = [emb, emb1]
+        rancoin = random.choice(choices)
+        await inter.response.send_message(embed = rancoin)
+
+    @commands.slash_command(name = 'rolemembers', description = 'Показывает участников с определённой ролью')
+    async def _rolemembers(self, inter, role: disnake.Role, member: disnake.Member = None):
+        '''
+        Parameters
+        ----------
+        role: :class:`disnake.Role`
+            Роль для поиска
+        '''
+        emb = disnake.Embed(colour = 0x2f3136)
         if len(role.members) != 0:
             emb.add_field(name = f'Участники с ролью {role} ({len(role.members)})', value = ', '.join([member.mention for member in role.members]))
-            if ctx.guild.owner.id != self.client.owner_id and ctx.guild.owner.id not in friends:
-                emb.set_footer(text = 'Cephalon Cy by сасиска#2472')
         else:
             emb.set_footer(text = 'Обнаружено 0 участников с этой ролью.')
-        await ctx.send(embed = emb)
+        await inter.response.send_message(embed = emb)
 
-    @slash.cog_slash(name = 'guild', description = 'Показывает информацию о сервере')
-    async def _guild(self, ctx):
-        guild = ctx.guild
-        emb = discord.Embed(colour = discord.Color.orange(), timestamp = datetime.datetime.utcnow())
-        emb.set_author(name = guild, icon_url = guild.icon_url)
+    @commands.slash_command(name = 'guild', description = 'Показывает информацию о сервере')
+    async def _guild(self, inter):
+        guild = inter.guild
+        emb = disnake.Embed(colour = 0x2f3136, timestamp = disnake.utils.utcnow())
+        emb.set_author(name = guild, icon_url = guild.icon.url)
         emb.add_field(name = 'ID сервера', value = guild.id)
         emb.add_field(name = 'Голосовой регион', value = guild.region)
         emb.add_field(name = 'Владелец', value = guild.owner.mention)
         emb.add_field(name = 'Участников', value = guild.member_count)
-        emb.add_field(name = 'Из них ботов', value = len(list(filter(lambda m: m.bot, ctx.guild.members))))
-        emb.add_field(name = 'Из них людей', value = len(list(filter(lambda m: not m.bot, ctx.guild.members))))
+        emb.add_field(name = 'Из них ботов', value = len(list(filter(lambda m: m.bot, inter.guild.members))))
+        emb.add_field(name = 'Из них людей', value = len(list(filter(lambda m: not m.bot, inter.guild.members))))
         emb.add_field(name = 'Каналов', value = f'Текстовых {len(guild.text_channels)} | Голосовых {len(guild.voice_channels)}')
         roles = ', '.join([role.name for role in guild.roles[1:]])
-        if 50 > roles > 1:
+        if 50 > len(roles) > 1:
             emb.add_field(name = f'Роли ({len(guild.roles)-1})', value = roles, inline = False)
-        now = datetime.datetime.today()
-        then = guild.created_at
+        now = disnake.utils.utcnow()
+        then = guild.created_at.utcnow()
         delta = now - then
         d = guild.created_at.strftime('%d.%m.%Y %H:%M:%S UTC')
-        emb.add_field(name = 'Дата создания сервера', value = f'{delta.days} дней назад. ({d})', inline = False)
-        emb.set_thumbnail(url = guild.icon_url)
-        await ctx.send(embed = emb)
+        emb.add_field(name = 'Дата создания сервера', value = f'{d}', inline = False)
+        emb.set_thumbnail(url = guild.icon.url)
+        await inter.response.send_message(embed = emb)
 
-    @slash.cog_slash(name = 'roleinfo', description = 'Информация о роли', options = [{'name': 'role', 'description': 'Роль', 'required': True, 'type': 8}])
-    async def _roleinfo(self, ctx, *, role: discord.Role):
+    @commands.slash_command(name = 'roleinfo', description = 'Информация о роли')
+    async def _roleinfo(self, inter, *, role: disnake.Role):
+        '''
+        Parameters
+        ----------
+        role: :class:`disnake.Role`
+            Роль
+        '''
         if role.mentionable == False:
             role.mentionable = 'Нет' 
         elif role.mentionable == True:
@@ -111,74 +143,86 @@ class sMisc(commands.Cog):
             role.hoist = 'Нет'
         elif role.hoist == True:
             role.hoist = 'Да'
-        emb = discord.Embed(title = role.name, colour = role.colour)
+        emb = disnake.Embed(title = role.name, colour = 0x2f3136)
         emb.add_field(name = 'ID', value = role.id)
         emb.add_field(name = 'Цвет', value = role.color)
         emb.add_field(name = 'Упоминается?', value = role.mentionable)
         emb.add_field(name = 'Управляется интеграцией?', value = role.managed)
         emb.add_field(name = 'Позиция в списке', value = role.position)
-        now = datetime.datetime.today()
-        then = role.created_at
+        now = disnake.utils.utcnow()
+        then = role.created_at.utcnow()
         delta = now - then
         d = role.created_at.strftime('%d.%m.%Y %H:%M:%S GMT')
-        emb.add_field(name = 'Создана', value = f'{delta.days} дня(ей) назад. ({d})', inline = False)
+        emb.add_field(name = 'Создана', value = f'{d}', inline = False)
         emb.add_field(name = 'Показывает участников отдельно?', value = role.hoist)
-        await ctx.send(embed = emb)
+        await inter.response.send_message(embed = emb)
 
-    @slash.cog_slash(name = 'avatar', description = 'Выводит аватар участника', options = [{'name': 'member', 'description': 'Пользователь', 'required': False, 'type': 6}])
-    async def _avatar(self, ctx, member: discord.User = None):
+    @commands.slash_command(name = 'avatar', description = 'Выводит аватар участника')
+    async def _avatar(self, inter, member: disnake.Member = None):
+        '''
+        Parameters
+        ----------
+        member: :class:`disnake.Member`
+            Пользователь
+        '''
         if member == None:
-            member = ctx.author
-        emb = discord.Embed(colour = member.color)
-        if not member.is_avatar_animated():
-            emb.set_image(url = member.avatar_url_as(format = 'png'))
+            member = inter.author
+        emb = disnake.Embed(colour = 0x2f3136)
+        if not member.avatar.is_animated():
+            emb.set_image(url = member.avatar.with_format('png'))
         else:
-            emb.set_image(url = member.avatar_url)
+            emb.set_image(url = member.avatar.url)
         emb.set_author(name = member)
-        await ctx.send(embed = emb)
+        await inter.response.send_message(embed = emb)
 
-    @slash.cog_slash(name = 'about', description = 'Показывает информацию о участнике', options = [{'name': 'member', 'description': 'Участник', 'required': False, 'type': 6}])
-    async def _about(self, ctx, member: discord.User = None):
+    @commands.slash_command(name = 'about', description = 'Показывает информацию о участнике')
+    async def _about(self, inter, member: disnake.Member = None):
+        '''
+        Parameters
+        ----------
+        member: :class:`disnake.Member`
+            Участник
+        '''
         if member == None:
-            member = ctx.author
+            member = inter.author
         if member.nick == None:
             member.nick = 'Н/Д'
         if member.bot == False:
             bot = 'Неа'
         elif member.bot == True:
             bot = 'Ага'
-        emb = discord.Embed(colour = 0x2f3136, timestamp = datetime.datetime.utcnow())
+        emb = disnake.Embed(colour = 0x2f3136, timestamp = disnake.utils.utcnow())
         emb.set_author(name = member)
         emb.add_field(name = 'ID', value = member.id)
-        now = datetime.datetime.today()
-        then = member.created_at
+        now = disnake.utils.utcnow()
+        then = member.created_at.utcnow()
         delta = now - then
         d = member.created_at.strftime('%d.%m.%Y %H:%M:%S UTC')
-        then1 = member.joined_at
+        then1 = member.joined_at.utcnow()
         delta1 = now - then1
         d1 = member.joined_at.strftime('%d.%m.%Y %H:%M:%S UTC')
-        emb.add_field(name = 'Создан', value = f'{delta.days} дня(ей) назад. ({d})', inline = False)
-        emb.add_field(name = 'Вошёл', value = f'{delta1.days} дня(ей) назад. ({d1})', inline = False)
+        emb.add_field(name = 'Создан', value = f'{d}', inline = False)
+        emb.add_field(name = 'Вошёл', value = f'{d1}', inline = False)
         emb.add_field(name = 'Упоминание', value = member.mention)
         emb.add_field(name = 'Необработанное имя', value = member.name)
         emb.add_field(name = 'Никнейм', value = member.nick)
-        if member.status == discord.Status.online:
+        if member.status == disnake.Status.online:
             status = 'В сети'
-        elif member.status == discord.Status.dnd:
+        elif member.status == disnake.Status.dnd:
             status = 'Не беспокоить'
-        elif member.status == discord.Status.idle:
+        elif member.status == disnake.Status.idle:
             status = 'Не активен'
-        elif member.status == discord.Status.offline:
+        elif member.status == disnake.Status.offline:
             status = 'Не в сети'
         emb.add_field(name = 'Статус', value = status)
         roles = ', '.join([role.name for role in member.roles[1:]])
         emb.add_field(name = 'Бот?', value = bot)
         limit = len(member.roles)
-        if 50 > limit > 1:
+        if limit > 1:
             emb.add_field(name = f'Роли ({len(member.roles)-1})', value = roles, inline = False)
             emb.add_field(name = 'Высшая Роль', value = member.top_role.mention, inline = False)
-        emb.set_thumbnail(url = member.avatar_url)
-        await ctx.send(embed = emb)
+        emb.set_thumbnail(url = member.avatar.url)
+        await inter.response.send_message(embed = emb)
 
 def setup(client):
     client.add_cog(sMisc(client))
