@@ -4,8 +4,8 @@ import os
 import random
 import re
 
-import discord
-from discord.ext import commands
+import disnake
+from disnake.ext import commands
 from pymongo import MongoClient
 
 passw = os.environ.get('passw')
@@ -24,8 +24,8 @@ botversions = [764882153812787250, 694170281270312991, 762015251264569352]
 class Slapper(commands.Converter):
     async def convert(self, ctx, argument):
         mention = random.choice(ctx.guild.members)
-        emb = discord.Embed(description = f'{argument}', colour =  0x2f3136, timestamp = ctx.message.created_at)
-        emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
+        emb = disnake.Embed(description = f'{argument}', colour = 0x2f3136, timestamp = ctx.message.created_at)
+        emb.set_author(name = ctx.author, icon_url = ctx.author.avatar.url)
         return await ctx.send(f'@someone ||{mention.mention}||', embed = emb)
 
 class TimeConverter(commands.Converter):
@@ -53,8 +53,8 @@ class Misc(commands.Cog):
     @commands.command()
     @commands.cooldown(1, 60, commands.BucketType.guild)
     async def vote(self, ctx, *, text):
-        emb = discord.Embed(description = 'ГОЛОСОВАНИЕ', colour = discord.Color.orange())
-        emb.set_author(name = ctx.author, icon_url = ctx.author.avatar_url)
+        emb = disnake.Embed(description = 'ГОЛОСОВАНИЕ', colour = disnake.Color.orange())
+        emb.set_author(name = ctx.author, icon_url = ctx.author.avatar.url)
         emb.add_field(name = 'Голосуем за:', value = text)
         emb.set_footer(text = '🚫 - воздержусь')
         sent = await ctx.send(embed = emb)
@@ -80,7 +80,7 @@ class Misc(commands.Cog):
     @commands.cooldown(1, 5, commands.BucketType.user)
     async def guild(self, ctx):
         guild = ctx.guild
-        emb = discord.Embed(colour = discord.Color.orange(), timestamp = ctx.message.created_at)
+        emb = disnake.Embed(colour = disnake.Color.orange(), timestamp = disnake.utils.utcnow())
         emb.set_author(name = guild, icon_url = guild.icon_url)
         emb.add_field(name = 'ID сервера', value = guild.id)
         emb.add_field(name = 'Голосовой регион', value = guild.region)
@@ -114,7 +114,7 @@ class Misc(commands.Cog):
             role.hoist = 'Нет'
         elif role.hoist == True:
             role.hoist = 'Да'
-        emb = discord.Embed(title = role.name, colour = role.colour)
+        emb = disnake.Embed(title = role.name, colour = role.colour)
         emb.add_field(name = 'ID', value = role.id)
         emb.add_field(name = 'Цвет', value = role.color)
         emb.add_field(name = 'Упоминается?', value = role.mentionable)
@@ -133,17 +133,11 @@ class Misc(commands.Cog):
     async def avatar(self, ctx, member: discord.User = None):
         if member == None:
             member = ctx.author
-        av = 'png'
-        av1 = 'webp'
-        av2 = 'jpg'
-        emb = discord.Embed(colour = 0x2f3136)
-        if member.is_avatar_animated() == False:
-            emb.add_field(name = '.png', value = f'[Ссылка]({member.avatar_url_as(format = av)})')
-            emb.add_field(name = '.webp', value = f'[Ссылка]({member.avatar_url_as(format = av1)})')
-            emb.add_field(name = '.jpg', value = f'[Ссылка]({member.avatar_url_as(format = av2)})')
+        emb = disnake.Embed(colour = 0x2f3136)
+        if not member.avatar.is_animated():
+            emb.set_image(url = member.avatar.with_format('png'))
         else:
-            emb.set_footer(text = 'По причине того, что аватар анимирован ссылок на статичные форматы нет')
-        emb.set_image(url = member.avatar_url)
+            emb.set_image(url = member.avatar.url)
         emb.set_author(name = member)
         await ctx.send(embed = emb)
 
@@ -158,7 +152,7 @@ class Misc(commands.Cog):
             bot = 'Неа'
         elif member.bot == True:
             bot = 'Ага'
-        emb = discord.Embed(colour = 0x2f3136, timestamp = datetime.datetime.utcnow())
+        emb = disnake.Embed(colour = member.color, timestamp = disnake.utils.utcnow())
         emb.set_author(name = member)
         emb.add_field(name = 'ID', value = member.id)
         now = datetime.datetime.today()
@@ -173,13 +167,13 @@ class Misc(commands.Cog):
         emb.add_field(name = 'Упоминание', value = member.mention)
         emb.add_field(name = 'Raw имя', value = member.name)
         emb.add_field(name = 'Никнейм', value = member.nick)
-        if member.status == discord.Status.online:
+        if member.status == disnake.Status.online:
             status = 'В сети'
-        elif member.status == discord.Status.dnd:
+        elif member.status == disnake.Status.dnd:
             status = 'Не беспокоить'
-        elif member.status == discord.Status.idle:
+        elif member.status == disnake.Status.idle:
             status = 'Не активен'
-        elif member.status == discord.Status.offline:
+        elif member.status == disnake.Status.offline:
             status = 'Не в сети'
         emb.add_field(name = 'Статус', value = status)
         roles = ', '.join([role.name for role in member.roles[1:]])
@@ -188,18 +182,18 @@ class Misc(commands.Cog):
         if limit > 1:
             emb.add_field(name = f'Роли ({len(member.roles)-1})', value = roles, inline = False)
             emb.add_field(name = 'Высшая Роль', value = member.top_role.mention, inline = False)
-        emb.set_thumbnail(url = member.avatar_url)
+        emb.set_thumbnail(url = member.avatar.url)
         await ctx.send(embed = emb)
 
     @commands.command()
     @commands.cooldown(1, 5, commands.BucketType.user)
     async def remind(self, ctx, time: TimeConverter, *, text):
-        emb = discord.Embed(colour = ctx.author.color, timestamp = ctx.message.created_at)
+        emb = disnake.Embed(colour = ctx.author.color, timestamp = disnake.utils.utcnow())
         emb.add_field(name = 'Напомню через', value = f'{time}s')
         emb.add_field(name = 'О чём напомню?', value = text)
         await ctx.send(embed = emb, delete_after = time)
         await asyncio.sleep(time)
-        emb = discord.Embed(colour = ctx.author.color, timestamp = ctx.message.created_at)
+        emb = disnake.Embed(colour = ctx.author.color, timestamp = disnake.utils.utcnow())
         emb.add_field(name = 'Напомнил через', value = f'{time}s')
         emb.add_field(name = 'Напоминаю о', value = text)
         await ctx.send(f'{ctx.author.mention}', embed = emb)
