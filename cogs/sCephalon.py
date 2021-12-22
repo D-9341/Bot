@@ -86,7 +86,7 @@ class sCephalon(commands.Cog):
         emb = disnake.Embed(description = '[Ссылка](https://discord.com/api/oauth2/authorize?client_id=694170281270312991&permissions=8&scope=bot%20applications.commands) для приглашения Cy на сервера.', colour = disnake.Color.orange())
         await inter.responce.send_message(embed = emb)
 
-    @commands.slash_command(name = 'help', description = 'Здесь можно получить полную помощь по всем командам'
+    @commands.slash_command(name = 'help', description = 'Здесь можно получить полную помощь по всем командам')
     async def _help(self, ctx, arg: str = commands.Param(choices = {'about': 'about'}, {'avatar': 'avatar'}, {'ban': 'ban'}, {'content': 'content'}, {'clear': 'clear'}, {'dm': 'dm'}, {'say': 'say'}, {'edit': 'edit'}, {'give': 'give'}, {'kick': 'kick'}, {'mute': 'mute'}, {'role': 'role'}, {'take': 'take'}, {'unmute': 'unmute'}, {'embeds': 'embeds'}, {'cephalon': 'cephalon'}, {'mod': 'mod'}, {'misc': 'misc'}, {'all': 'all'}, {'roll': 'roll'})):
         if arg == None:
             emb = disnake.Embed(title = self.client.user.name, description = 'Доступные Slash-команды', colour = disnake.Color.orange())
