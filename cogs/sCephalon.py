@@ -58,7 +58,7 @@ class sCephalon(commands.Cog):
             await inter.responce.send_message(embed = emb)
 
     @commands.slash_command(name = 'ping', description = 'Отображение задержки клиента бота. Нормальная задержка в диапазоне от 90 до 130 миллисекунд.')
-    async def _ping(self, ctx):
+    async def _ping(self, inter):
         emb = disnake.Embed(description = f'`fetching..`', colour = disnake.Color.orange())
         emb1 = disnake.Embed(description = f'Pong!  `{round(self.client.latency * 1000)}ms`', colour = disnake.Color.orange())
         message = await inter.responce.send_message(embed = emb)
@@ -66,7 +66,7 @@ class sCephalon(commands.Cog):
         await message.edit(embed = emb1)
 
     @commands.slash_command(name = 'info', description = 'Информация о боте')
-    async def _info(self, ctx):
+    async def _info(self, inter):
         emb = disnake.Embed(colour = disnake.Color.orange())
         emb.set_author(name = self.client.user.name, url = 'https://warframe.fandom.com/wiki/Cephalon_Cy', icon_url = self.client.user.avatar_url)
         emb.add_field(name = 'Версия', value = '0.12.12.0.0')
@@ -82,12 +82,12 @@ class sCephalon(commands.Cog):
         await inter.responce.send_message(embed = emb)
 
     @commands.slash_command(name = 'invite', description = 'Для приглашения бота на сервер')
-    async def _invite(self, ctx):
+    async def _invite(self, inter):
         emb = disnake.Embed(description = '[Ссылка](https://discord.com/api/oauth2/authorize?client_id=694170281270312991&permissions=8&scope=bot%20applications.commands) для приглашения Cy на сервера.', colour = disnake.Color.orange())
         await inter.responce.send_message(embed = emb)
 
     @commands.slash_command(name = 'help', description = 'Здесь можно получить полную помощь по всем командам')
-    async def _help(self, ctx, arg: str = commands.Param(choices = {'about': 'about'}, {'avatar': 'avatar'}, {'ban': 'ban'}, {'content': 'content'}, {'clear': 'clear'}, {'dm': 'dm'}, {'say': 'say'}, {'edit': 'edit'}, {'give': 'give'}, {'kick': 'kick'}, {'mute': 'mute'}, {'role': 'role'}, {'take': 'take'}, {'unmute': 'unmute'}, {'embeds': 'embeds'}, {'cephalon': 'cephalon'}, {'mod': 'mod'}, {'misc': 'misc'}, {'all': 'all'}, {'roll': 'roll'})):
+    async def _help(self, inter, arg: str = commands.Param(choices = {'about': 'about'}, {'avatar': 'avatar'}, {'ban': 'ban'}, {'content': 'content'}, {'clear': 'clear'}, {'dm': 'dm'}, {'say': 'say'}, {'edit': 'edit'}, {'give': 'give'}, {'kick': 'kick'}, {'mute': 'mute'}, {'role': 'role'}, {'take': 'take'}, {'unmute': 'unmute'}, {'embeds': 'embeds'}, {'cephalon': 'cephalon'}, {'mod': 'mod'}, {'misc': 'misc'}, {'all': 'all'}, {'roll': 'roll'})):
         if arg == None:
             emb = disnake.Embed(title = self.client.user.name, description = 'Доступные Slash-команды', colour = disnake.Color.orange())
             emb.add_field(name = 'Cephalon', value = '`info`, `invite`, `join`, `leave`, `ping`', inline = False)
