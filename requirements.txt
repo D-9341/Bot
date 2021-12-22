@@ -1,6 +1,5 @@
-discord.py[voice]
-discord.py
-discord-py-slash-command
+disnake
+disnake[voice]
 aiohttp
 websockets
 chardet
