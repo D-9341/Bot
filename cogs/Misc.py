@@ -68,8 +68,8 @@ class Misc(commands.Cog):
 
     @commands.command()
     @commands.cooldown(1, 5, commands.BucketType.user)
-    async def rolemembers(self, ctx, role: discord.Role, member: discord.Member = None):
-        emb = discord.Embed(colour = discord.Color.orange())
+    async def rolemembers(self, ctx, role: disnake.Role, member: disnake.Member = None):
+        emb = disnake.Embed(colour = disnake.Color.orange())
         if len(role.members) != 0:
             emb.add_field(name = f'Участники с ролью {role} ({len(role.members)})', value = ', '.join([member.mention for member in role.members]))
         else:
@@ -101,7 +101,7 @@ class Misc(commands.Cog):
 
     @commands.command()
     @commands.cooldown(1, 5, commands.BucketType.user)
-    async def roleinfo(self, ctx, role: discord.Role):
+    async def roleinfo(self, ctx, role: disnake.Role):
         if role.mentionable == False:
             role.mentionable = 'Нет'
         elif role.mentionable == True:
@@ -130,7 +130,7 @@ class Misc(commands.Cog):
 
     @commands.command(aliases = ['av'])
     @commands.cooldown(1, 5, commands.BucketType.user)
-    async def avatar(self, ctx, member: discord.User = None):
+    async def avatar(self, ctx, member: disnake.User = None):
         if member == None:
             member = ctx.author
         emb = disnake.Embed(colour = 0x2f3136)
@@ -143,7 +143,7 @@ class Misc(commands.Cog):
 
     @commands.command(aliases = ['me'])
     @commands.cooldown(1, 5, commands.BucketType.user)
-    async def about(self, ctx, member: discord.Member = None):
+    async def about(self, ctx, member: disnake.Member = None):
         if member == None:
             member = ctx.author
         if member.nick == None:
