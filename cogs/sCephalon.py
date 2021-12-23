@@ -61,7 +61,8 @@ class sCephalon(commands.Cog):
     async def _ping(self, inter):
         emb = disnake.Embed(description = f'`fetching..`', colour = disnake.Color.orange())
         emb1 = disnake.Embed(description = f'Pong!  `{round(self.client.latency * 1000)}ms`', colour = disnake.Color.orange())
-        message = await inter.response.send_message(embed = emb)
+        await inter.response.send_message(embed = emb)
+        message = await inter.original_message()
         await asyncio.sleep(self.client.latency)
         await message.edit(embed = emb1)
 
