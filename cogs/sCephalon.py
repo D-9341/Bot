@@ -54,7 +54,7 @@ class sCephalon(commands.Cog):
             await inter.response.send_message(embed = emb)
         if version == '0.12.12.0.0':
             emb = disnake.Embed(color = 0x2f3136)
-            emb.add_field(name = '0.12.12.0.0', value = 'Переход на новую библиотеку, способствующий дальнейшему поддержанию бота в живых. Изменения:\nУбрана команда vote, так как новая либра не даёт мне способов ставить реакции под сообщением, что отправил бот\nНовая команда - timeout\nПозволяет `отправить подумать над своим поведением` пользователя.')
+            emb.add_field(name = '0.12.12.0.0', value = 'Переход на новую библиотеку, способствующий дальнейшему поддержанию бота в живых. Изменения:\nУбрана команда vote из меню Slash-команд, так как новая либра не даёт мне способов ставить реакции под сообщением, что отправил бот\nНовая команда - timeout\nПозволяет `отправить подумать над своим поведением` пользователя.')
             await inter.response.send_message(embed = emb)
 
     @commands.slash_command(name = 'ping', description = 'Отображение задержки клиента бота. Нормальная задержка в диапазоне от 90 до 130 миллисекунд.')
@@ -76,7 +76,7 @@ class sCephalon(commands.Cog):
             emb.add_field(name = 'Принадлежность', value = 'Это - мой основной сервер.')
         if inter.guild.id == 735874149578440855:
             emb.add_field(name = 'Тестирование', value = 'Это - мой тестовый сервер.')
-        emb.add_field(name = 'Раздражаю', value = f'{len(self.client.users)} человек')
+        emb.add_field(name = 'Обслуживаю', value = f'{len(self.client.users)} человек')
         emb.add_field(name = 'Существую на', value = f'{len(self.client.guilds)} серверах')
         emb.set_footer(text = 'Данное приложение не имеет никакого причастия к игре Warframe.', icon_url = 'https://i.playground.ru/p/yVaOZNSTdgUTxmzy_qvzzQ.png')
         await inter.response.send_message(embed = emb)
@@ -93,7 +93,7 @@ class sCephalon(commands.Cog):
             emb.add_field(name = 'Cephalon', value = '`info`, `invite`, `join`, `leave`, `ping`', inline = False)
             emb.add_field(name = 'Embeds', value = '`content`, `edit`, `say`', inline = False)
             if not (inter.guild.owner.id != self.client.owner_id and inter.guild.owner.id not in friends):
-                emb.add_field(name = 'Fun', value = '`aye_balbec`, `cu`, `coinflip`, `dotersbrain`, `niggers`, `rp`, `rap`, `zatka`', inline = False)
+                emb.add_field(name = 'Fun', value = '`aye_balbec`, `coinflip`, `dotersbrain`, `niggers`, `rp`, `rap`, `zatka`', inline = False)
             emb.add_field(name = 'Mod', value = '`ban`, `clear`, `dm`, `give`, `kick`, `mute`, `take`, `unmute`', inline = False)
             emb.add_field(name = 'Misc', value = '`about`, `avatar`, `guild`, `remind`, `role`, `rolemembers`', inline = False)
             emb.add_field(name = 'ᅠ', value = 'Назовите комнату `Создать канал` (**регистр обязателен**), чтобы бот автоматически создавал для вас временные каналы, которые будут удаляться после того, как все люди выйдут из канала.')
@@ -144,10 +144,10 @@ class sCephalon(commands.Cog):
             await inter.response.send_message('```py\nabout - информация о человеке\navatar - аватар человека\nguild - информация о сервере\nremind - напоминание о событии\nroleinfo - информация о роли\nrolemembers - участники роли\nsomeone - упоминание someone\nvote - голосование за что-то.```')
         elif arg == 'All' or arg == 'all':
             await inter.response.send_message('```py\ninfo - информация о боте\ninvite - ссылка-приглашения бота\njoin - бот зайдёт в ваш голосовой канал\nleave - бот из него выйдет\nping - проверяет задержку клиента бота.```')
-            await inter.response.send_message('```py\ncontent(ctx) - позволяет увидеть raw контент сообщения\nedit - редактирует сообщение, отправленное от лица бота. Иные сообщения редактировать нельзя.\nsay - используется для написания как текстов, так и эмбедов.```')
-            await inter.response.send_message('```py\naye_balbec - я не ангел и не бес, просто..\ncu - медь\ncoinflip(c, coin) - подкидывает монетку\ndotersbrain - проверка на мозг дотера\nniggers - осуждаем!\nrp - ультимативный гайд по рп отыгровке\nrap - .rap\nzatka - Форма заявки для набор кадров```')
-            await inter.response.send_message('```py\nban - бан участника\nclear - очистка чата, не более 300!\ndm - пишет в лс участнику написанный текст\ngive - выдаёт роль\nkick - кик участника\nmute - мут участника\ntake - забирает роль\nunmute - снятие мута участника.```')
-            await inter.response.send_message('```py\nabout - информация о человеке\navatar - аватар человека\nguild - информация о сервере\nremind - напоминание о событии\nroleinfo - информация о роли\nrolemembers - участники роли\nsomeone - упоминание someone\nvote - голосование за что-то.```')
+            await inter.send('```py\ncontent(ctx) - позволяет увидеть raw контент сообщения\nedit - редактирует сообщение, отправленное от лица бота. Иные сообщения редактировать нельзя.\nsay - используется для написания как текстов, так и эмбедов.```')
+            await inter.send('```py\naye_balbec - я не ангел и не бес, просто..\ncu - медь\ncoinflip(c, coin) - подкидывает монетку\ndotersbrain - проверка на мозг дотера\nniggers - осуждаем!\nrp - ультимативный гайд по рп отыгровке\nrap - .rap\nzatka - Форма заявки для набор кадров```')
+            await inter.send('```py\nban - бан участника\nclear - очистка чата, не более 300!\ndm - пишет в лс участнику написанный текст\ngive - выдаёт роль\nkick - кик участника\nmute - мут участника\ntake - забирает роль\nunmute - снятие мута участника.```')
+            await inter.send('```py\nabout - информация о человеке\navatar - аватар человека\nguild - информация о сервере\nremind - напоминание о событии\nroleinfo - информация о роли\nrolemembers - участники роли\nsomeone - упоминание someone\nvote - голосование за что-то.```')
 
 def setup(client):
     client.add_cog(sCephalon(client))
