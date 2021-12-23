@@ -22,40 +22,34 @@ class sFun(commands.Cog):
 
     @commands.slash_command(name = 'dotersbrain', description = 'Здесь вы можете проверить себя на наличие мозга дотера.')
     async def _dotersbrain(self, inter):
-        sent1 = await inter.response.send_message(f'{inter.author.mention}, через 5 секунд появится одно из слов (чё, а, да, нет, ок), на которое вам нужно будет правильно ответить. На размышление 4 секунды.')
+        await inter.response.send_message(f'{inter.author.mention}, через 5 секунд появится одно из слов (чё, а, да, нет, ок), на которое вам нужно будет правильно ответить. На размышление 4 секунды.')
         await asyncio.sleep(5)
         words = ['чё', 'а', 'да', 'нет', 'ок']
         rand = random.choice(words)
-        sent = await inter.response.send_message(rand)
+        await inter.send(rand)
+        sent = await inter.original_message()
         try:
             msg = await self.client.wait_for('message', timeout = 4, check = lambda message: message.author == inter.author and message.channel == inter.channel)
             if msg.content.lower() == 'хуй через плечо' and sent.content == 'чё':
-                await inter.response.send_message(f'Поздравляю, у вас 3 стадия рака!')
-                await sent1.delete()
+                await inter.send(f'Поздравляю, у вас 3 стадия рака!')
                 await sent.delete()
             elif sent.content == 'а' and msg.content.lower() == 'хуй на':
-                await inter.response.send_message(f'Поздравляю, у вас 3 стадия рака!')
-                await sent1.delete()
+                await inter.send(f'Поздравляю, у вас 3 стадия рака!')
                 await sent.delete()
             elif sent.content == 'да' and msg.content.lower() == 'пизда':
-                await inter.response.send_message(f'Поздравляю, у вас 3 стадия рака!')
-                await sent1.delete()
+                await inter.send(f'Поздравляю, у вас 3 стадия рака!')
                 await sent.delete()
             elif sent.content == 'нет' and msg.content.lower() == 'пидора ответ':
-                await inter.response.send_message(f'Поздравляю, у вас 3 стадия рака!')
-                await sent1.delete()
+                await inter.send(f'Поздравляю, у вас 3 стадия рака!')
                 await sent.delete()
             elif sent.content == 'ок' and msg.content.lower() == 'хуй намок':
-                await inter.response.send_message(f'Поздравляю, у вас 3 стадия рака!')
-                await sent1.delete()
+                await inter.send(f'Поздравляю, у вас 3 стадия рака!')
                 await sent.delete()
             else:
-                await inter.response.send_message('Вы совершенно здоровый человек! ||попробуйте cy/help dotersbrain||')
-                await sent1.delete()
+                await inter.send('Вы совершенно здоровый человек! ||попробуйте cy/help dotersbrain||')
                 await sent.delete()
         except asyncio.TimeoutError:
-            await inter.response.send_message(f'{inter.author.mention}, Слишком медленно.')
-            await sent1.delete()
+            await inter.send(f'{inter.author.mention}, Слишком медленно.')
             await sent.delete()
 
     @commands.slash_command(name = 'niggers', description = 'Осуждаем!')
