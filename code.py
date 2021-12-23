@@ -55,22 +55,6 @@ def reset_cooldown(command: commands.Command, message: disnake.Message) -> None:
     
 @client.event
 async def on_guild_role_update(before, after):
-    if before.name == '1':
-        role = before.guild.get_role(after.id)
-        if after.name == '2' or after.name == 'Muted':
-            await role.delete()
-            g = await before.guild.create_role(name = '1', color = disnake.Color(0xff0000), reason = 'Нет, нельзя менять название этой роли на Muted или 2') # it is not allowed to rename this role to Muted or 2
-            await g.edit(position = 2)
-        else:
-            await role.edit(name = '1', color = disnake.Color(0xff0000), reason = 'Нельзя изменять эту роль.') # it is not allowed to edit this role
-    if before.name == '2':
-        role = before.guild.get_role(after.id)
-        if after.name == '1' or after.name == 'Muted':
-            await role.delete()
-            g = await before.guild.create_role(name = '2', color = disnake.Color(0xff0000), reason = 'Нет, нельзя менять название этой роли на Muted или 1') # it is not allowed to rename this role to Muted or 1
-            await g.edit(position = 1)
-        else:
-            await role.edit(name = '2', color = disnake.Color(0xff0000), reason = 'Нельзя изменять эту роль.') # it is not allowed to edit this role
     if before.name == 'Muted':
         role = before.guild.get_role(after.id)
         if after.name == '2' or after.name == '1':
@@ -171,82 +155,6 @@ async def on_message(message):
     if message.content.startswith(f'<@!{client.user.id}>') and len(message.content) == len(f'<@!{client.user.id}>'):
         await message.channel.send(f'чё звал {message.author.mention} ||`cy/`||')
         await client.process_commands(message)
-    def _check(m):
-        return (m.author == message.author and len(m.mentions) and (disnake.utils.utcnow() - m.created_at.utcnow()).seconds < 2)
-    if len(list(filter(lambda m: _check(m), client.cached_messages))) >= 3:
-        if not message.author.bot:
-            role = disnake.utils.get(message.guild.roles, name = 'Muted')
-            role3 = disnake.utils.get(message.guild.roles, name = '----------Предупреждения----------')
-            role1 = disnake.utils.get(message.guild.roles, name = '1')
-            role2 = disnake.utils.get(message.guild.roles, name = '2')
-            if role != None and role1 != None and role2 != None and role3 != None:
-                if role not in message.author.roles:
-                    if role1 not in message.author.roles and role2 not in message.author.roles:
-                        await message.channel.send(f'{message.author.mention} Был заглушён на 10 минут за спам упоминаниями. Больше так не делай!')
-                        await message.author.add_roles(role, role1, role3)
-                        channel = client.get_channel(714175791033876490)
-                        emb = disnake.Embed(title = 'СРАБОТАЛ\_АВТО_МУТ', color = disnake.Color.orange(), timestamp = disnake.utils.utcnow())
-                        emb.add_field(name = 'СЕРВЕР', value = message.guild.name)
-                        emb.add_field(name = 'ПРЕДУПРЕЖДЕНИЕ', value = 'ПЕРВОЕ')
-                        emb.add_field(name = 'УЧАСТНИК', value = message.author)
-                        await channel.send(embed = emb)
-                        await asyncio.sleep(600)
-                        if role != None:
-                            if role in message.author.roles:
-                                await message.author.remove_roles(role)
-                                emb = disnake.Embed(description = f'{message.author.mention} Был разглушён.', color = 0x2f3136)
-                                await message.channel.send(embed = emb)
-                            else:
-                                emb = disnake.Embed(description = f'Роли Muted не было обнаружено в списке ролей {message.author.mention}.', color = 0x2f3136)
-                                await message.channel.send(embed = emb)
-                        else:
-                            emb = disnake.Embed(description = f'Невозможно снять заглушение у {message.author.mention}, т.к. роль `Muted` была удалена.', color = 0x2f3136)
-                            await message.channel.send(embed = emb)
-                    if role1 in message.author.roles and role2 not in message.author.roles:
-                        await message.channel.send(f'{message.author.mention} Был заглушён на 30 минут за спам упоминаниями. Последнее предупреждение.')
-                        await message.author.remove_roles(role1)
-                        await message.author.add_roles(role, role2, role3)
-                        channel = client.get_channel(714175791033876490)
-                        emb = disnake.Embed(title = 'СРАБОТАЛ\_АВТО_МУТ', color = disnake.Color.orange(), timestamp = datetime.datetime.utcnow())
-                        emb.add_field(name = 'СЕРВЕР', value = message.guild.name)
-                        emb.add_field(name = 'ПРЕДУПРЕЖДЕНИЕ', value = 'ПОСЛЕДНЕЕ')
-                        emb.add_field(name = 'УЧАСТНИК', value = message.author)
-                        await channel.send(embed = emb)
-                        await asyncio.sleep(1800)
-                        if role != None:
-                            if role in message.author.roles:
-                                await message.author.remove_roles(role)
-                                emb = disnake.Embed(description = f'{message.author.mention} Был разглушён.', color = 0x2f3136)
-                                await message.channel.send(embed = emb)
-                            else:
-                                emb = disnake.Embed(description = f'Роли Muted не было обнаружено в списке ролей {message.author.mention}.', color = 0x2f3136)
-                                await message.channel.send(embed = emb)
-                        else:
-                            emb = disnake.Embed(description = f'Невозможно снять заглушение у {message.author.mention}, т.к. роль `Muted` была удалена.', color = 0x2f3136)
-                            await message.channel.send(embed = emb)
-                    if role2 in message.author.roles:
-                        await message.channel.send(f'{message.author.mention} Был заглушён навсегда за спам упоминаниями.')
-                        await message.author.add_roles(role)
-                        await message.author.remove_roles(role2, role3)
-                        channel = client.get_channel(714175791033876490)
-                        emb = disnake.Embed(title = 'СРАБОТАЛ\_АВТО_МУТ', color = disnake.Color.orange(), timestamp = disnake.utils.utcnow())
-                        emb.add_field(name = 'СЕРВЕР', value = message.guild.name)
-                        emb.add_field(name = 'УЧАСТНИК', value = message.author)
-                        await channel.send(embed = emb)
-                else:
-                    return
-            elif role == None:
-                r = await message.guild.create_role(name = 'Muted', colour = disnake.Colour(0x000001), reason = 'Создано автоматически из-за недостатка ролей.')
-                await r.edit(position = 4)
-            elif role3 == None:
-                r1 = await message.guild.create_role(name = '----------Предупреждения----------', colour = disnake.Colour(0x2f3136), reason = 'Создано автоматически из-за недостатка ролей.')
-                r1.edit(position = 3)
-            elif role1 == None:
-                r2 = await message.guild.create_role(name = '1', colour = disnake.Colour(0xff0000), reason = 'Создано автоматически из-за недостатка ролей.')
-                r2.edit(position = 2)
-            elif role2 == None:
-                r3 = await message.guild.create_role(name = '2', colour = disnake.Colour(0xff0000), reason = 'Создано автоматически из-за недостатка ролей.')
-                r3.edit(position = 1)
     if ('сделать') in message.content.lower() or ('предлагаю') in message.content.lower() or ('предложение') in message.content.lower() and message.author.bot == False:
         await message.add_reaction('👍')
         await message.add_reaction('👎')
