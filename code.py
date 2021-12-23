@@ -172,7 +172,7 @@ async def on_message(message):
         await message.channel.send(f'чё звал {message.author.mention} ||`cy/`||')
         await client.process_commands(message)
     def _check(m):
-        return (m.author == message.author and len(m.mentions) and (datetime.datetime.utcnow() - m.created_at).seconds < 2)
+        return (m.author == message.author and len(m.mentions) and (disnake.utils.utcnow() - m.created_at.utcnow()).seconds < 2)
     if len(list(filter(lambda m: _check(m), client.cached_messages))) >= 3:
         if not message.author.bot:
             role = disnake.utils.get(message.guild.roles, name = 'Muted')
