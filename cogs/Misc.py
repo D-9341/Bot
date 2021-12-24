@@ -91,11 +91,8 @@ class Misc(commands.Cog):
         emb.add_field(name = 'Каналов', value = f'Текстовых {len(guild.text_channels)} | Голосовых {len(guild.voice_channels)}')
         roles = ', '.join([role.name for role in guild.roles[1:]])
         emb.add_field(name = f'Роли ({len(guild.roles)-1})', value = roles, inline = False)
-        now = datetime.datetime.today()
-        then = guild.created_at
-        delta = now - then
         d = guild.created_at.strftime('%d.%m.%Y %H:%M:%S UTC')
-        emb.add_field(name = 'Дата создания сервера', value = f'{delta.days} дней назад. ({d})', inline = False)
+        emb.add_field(name = 'Дата создания сервера', value = f'{d}', inline = False)
         emb.set_thumbnail(url = guild.icon_url)
         await ctx.send(embed = emb)
 
@@ -120,11 +117,8 @@ class Misc(commands.Cog):
         emb.add_field(name = 'Упоминается?', value = role.mentionable)
         emb.add_field(name = 'Управляется интеграцией?', value = role.managed)
         emb.add_field(name = 'Позиция в списке', value = role.position)
-        now = datetime.datetime.today()
-        then = role.created_at
-        delta = now - then
         d = role.created_at.strftime('%d.%m.%Y %H:%M:%S GMT')
-        emb.add_field(name = 'Создана', value = f'{delta.days} дня(ей) назад. ({d})', inline = False)
+        emb.add_field(name = 'Создана', value = f'{d}', inline = False)
         emb.add_field(name = 'Показывает участников отдельно?', value = role.hoist)
         await ctx.send(embed = emb)
 
@@ -155,15 +149,10 @@ class Misc(commands.Cog):
         emb = disnake.Embed(colour = member.color, timestamp = disnake.utils.utcnow())
         emb.set_author(name = member)
         emb.add_field(name = 'ID', value = member.id)
-        now = datetime.datetime.today()
-        then = member.created_at
-        delta = now - then
         d = member.created_at.strftime('%d.%m.%Y %H:%M:%S UTC')
-        then1 = member.joined_at
-        delta1 = now - then1
         d1 = member.joined_at.strftime('%d.%m.%Y %H:%M:%S UTC')
-        emb.add_field(name = 'Создан', value = f'{delta.days} дня(ей) назад. ({d})', inline = False)
-        emb.add_field(name = 'Вошёл', value = f'{delta1.days} дня(ей) назад. ({d1})', inline = False)
+        emb.add_field(name = 'Создан', value = f'{d}', inline = False)
+        emb.add_field(name = 'Вошёл', value = f'{d1}', inline = False)
         emb.add_field(name = 'Упоминание', value = member.mention)
         emb.add_field(name = 'Raw имя', value = member.name)
         emb.add_field(name = 'Никнейм', value = member.nick)
