@@ -115,9 +115,6 @@ class sMisc(commands.Cog):
         roles = ', '.join([role.name for role in guild.roles[1:]])
         if 50 > len(roles) > 1:
             emb.add_field(name = f'Роли ({len(guild.roles)-1})', value = roles, inline = False)
-        now = disnake.utils.utcnow()
-        then = guild.created_at.utcnow()
-        delta = now - then
         d = guild.created_at.strftime('%d.%m.%Y %H:%M:%S UTC')
         emb.add_field(name = 'Дата создания сервера', value = f'{d}', inline = False)
         emb.set_thumbnail(url = guild.icon.url)
@@ -149,9 +146,6 @@ class sMisc(commands.Cog):
         emb.add_field(name = 'Упоминается?', value = role.mentionable)
         emb.add_field(name = 'Управляется интеграцией?', value = role.managed)
         emb.add_field(name = 'Позиция в списке', value = role.position)
-        now = disnake.utils.utcnow()
-        then = role.created_at.utcnow()
-        delta = now - then
         d = role.created_at.strftime('%d.%m.%Y %H:%M:%S GMT')
         emb.add_field(name = 'Создана', value = f'{d}', inline = False)
         emb.add_field(name = 'Показывает участников отдельно?', value = role.hoist)
@@ -194,12 +188,7 @@ class sMisc(commands.Cog):
         emb = disnake.Embed(colour = 0x2f3136, timestamp = disnake.utils.utcnow())
         emb.set_author(name = member)
         emb.add_field(name = 'ID', value = member.id)
-        now = disnake.utils.utcnow()
-        then = member.created_at.utcnow()
-        delta = now - then
         d = member.created_at.strftime('%d.%m.%Y %H:%M:%S UTC')
-        then1 = member.joined_at.utcnow()
-        delta1 = now - then1
         d1 = member.joined_at.strftime('%d.%m.%Y %H:%M:%S UTC')
         emb.add_field(name = 'Создан', value = f'{d}', inline = False)
         emb.add_field(name = 'Вошёл', value = f'{d1}', inline = False)
