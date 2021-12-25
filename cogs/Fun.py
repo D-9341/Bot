@@ -100,13 +100,5 @@ class Fun(commands.Cog):
         emb.add_field(name = 'в какое время дня свободны', value = '16:00 до 22:00+', inline = False)
         await ctx.send(embed = emb)
 
-    @commands.command(aliases = ['c', 'coin'])
-    async def coinflip(self, ctx):
-        emb = disnake.Embed(description = f'{ctx.author.mention} подбрасывает монетку: ОРЁЛ', colour = disnake.Color.orange())
-        emb1 = disnake.Embed(description = f'{ctx.author.mention} подбрасывает монетку: РЕШКА', colour = disnake.Color.orange())
-        choices = [emb, emb1]
-        rancoin = random.choice(choices)
-        await ctx.send(embed = rancoin)
-
 def setup(client):
     client.add_cog(Fun(client))
