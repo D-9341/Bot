@@ -404,7 +404,7 @@ class Mod(commands.Cog):
 
     @commands.command()
     @commands.has_permissions(manage_channels = True)
-    async def unmute(self, ctx, member: disnake.Embed, *, reason = None):
+    async def unmute(self, ctx, member: disnake.Member, *, reason = None):
         role = disnake.utils.get(ctx.guild.roles, name = 'Muted')
         if role != None:
             if role in member.roles:
