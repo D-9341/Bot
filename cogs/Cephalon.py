@@ -101,13 +101,13 @@ class Cephalon(commands.Cog):
     @commands.cooldown(1, 5, commands.BucketType.user)
     async def invite(self, ctx, arg = None):
         if arg == None:
-            emb = disnake.Embed(description = '[Ссылка](https://discord.com/api/oauth2/authorize?client_id=694170281270312991&permissions=8&scope=bot%20applications.commands) для приглашения Cy на сервера.', colour = discord.Color.orange())
+            emb = disnake.Embed(description = '[Ссылка](https://discord.com/api/oauth2/authorize?client_id=694170281270312991&permissions=8&scope=bot%20applications.commands) для приглашения Cy на сервера.', colour = disnake.Color.orange())
             await ctx.send(embed = emb)
         if arg == 'beta':
-            emb = disnake.Embed(description = '[Ссылка](https://discord.com/oauth2/authorize?client_id=764882153812787250&scope=bot&permissions=8&scope=bot%20applications.commands) для приглашения Cy Beta на сервера.', color = discord.Color.orange())
+            emb = disnake.Embed(description = '[Ссылка](https://discord.com/oauth2/authorize?client_id=764882153812787250&scope=bot&permissions=8&scope=bot%20applications.commands) для приглашения Cy Beta на сервера.', color = disnake.Color.orange())
             await ctx.send(embed = emb)
         if arg == 'pro':
-            emb = disnake.Embed(description = '[Ссылка](https://discord.com/oauth2/authorize?client_id=762015251264569352&scope=bot&permissions=8&scope=bot%20applications.commands) для приглашения Cy PRO на сервера. ~~||ты бля ваще как об этом узнал ебанутый||~~', color = discord.Color.orange())
+            emb = disnake.Embed(description = '[Ссылка](https://discord.com/oauth2/authorize?client_id=762015251264569352&scope=bot&permissions=8&scope=bot%20applications.commands) для приглашения Cy PRO на сервера. ~~||ты бля ваще как об этом узнал ебанутый||~~', color = disnake.Color.orange())
             await ctx.send(embed = emb)
 
     @commands.command()
