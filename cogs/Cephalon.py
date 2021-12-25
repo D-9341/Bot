@@ -147,12 +147,12 @@ class Cephalon(commands.Cog):
     @commands.command()
     async def help(self, ctx, arg = None):
         if arg == None:
-            emb = disnake.Embed(description = f'Доступные команды.', color = disnake.Color.orange())
+            emb = disnake.Embed(description = f'Все доступные команды. ||почти||', color = disnake.Color.orange())
             emb.set_author(name = self.client.user.name, url = 'https://discord.com/api/oauth2/authorize?client_id=694170281270312991&permissions=8&scope=bot%20applications.commands')
             emb.add_field(name = 'Cephalon', value = '`botver`, `info`, `invite`, `join`, `leave`, `locale`, `ping`, `setup`', inline = False)
             emb.add_field(name = 'Embeds', value = '`content`, `edit`, `say`', inline = False)
             if not (ctx.guild.owner.id != self.client.owner_id and ctx.guild.owner.id not in friends):
-                emb.add_field(name = 'Fun', value = '`aye_balbec`, `cu`, `coinflip`, `dotersbrain`, `niggers`, `rp`, `rap`, `roll`, `zatka`', inline = False)
+                emb.add_field(name = 'Fun', value = '`aye_balbec`, `coinflip`, `dotersbrain`, `niggers`, `rp`, `rap`, `roll`, `zatka`', inline = False)
             emb.add_field(name = 'Mod', value = '`ban`, `clear`, `dm`, `deaf`, `give`, `kick`, `mute`, `take`, `timeout`, `undeaf`, `unmute`', inline = False)
             emb.add_field(name = 'Misc', value = '`about`, `avatar`, `guild`, `remind`, `roleinfo`, `rolemembers`, `someone`, `vote`', inline = False)
             emb.add_field(name = 'ᅠ', value = 'Назовите войс `Создать канал`, чтобы бот автоматически создавал для вас временные каналы, которые будут удаляться после того, как все люди выйдут из него.', inline = False)
@@ -160,13 +160,13 @@ class Cephalon(commands.Cog):
             emb.set_footer(text = 'Cephalon Cy © сасиска#2472')
             return await ctx.send(embed = emb)
         elif arg == 'timeout':
-            await ctx.send('```apache\ncy/timeout <@пинг/имя/ID> <время(s/m/h/d(15s, 5m, 1h, 5d))> [причина] ([] - опционально, <> - обязательно, / - или)```')
+            await ctx.send('```apache\ncy/timeout <@пинг/имя/ID> <время(s/m/h/d(15s/5m/1h/5d))> [причина] ([] - опционально, <> - обязательно, / - или)```')
         elif arg == 'deaf':
             await ctx.send('```apache\ncy/deaf <@пинг/имя/ID> [причина]\nВ отличии от команды mute, бот будет заглушать людей в голосовом канале с ролью **Deafened**\n([] - опционально, <> - обязательно, / - или)```')
         elif arg == 'undeaf':
             await ctx.send('```apache\ncy/undeaf <@пинг/имя/ID> [причина]\n([] - опционально, <> - обязательно, / - или)```')
         elif arg == 'locale':
-            await ctx.send('```apache\ncy/locale [ru/gnida]\n([] - опционально)```')
+            await ctx.send('```apache\ncy/locale [ru/gnida]\n([] - опционально, / - или)```')
         elif arg == 'setup':
             await ctx.send('```apache\ncy/setup\nвыполнение команды создаст 4 роли, если их нет на сервере.\nбудет выполнено автоматически, если сработает авто-мут.```')
         elif arg == 'roll':
@@ -192,9 +192,9 @@ class Cephalon(commands.Cog):
         elif arg == 'kick':
             await ctx.send('```apache\ncy/kick <@пинг/имя/ID> [причина] ([] - опционально, <> - обязательно, / - или)\nperms = kick_members```')
         elif arg == 'mute':
-            await ctx.send('```apache\ncy/mute <@пинг/имя/ID> <время(s/m/h/d(15s, 5m, 1h, 5d))> [причина] ([] - опционально, <> - обязательно, / - или)\nperms = view_audit_log```')
+            await ctx.send('```apache\ncy/mute <@пинг/имя/ID> <время(s/m/h/d(15s/5m/1h/5d))> [причина] ([] - опционально, <> - обязательно, / - или)\nperms = view_audit_log```')
         elif arg == 'remind':
-            await ctx.send('```apache\ncy/remind <время(s/m/h/d(15s, 5m, 1h, 5d))> <текст> (<> - обязательно, / - или)```')
+            await ctx.send('```apache\ncy/remind <время(s/m/h/d(15s/5m/1h/5d))> <текст> (<> - обязательно, / - или)```')
         elif arg == 'roleinfo':
             await ctx.send('```apache\ncy/roleinfo <@роль/имя роли/ID роли> (<> - обязательно, / - или)```')
         elif arg == 'take':
