@@ -274,17 +274,15 @@ class Mod(commands.Cog):
                 if role != None:
                     await member.add_roles(role)
                     emb = disnake.Embed(colour = 0x2f3136, timestamp = disnake.utils.utcnow())
-                    emb.set_author(name = ctx.author, icon_url = ctx.author.avatar.url)
                     emb.add_field(name = 'Заглушён', value = f'{member.mention}')
-                    emb.add_field(name = 'По причине', value = reason)
+                    emb.add_field(name = 'Причина', value = reason)
                     await ctx.send(embed = emb)
                 else:
                     role = await ctx.guild.create_role(name = 'Muted', colour = 0x000001, reason = 'Создано автоматически командой mute')
                     await member.add_roles(role)
                     emb = disnake.Embed(colour = 0x2f3136, timestamp = disnake.utils.utcnow())
-                    emb.set_author(name = ctx.author, icon_url = ctx.author.avatar.url)
                     emb.add_field(name = 'Заглушён', value = f'{member.mention}')
-                    emb.add_field(name = 'По причине', value = reason)
+                    emb.add_field(name = 'Причина', value = reason)
                     await ctx.send(embed = emb)
         else:
             emb = disnake.Embed(description = f'Извините, {ctx.author.mention}, но вы не можете заглушить моего создателя!', colour = disnake.Color.orange())
