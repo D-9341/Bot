@@ -256,13 +256,7 @@ class Mod(commands.Cog):
 
     @commands.command()
     @commands.has_permissions(view_audit_log = True)
-    async def mute(self, ctx, member: disnake.Member, time: TimeConverter, *, reason = None):
-        if time < 300:
-            color = 0x2f3136
-        if time >= 300:
-            color = disnake.Color.orange()
-        if time >= 1200:
-            color = 0xff0000
+    async def mute(self, ctx, member: disnake.Member, *, reason = None):
         if reason == None:
             reason = 'Не указана.'
         role = disnake.utils.get(ctx.guild.roles, name = 'Muted')
@@ -283,23 +277,7 @@ class Mod(commands.Cog):
                     emb.set_author(name = ctx.author, icon_url = ctx.author.avatar.url)
                     emb.add_field(name = 'Заглушён', value = f'{member.mention}')
                     emb.add_field(name = 'По причине', value = reason)
-                    emb.add_field(name = 'Время заглушения', value = f'{time}s')
-                    await ctx.send(embed = emb, delete_after = time)
-                    await asyncio.sleep(time)
-                    if role != None:
-                        if role in member.roles:
-                            emb = disnake.Embed(colour = color, timestamp = disnake.utils.utcnow())
-                            emb.add_field(name = 'Размучен по истечению времени', value = member.mention)
-                            emb.add_field(name = 'Был в муте по причине', value = reason)
-                            emb.add_field(name = 'Время мута составляло', value = f'{time}s')
-                            await member.remove_roles(role)
-                            await ctx.send(f'{member.mention}', embed = emb)
-                        else:
-                            emb = disnake.Embed(description = f'Снятие заглушения для {member.mention} не требуется. Роли Muted не обнаружено в списке ролей участника.', colour = disnake.Color.orange())
-                            await ctx.send(embed = emb)
-                    else:
-                        emb = disnake.Embed(description = f'Невозможно снять заглушение у {member.mention}, т.к. роль Muted была удалена.', colour = disnake.Color.orange(), timestamp = disnake.utils.utcnow())
-                        await ctx.send(embed = emb)
+                    await ctx.send(embed = emb)
                 else:
                     role = await ctx.guild.create_role(name = 'Muted', colour = 0x000001, reason = 'Создано автоматически командой mute')
                     await member.add_roles(role)
@@ -307,23 +285,7 @@ class Mod(commands.Cog):
                     emb.set_author(name = ctx.author, icon_url = ctx.author.avatar.url)
                     emb.add_field(name = 'Заглушён', value = f'{member.mention}')
                     emb.add_field(name = 'По причине', value = reason)
-                    emb.add_field(name = 'Время заглушения', value = f'{time}s')
-                    await ctx.send(embed = emb, delete_after = time)
-                    await asyncio.sleep(time)
-                    if role != None:
-                        if role in member.roles:
-                            emb = disnake.Embed(colour = color, timestamp = disnake.utils.utcnow())
-                            emb.add_field(name = 'Размучен по истечению времени', value = member.mention)
-                            emb.add_field(name = 'По причине', value = reason)
-                            emb.add_field(name = 'Время мута составляло', value = f'{time}s')
-                            await ctx.send(f'{member.mention}', embed = emb)
-                            await member.remove_roles(role)
-                        else:
-                            emb = disnake.Embed(description = f'Снятие заглушения для {member.mention} не требуется. Роли Muted не обнаружено в списке ролей участника.', colour = disnake.Color.orange())
-                            await ctx.send(embed = emb)
-                    else:
-                        emb = disnake.Embed(description = f'Невозможно снять заглушение у {member.mention}, т.к. роль Muted была удалена.', colour = disnake.Color.orange(), timestamp = disnake.utils.utcnow())
-                        await ctx.send(embed = emb)
+                    await ctx.send(embed = emb)
         else:
             emb = disnake.Embed(description = f'Извините, {ctx.author.mention}, но вы не можете заглушить моего создателя!', colour = disnake.Color.orange())
             await ctx.send(embed = emb)
