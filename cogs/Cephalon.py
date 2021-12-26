@@ -156,9 +156,12 @@ class Cephalon(commands.Cog):
             emb.add_field(name = 'Mod', value = '`ban`, `clear`, `dm`, `deaf`, `give`, `kick`, `mute`, `take`, `timeout`, `undeaf`, `unmute`', inline = False)
             emb.add_field(name = 'Misc', value = '`about`, `avatar`, `coinflip`, `guild`, `roll`, `remind`, `roleinfo`, `rolemembers`, `someone`, `vote`', inline = False)
             emb.add_field(name = 'ᅠ', value = 'Назовите войс `Создать канал`, чтобы бот автоматически создавал для вас временные каналы, которые будут удаляться после того, как все люди выйдут из него.', inline = False)
+            emb.add_field(name = 'ᅠ', value = '**Не используйте [], <>, / при написании команды. Не будьте дебилами!**', inline = False)
             emb.add_field(name = 'ᅠ', value = '**Используйте** `cy/help [команда/категория]` **для подробностей использования.**\n\n[Ссылка-приглашение](https://discord.com/api/oauth2/authorize?client_id=694170281270312991&permissions=8&scope=bot%20applications.commands)', inline = False)
             emb.set_footer(text = 'Cephalon Cy © сасиска#2472')
             return await ctx.send(embed = emb)
+        elif arg == 'dotersbrain':
+            await ctx.send('```cy/dotersbrain, список слов и рифм: чё - хуй через плечо; а - хуй на; да - пизда; нет - пидора ответ; ок - хуй намок```')
         elif arg == 'timeout':
             await ctx.send('```apache\ncy/timeout <@пинг/имя/ID> <время(s/m/h/d(15s/5m/1h/5d))> [причина] ([] - опционально, <> - обязательно, / - или)```')
         elif arg == 'deaf':
