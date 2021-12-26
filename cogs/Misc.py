@@ -114,7 +114,6 @@ class Misc(commands.Cog):
         emb = disnake.Embed(colour = disnake.Color.orange(), timestamp = disnake.utils.utcnow())
         emb.set_author(name = guild, icon_url = guild.icon.url)
         emb.add_field(name = 'ID сервера', value = guild.id)
-        emb.add_field(name = 'Голосовой регион', value = str(guild.region))
         emb.add_field(name = 'Владелец', value = guild.owner.mention)
         emb.add_field(name = 'Участников', value = guild.member_count)
         emb.add_field(name = 'Из них ботов', value = len(list(filter(lambda m: m.bot, guild.members))))
