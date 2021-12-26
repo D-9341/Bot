@@ -273,7 +273,7 @@ class Mod(commands.Cog):
             else:
                 if role != None:
                     await member.add_roles(role)
-                    emb = disnake.Embed(colour = color, timestamp = disnake.utils.utcnow())
+                    emb = disnake.Embed(colour = 0x2f3136, timestamp = disnake.utils.utcnow())
                     emb.set_author(name = ctx.author, icon_url = ctx.author.avatar.url)
                     emb.add_field(name = 'Заглушён', value = f'{member.mention}')
                     emb.add_field(name = 'По причине', value = reason)
@@ -281,7 +281,7 @@ class Mod(commands.Cog):
                 else:
                     role = await ctx.guild.create_role(name = 'Muted', colour = 0x000001, reason = 'Создано автоматически командой mute')
                     await member.add_roles(role)
-                    emb = disnake.Embed(colour = color, timestamp = disnake.utils.utcnow())
+                    emb = disnake.Embed(colour = 0x2f3136, timestamp = disnake.utils.utcnow())
                     emb.set_author(name = ctx.author, icon_url = ctx.author.avatar.url)
                     emb.add_field(name = 'Заглушён', value = f'{member.mention}')
                     emb.add_field(name = 'По причине', value = reason)
