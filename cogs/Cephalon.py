@@ -161,7 +161,7 @@ class Cephalon(commands.Cog):
         elif arg == 'undeaf':
             await ctx.send('```apache\ncy/undeaf <@пинг/имя/ID> [причина]\n([] - опционально, <> - обязательно, / - или)```')
         elif arg == 'locale':
-            await ctx.send('```apache\ncy/locale [ru/gnida]\n([] - опционально, / - или)```')
+            await ctx.send('```apache\ncy/locale [ru/gnida/test]\n([] - опционально, / - или)```')
         elif arg == 'setup':
             await ctx.send('```apache\ncy/setup\nвыполнение команды создаст 4 роли, если их нет на сервере.\nбудет выполнено автоматически, если сработает авто-мут.```')
         elif arg == 'roll':
@@ -179,15 +179,15 @@ class Cephalon(commands.Cog):
         elif arg == 'dm':
             await ctx.send('```apache\ncy/dm <@пинг/имя/ID> <текст> (<> - обязательно, / - или)\nperms = view_audit_log```')
         elif arg == 'say':
-                await ctx.send('```apache\ncy/say [обычный текст] [t& title текст] | [d& description текст] | [th& ссылка на картинку справа] | [img& ссылка на картинку снизу] [f& footer текст] [msg& сообщение над эмбедом]\ncy/say t& title | d& description\ncy/say [текст]\n(вам НЕ обязательно писать все аргументы в данном порядке, пишите только те, что вам нужны в любом порядке. Однако необходимо написать хоть что-то для выполнения команды) ([] - опционально)```')
+            await ctx.send('```apache\ncy/say [обычный текст] [t& title текст] | [d& description текст] | [th& ссылка на картинку справа] | [img& ссылка на картинку снизу] [f& footer текст] [msg& сообщение над эмбедом]\ncy/say t& title | d& description\ncy/say [текст]\n(вам НЕ обязательно писать все аргументы в данном порядке, пишите только те, что вам нужны в любом порядке. Однако необходимо написать хоть что-то для выполнения команды) ([] - опционально)```')
         elif arg == 'edit':
-                await ctx.send('```apache\ncy/edit <ID> [обычный текст] [t& title текст] | [d& description текст] | [th& ссылка на картинку справа] | [img& ссылка на картинку снизу]\ncy/edit <ID> [текст]\ncy/edit <ID> --clean | d& description\ncy/edit <ID> --clean\ncy/edit <ID> --noembed\ncy/edit <ID> --empty-embed\ncy/edit <ID> --delete\n--clean удалит контент над эмбедом, --noembed удалит эмбед, работает только если есть эмбед, --empty-embed опустошит эмбед, --delete удалит сообщение\nесли у сообщения есть эмбед и в команде нет агрументов, автоматически будет заменён msg&\n([] - опционально, <> - обязательно)\nperms = manage_channels```')
+            await ctx.send('```apache\ncy/edit <ID> [обычный текст] [t& title текст] | [d& description текст] | [th& ссылка на картинку справа] | [img& ссылка на картинку снизу]\ncy/edit <ID> [текст]\ncy/edit <ID> --clean | d& description\ncy/edit <ID> --clean\ncy/edit <ID> --noembed\ncy/edit <ID> --empty-embed\ncy/edit <ID> --delete\n--clean удалит контент над эмбедом, --noembed удалит эмбед, работает только если есть эмбед, --empty-embed опустошит эмбед, --delete удалит сообщение\nесли у сообщения есть эмбед и в команде нет агрументов, автоматически будет заменён msg&\n([] - опционально, <> - обязательно)\nperms = manage_channels```')
         elif arg == 'give':
             await ctx.send('```apache\ncy/give <@пинг/имя/ID> <@роль/имя роли/ID роли> (<> - обязательно, / - или)\nperms = manage_channels```')
         elif arg == 'kick':
             await ctx.send('```apache\ncy/kick <@пинг/имя/ID> [причина] ([] - опционально, <> - обязательно, / - или)\nperms = kick_members```')
         elif arg == 'mute':
-            await ctx.send('```apache\ncy/mute <@пинг/имя/ID> <время(s/m/h/d(15s/5m/1h/5d))> [причина] ([] - опционально, <> - обязательно, / - или)\nperms = view_audit_log```')
+            await ctx.send('```apache\ncy/mute <@пинг/имя/ID> [причина] ([] - опционально, <> - обязательно, / - или)\nperms = view_audit_log```')
         elif arg == 'remind':
             await ctx.send('```apache\ncy/remind <время(s/m/h/d(15s/5m/1h/5d))> <текст> (<> - обязательно, / - или)```')
         elif arg == 'roleinfo':
