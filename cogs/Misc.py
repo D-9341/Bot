@@ -111,7 +111,7 @@ class Misc(commands.Cog):
     @commands.cooldown(1, 5, commands.BucketType.user)
     async def guild(self, ctx):
         guild = ctx.guild
-        emb = disnake.Embed(colour = disnake.Color.orange(), timestamp = disnake.utils.utcnow())
+        emb = disnake.Embed(colour = 0x2f3136, timestamp = disnake.utils.utcnow())
         emb.set_author(name = guild, icon_url = guild.icon.url)
         emb.add_field(name = 'ID сервера', value = guild.id)
         emb.add_field(name = 'Голосовой регион', value = guild.region)
@@ -121,10 +121,11 @@ class Misc(commands.Cog):
         emb.add_field(name = 'Из них людей', value = len(list(filter(lambda m: not m.bot, guild.members))))
         emb.add_field(name = 'Каналов', value = f'Текстовых {len(guild.text_channels)} | Голосовых {len(guild.voice_channels)}')
         roles = ', '.join([role.name for role in guild.roles[1:]])
-        #emb.add_field(name = f'Роли ({len(guild.roles)-1})', value = roles, inline = False)
+        if 1 < len(roles) < 50:
+            emb.add_field(name = f'Роли ({len(guild.roles)-1})', value = roles, inline = False)
         d = guild.created_at.strftime('%d.%m.%Y %H:%M:%S UTC')
         emb.add_field(name = 'Дата создания сервера', value = f'{d}', inline = False)
-        emb.set_thumbnail(url = guild.icon_url)
+        emb.set_thumbnail(url = guild.icon.url)
         await ctx.send(embed = emb)
 
     @commands.command()
