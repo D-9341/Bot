@@ -113,7 +113,7 @@ class sMisc(commands.Cog):
         emb.add_field(name = 'Из них людей', value = len(list(filter(lambda m: not m.bot, inter.guild.members))))
         emb.add_field(name = 'Каналов', value = f'Текстовых {len(guild.text_channels)} | Голосовых {len(guild.voice_channels)}')
         roles = ', '.join([role.name for role in guild.roles[1:]])
-        if 1 < len(roles) < 50:
+        if len(roles) > 1 and len(roles) < 50:
             emb.add_field(name = f'Роли ({len(guild.roles)-1})', value = roles, inline = False)
         d = guild.created_at.strftime('%d.%m.%Y %H:%M:%S UTC')
         emb.add_field(name = 'Дата создания сервера', value = f'{d}', inline = False)
