@@ -47,23 +47,17 @@ class Cephalon(commands.Cog):
         }
         if collection.count_documents({'_id': ctx.author.id}) == 0:
             collection.insert_one(post)
-        role3 = disnake.utils.get(ctx.guild.roles, name = '----------Предупреждения----------')
-        role1 = disnake.utils.get(ctx.guild.roles, name = '1')
-        role2 = disnake.utils.get(ctx.guild.roles, name = '2')
+        role1 = disnake.utils.get(ctx.guild.roles, name = 'Deafened')
         role = disnake.utils.get(ctx.guild.roles, name = 'Muted')
-        if role and role1 and role2 and role3 != None:
+        if role and role1 != None:
             emb = disnake.Embed(description = 'Все нужные роли уже присутсвуют на сервере.', color = disnake.Color.orange())
             return await ctx.send(embed = emb)
-        emb = disnake.Embed(description = 'С написанием этой команды на сервер будут добавлены несколько ролей, если их нет. Они нужны для правильной работы авто и обычного мута. Не следует их удалять, так как они будут созданы снова, но уже автоматически.', color = disnake.Color.orange())
+        emb = disnake.Embed(description = 'С написанием этой команды на сервер добавлены роли, если их нет. Они будут созданы автоматически, если будут вызваны команды `mute` или `deaf`', color = disnake.Color.orange())
         await ctx.send(embed = emb)
         if role == None:
             await ctx.guild.create_role(name = 'Muted', colour = disnake.Colour(0x000001), reason = 'Создано командой setup.')
-        if role3 == None:
-            await ctx.guild.create_role(name = '----------Предупреждения----------', color = disnake.Color(0x2f3136), reason = 'Создано командой setup.')
         if role1 == None:
-            await ctx.guild.create_role(name = '1', color = disnake.Color(0xff0000), reason = 'Создано командой setup.')
-        if role2 == None:
-            await ctx.guild.create_role(name = '2', color = disnake.Color(0xff0000), reason = 'Создано командой setup.')
+            await ctx.guild.create_role(name = 'Deafened', color = disnake.Color(0x000001), reason = 'Создано командой setup.')
 
     @commands.command()
     async def generate(self, ctx):
