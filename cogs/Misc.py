@@ -115,9 +115,7 @@ class Misc(commands.Cog):
         emb.set_author(name = guild, icon_url = guild.icon.url)
         emb.add_field(name = 'ID сервера', value = guild.id)
         emb.add_field(name = 'Владелец', value = guild.owner.mention)
-        emb.add_field(name = 'Участников', value = guild.member_count)
-        emb.add_field(name = 'Из них ботов', value = len(list(filter(lambda m: m.bot, guild.members))))
-        emb.add_field(name = 'Из них людей', value = len(list(filter(lambda m: not m.bot, guild.members))))
+        emb.add_field(name = 'Участников', value = f'{guild.member_count}\n**Из них ботов:** {len(list(filter(lambda m: m.bot, guild.members)))}\n**Из них людей:** {len(list(filter(lambda m: not m.bot, guild.members)))}')
         emb.add_field(name = 'Каналов', value = f'Текстовых {len(guild.text_channels)} | Голосовых {len(guild.voice_channels)}')
         roles = ', '.join([role.name for role in guild.roles[1:]])
         if len(roles) > 1:
