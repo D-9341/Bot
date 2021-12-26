@@ -114,14 +114,13 @@ class Misc(commands.Cog):
         emb = disnake.Embed(colour = 0x2f3136, timestamp = disnake.utils.utcnow())
         emb.set_author(name = guild, icon_url = guild.icon.url)
         emb.add_field(name = 'ID сервера', value = guild.id)
-        emb.add_field(name = 'Голосовой регион', value = guild.region)
         emb.add_field(name = 'Владелец', value = guild.owner.mention)
         emb.add_field(name = 'Участников', value = guild.member_count)
         emb.add_field(name = 'Из них ботов', value = len(list(filter(lambda m: m.bot, guild.members))))
         emb.add_field(name = 'Из них людей', value = len(list(filter(lambda m: not m.bot, guild.members))))
         emb.add_field(name = 'Каналов', value = f'Текстовых {len(guild.text_channels)} | Голосовых {len(guild.voice_channels)}')
         roles = ', '.join([role.name for role in guild.roles[1:]])
-        if len(roles) > 1 and len(roles) < 50:
+        if len(roles) > 1:
             emb.add_field(name = f'Роли ({len(guild.roles)-1})', value = roles, inline = False)
         d = guild.created_at.strftime('%d.%m.%Y %H:%M:%S UTC')
         emb.add_field(name = 'Дата создания сервера', value = f'{d}', inline = False)
@@ -143,7 +142,7 @@ class Misc(commands.Cog):
             role.hoist = 'Нет'
         elif role.hoist == True:
             role.hoist = 'Да'
-        emb = disnake.Embed(title = role.name, colour = role.colour)
+        emb = disnake.Embed(title = role.name, colour = 0x2f3136)
         emb.add_field(name = 'ID', value = role.id)
         emb.add_field(name = 'Цвет', value = role.color)
         emb.add_field(name = 'Упоминается?', value = role.mentionable)
@@ -178,7 +177,7 @@ class Misc(commands.Cog):
             bot = 'Неа'
         elif member.bot == True:
             bot = 'Ага'
-        emb = disnake.Embed(colour = member.color, timestamp = disnake.utils.utcnow())
+        emb = disnake.Embed(colour = 0x2f3136, timestamp = disnake.utils.utcnow())
         emb.set_author(name = member)
         emb.add_field(name = 'ID', value = member.id)
         d = member.created_at.strftime('%d.%m.%Y %H:%M:%S UTC')
@@ -186,7 +185,7 @@ class Misc(commands.Cog):
         emb.add_field(name = 'Создан', value = f'{d}', inline = False)
         emb.add_field(name = 'Вошёл', value = f'{d1}', inline = False)
         emb.add_field(name = 'Упоминание', value = member.mention)
-        emb.add_field(name = 'Raw имя', value = member.name)
+        emb.add_field(name = 'Необработанное имя', value = member.name)
         emb.add_field(name = 'Никнейм', value = member.nick)
         if member.status == disnake.Status.online:
             status = 'В сети'
