@@ -30,23 +30,14 @@ class Cephalon(commands.Cog):
             glocale = collection.find_one({"_id": ctx.author.id})["locale"]
             collection.update_one({"locale": 'gnida', '_id': ctx.author.id}, {"$set": {'locale': 'ru'}})
             await ctx.send('Ваша локаль была установлена на `ru`.')
+        if locale == 'test':
+            rlocale = collection.find_one({"_id": ctx.author.id})["locale"]
+            if rlocale == 'ru':
+                await ctx.send('Ваша локаль равна `ru`')
+            if rlocale == 'gnida':
+                await ctx.send('Твоя ёбаная локаль равна `gnida`')
         if locale == None:
-            await ctx.send('Возможные локали:\nru\ngnida\n\nПри установке локали на `gnida` будут прикольные штуки!')
-
-    @commands.command()
-    async def locale_test(self, ctx):
-        rlocale = collection.find_one({"_id": ctx.author.id})["locale"]
-        if rlocale == None:
-            post = {
-                '_id': ctx.author.id,
-                'locale': 'ru'
-            }
-            if collection.count_documents({'_id': ctx.author.id}) == 0:
-                collection.insert_one(post)
-        if rlocale == 'ru':
-            await ctx.send('Ваша локаль равна `ru`')
-        if rlocale == 'gnida':
-            await ctx.send('Твоя ёбаная локаль равна `gnida`')
+            await ctx.send(embed = disnake.Embed(description = 'Возможные локали:\nru\ngnida\n\nУстановка локали на gnida может подходить не всем серверам.', color = 0x2f3136))
 
     @commands.command()
     async def setup(self, ctx):
