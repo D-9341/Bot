@@ -73,6 +73,14 @@ class Misc(commands.Cog):
             rand = random.randint(first, second)
             await ctx.send(f'`{ctx.author} выпадает число({first}-{second})\n{rand}`')
 
+    @commands.command(aliases = ['c', 'coin'])
+    async def coinflip(self, ctx):
+        emb = disnake.Embed(description = f'{ctx.author.mention} подбрасывает монетку: ОРЁЛ', colour = disnake.Color.orange())
+        emb1 = disnake.Embed(description = f'{ctx.author.mention} подбрасывает монетку: РЕШКА', colour = disnake.Color.orange())
+        choices = [emb, emb1]
+        rancoin = random.choice(choices)
+        await ctx.send(embed = rancoin)
+            
     @commands.command()
     @commands.cooldown(1, 60, commands.BucketType.guild)
     async def vote(self, ctx, *, text):
