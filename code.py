@@ -247,12 +247,11 @@ async def on_message_edit(before, after):
 async def on_slash_command_error(inter, error):
     channel = client.get_channel(838506478108803112)
     if isinstance(error, commands.MissingPermissions):
-        emb = disnake.Embed(description = f'{inter.author.mention}, у вас недостаточно прав на выполнение команды `{inter.command.name}`', colour = disnake.Color.orange())
+        emb = disnake.Embed(description = f'{inter.author.mention}, у вас недостаточно прав на выполнение этой команды', colour = disnake.Color.orange())
         await inter.response.send_message(embed = emb)
         eemb = disnake.Embed(description = 'Поймана ошибка `MissingPermissions`', color = 0xff0000, timestamp = disnake.utils.utcnow())
         eemb.add_field(name = 'Сервер', value = inter.guild.name)
         eemb.add_field(name = 'Вызвавший ошибку', value = f'{inter.author.mention} ({inter.author.name})', inline = False)
-        eemb.add_field(name = 'Команда', value = inter.command.name, inline = False)
         await channel.send(embed = eemb)
     elif isinstance(error, commands.CommandOnCooldown):
         s = error.retry_after
@@ -263,21 +262,20 @@ async def on_slash_command_error(inter, error):
         rand1 = random.choice(choices1)
         rand2 = random.choice(choices2)
         if round(s) >= 5:
-            emb = disnake.Embed(description = f'{rand} Команда `{inter.command.name}` будет доступна через {round(s)} секунд..', colour = disnake.Color.orange())
-            await inter.response.send_message.send(embed = emb)
+            emb = disnake.Embed(description = f'{rand} Эта команда будет доступна через {round(s)} секунд..', colour = disnake.Color.orange())
+            await inter.response.send_message(embed = emb)
         elif round(s) >= 2:
-            emb = disnake.Embed(description = f'{rand1} Команда `{inter.command.name}` будет доступна через {round(s)} секунды.', colour = disnake.Color.orange())
-            await inter.response.send_message.send(embed = emb)
+            emb = disnake.Embed(description = f'{rand1} Эта команда будет доступна через {round(s)} секунды.', colour = disnake.Color.orange())
+            await inter.response.send_message(embed = emb)
         elif round(s) >= 1:
-            emb = disnake.Embed(description = f'{rand2} Команда `{inter.command.name}` будет доступна через {round(s)} секунду!', colour = disnake.Color.orange())
-            await inter.response.send_message.send(embed = emb)
+            emb = disnake.Embed(description = f'{rand2} Эта команда будет доступна через {round(s)} секунду!', colour = disnake.Color.orange())
+            await inter.response.send_message(embed = emb)
         elif round(s) <= 0:
             emb = disnake.Embed(description = 'Ебать ты тайминг поймал конечно ||До перезарядки команды оставалось чуть больше, чем 0 секунд||', colour = disnake.Color.orange())
-            await inter.response.send_message.send(embed = emb)
+            await inter.response.send_message(embed = emb)
         eemb = disnake.Embed(description = 'Поймана ошибка `CommandOnCooldown`', color = 0xff0000, timestamp = disnake.utils.utcnow())
         eemb.add_field(name = 'Сервер', value = inter.guild.name)
         eemb.add_field(name = 'Вызвавший ошибку', value = f'{inter.author.mention} ({inter.author.name})', inline = False)
-        eemb.add_field(name = 'Команда', value = inter.command.name, inline = False)
         eemb.add_field(name = 'Оставалось времени', value = round(s), inline = False)
         await channel.send(embed = eemb)
         
