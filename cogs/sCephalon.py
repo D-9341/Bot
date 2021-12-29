@@ -74,7 +74,7 @@ class sCephalon(commands.Cog):
     async def _info(self, inter):
         emb = disnake.Embed(colour = disnake.Color.orange())
         emb.set_author(name = self.client.user.name, url = 'https://warframe.fandom.com/wiki/Cephalon_Cy', icon_url = self.client.user.avatar.url)
-        emb.add_field(name = 'Версия', value = '0.12.12.0.0')
+        emb.add_field(name = 'Версия', value = '0.12.12.10.0')
         emb.add_field(name = 'Написан на', value = 'disnake.py v2.3.0')
         emb.add_field(name = 'Разработчик', value = '[сасиска#2472](https://discord.com/users/338714886001524737)')
         if inter.guild.id == 693929822543675455:
