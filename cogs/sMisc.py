@@ -85,6 +85,25 @@ class sMisc(commands.Cog):
         rancoin = random.choice(choices)
         await inter.response.send_message(embed = rancoin)
 
+    @commands.slash_command(name = 'vote', description = 'Устраивает голосование за что-либо')
+    @commands.cooldown(1, 60, commands.BucketType.guild)
+    async def _vote(self, inter, *, text):
+        '''
+        Parameters
+        ----------
+        text: :class:`str`
+            Текст для написания. Пишите его так, будто слова *голосуем за* уже написаны
+        '''
+        emb = disnake.Embed(description = 'ГОЛОСОВАНИЕ', colour = 0x2f3136)
+        emb.set_author(name = inter.author, icon_url = inter.author.avatar.url)
+        emb.add_field(name = 'Голосуем за:', value = text)
+        emb.set_footer(text = '🚫 - воздержусь')
+        await inter.response.send_message(embed = emb)
+        sent = await inter.original_message()
+        await sent.add_reaction('👍')
+        await sent.add_reaction('👎')
+        await sent.add_reaction('🚫')
+        
     @commands.slash_command(name = 'rolemembers', description = 'Показывает участников с определённой ролью')
     async def _rolemembers(self, inter, role: disnake.Role, member: disnake.Member = None):
         '''
