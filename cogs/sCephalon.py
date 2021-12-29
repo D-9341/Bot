@@ -23,7 +23,7 @@ class sCephalon(commands.Cog):
         print('Группа Slash-команд Cephalon загружена')
 
     @commands.slash_command(name = 'botver', description = 'Позволяет узнать текущую версию бота')
-    async def _botver(self, inter, version: str = commands.Param(choices = {'0.12.9.10519': '0.12.9.10519', '0.12.9.10988': '0.12.9.10988', '0.12.9.11410': '0.12.9.11410', '0.12.10.1.11661': '0.12.10.1.11661', '0.12.10.2.11856': '0.12.10.2.11856', '0.12.10.2.12528': '0.12.10.2.12528', '0.12.11.2.13771': '0.12.11.2.13771', '0.12.12.0.0': '0.12.12.0.0'})):
+    async def _botver(self, inter, version: str = commands.Param(choices = {'0.12.9.10519': '0.12.9.10519', '0.12.9.10988': '0.12.9.10988', '0.12.9.11410': '0.12.9.11410', '0.12.10.1.11661': '0.12.10.1.11661', '0.12.10.2.11856': '0.12.10.2.11856', '0.12.10.2.12528': '0.12.10.2.12528', '0.12.11.2.13771': '0.12.11.2.13771', '0.12.12.0.0': '0.12.12.0.0', '0.12.12.10.0': '0.12.12.10.0'})):
         if version == '0.12.9.10519':
             emb = disnake.Embed(color = 0x2f3136)
             emb.add_field(name = '0.12.9.10519', value = 'Небольшие исправления, в целом никак не связанные с работой бота.')
@@ -55,6 +55,10 @@ class sCephalon(commands.Cog):
         if version == '0.12.12.0.0':
             emb = disnake.Embed(color = 0x2f3136)
             emb.add_field(name = '0.12.12.0.0', value = 'Переход на новую библиотеку, способствующий дальнейшему поддержанию бота в живых. Изменения:\nУбрана команда vote из меню Slash-команд, так как новая либра не даёт мне способов ставить реакции под сообщением, что отправил бот\nНовая команда - timeout\nПозволяет `отправить подумать над своим поведением` пользователя.')
+            await inter.response.send_message(embed = emb)
+        if version == '0.12.12.10.0':
+            emb = disnake.Embed(color = 0x2f3136)
+            emb.add_field(name = '0.12.12.10.0', value = 'Некоторое количество исправлений, возвращение команды vote через /\nИзменена логика команды mute - теперь нельзя установить время, на которое человек заглушается')
             await inter.response.send_message(embed = emb)
 
     @commands.slash_command(name = 'ping', description = 'Отображение задержки клиента бота. Нормальная задержка в диапазоне от 90 до 130 миллисекунд.')
@@ -93,10 +97,9 @@ class sCephalon(commands.Cog):
             emb = disnake.Embed(title = self.client.user.name, description = 'Доступные Slash-команды', colour = disnake.Color.orange())
             emb.add_field(name = 'Cephalon', value = '`botver`, `info`, `invite`, `join`, `leave`, `ping`', inline = False)
             emb.add_field(name = 'Embeds', value = '`content`, `edit`, `say`', inline = False)
-            if not (inter.guild.owner.id != self.client.owner_id and inter.guild.owner.id not in friends):
-                emb.add_field(name = 'Fun', value = '`aye_balbec`, `dotersbrain`, `niggers`, `rp`, `rap`, `zatka`', inline = False)
+            emb.add_field(name = 'Fun', value = '`aye_balbec`, `dotersbrain`, `niggers`, `rp`, `rap`, `zatka`', inline = False)
             emb.add_field(name = 'Mod', value = '`ban`, `clear`, `dm`, `give`, `kick`, `mute`, `take`, `unmute`', inline = False)
-            emb.add_field(name = 'Misc', value = '`about`, `avatar`, `coinflip`, `guild`, `remind`, `role`, `roll`, `rolemembers`', inline = False)
+            emb.add_field(name = 'Misc', value = '`about`, `avatar`, `coinflip`, `guild`, `remind`, `role`, `roll`, `rolemembers`, `vote`', inline = False)
             emb.add_field(name = 'ᅠ', value = 'Назовите комнату `Создать канал`, чтобы бот автоматически создавал для вас временные каналы, которые будут удаляться после того, как все люди выйдут из канала.')
             emb.add_field(name = 'ᅠ', value = 'Не используйте [], <>, / при написании команды.', inline = False)
             emb.add_field(name = 'ᅠ', value = '**Используйте** `/help [команда/категория]` **для подробностей использования.**\n\n**[Ссылка-приглашение](https://discord.com/api/oauth2/authorize?client_id=694170281270312991&permissions=8&scope=bot%20applications.commands)**', inline = False)
