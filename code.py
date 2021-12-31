@@ -22,12 +22,6 @@ cwd = str(cwd)
 @client.event
 async def on_ready():
     channel = client.get_channel(714175791033876490)
-    message = client.get_message(926392608153022486)
-    await message.add_reaction(926398503926759464)
-    await message.add_reaction(926398420925693982)
-    await message.add_reaction(926398378756153394)
-    await message.add_reaction(926398451619602454)
-    await message.add_reaction(926398323991117825)
     emb = disnake.Embed(description = 'В сети, поверхностная проверка не выявила ошибок.', color = 0x2f3136, timestamp = disnake.utils.utcnow())
     emb.set_footer(text = 'Cephalon Cy © сасиска#2472')
     await channel.send(embed = emb)
@@ -71,19 +65,19 @@ async def on_raw_reaction_add(payload):
     message_id = payload.message_id
     if message_id == 926392608153022486:
         guild_id = payload.guild_id
-        guild = discord.utils.find(lambda g: g.id == guild_id, self.client.guilds)
+        guild = disnake.utils.find(lambda g: g.id == guild_id, self.client.guilds)
         if payload.emoji.name == ':engineer:':
-            role = discord.utils.get(guild.roles, name = 'Инженер')
+            role = disnake.utils.get(guild.roles, name = 'Инженер')
         if payload.emoji.name == ':captain:':
-            role = discord.utils.get(guild.roles, name = 'Капитан')
+            role = disnake.utils.get(guild.roles, name = 'Капитан')
         if payload.emoji.name == ':medic:':
-            role = discord.utils.get(guild.roles, name = 'Медик')
+            role = disnake.utils.get(guild.roles, name = 'Медик')
         if payload.emoji.name == ':mechanic:':
-            role = discord.utils.get(guild.roles, name = 'Механик')
+            role = disnake.utils.get(guild.roles, name = 'Механик')
         if payload.emoji.name == ':BSEC:':
-            role = discord.utils.get(guild.roles, name = 'СБЭУ')
+            role = disnake.utils.get(guild.roles, name = 'СБЭУ')
         if role:
-            member = discord.utils.get(lambda m: m.id == payload.user_id, guild.members)
+            member = disnake.utils.get(lambda m: m.id == payload.user_id, guild.members)
             if member:
                 await member.add_roles(role)
         
@@ -92,19 +86,19 @@ async def on_raw_reaction_remove(payload):
     message_id = payload.message_id
     if message_id == 926392608153022486:
         guild_id = payload.guild_id
-        guild = discord.utils.find(lambda g: g.id == guild_id, self.client.guilds)
+        guild = disnake.utils.find(lambda g: g.id == guild_id, self.client.guilds)
         if payload.emoji.name == ':engineer:':
-            role = discord.utils.get(guild.roles, name = 'Инженер')
+            role = disnake.utils.get(guild.roles, name = 'Инженер')
         if payload.emoji.name == ':captain:':
-            role = discord.utils.get(guild.roles, name = 'Капитан')
+            role = disnake.utils.get(guild.roles, name = 'Капитан')
         if payload.emoji.name == ':medic:':
-            role = discord.utils.get(guild.roles, name = 'Медик')
+            role = disnake.utils.get(guild.roles, name = 'Медик')
         if payload.emoji.name == ':mechanic:':
-            role = discord.utils.get(guild.roles, name = 'Механик')
+            role = disnake.utils.get(guild.roles, name = 'Механик')
         if payload.emoji.name == ':BSEC:':
-            role = discord.utils.get(guild.roles, name = 'СБЭУ')
+            role = disnake.utils.get(guild.roles, name = 'СБЭУ')
         if role:
-            member = discord.utils.get(lambda m: m.id == payload.user_id, guild.members)
+            member = disnake.utils.get(lambda m: m.id == payload.user_id, guild.members)
             if member:
                 await member.remove_roles(role)
 
