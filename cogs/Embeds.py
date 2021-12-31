@@ -53,7 +53,7 @@ class Embeds(commands.Cog):
 
     @commands.command()
     async def edit(self, ctx, arg, *, msg = None):
-        message = await ctx.fetch_message(id = arg)
+        message = await ctx.fetch_message(arg)
         if message != None:
             old_embed = message.embeds[0]
             title = old_embed.title
@@ -122,7 +122,7 @@ class Embeds(commands.Cog):
     async def content(self, ctx, arg, channel: disnake.TextChannel = None):
         if channel == None:
             channel = ctx.message.channel
-        message = await channel.fetch_message(id = arg)
+        message = await channel.fetch_message(arg)
         for emb in message.embeds:
             if emb.color != emb.Empty:
                 color = f' color {emb.color}'
