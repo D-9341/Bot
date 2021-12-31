@@ -61,48 +61,6 @@ async def on_guild_role_update(before, after):
         await role.edit(name = 'Muted', color = disnake.Color(0x000001), reason = 'Нельзя изменять эту роль.') # it is not allowed to edit this role
 
 @client.event
-async def on_raw_reaction_add(payload):
-    message_id = payload.message_id
-    if message_id == 926392608153022486:
-        guild_id = payload.guild_id
-        guild = disnake.utils.find(lambda g: g.id == guild_id, client.guilds)
-        if payload.emoji.name == ':engineer:':
-            role = disnake.utils.get(guild.roles, name = 'Инженер')
-        if payload.emoji.name == ':captain:':
-            role = disnake.utils.get(guild.roles, name = 'Капитан')
-        if payload.emoji.name == ':medic:':
-            role = disnake.utils.get(guild.roles, name = 'Медик')
-        if payload.emoji.name == ':mechanic:':
-            role = disnake.utils.get(guild.roles, name = 'Механик')
-        if payload.emoji.name == ':BSEC:':
-            role = disnake.utils.get(guild.roles, name = 'СБЭУ')
-        if role:
-            member = disnake.utils.get(lambda m: m.id == payload.user_id, guild.members)
-            if member:
-                await member.add_roles(role)
-
-@client.event
-async def on_raw_reaction_remove(payload):
-    message_id = payload.message_id
-    if message_id == 926392608153022486:
-        guild_id = payload.guild_id
-        guild = disnake.utils.find(lambda g: g.id == guild_id, client.guilds)
-        if payload.emoji.name == ':engineer:':
-            role = disnake.utils.get(guild.roles, name = 'Инженер')
-        if payload.emoji.name == ':captain:':
-            role = disnake.utils.get(guild.roles, name = 'Капитан')
-        if payload.emoji.name == ':medic:':
-            role = disnake.utils.get(guild.roles, name = 'Медик')
-        if payload.emoji.name == ':mechanic:':
-            role = disnake.utils.get(guild.roles, name = 'Механик')
-        if payload.emoji.name == ':BSEC:':
-            role = disnake.utils.get(guild.roles, name = 'СБЭУ')
-        if role:
-            member = disnake.utils.get(lambda m: m.id == payload.user_id, guild.members)
-            if member:
-                await member.remove_roles(role)
-
-@client.event
 async def on_command_completion(ctx):
     lchannel = client.get_channel(714175791033876490)
     emb = disnake.Embed(title = 'ВЫПОЛНЕНИЕ_КОМАНДЫ', color = disnake.Color.orange()) # COMMAND_COMPLETION
