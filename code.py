@@ -65,7 +65,7 @@ async def on_raw_reaction_add(payload):
     message_id = payload.message_id
     if message_id == 926392608153022486:
         guild_id = payload.guild_id
-        guild = disnake.utils.find(lambda g: g.id == guild_id, self.client.guilds)
+        guild = disnake.utils.find(lambda g: g.id == guild_id, client.guilds)
         if payload.emoji.name == ':engineer:':
             role = disnake.utils.get(guild.roles, name = 'Инженер')
         if payload.emoji.name == ':captain:':
@@ -80,13 +80,13 @@ async def on_raw_reaction_add(payload):
             member = disnake.utils.get(lambda m: m.id == payload.user_id, guild.members)
             if member:
                 await member.add_roles(role)
-        
+
 @client.event
 async def on_raw_reaction_remove(payload):
     message_id = payload.message_id
     if message_id == 926392608153022486:
         guild_id = payload.guild_id
-        guild = disnake.utils.find(lambda g: g.id == guild_id, self.client.guilds)
+        guild = disnake.utils.find(lambda g: g.id == guild_id, client.guilds)
         if payload.emoji.name == ':engineer:':
             role = disnake.utils.get(guild.roles, name = 'Инженер')
         if payload.emoji.name == ':captain:':
