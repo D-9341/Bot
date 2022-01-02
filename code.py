@@ -282,7 +282,7 @@ async def on_slash_command_error(inter, error):
 @client.event
 async def on_command_error(ctx, error):
     channel = client.get_channel(838506478108803112)
-    elif isinstance(error, commands.MissingPermissions):
+    if isinstance(error, commands.MissingPermissions):
         emb = disnake.Embed(description = f'{ctx.author.mention}, у вас недостаточно прав на выполнение команды `{ctx.command.name}`', colour = disnake.Color.orange())
         await ctx.send(embed = emb)
         eemb = disnake.Embed(description = 'Поймана ошибка `MissingPermissions`', color = 0xff0000, timestamp = disnake.utils.utcnow())
