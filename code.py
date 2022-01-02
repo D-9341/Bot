@@ -282,13 +282,6 @@ async def on_slash_command_error(inter, error):
 @client.event
 async def on_command_error(ctx, error):
     channel = client.get_channel(838506478108803112)
-    if isinstance(error, commands.CommandNotFound):
-        emb = disnake.Embed(description = f'{ctx.author.mention}, команда не обнаружена. Может, пропишите cy/help?', colour = disnake.Color.orange())
-        await ctx.send(embed = emb)
-        eemb = disnake.Embed(description = 'Поймана ошибка `CommandNotFound`', color = 0xff0000, timestamp = disnake.utils.utcnow())
-        eemb.add_field(name = 'Сервер', value = ctx.guild.name)
-        eemb.add_field(name = 'Вызвавший ошибку', value = f'{ctx.author.mention} ({ctx.author.name})', inline = False)
-        await channel.send(embed = eemb)
     elif isinstance(error, commands.MissingPermissions):
         emb = disnake.Embed(description = f'{ctx.author.mention}, у вас недостаточно прав на выполнение команды `{ctx.command.name}`', colour = disnake.Color.orange())
         await ctx.send(embed = emb)
