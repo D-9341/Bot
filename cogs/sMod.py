@@ -267,6 +267,86 @@ class sMod(commands.Cog):
             emb = disnake.Embed(description = f'{inter.author.mention}, я не могу найти {role.mention} в списке ролей.', colour = 0x2f3136, timestamp = disnake.utils.utcnow())
             await inter.response.send_message(embed = emb)
 
+    @commands.slash_command(name = 'mute', description = 'Заглушает участника, запрещая ему писать в каналах')
+    @commands.has_permissions(view_audit_log = True)
+    async def _mute(self, inter, member: disnake.Member, *, reason = 'Не указана'):
+        '''        
+        Parameters
+        ----------
+        member: :class: `disnake.Member`
+            Участник
+        reason: :class: `str`
+            Причина
+        '''
+        role = disnake.utils.get(inter.guild.roles, name = 'Muted')
+        if role in member.roles:
+            emb = disnake.Embed(description = 'Роль Muted уже есть в списке ролей участника.', color = 0x2f3136)
+            return await inter.send(embed = emb)
+        if member.id != 338714886001524737:
+            if inter.author.top_role == member.top_role and inter.author.id != 338714886001524737:
+                emb = disnake.Embed(description = f'{inter.author.mention}, ваша высшая роль равна высшей роли {member.mention}. Заглушение отклонено.', colour = disnake.Color.orange())
+                await inter.send(embed = emb)
+            elif inter.author.top_role < member.top_role and inter.author.id != 338714886001524737:
+                emb = disnake.Embed(description = f'{inter.author.mention}, ваша высшая роль ниже высшей роли {member.mention}. Заглушение отклонено.', colour = disnake.Color.orange())
+                await inter.send(embed = emb)
+            else:
+                if role != None:
+                    await member.add_roles(role)
+                    emb = disnake.Embed(colour = 0x2f3136, timestamp = disnake.utils.utcnow())
+                    emb.add_field(name = 'Заглушён', value = f'{member.mention}')
+                    emb.add_field(name = 'Причина', value = reason)
+                    await inter.send(embed = emb)
+                else:
+                    role = await inter.guild.create_role(name = 'Muted', colour = 0x000001, reason = 'Создано автоматически командой mute')
+                    await member.add_roles(role)
+                    emb = disnake.Embed(colour = 0x2f3136, timestamp = disnake.utils.utcnow())
+                    emb.add_field(name = 'Заглушён', value = f'{member.mention}')
+                    emb.add_field(name = 'Причина', value = reason)
+                    await inter.send(embed = emb)
+        else:
+            emb = disnake.Embed(description = f'Извините, {inter.author.mention}, но вы не можете заглушить моего создателя!', colour = disnake.Color.orange())
+            await inter.send(embed = emb)
+
+    @commands.slash_command(name = 'deaf', description = 'Заглушает участника, запрещая ему разговаривать в каналах')
+    @commands.has_permissions(view_audit_log = True)
+    async def _deaf(self, inter, member: disnake.Member, *, reason = 'Не указана'):
+        '''        
+        Parameters
+        ----------
+        member: :class: `disnake.Member`
+            Участник
+        reason: :class: `str`
+            Причина
+        '''
+        role = disnake.utils.get(inter.guild.roles, name = 'Deafened')
+        if role in member.roles:
+            emb = disnake.Embed(description = 'Роль Deafened уже есть в списке ролей участника.', color = 0x2f3136)
+            return await inter.send(embed = emb)
+        if member.id != 338714886001524737:
+            if inter.author.top_role == member.top_role and inter.author.id != 338714886001524737:
+                emb = disnake.Embed(description = f'{inter.author.mention}, ваша высшая роль равна высшей роли {member.mention}. Заглушение отклонено.', colour = disnake.Color.orange())
+                await inter.send(embed = emb)
+            elif inter.author.top_role < member.top_role and inter.author.id != 338714886001524737:
+                emb = disnake.Embed(description = f'{inter.author.mention}, ваша высшая роль ниже высшей роли {member.mention}. Заглушение отклонено.', colour = disnake.Color.orange())
+                await inter.send(embed = emb)
+            else:
+                if role != None:
+                    await member.add_roles(role)
+                    emb = disnake.Embed(colour = 0x2f3136, timestamp = disnake.utils.utcnow())
+                    emb.add_field(name = 'Заглушён', value = f'{member.mention}')
+                    emb.add_field(name = 'Причина', value = reason)
+                    await inter.send(embed = emb)
+                else:
+                    role = await inter.guild.create_role(name = 'Deafened', colour = 0x000001, reason = 'Создано автоматически командой deaf')
+                    await member.add_roles(role)
+                    emb = disnake.Embed(colour = 0x2f3136, timestamp = disnake.utils.utcnow())
+                    emb.add_field(name = 'Заглушён', value = f'{member.mention}')
+                    emb.add_field(name = 'Причина', value = reason)
+                    await inter.send(embed = emb)
+        else:
+            emb = disnake.Embed(description = f'Извините, {inter.author.mention}, но вы не можете заглушить моего создателя!', colour = disnake.Color.orange())
+            await inter.send(embed = emb)
+
     @commands.slash_command(name = 'unmute', description = 'Отменяет заглушение участника')
     @commands.has_permissions(manage_channels = True)
     async def _unmute(self, inter, member: disnake.Member, *, reason = None):
@@ -294,6 +374,32 @@ class sMod(commands.Cog):
         else:
             emb = disnake.Embed(description = f'{inter.author.mention}, Я не могу снять заглушение у {member.mention} из-за того, что роль Muted была удалена', colour = 0x2f3136, timestamp = disnake.utils.utcnow())
             await inter.response.send_message(embed = emb)
+
+    @commands.slash_command(name = 'undeaf', description = 'Отменяет заглушение участника')
+    @commands.has_permissions(manage_channels = True)
+    async def _undeaf(self, ctx, member: disnake.Member, *, reason = 'Не указана'):
+        '''        
+        Parameters
+        ----------
+        member: :class: `disnake.Member`
+            Участник
+        reason: :class: `str`
+            Причина
+        '''
+        role = disnake.utils.get(ctx.guild.roles, name = 'Deafened')
+        if role != None:
+            if role in member.roles:
+                await member.remove_roles(role)
+                emb = disnake.Embed(title = f'Принудительное снятие заглушения у {member}', colour = 0x2f3136, timestamp = disnake.utils.utcnow())
+                emb.add_field(name = 'Снял мут', value = ctx.author.mention)
+                emb.add_field(name = 'По причине', value = reason)
+                await ctx.send(embed = emb)
+            else:
+                emb = disnake.Embed(description = 'Снятие заглушения не требуется. Роли Deafened не обнаружено в списке ролей участника.', colour = 0x2f3136)
+                await ctx.send(embed = emb)
+        else:
+            emb = disnake.Embed(description = f'{ctx.author.mention}, Я не могу снять заглушение у {member.mention} из-за того, что роль Deafened была удалена', colour = 0x2f3136, timestamp = disnake.utils.utcnow())
+            await ctx.send(embed = emb)
 
     @commands.slash_command(name = 'clear', description = 'Очищает канал от указанного количества сообщений. Не работает, если в канале нет сообщений.')
     @commands.has_permissions(administrator = True)
