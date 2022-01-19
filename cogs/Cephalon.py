@@ -71,7 +71,7 @@ class Cephalon(commands.Cog):
     async def info(self, ctx):
         emb = disnake.Embed(colour = disnake.Color.orange())
         emb.set_author(name = self.client.user.name, url = 'https://warframe.fandom.com/wiki/Cephalon_Cy', icon_url = self.client.user.avatar.url)
-        emb.add_field(name = 'Версия', value = '0.12.12.10.0')
+        emb.add_field(name = 'Версия', value = '0.12.12.10.16367')
         emb.add_field(name = 'Написан на', value = 'disnake.py v2.3.0')
         emb.add_field(name = 'Разработчик', value = '[сасиска#2472](https://discord.com/users/338714886001524737)')
         if ctx.guild.id == 693929822543675455:
@@ -108,7 +108,7 @@ class Cephalon(commands.Cog):
     @commands.command()
     async def botver(self, ctx):
         emb = disnake.Embed(color = 0x2f3136)
-        emb.add_field(name = '0.12.12.10.0', value = 'Некоторое количество исправлений, возвращение команды vote через /\nИзменена логика команды mute - теперь нельзя установить время, на которое человек заглушается')
+        emb.add_field(name = '0.12.12.10.16367', value = 'Изменение команд Embeds\n\nИзменено написание команд **say**, **edit** и переписана help под их изменение')
         await ctx.send(embed = emb)
 
     @commands.command()
