@@ -23,7 +23,7 @@ class sCephalon(commands.Cog):
         print('Группа Slash-команд Cephalon загружена')
 
     @commands.slash_command(name = 'botver', description = 'Позволяет узнать текущую версию бота')
-    async def _botver(self, inter, version: str = commands.Param(choices = {'0.12.9.10519': '0.12.9.10519', '0.12.9.10988': '0.12.9.10988', '0.12.9.11410': '0.12.9.11410', '0.12.10.1.11661': '0.12.10.1.11661', '0.12.10.2.11856': '0.12.10.2.11856', '0.12.10.2.12528': '0.12.10.2.12528', '0.12.11.2.13771': '0.12.11.2.13771', '0.12.12.0.0': '0.12.12.0.0', '0.12.12.10.0': '0.12.12.10.0'})):
+    async def _botver(self, inter, version: str = commands.Param(choices = {'0.12.9.10519': '0.12.9.10519', '0.12.9.10988': '0.12.9.10988', '0.12.9.11410': '0.12.9.11410', '0.12.10.1.11661': '0.12.10.1.11661', '0.12.10.2.11856': '0.12.10.2.11856', '0.12.10.2.12528': '0.12.10.2.12528', '0.12.11.2.13771': '0.12.11.2.13771', '0.12.12.0.0': '0.12.12.0.0', '0.12.12.10.0': '0.12.12.10.0', '0.12.12.10.16367': '0.12.12.10.16367'})):
         if version == '0.12.9.10519':
             emb = disnake.Embed(color = 0x2f3136)
             emb.add_field(name = '0.12.9.10519', value = 'Небольшие исправления, в целом никак не связанные с работой бота.')
@@ -60,6 +60,10 @@ class sCephalon(commands.Cog):
             emb = disnake.Embed(color = 0x2f3136)
             emb.add_field(name = '0.12.12.10.0', value = 'Некоторое количество исправлений, возвращение команды vote через /\nИзменена логика команды mute - теперь нельзя установить время, на которое человек заглушается')
             await inter.response.send_message(embed = emb)
+        if version == '0.12.12.10.16367':
+            emb = disnake.Embed(color = 0x2f3136)
+            emb.add_field(name = '0.12.12.10.16367', value = 'Изменение команд Embeds\n\nИзменено написание команд **say**, **edit** и переписана help под их изменение')
+            await inter.response.send_message(embed = emb)
 
     @commands.slash_command(name = 'ping', description = 'Отображение задержки клиента бота. Нормальная задержка в диапазоне от 90 до 130 миллисекунд.')
     async def _ping(self, inter):
@@ -74,7 +78,7 @@ class sCephalon(commands.Cog):
     async def _info(self, inter):
         emb = disnake.Embed(colour = disnake.Color.orange())
         emb.set_author(name = self.client.user.name, url = 'https://warframe.fandom.com/wiki/Cephalon_Cy', icon_url = self.client.user.avatar.url)
-        emb.add_field(name = 'Версия', value = '0.12.12.10.0')
+        emb.add_field(name = 'Версия', value = '0.12.12.10.16367')
         emb.add_field(name = 'Написан на', value = 'disnake.py v2.3.0')
         emb.add_field(name = 'Разработчик', value = '[сасиска#2472](https://discord.com/users/338714886001524737)')
         if inter.guild.id == 693929822543675455:
@@ -122,9 +126,9 @@ class sCephalon(commands.Cog):
         elif arg == 'dm':
             await inter.response.send_message('```apache\ncy/dm <@пинг/имя/ID> <текст> (<> - обязательно, / - или)\nperms = view_audit_log```')
         elif arg == 'say':
-                await inter.response.send_message('```apache\ncy/say [обычный текст] [t& title текст] | [d& description текст] | [th& ссылка на картинку справа] | [img& ссылка на картинку снизу] [f& footer текст] [msg& сообщение над эмбедом]\ncy/say t& title | d& description\ncy/say [текст]\n(вам НЕ обязательно писать все аргументы в данном порядке, пишите только те, что вам нужны в любом порядке. Однако необходимо написать хоть что-то для выполнения команды) ([] - опционально)```')
+            await inter.response.send_message('```apache\ncy/say [обычный текст] [&t title текст] [&d description текст] [&th ссылка на картинку справа] [&img ссылка на картинку снизу] [&f footer текст] [&msg сообщение над эмбедом]\ncy/say &t Заголовок &d Описание\ncy/say [текст]\n(вам НЕ обязательно писать все аргументы в данном порядке, пишите только те, что вам нужны в любом порядке. Однако необходимо написать хоть что-то для выполнения команды) ([] - опционально)```')
         elif arg == 'edit':
-                await inter.response.send_message('```apache\ncy/edit <ID> [обычный текст] [t& title текст] | [d& description текст] | [th& ссылка на картинку справа] | [img& ссылка на картинку снизу]\ncy/edit <ID> [текст]\ncy/edit <ID> --clean | d& description\ncy/edit <ID> --clean\ncy/edit <ID> --noembed\ncy/edit <ID> --empty-embed\ncy/edit <ID> --delete\n--clean удалит контент над эмбедом, --noembed удалит эмбед, работает только если есть эмбед, --empty-embed опустошит эмбед, --delete удалит сообщение\nесли у сообщения есть эмбед и в команде нет агрументов, автоматически будет заменён msg&\n([] - опционально, <> - обязательно)\nperms = manage_channels```')
+            await inter.response.send_message('```apache\ncy/edit <ID> [обычный текст] [&t title текст] [&d description текст] [&th ссылка на картинку справа] [&img ссылка на картинку снизу]\ncy/edit <ID> [текст]\ncy/edit <ID> --clean &d description\ncy/edit <ID> --clean\ncy/edit <ID> --noembed\ncy/edit <ID> --empty-embed\ncy/edit <ID> --delete\n--clean удалит контент над эмбедом, --noembed удалит эмбед, работает только если есть эмбед, --empty-embed опустошит эмбед, --delete удалит сообщение\nесли у сообщения есть эмбед и в команде нет агрументов, автоматически будет заменён &msg\n([] - опционально, <> - обязательно)\nperms = manage_channels```')
         elif arg == 'give':
             await inter.response.send_message('```apache\ncy/give <@пинг/имя/ID> <@роль/имя роли/ID роли> (<> - обязательно, / - или)\nperms = manage_channels```')
         elif arg == 'kick':
