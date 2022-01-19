@@ -43,31 +43,31 @@ class sEmbeds(commands.Cog):
             else:
                 content = f'content {message.content}'
             if emb.image.url != emb.Empty:
-                img = f' | img& {emb.image.url}'
+                img = f' &img {emb.image.url}'
                 image = f' image {emb.image.url}'
             else:
                 img = ''
                 image = ''
             if emb.thumbnail.url != emb.Empty:
-                th = f' | th& {emb.thumbnail.url}'
+                th = f' &th {emb.thumbnail.url}'
                 thumb = f' thumbnail {emb.thumbnail.url}'
             else:
                 th = ''
                 thumb = ''
             if emb.description != emb.Empty:
-                d = f' | d& {emb.description}'
+                d = f' &d {emb.description}'
                 description = f' description {emb.description}'
             else:
                 d = ''
                 description = ''
             if emb.title != emb.Empty:
-                t = f't& {emb.title}'
+                t = f'&t {emb.title}'
                 title = f' title {emb.title}'
             else:
                 t = ''
                 title = ''
             if emb.footer.text != emb.Empty:
-                f = f' | f& {emb.footer.text}'
+                f = f' &f {emb.footer.text}'
                 footer = f' footer {emb.footer.text}'
             else:
                 f = ''
@@ -102,20 +102,19 @@ class sEmbeds(commands.Cog):
             title = ''
             description = ''
             image = thumbnail = footer = None
-            embed_values = msg.split('|')
+            embed_values = msg.split('&')
             for i in embed_values:
-                if i.strip().lower().startswith('t&'):
-                    title = i.strip()[2:].strip()
-                elif i.strip().lower().startswith('d&'):
-                    description = i.strip()[2:].strip()
-                elif i.strip().lower().startswith('img&'):
-                    image = i.strip()[4:].strip()
-                elif i.strip().lower().startswith('th&'):
-                    thumbnail = i.strip()[3:].strip()
-                elif i.strip().lower().startswith('f&'):
-                    footer = i.strip()[2:].strip()
-            color = 0x2f3136
-            emb = disnake.Embed(title = title, description = description, color = color, timestamp = disnake.utils.utcnow())
+                if i.strip().lower().startswith('t'):
+                    title = i.strip()[1:].strip()
+                elif i.strip().lower().startswith('d'):
+                    description = i.strip()[1:].strip()
+                elif i.strip().lower().startswith('img'):
+                    image = i.strip()[3:].strip()
+                elif i.strip().lower().startswith('th'):
+                    thumbnail = i.strip()[2:].strip()
+                elif i.strip().lower().startswith('f'):
+                    footer = i.strip()[1:].strip()
+            emb = disnake.Embed(title = title, description = description, color = 0x2f3136, timestamp = disnake.utils.utcnow())
             for i in embed_values:
                 emb.set_author(name = inter.author, icon_url = inter.author.avatar.url)
                 if image:
@@ -124,7 +123,7 @@ class sEmbeds(commands.Cog):
                     emb.set_thumbnail(url = thumbnail)
                 if footer:
                     emb.set_footer(text = footer)
-                if 't&' not in msg and 'd&' not in msg and 'img&' not in msg and 'th&' not in msg and 'f&' not in msg:
+                if 't' not in msg and 'd' not in msg and 'img' not in msg and 'th' not in msg and 'f' not in msg:
                     if message.author == self.client.user:
                         if '--clean' in msg:
                             await message.edit(content = None)
@@ -173,20 +172,20 @@ class sEmbeds(commands.Cog):
         title = ''
         description = ''
         image = thumbnail = message = footer = None
-        embed_values = msg.split('|')
+        embed_values = msg.split('&')
         for i in embed_values:
-            if i.strip().lower().startswith('t&'):
-                title = i.strip()[2:].strip()
-            elif i.strip().lower().startswith('d&'):
-                description = i.strip()[2:].strip()
-            elif i.strip().lower().startswith('img&'):
-                image = i.strip()[4:].strip()
-            elif i.strip().lower().startswith('th&'):
-                thumbnail = i.strip()[3:].strip()
-            elif i.strip().lower().startswith('msg&'):
-                message = i.strip()[4:].strip()
-            elif i.strip().lower().startswith('f&'):
-                footer = i.strip()[2:].strip()
+            if i.strip().lower().startswith('t'):
+                title = i.strip()[1:].strip()
+            elif i.strip().lower().startswith('d'):
+                description = i.strip()[1:].strip()
+            elif i.strip().lower().startswith('img'):
+                image = i.strip()[3:].strip()
+            elif i.strip().lower().startswith('th'):
+                thumbnail = i.strip()[2:].strip()
+            elif i.strip().lower().startswith('msg'):
+                message = i.strip()[3:].strip()
+            elif i.strip().lower().startswith('f'):
+                footer = i.strip()[1:].strip()
         emb = disnake.Embed(title = title, description = description, color = 0x2f3136)
         for i in embed_values:
             emb.set_author(name = inter.author, icon_url = inter.author.avatar.url)
@@ -196,7 +195,7 @@ class sEmbeds(commands.Cog):
                 emb.set_thumbnail(url = thumbnail)
             if footer:
                 emb.set_footer(text = footer)
-            if 't&' not in msg and 'd&' not in msg and 'img&' not in msg and 'th&' not in msg and 'msg&' not in msg and 'f&' not in msg:
+            if 't' not in msg and 'd' not in msg and 'img' not in msg and 'th' not in msg and 'msg' not in msg and 'f' not in msg:
                 return await inter.response.send_message(msg)
             else:
                 if message:
