@@ -1,6 +1,7 @@
 import asyncio
 import os
 import secrets
+import time
 
 import disnake
 from disnake.ext import commands
@@ -12,6 +13,8 @@ collection = cluster.Locale.locale
 
 guilds = [693929822543675455, 735874149578440855, 818758712163827723]
 
+uptime = disnake.utils.utcnow()
+
 class Cephalon(commands.Cog):
     def __init__(self, client):
         self.client = client
@@ -19,6 +22,11 @@ class Cephalon(commands.Cog):
     @commands.Cog.listener()
     async def on_ready(self):
         print('Модуль Cephalon загружен')
+
+    @commands.command()
+    async def uptime(self, ctx):
+        bot_time = disnake.utils.utcnow() - uptime
+        await ctx.send(embed = disnake.Embed(description = bot_time, color = 0x2f3136))
 
     @commands.command() #ru, gnida
     async def locale(self, ctx, locale = None):
