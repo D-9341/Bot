@@ -26,7 +26,7 @@ class Cephalon(commands.Cog):
     @commands.command()
     async def uptime(self, ctx):
         bot_time = disnake.utils.utcnow() - uptime
-        await ctx.send(embed = disnake.Embed(description = f'Я в сети уже `{round(bot_time)}`', color = 0x2f3136))
+        await ctx.send(embed = disnake.Embed(description = f'Я в сети уже `{bot_time*1000}`', color = 0x2f3136))
 
     @commands.command() #ru, gnida
     async def locale(self, ctx, locale = None):
