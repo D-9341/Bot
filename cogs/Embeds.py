@@ -86,18 +86,6 @@ class Embeds(commands.Cog):
                             await message.edit(content = None)
                         if '--delete' in msg:
                             await message.delete()
-                        if '--noembed' in msg:
-                            if message.embeds != []:
-                                await message.edit(embed = None)
-                            else:
-                                return await ctx.send(f'{ctx.author.mention}, нечего удалять. Возможно, вы имели ввиду cy/edit {message.id} --delete ?', delete_after = 5)
-                        if '--empty-embed' in msg:
-                            if message.embeds != []:
-                                emb = disnake.Embed(title = None, description = None, color = 0x2f3136)
-                                emb.set_author(name = ctx.author, icon_url = ctx.author.avatar.url)
-                                await message.edit(embed = emb)
-                            else:
-                                return await ctx.send(f'{ctx.author.mention}, нечего очищать. Возможно, вы имели ввиду cy/edit {message.id} --delete ?')
                         else:
                             await message.edit(content = msg)
                     else:
