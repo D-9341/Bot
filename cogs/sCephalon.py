@@ -106,7 +106,7 @@ class sCephalon(commands.Cog):
     async def _help(self, inter, arg: str = commands.Param(default = None, choices = {'about': 'about', 'avatar': 'avatar', 'ban': 'ban', 'content': 'content', 'clear': 'clear', 'dm': 'dm', 'say': 'say', 'edit': 'edit', 'give': 'give', 'kick': 'kick', 'mute': 'mute', 'role': 'role', 'take': 'take', 'unmute': 'unmute', 'embeds': 'embeds', 'cephalon': 'cephalon', 'mod': 'mod', 'misc': 'misc', 'all': 'all', 'roll': 'roll'})):
         if arg == None:
             emb = disnake.Embed(title = self.client.user.name, description = 'Доступные Slash-команды', colour = disnake.Color.orange())
-            emb.add_field(name = 'Cephalon', value = '`botver`, `info`, `invite`, `join`, `leave`, `ping`', inline = False)
+            emb.add_field(name = 'Cephalon', value = '`botver`, `info`, `invite`, `join`, `leave`, `ping`, `uptime`', inline = False)
             emb.add_field(name = 'Embeds', value = '`content`, `edit`, `say`', inline = False)
             emb.add_field(name = 'Fun', value = '`aye_balbec`, `dotersbrain`, `niggers`, `rp`, `rap`, `zatka`', inline = False)
             emb.add_field(name = 'Mod', value = '`ban`, `clear`, `dm`, `give`, `kick`, `mute`, `take`, `unmute`', inline = False)
