@@ -14,6 +14,8 @@ friends = [351071668241956865, 417362845303439360]
 
 guilds = [693929822543675455, 735874149578440855, 818758712163827723]
 
+uptime = disnake.utils.utcnow()
+
 class sCephalon(commands.Cog):
     def __init__(self, client):
         self.client = client
@@ -21,6 +23,11 @@ class sCephalon(commands.Cog):
     @commands.Cog.listener()
     async def on_ready(self):
         print('Группа Slash-команд Cephalon загружена')
+
+    @commands.slash_command(name = 'uptime', description = 'Позволяет узнать время бота в сети')
+    async def _uptime(self, inter):
+        bot_time = disnake.utils.utcnow() - uptime
+        await inter.response.send_message(embed = disnake.Embed(description = f'Я в сети уже `{bot_time}`', color = 0x2f3136))
 
     @commands.slash_command(name = 'botver', description = 'Позволяет узнать текущую версию бота')
     async def _botver(self, inter, version: str = commands.Param(choices = {'0.12.9.10519': '0.12.9.10519', '0.12.9.10988': '0.12.9.10988', '0.12.9.11410': '0.12.9.11410', '0.12.10.1.11661': '0.12.10.1.11661', '0.12.10.2.11856': '0.12.10.2.11856', '0.12.10.2.12528': '0.12.10.2.12528', '0.12.11.2.13771': '0.12.11.2.13771', '0.12.12.0.0': '0.12.12.0.0', '0.12.12.10.0': '0.12.12.10.0', '0.12.12.10.16367': '0.12.12.10.16367'})):
