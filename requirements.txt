@@ -6,3 +6,4 @@ chardet
 asyncpg
 pymongo[srv]
 regex
+youtube-dl
