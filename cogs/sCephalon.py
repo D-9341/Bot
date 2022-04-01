@@ -27,7 +27,8 @@ class sCephalon(commands.Cog):
     @commands.slash_command(name = 'uptime', description = 'Позволяет узнать время бота в сети')
     async def _uptime(self, inter):
         bot_time = disnake.utils.utcnow() - uptime
-        await inter.response.send_message(embed = disnake.Embed(description = f'Я в сети уже `{bot_time}`', color = 0x2f3136))
+        emb = disnake.Embed(description = f'Я в сети уже `{bot_time}`', color = 0x2f3136)
+        await inter.response.send_message(embed = emb)
 
     @commands.slash_command(name = 'botver', description = 'Позволяет узнать текущую версию бота')
     async def _botver(self, inter, version: str = commands.Param(choices = {'0.12.9.10519': '0.12.9.10519', '0.12.9.10988': '0.12.9.10988', '0.12.9.11410': '0.12.9.11410', '0.12.10.1.11661': '0.12.10.1.11661', '0.12.10.2.11856': '0.12.10.2.11856', '0.12.10.2.12528': '0.12.10.2.12528', '0.12.11.2.13771': '0.12.11.2.13771', '0.12.12.0.0': '0.12.12.0.0', '0.12.12.10.0': '0.12.12.10.0', '0.12.12.10.16367': '0.12.12.10.16367'})):
