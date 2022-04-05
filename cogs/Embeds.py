@@ -83,24 +83,24 @@ class Embeds(commands.Cog):
                 if 't' not in msg and 'd' not in msg and 'img' not in msg and 'th' not in msg and 'f' not in msg:
                     if message.author == self.client.user:
                         if '--clean' in msg:
-                            await message.edit(content = None)
+                            return await message.edit(content = None)
                         if '--delete' in msg:
-                            await message.delete()
+                            return await message.delete()
                         else:
-                            await message.edit(content = msg)
+                            return await message.edit(content = msg)
                     else:
                         return await ctx.send(f'{message.id} не является сообщением от {self.client.user}')
                 else:
                     if message.author == self.client.user:
                         if '--clean' in msg:
-                            await message.edit(content = None, embed = emb)
+                            return await message.edit(content = None, embed = emb)
                         if '--noembed' in msg:
                             if message.embeds != []:
-                                await message.edit(embed = None)
+                                return await message.edit(embed = None)
                             else:
                                 return await ctx.send(f'{ctx.author.mention}, нечего удалять. Возможно, вы имели ввиду cy/edit {message.id} --delete ?', delete_after = 5)
                         else:
-                            await message.edit(embed = emb)
+                            return await message.edit(embed = emb)
                     else:
                         return await ctx.send(f'{message.id} не является сообщением от {self.client.user}')
         else:
