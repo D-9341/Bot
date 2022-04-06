@@ -148,7 +148,7 @@ async def on_message(message):
         collection.insert_one(post)
     if message.channel.id == 890673628822274128 and message.author.id == client.owner_id:
         await message.channel.send(f'<@!468079847017676801>, <@!417362845303439360>, похоже, еблан на сасиске скинул код!')
-    if message.content.startswith(f'<@!{client.user.id}>') and len(message.content) == len(f'<@!{client.user.id}>'):
+    if message.content.startswith(f'<@{client.user.id}>') and len(message.content) == len(f'<@{client.user.id}>'):
         await message.channel.send(f'чё звал {message.author.mention} ||`cy/`||')
         await client.process_commands(message)
     if ('сделать') in message.content.lower() or ('предлагаю') in message.content.lower() or ('предложение') in message.content.lower() and message.author.bot == False:
