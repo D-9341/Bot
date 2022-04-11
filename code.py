@@ -11,7 +11,7 @@ from pymongo import MongoClient
 from disnake.ext import commands
 from disnake.utils import get
 
-client = commands.Bot(command_prefix = commands.when_mentioned_or('cy/'), intents = disnake.Intents.all(), owner_id = 338714886001524737, status = disnake.Status.idle, activity = disnake.Activity(type = disnake.ActivityType.watching, name = 'Хрю хрю, хрю! (С днём рождения, дудка!)'), allowed_mentions = disnake.AllowedMentions(everyone = False), case_insensitive = True)
+client = commands.Bot(command_prefix = commands.when_mentioned_or('cy/'), intents = disnake.Intents.all(), owner_id = 338714886001524737, status = disnake.Status.idle, activity = disnake.Activity(type = disnake.ActivityType.watching, name = 'Чё там у хохлов'), allowed_mentions = disnake.AllowedMentions(everyone = False), case_insensitive = True)
 client.remove_command('help')
 passw = os.environ.get('passw')
 cluster = MongoClient(f"mongodb+srv://cephalon:{passw}@locale.ttokw.mongodb.net/Locale?retryWrites=true&w=majority")
