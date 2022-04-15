@@ -328,7 +328,7 @@ async def on_command_error(ctx, error):
             await ctx.send('```apache\ncy/ban <@пинг/имя/ID> [причина/--soft --reason]\ncy/ban 185476724627210241 --soft --reason лошара\ncy/ban @сасиска чмо\ncy/ban "Sgt White"\ncy/ban @крипочек --soft\n\nПри использовании --soft обязательно указывать --reason ПОСЛЕ --soft\n\n([] - опционально, <> - обязательно, / - или)\nperms = ban_members```')
         else:
             emb = disnake.Embed(description = f'{ctx.author.mention}, обнаружен недостаток аргументов для `{ctx.command.name}`. Попробуйте cy/help `{ctx.command.name}`', colour = disnake.Color.orange())
-            emb.set_footer(text = 'Задержка команды сброшена, так как была вызвана ошибка при вводе пользователя')
+            emb.set_footer(text = 'Задержка команды сброшена')
             await ctx.send(embed = emb)
         eemb = disnake.Embed(description = 'Поймана ошибка `MissingRequiredArgument`', color = 0xff0000, timestamp = disnake.utils.utcnow())
         eemb.add_field(name = 'Сервер', value = ctx.guild.name)
@@ -338,7 +338,7 @@ async def on_command_error(ctx, error):
     elif isinstance(error, commands.MemberNotFound):
         reset_cooldown(ctx.command, ctx.message)
         emb = disnake.Embed(description = f'{ctx.author.mention}, участник не обнаружен.', color = disnake.Color.orange())
-        emb.set_footer(text = 'Задержка команды сброшена, так как была вызвана ошибка при вводе пользователя')
+        emb.set_footer(text = 'Задержка команды сброшена')
         await ctx.send(embed = emb)
         eemb = disnake.Embed(description = 'Поймана ошибка `MemberNotFound`', color = 0xff0000, timestamp = disnake.utils.utcnow())
         eemb.add_field(name = 'Сервер', value = ctx.guild.name)
@@ -348,7 +348,7 @@ async def on_command_error(ctx, error):
     elif isinstance(error, commands.BadArgument):
         reset_cooldown(ctx.command, ctx.message)
         emb = disnake.Embed(description = f'{ctx.author.mention}, обнаружен неверный аргумент для `{ctx.command.name}`. Попробуйте cy/help `{ctx.command.name}`', colour = disnake.Color.orange())
-        emb.set_footer(text = 'Задержка команды сброшена, так как была вызвана ошибка при вводе пользователя')
+        emb.set_footer(text = 'Задержка команды сброшена')
         await ctx.send(embed = emb)
         eemb = disnake.Embed(description = 'Поймана ошибка `BadArgument`', color = 0xff0000, timestamp = disnake.utils.utcnow())
         eemb.add_field(name = 'Сервер', value = ctx.guild.name)
