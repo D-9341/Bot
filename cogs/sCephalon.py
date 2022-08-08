@@ -109,7 +109,6 @@ class sCephalon(commands.Cog):
             emb = disnake.Embed(title = self.client.user.name, description = 'Доступные Slash-команды', colour = disnake.Color.orange())
             emb.add_field(name = 'Cephalon', value = '`botver`, `info`, `invite`, `join`, `leave`, `ping`, `uptime`', inline = False)
             emb.add_field(name = 'Embeds', value = '`content`, `edit`, `say`', inline = False)
-            emb.add_field(name = 'Fun', value = '`aye_balbec`, `dotersbrain`, `niggers`, `rp`, `rap`, `zatka`', inline = False)
             emb.add_field(name = 'Mod', value = '`ban`, `clear`, `dm`, `give`, `kick`, `mute`, `take`, `unmute`', inline = False)
             emb.add_field(name = 'Misc', value = '`about`, `avatar`, `coinflip`, `guild`, `remind`, `role`, `roll`, `rolemembers`, `vote`', inline = False)
             emb.add_field(name = 'ᅠ', value = 'Назовите комнату `Создать канал`, чтобы бот автоматически создавал для вас временные каналы, которые будут удаляться после того, как все люди выйдут из канала.')
@@ -162,7 +161,6 @@ class sCephalon(commands.Cog):
         elif arg == 'All' or arg == 'all':
             await inter.response.send_message('```py\ninfo - информация о боте\ninvite - ссылка-приглашения бота\njoin - бот зайдёт в ваш голосовой канал\nleave - бот из него выйдет\nping - проверяет задержку клиента бота.```')
             await inter.send('```py\ncontent(ctx) - позволяет увидеть raw контент сообщения\nedit - редактирует сообщение, отправленное от лица бота. Иные сообщения редактировать нельзя.\nsay - используется для написания как текстов, так и эмбедов.```')
-            await inter.send('```py\naye_balbec - я не ангел и не бес, просто..\ncu - медь\ncoinflip(c, coin) - подкидывает монетку\ndotersbrain - проверка на мозг дотера\nniggers - осуждаем!\nrp - ультимативный гайд по рп отыгровке\nrap - .rap\nzatka - Форма заявки для набор кадров```')
             await inter.send('```py\nban - бан участника\nclear - очистка чата, не более 300!\ndm - пишет в лс участнику написанный текст\ngive - выдаёт роль\nkick - кик участника\nmute - мут участника\ntake - забирает роль\nunmute - снятие мута участника.```')
             await inter.send('```py\nabout - информация о человеке\navatar - аватар человека\nguild - информация о сервере\nremind - напоминание о событии\nroleinfo - информация о роли\nrolemembers - участники роли\nsomeone - упоминание someone\nvote - голосование за что-то.```')
 
