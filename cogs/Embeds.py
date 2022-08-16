@@ -53,7 +53,7 @@ class Embeds(commands.Cog):
 
     @commands.command()
     async def edit(self, ctx, arg, *, msg = None):
-        message = await ctx.fetch_message(arg)
+        message = await ctx.message.channel.fetch_message(arg)
         if message != None:
             old_embed = message.embeds[0]
             title = old_embed.title
