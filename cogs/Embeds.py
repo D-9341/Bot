@@ -22,90 +22,95 @@ class Embeds(commands.Cog):
         image = thumbnail = message = footer = None
         embed_values = msg.split('&')
         for i in embed_values:
-            if i.strip().lower().startswith('t'):
-                title = i.strip()[1:].strip()
+            if i.strip().lower().startswith('th'):
+                thumbnail = i.strip()[2:].strip()
             elif i.strip().lower().startswith('d'):
                 description = i.strip()[1:].strip()
             elif i.strip().lower().startswith('img'):
                 image = i.strip()[3:].strip()
-            elif i.strip().lower().startswith('th'):
-                thumbnail = i.strip()[2:].strip()
+            elif i.strip().lower().startswith('t'):
+                title = i.strip()[1:].strip()
             elif i.strip().lower().startswith('msg'):
                 message = i.strip()[3:].strip()
             elif i.strip().lower().startswith('f'):
                 footer = i.strip()[1:].strip()
         emb = disnake.Embed(title = title, description = description, color = 0x2f3136)
-        for i in embed_values:
-            emb.set_author(name = ctx.author, icon_url = ctx.author.avatar.url)
-            if image:
-                emb.set_image(url = image)
-            if thumbnail:
-                emb.set_thumbnail(url = thumbnail)
-            if footer:
-                emb.set_footer(text = footer)
-            if 't' not in msg and 'd' not in msg and 'img' not in msg and 'th' not in msg and 'msg' not in msg and 'f' not in msg:
-                await ctx.send(msg)
+        emb.set_author(name = ctx.author, icon_url = ctx.author.avatar.url)
+        if image:
+            emb.set_image(url = image)
+        if thumbnail:
+            emb.set_thumbnail(url = thumbnail)
+        if footer:
+            emb.set_footer(text = footer)
+        if '&t' not in msg and '&d' not in msg and '&img' not in msg and '&th' not in msg and '&msg' not in msg and '&f' not in msg:
+            await ctx.send(msg)
+        else:
+            if message:
+                return await ctx.send(f'{message}', embed = emb)
             else:
-                if message:
-                    return await ctx.send(f'{message}', embed = emb)
-                else:
-                    return await ctx.send(embed = emb)
+                return await ctx.send(embed = emb)
 
     @commands.command()
     async def edit(self, ctx, arg, *, msg = None):
         channel = ctx.message.channel
         message = await channel.fetch_message(arg)
-        if message != None:
+        if message.embeds != []:
             old_embed = message.embeds[0]
             title = old_embed.title
             description = old_embed.description
-            image = thumbnail = footer = None
-            embed_values = msg.split('&')
-            for i in embed_values:
-                if i.strip().lower().startswith('t'):
-                    title = i.strip()[1:].strip()
-                elif i.strip().lower().startswith('d'):
-                    description = i.strip()[1:].strip()
-                elif i.strip().lower().startswith('img'):
-                    image = i.strip()[3:].strip()
-                elif i.strip().lower().startswith('th'):
-                    thumbnail = i.strip()[2:].strip()
-                elif i.strip().lower().startswith('f'):
-                    footer = i.strip()[1:].strip()
-            emb = disnake.Embed(title = title, description = description, color = 0x2f3136, timestamp = disnake.utils.utcnow())
-            for i in embed_values:
-                emb.set_author(name = ctx.author, icon_url = ctx.author.avatar.url)
-                if image:
-                    emb.set_image(url = image)
-                if thumbnail:
-                    emb.set_thumbnail(url = thumbnail)
-                if footer:
-                    emb.set_footer(text = footer)
-                if 't' not in msg and 'd' not in msg and 'img' not in msg and 'th' not in msg and 'f' not in msg:
-                    if message.author == self.client.user:
-                        if '--clean' in msg:
-                            return await message.edit(content = None)
-                        if '--delete' in msg:
-                            return await message.delete()
-                        else:
-                            return await message.edit(content = msg)
+        image = thumbnail = footer = None
+        embed_values = msg.split('&')
+        for i in embed_values:
+            if i.strip().lower().startswith('th'):
+                thumbnail = i.strip()[2:].strip()
+            elif i.strip().lower().startswith('d'):
+                description = i.strip()[1:].strip()
+            elif i.strip().lower().startswith('img'):
+                image = i.strip()[3:].strip()
+            elif i.strip().lower().startswith('t'):
+                title = i.strip()[1:].strip()
+            elif i.strip().lower().startswith('f'):
+                footer = i.strip()[1:].strip()
+        emb = disnake.Embed(title = title, description = description, color = 0x2f3136, timestamp = disnake.utils.utcnow())
+        emb.set_author(name = ctx.author, icon_url = ctx.author.avatar.url)
+        if image:
+            emb.set_image(url = image)
+        if thumbnail:
+            emb.set_thumbnail(url = thumbnail)
+        if footer:
+            emb.set_footer(text = footer)
+        if '&t' not in msg and '&d' not in msg and '&img' not in msg and '&th' not in msg and '&f' not in msg:
+            if message.author == self.client.user:
+                if '--clean' in msg:
+                    return await message.edit(content = None)
+                if '--delete' in msg:
+                    await message.delete()
+                    return await ctx.send('Сообщение удалено')
+                if '--noembed' in msg:
+                    if message.embeds != []:
+                        return await message.edit(embed = None)
                     else:
-                        return await ctx.send(f'{message.id} не является сообщением от {self.client.user}')
+                        return await ctx.send(f'{ctx.author.mention}, нечего удалять. Возможно, вы имели ввиду cy/edit {message.id} --delete ?')
                 else:
-                    if message.author == self.client.user:
-                        if '--clean' in msg:
-                            return await message.edit(content = None, embed = emb)
-                        if '--noembed' in msg:
-                            if message.embeds != []:
-                                return await message.edit(embed = None)
-                            else:
-                                return await ctx.send(f'{ctx.author.mention}, нечего удалять. Возможно, вы имели ввиду cy/edit {message.id} --delete ?', delete_after = 5)
-                        else:
-                            return await message.edit(embed = emb)
-                    else:
-                        return await ctx.send(f'{message.id} не является сообщением от {self.client.user}')
+                    return await message.edit(content = msg)
+            else:
+                return await ctx.send(f'{message.id} не является сообщением от {self.client.user}')
         else:
-            await ctx.send(f'сообщение {message.id} не обнаружено.')
+            if message.author == self.client.user:
+                if '--clean' in msg:
+                    return await message.edit(content = None, embed = emb)
+                if '--delete' in msg:
+                    await message.delete()
+                    return await ctx.send('Сообщение удалено')
+                if '--noembed' in msg:
+                    if message.embeds != []:
+                        return await message.edit(embed = None)
+                    else:
+                        return await ctx.send(f'{ctx.author.mention}, нечего удалять. Возможно, вы имели ввиду cy/edit {message.id} --delete ?')
+                else:
+                    return await message.edit(embed = emb)
+            else:
+                return await ctx.send(f'{message.id} не является сообщением от {self.client.user.mention}')
 
     @commands.command(aliases = ['ctx'])
     async def content(self, ctx, arg, channel: disnake.TextChannel = None):
