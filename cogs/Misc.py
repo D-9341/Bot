@@ -94,7 +94,7 @@ class Misc(commands.Cog):
         await sent.add_reaction('🚫')
 
     @commands.command()
-    async def someone(self, ctx, text: Slapper):
+    async def someone(self, ctx, *, text: Slapper):
         await ctx.send(embed = text)
 
     @commands.command()
