@@ -4,16 +4,13 @@ import os
 import random
 import re
 
-import disnake
-from disnake.ext import commands
+import discord
+from discord.ext import commands
 from pymongo import MongoClient
 
 passw = os.environ.get('passw')
 cluster = MongoClient(f"mongodb+srv://cephalon:{passw}@locale.ttokw.mongodb.net/Locale?retryWrites=true&w=majority")
 collection = cluster.Locale.locale
-
-time_regex = re.compile(r"(?:(\d{1,5})(h|s|m|d))+?")
-time_dict = {'h': 3600, 's': 1, 'm': 60, 'd': 86400}
 
 friends = [351071668241956865, 417362845303439360]
 
@@ -24,23 +21,9 @@ botversions = [764882153812787250, 694170281270312991, 762015251264569352]
 class Slapper(commands.Converter):
     async def convert(self, ctx, argument):
         mention = random.choice(ctx.guild.members)
-        emb = disnake.Embed(description = f'{argument}', colour = 0x2f3136, timestamp = ctx.message.created_at)
+        emb = discord.Embed(description = f'{argument}', color =  0x2f3136, timestamp = ctx.message.created_at)
         emb.set_author(name = ctx.author, icon_url = ctx.author.avatar.url)
         return await ctx.send(f'@someone ||{mention.mention}||', embed = emb)
-
-class TimeConverter(commands.Converter):
-    async def convert(self, ctx, argument):
-        args = argument.lower()
-        time = 0
-        matches = re.findall(time_regex, args)
-        for key, value in matches:
-            try:
-                time += time_dict[value] * float(key)
-            except KeyError:
-                await ctx.send(f'{value} не является правильным аргументом! Правильные: h|m|s|d')
-            except ValueError:
-                await ctx.send(f'{key} не число!')
-        return time
 
 class Misc(commands.Cog):
     def __init__(self, client):
@@ -52,39 +35,39 @@ class Misc(commands.Cog):
 
     @commands.command()
     async def roll(self, ctx, first: int = None, second: int = None):
-        if first == None and second == None:
+        if not first and not second:
             rand = random.randint(0, 100)
             if rand == 69:
-                await ctx.send(f'`{ctx.author} выпадает число(0-100)\n100`')
+                await ctx.send(f'`{ctx.author} получает случайное число (0-100)\n100`')
             else:
                 rand1 = random.randint(0, 9)
                 rand2 = random.randint(0, 9)
-                await ctx.send(f'`{ctx.author} выпадает число(0-100)\n0{rand1}{rand2}`')
-        if first != None and second == None:
+                await ctx.send(f'`{ctx.author} получает случайное число (0-100)\n0{rand1}{rand2}`')
+        if first and not second:
             rand = random.randint(0, first)
             if first < 10:
-                await ctx.send(f'`{ctx.author} выпадает число(0-{first})\n0{rand}`')
+                await ctx.send(f'`{ctx.author} получает случайное число (0-{first})\n0{rand}`')
             else:
-                await ctx.send(f'`{ctx.author} выпадает число(0-{first})\n{rand}`')
-        if first != None and second != None:
+                await ctx.send(f'`{ctx.author} получает случайное число (0-{first})\n{rand}`')
+        if first and second:
             if first > second:
                 rand = random.randint(first, first)
-                await ctx.send(f'`{ctx.author} выпадает число({first}-{first})\n{rand}`')
+                await ctx.send(f'`{ctx.author} получает случайное число ({first}-{first})\n{rand}`')
             rand = random.randint(first, second)
-            await ctx.send(f'`{ctx.author} выпадает число({first}-{second})\n{rand}`')
+            await ctx.send(f'`{ctx.author} получает случайное число ({first}-{second})\n{rand}`')
 
     @commands.command(aliases = ['c', 'coin'])
     async def coinflip(self, ctx):
-        emb = disnake.Embed(description = f'{ctx.author.mention} подбрасывает монетку: ОРЁЛ', colour = disnake.Color.orange())
-        emb1 = disnake.Embed(description = f'{ctx.author.mention} подбрасывает монетку: РЕШКА', colour = disnake.Color.orange())
+        emb = discord.Embed(description = f'{ctx.author.mention} подбрасывает монетку: ОРЁЛ', color = 0xff8000)
+        emb1 = discord.Embed(description = f'{ctx.author.mention} подбрасывает монетку: РЕШКА', color = 0xff8000)
         choices = [emb, emb1]
         rancoin = random.choice(choices)
         await ctx.send(embed = rancoin)
-            
+
     @commands.command()
     @commands.cooldown(1, 60, commands.BucketType.guild)
     async def vote(self, ctx, *, text):
-        emb = disnake.Embed(description = 'ГОЛОСОВАНИЕ', colour = disnake.Color.orange())
+        emb = discord.Embed(description = 'ГОЛОСОВАНИЕ', color = 0xff8000)
         emb.set_author(name = ctx.author, icon_url = ctx.author.avatar.url)
         emb.add_field(name = 'Голосуем за:', value = text)
         emb.set_footer(text = '🚫 - воздержусь')
@@ -99,19 +82,19 @@ class Misc(commands.Cog):
 
     @commands.command()
     @commands.cooldown(1, 5, commands.BucketType.user)
-    async def rolemembers(self, ctx, role: disnake.Role, member: disnake.Member = None):
-        emb = disnake.Embed(colour = disnake.Color.orange())
+    async def rolemembers(self, ctx, role: discord.Role, member: discord.Member = None):
+        emb = discord.Embed(color = 0xff8000)
         if len(role.members) != 0:
             emb.add_field(name = f'Участники с ролью {role} ({len(role.members)})', value = ', '.join([member.mention for member in role.members]))
         else:
-            emb.set_footer(text = 'Обнаружено 0 участников с этой ролью.')
+            emb.set_footer(text = 'Этой роли нет ни у кого.')
         await ctx.send(embed = emb)
 
     @commands.command()
     @commands.cooldown(1, 5, commands.BucketType.user)
     async def guild(self, ctx):
         guild = ctx.guild
-        emb = disnake.Embed(colour = 0x2f3136, timestamp = disnake.utils.utcnow())
+        emb = discord.Embed(color = 0x2f3136, timestamp = discord.utils.utcnow())
         emb.set_author(name = guild, icon_url = guild.icon.url)
         emb.add_field(name = 'ID сервера', value = guild.id)
         emb.add_field(name = 'Владелец', value = guild.owner.mention)
@@ -127,7 +110,7 @@ class Misc(commands.Cog):
 
     @commands.command()
     @commands.cooldown(1, 5, commands.BucketType.user)
-    async def roleinfo(self, ctx, role: disnake.Role):
+    async def roleinfo(self, ctx, role: discord.Role):
         if role.mentionable == False:
             role.mentionable = 'Нет'
         elif role.mentionable == True:
@@ -140,7 +123,7 @@ class Misc(commands.Cog):
             role.hoist = 'Нет'
         elif role.hoist == True:
             role.hoist = 'Да'
-        emb = disnake.Embed(title = role.name, colour = 0x2f3136)
+        emb = discord.Embed(title = role.name, color = 0x2f3136)
         emb.add_field(name = 'ID', value = role.id)
         emb.add_field(name = 'Цвет', value = role.color)
         emb.add_field(name = 'Упоминается?', value = role.mentionable)
@@ -153,10 +136,10 @@ class Misc(commands.Cog):
 
     @commands.command(aliases = ['av'])
     @commands.cooldown(1, 5, commands.BucketType.user)
-    async def avatar(self, ctx, member: disnake.User = None):
+    async def avatar(self, ctx, member: discord.User = None):
         if member == None:
             member = ctx.author
-        emb = disnake.Embed(colour = 0x2f3136)
+        emb = discord.Embed(color = 0x2f3136)
         if not member.avatar.is_animated():
             emb.set_image(url = member.avatar.with_format('png'))
         else:
@@ -166,16 +149,16 @@ class Misc(commands.Cog):
 
     @commands.command(aliases = ['me'])
     @commands.cooldown(1, 5, commands.BucketType.user)
-    async def about(self, ctx, member: disnake.Member = None):
+    async def about(self, ctx, member: discord.Member = None):
         if member == None:
             member = ctx.author
         if member.nick == None:
-            member.nick = 'Н/Д'
+            member.nick = 'Н/У'
         if member.bot == False:
-            bot = 'Неа'
+            bot = 'Нет'
         elif member.bot == True:
-            bot = 'Ага'
-        emb = disnake.Embed(colour = 0x2f3136, timestamp = disnake.utils.utcnow())
+            bot = 'Да'
+        emb = discord.Embed(color = 0x2f3136, timestamp = discord.utils.utcnow())
         emb.set_author(name = member)
         emb.add_field(name = 'ID', value = member.id)
         d = member.created_at.strftime('%d.%m.%Y %H:%M:%S UTC')
@@ -185,13 +168,13 @@ class Misc(commands.Cog):
         emb.add_field(name = 'Упоминание', value = member.mention)
         emb.add_field(name = 'Необработанное имя', value = member.name)
         emb.add_field(name = 'Никнейм', value = member.nick)
-        if member.status == disnake.Status.online:
+        if member.status == discord.Status.online:
             status = 'В сети'
-        elif member.status == disnake.Status.dnd:
+        elif member.status == discord.Status.dnd:
             status = 'Не беспокоить'
-        elif member.status == disnake.Status.idle:
+        elif member.status == discord.Status.idle:
             status = 'Не активен'
-        elif member.status == disnake.Status.offline:
+        elif member.status == discord.Status.offline:
             status = 'Не в сети'
         emb.add_field(name = 'Статус', value = status)
         roles = ', '.join([role.name for role in member.roles[1:]])
@@ -203,18 +186,5 @@ class Misc(commands.Cog):
         emb.set_thumbnail(url = member.avatar.url)
         await ctx.send(embed = emb)
 
-    @commands.command()
-    @commands.cooldown(1, 5, commands.BucketType.user)
-    async def remind(self, ctx, time: TimeConverter, *, text):
-        emb = disnake.Embed(colour = ctx.author.color, timestamp = disnake.utils.utcnow())
-        emb.add_field(name = 'Напомню через', value = f'{time}s')
-        emb.add_field(name = 'О чём напомню?', value = text)
-        await ctx.send(embed = emb, delete_after = time)
-        await asyncio.sleep(time)
-        emb = disnake.Embed(colour = ctx.author.color, timestamp = disnake.utils.utcnow())
-        emb.add_field(name = 'Напомнил через', value = f'{time}s')
-        emb.add_field(name = 'Напоминаю о', value = text)
-        await ctx.send(f'{ctx.author.mention}', embed = emb)
-
-def setup(client):
-    client.add_cog(Misc(client))
+async def setup(client):
+    await client.add_cog(Misc(client))
