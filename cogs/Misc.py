@@ -2,7 +2,6 @@ import asyncio
 import datetime
 import os
 import random
-import re
 
 import discord
 from discord.ext import commands
@@ -20,9 +19,9 @@ botversions = [764882153812787250, 694170281270312991, 762015251264569352]
 
 class Slapper(commands.Converter):
     async def convert(self, ctx, argument):
-        mention = random.choice(ctx.guild.members)
-        emb = discord.Embed(description = f'{argument}', color =  0x2f3136, timestamp = ctx.message.created_at)
-        emb.set_author(name = ctx.author, icon_url = ctx.author.avatar.url)
+        mention = random.choice(ctx.channel.members)
+        emb = discord.Embed(description = f'{argument}', color =  0x2f3136, timestamp = discord.utils.utcnow())
+        emb.set_author(name = ctx.author.display_name, icon_url = ctx.author.avatar.url)
         return await ctx.send(f'@someone ||{mention.mention}||', embed = emb)
 
 class Misc(commands.Cog):
@@ -35,40 +34,39 @@ class Misc(commands.Cog):
 
     @commands.command()
     async def roll(self, ctx, first: int = None, second: int = None):
+        if first <= 0 or second <= 0:
+            return await ctx.send(embed = discord.Embed(description = f'{ctx.author.display_name} попытался выролять отрицательное число', color = 0xff8000))
         if not first and not second:
             rand = random.randint(0, 100)
             if rand == 69:
-                await ctx.send(f'`{ctx.author} получает случайное число (0-100)\n100`')
+                await ctx.send(embed = discord.Embed(description = f'{ctx.author.display_name} получает случайное число (0-100)\n`100`', color = 0xff8000))
             else:
                 rand1 = random.randint(0, 9)
                 rand2 = random.randint(0, 9)
-                await ctx.send(f'`{ctx.author} получает случайное число (0-100)\n0{rand1}{rand2}`')
+                await ctx.send(embed = discord.Embed(description = f'{ctx.author.display_name} получает случайное число (0-100)\n`0{rand1}{rand2}`', color = 0xff8000))
         if first and not second:
             rand = random.randint(0, first)
             if first < 10:
-                await ctx.send(f'`{ctx.author} получает случайное число (0-{first})\n0{rand}`')
+                await ctx.send(embed = discord.Embed(description = f'`{ctx.author.display_name} получает случайное число (0-{first})\n0{rand}`', color = 0xff8000))
             else:
-                await ctx.send(f'`{ctx.author} получает случайное число (0-{first})\n{rand}`')
+                await ctx.send(embed = discord.Embed(description = f'`{ctx.author.display_name} получает случайное число (0-{first})\n{rand}`', color = 0xff8000))
         if first and second:
             if first > second:
                 rand = random.randint(first, first)
-                await ctx.send(f'`{ctx.author} получает случайное число ({first}-{first})\n{rand}`')
+                return await ctx.send(embed = discord.Embed(description = f'`{ctx.author.display_name} получает случайное число ({first}-{first})\n{rand}`', color = 0xff8000))
             rand = random.randint(first, second)
-            await ctx.send(f'`{ctx.author} получает случайное число ({first}-{second})\n{rand}`')
+            await ctx.send(embed = discord.Embed(description = f'`{ctx.author.display_name} получает случайное число ({first}-{second})\n{rand}`', color = 0xff8000))
 
     @commands.command(aliases = ['c', 'coin'])
     async def coinflip(self, ctx):
-        emb = discord.Embed(description = f'{ctx.author.mention} подбрасывает монетку: ОРЁЛ', color = 0xff8000)
-        emb1 = discord.Embed(description = f'{ctx.author.mention} подбрасывает монетку: РЕШКА', color = 0xff8000)
-        choices = [emb, emb1]
-        rancoin = random.choice(choices)
-        await ctx.send(embed = rancoin)
+        coin = random.choice(['ОРЁЛ', 'РЕШКА'])
+        await ctx.send(embed = discord.Embed(description = f'{ctx.author.mention} подбрасывает монетку: {coin}', color = 0xff8000))
 
     @commands.command()
     @commands.cooldown(1, 60, commands.BucketType.guild)
     async def vote(self, ctx, *, text):
         emb = discord.Embed(description = 'ГОЛОСОВАНИЕ', color = 0xff8000)
-        emb.set_author(name = ctx.author, icon_url = ctx.author.avatar.url)
+        emb.set_author(name = ctx.author.display_name, icon_url = ctx.author.avatar.url)
         emb.add_field(name = 'Голосуем за:', value = text)
         emb.set_footer(text = '🚫 - воздержусь')
         sent = await ctx.send(embed = emb)
@@ -82,12 +80,12 @@ class Misc(commands.Cog):
 
     @commands.command()
     @commands.cooldown(1, 5, commands.BucketType.user)
-    async def rolemembers(self, ctx, role: discord.Role, member: discord.Member = None):
+    async def rolemembers(self, ctx, role: discord.Role):
         emb = discord.Embed(color = 0xff8000)
         if len(role.members) != 0:
             emb.add_field(name = f'Участники с ролью {role} ({len(role.members)})', value = ', '.join([member.mention for member in role.members]))
         else:
-            emb.set_footer(text = 'Этой роли нет ни у кого.')
+            emb.description = f'Роли {role.name} нет ни у кого.'
         await ctx.send(embed = emb)
 
     @commands.command()
@@ -95,7 +93,7 @@ class Misc(commands.Cog):
     async def guild(self, ctx):
         guild = ctx.guild
         emb = discord.Embed(color = 0x2f3136, timestamp = discord.utils.utcnow())
-        emb.set_author(name = guild, icon_url = guild.icon.url)
+        emb.set_author(name = guild, icon_url = guild.icon.url if guild.icon else 'https://cdn.discordapp.com/attachments/685176670344183836/1076601210485866546/76923ec8de0a6ca5.png')
         emb.add_field(name = 'ID сервера', value = guild.id)
         emb.add_field(name = 'Владелец', value = guild.owner.mention)
         emb.add_field(name = 'Участников', value = f'{guild.member_count}\n**Из них ботов:** {len(list(filter(lambda m: m.bot, guild.members)))}\n**Из них людей:** {len(list(filter(lambda m: not m.bot, guild.members)))}')
@@ -103,9 +101,9 @@ class Misc(commands.Cog):
         roles = ', '.join([role.name for role in guild.roles[1:]])
         if len(roles) > 1:
             emb.add_field(name = f'Роли ({len(guild.roles)-1})', value = roles, inline = False)
-        d = guild.created_at.strftime('%d.%m.%Y %H:%M:%S UTC')
+        d = guild.created_at.strftime('%d.%m.%Y %H:%M:%S GMT')
         emb.add_field(name = 'Дата создания сервера', value = f'{d}', inline = False)
-        emb.set_thumbnail(url = guild.icon.url)
+        emb.set_thumbnail(url = guild.icon.url if guild.icon else 'https://cdn.discordapp.com/attachments/685176670344183836/1076601210485866546/76923ec8de0a6ca5.png')
         await ctx.send(embed = emb)
 
     @commands.command()
@@ -134,7 +132,7 @@ class Misc(commands.Cog):
         emb.add_field(name = 'Показывает участников отдельно?', value = role.hoist)
         await ctx.send(embed = emb)
 
-    @commands.command(aliases = ['av'])
+    @commands.command()
     @commands.cooldown(1, 5, commands.BucketType.user)
     async def avatar(self, ctx, member: discord.User = None):
         if member == None:
@@ -144,7 +142,7 @@ class Misc(commands.Cog):
             emb.set_image(url = member.avatar.with_format('png'))
         else:
             emb.set_image(url = member.avatar.url)
-        emb.set_author(name = member)
+        emb.set_author(name = member.display_name)
         await ctx.send(embed = emb)
 
     @commands.command(aliases = ['me'])
@@ -152,22 +150,22 @@ class Misc(commands.Cog):
     async def about(self, ctx, member: discord.Member = None):
         if member == None:
             member = ctx.author
-        if member.nick == None:
-            member.nick = 'Н/У'
         if member.bot == False:
             bot = 'Нет'
         elif member.bot == True:
             bot = 'Да'
         emb = discord.Embed(color = 0x2f3136, timestamp = discord.utils.utcnow())
-        emb.set_author(name = member)
+        emb.set_author(name = member.display_name)
         emb.add_field(name = 'ID', value = member.id)
-        d = member.created_at.strftime('%d.%m.%Y %H:%M:%S UTC')
-        d1 = member.joined_at.strftime('%d.%m.%Y %H:%M:%S UTC')
-        emb.add_field(name = 'Создан', value = f'{d}', inline = False)
-        emb.add_field(name = 'Вошёл', value = f'{d1}', inline = False)
+        if ctx.guild:
+            d = member.created_at.strftime('%d.%m.%Y %H:%M:%S GMT')
+            d1 = member.joined_at.strftime('%d.%m.%Y %H:%M:%S GMT')
+            emb.add_field(name = 'Создан', value = f'{d}', inline = False)
+            emb.add_field(name = 'Вошёл', value = f'{d1}', inline = False)
         emb.add_field(name = 'Упоминание', value = member.mention)
-        emb.add_field(name = 'Необработанное имя', value = member.name)
-        emb.add_field(name = 'Никнейм', value = member.nick)
+        emb.add_field(name = 'Глобальное имя', value = member.name)
+        if member.nick:
+            emb.add_field(name = 'Никнейм', value = member.nick)
         if member.status == discord.Status.online:
             status = 'В сети'
         elif member.status == discord.Status.dnd:
@@ -177,10 +175,11 @@ class Misc(commands.Cog):
         elif member.status == discord.Status.offline:
             status = 'Не в сети'
         emb.add_field(name = 'Статус', value = status)
-        roles = ', '.join([role.name for role in member.roles[1:]])
+        if ctx.guild:
+            roles = ', '.join([role.name for role in member.roles[1:]])
         emb.add_field(name = 'Бот?', value = bot)
         limit = len(member.roles)
-        if limit > 1:
+        if limit > 1 and ctx.guild:
             emb.add_field(name = f'Роли ({len(member.roles)-1})', value = roles, inline = False)
             emb.add_field(name = 'Высшая Роль', value = member.top_role.mention, inline = False)
         emb.set_thumbnail(url = member.avatar.url)
