@@ -13,23 +13,6 @@ collection = cluster.Locale.locale
 
 guilds = [693929822543675455, 735874149578440855, 818758712163827723]
 
-time_regex = re.compile(r"(?:(\d{1,5})(h|s|m|d))+?")
-time_dict = {'h': 3600, 's': 1, 'm': 60, 'd': 86400}
-
-class TimeConverter(commands.Converter):
-    async def convert(self, ctx, argument):
-        args = argument.lower()
-        time = 0
-        matches = re.findall(time_regex, args)
-        for key, value in matches:
-            try:
-                time += time_dict[value] * float(key)
-            except KeyError:
-                await ctx.send(f'{value} не является правильным аргументом! Правильные: h|m|s|d')
-            except ValueError:
-                await ctx.send(f'{key} не число!')
-        return time
-
 class Mod(commands.Cog):
     def __init__(self, client):
         self.client = client
@@ -43,7 +26,7 @@ class Mod(commands.Cog):
     @commands.cooldown(1, 5, commands.BucketType.user)
     async def dm(self, ctx, member: discord.Member, * , text):
         emb = discord.Embed(description = f'{text}', color = 0x2f3136)
-        emb.set_author(name = ctx.author, icon_url = ctx.author.avatar.url)
+        emb.set_author(name = ctx.author.display_name, icon_url = ctx.author.avatar.url)
         await member.send(embed = emb)
         rlocale = collection.find_one({"_id": ctx.author.id})["locale"]
         if rlocale == 'ru':
@@ -66,10 +49,10 @@ class Mod(commands.Cog):
             if member == ctx.author:
                 if rlocale == 'ru':
                     emb = discord.Embed(description = 'Ты **не** можешь кикнуть себя.', color = discord.Color.blurple())
-                    await ctx.send(embed = emb)
+                    return await ctx.send(embed = emb)
                 if rlocale == 'gnida':
                     emb = discord.Embed(description = 'Для дохуя умных доношу - **нельзя** кикать __себя__', color = discord.Color.blurple())
-                    await ctx.send(embed = emb)
+                    return await ctx.send(embed = emb)
             if ctx.author.top_role == member.top_role:
                 if rlocale == 'ru':
                     emb = discord.Embed(description = f'{ctx.author.mention}, ваша высшая роль равна высшей роли {member.mention}. Кик отклонён.', color = 0xff8000)
@@ -100,7 +83,7 @@ class Mod(commands.Cog):
                     await ctx.send(embed = emb)
             else:
                 emb = discord.Embed(color = 0xff8000)
-                emb.set_author(name = ctx.author, icon_url = ctx.author.avatar.url)
+                emb.set_author(name = ctx.author.display_name, icon_url = ctx.author.avatar.url)
                 emb.add_field(name = 'Был кикнут', value = member.mention)
                 emb.add_field(name = 'По причине', value = reason)
                 await ctx.send(embed = emb)
@@ -128,10 +111,10 @@ class Mod(commands.Cog):
             if member == ctx.author:
                 if rlocale == 'ru':
                     emb = discord.Embed(description = 'Ты **не** можешь забанить себя.', color = discord.Color.blurple())
-                    await ctx.send(embed = emb)
+                    return await ctx.send(embed = emb)
                 if rlocale == 'gnida':
                     emb = discord.Embed(description = 'Для дохуя умных доношу - **нельзя** банить __себя__', color = discord.Color.blurple())
-                    await ctx.send(embed = emb)
+                    return await ctx.send(embed = emb)
             if ctx.author.top_role == member.top_role:
                 if rlocale == 'ru':
                     emb = discord.Embed(description = f'{ctx.author.mention}, ваша высшая роль равна высшей роли {member.mention}. Бан отклонён.', color = 0xff8000)
@@ -164,7 +147,7 @@ class Mod(commands.Cog):
                 if '--soft' in reason:
                     emb = discord.Embed(color = 0xff8000)
                     emb.set_author(name = ctx.author, icon_url = ctx.author.avatar.url)
-                    emb.add_field(name = 'Упрощённо забанен', value = f'{member.mention} ({member.name})')
+                    emb.add_field(name = 'Упрощённо забанен', value = f'{member.mention} ({member.display_name})')
                     if '--reason' in reason:
                         reason = reason.strip()[15:].strip()
                     emb.add_field(name = 'По причине', value = reason)
@@ -173,7 +156,7 @@ class Mod(commands.Cog):
                     await member.unban(reason = '--softban')
                 else:
                     emb = discord.Embed(color = 0xff8000)
-                    emb.set_author(name = ctx.author, icon_url = ctx.author.avatar.url)
+                    emb.set_author(name = ctx.author.display_name, icon_url = ctx.author.avatar.url)
                     emb.add_field(name = 'Был забанен', value = member.mention)
                     emb.add_field(name = 'По причине', value = reason)
                     await ctx.send(embed = emb)
@@ -192,7 +175,7 @@ class Mod(commands.Cog):
         rlocale = collection.find_one({"_id": ctx.author.id})["locale"]
         bot = ctx.guild.get_member(self.client.user.id)
         if role != None:
-            if role.name == 'Muted':
+            if role.name == 'Muted' or role.name == 'Deafened':
                 if member.id not in self.client.owner_ids:
                     if member == ctx.author:
                         if rlocale == 'ru':
@@ -233,10 +216,10 @@ class Mod(commands.Cog):
                         await ctx.send(embed = emb)
                 elif role.is_default():
                     if rlocale == 'ru':
-                        emb = discord.Embed(description = f'Выдавать @everyone?', color = 0xff8000)
+                        emb = discord.Embed(description = 'Выдавать @everyone?', color = 0xff8000)
                         await ctx.send(embed = emb)
                     if rlocale == 'gnida':
-                        emb = discord.Embed(description = f'Это @everyone, еблан!', color = 0xff8000)
+                        emb = discord.Embed(description = 'Это @everyone, еблан', color = 0xff8000)
                         await ctx.send(embed = emb)
                 elif member.top_role > bot.top_role:
                     if rlocale == 'ru':
@@ -264,7 +247,7 @@ class Mod(commands.Cog):
                 emb = discord.Embed(description = f'{ctx.author.mention}, я не могу найти {role} в списке ролей.\n||Используйте @упоминание роли||', color = member.color, timestamp = discord.utils.utcnow())
                 await ctx.send(embed = emb)
             if rlocale == 'gnida':
-                emb = discord.Embed(description = f'Не вижу я твоего высера в списке ролей', color = member.color, timestamp = discord.utils.utcnow())
+                emb = discord.Embed(description = 'Не вижу я твоего высера в списке ролей', color = member.color, timestamp = discord.utils.utcnow())
                 await ctx.send(embed = emb)
 
     @commands.command()
@@ -273,7 +256,7 @@ class Mod(commands.Cog):
         rlocale = collection.find_one({"_id": ctx.author.id})["locale"]
         bot = ctx.guild.get_member(self.client.user.id)
         if role != None:
-            if role.name == 'Muted':
+            if role.name == 'Muted' or role.name == 'Deafened':
                 await member.remove_roles(role)
                 if rlocale == 'ru':
                     emb = discord.Embed(description = f'{member.mention} был разглушён {ctx.author.mention}', color = 0xff8000)
@@ -328,7 +311,7 @@ class Mod(commands.Cog):
                 emb = discord.Embed(description = f'{ctx.author.mention}, я не могу найти {role.mention} в списке ролей.\n||Используйте @упоминание роли||', color = member.color, timestamp = discord.utils.utcnow())
                 await ctx.send(embed = emb)
             if rlocale == 'gnida':
-                emb = discord.Embed(description = f'Не вижу я твоего высера в списке ролей', color = member.color, timestamp = discord.utils.utcnow())
+                emb = discord.Embed(description = 'Не вижу я твоего высера в списке ролей', color = member.color, timestamp = discord.utils.utcnow())
                 await ctx.send(embed = emb)
 
     @commands.command()
@@ -389,12 +372,12 @@ class Mod(commands.Cog):
                 emb = discord.Embed(description = f'Извините, {ctx.author.mention}, но вы не можете заглушить моего создателя!', color = 0xff0000)
                 await ctx.send(embed = emb)
             if rlocale == 'gnida':
-                emb = discord.Embed(description = f'иди нахуй', color = 0xff0000)
+                emb = discord.Embed(description = 'иди нахуй', color = 0xff0000)
                 await ctx.send(embed = emb)
 
     @commands.command()
     @commands.has_permissions(manage_channels = True)
-    async def timeout(self, ctx, member: discord.Member, duration: TimeConverter, *, reason = None):
+    async def timeout(self, ctx, member: discord.Member, *, reason = None):
         rlocale = collection.find_one({"_id": ctx.author.id})["locale"]
         if reason == None:
             if rlocale == 'ru':
@@ -424,20 +407,20 @@ class Mod(commands.Cog):
                     emb = discord.Embed(description = f'{ctx.author.mention}, твоя самая крутая роль даже ниже самой крутой роли {member.mention}. Надеюсь мне не надо объяснять почему я не могу отстранить его от пиздежа?', color = 0xff8000)
                     await ctx.send(embed = emb)
             else:
-                await member.timeout(reason = reason, duration = duration)
-                emb = discord.Embed(title = f'Тайм-аут участника {member}', color = 0xff8000, timestamp = discord.utils.utcnow())
+                await member.timeout(datetime.timedelta(hours = 1), reason = reason)
+                emb = discord.Embed(title = f'Тайм-аут участника {member.display_name}', color = 0xff8000, timestamp = discord.utils.utcnow())
                 emb.add_field(name = 'Причина', value = reason)
-                emb.add_field(name = 'Время тайм-аута', value = f'{duration}s')
+                emb.add_field(name = 'Время тайм-аута', value = '1 час')
                 await ctx.send(embed = emb)
         else:
             if rlocale == 'ru':
                 emb = discord.Embed(description = f'Извините, {ctx.author.mention}, но вы не можете заглушить моего создателя!', color = 0xff0000)
                 await ctx.send(embed = emb)
             if rlocale == 'gnida':
-                emb = discord.Embed(description = f'иди нахуй', color = 0xff0000)
+                emb = discord.Embed(description = 'иди нахуй', color = 0xff0000)
                 await ctx.send(embed = emb)
 
-    @commands.command()
+    @commands.command(aliases = ['silencio'])
     @commands.has_permissions(manage_channels = True)
     async def deaf(self, ctx, member: discord.Member, *, reason = None):
         rlocale = collection.find_one({"_id": ctx.author.id})["locale"]
@@ -488,7 +471,7 @@ class Mod(commands.Cog):
                 emb = discord.Embed(description = f'Извините, {ctx.author.mention}, но вы не можете заглушить моего создателя!', color = 0xff0000)
                 await ctx.send(embed = emb)
             if rlocale == 'gnida':
-                emb = discord.Embed(description = f'иди нахуй', color = 0xff0000)
+                emb = discord.Embed(description = 'иди нахуй', color = 0xff0000)
                 await ctx.send(embed = emb)
 
     @commands.command()
@@ -569,7 +552,7 @@ class Mod(commands.Cog):
                 await ctx.send(embed = emb)
 
     @commands.command()
-    @commands.cooldown(1, 10, commands.BucketType.user)
+    @commands.cooldown(1, 60, commands.BucketType.user)
     @commands.bot_has_permissions(manage_messages = True)
     @commands.has_permissions(administrator = True)
     async def clear(self, ctx, amount: int, members = '--everyone', *, filt = None):
@@ -582,12 +565,27 @@ class Mod(commands.Cog):
                 else:
                     authors[message.author] += 1
         if amount == 2472:
+            sus = self.client.get_user(338714886001524737)
             if ctx.author.id in self.client.owner_ids:
-                await ctx.channel.delete()
-                emb = discord.Embed(description = f'Канал `{ctx.channel.name}` удалён.', color = 0x2f3136)
-                await ctx.author.send(embed = emb)
+                if ctx.guild.id == 693929822543675455 and ctx.author.id != 338714886001524737:
+                    emb = discord.Embed(description = 'Даже будучи разработчиком бота ты не имеешь права выполнить это действие на этом сервере.', color = 0xff0000)
+                    emb.set_footer(text = f'Выполнил {ctx.author.display_name}')
+                    await ctx.send(embed = emb)
+                    await sus.send(embed = emb)
+                elif ctx.guild.id == 693929822543675455 and ctx.author.id == 338714886001524737:
+                    emb = discord.Embed(description = 'Даже ты не можешь выполнить это действие на этом сервере.', color = 0xff8000)
+                    await ctx.send(embed = emb)
+                else:
+                    pro = self.client.get_user(417012231406878720)
+                    zov = self.client.get_user(647853887583289354)
+                    await ctx.channel.delete()
+                    emb = discord.Embed(description = f'Канал `{ctx.channel.name}` на сервере {ctx.guild} удалён.', color = 0xff0000)
+                    emb.set_footer(text = f'Выполнил: {ctx.author.display_name}')
+                    await sus.send(embed = emb)
+                    await pro.send(embed = emb)
+                    await zov.send(embed = emb)
             else:
-                await ctx.author.send('А я так не думаю.')
+                raise commands.NotOwner()
         elif amount >= 300:
             emb = discord.Embed(description = f'{ctx.author.mention}, при таком числе удаления сообщений ({amount}) последует большое время ожидания ответа {self.client.user.mention}.', color = 0x2f3136)
             await ctx.send(f'{ctx.guild.owner.mention}', embed = emb)
@@ -631,7 +629,7 @@ class Mod(commands.Cog):
                                 emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{len(cleared)} / {amount}```')
                                 if filt:
                                     emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
-                                emb.add_field(name = 'Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
+                                emb.add_field(name = 'Проверены сообщения от:', value = ''.join([f"```ARM\n{author.display_name} : {amount}```" for author, amount in authors.items()]), inline = False)
                                 emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c".')
                                 await sent.edit(embed = emb)
                                 msg = await self.client.wait_for('message', timeout = 10, check = lambda message: message.channel == ctx.message.channel and message.author == ctx.author and message.content.lower() == 'c')
@@ -639,7 +637,7 @@ class Mod(commands.Cog):
                                 emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{len(cleared)} / {amount}```')
                                 if filt:
                                     emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
-                                emb.add_field(name = 'Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
+                                emb.add_field(name = 'Проверены сообщения от:', value = ''.join([f"```ARM\n{author.display_name} : {amount}```" for author, amount in authors.items()]), inline = False)
                                 await sent.edit(embed = emb)
                             except asyncio.TimeoutError:
                                 await sent.delete()
@@ -693,8 +691,8 @@ class Mod(commands.Cog):
                 emb = discord.Embed(description = f'{ctx.author.mention}, создан запрос на удаление {amount} сообщений. Мне нужен ответ создателя сервера на это действие. Продолжаем? (y/n)\n||Запрос будет отменён через 1 минуту.||', color = 0x2f3136)
                 sent = await ctx.send(f'{ctx.guild.owner.mention}', embed = emb)
                 try:
-                    msg = await self.client.wait_for('message', timeout = 10, check = lambda message: message.author == ctx.author and message.channel == ctx.message.channel)
-                    if msg.content.lower() == 'y':
+                    msg = await self.client.wait_for('message', timeout = 60, check = lambda message: message.channel == ctx.message.channel)
+                    if msg.content.lower() == 'y' and msg.author.id == ctx.guild.owner.id:
                         await msg.delete()
                         await sent.delete()
                         if '--silent' not in members:
@@ -725,7 +723,7 @@ class Mod(commands.Cog):
                                 emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{len(cleared)} / {amount}```')
                                 if filt:
                                     emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
-                                emb.add_field(name = 'Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
+                                emb.add_field(name = 'Проверены сообщения от:', value = ''.join([f"```ARM\n{author.display_name} : {amount}```" for author, amount in authors.items()]), inline = False)
                                 emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c".')
                                 await sent.edit(embed = emb)
                                 msg = await self.client.wait_for('message', timeout = 10, check = lambda message: message.channel == ctx.message.channel and message.author == ctx.author and message.content.lower() == 'c')
@@ -733,7 +731,7 @@ class Mod(commands.Cog):
                                 emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{len(cleared)} / {amount}```')
                                 if filt:
                                     emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
-                                emb.add_field(name = 'Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
+                                emb.add_field(name = 'Проверены сообщения от:', value = ''.join([f"```ARM\n{author.display_name} : {amount}```" for author, amount in authors.items()]), inline = False)
                                 await sent.edit(embed = emb)
                             except asyncio.TimeoutError:
                                 await sent.delete()
@@ -766,7 +764,7 @@ class Mod(commands.Cog):
                     elif msg.content.lower() == 'n' and msg.author.id == ctx.guild.owner.id:
                         await msg.delete()
                         await sent.delete()
-                        emb = discord.Embed(description = f'{ctx.guild.owner} отменил запрос.', color = 0x2f3136)
+                        emb = discord.Embed(description = f'{ctx.guild.owner.mention} отменил запрос.', color = 0x2f3136)
                         await ctx.send(embed = emb, delete_after = 3)
                     elif msg.content.lower() == 'n' or msg.content.lower() == 'y' and msg.author.id != ctx.guild.owner.id:
                         await msg.delete()
@@ -786,7 +784,7 @@ class Mod(commands.Cog):
                 emb = discord.Embed(description = f'{ctx.author.mention}, создан запрос на удаление {amount} сообщений. Продолжить? (y/n)\n||Запрос будет отменён через 10 секунд.||', color = 0x2f3136)
                 sent = await ctx.send(embed = emb)
                 try:
-                    msg = await self.client.wait_for('message', timeout = 10, check = lambda message: message.author == ctx.author and message.channel == ctx.message.channel)
+                    msg = await self.client.wait_for('message', timeout = 10, check = lambda message: message.channel == ctx.message.channel)
                     if msg.content.lower() == 'y':
                         await msg.delete()
                         await sent.delete()
@@ -818,15 +816,15 @@ class Mod(commands.Cog):
                                 emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{len(cleared)} / {amount}```')
                                 if filt:
                                     emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
-                                emb.add_field(name = 'Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
+                                emb.add_field(name = 'Проверены сообщения от:', value = ''.join([f"```ARM\n{author.display_name} : {amount}```" for author, amount in authors.items()]), inline = False)
                                 emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c".')
                                 await sent.edit(embed = emb)
+                                msg = await self.client.wait_for('message', timeout = 10, check = lambda message: message.channel == ctx.message.channel and message.author == ctx.author and message.content.lower() == 'c')
                                 emb = discord.Embed(title = 'Результаты удаления сообщений', color = 0x2f3136)
                                 emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{len(cleared)} / {amount}```')
                                 if filt:
                                     emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
-                                emb.add_field(name = 'Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
-                                emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c".')
+                                emb.add_field(name = 'Проверены сообщения от:', value = ''.join([f"```ARM\n{author.display_name} : {amount}```" for author, amount in authors.items()]), inline = False)
                                 await sent.edit(embed = emb)
                             except asyncio.TimeoutError:
                                 await sent.delete()
@@ -906,7 +904,7 @@ class Mod(commands.Cog):
                             emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{len(cleared)} / {amount}```')
                             if filt:
                                 emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
-                            emb.add_field(name = 'Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
+                            emb.add_field(name = 'Проверены сообщения от:', value = ''.join([f"```ARM\n{author.display_name} : {amount}```" for author, amount in authors.items()]), inline = False)
                             emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c".')
                             await sent.edit(embed = emb)
                             msg = await self.client.wait_for('message', timeout = 10, check = lambda message: message.channel == ctx.message.channel and message.author == ctx.author and message.content.lower() == 'c')
@@ -914,7 +912,7 @@ class Mod(commands.Cog):
                             emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{len(cleared)} / {amount}```')
                             if filt:
                                 emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
-                            emb.add_field(name = 'Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
+                            emb.add_field(name = 'Проверены сообщения от:', value = ''.join([f"```ARM\n{author.display_name} : {amount}```" for author, amount in authors.items()]), inline = False)
                             await sent.edit(embed = emb)
                         except asyncio.TimeoutError:
                             await sent.delete()
@@ -944,7 +942,7 @@ class Mod(commands.Cog):
                                 await ctx.channel.purge(limit = amount, check = lambda m: m.pinned == False)
                             else:
                                 await ctx.channel.purge(limit = amount, check = lambda m: m.content.lower() == filt.lower() and m.pinned == False)
-                elif msgtent.lower() == 'n':
+                elif msg.content.lower() == 'n':
                     await msg.delete()
                     await sent.delete()
                     emb = discord.Embed(description = 'Отменено.', color = 0x2f3136)
@@ -990,7 +988,7 @@ class Mod(commands.Cog):
                     emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{len(cleared)} / {amount}```')
                     if filt:
                         emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
-                    emb.add_field(name = 'Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
+                    emb.add_field(name = 'Проверены сообщения от:', value = ''.join([f"```ARM\n{author.display_name} : {amount}```" for author, amount in authors.items()]), inline = False)
                     emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c".')
                     await sent.edit(embed = emb)
                     msg = await self.client.wait_for('message', timeout = 10, check = lambda message: message.channel == ctx.message.channel and message.author == ctx.author and message.content.lower() == 'c')
@@ -998,7 +996,7 @@ class Mod(commands.Cog):
                     emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{len(cleared)} / {amount}```')
                     if filt:
                         emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
-                    emb.add_field(name = 'Проверены сообщения от:', value = ''.join([f"```ARM\n{author} : {amount}```" for author, amount in authors.items()]), inline = False)
+                    emb.add_field(name = 'Проверены сообщения от:', value = ''.join([f"```ARM\n{author.display_name} : {amount}```" for author, amount in authors.items()]), inline = False)
                     await sent.edit(embed = emb)
                 except asyncio.TimeoutError:
                     await sent.delete()
