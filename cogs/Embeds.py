@@ -1,11 +1,11 @@
 import asyncio
-
 import discord
 from discord.ext import commands
 
 botversions = [764882153812787250, 694170281270312991, 762015251264569352]
 
 class Embeds(commands.Cog):
+
     def __init__(self, client):
         self.client = client
 
@@ -43,7 +43,7 @@ class Embeds(commands.Cog):
                 color = int('0x' + color.lstrip('#'), 16)
         emb = discord.Embed(title = title, description = description, color = color)
         for i in embed_values:
-            emb.set_author(name = ctx.author, icon_url = ctx.author.avatar.url)
+            emb.set_author(name = ctx.author.display_name, icon_url = ctx.author.avatar.url)
             if image:
                 emb.set_image(url = image)
             if thumbnail:
@@ -68,7 +68,7 @@ class Embeds(commands.Cog):
                     await message.delete()
                     return await ctx.send('Сообщение удалено.')
                 if '--clean' in msg:
-                    await message.edit(content = None)
+                    return await message.edit(content = None)
                 if '--noembed' in msg:
                     if message.embeds != []:
                         await message.edit(embed = None)
@@ -87,7 +87,8 @@ class Embeds(commands.Cog):
             else:
                 title = ''
                 description = ''
-            image = thumbnail = footer = color = None
+                color = None
+            image = thumbnail = footer = None
             embed_values = msg.split('&')
             for i in embed_values:
                 if i.strip().lower().startswith('th'):
@@ -102,15 +103,17 @@ class Embeds(commands.Cog):
                     title = i.strip()[1:].strip()
                 elif i.strip().lower().startswith('f'):
                     footer = i.strip()[1:].strip()
-            if color == None:
+            if message.embeds == [] or color == None:
                 color = 0x2f3136
+            elif message.embeds != [] and '&c' not in msg:
+                color = message.embeds[0].color
             else:
                 if '#' not in color:
                     color = int('0x' + color, 16)
                 else:
                     color = int('0x' + color.lstrip('#'), 16)
             emb = discord.Embed(title = title, description = description, color = color, timestamp = discord.utils.utcnow())
-            emb.set_author(name = ctx.author, icon_url = ctx.author.avatar.url)
+            emb.set_author(name = ctx.author.display_name, icon_url = ctx.author.avatar.url)
             if image:
                 emb.set_image(url = image)
             if thumbnail:
@@ -133,7 +136,7 @@ class Embeds(commands.Cog):
             else:
                 return await ctx.send(f'{message.id} не является сообщением от {self.client.user.mention}')
 
-    @commands.command(aliases = ['ctx'])
+    @commands.command(aliases=['ctx'])
     async def content(self, ctx, arg, channel: discord.TextChannel = None):
         if channel == None:
             channel = ctx.channel
@@ -191,11 +194,12 @@ class Embeds(commands.Cog):
         else:
             if message.embeds == []:
                 if '```' in message.content:
-                    await ctx.send(f'@{message.author} {message.content}')
+                    await ctx.send(f'@{message.author.display_name} {message.content}')
                 else:
-                    await ctx.send(f'```@{message.author} {message.content}```')
+                    await ctx.send(f'```@{message.author.display_name} {message.content}```')
             else:
                 await ctx.send(f'```{content}{title}{description}{footer}{color}{author}{image}{thumb}```')
+
 
 async def setup(client):
     await client.add_cog(Embeds(client))
