@@ -32,71 +32,68 @@ class Cephalon(commands.Cog):
 
     @commands.command()
     async def help(self, ctx, arg = None):
-        if arg == None:
-            emb = discord.Embed(description = 'Все доступные команды.', color = 0xff8000)
-            emb.set_author(name = self.client.user.name, url = 'https://discord.com/api/oauth2/authorize?client_id=694170281270312991&permissions=8&scope=bot%20applications.commands')
-            emb.add_field(name = 'Cephalon', value = '`botver`, `devs`, `help`, `info`, `invite`, `locale`, `ping`, `uptime`', inline = False)
-            emb.add_field(name = 'Embeds', value = '`content`, `edit`, `say`', inline = False)
-            emb.add_field(name = 'Fun', value = '`aghanim`, `dotersbrain`', inline = False)
-            emb.add_field(name = 'Mod', value = '`ban`, `clear`, `dm`, `deaf`, `give`, `kick`, `mute`, `take`, `timeout`, `undeaf`, `unmute`', inline = False)
-            emb.add_field(name = 'Misc', value = '`about`, `avatar`, `coinflip`, `guild`, `roll`, `roleinfo`, `rolemembers`, `someone`, `vote`', inline = False)
-            #emb.add_field(name = 'Music', value = '`join`, `leave`, `play`, `pause`, `resume`, `volume`')
-            emb.add_field(name = 'ᅠ', value = 'Указанные разрешения необходимы для исполнителя команды если не указано другого.', inline = False)
-            emb.add_field(name = 'ᅠ', value = 'Не используйте `[] <> /` при написании команды.', inline = False)
-            emb.add_field(name = 'ᅠ', value = '**Используйте** `cy/help [команда]` **для подробностей использования.**\n\n**[Ссылка-приглашение](https://discord.com/api/oauth2/authorize?client_id=694170281270312991&permissions=8&scope=bot%20applications.commands)**', inline = False)
-            emb.set_footer(text = 'Cephalon Cy ©️ Sus&Co\n2020 - Present')
-            return await ctx.send(embed = emb)
-        #elif arg == 'play':
-        #    await ctx.send('```apache\ncy/play <ссылка на видео YouTube>\nСсылка должна быть только с YouTube\n\n<> - обязательно```')
-        #elif arg == 'volume':
-        #    await ctx.send('```apache\ncy/volume <громкость>\nГромкость должна быть в пределе от 0 до 100\n\n<> - обязательно```')
-        elif arg == 'dotersbrain':
-            await ctx.send('```apache\ncy/dotersbrain\n\nСлова и ответы к ним: чё - хуй через плечо, а - хуй на, да - пизда, нет - пидора ответ, ок - хуй намок```')
-        elif arg == 'timeout':
-            await ctx.send('```apache\ncy/timeout <@пинг/имя/ID> [причина]\n\n[] - опционально, <> - обязательно, / - или\nНеобходимы разрешения - управлять каналами```')
-        elif arg == 'deaf':
-            await ctx.send('```apache\ncy/deaf <@пинг/имя/ID> [причина]\nВ отличии от команды mute, бот будет заглушать людей в голосовом канале с ролью **Deafened**\n\n[] - опционально, <> - обязательно, / - или\nНеобходимы разрешения - управлять каналами```')
-        elif arg == 'undeaf':
-            await ctx.send('```apache\ncy/undeaf <@пинг/имя/ID> [причина]\n\n[] - опционально, <> - обязательно, / - или\nНеобходимы разрешения - управлять каналами```')
-        elif arg == 'roll':
-            await ctx.send('```apache\ncy/roll [от] [до]\nесли не указано [до], [от] станет [до].\ncy/roll 80 (0-80)\ncy/roll 26 90 (26-90)\ncy/roll (0-100)\n\n[] - опционально```')
-        elif arg == 'about':
-            await ctx.send('```apache\ncy/about [@пинг/имя/ID]\n\n[] - опционально, / - или```')
-        elif arg == 'avatar':
-            await ctx.send('```apache\ncy/avatar [@пинг/имя/ID]\n\n[] - опционально, / - или```')
-        elif arg == 'ban':
-            await ctx.send('```apache\ncy/ban <@пинг/имя/ID> [причина/--soft --reason]\ncy/ban 185476724627210241 --soft --reason лошара\ncy/ban @сасиска чмо\ncy/ban "Sgt White" --soft\n\nПри использовании --soft обязательно указывать --reason после него, однако можно не использовать --reason\n[] - опционально, <> - обязательно, / - или\nНеобходимы разрешения - банить участников```')
-        elif arg == 'content' or arg == 'ctx':
-            await ctx.send('```apache\ncy/content <ID> [канал, в котором находится сообщение]\n\n[] - опционально, <> - обязательно```')
-        elif arg == 'clear':
-            await ctx.send('```apache\ncy/clear <количество> [диапазон] [фильтр]\ncy/clear 100\ncy/clear 10\ncy/clear 50 --everyone хыха\ncy/clear 30 --bots\ncy/clear 15 --users\ncy/clear 5 --silent\ncy/clear 200 "--silent --everyone" хыха\n\n--everyone удалит сообщения от всех\n--bots удалит сообщения только от ботов\n--users удалит сообщения только от людей\n--silent не покажет результаты удаления сообщений\n\nПри указании диапазона не будет удалено столько сообщений, сколько было указано, будет удалено столько, сколько будет найдено в пределах заданного количества сообщений.\nДопустим cy/clear 10 --bots\nЕсли сообщения от ботов и людей чередуются, будет удалено лишь то кол-во сообщений от ботов, что было найдено в указанном пределе 10.\n\nСообщения старше 2 недель будут удалены не сразу - лимит discord API\nПри удалении более 100 сообщений нужно подтверждение владельца сервера.\nТолько владелец сервера может удалять от 250 сообщений за раз.\nНе более 300 за раз!\n\n[] - опционально, <> - обязательно, / - или\nНеобходимы разрешения - права администратора```')
-        elif arg == 'dm':
-            await ctx.send('```apache\ncy/dm <@пинг/имя/ID> <текст>\n\n(<> - обязательно, / - или)\nНеобходимы разрешения - просматривать лог аудита```')
-        elif arg == 'say':
-            await ctx.send('```apache\ncy/say [обычный текст] [&t title текст] [&d description текст] [&th ссылка на картинку справа] [&img ссылка на картинку снизу] [&f footer текст] [&c цвет в HEX коде] [&msg сообщение над эмбедом]\ncy/say &t Заголовок &d Описание\ncy/say [текст]\nУчтите, что если вы захотите упомянуть роль с использованием какого либо аргумента текст не будет показан из-за способа упоминания ролей в Discord\nВсе аргументы являются необязательными, но если отправить пустую команду - ответ будет этим сообщением\n\n[] - опционально```')
-        elif arg == 'edit':
-            await ctx.send('```apache\ncy/edit <ID> [обычный текст] [&t title текст] [&d description текст] [&f footer текст] [&c цвет в HEX коде] [&th ссылка на картинку справа] [&img ссылка на картинку снизу]\ncy/edit <ID> [текст]\ncy/edit <ID> --clean\ncy/edit <ID> --noembed\ncy/edit <ID> --delete\n\n--clean удалит контент над эмбедом\n--noembed удалит эмбед\n--delete удалит сообщение\n\nИспользование --clean и --noembed одновременно невозможно.\nЕсли у сообщения есть эмбед и в команде нет агрументов, автоматически будет заменён &msg\nЗаголовок, описание и цвет будут взяты со старого эмбеда, если таковой имеется и эти аргументы не были указаны.\nДля очистки какого-либо поля укажите аргумент и оставьте его пустым:\ncy/edit <ID> &d\nЭто опустошит описание.\n\n[] - опционально, <> - обязательно\nНеобходимы разрешения - управлять сообщениями```')
-        elif arg == 'give':
-            await ctx.send('```apache\ncy/give <@пинг/имя/ID> <@роль/имя роли/ID роли>\n\n<> - обязательно, / - или\nНеобходимы разрешения - управлять каналами```')
-        elif arg == 'kick':
-            await ctx.send('```apache\ncy/kick <@пинг/имя/ID> [причина]\n\n[] - опционально, <> - обязательно, / - или\nНеобходимы разрешения - выгонять участников```')
-        elif arg == 'mute':
-            await ctx.send('```apache\ncy/mute <@пинг/имя/ID> [причина]\n\n[] - опционально, <> - обязательно, / - или\nНеобходимы разрешения - просматривать лог аудита```')
-        elif arg == 'roleinfo':
-            await ctx.send('```apache\ncy/roleinfo <@роль/имя роли/ID роли>\n\n<> - обязательно, / - или```')
-        elif arg == 'take':
-            await ctx.send('```apache\ncy/take <@пинг/имя/ID> <@роль/имя роли/ID роли>\n\n<> - обязательно, / - или\nНеобходимы разрешения - управлять каналами```')
-        elif arg == 'someone':
-            await ctx.send('```apache\ncy/someone <текст>\n\n<> - обязательно```')
-        elif arg == 'unmute':
-            await ctx.send('```apache\ncy/unmute <@пинг/имя/ID> [причина]\n\n[] - опционально, <> - обязательно, / - или\nНеобходимы разрешения - управлять каналами```')
-        elif arg == 'vote':
-            await ctx.send('```apache\ncy/vote <текст>\n\n<> - обязательно```')
-        elif arg == 'help':
-            await ctx.send('```apache\ncy/help [команда]\n\n[] - опционально```')
-        else:
-            emb = discord.Embed(description = f'Команда `{arg}` не обнаружена или выполняется лишь её написанием.', color = 0xff8000)
-            await ctx.send(embed = emb)
+        match arg:
+            case None:
+                emb = discord.Embed(description = 'Все доступные команды.', color = 0xff8000)
+                emb.set_author(name = self.client.user.name, url = 'https://discord.com/api/oauth2/authorize?client_id=694170281270312991&permissions=8&scope=bot%20applications.commands')
+                emb.add_field(name = 'Cephalon', value = '`botver`, `devs`, `help`, `info`, `invite`, `locale`, `ping`, `uptime`', inline = False)
+                emb.add_field(name = 'Embeds', value = '`content`, `edit`, `say`', inline = False)
+                emb.add_field(name = 'Fun', value = '`aghanim`, `dotersbrain`', inline = False)
+                emb.add_field(name = 'Mod', value = '`ban`, `clear`, `dm`, `deaf`, `give`, `kick`, `mute`, `take`, `timeout`, `undeaf`, `unmute`', inline = False)
+                emb.add_field(name = 'Misc', value = '`about`, `avatar`, `coinflip`, `guild`, `roll`, `roleinfo`, `rolemembers`, `someone`, `vote`', inline = False)
+                #emb.add_field(name = 'Music', value = '`join`, `leave`, `play`, `pause`, `resume`, `volume`')
+                emb.add_field(name = 'ᅠ', value = 'Указанные разрешения необходимы для исполнителя команды если не указано другого.', inline = False)
+                emb.add_field(name = 'ᅠ', value = 'Не используйте `[] <> /` при написании команды.', inline = False)
+                emb.add_field(name = 'ᅠ', value = '**Используйте** `cy/help [команда]` **для подробностей использования.**\n\n**[Ссылка-приглашение](https://discord.com/api/oauth2/authorize?client_id=694170281270312991&permissions=8&scope=bot%20applications.commands)**', inline = False)
+                emb.set_footer(text = 'Cephalon Cy ©️ Sus&Co\n2020 - Present')
+                return await ctx.send(embed = emb)
+            case 'dotersbrain':
+                await ctx.send('```apache\ncy/dotersbrain\n\nСлова и ответы к ним: чё - хуй через плечо, а - хуй на, да - пизда, нет - пидора ответ, ок - хуй намок```')
+            case 'timeout':
+                await ctx.send('```apache\ncy/timeout <@пинг/имя/ID> [причина]\n\n[] - опционально, <> - обязательно, / - или\nНеобходимы разрешения - управлять каналами```')
+            case 'deaf':
+                await ctx.send('```apache\ncy/deaf <@пинг/имя/ID> [причина]\nВ отличии от команды mute, бот будет заглушать людей в голосовом канале с ролью **Deafened**\n\n[] - опционально, <> - обязательно, / - или\nНеобходимы разрешения - управлять каналами```')
+            case 'undeaf':
+                await ctx.send('```apache\ncy/undeaf <@пинг/имя/ID> [причина]\n\n[] - опционально, <> - обязательно, / - или\nНеобходимы разрешения - управлять каналами```')
+            case 'roll':
+                await ctx.send('```apache\ncy/roll [от] [до]\nесли не указано [до], [от] станет [до].\ncy/roll 80 (0-80)\ncy/roll 26 90 (26-90)\ncy/roll (0-100)\n\n[] - опционально```')
+            case 'about':
+                await ctx.send('```apache\ncy/about [@пинг/имя/ID]\n\n[] - опционально, / - или```')
+            case 'avatar':
+                await ctx.send('```apache\ncy/avatar [@пинг/имя/ID]\n\n[] - опционально, / - или```')
+            case 'ban':
+                await ctx.send('```apache\ncy/ban <@пинг/имя/ID> [причина/--soft --reason]\ncy/ban 185476724627210241 --soft --reason лошара\ncy/ban @сасиска чмо\ncy/ban "Sgt White" --soft\n\nПри использовании --soft обязательно указывать --reason после него, однако можно не использовать --reason\n[] - опционально, <> - обязательно, / - или\nНеобходимы разрешения - банить участников```')
+            case 'content', 'ctx':
+                await ctx.send('```apache\ncy/content <ID> [канал, в котором находится сообщение]\n\n[] - опционально, <> - обязательно```')
+            case 'clear':
+                await ctx.send('```apache\ncy/clear <количество> [диапазон] [фильтр]\ncy/clear 100\ncy/clear 10\ncy/clear 50 --everyone хыха\ncy/clear 30 --bots\ncy/clear 15 --users\ncy/clear 5 --silent\ncy/clear 200 "--silent --everyone" хыха\n\n--everyone удалит сообщения от всех\n--bots удалит сообщения только от ботов\n--users удалит сообщения только от людей\n--silent не покажет результаты удаления сообщений\n\nПри указании диапазона не будет удалено столько сообщений, сколько было указано, будет удалено столько, сколько будет найдено в пределах заданного количества сообщений.\nДопустим cy/clear 10 --bots\nЕсли сообщения от ботов и людей чередуются, будет удалено лишь то кол-во сообщений от ботов, что было найдено в указанном пределе 10.\n\nСообщения старше 2 недель будут удалены не сразу - лимит discord API\nПри удалении более 100 сообщений нужно подтверждение владельца сервера.\nТолько владелец сервера может удалять от 250 сообщений за раз.\nНе более 300 за раз!\n\n[] - опционально, <> - обязательно, / - или\nНеобходимы разрешения - права администратора```')
+            case 'dm':
+                await ctx.send('```apache\ncy/dm <@пинг/имя/ID> <текст>\n\n<> - обязательно, / - или\nНеобходимы разрешения - просматривать лог аудита```')
+            case 'say':
+                await ctx.send('```apache\ncy/say [обычный текст] [&t title текст] [&d description текст] [&th ссылка на картинку справа] [&img ссылка на картинку снизу] [&f footer текст] [&c цвет в HEX коде] [&msg сообщение над эмбедом]\ncy/say &t Заголовок &d Описание\ncy/say [текст]\n\nУчтите, что если вы захотите упомянуть роль с использованием какого либо аргумента текст не будет показан из-за способа упоминания ролей в Discord\nВсе аргументы являются необязательными, но если отправить пустую команду - ответ будет этим сообщением\n\n[] - опционально, но необходимо хоть что-то```')
+            case 'edit':
+                await ctx.send('```apache\ncy/edit <ID> [обычный текст] [&t title текст] [&d description текст] [&f footer текст] [&c цвет в HEX коде] [&th ссылка на картинку справа] [&img ссылка на картинку снизу]\ncy/edit <ID> [текст]\ncy/edit <ID> --clean\ncy/edit <ID> --noembed\ncy/edit <ID> --delete\n\n--clean удалит контент над эмбедом\n--noembed удалит эмбед\n--delete удалит сообщение\n\nИспользование --clean и --noembed одновременно невозможно.\nЕсли у сообщения есть эмбед и в команде нет агрументов, автоматически будет заменён &msg\nЗаголовок, описание и цвет будут взяты со старого эмбеда, если таковой имеется и эти аргументы не были указаны.\nДля очистки какого-либо поля укажите аргумент и оставьте его пустым:\ncy/edit <ID> &d\nЭто опустошит описание.\n\n[] - опционально, <> - обязательно\nНеобходимы разрешения - управлять сообщениями```')
+            case 'give':
+                await ctx.send('```apache\ncy/give <@пинг/имя/ID> <@роль/имя роли/ID роли>\n\n<> - обязательно, / - или\nНеобходимы разрешения - управлять каналами```')
+            case 'kick':
+                await ctx.send('```apache\ncy/kick <@пинг/имя/ID> [причина]\n\n[] - опционально, <> - обязательно, / - или\nНеобходимы разрешения - выгонять участников```')
+            case 'mute':
+                await ctx.send('```apache\ncy/mute <@пинг/имя/ID> [причина]\n\n[] - опционально, <> - обязательно, / - или\nНеобходимы разрешения - просматривать лог аудита```')
+            case 'roleinfo':
+                await ctx.send('```apache\ncy/roleinfo <@роль/имя роли/ID роли>\n\n<> - обязательно, / - или```')
+            case 'take':
+                await ctx.send('```apache\ncy/take <@пинг/имя/ID> <@роль/имя роли/ID роли>\n\n<> - обязательно, / - или\nНеобходимы разрешения - управлять каналами```')
+            case 'someone':
+                await ctx.send('```apache\ncy/someone <текст>\n\n<> - обязательно```')
+            case 'unmute':
+                await ctx.send('```apache\ncy/unmute <@пинг/имя/ID> [причина]\n\n[] - опционально, <> - обязательно, / - или\nНеобходимы разрешения - управлять каналами```')
+            case 'vote':
+                await ctx.send('```apache\ncy/vote <текст>\n\n<> - обязательно```')
+            case 'help':
+                await ctx.send('```apache\ncy/help [команда]\n\n[] - опционально```')
+            case _:
+                emb = discord.Embed(description = f'Команда `{arg}` не обнаружена или выполняется лишь её написанием.', color = 0xff8000)
+                await ctx.send(embed = emb)
 
     @commands.command()
     async def uptime(self, ctx):
