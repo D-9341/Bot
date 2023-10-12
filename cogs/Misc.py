@@ -109,18 +109,21 @@ class Misc(commands.Cog):
     @commands.command()
     @commands.cooldown(1, 5, commands.BucketType.user)
     async def roleinfo(self, ctx, role: discord.Role):
-        if role.mentionable == False:
-            role.mentionable = 'Нет'
-        elif role.mentionable == True:
-            role.mentionable = 'Да'
-        if role.managed == False:
-            role.managed = 'Нет'
-        elif role.managed == True:
-            role.managed = 'Да'
-        if role.hoist == False:
-            role.hoist = 'Нет'
-        elif role.hoist == True:
-            role.hoist = 'Да'
+        match role.mentionable:
+            case False:
+                role.mentionable = 'Нет'
+            case True:
+                role.mentionable = 'Да'
+        match role.managed:
+            case False:
+                role.managed = 'Нет'
+            case True:
+                role.managed = 'Да'
+        match role.hoist:
+            case False:
+                role.hoist = 'Нет'
+            case True:
+                role.hoist = 'Да'
         emb = discord.Embed(title = role.name, color = 0x2f3136)
         emb.add_field(name = 'ID', value = role.id)
         emb.add_field(name = 'Цвет', value = role.color)
@@ -150,10 +153,11 @@ class Misc(commands.Cog):
     async def about(self, ctx, member: discord.Member = None):
         if member == None:
             member = ctx.author
-        if member.bot == False:
-            bot = 'Нет'
-        elif member.bot == True:
-            bot = 'Да'
+        match member.bot:
+            case False:
+                bot = 'Нет'
+            case True:
+                bot = 'Да'
         emb = discord.Embed(color = 0x2f3136, timestamp = discord.utils.utcnow())
         emb.set_author(name = member.display_name)
         emb.add_field(name = 'ID', value = member.id)
@@ -166,20 +170,21 @@ class Misc(commands.Cog):
         emb.add_field(name = 'Глобальное имя', value = member.name)
         if member.nick:
             emb.add_field(name = 'Никнейм', value = member.nick)
-        if member.status == discord.Status.online:
-            status = 'В сети'
-        elif member.status == discord.Status.dnd:
-            status = 'Не беспокоить'
-        elif member.status == discord.Status.idle:
-            status = 'Не активен'
-        elif member.status == discord.Status.offline:
-            status = 'Не в сети'
+        match member.status:
+            case discord.Status.online:
+                status = 'В сети'
+            case discord.Status.dnd:
+                status = 'Не беспокоить'
+            case discord.Status.idle:
+                status = 'Не активен'
+            case discord.Status.offline:
+                status = 'Не в сети'
         emb.add_field(name = 'Статус', value = status)
         if ctx.guild:
             roles = ', '.join([role.name for role in member.roles[1:]])
-        emb.add_field(name = 'Бот?', value = bot)
-        limit = len(member.roles)
+            emb.add_field(name = 'Бот?', value = bot)
         if limit > 1 and ctx.guild:
+            limit = len(member.roles)
             emb.add_field(name = f'Роли ({len(member.roles)-1})', value = roles, inline = False)
             emb.add_field(name = 'Высшая Роль', value = member.top_role.mention, inline = False)
         emb.set_thumbnail(url = member.avatar.url)
