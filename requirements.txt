@@ -1,5 +1,5 @@
-disnake
-disnake[voice]
+discord
+discord[voice]
 aiohttp
 websockets
 chardet
