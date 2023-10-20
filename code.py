@@ -268,5 +268,4 @@ async def main():
     await load()
     await client.start(t)
 
-keep_alive()
 asyncio.run(main())
