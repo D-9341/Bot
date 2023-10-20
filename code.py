@@ -4,7 +4,6 @@ import os
 import random
 
 import discord
-from keep_alive import keep_alive
 from pathlib import Path
 from discord.ext import commands
 from pymongo import MongoClient
