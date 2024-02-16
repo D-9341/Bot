@@ -1,4 +1,3 @@
-import asyncio
 import discord
 from discord.ext import commands
 
@@ -15,8 +14,7 @@ class Embeds(commands.Cog):
 
     @commands.command()
     async def say(self, ctx, *, msg):
-        title = ''
-        description = ''
+        title = description = ''
         image = thumbnail = message = footer = color = None
         embed_values = msg.split('&')
         for i in embed_values:
@@ -34,7 +32,7 @@ class Embeds(commands.Cog):
                 message = i.strip()[3:].strip()
             elif i.strip().lower().startswith('f'):
                 footer = i.strip()[1:].strip()
-        if color == None:
+        if color is None:
             color = 0x2f3136
         else:
             if '#' not in color:
@@ -50,7 +48,7 @@ class Embeds(commands.Cog):
                 emb.set_thumbnail(url = thumbnail)
             if footer:
                 emb.set_footer(text = footer)
-            if '&t' not in msg and '&d' not in msg and '&img' not in msg and '&th' not in msg and '&msg' not in msg and '&f' not in msg and '&c' not in msg:
+            if not any(keyword in msg for keyword in ['&t', '&d', '&img', '&th', '&msg', '&f', '&c']):
                 return await ctx.send(msg)
             else:
                 if message:
@@ -62,7 +60,7 @@ class Embeds(commands.Cog):
     @commands.has_permissions(manage_messages = True)
     async def edit(self, ctx, arg, *, msg = None):
         message = await ctx.channel.fetch_message(arg)
-        if '&t' not in msg and '&d' not in msg and '&img' not in msg and '&th' not in msg and '&f' not in msg and '&c' not in msg:
+        if not any(keyword in msg for keyword in ['&t', '&d', '&img', '&th', '&f', '&c']):
             if message.author == self.client.user:
                 if '--delete' in msg:
                     await message.delete()
@@ -73,11 +71,11 @@ class Embeds(commands.Cog):
                     if message.embeds != []:
                         await message.edit(embed = None)
                     else:
-                        return await ctx.send(f'{ctx.author.mention}, нечего удалять. Возможно, вы имели ввиду cy/edit {message.id} --delete')
+                        return await ctx.send(embed = discord.Embed(description = f'{ctx.author.mention}, нечего удалять. Возможно, вы имели ввиду cy/edit {message.id} --delete', color = 0xff8000))
                 else:
                     return await message.edit(content = msg)
             else:
-                return await ctx.send(f'{message.id} не является сообщением от {self.client.user.mention}')
+                return await ctx.send(embed = discord.Embed(description = f'{message.id} не является сообщением от {self.client.user.mention}', color = 0xff0000))
         else:
             if message.embeds != []:
                 old_embed = message.embeds[0]
@@ -85,8 +83,7 @@ class Embeds(commands.Cog):
                 description = old_embed.description
                 color = old_embed.color
             else:
-                title = ''
-                description = ''
+                title = description = ''
                 color = None
             image = thumbnail = footer = None
             embed_values = msg.split('&')
@@ -103,7 +100,7 @@ class Embeds(commands.Cog):
                     title = i.strip()[1:].strip()
                 elif i.strip().lower().startswith('f'):
                     footer = i.strip()[1:].strip()
-            if message.embeds == [] or color == None:
+            if message.embeds == [] or color is None:
                 color = 0x2f3136
             elif message.embeds != [] and '&c' not in msg:
                 color = message.embeds[0].color
@@ -130,25 +127,24 @@ class Embeds(commands.Cog):
                     if message.embeds != []:
                         return await message.edit(embed = None)
                     else:
-                        return await ctx.send(f'{ctx.author.mention}, нечего удалять. Возможно, вы имели ввиду cy/edit {message.id} --delete')
+                        return await ctx.send(embed = discord.Embed(description = f'{ctx.author.mention}, нечего удалять. Возможно, вы имели ввиду cy/edit {message.id} --delete', color = 0xff8000))
                 else:
                     return await message.edit(embed = emb)
             else:
-                return await ctx.send(f'{message.id} не является сообщением от {self.client.user.mention}')
+                return await ctx.send(embed = discord.Embed(description = f'{message.id} не является сообщением от {self.client.user.mention}', color = 0xff8000))
 
-    @commands.command(aliases=['ctx'])
-    async def content(self, ctx, arg, channel: discord.TextChannel = None):
-        if channel == None:
+    @commands.command(aliases = ['ctx'])
+    async def content(self, ctx, arg, channel: discord.TextChannel = None, should_be_edit = None):
+        if channel is None:
             channel = ctx.channel
         message = await channel.fetch_message(arg)
         for emb in message.embeds:
-            if emb.color != None:
+            if emb.color is not None:
                 color = f' color {emb.color}'
                 c = f' &c {emb.color}'
             else:
-                color = ''
-                c = ''
-            if emb.author.name != None:
+                color = c = ''
+            if emb.author.name is not None:
                 author = f' author {emb.author.name}'
             else:
                 author = ''
@@ -156,41 +152,48 @@ class Embeds(commands.Cog):
                 content = ''
             else:
                 content = f'content {message.content}'
-            if emb.image.url != None:
+            if emb.image.url is not None:
                 img = f' &img {emb.image.url}'
                 image = f' image {emb.image.url}'
             else:
-                img = ''
-                image = ''
-            if emb.thumbnail.url != None:
+                img = image = ''
+            if emb.thumbnail.url is not None:
                 th = f' &th {emb.thumbnail.url}'
                 thumb = f' thumbnail {emb.thumbnail.url}'
             else:
-                th = ''
-                thumb = ''
-            if emb.description != None:
+                th = thumb = ''
+            if emb.description is not None:
                 d = f' &d {emb.description}'
                 description = f' description {emb.description}'
             else:
-                d = ''
-                description = ''
-            if emb.title != None:
+                d = description = ''
+            if emb.title is not None:
                 t = f'&t {emb.title}'
                 title = f' title {emb.title}'
             else:
-                t = ''
-                title = ''
-            if emb.footer.text != None:
+                t = title = ''
+            if emb.footer.text is not None:
                 f = f' &f {emb.footer.text}'
                 footer = f' footer {emb.footer.text}'
             else:
-                f = ''
-                footer = ''
+                f = footer = ''
         if message.author.id in botversions:
             if message.embeds == []:
-                await ctx.send(f'```cy/say {message.content}```')
+                if '```' in message.content:
+                    if should_be_edit == '--edit':
+                        await ctx.send(f'cy/edit {message.id} {message.content}')
+                    else:
+                        await ctx.send(f'cy/say {message.content}')
+                else:
+                    if should_be_edit == '--edit':
+                        await ctx.send(f'```cy/edit {message.id} {message.content}```')
+                    else:
+                        await ctx.send(f'```cy/say {message.content}```')
             else:
-                await ctx.send(f'```cy/say {t}{d}{f}{th}{img}{c}```')
+                if should_be_edit == '--edit':
+                    await ctx.send(f'```cy/edit {message.id} {t}{d}{f}{th}{img}{c}```')
+                else:
+                    await ctx.send(f'```cy/say {t}{d}{f}{th}{img}{c}```')
         else:
             if message.embeds == []:
                 if '```' in message.content:
@@ -199,7 +202,6 @@ class Embeds(commands.Cog):
                     await ctx.send(f'```@{message.author.display_name} {message.content}```')
             else:
                 await ctx.send(f'```{content}{title}{description}{footer}{color}{author}{image}{thumb}```')
-
 
 async def setup(client):
     await client.add_cog(Embeds(client))

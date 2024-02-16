@@ -1,4 +1,3 @@
-import asyncio
 import discord
 from discord import app_commands
 from discord.ext import commands
@@ -52,7 +51,7 @@ class sEmbeds(commands.Cog):
                 emb.set_thumbnail(url = thumbnail)
             if footer:
                 emb.set_footer(text = footer)
-            if '&t' not in msg and '&d' not in msg and '&img' not in msg and '&th' not in msg and '&msg' not in msg and '&f' not in msg and '&c' not in msg:
+            if not any(keyword in msg for keyword in ['&t', '&d', '&img', '&th', '&msg', '&f', '&c']):
                 return await interaction.response.send_message(msg)
             else:
                 if message:
@@ -65,7 +64,7 @@ class sEmbeds(commands.Cog):
     @app_commands.checks.has_permissions(manage_messages = True)
     async def edit(self, interaction: discord.Interaction, arg: str, *, msg: str = None):
         message = await interaction.channel.fetch_message(int(arg))
-        if '&t' not in msg and '&d' not in msg and '&img' not in msg and '&th' not in msg and '&f' not in msg and '&c' not in msg:
+        if not any(keyword in msg for keyword in ['&t', '&d', '&img', '&th', '&f', '&c']):
             if message.author == self.client.user:
                 if '--delete' in msg:
                     await message.delete()
@@ -82,7 +81,7 @@ class sEmbeds(commands.Cog):
                         await interaction.response.send_message(f'{interaction.user.mention}, нечего удалять. Возможно, вы имели ввиду /edit {message.id} --delete')
                         return
                 else:
-                    await message.edit(content=msg)
+                    await message.edit(content = msg)
                     return
             else:
                 await interaction.response.send_message(f'{message.id} не является сообщением от {self.client.user.mention}')
@@ -153,7 +152,7 @@ class sEmbeds(commands.Cog):
 
     @app_commands.command(description = 'Получите контент сообщения. Можно использовать не только на сообщениях бота')
     @app_commands.describe(arg = 'ID сообщения, контент которого нужно получить', channel = 'Канал, из которого нужно достать сообщение. Не указывайте, если команда выполняется в том же канале, что и сообщение')
-    async def content(self, interaction: discord.Interaction, arg: str, channel: discord.TextChannel = None):
+    async def content(self, interaction: discord.Interaction, arg: str, channel: discord.TextChannel = None, should_be_edit: str = 'no'):
         if channel == None:
             channel = interaction.channel
         message = await channel.fetch_message(int(arg))
@@ -204,9 +203,21 @@ class sEmbeds(commands.Cog):
                 footer = ''
         if message.author.id in botversions:
             if message.embeds == []:
-                await interaction.response.send_message(f'```/say {message.content}```')
+                if '```' in message.content:
+                    if should_be_edit == '--edit':
+                        await interaction.response.send_message(f'cy/edit {message.id} {message.content}')
+                    else:
+                        await interaction.response.send_message(f'cy/say {message.content}')
+                else:
+                    if should_be_edit == '--edit':
+                        await interaction.response.send_message(f'```cy/edit {message.id} {message.content}```')
+                    else:
+                        await interaction.response.send_message(f'```cy/say {message.content}```')
             else:
-                await interaction.response.send_message(f'```/say {t}{d}{f}{th}{img}{c}```')
+                if should_be_edit == '--edit':
+                    await interaction.response.send_message(f'```cy/edit {message.id} {t}{d}{f}{th}{img}{c}```')
+                else:
+                    await interaction.response.send_message(f'```cy/say {t}{d}{f}{th}{img}{c}```')
         else:
             if message.embeds == []:
                 if '```' in message.content:

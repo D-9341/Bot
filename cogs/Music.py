@@ -1,7 +1,7 @@
 import asyncio
 
 import discord
-import youtube_dl
+import yt_dlp
 import os
 from discord.ext import commands
 from pymongo import MongoClient
@@ -28,7 +28,7 @@ ffmpeg_options = {
     'options': '-vn',
 }
 
-ytdl = youtube_dl.YoutubeDL(ytdl_format_options)
+ytdl = yt_dlp.YoutubeDL(ytdl_format_options)
 
 class YTDLSource(discord.PCMVolumeTransformer):
     def __init__(self, source, *, data, volume = 0.5):
@@ -97,7 +97,7 @@ class Music(commands.Cog):
     @commands.command()
     async def volume(self, ctx, volume: int):
         rlocale = collection.find_one({"_id": ctx.author.id})["locale"]
-        if 0 < volume <= 100:
+        if 0 <= volume <= 100:
             if not ctx.author.voice:
                 return await ctx.send(embed = discord.Embed(description = 'Ты должен быть в канале, чтобы использовать volume.', color = 0xff8000))
             if not ctx.guild.voice_client:

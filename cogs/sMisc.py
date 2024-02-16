@@ -1,8 +1,5 @@
-import asyncio
-import datetime
 import os
 import random
-import re
 
 import discord
 from discord import app_commands
@@ -33,37 +30,34 @@ class sMisc(commands.Cog):
         if not first and not second:
             rand = random.randint(0, 100)
             if rand == 69:
-                await interaction.response.send_message(f'`{interaction.user} получает случайное число (0-100)\n100`')
+                await interaction.response.send_message(embed = discord.Embed(description = f'`{interaction.user} получает случайное число (0-100)\n100`', color = 0xff8000))
             else:
                 rand1 = random.randint(0, 9)
                 rand2 = random.randint(0, 9)
-                await interaction.response.send_message(f'`{interaction.user} получает случайное число (0-100)\n0{rand1}{rand2}`')
+                await interaction.response.send_message(embed = discord.Embed(description = f'`{interaction.user} получает случайное число (0-100)\n0{rand1}{rand2}`', color = 0xff8000))
         if first and not second:
             rand = random.randint(0, first)
             if first < 10:
-                await interaction.response.send_message(f'`{interaction.user} получает случайное число (0-{first})\n0{rand}`')
+                await interaction.response.send_message(embed = discord.Embed(description = f'`{interaction.user} получает случайное число (0-{first})\n0{rand}`', color = 0xff8000))
             else:
-                await interaction.response.send_message(f'`{interaction.user} получает случайное число (0-{first})\n{rand}`')
+                await interaction.response.send_message(embed = discord.Embed(description = f'`{interaction.user} получает случайное число (0-{first})\n{rand}`', color = 0xff8000))
         if not first and second:
             rand = random.randint(0, second)
             if second < 10:
-                await interaction.response.send_message(f'`{interaction.user} получает случайное число (0-{second})\n0{rand}`')
+                await interaction.response.send_message(embed = discord.Embed(description = f'`{interaction.user} получает случайное число (0-{second})\n0{rand}`', color = 0xff8000))
             else:
-                await interaction.response.send_message(f'`{interaction.user} получает случайное число (0-{second})\n{rand}`')
+                await interaction.response.send_message(embed = discord.Embed(description = f'`{interaction.user} получает случайное число (0-{second})\n{rand}`', color = 0xff8000))
         if first and second:
             if first > second:
                 rand = random.randint(first, first)
-                await interaction.response.send_message(f'`{interaction.user} получает случайное число ({first}-{first})\n{rand}`')
+                await interaction.response.send_message(embed = discord.Embed(description = f'`{interaction.user} получает случайное число ({first}-{first})\n{rand}`', color = 0xff8000))
             rand = random.randint(first, second)
-            await interaction.response.send_message(f'`{interaction.user} получает случайное число ({first}-{second})\n{rand}`')
+            await interaction.response.send_message(embed = discord.Embed(description = f'`{interaction.user} получает случайное число ({first}-{second})\n{rand}`', color = 0xff8000))
 
     @app_commands.command(description = 'Подбрасывает монетку')
     async def coinflip(self, interaction: discord.Interaction):
-        emb = discord.Embed(description = f'{interaction.user.mention} подбрасывает монетку: ОРЁЛ', color = 0xff8000)
-        emb1 = discord.Embed(description = f'{interaction.user.mention} подбрасывает монетку: РЕШКА', color = 0xff8000)
-        choices = [emb, emb1]
-        rancoin = random.choice(choices)
-        await interaction.response.send_message(embed = rancoin)
+        coin = random.choice(['ОРЁЛ', 'РЕШКА'])
+        await interaction.response.send_message(embed = discord.Embed(description = f'{interaction.author.mention} подбрасывает монетку: {coin}', color = 0xff8000))
 
     @app_commands.command(description = 'Показывает участников с определённой ролью')
     @app_commands.describe(role = 'Роль')
@@ -72,7 +66,7 @@ class sMisc(commands.Cog):
         if len(role.members) != 0:
             emb.add_field(name = f'Участники с ролью {role} ({len(role.members)})', value = ', '.join([member.mention for member in role.members]))
         else:
-            emb.set_footer(text = 'Этой роли нет ни у кого.')
+            emb.description = 'Этой роли нет ни у кого.'
         await interaction.response.send_message(embed = emb)
 
     @app_commands.command(description = 'Информация о сервере')

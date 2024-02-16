@@ -13,6 +13,7 @@ class Fun(commands.Cog):
         print('Модуль Fun загружен')
 
     @commands.command()
+    @commands.cooldown(1, 15, commands.BucketType.user)
     async def dotersbrain(self, ctx):
         sent1 = await ctx.send(f'{ctx.author.mention}, через 5 секунд появится одно из слов (чё, а, да, нет, ок), на которое вам нужно будет правильно ответить. На размышление 4 секунды.')
         await asyncio.sleep(5)
@@ -50,6 +51,7 @@ class Fun(commands.Cog):
             await sent.delete()
 
     @commands.command()
+    @commands.cooldown(1, 5, commands.BucketType.user)
     async def aghanim(self, ctx):
         rand = random.randint(1, 40)
         if rand >= 15:
@@ -58,10 +60,12 @@ class Fun(commands.Cog):
             await ctx.send(embed = discord.Embed(description = f'Длина твоего аганима {rand} см, лошара', color = 0xff8000))
 
     @commands.command()
+    @commands.cooldown(1, 15, commands.BucketType.user)
     async def sanya(self, ctx):
         await ctx.send(embed = discord.Embed().set_image(url = 'https://cdn.discordapp.com/attachments/685176670344183836/1076601210485866546/76923ec8de0a6ca5.png'))
 
     @commands.command()
+    @commands.cooldown(1, 15, commands.BucketType.user)
     async def ball(self, ctx):
         await ctx.send(embed = discord.Embed().set_image(url ="https://cdn.discordapp.com/attachments/1064581563603488911/1070381595137163427/rn_image_picker_lib_temp_63aafe99-1b5a-4811-9ad4-5be217ced37f.jpg"))
 

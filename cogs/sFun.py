@@ -58,7 +58,7 @@ class sFun(commands.Cog):
 
     @app_commands.command(description = 'Яйца')
     async def ball(self, interaction: discord.Interaction):
-        await interaction.response.send_message(embed = discord.Embed().set_image(url ="https://cdn.discordapp.com/attachments/1064581563603488911/1070381595137163427/rn_image_picker_lib_temp_63aafe99-1b5a-4811-9ad4-5be217ced37f.jpg"))
+        await interaction.response.send_message(embed = discord.Embed().set_image(url = "https://cdn.discordapp.com/attachments/1064581563603488911/1070381595137163427/rn_image_picker_lib_temp_63aafe99-1b5a-4811-9ad4-5be217ced37f.jpg"))
 
 async def setup(client):
     await client.add_cog(sFun(client))
