@@ -5,8 +5,8 @@ import discord
 from discord.ext import commands
 from pymongo import MongoClient
 
-passw = os.environ.get('passw')
-cluster = MongoClient(f"mongodb+srv://cephalon:{passw}@locale.ttokw.mongodb.net/Locale?retryWrites=true&w=majority")
+PASS = os.environ.get('PASS')
+cluster = MongoClient(f"mongodb+srv://cephalon:{PASS}@locale.ttokw.mongodb.net/Locale?retryWrites=true&w=majority")
 collection = cluster.Locale.locale
 
 class Slapper(commands.Converter):
