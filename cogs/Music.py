@@ -6,8 +6,8 @@ import os
 from discord.ext import commands
 from pymongo import MongoClient
 
-passw = os.environ['passw']
-cluster = MongoClient(f"mongodb+srv://cephalon:{passw}@locale.ttokw.mongodb.net/Locale?retryWrites=true&w=majority")
+PASS = os.environ['PASS']
+cluster = MongoClient(f"mongodb+srv://cephalon:{PASS}@locale.ttokw.mongodb.net/Locale?retryWrites=true&w=majority")
 collection = cluster.Locale.locale
 
 ytdl_format_options = {

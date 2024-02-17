@@ -10,8 +10,8 @@ from pymongo import MongoClient
 
 client = commands.Bot(command_prefix = commands.when_mentioned_or('cy/'), intents = discord.Intents.all(), status = discord.Status.idle, activity = discord.Activity(type = discord.ActivityType.watching, name = 'Чё там у хохлов'), owner_ids = [338714886001524737, 417012231406878720, 647853887583289354], case_insensitive = True, allowed_mentions = discord.AllowedMentions(everyone = False))
 client.remove_command('help')
-passw = os.environ['passw']
-cluster = MongoClient(f"mongodb+srv://cephalon:{passw}@locale.ttokw.mongodb.net/Locale?retryWrites=true&w=majority")
+PASS = os.environ['PASS']
+cluster = MongoClient(f"mongodb+srv://cephalon:{PASS}@locale.ttokw.mongodb.net/Locale?retryWrites=true&w=majority")
 collection = cluster.Locale.locale
 cwd = Path(__file__).parents[0]
 cwd = str(cwd)
