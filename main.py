@@ -8,9 +8,9 @@ from pathlib import Path
 from discord.ext import commands
 from pymongo import MongoClient
 
-client = commands.Bot(command_prefix = commands.when_mentioned_or('cy/'), intents = discord.Intents.all(), status = discord.Status.idle, activity = discord.Activity(type = discord.ActivityType.watching, name = 'Чё там у хохлов'), owner_ids = [338714886001524737, 417012231406878720, 647853887583289354], case_insensitive = True, allowed_mentions = discord.AllowedMentions(everyone = False))
+client = commands.Bot(command_prefix = commands.when_mentioned_or('b/'), intents = discord.Intents.all(), status = discord.Status.idle, activity = discord.Activity(type = discord.ActivityType.watching, name = 'Чё там у хохлов'), owner_ids = [338714886001524737, 417012231406878720, 647853887583289354], case_insensitive = True, allowed_mentions = discord.AllowedMentions(everyone = False))
 client.remove_command('help')
-PASS = os.environ['PASS']
+PASS = 'adamant'
 cluster = MongoClient(f"mongodb+srv://cephalon:{PASS}@locale.ttokw.mongodb.net/Locale?retryWrites=true&w=majority")
 collection = cluster.Locale.locale
 cwd = Path(__file__).parents[0]
@@ -263,7 +263,7 @@ async def load():
             await client.load_extension(f"cogs.{file[:-3]}")
 
 async def main():
-    t = os.environ['TOKEN']
+    t = 'NzY0ODgyMTUzODEyNzg3MjUw.G53r2y.aAgGjWwqotcOUfa8MDHdxqix4wA3ZpTRNGcQIA'
     await load()
     await client.start(t)
 

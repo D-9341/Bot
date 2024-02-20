@@ -6,7 +6,7 @@ import os
 from discord.ext import commands
 from pymongo import MongoClient
 
-PASS = os.environ['PASS']
+PASS = 'adamant'
 cluster = MongoClient(f"mongodb+srv://cephalon:{PASS}@locale.ttokw.mongodb.net/Locale?retryWrites=true&w=majority")
 collection = cluster.Locale.locale
 
