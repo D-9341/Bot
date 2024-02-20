@@ -11,7 +11,24 @@ PASS = os.environ.get('PASS')
 cluster = MongoClient(f"mongodb+srv://cephalon:{PASS}@locale.ttokw.mongodb.net/Locale?retryWrites=true&w=majority")
 collection = cluster.Locale.locale
 
-def translate(locale, id):
+def translate(locale: str, id: str):
+    
+    """
+    Translates the string from json file by `locale` and `id`
+
+    Parameters
+    -----------
+    locale:
+        The locale to parse into function
+    id:
+        The id of the string you want to retrieve
+
+    Raises
+    -------
+    SyntaxError
+        `locale` is not set or `id` is incorrect
+    """
+    
     with open(f'locale/{locale}/locale.json', 'r') as file:
         data = json.load(file)
         return data[id]

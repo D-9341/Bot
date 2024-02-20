@@ -1,9 +1,0 @@
-discord
-discord[voice]
-aiohttp
-websockets
-chardet
-asyncpg
-pymongo[srv]
-regex
-youtube_dl
