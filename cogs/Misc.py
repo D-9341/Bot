@@ -28,7 +28,7 @@ class Misc(commands.Cog):
     async def roll(self, ctx, first = None, second: int = None):
         if not first and not second:
             rand = random.randint(0, 100)
-            if rand == 69:
+            if rand == 42:
                 await ctx.send(embed = discord.Embed(description = f'{ctx.author.display_name} получает случайное число (0-100)\n`100`', color = 0xff8000))
             else:
                 rand1 = random.randint(0, 9)

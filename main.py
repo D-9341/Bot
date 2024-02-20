@@ -37,7 +37,7 @@ async def on_guild_role_update(before, after):
     if before.name == 'Deafened':
         role = before.guild.get_role(after.id)
         await role.edit(name = 'Deafened', color = 0x000001, reason = 'Нельзя изменять эту роль')
- 
+
 @client.event
 async def on_command_completion(ctx):
     lchannel = client.get_channel(714175791033876490)

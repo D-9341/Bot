@@ -382,7 +382,7 @@ class Mod(commands.Cog):
         elif amount >= 250:
             if ctx.author != ctx.guild.owner:
                 emb = discord.Embed(description = f'{ctx.author.mention}, операция с данным числом ({amount}) доступна только {ctx.guild.owner.mention}.', color = 0x2f3136)
-                await ctx.send(f'{ctx.guild.owner.mention}', embed = emb, delete_after = 5)
+                await ctx.send(f'{ctx.guild.owner.mention}', embed = emb, delete_after = 15)
             else:
                 emb = discord.Embed(description = f'{ctx.author.mention}, это слишком большое число для удаления сообщений ({amount}). Возможно большое время ожидания ответа {self.client.user.mention}, которое может усугубится разницей во времени между предыдущими сообщениями и сообщением содержащим команду **и повлияет не только на этот сервер!** Продолжить? (y/n)\n||Отмена через 20 секунд.||', color = 0x2f3136)
                 sent = await ctx.send(embed = emb)
@@ -391,7 +391,7 @@ class Mod(commands.Cog):
                     if msg.content.lower() == 'y' and msg.author.id == ctx.guild.owner.id:
                         await msg.delete()
                         await sent.delete()
-                        emb = discord.Embed(description = 'Проверяем..', color = 0x2f3136)
+                        emb = discord.Embed(description = 'Удаляем..', color = 0x2f3136)
                         sent = await ctx.send(embed = emb)
                         if '--bots' in members:
                             if filt is None:
@@ -418,11 +418,7 @@ class Mod(commands.Cog):
                                 emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c".')
                                 await sent.edit(embed = emb)
                                 msg = await self.client.wait_for('message', timeout = 10, check = lambda message: message.channel == ctx.message.channel and message.author == ctx.author and message.content.lower() == 'c')
-                                emb = discord.Embed(title = 'Результаты удаления сообщений', color = 0x2f3136)
-                                emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{len(cleared)} / {amount}```')
-                                if filt:
-                                    emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
-                                emb.add_field(name = 'Проверены сообщения от:', value = ''.join([f"```ARM\n{author.display_name} : {amount}```" for author, amount in authors.items()]), inline = False)
+                                emb.set_footer(text = None)
                                 await sent.edit(embed = emb)
                             except asyncio.TimeoutError:
                                 await sent.delete()
@@ -457,7 +453,7 @@ class Mod(commands.Cog):
                 if msg.content.lower() == 'y' and msg.author.id == ctx.guild.owner.id:
                     await msg.delete()
                     await sent.delete()
-                    emb = discord.Embed(description = 'Проверяем..', color = 0x2f3136)
+                    emb = discord.Embed(description = 'Удаляем..', color = 0x2f3136)
                     sent = await ctx.send(embed = emb)
                     if '--bots' in members:
                         if filt is None:
@@ -484,11 +480,7 @@ class Mod(commands.Cog):
                             emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c".')
                             await sent.edit(embed = emb)
                             msg = await self.client.wait_for('message', timeout = 10, check = lambda message: message.channel == ctx.message.channel and message.author == ctx.author and message.content.lower() == 'c')
-                            emb = discord.Embed(title = 'Результаты удаления сообщений', color = 0x2f3136)
-                            emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{len(cleared)} / {amount}```')
-                            if filt:
-                                emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
-                            emb.add_field(name = 'Проверены сообщения от:', value = ''.join([f"```ARM\n{author.display_name} : {amount}```" for author, amount in authors.items()]), inline = False)
+                            emb.set_footer(text = None)
                             await sent.edit(embed = emb)
                         except asyncio.TimeoutError:
                             await sent.delete()
@@ -516,63 +508,59 @@ class Mod(commands.Cog):
             sent = await ctx.send(embed = emb)
             try:
                 msg = await self.client.wait_for('message', timeout = 10, check = lambda message: message.author == ctx.author and message.channel == ctx.message.channel)
-                if msg.content.lower() == 'y':
-                    await msg.delete()
-                    await sent.delete()
-                    emb = discord.Embed(description = 'Проверяем..', color = 0x2f3136)
-                    sent = await ctx.send(embed = emb)
-                    if '--bots' in members:
-                        if filt is None:
-                            cleared = await ctx.channel.purge(limit = amount, check = lambda m: m.author.bot == True and m.pinned == False, before = sent)
-                        else:
-                            cleared = await ctx.channel.purge(limit = amount, check = lambda m: m.content.lower() == filt.lower() and m.author.bot == True and m.pinned == False, before = sent)
-                    if '--users' in members:
-                        if filt is None:
-                            cleared = await ctx.channel.purge(limit = amount, check = lambda m: m.author.bot == False and m.pinned == False, before = sent)
-                        else:
-                            cleared = await ctx.channel.purge(limit = amount, check = lambda m: m.author.bot == False and m.content.lower() == filt.lower() and m.pinned == False, before = sent)
-                    else:
-                        if filt is None:
-                            cleared = await ctx.channel.purge(limit = amount, check = lambda m: m.pinned == False, before = sent)
-                        else:
-                            cleared = await ctx.channel.purge(limit = amount, check = lambda m: m.content.lower() == filt.lower() and m.pinned == False, before = sent)
-                    if '--silent' not in members:
-                        try:
-                            emb = discord.Embed(title = 'Результаты удаления сообщений', color = 0x2f3136)
-                            emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{len(cleared)} / {amount}```')
-                            if filt:
-                                emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
-                            emb.add_field(name = 'Проверены сообщения от:', value = ''.join([f"```ARM\n{author.display_name} : {amount}```" for author, amount in authors.items()]), inline = False)
-                            emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c"')
-                            await sent.edit(embed = emb)
-                            msg = await self.client.wait_for('message', timeout = 10, check = lambda message: message.channel == ctx.message.channel and message.author == ctx.author and message.content.lower() == 'c')
-                            emb = discord.Embed(title = 'Результаты удаления сообщений', color = 0x2f3136)
-                            emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{len(cleared)} / {amount}```')
-                            if filt:
-                                emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
-                            emb.add_field(name = 'Проверены сообщения от:', value = ''.join([f"```ARM\n{author.display_name} : {amount}```" for author, amount in authors.items()]), inline = False)
-                            await sent.edit(embed = emb)
-                        except asyncio.TimeoutError:
-                            await sent.delete()
-                elif msg.content.lower() == 'n':
-                    await msg.delete()
-                    await sent.delete()
-                    emb = discord.Embed(description = 'Отменено.', color = 0x2f3136)
-                    await ctx.send(embed = emb, delete_after = 3)
-                else:
-                    await msg.delete()
-                    await sent.delete()
-                    emb = discord.Embed(description = f'Недопустимый ответ - {msg.content}', color = 0x2f3136)
-                    await ctx.send(embed = emb, delete_after = 3)
             except asyncio.TimeoutError:
                 await sent.delete()
                 emb = discord.Embed(description = f'{ctx.author.mention}, Время вышло.', color = 0x2f3136)
+                await ctx.send(embed = emb, delete_after = 3)
+            if msg.content.lower() == 'y':
+                await msg.delete()
+                await sent.delete()
+                emb = discord.Embed(description = 'Удаляем..', color = 0x2f3136)
+                sent = await ctx.send(embed = emb)
+                if '--bots' in members:
+                    if filt is None:
+                        cleared = await ctx.channel.purge(limit = amount, check = lambda m: m.author.bot == True and m.pinned == False, before = sent)
+                    else:
+                        cleared = await ctx.channel.purge(limit = amount, check = lambda m: m.content.lower() == filt.lower() and m.author.bot == True and m.pinned == False, before = sent)
+                if '--users' in members:
+                    if filt is None:
+                        cleared = await ctx.channel.purge(limit = amount, check = lambda m: m.author.bot == False and m.pinned == False, before = sent)
+                    else:
+                        cleared = await ctx.channel.purge(limit = amount, check = lambda m: m.author.bot == False and m.content.lower() == filt.lower() and m.pinned == False, before = sent)
+                else:
+                    if filt is None:
+                        cleared = await ctx.channel.purge(limit = amount, check = lambda m: m.pinned == False, before = sent)
+                    else:
+                        cleared = await ctx.channel.purge(limit = amount, check = lambda m: m.content.lower() == filt.lower() and m.pinned == False, before = sent)
+                if '--silent' not in members:
+                    try:
+                        emb = discord.Embed(title = 'Результаты удаления сообщений', color = 0x2f3136)
+                        emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{len(cleared)} / {amount}```')
+                        if filt:
+                            emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
+                        emb.add_field(name = 'Проверены сообщения от:', value = ''.join([f"```ARM\n{author.display_name} : {amount}```" for author, amount in authors.items()]), inline = False)
+                        emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c"')
+                        await sent.edit(embed = emb)
+                        msg = await self.client.wait_for('message', timeout = 10, check = lambda message: message.channel == ctx.message.channel and message.author == ctx.author and message.content.lower() == 'c')
+                        emb.set_footer(text = None)
+                        await sent.edit(embed = emb)
+                    except asyncio.TimeoutError:
+                        await sent.delete()
+            elif msg.content.lower() == 'n':
+                await msg.delete()
+                await sent.delete()
+                emb = discord.Embed(description = 'Отменено.', color = 0x2f3136)
+                await ctx.send(embed = emb, delete_after = 3)
+            else:
+                await msg.delete()
+                await sent.delete()
+                emb = discord.Embed(description = f'Недопустимый ответ - {msg.content}', color = 0x2f3136)
                 await ctx.send(embed = emb, delete_after = 3)
         elif amount == 0:
             emb = discord.Embed(description = 'Удалять 0 сообщений? Ты еблан?', color = 0x2f3136)
             await ctx.send(embed = emb, delete_after = 3)
         else:
-            emb = discord.Embed(description = 'Проверяем..', color = 0x2f3136)
+            emb = discord.Embed(description = 'Удаляем..', color = 0x2f3136)
             sent = await ctx.send(embed = emb)
             if '--bots' in members:
                 if filt is None:
@@ -599,11 +587,7 @@ class Mod(commands.Cog):
                     emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены напишите "c"')
                     await sent.edit(embed = emb)
                     msg = await self.client.wait_for('message', timeout = 10, check = lambda message: message.channel == ctx.message.channel and message.author == ctx.author and message.content.lower() == 'c')
-                    emb = discord.Embed(title = 'Результаты удаления сообщений', color = 0x2f3136)
-                    emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{len(cleared)} / {amount}```')
-                    if filt:
-                        emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({members})```', inline = True)
-                    emb.add_field(name = 'Проверены сообщения от:', value = ''.join([f"```ARM\n{author.display_name} : {amount}```" for author, amount in authors.items()]), inline = False)
+                    emb.set_footer(text = None)
                     await sent.edit(embed = emb)
                 except asyncio.TimeoutError:
                     await sent.delete()
