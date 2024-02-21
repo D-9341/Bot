@@ -188,7 +188,7 @@ class sCephalon(commands.Cog):
         emb.set_author(name = self.client.user.name, url = 'https://warframe.fandom.com/wiki/Cephalon_Cy', icon_url = self.client.user.avatar.url)
         emb.add_field(name = 'Версия', value = '0.13.0.2.21680')
         emb.add_field(name = 'Написан на', value = f'discord.py v{discord.__version__}\nPython v{sys.version[:7]}')
-        emb.add_field(name = 'Разработчики 🇷🇺', value = '[сасиска](https://discord.com/users/338714886001524737)\n[Prokaznik](https://discord.com/users/417012231406878720)\n[MegaVanya](https://discord.com/users/647853887583289354)')
+        emb.add_field(name = 'Разработчики 🇷🇺', value = '[сасиска](https://discord.com/users/338714886001524737)\n[Prokaznik](https://discord.com/users/417012231406878720)')
         emb.add_field(name = 'Обслуживаю', value = f'{len(self.client.users)} человек')
         emb.add_field(name = 'Существую на', value = f'{len(self.client.guilds)} серверах')
         emb.set_footer(text = 'Данное приложение вдохновлено игрой Warframe', icon_url = 'https://i.playground.ru/p/yVaOZNSTdgUTxmzy_qvzzQ.png')
@@ -199,7 +199,6 @@ class sCephalon(commands.Cog):
         emb = discord.Embed(description = 'Разработчики бота, в частности члены команды Sus&Co', color = 0xff8000)
         emb.add_field(name = 'сасиска', value = 'Первичный владелец бота, по совместительству основатель Sus&Co', inline = False)
         emb.add_field(name = 'Проказник', value = 'Причастен к созданию локали gnida, помогает с идеями для основного бота. Хоть и считается разработчиком, не имеет доступа к коду', inline = False)
-        emb.add_field(name = 'Zoddof', value = 'Переработал категорию Fun, **имеет** доступ к коду версии Beta', inline = False)
         await interaction.response.send_message(embed = emb)
 
     @app_commands.command(description = 'Пригласите бота на сервер!')

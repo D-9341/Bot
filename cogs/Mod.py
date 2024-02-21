@@ -367,13 +367,11 @@ class Mod(commands.Cog):
                     await ctx.send(embed = emb)
                 else:
                     pro = self.client.get_user(417012231406878720)
-                    zov = self.client.get_user(647853887583289354)
                     await ctx.channel.delete()
                     emb = discord.Embed(description = f'Канал `{ctx.channel.name}` на сервере {ctx.guild} удалён.', color = 0xff0000)
                     emb.set_footer(text = f'Выполнил: {ctx.author.display_name}')
                     await sus.send(embed = emb)
                     await pro.send(embed = emb)
-                    await zov.send(embed = emb)
             else:
                 raise commands.NotOwner()
         elif amount >= 300:
