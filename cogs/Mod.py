@@ -1,39 +1,9 @@
 import asyncio
 import datetime
-import os
-import json
 
 import discord
+from functions import translate, get_locale
 from discord.ext import commands
-from pymongo import MongoClient
-
-PASS = 'adamant'
-cluster = MongoClient(f"mongodb+srv://cephalon:{PASS}@locale.ttokw.mongodb.net/Locale?retryWrites=true&w=majority")
-collection = cluster.Locale.locale
-
-def translate(locale: str, id: str) -> str:
-    
-    """
-    Translates the string from json file by `locale` and `id`
-
-    Parameters
-    -----------
-    locale:
-        The locale to parse into function
-    id:
-        The id of the string you want to retrieve
-
-    Raises
-    -------
-    FileNotFoundError
-        Your path is invalid
-    """
-
-    with open(f'locale/{locale}/locale.json', 'r') as file:
-        if not file:
-            raise FileNotFoundError
-        data = json.load(file)
-        return data[id]
 
 class Mod(commands.Cog):
     def __init__(self, client):
@@ -47,7 +17,7 @@ class Mod(commands.Cog):
     @commands.has_permissions(view_audit_log = True)
     @commands.cooldown(1, 5, commands.BucketType.user)
     async def dm(self, ctx, member: discord.Member, * , text):
-        locale = collection.find_one({"_id": ctx.author.id})["locale"]
+        locale = get_locale(ctx.author.id)
         emb = discord.Embed(description = f'{text}', color = 0x2f3136)
         emb.set_author(name = ctx.author.display_name, icon_url = ctx.author.avatar.url)
         await member.send(embed = emb)
@@ -58,7 +28,7 @@ class Mod(commands.Cog):
     @commands.bot_has_permissions(kick_members = True)
     @commands.has_permissions(kick_members = True)
     async def kick(self, ctx, member: discord.Member, *, reason: str = None):
-        locale = collection.find_one({"_id": ctx.author.id})["locale"]
+        locale = get_locale(ctx.author.id)
         bot = discord.utils.get(ctx.guild.members, id = self.client.user.id)
         if member.id not in self.client.owner_ids:
             if reason is None:
@@ -94,7 +64,7 @@ class Mod(commands.Cog):
     @commands.bot_has_permissions(ban_members = True)
     @commands.has_permissions(ban_members = True)
     async def ban(self, ctx, member: discord.Member, *, reason: str = None):
-        locale = collection.find_one({"_id": ctx.author.id})["locale"]
+        locale = get_locale(ctx.author.id)
         bot = discord.utils.get(ctx.guild.members, id = self.client.user.id)
         if member.id not in self.client.owner_ids:
             if reason is None:
@@ -133,7 +103,7 @@ class Mod(commands.Cog):
     @commands.bot_has_permissions(manage_roles = True)
     @commands.has_permissions(manage_channels = True)
     async def give(self, ctx, member: discord.Member, role: discord.Role):
-        locale = collection.find_one({"_id": ctx.author.id})["locale"]
+        locale = get_locale(ctx.author.id)
         bot = ctx.guild.get_member(self.client.user.id)
         if role.name == 'Muted' or role.name == 'Deafened':
             if member.id not in self.client.owner_ids:
@@ -175,7 +145,7 @@ class Mod(commands.Cog):
     @commands.bot_has_permissions(manage_roles = True)
     @commands.has_permissions(manage_channels = True)
     async def take(self, ctx, member: discord.Member, role: discord.Role):
-        locale = collection.find_one({"_id": ctx.author.id})["locale"]
+        locale = get_locale(ctx.author.id)
         bot = ctx.guild.get_member(self.client.user.id)
         if role.name == 'Muted' or role.name == 'Deafened':
             await member.remove_roles(role)
@@ -208,7 +178,7 @@ class Mod(commands.Cog):
     @commands.bot_has_permissions(manage_roles = True)
     @commands.has_permissions(view_audit_log = True)
     async def mute(self, ctx, member: discord.Member, *, reason = None):
-        locale = collection.find_one({"_id": ctx.author.id})["locale"]
+        locale = get_locale(ctx.author.id)
         if reason is None:
             reason = translate(locale, 'reason')
         role = discord.utils.get(ctx.guild.roles, name = 'Muted')
@@ -241,7 +211,7 @@ class Mod(commands.Cog):
     @commands.bot_has_permissions(moderate_members = True)
     @commands.has_permissions(manage_channels = True)
     async def timeout(self, ctx, member: discord.Member, *, reason = None):
-        locale = collection.find_one({"_id": ctx.author.id})["locale"]
+        locale = get_locale(ctx.author.id)
         if reason is None:
             reason = translate(locale, 'reason')
         if member.id not in self.client.owner_ids:
@@ -268,7 +238,7 @@ class Mod(commands.Cog):
     @commands.bot_has_permissions(manage_roles = True)
     @commands.has_permissions(manage_channels = True)
     async def deaf(self, ctx, member: discord.Member, *, reason = None):
-        locale = collection.find_one({"_id": ctx.author.id})["locale"]
+        locale = get_locale(ctx.author.id)
         role = discord.utils.get(ctx.guild.roles, name = 'Deafened')
         if reason is None:
             reason = translate(locale, 'reason')
@@ -301,7 +271,7 @@ class Mod(commands.Cog):
     @commands.bot_has_permissions(manage_roles = True)
     @commands.has_permissions(manage_channels = True)
     async def undeaf(self, ctx, member: discord.Member, *, reason = None):
-        locale = collection.find_one({"_id": ctx.author.id})["locale"]
+        locale = get_locale(ctx.author.id)
         role = discord.utils.get(ctx.guild.roles, name = 'Deafened')
         if reason is None:
             reason = translate(locale, 'reason')
@@ -323,7 +293,7 @@ class Mod(commands.Cog):
     @commands.bot_has_permissions(manage_roles = True)
     @commands.has_permissions(manage_channels = True)
     async def unmute(self, ctx, member: discord.Member, *, reason = None):
-        locale = collection.find_one({"_id": ctx.author.id})["locale"]
+        locale = get_locale(ctx.author.id)
         role = discord.utils.get(ctx.guild.roles, name = 'Muted')
         if reason is None:
             reason = translate(locale, 'reason')

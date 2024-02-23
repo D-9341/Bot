@@ -2,13 +2,8 @@ import asyncio
 
 import discord
 import yt_dlp
-import os
+from functions import translate, get_locale
 from discord.ext import commands
-from pymongo import MongoClient
-
-PASS = 'adamant'
-cluster = MongoClient(f"mongodb+srv://cephalon:{PASS}@locale.ttokw.mongodb.net/Locale?retryWrites=true&w=majority")
-collection = cluster.Locale.locale
 
 ytdl_format_options = {
     'format': 'bestaudio/best',
@@ -56,34 +51,34 @@ class Music(commands.Cog):
 
     @commands.command(aliases = ['p'])
     async def play(self, ctx, *, url):
-        rlocale = collection.find_one({"_id": ctx.author.id})["locale"]
+        locale = get_locale(ctx.author.id)
         if not ctx.author.voice:
-            if rlocale == 'ru':
+            if locale == 'ru':
                 await ctx.send(embed = discord.Embed(description = 'Ты должен быть в канале, чтобы использовать play.', color = 0xff8000))
-            if rlocale == 'gnida':
+            if locale == 'gnida':
                 await ctx.send(embed = discord.Embed(description = 'Чтобы применить play тебе надо в канале быть, еблан.', color = 0xff8000))
         if not ctx.guild.voice_client:
             await ctx.author.voice.channel.connect(self_deaf = True)
-            if rlocale == 'ru':
+            if locale == 'ru':
                 await ctx.send(embed = discord.Embed(description = f'Присоединён к каналу {ctx.author.voice.channel.name}.', color = 0xff8000))
-            if rlocale == 'gnida':
+            if locale == 'gnida':
                 await ctx.send(embed = discord.Embed(description = f'Присосался к {ctx.author.voice.channel.name}', color = 0xff8000))
         if ctx.guild.voice_client:
             if ctx.guild.voice_client.channel != ctx.author.voice.channel:
-                if rlocale == 'ru':
+                if locale == 'ru':
                     return await ctx.send(embed = discord.Embed(description = 'Я уже используюсь в другом канале!', color = 0xff0000))
-                if rlocale == 'gnida':
+                if locale == 'gnida':
                     return await ctx.send(embed = discord.Embed(description = 'Ты чё слепой нахуй? Меня уже используют в другом канале, ебалай.', color = 0xff0000))
             player = await YTDLSource.from_url(url, loop = self.client.loop, stream = True)
             ctx.voice_client.play(player, after = ctx.voice_client.play(player))
-            if rlocale == 'ru' or rlocale == 'gnida':
+            if locale == 'ru' or locale == 'gnida':
                 await ctx.send(embed = discord.Embed(description = f"Сейчас играет: {player.title}", color = 0xff8000))
-            if rlocale == 'en':
+            if locale == 'en':
                 await ctx.send(embed = discord.Embed(description = f"Now playing: {player.title}", color = 0xff8000))
 
     @commands.command()
     async def resume(self, ctx):
-        rlocale = collection.find_one({"_id": ctx.author.id})["locale"]
+        locale = get_locale(ctx.author.id)
         if not ctx.author.voice:
             return await ctx.send(embed = discord.Embed(description = 'Ты должен быть в канале, чтобы использовать resume.', color = 0xff8000))
         if not ctx.guild.voice_client:
@@ -96,7 +91,7 @@ class Music(commands.Cog):
 
     @commands.command()
     async def volume(self, ctx, volume: int):
-        rlocale = collection.find_one({"_id": ctx.author.id})["locale"]
+        locale = get_locale(ctx.author.id)
         if 0 <= volume <= 100:
             if not ctx.author.voice:
                 return await ctx.send(embed = discord.Embed(description = 'Ты должен быть в канале, чтобы использовать volume.', color = 0xff8000))
@@ -112,7 +107,7 @@ class Music(commands.Cog):
 
     @commands.command()
     async def pause(self, ctx):
-        rlocale = collection.find_one({"_id": ctx.author.id})["locale"]
+        locale = get_locale(ctx.author.id)
         if not ctx.author.voice:
             return await ctx.send(embed = discord.Embed(description = 'Ты должен быть в канале, чтобы использовать pause.', color = 0xff8000))
         if not ctx.guild.voice_client:
@@ -125,7 +120,7 @@ class Music(commands.Cog):
 
     @commands.command(aliases = ['s', 'ass'])
     async def stop(self, ctx):
-        rlocale = collection.find_one({"_id": ctx.author.id})["locale"]
+        locale = get_locale(ctx.author.id)
         if not ctx.author.voice:
             return await ctx.send(embed = discord.Embed(description = 'Ты должен быть в канале, чтобы использовать stop.', color = 0xff8000))
         if not ctx.guild.voice_client:
@@ -138,7 +133,7 @@ class Music(commands.Cog):
 
     @commands.command()
     async def join(self, ctx):
-        rlocale = collection.find_one({"_id": ctx.author.id})["locale"]
+        locale = get_locale(ctx.author.id)
         if not ctx.author.voice:
             await ctx.send(embed = discord.Embed(description = 'Ты должен быть в канале, чтобы использовать join.', color = 0xff8000))
         else:
@@ -150,7 +145,7 @@ class Music(commands.Cog):
 
     @commands.command()
     async def leave(self, ctx):
-        rlocale = collection.find_one({"_id": ctx.author.id})["locale"]
+        locale = get_locale(ctx.author.id)
         if ctx.guild.voice_client:
             if ctx.guild.voice_client.channel == ctx.author.voice.channel:
                 await ctx.send(embed = discord.Embed(description = f'Покинул канал {ctx.author.voice.channel.name}.', color = 0xff8000))

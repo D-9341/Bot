@@ -2,17 +2,14 @@
 import asyncio
 import os
 import random
+import json
 
 import discord
 from pathlib import Path
 from discord.ext import commands
-from pymongo import MongoClient
 
 client = commands.Bot(command_prefix = commands.when_mentioned_or('b/'), intents = discord.Intents.all(), status = discord.Status.idle, activity = discord.Activity(type = discord.ActivityType.watching, name = 'Чё там у хохлов'), owner_ids = {338714886001524737, 417012231406878720}, case_insensitive = True, allowed_mentions = discord.AllowedMentions(everyone = False))
 client.remove_command('help')
-PASS = 'adamant'
-cluster = MongoClient(f"mongodb+srv://cephalon:{PASS}@locale.ttokw.mongodb.net/Locale?retryWrites=true&w=majority")
-collection = cluster.Locale.locale
 cwd = Path(__file__).parents[0]
 cwd = str(cwd)
 
@@ -117,12 +114,13 @@ async def on_voice_state_update(member, before, after):
 @client.event
 async def on_message(message):
     await client.process_commands(message)
-    post = {
-        '_id': message.author.id,
-        'locale': 'ru'
-    }
-    if collection.count_documents({'_id': message.author.id}) == 0 and message.author.bot == False:
-        collection.insert_one(post)
+    if message.author.bot == False:
+        with open('locales/users.json', 'r') as users_file:
+            data = json.load(users_file)
+        if str(message.author.id) not in data:
+            data[str(message.author.id)] = 'ru'
+            with open('locales/users.json', 'w') as users_file:
+                json.dump(data, users_file, indent = 4)
     if message.content.startswith(f'<@{client.user.id}>') and len(message.content) == len(f'<@{client.user.id}>'):
         await message.channel.send(f'чё звал {message.author.mention} ||`cy/`||')
     if message.channel.id == 1041417879788208169:
@@ -203,8 +201,7 @@ async def on_message(message):
 @client.event
 async def on_message_edit(before, after):
     channel = client.get_channel(714175791033876490)
-    if channel is None:
-        return
+    if channel is None: return
     if not before.author.bot:
         if ('http') not in after.content.lower():
             emb = discord.Embed(description = f'ИЗМЕНЕНИЕ_[СООБЩЕНИЯ]({before.jump_url})', color = 0xff8000, timestamp = discord.utils.utcnow())

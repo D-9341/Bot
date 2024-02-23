@@ -64,7 +64,7 @@ class Embeds(commands.Cog):
             if message.author == self.client.user:
                 if '--delete' in msg:
                     await message.delete()
-                    return await ctx.send('Сообщение удалено.')
+                    return await ctx.send('Сообщение удалено')
                 if '--clean' in msg:
                     return await message.edit(content = None)
                 if '--noembed' in msg:
@@ -120,7 +120,7 @@ class Embeds(commands.Cog):
             if message.author == self.client.user:
                 if '--delete' in msg:
                     await message.delete()
-                    return await ctx.send('Сообщение удалено.')
+                    return await ctx.send('Сообщение удалено')
                 if '--clean' in msg:
                     return await message.edit(content = None, embed = emb)
                 if '--noembed' in msg:

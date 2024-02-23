@@ -47,7 +47,7 @@ class Fun(commands.Cog):
                 await sent1.delete()
                 await sent.delete()
         except asyncio.TimeoutError:
-            await ctx.send(f'{ctx.author.mention}, Слишком медленно.')
+            await ctx.send(f'{ctx.author.mention}, слишком медленно.')
             await sent.delete()
 
     @commands.command()

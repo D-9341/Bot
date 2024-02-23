@@ -3,11 +3,6 @@ import random
 
 import discord
 from discord.ext import commands
-from pymongo import MongoClient
-
-PASS = 'adamant'
-cluster = MongoClient(f"mongodb+srv://cephalon:{PASS}@locale.ttokw.mongodb.net/Locale?retryWrites=true&w=majority")
-collection = cluster.Locale.locale
 
 class Slapper(commands.Converter):
     async def convert(self, ctx, argument):
@@ -25,7 +20,7 @@ class Misc(commands.Cog):
         print('Модуль Misc загружен')
 
     @commands.command()
-    async def roll(self, ctx, first = None, second: int = None):
+    async def roll(self, ctx, first: str | int = None, second: int = None):
         if not first and not second:
             rand = random.randint(0, 100)
             if rand == 42:
