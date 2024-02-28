@@ -4,7 +4,6 @@ from discord.ext import commands
 botversions = [764882153812787250, 694170281270312991, 762015251264569352]
 
 class Embeds(commands.Cog):
-
     def __init__(self, client):
         self.client = client
 

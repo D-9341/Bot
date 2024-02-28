@@ -3,12 +3,14 @@ import asyncio
 import os
 import random
 import json
+import warnings
+warnings.filterwarnings("ignore")
 
 import discord
 from pathlib import Path
 from discord.ext import commands
 
-client = commands.Bot(command_prefix = commands.when_mentioned_or('b/'), intents = discord.Intents.all(), status = discord.Status.idle, activity = discord.Activity(type = discord.ActivityType.watching, name = 'Чё там у хохлов'), owner_ids = {338714886001524737, 417012231406878720}, case_insensitive = True, allowed_mentions = discord.AllowedMentions(everyone = False))
+client = commands.Bot(command_prefix = commands.when_mentioned_or('cy/'), intents = discord.Intents.all(), status = discord.Status.idle, activity = discord.Activity(type = discord.ActivityType.watching, name = 'в никуда'), owner_ids = {338714886001524737, 417012231406878720}, case_insensitive = True, allowed_mentions = discord.AllowedMentions(everyone = False))
 client.remove_command('help')
 cwd = Path(__file__).parents[0]
 cwd = str(cwd)
@@ -37,34 +39,28 @@ async def on_guild_role_update(before, after):
 
 @client.event
 async def on_command_completion(ctx):
-    lchannel = client.get_channel(714175791033876490)
+    channel = client.get_channel(714175791033876490)
     emb = discord.Embed(title = 'ВЫПОЛНЕНИЕ_КОМАНДЫ', color = 0xff8000)
     emb.add_field(name = 'НАЗВАНИЕ', value = f'```{ctx.command.name}```')
     emb.add_field(name = 'ИСПОЛНИТЕЛЬ', value = f'{ctx.author.mention} ({ctx.author})')
     emb.add_field(name = 'СЕРВЕР', value = ctx.guild.name if ctx.guild else "ЛС", inline = False)
     emb.add_field(name = 'КАНАЛ', value = f'{ctx.channel.name} ({ctx.channel.mention})' if ctx.guild else "Недоступно в ЛС", inline = False)
-    await lchannel.send(embed = emb)
+    await channel.send(embed = emb)
 
 @client.event
 async def on_member_join(member):
-    if member.bot == False:
-        user = 'УЧАСТНИК'
-    else:
-        user = 'БОТ'
-    lchannel = client.get_channel(714175791033876490)
+    user = 'БОТ' if member.bot else 'УЧАСТНИК'
+    channel = client.get_channel(714175791033876490)
     emb = discord.Embed(title = f'{user}\_ЗАШЁЛ\_НА_СЕРВЕР', color = 0xff8000, timestamp = discord.utils.utcnow())
     emb.add_field(name = f'{user}', value = member)
     emb.add_field(name = 'УПОМИНАНИЕ', value = member.mention)
     emb.add_field(name = 'СЕРВЕР', value = member.guild.name)
     emb.set_footer(text = f'ID: {member.id}')
-    await lchannel.send(embed = emb)
+    await channel.send(embed = emb)
 
 @client.event
 async def on_member_remove(member):
-    if member.bot == False:
-        user = 'УЧАСТНИК'
-    else:
-        user = 'БОТ'
+    user = 'БОТ' if member.bot else 'УЧАСТНИК'
     channel = client.get_channel(714175791033876490)
     emb = discord.Embed(title = f'{user}\_ВЫШЕЛ\_С_СЕРВЕРА', color = 0xff8000, timestamp = discord.utils.utcnow())
     emb.add_field(name = f'{user}', value = member)
@@ -97,9 +93,9 @@ async def on_voice_state_update(member, before, after):
         if member.bot == True:
             room = 'Чего бля'
         if member.id in client.owner_ids:
-            room = f'Комната моего Создателя - {member.display_name}'
+            room = f'Канал моего Создателя - {member.display_name}'
         else:
-            room = f'Комната {member.display_name}'
+            room = f'Канал {member.display_name}'
         channel = await member.guild.create_voice_channel(name = room, category = after.channel.category)
         await member.move_to(channel)
         await channel.set_permissions(member, mute_members = True, move_members = True, manage_channels = True)
@@ -232,7 +228,7 @@ async def on_command_error(ctx, error):
     elif isinstance(error, commands.MissingRequiredArgument):
         rearm(ctx.command, ctx.message)
         if ctx.command.name == 'clear':
-            await ctx.send('```apache\ncy/clear <количество> [диапазон] [фильтр]\ncy/clear 10\ncy/clear 50 --everyone хыха\ncy/clear 30 --bots\ncy/clear 15 --users\ncy/clear 5 --silent\ncy/clear 200 "--silent --everyone"\n\n--everyone удалит сообщения от всех\n--bots удалит сообщения только от ботов\n--users удалит сообщения только от людей\n--silent не покажет результаты удаления сообщений. Учтите, что если нужно будет подтверждение удаления - оно будет показано\nПри указании фильтра необходимо писать именно то, что написано в сообщении - команда чувствительна к регистру\n\nПри указании диапазона не будет удалено столько сообщений, сколько было указано, будет удалено столько, сколько будет найдено в пределах заданного количества сообщений\nДопустим cy/clear 10 --bots\nЕсли сообщения от ботов и людей чередуются, будет удалено лишь то кол-во сообщений от ботов, что было найдено в указанном пределе 10. Это сделано намеренно, но может быть изменено в будущем\n\nСообщения старше 2 недель будут удалены не сразу - лимит discord API\nПри удалении более 100 сообщений нужно подтверждение владельца сервера.\nТолько владелец сервера может удалять от 250 сообщений за раз.\nНе более 300 за раз!\n\n[] - опционально, <> - обязательно, / - или\nНеобходимы разрешения - права администратора```')
+            await ctx.send('```apache\ncy/clear <количество> [диапазон] [фильтр]\ncy/clear 10\ncy/clear 50 --everyone хыха\ncy/clear 30 --bots\ncy/clear 15 --users\ncy/clear 5 --silent\ncy/clear 200 "--silent --everyone"\n\n--everyone удалит сообщения от всех\n--bots удалит сообщения только от ботов\n--users удалит сообщения только от людей\n--silent не покажет результаты удаления сообщений. Учтите, что если нужно будет подтверждение удаления - оно будет показано\nПри указании фильтра необходимо писать именно то, что написано в сообщении - команда чувствительна к регистру\n\nПри указании диапазона не будет удалено столько сообщений, сколько было указано, будет удалено столько, сколько будет найдено в пределах заданного количества сообщений\nДопустим cy/clear 10 --bots\nЕсли сообщения от ботов и людей чередуются, будет удалено лишь то кол-во сообщений от ботов, что было найдено в указанном пределе 10. Это сделано намеренно, но может быть изменено в будущем\n\nСообщения старше 2 недель будут удалены не сразу - лимит discord API\nПри удалении более 100 сообщений нужно подтверждение владельца сервера.\nТолько владелец сервера может удалять от 250 сообщений за раз.\nНе более 300 за раз!\n\n[] - опционально, <> - обязательно, / - или\nНеобходимы разрешения - права администратора\nБоту необходимы разрешения - управлять сообщениями```')
         elif ctx.command.name == 'say':
             await ctx.send('```apache\ncy/say [обычный текст] [&t title текст] [&d description текст] [&th ссылка на картинку справа] [&img ссылка на картинку снизу] [&f footer текст] [&c цвет в HEX коде] [&msg сообщение над эмбедом]\ncy/say &t Заголовок &d Описание\ncy/say [текст]\nУчтите, что если вы захотите упомянуть роль с использованием какого либо аргумента текст не будет показан из-за способа упоминания ролей в Discord\nВсе аргументы являются необязательными, но если отправить пустую команду - ответ будет этим сообщением\n\n[] - опционально```')
         elif ctx.command.name == 'edit':
@@ -256,11 +252,11 @@ async def on_command_error(ctx, error):
 
 async def load():
     for file in os.listdir(cwd+"/cogs"):
-        if file.endswith(".py") and not file.startswith("_"):
+        if file.endswith(".py") and not file.startswith("s"):
             await client.load_extension(f"cogs.{file[:-3]}")
 
 async def main():
-    t = 'NzY0ODgyMTUzODEyNzg3MjUw.G53r2y.aAgGjWwqotcOUfa8MDHdxqix4wA3ZpTRNGcQIA'
+    t = 'Njk0MTcwMjgxMjcwMzEyOTkx.GupfdU.wPFXo0oocmWcs3esT7QelBMfIT_9kzy3iJIHj4'
     await load()
     await client.start(t)
 

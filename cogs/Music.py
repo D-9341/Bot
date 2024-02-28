@@ -33,7 +33,7 @@ class YTDLSource(discord.PCMVolumeTransformer):
         self.url = data.get('url')
 
     @classmethod
-    async def from_url(cls, url, *, loop = None, stream = True):
+    async def from_url(cls, url, *, loop = None, stream = False):
         loop = loop or asyncio.get_event_loop()
         data = await loop.run_in_executor(None, lambda: ytdl.extract_info(url, download = not stream))
         if 'entries' in data:
@@ -54,9 +54,9 @@ class Music(commands.Cog):
         locale = get_locale(ctx.author.id)
         if not ctx.author.voice:
             if locale == 'ru':
-                await ctx.send(embed = discord.Embed(description = 'Ты должен быть в канале, чтобы использовать play.', color = 0xff8000))
+                await ctx.send(embed = discord.Embed(description = 'Ты должен быть в канале, чтобы использовать play', color = 0xff8000))
             if locale == 'gnida':
-                await ctx.send(embed = discord.Embed(description = 'Чтобы применить play тебе надо в канале быть, еблан.', color = 0xff8000))
+                await ctx.send(embed = discord.Embed(description = 'Чтобы применить play тебе надо в канале быть, еблан', color = 0xff8000))
         if not ctx.guild.voice_client:
             await ctx.author.voice.channel.connect(self_deaf = True)
             if locale == 'ru':
@@ -68,7 +68,7 @@ class Music(commands.Cog):
                 if locale == 'ru':
                     return await ctx.send(embed = discord.Embed(description = 'Я уже используюсь в другом канале!', color = 0xff0000))
                 if locale == 'gnida':
-                    return await ctx.send(embed = discord.Embed(description = 'Ты чё слепой нахуй? Меня уже используют в другом канале, ебалай.', color = 0xff0000))
+                    return await ctx.send(embed = discord.Embed(description = 'Ты чё слепой нахуй? Меня уже используют в другом канале, ебалай', color = 0xff0000))
             player = await YTDLSource.from_url(url, loop = self.client.loop, stream = True)
             ctx.voice_client.play(player, after = ctx.voice_client.play(player))
             if locale == 'ru' or locale == 'gnida':
@@ -80,7 +80,7 @@ class Music(commands.Cog):
     async def resume(self, ctx):
         locale = get_locale(ctx.author.id)
         if not ctx.author.voice:
-            return await ctx.send(embed = discord.Embed(description = 'Ты должен быть в канале, чтобы использовать resume.', color = 0xff8000))
+            return await ctx.send(embed = discord.Embed(description = 'Ты должен быть в канале, чтобы использовать resume', color = 0xff8000))
         if not ctx.guild.voice_client:
             return await ctx.send(embed = discord.Embed(description = 'Я не нахожусь в канале!', color = 0xff0000))
         if ctx.guild.voice_client:
@@ -94,7 +94,7 @@ class Music(commands.Cog):
         locale = get_locale(ctx.author.id)
         if 0 <= volume <= 100:
             if not ctx.author.voice:
-                return await ctx.send(embed = discord.Embed(description = 'Ты должен быть в канале, чтобы использовать volume.', color = 0xff8000))
+                return await ctx.send(embed = discord.Embed(description = 'Ты должен быть в канале, чтобы использовать volume', color = 0xff8000))
             if not ctx.guild.voice_client:
                 return await ctx.send(embed = discord.Embed(description = 'Я не нахожусь в канале!', color = 0xff0000))
             if ctx.guild.voice_client:
@@ -109,37 +109,37 @@ class Music(commands.Cog):
     async def pause(self, ctx):
         locale = get_locale(ctx.author.id)
         if not ctx.author.voice:
-            return await ctx.send(embed = discord.Embed(description = 'Ты должен быть в канале, чтобы использовать pause.', color = 0xff8000))
+            return await ctx.send(embed = discord.Embed(description = 'Ты должен быть в канале, чтобы использовать pause', color = 0xff8000))
         if not ctx.guild.voice_client:
             return await ctx.send(embed = discord.Embed(description = 'Я не нахожусь в канале!', color = 0xff0000))
         if ctx.guild.voice_client:
             if ctx.guild.voice_client.channel != ctx.author.voice.channel:
                 return await ctx.send(embed = discord.Embed(description = 'Ты должен быть в том же канале, что и я!', color = 0xff0000))
             ctx.guild.voice_client.pause()
-            await ctx.send(embed = discord.Embed(description = 'Проигрывание приостановлено.', color = 0xff8000))
+            await ctx.send(embed = discord.Embed(description = 'Проигрывание приостановлено', color = 0xff8000))
 
     @commands.command(aliases = ['s', 'ass'])
     async def stop(self, ctx):
         locale = get_locale(ctx.author.id)
         if not ctx.author.voice:
-            return await ctx.send(embed = discord.Embed(description = 'Ты должен быть в канале, чтобы использовать stop.', color = 0xff8000))
+            return await ctx.send(embed = discord.Embed(description = 'Ты должен быть в канале, чтобы использовать stop', color = 0xff8000))
         if not ctx.guild.voice_client:
             return await ctx.send(embed = discord.Embed(description = 'Я не нахожусь в канале!', color = 0xff0000))
         if ctx.guild.voice_client:
             if ctx.guild.voice_client.channel != ctx.author.voice.channel:
                 return await ctx.send(embed = discord.Embed(description = 'Ты должен быть в том же канале, что и я!', color = 0xff0000))
             ctx.guild.voice_client.stop()
-            await ctx.send(embed = discord.Embed(description = 'Плеер остановлен.', color = 0xff8000))
+            await ctx.send(embed = discord.Embed(description = 'Плеер остановлен', color = 0xff8000))
 
     @commands.command()
     async def join(self, ctx):
         locale = get_locale(ctx.author.id)
         if not ctx.author.voice:
-            await ctx.send(embed = discord.Embed(description = 'Ты должен быть в канале, чтобы использовать join.', color = 0xff8000))
+            await ctx.send(embed = discord.Embed(description = 'Ты должен быть в канале, чтобы использовать join', color = 0xff8000))
         else:
             if not ctx.voice_client:
                 await ctx.author.voice.channel.connect(self_deaf = True)
-                return await ctx.send(embed = discord.Embed(description = f'Присоединён к каналу {ctx.author.voice.channel.name}.', color = 0xff8000))
+                return await ctx.send(embed = discord.Embed(description = f'Присоединён к каналу {ctx.author.voice.channel.name}', color = 0xff8000))
             else:
                 return await ctx.send(embed = discord.Embed(description = f'Я уже используюсь в другом канале!', color = 0xff8000))
 
@@ -148,7 +148,7 @@ class Music(commands.Cog):
         locale = get_locale(ctx.author.id)
         if ctx.guild.voice_client:
             if ctx.guild.voice_client.channel == ctx.author.voice.channel:
-                await ctx.send(embed = discord.Embed(description = f'Покинул канал {ctx.author.voice.channel.name}.', color = 0xff8000))
+                await ctx.send(embed = discord.Embed(description = f'Покинул канал {ctx.author.voice.channel.name}', color = 0xff8000))
                 await ctx.voice_client.disconnect(force = True)
                 await ctx.voice_client.clean_up()
             else:

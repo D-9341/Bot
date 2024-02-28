@@ -238,7 +238,7 @@ class sCephalon(commands.Cog):
             emb.add_field(name = '0.12.10.2.11856', value = 'Добавлена команда locale для изменения локали. Пока доступны только `ru` (по умолчанию) и `gnida`.\nSay/Edit\nУбран аргумент --everyone и запрещено упоминание @everyone каким-либо способом.')
             await interaction.response.send_message(embed = emb)
         if version == '0.12.10.2.12528':
-            emb = discord.Embed(color = discord.Color.blurple())
+            emb = discord.Embed(color = 0x2f3136)
             emb.add_field(name = '0.12.10.2.12528', value = 'Отдельные куски кода были рассортированы по разным файлам.')
             await interaction.response.send_message(embed = emb)
         if version == '0.12.11.2.13771':
