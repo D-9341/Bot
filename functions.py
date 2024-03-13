@@ -7,22 +7,22 @@ def translate(locale: str, id: str) -> str:
     Parameters
     -----------
     locale:
-        The locale to parse into function
+        The locale to pass into function
     id:
-        The id of the string you want to retrieve
+        The id of the string to be retrieved
     """
     with open(f'locales/{locale}/locale.json', 'r', encoding = 'utf-8') as file:
         data = json.load(file)
-        return data.get(id, "Локаль не найдена")
+    return data.get(id, "Локаль не найдена")
 
 def get_locale(author_id: str) -> str:
     """
-    Gets the locale by `author_id` provided by discord.py's `author.id`
+    Gets the locale from `author_id` provided by discord.py's `author.id`
 
     Parameters
     -----------
     author_id:
-        The `id` that string should be searched by
+        The `id` that locale should be searched for
     """
     with open('locales/users.json', 'r') as file:
         data = json.load(file)
@@ -35,7 +35,7 @@ def set_locale(author_id: str, locale: str) -> None:
     Parameters
     -----------
     author_id:
-        The `id` that locale should be searched by
+        The `id` that locale should be searched for
     locale:
         The new locale to be set
     """

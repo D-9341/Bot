@@ -15,7 +15,7 @@ client.remove_command('help')
 cwd = Path(__file__).parents[0]
 cwd = str(cwd)
 
-def rearm(command: commands.Command, message: discord.Message) -> None:
+def rearm(command: commands.Command, message: discord.Message):
     if command._buckets.valid:
         bucket = command._buckets.get_bucket(message)
         bucket._tokens = min(bucket.rate, bucket._tokens + 1)
