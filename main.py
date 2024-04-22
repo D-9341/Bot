@@ -91,17 +91,14 @@ async def on_voice_state_update(member, before, after):
     if after.channel.name == 'Создать канал':
         await after.channel.edit(user_limit = 1)
         if member.bot == True:
-            room = 'Чего бля'
-        if member.id in client.owner_ids:
-            room = f'Канал моего Создателя - {member.display_name}'
+            room = 'чё'
         else:
             room = f'Канал {member.display_name}'
         channel = await member.guild.create_voice_channel(name = room, category = after.channel.category)
         await member.move_to(channel)
         await channel.set_permissions(member, mute_members = True, move_members = True, manage_channels = True)
         await channel.send(embed = discord.Embed(description = 'Этот канал удалится после того, как все люди выйдут из него. Исключение - перезапуск бота. В таком случае, что делать с каналом решать вам.', color = 0xff8000))
-        def check(a,b,c):
-            return len(channel.members) == 0
+        def check(a, b, c): return len(channel.members) == 0
         await client.wait_for('voice_state_update', check = check)
         await channel.delete()
     if role in member.roles:
@@ -256,7 +253,7 @@ async def load():
             await client.load_extension(f"cogs.{file[:-3]}")
 
 async def main():
-    t = 'Njk0MTcwMjgxMjcwMzEyOTkx.GupfdU.wPFXo0oocmWcs3esT7QelBMfIT_9kzy3iJIHj4'
+    t = os.environ['TOKEN']
     await load()
     await client.start(t)
 
