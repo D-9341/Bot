@@ -249,7 +249,7 @@ async def on_command_error(ctx, error):
 
 async def load():
     for file in os.listdir(cwd+"/cogs"):
-        if file.endswith(".py") and not file.startswith("s"):
+        if file.endswith(".py"):
             await client.load_extension(f"cogs.{file[:-3]}")
 
 async def main():

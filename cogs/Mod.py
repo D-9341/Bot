@@ -264,8 +264,8 @@ class Mod(commands.Cog):
                 emb.add_field(name = 'Причина', value = reason)
                 await ctx.send(embed = emb)
         else:
-                emb = discord.Embed(description = translate(locale, 'attempt_to_mute_dev'), color = 0xff0000)
-                await ctx.send(embed = emb)
+            emb = discord.Embed(description = translate(locale, 'attempt_to_mute_dev'), color = 0xff0000)
+            await ctx.send(embed = emb)
 
     @commands.command()
     @commands.bot_has_permissions(manage_roles = True)

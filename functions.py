@@ -2,7 +2,7 @@ import json
 
 class memoize:
     """
-    A `decorator` object to memoize the results of a function
+    A `decorator` object that memoizes the results of recursive functions for multiple times faster execution, consuming more memory
     """
     def __init__(self, f):
         self.f = f
