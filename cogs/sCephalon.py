@@ -3,16 +3,10 @@ import os
 import sys
 
 import discord
+from functions import translate, get_locale, set_locale
 from typing import Literal
 from discord import app_commands
 from discord.ext import commands
-from pymongo import MongoClient
-
-PASS = os.environ.get('PASS')
-cluster = MongoClient(f"mongodb+srv://cephalon:{PASS}@locale.ttokw.mongodb.net/Locale?retryWrites=true&w=majority")
-collection = cluster.Locale.locale
-
-friends = [351071668241956865, 417362845303439360]
 
 guilds = [693929822543675455, 735874149578440855, 818758712163827723]
 
@@ -121,50 +115,41 @@ class sCephalon(commands.Cog):
 
     @app_commands.command(description = 'Выберите локаль бота')
     async def locale(self, interaction: discord.Interaction):
-        locale = collection.find_one({"_id": interaction.user.id})["locale"]
+        locale = get_locale(interaction.user.id)
         rbutton = GrayButton('RU')
         gbutton = RedButton('GNIDA')
         ebutton = GrayButton('EN')
-        tbutton = GrayButton('TEST' if locale != 'ru' else 'ТЕСТ')
-        ibutton = GrayButton('INFO' if locale != 'ru' else 'ИНФО')
-        ybutton = RedButton('YES' if locale != 'ru' else 'ДА')
-        nbutton = GrayButton('NO' if locale != 'ru' else 'НЕТ')
-        confirm = View(timeout = 5)
+        tbutton = GrayButton('TEST' if locale == 'en' else 'ТЕСТ')
+        ibutton = GrayButton('INFO' if locale == 'en' else 'ИНФО')
+        ybutton = RedButton('YES' if locale == 'en' else 'ДА')
+        nbutton = GrayButton('NO' if locale == 'en' else 'НЕТ')
+        confirm = discord.ui.View(timeout = 5)
         confirm.add_item(ybutton)
         confirm.add_item(nbutton)
-        view = View(timeout = 5)
+        view = discord.ui.View(timeout = 5)
         view.add_item(rbutton)
         view.add_item(gbutton)
-        #view.add_item(ebutton)
+        if interaction.user.id in self.client.owner_ids:
+            view.add_item(ebutton)
         view.add_item(tbutton)
         view.add_item(ibutton)
         async def rbutton_callback(interaction):
-            collection.update_one({'_id': interaction.author.id}, {"$set": {'locale': 'ru'}})
+            set_locale(str(interaction.user.id), 'ru')
             await interaction.response.edit_message(embed = discord.Embed(description = 'Ваша локаль была установлена на `ru`.', color = 0xff8000), view = None)
         async def gbutton_callback(interaction):
             await interaction.response.edit_message(embed = discord.Embed(description = 'Ты бля уверен?', color = 0xff8000), view = confirm)
         async def ybutton_callback(interaction):
-            collection.update_one({'_id': interaction.author.id}, {"$set": {'locale': 'gnida'}})
+            set_locale(str(interaction.user.id), 'gnida')
             await interaction.response.edit_message(embed = discord.Embed(description = 'Твоя ёбаная локаль была установлена на `gnida`!', color = 0xff8000), view = None)
         async def nbutton_callback(interaction):
             await interaction.response.edit_message(embed = discord.Embed(description = 'Ну ок', color = 0xff8000), view = None)
         async def ebutton_callback(interaction):
-            collection.update_one({'_id': interaction.author.id}, {"$set": {'locale': 'en'}})
+            set_locale(str(interaction.user.id), 'en')
             await interaction.response.edit_message(embed = discord.Embed(description = 'Your locale has been set to `en`.', color = 0xff8000), view = None)
         async def test_callback(interaction):
-            if locale == 'ru':
-                await interaction.response.edit_message(embed = discord.Embed(description = 'Ваша локаль установлена на `ru`', color = 0xff8000), view = None)
-            if locale == 'gnida':
-                await interaction.response.edit_message(embed = discord.Embed(description = 'Твоя ёбаная локаль установлена на `gnida`', color = 0xff8000), view = None)
-            if locale == 'en':
-                await interaction.response.edit_message(embed = discord.Embed(description = 'Your locale set to `en`', color = 0xff8000), view = None)
+            await interaction.response.edit_message(embed = discord.Embed(description = translate(locale, 'locale_test'), color = 0xff8000), view = None)
         async def info_callback(interaction):
-            if locale == 'ru':
-                await interaction.response.edit_message(content = None, embed = discord.Embed(description = 'Возможные локали:\nru\ngnida\nen\n\nУстановка локали на gnida производится на __ваш__ страх и риск. Создатели этого приложения не несут ответсвенности за **__любые__** происшествия, связанные с этой локалью.', color = 0xb00b69), view = None)
-            if locale == 'gnida':
-                await interaction.response.edit_message(content = None, embed = discord.Embed(description = 'Возможные локали:\nru\ngnida\nen\n\nТут короче предупреждение должно быть о том, создатели бота ответственности за локаль не несут.', color = 0xb00b69), view = None)
-            if locale == 'en':
-                await interaction.response.edit_message(content = None, embed = discord.Embed(description = 'Possible locales:\nru\ngnida\nen', color = 0xb00b69), view = None)
+            await interaction.response.edit_message(content = None, embed = discord.Embed(description = translate(locale, 'locale_info'), color = 0xb00b69), view = None)
         rbutton.callback = rbutton_callback
         gbutton.callback = gbutton_callback
         ebutton.callback = ebutton_callback
@@ -174,13 +159,11 @@ class sCephalon(commands.Cog):
         nbutton.callback = nbutton_callback
         if locale == 'ru':
             rbutton.disabled = True
-            await interaction.response.send_message('Выберите опцию:', view = view)
         if locale == 'gnida':
             gbutton.disabled = True
-            await interaction.response.send_message('Чё надо', view = view)
         if locale == 'en':
             ebutton.disabled = True
-            await interaction.response.send_message('Choose option:', view = view)
+        await interaction.response.send_message(embed = discord.Embed(description = translate(locale, 'locale_options'), color = 0xff8000), view = view)
 
     @app_commands.command(description = 'Информация о боте')
     async def info(self, interaction: discord.Interaction):
