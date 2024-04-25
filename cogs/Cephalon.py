@@ -33,7 +33,7 @@ class Cephalon(commands.Cog):
             emb.set_author(name = self.client.user.name, url = 'https://discord.com/api/oauth2/authorize?client_id=694170281270312991&permissions=8&scope=bot%20applications.commands')
             emb.add_field(name = 'Cephalon', value = '`botver`, `devs`, `help`, `info`, `invite`, `locale`, `ping`, `uptime`', inline = False)
             emb.add_field(name = 'Embeds', value = '`content`, `edit`, `say`', inline = False)
-            emb.add_field(name = 'Fun', value = '`aghanim`, `dotersbrain`', inline = False)
+            emb.add_field(name = 'Fun', value = '`aghanim`, `dotersbrain`, `roulette`', inline = False)
             emb.add_field(name = 'Mod', value = '`ban`, `clear`, `dm`, `deaf`, `give`, `kick`, `mute`, `take`, `timeout`, `undeaf`, `unmute`', inline = False)
             emb.add_field(name = 'Misc', value = '`about`, `avatar`, `coinflip`, `guild`, `roll`, `roleinfo`, `rolemembers`, `someone`', inline = False)
             #emb.add_field(name = 'Music', value = '`join`, `leave`, `play`, `pause`, `resume`, `volume`')
@@ -48,6 +48,8 @@ class Cephalon(commands.Cog):
         #    await ctx.send('```python\ncy/volume <громкость>\nГромкость должна быть в пределе от 0 до 100\n\n<> - обязательно```')
         elif command == 'dotersbrain':
             await ctx.send('```python\ncy/dotersbrain\n\nСлова и ответы к ним: чё - хуй через плечо, а - хуй на, да - пизда, нет - пидора ответ, ок - хуй намок```')
+        elif command == 'roulette':
+            await ctx.send('```python\ncy/roulette\n\nСигаретка - восстанавливает одно очко здоровья\nНожовка по металлу - следующий патрон нанесёт в 2 раза больше урона\nПиво - вы передёргиваете затвор не влияя на порядок ходов\nЛупа - посмотреть, какой патрон сейчас в патроннике```')
         elif command == 'timeout':
             await ctx.send('```python\ncy/timeout <@пинг/имя/ID> [причина]\n\n[] - опционально, <> - обязательно, / - или\nНеобходимы разрешения - управлять каналами```')
         elif command == 'deaf':
