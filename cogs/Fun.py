@@ -64,7 +64,7 @@ class Fun(commands.Cog):
                 await ctx.send(embed = discord.Embed(description = f'Патронов - {len(rounds_order)}, боевых - {rounds_order.count(1)}, холостых - {rounds_order.count(0)}\nВаше здоровье - {p1_hp}\nЗдоровье врага - {p2_hp}', color = 0x2f3136)) # \nВаши предметы - {", ".join(p1_items)}\nПредметы противника - {", ".join(p2_items)}
                 if turn_order == 0:
                     await ctx.send(embed = discord.Embed(description = 'Выберите действие: 1 - выстрелить в себя, 2 - выстрелить в оппонента', color = 0xff8000)) # , 3 - использовать предмет
-                    action = await self.client.wait_for('message', timeout = 30, check = lambda message: message.channel == ctx.message.channel and message.author == ctx.author and message.content.lower() == '1' or message.content.lower() == '2')
+                    action = await self.client.wait_for('message', timeout = 30, check = lambda message: message.channel == ctx.message.channel and message.author == ctx.author and message.content.lower() == '1' or message.content.lower() == '2' or message.content.lower() == 'stop')
                     if action.content == '1':
                         await ctx.send(embed = discord.Embed(description = 'Вы выбрали выстрелить в себя...', color = 0xff0000))
                         await asyncio.sleep(3)
