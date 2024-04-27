@@ -136,7 +136,7 @@ class Fun(commands.Cog):
                                     await asyncio.sleep(3)
                                     p1_items.pop(int(item.content) - 1)
                                     if live_rounds != []:
-                                        await ctx.author.send(embed = discord.Embed(description = f'...{(live_rounds[(random.randint(0, (len(live_rounds) - 1)))]) + 1} патрон боевой...', color = 0xff8000))
+                                        await ctx.author.send(embed = discord.Embed(description = f'...{(random.choice(live_rounds)) + 1} патрон боевой...', color = 0xff8000))
                                         await asyncio.sleep(1)
                                         turn_order = 1
                                     else:
@@ -148,7 +148,7 @@ class Fun(commands.Cog):
                                     await asyncio.sleep(3)
                                     p1_items.pop(int(item.content) - 1)
                                     normal = random.randint(1, 4)
-                                    if normal in [1, 2]:
+                                    if normal <= 2:
                                         await ctx.send(embed = discord.Embed(description = f'{ctx.author.mention} восстанавливает 2 здоровья...', color = 0x00ff00))
                                         p1_hp += 2
                                         await asyncio.sleep(1)
@@ -239,7 +239,7 @@ class Fun(commands.Cog):
                                     await asyncio.sleep(3)
                                     p2_items.pop(int(item.content) - 1)
                                     if live_rounds != []:
-                                        await player.send(embed = discord.Embed(description = f'...{(live_rounds[(random.randint(0, (len(live_rounds) - 1)))]) + 1} патрон боевой...', color = 0xff8000))
+                                        await player.send(embed = discord.Embed(description = f'...{(random.choice(live_rounds)) + 1} патрон боевой...', color = 0xff8000))
                                         await asyncio.sleep(1)
                                         turn_order = 1
                                     else:
@@ -251,7 +251,7 @@ class Fun(commands.Cog):
                                     await asyncio.sleep(3)
                                     p2_items.pop(int(item.content) - 1)
                                     normal = random.randint(1, 4)
-                                    if normal in [1, 2]:
+                                    if normal <= 2:
                                         await ctx.send(embed = discord.Embed(description = f'{player.mention} восстанавливает 2 здоровья...', color = 0x00ff00))
                                         p2_hp += 2
                                         await asyncio.sleep(1)
@@ -373,6 +373,7 @@ class Fun(commands.Cog):
                                 if sawed:
                                     await ctx.send(embed = discord.Embed(description = 'Вы уже использовали ножовку', color = 0xff0000))
                                     await asyncio.sleep(1)
+                                    turn_order = 0
                                 else:
                                     await ctx.send(embed = discord.Embed(description = 'Вы использовали ножовку по металлу, следующий ваш выстрел нанесёт в 2 раза больше урона', color = 0x00ff00))
                                     sawed = True
@@ -400,7 +401,7 @@ class Fun(commands.Cog):
                                 await asyncio.sleep(3)
                                 p1_items.pop(int(item.content) - 1)
                                 if live_rounds != []:
-                                    await ctx.send(embed = discord.Embed(description = f'...{(live_rounds[(random.randint(0, (len(live_rounds) - 1)))]) + 1} патрон боевой...', color = 0xff8000))
+                                    await ctx.send(embed = discord.Embed(description = f'...{(random.choice(live_rounds)) + 1} патрон боевой...', color = 0xff8000))
                                     await asyncio.sleep(1)
                                     turn_order = 0
                                 else:
@@ -412,7 +413,7 @@ class Fun(commands.Cog):
                                 await asyncio.sleep(3)
                                 p1_items.pop(int(item.content) - 1)
                                 normal = random.randint(1, 4)
-                                if normal in [1, 2]:
+                                if normal <= 2:
                                     await ctx.send(embed = discord.Embed(description = 'Вы восстанавливаете 2 здоровья...', color = 0x00ff00))
                                     p1_hp += 2
                                     await asyncio.sleep(1)
@@ -520,16 +521,16 @@ class Fun(commands.Cog):
                                 await asyncio.sleep(3)
                                 p2_items.pop(int(item.content) - 1)
                                 normal = random.randint(1, 4)
-                                if normal in [1, 2]:
+                                if normal <= 2:
                                     await ctx.send(embed = discord.Embed(description = 'Противник восстанавливает 2 здоровья...', color = 0x00ff00))
                                     p2_hp += 2
                                     await asyncio.sleep(1)
-                                    turn_order = 0
+                                    turn_order = 1
                                 else:
                                     await ctx.send(embed = discord.Embed(description = '...Противник теряет 1 здоровье...', color = 0xff0000))
                                     p2_hp -= 1
                                     await asyncio.sleep(1)
-                                    turn_order = 0
+                                    turn_order = 1
                             # elif 'Шприц' in used:
                             #     await ctx.send(embed = discord.Embed(description = 'Вы использовали шприц адреналина, вы можете выбрать один предмет противника', color = 0x00ff00))
                             elif 'Странная' in used:
