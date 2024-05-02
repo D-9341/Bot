@@ -4,17 +4,6 @@ import random
 import discord
 from discord import app_commands
 from discord.ext import commands
-from pymongo import MongoClient
-
-PASS = os.environ.get('PASS')
-cluster = MongoClient(f"mongodb+srv://cephalon:{PASS}@locale.ttokw.mongodb.net/Locale?retryWrites=true&w=majority")
-collection = cluster.Locale.locale
-
-friends = [351071668241956865, 417362845303439360]
-
-guilds = [693929822543675455, 735874149578440855, 818758712163827723]
-
-botversions = [764882153812787250, 694170281270312991, 762015251264569352]
 
 class sMisc(commands.Cog):
     def __init__(self, client):

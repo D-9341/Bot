@@ -211,7 +211,7 @@ async def on_command_error(ctx, error):
         emb.set_footer(text = 'Счётчик перезарядки сброшен')
         await ctx.send(embed = emb) 
     elif isinstance(error, commands.BotMissingPermissions):
-        emb = discord.Embed(description = f'{ctx.author.mention}, у **меня** недостаточно прав на выполнение команды `{ctx.command.name}`\n||Выдача прав администратора решит эту проблему||', color = 0xff0000)
+        emb = discord.Embed(description = f'{ctx.author.mention}, у **меня** недостаточно прав на выполнение команды `{ctx.command.name}`, напишите cy/help `{ctx.command.name}` для просмотра необходимых прав\n||Выдача прав администратора решит эту проблему||', color = 0xff0000)
         await ctx.send(embed = emb)
     elif isinstance(error, commands.MissingPermissions):
         emb = discord.Embed(description = f'{ctx.author.mention}, у вас недостаточно прав на выполнение команды `{ctx.command.name}`. Напишите cy/help `{ctx.command.name}` для просмотра необходимых прав', color = 0xff8000)
