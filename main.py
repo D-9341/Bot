@@ -3,8 +3,6 @@ import asyncio
 import os
 import random
 import json
-import warnings
-warnings.filterwarnings("ignore")
 
 import discord
 from pathlib import Path
@@ -51,7 +49,7 @@ async def on_command_completion(ctx):
 async def on_member_join(member):
     user = 'БОТ' if member.bot else 'УЧАСТНИК'
     channel = client.get_channel(714175791033876490)
-    emb = discord.Embed(title = f'{user}\_ЗАШЁЛ\_НА_СЕРВЕР', color = 0xff8000, timestamp = discord.utils.utcnow())
+    emb = discord.Embed(title = rf'{user}\_ЗАШЁЛ\_НА_СЕРВЕР', color = 0xff8000, timestamp = discord.utils.utcnow())
     emb.add_field(name = f'{user}', value = member)
     emb.add_field(name = 'УПОМИНАНИЕ', value = member.mention)
     emb.add_field(name = 'СЕРВЕР', value = member.guild.name)
@@ -62,7 +60,7 @@ async def on_member_join(member):
 async def on_member_remove(member):
     user = 'БОТ' if member.bot else 'УЧАСТНИК'
     channel = client.get_channel(714175791033876490)
-    emb = discord.Embed(title = f'{user}\_ВЫШЕЛ\_С_СЕРВЕРА', color = 0xff8000, timestamp = discord.utils.utcnow())
+    emb = discord.Embed(title = rf'{user}\_ВЫШЕЛ\_С_СЕРВЕРА', color = 0xff8000, timestamp = discord.utils.utcnow())
     emb.add_field(name = f'{user}', value = member)
     emb.add_field(name = 'УПОМИНАНИЕ', value = member.mention)
     emb.add_field(name = 'СЕРВЕР', value = member.guild.name)
@@ -72,7 +70,7 @@ async def on_member_remove(member):
 @client.event
 async def on_guild_remove(guild):
     channel = client.get_channel(714175791033876490)
-    emb = discord.Embed(title = 'ВЫХОД\_С_СЕРВЕРА', color = 0xff8000, timestamp = discord.utils.utcnow())
+    emb = discord.Embed(title = r'ВЫХОД\_С_СЕРВЕРА', color = 0xff8000, timestamp = discord.utils.utcnow())
     emb.add_field(name = 'СЕРВЕР', value = guild.name)
     emb.set_footer(text = f'ID: {guild.id}')
     await channel.send(embed = emb)
@@ -80,7 +78,7 @@ async def on_guild_remove(guild):
 @client.event
 async def on_guild_join(guild):
     channel = client.get_channel(714175791033876490)
-    emb = discord.Embed(title = 'ДОБАВЛЕНИЕ\_НА_СЕРВЕР', color = 0xff8000, timestamp = discord.utils.utcnow())
+    emb = discord.Embed(title = r'ДОБАВЛЕНИЕ\_НА_СЕРВЕР', color = 0xff8000, timestamp = discord.utils.utcnow())
     emb.add_field(name = 'СЕРВЕР', value = guild.name)
     emb.set_footer(text = f'ID: {guild.id}')
     await channel.send(embed = emb)
@@ -122,7 +120,7 @@ async def on_message(message):
             sent = await message.channel.send(role.mention)
             await sent.delete()
             channel = client.get_channel(714175791033876490)
-            emb = discord.Embed(title = 'ОПОВЕЩЕНИЕ\_ОБ_ОБНОВЛЕНИИ', color = 0xff8000, timestamp = discord.utils.utcnow())
+            emb = discord.Embed(title = r'ОПОВЕЩЕНИЕ\_ОБ_ОБНОВЛЕНИИ', color = 0xff8000, timestamp = discord.utils.utcnow())
             emb.add_field(name = 'ОПОВЕЩЕНЫ', value = 'РАЗРАБОТЧИКИ')
             await channel.send(embed = emb)
     elif message.channel.id == 750372413102883028:
@@ -131,7 +129,7 @@ async def on_message(message):
             sent = await message.channel.send(role.mention)
             await sent.delete()
             channel = client.get_channel(714175791033876490)
-            emb = discord.Embed(title = 'ОПОВЕЩЕНИЕ\_ОБ_ОБНОВЛЕНИИ', color = 0xff8000, timestamp = discord.utils.utcnow())
+            emb = discord.Embed(title = r'ОПОВЕЩЕНИЕ\_ОБ_ОБНОВЛЕНИИ', color = 0xff8000, timestamp = discord.utils.utcnow())
             emb.add_field(name = 'ОПОВЕЩЕНЫ', value = role.mention)
             await channel.send(embed = emb)
     elif message.channel.id == 750368033578680361:
@@ -140,7 +138,7 @@ async def on_message(message):
             sent = await message.channel.send(role.mention)
             await sent.delete()
             channel = client.get_channel(714175791033876490)
-            emb = discord.Embed(title = 'ОПОВЕЩЕНИЕ\_ОБ_ОБНОВЛЕНИИ', color = 0xff8000, timestamp = discord.utils.utcnow())
+            emb = discord.Embed(title = r'ОПОВЕЩЕНИЕ\_ОБ_ОБНОВЛЕНИИ', color = 0xff8000, timestamp = discord.utils.utcnow())
             emb.add_field(name = 'ОПОВЕЩЕНЫ', value = role.mention)
             await channel.send(embed = emb)
     elif message.channel.id == 750363498290348123:
@@ -149,7 +147,7 @@ async def on_message(message):
             sent = await message.channel.send(role.mention)
             await sent.delete()
             channel = client.get_channel(714175791033876490)
-            emb = discord.Embed(title = 'ОПОВЕЩЕНИЕ\_ОБ_ОБНОВЛЕНИИ', color = 0xff8000, timestamp = discord.utils.utcnow())
+            emb = discord.Embed(title = r'ОПОВЕЩЕНИЕ\_ОБ_ОБНОВЛЕНИИ', color = 0xff8000, timestamp = discord.utils.utcnow())
             emb.add_field(name = 'ОПОВЕЩЕНЫ', value = role.mention)
             await channel.send(embed = emb)
     elif message.channel.id == 750373602460827730:
@@ -158,7 +156,7 @@ async def on_message(message):
             sent = await message.channel.send(role.mention)
             await sent.delete()
             channel = client.get_channel(714175791033876490)
-            emb = discord.Embed(title = 'ОПОВЕЩЕНИЕ\_ОБ_ОБНОВЛЕНИИ', color = 0xff8000, timestamp = discord.utils.utcnow())
+            emb = discord.Embed(title = r'ОПОВЕЩЕНИЕ\_ОБ_ОБНОВЛЕНИИ', color = 0xff8000, timestamp = discord.utils.utcnow())
             emb.add_field(name = 'ОПОВЕЩЕНЫ', value = role.mention)
             await channel.send(embed = emb)
     elif message.channel.id == 707498623981715557:

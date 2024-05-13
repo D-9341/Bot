@@ -14,7 +14,7 @@ class Embeds(commands.Cog):
     @commands.command()
     async def say(self, ctx, *, msg):
         title = description = ''
-        image = thumbnail = message = footer = color = None
+        image = thumbnail = message = footer = color = author = None
         embed_values = msg.split('&')
         for i in embed_values:
             if i.strip().lower().startswith('th'):
@@ -31,6 +31,11 @@ class Embeds(commands.Cog):
                 message = i.strip()[3:].strip()
             elif i.strip().lower().startswith('f'):
                 footer = i.strip()[1:].strip()
+            elif i.strip().lower().startswith('a'):
+                author = i.strip()[1:].strip()
+                author = await commands.MemberConverter().convert(ctx, author)
+        if author is None:
+            author = ctx.author
         if color is None:
             color = 0x2f3136
         else:
@@ -40,14 +45,14 @@ class Embeds(commands.Cog):
                 color = int('0x' + color.lstrip('#'), 16)
         emb = discord.Embed(title = title, description = description, color = color)
         for i in embed_values:
-            emb.set_author(name = ctx.author.display_name, icon_url = ctx.author.avatar.url)
+            emb.set_author(name = author.display_name, icon_url = author.avatar.url)
             if image:
                 emb.set_image(url = image)
             if thumbnail:
                 emb.set_thumbnail(url = thumbnail)
             if footer:
                 emb.set_footer(text = footer)
-            if not any(keyword in msg for keyword in ['&t', '&d', '&img', '&th', '&msg', '&f', '&c']):
+            if not any(keyword in msg for keyword in ['&t', '&d', '&img', '&th', '&f', '&c', '&a']):
                 return await ctx.send(msg)
             else:
                 if message:
@@ -59,7 +64,7 @@ class Embeds(commands.Cog):
     @commands.has_permissions(manage_messages = True)
     async def edit(self, ctx, arg, *, msg = None):
         message = await ctx.channel.fetch_message(arg)
-        if not any(keyword in msg for keyword in ['&t', '&d', '&img', '&th', '&f', '&c']):
+        if not any(keyword in msg for keyword in ['&t', '&d', '&img', '&th', '&f', '&c', '&a']):
             if message.author == self.client.user:
                 if '--delete' in msg:
                     await message.delete()
@@ -84,7 +89,7 @@ class Embeds(commands.Cog):
             else:
                 title = description = ''
                 color = None
-            image = thumbnail = footer = None
+            image = thumbnail = footer = author = None
             embed_values = msg.split('&')
             for i in embed_values:
                 if i.strip().lower().startswith('th'):
@@ -99,6 +104,11 @@ class Embeds(commands.Cog):
                     title = i.strip()[1:].strip()
                 elif i.strip().lower().startswith('f'):
                     footer = i.strip()[1:].strip()
+                elif i.strip().lower().startswith('a'):
+                    author = i.strip()[1:].strip()
+                    author = await commands.MemberConverter().convert(ctx, author)
+            if author is None:
+                author = ctx.author
             if message.embeds == [] or color is None:
                 color = 0x2f3136
             elif message.embeds != [] and '&c' not in msg:
@@ -109,7 +119,7 @@ class Embeds(commands.Cog):
                 else:
                     color = int('0x' + color.lstrip('#'), 16)
             emb = discord.Embed(title = title, description = description, color = color, timestamp = discord.utils.utcnow())
-            emb.set_author(name = ctx.author.display_name, icon_url = ctx.author.avatar.url)
+            emb.set_author(name = author.display_name, icon_url = author.avatar.url)
             if image:
                 emb.set_image(url = image)
             if thumbnail:
