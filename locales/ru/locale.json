@@ -44,5 +44,9 @@
     "undeaf_no_role": "{author_mention}, Я не могу снять заглушение у {member_mention} из-за того, что роль Deafened была удалена",
     "unmute_member_has_no_role": "Снятие заглушения не требуется. Роли Muted не обнаружено в списке ролей участника",
     "unmute_success": "Снятие заглушения у {member}",
-    "unmute_no_role": "{author_mention}, Я не могу снять заглушение у {member_mention} из-за того, что роль Muted была удалена"
+    "unmute_no_role": "{author_mention}, Я не могу снять заглушение у {member_mention} из-за того, что роль Muted была удалена",
+    "play_not_in_voice_channel": "Ты должен быть в канале, чтобы использовать play",
+    "play_connected": "Присоединён к каналу {ctx_author_voice_channel_name}",
+    "play_already_in_use": "Я уже используюсь в другом канале!",
+    "play_now_playing": "Сейчас играет: {player_title}"
 }

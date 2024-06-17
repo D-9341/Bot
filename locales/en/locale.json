@@ -44,5 +44,9 @@
     "undeaf_no_role": "{author_mention}, I can't undeaf {member_mention} because the Deafened role has been removed",
     "unmute_member_has_no_role": "Unmuting is not needed. Muted role not found in the member's role list",
     "unmute_success": "Unmuting successful for {member}",
-    "unmute_no_role": "{author_mention}, I can't unmute {member_mention} because the Muted role has been removed"
+    "unmute_no_role": "{author_mention}, I can't unmute {member_mention} because the Muted role has been removed",
+    "play_not_in_voice_channel": "You must be in a voice channel to play music",
+    "play_connected": "Connected to {ctx_author_voice_channel_name}",
+    "play_already_in_use": "Music is already playing in another channel",
+    "play_now_playing": "Now playing: {player_title}"
 }

@@ -53,28 +53,16 @@ class Music(commands.Cog):
     async def play(self, ctx, *, url):
         locale = get_locale(ctx.author.id)
         if not ctx.author.voice:
-            if locale == 'ru':
-                await ctx.send(embed = discord.Embed(description = 'Ты должен быть в канале, чтобы использовать play', color = 0xff8000))
-            if locale == 'gnida':
-                await ctx.send(embed = discord.Embed(description = 'Чтобы применить play тебе надо в канале быть, еблан', color = 0xff8000))
+            return await ctx.send(embed = discord.Embed(description = translate(locale, 'play_not_in_voice_channel'), color = 0xff8000))
         if not ctx.guild.voice_client:
-            await ctx.author.voice.channel.connect(self_deaf = True)
-            if locale == 'ru':
-                await ctx.send(embed = discord.Embed(description = f'Присоединён к каналу {ctx.author.voice.channel.name}.', color = 0xff8000))
-            if locale == 'gnida':
-                await ctx.send(embed = discord.Embed(description = f'Присосался к {ctx.author.voice.channel.name}', color = 0xff8000))
+            await ctx.author.voice.channel.connect(self_deaf = True, cls = lambda _, __: YTDLSource)
+            await ctx.send(embed = discord.Embed(description = f'{translate(locale, "play_connected")}'.format(ctx_author_voice_channel_name = ctx.author.voice.channel.name), color = 0xff8000))
         if ctx.guild.voice_client:
             if ctx.guild.voice_client.channel != ctx.author.voice.channel:
-                if locale == 'ru':
-                    return await ctx.send(embed = discord.Embed(description = 'Я уже используюсь в другом канале!', color = 0xff0000))
-                if locale == 'gnida':
-                    return await ctx.send(embed = discord.Embed(description = 'Ты чё слепой нахуй? Меня уже используют в другом канале, ебалай', color = 0xff0000))
+                return await ctx.send(embed = discord.Embed(description = translate(locale, 'play_already_in_use'), color = 0xff0000))
             player = await YTDLSource.from_url(url, loop = self.client.loop, stream = True)
-            ctx.voice_client.play(player, after = ctx.voice_client.play(player))
-            if locale == 'ru' or locale == 'gnida':
-                await ctx.send(embed = discord.Embed(description = f"Сейчас играет: {player.title}", color = 0xff8000))
-            if locale == 'en':
-                await ctx.send(embed = discord.Embed(description = f"Now playing: {player.title}", color = 0xff8000))
+            ctx.voice_client.play(player, after = lambda _: ctx.voice_client.play(player))
+            await ctx.send(embed = discord.Embed(description = f"{translate(locale, 'play_now_playing')}".format(player_title = player.title), color = 0xff8000))
 
     @commands.command()
     async def resume(self, ctx):
