@@ -22,7 +22,7 @@ def rearm(command: commands.Command, message: discord.Message):
 async def on_ready():
     await client.tree.sync()
     channel = client.get_channel(714175791033876490)
-    emb = discord.Embed(description = 'В сети, поверхностная проверка не выявила ошибок.', color = 0x2f3136, timestamp = discord.utils.utcnow())
+    emb = discord.Embed(description = 'В сети, поверхностная проверка не выявила ошибок', color = 0x2f3136, timestamp = discord.utils.utcnow())
     emb.set_footer(text = 'Cephalon Cy © Sus&Co')
     await channel.send(embed = emb)
 
@@ -44,6 +44,13 @@ async def on_command_completion(ctx):
     emb.add_field(name = 'СЕРВЕР', value = ctx.guild.name if ctx.guild else "ЛС", inline = False)
     emb.add_field(name = 'КАНАЛ', value = f'{ctx.channel.name} ({ctx.channel.mention})' if ctx.guild else "Недоступно в ЛС", inline = False)
     await channel.send(embed = emb)
+
+# СПЕЦИАЛЬНО ПРОТИВ ПИПИСЬКИНА
+@client.event
+async def on_member_update(before, after):
+    if before.id == 417362845303439360:
+        if before.nick == 'Марат Каскинов':
+            await after.edit(nick = 'Марат Каскинов', reason = 'Против пиписькина')
 
 @client.event
 async def on_member_join(member):
@@ -95,7 +102,7 @@ async def on_voice_state_update(member, before, after):
         channel = await member.guild.create_voice_channel(name = room, category = after.channel.category)
         await member.move_to(channel)
         await channel.set_permissions(member, mute_members = True, move_members = True, manage_channels = True)
-        await channel.send(embed = discord.Embed(description = 'Этот канал удалится после того, как все люди выйдут из него. Исключение - перезапуск бота. В таком случае, что делать с каналом решать вам.', color = 0xff8000))
+        await channel.send(embed = discord.Embed(description = 'Этот канал удалится после того, как все люди выйдут из него. Исключение - перезапуск бота. В таком случае, что делать с каналом решать вам', color = 0xff8000))
         def check(a, b, c): return len(channel.members) == 0
         await client.wait_for('voice_state_update', check = check)
         await channel.delete()
@@ -244,6 +251,16 @@ async def on_command_error(ctx, error):
         emb = discord.Embed(description = f'{ctx.author.mention}, предоставлен неверный аргумент для `{ctx.command.name}`. Попробуйте cy/help `{ctx.command.name}`', color = 0xff8000)
         emb.set_footer(text = 'Счётчик перезарядки сброшен')
         await ctx.send(embed = emb)
+
+@client.command()
+async def reload(ctx):
+    for file in os.listdir(cwd+"/cogs"):
+        if file.endswith(".py"):
+            await client.unload_extension(f"cogs.{file[:-3]}")
+    for file in os.listdir(cwd+"/cogs"):
+        if file.endswith(".py"):
+            await client.load_extension(f"cogs.{file[:-3]}")
+    await ctx.send(embed = discord.Embed(description = f'```apache\nМодули перезагружены```', color = 0xff8000))
 
 async def load():
     for file in os.listdir(cwd+"/cogs"):

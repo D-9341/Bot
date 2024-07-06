@@ -110,27 +110,18 @@ class Misc(commands.Cog):
     @commands.command()
     @commands.cooldown(1, 5, commands.BucketType.user)
     async def roleinfo(self, ctx, role: discord.Role):
-        if role.mentionable == False:
-            role.mentionable = 'Нет'
-        elif role.mentionable == True:
-            role.mentionable = 'Да'
-        if role.managed == False:
-            role.managed = 'Нет'
-        elif role.managed == True:
-            role.managed = 'Да'
-        if role.hoist == False:
-            role.hoist = 'Нет'
-        elif role.hoist == True:
-            role.hoist = 'Да'
+        is_mentionable = 'Да' if role.mentionable else 'Нет'
+        is_managed = 'Да' if role.managed else 'Нет'
+        is_hoisted = 'Да' if role.hoist else 'Нет'
         emb = discord.Embed(title = role.name, color = 0x2f3136)
         emb.add_field(name = 'ID', value = role.id)
         emb.add_field(name = 'Цвет', value = role.color)
-        emb.add_field(name = 'Упоминается?', value = role.mentionable)
-        emb.add_field(name = 'Управляется интеграцией?', value = role.managed)
+        emb.add_field(name = 'Упоминается?', value = is_mentionable)
+        emb.add_field(name = 'Управляется интеграцией?', value = is_managed)
         emb.add_field(name = 'Позиция в списке', value = role.position)
         d = role.created_at.strftime('%d.%m.%Y %H:%M:%S GMT')
         emb.add_field(name = 'Создана', value = f'{d}', inline = False)
-        emb.add_field(name = 'Показывает участников отдельно?', value = role.hoist)
+        emb.add_field(name = 'Показывает участников отдельно?', value = is_hoisted)
         await ctx.send(embed = emb)
 
     @commands.command()
@@ -167,14 +158,13 @@ class Misc(commands.Cog):
         emb.add_field(name = 'Глобальное имя', value = member.name)
         if member.nick:
             emb.add_field(name = 'Никнейм', value = member.nick)
-        if member.status == discord.Status.online:
-            status = 'В сети'
-        elif member.status == discord.Status.dnd:
-            status = 'Не беспокоить'
-        elif member.status == discord.Status.idle:
-            status = 'Не активен'
-        elif member.status == discord.Status.offline:
-            status = 'Не в сети'
+        status_map = {
+            discord.Status.online: 'В сети',
+            discord.Status.dnd: 'Не беспокоить',
+            discord.Status.idle: 'Не активен',
+            discord.Status.offline: 'Не в сети',
+        }
+        status = status_map.get(member.status, 'Неизвестно')
         emb.add_field(name = 'Статус', value = status)
         if ctx.guild:
             roles = ', '.join([role.name for role in member.roles[1:]])

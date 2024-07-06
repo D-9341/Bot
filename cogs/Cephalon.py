@@ -122,7 +122,7 @@ class Cephalon(commands.Cog):
             await ctx.send(embed = discord.Embed(description = f'Счётчик перезарядки для `{command.name}` сброшен. Счётчик перезарядки был равен `{round(command.get_cooldown_retry_after(ctx))}` секунд.', color = 0xff8000))
             await command.reset_cooldown(ctx)
 
-    @commands.command() #ru, gnida, en
+    @commands.command() # ru, gnida, en
     async def locale(self, ctx):
         locale = get_locale(ctx.author.id)
         rbutton = GrayButton('RU')
@@ -142,25 +142,23 @@ class Cephalon(commands.Cog):
             view.add_item(ebutton)
         view.add_item(tbutton)
         view.add_item(ibutton)
-        async def on_timeout(interaction):
-            await interaction.response.edit_message(embed = discord.Embed(description = 'Время вышло', color = 0xff8000), view = None)
         async def rbutton_callback(interaction):
             set_locale(str(ctx.author.id), 'ru')
-            await interaction.response.edit_message(embed = discord.Embed(description = 'Ваша локаль была установлена на `ru`.', color = 0xff8000), view = None)
+            return await interaction.response.edit_message(embed = discord.Embed(description = 'Ваша локаль была установлена на `ru`.', color = 0xff8000), view = None)
         async def gbutton_callback(interaction):
             await interaction.response.edit_message(embed = discord.Embed(description = 'Ты бля уверен?', color = 0xff8000), view = confirm)
         async def ybutton_callback(interaction):
             set_locale(str(ctx.author.id), 'gnida')
-            await interaction.response.edit_message(embed = discord.Embed(description = 'Твоя ёбаная локаль была установлена на `gnida`!', color = 0xff8000), view = None)
+            return await interaction.response.edit_message(embed = discord.Embed(description = 'Твоя ёбаная локаль была установлена на `gnida`!', color = 0xff8000), view = None)
         async def nbutton_callback(interaction):
-            await interaction.response.edit_message(embed = discord.Embed(description = 'Ну ок', color = 0xff8000), view = None)
+            return await interaction.response.edit_message(embed = discord.Embed(description = 'Ну ок', color = 0xff8000), view = None)
         async def ebutton_callback(interaction):
             set_locale(str(ctx.author.id), 'en')
-            await interaction.response.edit_message(embed = discord.Embed(description = 'Your locale has been set to `en`.', color = 0xff8000), view = None)
+            return await interaction.response.edit_message(embed = discord.Embed(description = 'Your locale has been set to `en`.', color = 0xff8000), view = None)
         async def test_callback(interaction):
-            await interaction.response.edit_message(embed = discord.Embed(description = translate(locale, 'locale_test'), color = 0xff8000), view = None)
+            return await interaction.response.edit_message(embed = discord.Embed(description = translate(locale, 'locale_test'), color = 0xff8000), view = None)
         async def info_callback(interaction):
-            await interaction.response.edit_message(content = None, embed = discord.Embed(description = translate(locale, 'locale_info'), color = 0xb00b69), view = None)
+            return await interaction.response.edit_message(content = None, embed = discord.Embed(description = translate(locale, 'locale_info'), color = 0xb00b69), view = None)
         rbutton.callback = rbutton_callback
         gbutton.callback = gbutton_callback
         ebutton.callback = ebutton_callback
@@ -174,7 +172,11 @@ class Cephalon(commands.Cog):
             gbutton.disabled = True
         if locale == 'en':
             ebutton.disabled = True
-        await ctx.send(embed = discord.Embed(description = translate(locale, 'locale_options'), color = 0xff8000), view = view)
+        try:
+            msg = await ctx.send(embed = discord.Embed(description = translate(locale, 'locale_options'), color = 0xff8000), view = view)
+            await self.client.wait_for('message_edit', check = lambda message: message.author.id == ctx.author.id and message.id == msg.id, timeout = 10)
+        except asyncio.TimeoutError:
+            await msg.edit(embed = discord.Embed(description = 'Время вышло', color = 0xff8000), view = None) 
 
     @commands.command()
     async def generate(self, ctx):
@@ -187,7 +189,7 @@ class Cephalon(commands.Cog):
     @commands.command()
     @commands.cooldown(1, 5, commands.BucketType.user)
     async def info(self, ctx):
-        emb = discord.Embed(title = 'Пару строк кода сюда, новые фишки туда', description = 'Создатели бота постоянно совершенствуют своё детище, поддерживая его в актуальном состоянии.', color = 0xff8000)
+        emb = discord.Embed(title = 'Пару строк кода сюда, новые фишки туда', description = 'Создатели бота постоянно совершенствуют своё детище, поддерживая его в актуальном состоянии', color = 0xff8000)
         emb.set_author(name = self.client.user.name, url = 'https://warframe.fandom.com/wiki/Cephalon_Cy', icon_url = self.client.user.avatar.url)
         emb.add_field(name = 'Версия', value = '0.13.0.2.21680')
         emb.add_field(name = 'Написан на', value = f'discord.py v{discord.__version__}\nPython v{sys.version[:7]}')

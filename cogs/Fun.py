@@ -2,6 +2,7 @@ import asyncio
 import discord
 import random
 import json
+from functions import translate, get_locale, set_locale
 from discord.ext import commands
 
 def check_for_red(lst):
@@ -37,6 +38,7 @@ class Fun(commands.Cog):
     @commands.command(aliases = ['cf', 'c4'])
     @commands.cooldown(1, 20, commands.BucketType.user)
     async def connectfour(self, ctx):
+        locale = get_locale(ctx.author.id)
         board = [['⚪' for _ in range(7)] for _ in range(6)]
         turn = random.randint(0, 1)
         await ctx.send(embed = discord.Embed(description = f"{'\n'.join(str(x) for x in board).replace(',', '').replace("'", '')}", color = 0x2f3136))
