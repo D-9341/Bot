@@ -48,5 +48,5 @@
     "play_not_in_voice_channel": "Чтобы применить play тебе надо в канале быть, еблан",
     "play_connected": "Присосался к {ctx_author_voice_channel_name}",
     "play_already_in_use": "Ты чё слепой нахуй? Я уже используюсь в другом канале!",
-    "play_now_playing": "Сейчас пердит: {player_title}"
+    "play_now_playing": "Сейчас пердит: [{player_title}]({player_url}) ({player_duration})"
 }

@@ -48,5 +48,5 @@
     "play_not_in_voice_channel": "You must be in a voice channel to play music",
     "play_connected": "Connected to {ctx_author_voice_channel_name}",
     "play_already_in_use": "Music is already playing in another channel",
-    "play_now_playing": "Now playing: {player_title}"
+    "play_now_playing": "Now playing: [{player_title}]({player_url}) ({player_duration})"
 }

@@ -26,29 +26,31 @@ class Misc(commands.Cog):
             if rand == 42:
                 await ctx.send(embed = discord.Embed(description = f'{ctx.author.display_name} получает случайное число (0-100)\n`100`', color = 0xff8000))
             else:
-                rand1 = random.randint(0, 9)
-                rand2 = random.randint(0, 9)
-                await ctx.send(embed = discord.Embed(description = f'{ctx.author.display_name} получает случайное число (0-100)\n`0{rand1}{rand2}`', color = 0xff8000))
+                random_number = random.randint(0, 99)
+                padded_number = str(random_number).zfill(3)
+                await ctx.send(embed = discord.Embed(description=f'{ctx.author.display_name} получает случайное число (0-100)\n`{padded_number}`', color = 0xff8000))
         if first and not second:
+            if first == 'adamant':
+                await ctx.send(embed = discord.Embed(description = f'{ctx.author.display_name} получает случайное число \n`5 6 4 7 0 -9 9 2 π √2 Ω א`', color = 0xff8000))
             if 'd' in first:
-                [dice_amount, dice_quality] = first.split('d')
-                dice_amount, dice_quality = int(dice_amount), int(dice_quality)
+                [dice_amount, dice_edges] = first.split('d')
+                dice_amount, dice_edges = int(dice_amount), int(dice_edges)
                 if dice_amount > 20:
                     return await ctx.send(embed = discord.Embed(description = 'Нельзя бросить больше 20 дайсов', color = 0xff0000))
-                if dice_quality > 20:
+                if dice_edges > 20:
                     return await ctx.send(embed = discord.Embed(description = 'Вы не можете кинуть дайс с большим количеством граней, чем 20', color = 0xff8000))
                 if dice_amount > 1:
                     attempts = ''
                     result = 0
                     for i in range(1, dice_amount + 1):
-                        rand = random.randint(1, dice_quality)
+                        rand = random.randint(1, dice_edges)
                         attempts += f'{i}. `{rand}`\n'
                         result += rand
                     attempts += f'В сумме - ||{result}||'
                 else:
-                    res = random.randint(1, dice_quality)
+                    res = random.randint(1, dice_edges)
                     total = ''
-                    if res == 1 and dice_quality == 20:
+                    if res == 1 and dice_edges == 20:
                         total = ', критический провал'
                     if res == 20:
                         total = ', критический успех!'
@@ -89,9 +91,9 @@ class Misc(commands.Cog):
             emb.description = f'Роли {role.name} нет ни у кого.'
         await ctx.send(embed = emb)
 
-    @commands.command()
+    @commands.command(aliases = ['guild'])
     @commands.cooldown(1, 5, commands.BucketType.user)
-    async def guild(self, ctx):
+    async def serverinfo(self, ctx):
         guild = ctx.guild
         emb = discord.Embed(color = 0x2f3136, timestamp = discord.utils.utcnow())
         emb.set_author(name = guild, icon_url = guild.icon.url if guild.icon else 'https://cdn.discordapp.com/attachments/685176670344183836/1076601210485866546/76923ec8de0a6ca5.png')
@@ -127,8 +129,7 @@ class Misc(commands.Cog):
     @commands.command()
     @commands.cooldown(1, 5, commands.BucketType.user)
     async def avatar(self, ctx, member: discord.User = None):
-        if member is None:
-            member = ctx.author
+        member = member if member else ctx.author
         emb = discord.Embed(color = 0x2f3136)
         if not member.avatar.is_animated():
             emb.set_image(url = member.avatar.with_format('png'))
@@ -140,41 +141,36 @@ class Misc(commands.Cog):
     @commands.command(aliases = ['me'])
     @commands.cooldown(1, 5, commands.BucketType.user)
     async def about(self, ctx, member: discord.Member = None):
-        if member is None:
-            member = ctx.author
-        if member.bot == False:
-            bot = 'Нет'
-        elif member.bot == True:
-            bot = 'Да'
-        emb = discord.Embed(color = 0x2f3136, timestamp = discord.utils.utcnow())
-        emb.set_author(name = member.display_name)
-        emb.add_field(name = 'ID', value = member.id)
+        target = member if member else ctx.author
+        is_bot = 'Да' if target.bot else 'Нет'
+        embed = discord.Embed(color = 0x2f3136, timestamp = discord.utils.utcnow())
+        embed.set_author(name = target.display_name)
+        embed.add_field(name = 'ID', value = target.id)
         if ctx.guild:
-            d = member.created_at.strftime('%d.%m.%Y %H:%M:%S GMT')
-            d1 = member.joined_at.strftime('%d.%m.%Y %H:%M:%S GMT')
-            emb.add_field(name = 'Создан', value = f'{d}', inline = False)
-            emb.add_field(name = 'Вошёл', value = f'{d1}', inline = False)
-        emb.add_field(name = 'Упоминание', value = member.mention)
-        emb.add_field(name = 'Глобальное имя', value = member.name)
-        if member.nick:
-            emb.add_field(name = 'Никнейм', value = member.nick)
+            created_at = target.created_at.strftime('%d.%m.%Y %H:%M:%S GMT')
+            joined_at = target.joined_at.strftime('%d.%m.%Y %H:%M:%S GMT')
+            embed.add_field(name = 'Создан', value = created_at, inline = False)
+            embed.add_field(name = 'Вошёл', value = joined_at, inline = False)
+        embed.add_field(name = 'Упоминание', value = target.mention)
+        embed.add_field(name = 'Глобальное имя', value = target.name)
+        if target.nick:
+            embed.add_field(name = 'Никнейм', value = target.nick)
         status_map = {
             discord.Status.online: 'В сети',
             discord.Status.dnd: 'Не беспокоить',
             discord.Status.idle: 'Не активен',
             discord.Status.offline: 'Не в сети',
         }
-        status = status_map.get(member.status, 'Неизвестно')
-        emb.add_field(name = 'Статус', value = status)
+        status = status_map.get(target.status, 'Неизвестно')
+        embed.add_field(name = 'Статус', value = status)
         if ctx.guild:
-            roles = ', '.join([role.name for role in member.roles[1:]])
-        emb.add_field(name = 'Бот?', value = bot)
-        limit = len(member.roles)
-        if limit > 1 and ctx.guild:
-            emb.add_field(name = f'Роли ({len(member.roles)-1})', value = roles, inline = False)
-            emb.add_field(name = 'Высшая Роль', value = member.top_role.mention, inline = False)
-        emb.set_thumbnail(url = member.avatar.url)
-        await ctx.send(embed = emb)
+            roles = ', '.join([role.name for role in target.roles[1:]])
+        embed.add_field(name = 'Бот?', value = is_bot)
+        if len(target.roles) > 1 and ctx.guild:
+            embed.add_field(name = f'Роли ({len(target.roles)-1})', value = roles, inline = False)
+            embed.add_field(name = 'Высшая роль', value = target.top_role.mention, inline = False)
+        embed.set_thumbnail(url = target.avatar.url)
+        await ctx.send(embed = embed)
 
 async def setup(client):
     await client.add_cog(Misc(client))

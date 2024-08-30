@@ -44,3 +44,26 @@ def set_locale(author_id: str, locale: str) -> None:
     data[str(author_id)] = locale
     with open('locales/users.json', 'w') as file:
         json.dump(data, file, indent = 4)
+
+
+def get_plural_form(number: int, words: list[str]) -> str:
+    """
+    Returns the plural form of a number for a russian language
+
+    Parameters
+    ----------
+    number:
+        The number to check
+    words:
+        The list of words to return
+
+    Examples
+    --------
+    >>> get_plural_form(5, ["яблоко", "яблока", "яблок"])
+    'яблок'
+    >>> get_plural_form(2, ["победа", "победы", "побед"])
+    'победы'
+    """
+    if number % 10 == 1 and number % 100 != 11: return words[0]
+    elif number % 10 >= 2 and number % 10 <= 4 and (number % 100 < 10 or number % 100 >= 20): return words[1]
+    else: return words[2]

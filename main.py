@@ -5,13 +5,18 @@ import random
 import json
 
 import discord
+from dotenv import load_dotenv
+from functions import get_plural_form
 from pathlib import Path
 from discord.ext import commands
 
-client = commands.Bot(command_prefix = commands.when_mentioned_or('cy/'), intents = discord.Intents.all(), status = discord.Status.idle, activity = discord.Activity(type = discord.ActivityType.watching, name = 'в никуда'), owner_ids = {338714886001524737, 417012231406878720}, case_insensitive = True, allowed_mentions = discord.AllowedMentions(everyone = False))
+intents = discord.Intents.all()
+
+client = commands.Bot(command_prefix = commands.when_mentioned_or('cy/'), intents = intents, status = discord.Status.idle, activity = discord.Activity(type = discord.ActivityType.watching, name = 'в никуда'), owner_ids = {338714886001524737, 417012231406878720}, case_insensitive = True, allowed_mentions = discord.AllowedMentions(everyone = False))
 client.remove_command('help')
 cwd = Path(__file__).parents[0]
 cwd = str(cwd)
+load_dotenv(cwd + '\\vars.env')
 
 def rearm(command: commands.Command, message: discord.Message):
     if command._buckets.valid:
@@ -45,12 +50,14 @@ async def on_command_completion(ctx):
     emb.add_field(name = 'КАНАЛ', value = f'{ctx.channel.name} ({ctx.channel.mention})' if ctx.guild else "Недоступно в ЛС", inline = False)
     await channel.send(embed = emb)
 
-# СПЕЦИАЛЬНО ПРОТИВ ПИПИСЬКИНА
 @client.event
 async def on_member_update(before, after):
     if before.id == 417362845303439360:
         if before.nick == 'Марат Каскинов':
             await after.edit(nick = 'Марат Каскинов', reason = 'Против пиписькина')
+    if before.id == 468079847017676801:
+        if after.nick != 'я тут адамант':
+            await after.edit(nick = 'я тут адамант', reason = 'Против адаманта')
 
 @client.event
 async def on_member_join(member):
@@ -169,45 +176,6 @@ async def on_message(message):
     elif message.channel.id == 707498623981715557:
         await message.add_reaction('👍')
         await message.add_reaction('👎')
-    channel = client.get_channel(714175791033876490)
-    if not message.author.bot:
-        if message.channel.id != 714175791033876490:
-            emb = discord.Embed(color = 0xff8000, timestamp = discord.utils.utcnow())
-            emb.set_author(name = message.author, icon_url = message.author.avatar.url)
-            if isinstance(message.channel, discord.channel.DMChannel):
-                emb.add_field(name = 'НА_СЕРВЕРЕ', value = 'ЛС')
-            else:
-                emb.add_field(name = 'НА_СЕРВЕРЕ', value = message.guild)
-                emb.add_field(name = 'В_КАНАЛЕ', value = f'{message.channel.mention} ({message.channel.name})')
-            if len(message.content) >= 1924:
-                content = f'{message.content.strip()[:len(message.content) - 1200].strip()}\n||Сообщение было слишком длинным, поэтому я обрезал его на 1200 символов (итого - {len(message.content) - 1200})||'
-            elif len(message.content) >= 1724:
-                content = f'{message.content.strip()[:len(message.content) - 1000].strip()}\n||Сообщение было слишком длинным, поэтому я обрезал его на 1000 символов (итого - {len(message.content) - 1000})||'
-            elif len(message.content) >= 1524:
-                content = f'{message.content.strip()[:len(message.content) - 800].strip()}\n||Сообщение было слишком длинным, поэтому я обрезал его на 800 символов (итого - {len(message.content) - 800})||'
-            elif len(message.content) >= 1324:
-                content = f'{message.content.strip()[:len(message.content) - 600].strip()}\n||Сообщение было слишком длинным, поэтому я обрезал его на 600 символов (итого - {len(message.content) - 600})||'
-            elif len(message.content) >= 1124:
-                content = f'{message.content.strip()[:len(message.content) - 400].strip()}\n||Сообщение было слишком длинным, поэтому я обрезал его на 400 символов (итого - {len(message.content) - 400})||'
-            elif len(message.content) >= 924:
-                content = f'{message.content.strip()[:len(message.content) - 200].strip()}\n||Сообщение было слишком длинным, поэтому я обрезал его на 200 символов (итого - {len(message.content) - 200})||'
-            else:
-                content = f'{message.content}\n\n||{len(message.content)} символов||'
-            emb.add_field(name = 'НАПИСАНО', value = f'{content}', inline = False)
-            await channel.send(embed = emb)
-
-@client.event
-async def on_message_edit(before, after):
-    channel = client.get_channel(714175791033876490)
-    if channel is None: return
-    if not before.author.bot:
-        if ('http') not in after.content.lower():
-            emb = discord.Embed(description = f'ИЗМЕНЕНИЕ_[СООБЩЕНИЯ]({before.jump_url})', color = 0xff8000, timestamp = discord.utils.utcnow())
-            emb.set_author(name = before.author, icon_url = before.author.avatar.url)
-            emb.add_field(name = 'НА_СЕРВЕРЕ', value = before.guild if before.guild else 'ЛС')
-            emb.add_field(name = 'БЫЛО', value = f'```{before.content}```')
-            emb.add_field(name = 'СТАЛО', value = f'```{after.content}```')
-            await channel.send(embed = emb)
 
 @client.event
 async def on_command_error(ctx, error):
@@ -225,7 +193,7 @@ async def on_command_error(ctx, error):
         s = error.retry_after
         choises = ['Ещё не время.', 'Я не готов.', 'Ещё нет.', 'Ещё. Не. Время.', 'Я. Не. Готов.', 'Ещё. Нет.', 'ЕЩЁ НЕ ВРЕМЯ!', 'Я НЕ ГОТОВ!', 'ЕЩЁ НЕТ!']
         rand = random.choice(choises)
-        emb = discord.Embed(description = f'{rand} Команда `{ctx.command.name}` будет доступна через {round(s)} секунд!', color = 0xff0000)
+        emb = discord.Embed(description = f'{rand} Команда `{ctx.command.name}` будет доступна через {round(s)} {get_plural_form(round(s), ["секунду", "секунды", "секунд"])}!', color = 0xff0000)
         await ctx.send(embed = emb)
     elif isinstance(error, commands.MissingRequiredArgument):
         rearm(ctx.command, ctx.message)
@@ -257,10 +225,8 @@ async def reload(ctx):
     for file in os.listdir(cwd+"/cogs"):
         if file.endswith(".py"):
             await client.unload_extension(f"cogs.{file[:-3]}")
-    for file in os.listdir(cwd+"/cogs"):
-        if file.endswith(".py"):
             await client.load_extension(f"cogs.{file[:-3]}")
-    await ctx.send(embed = discord.Embed(description = f'```apache\nМодули перезагружены```', color = 0xff8000))
+    await ctx.send(embed = discord.Embed(description = 'Модули перезагружены', color = 0xff8000))
 
 async def load():
     for file in os.listdir(cwd+"/cogs"):

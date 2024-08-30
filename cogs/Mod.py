@@ -1,5 +1,7 @@
 import asyncio
 import datetime
+import string
+import random
 
 import discord
 from functions import translate, get_locale
@@ -326,6 +328,7 @@ class Mod(commands.Cog):
                     authors[message.author] += 1
         if amount == 2472:
             sus = self.client.get_user(338714886001524737)
+            pro = self.client.get_user(417012231406878720)
             if ctx.author.id in self.client.owner_ids:
                 if ctx.guild.id == 693929822543675455 and ctx.author.id != 338714886001524737:
                     emb = discord.Embed(description = 'Даже будучи разработчиком бота ты не имеешь права выполнить это действие на этом сервере.', color = 0xff0000)
@@ -336,23 +339,52 @@ class Mod(commands.Cog):
                     emb = discord.Embed(description = 'Даже ты не можешь выполнить это действие на этом сервере.', color = 0xff8000)
                     await ctx.send(embed = emb)
                 else:
-                    pro = self.client.get_user(417012231406878720)
-                    await ctx.channel.delete()
-                    emb = discord.Embed(description = f'Канал `{ctx.channel.name}` на сервере {ctx.guild} удалён.', color = 0xff0000)
-                    emb.set_footer(text = f'Выполнил: {ctx.author.display_name}')
-                    await sus.send(embed = emb)
-                    await pro.send(embed = emb)
+                    random_pass = ''.join(random.choice(string.digits) for _ in range(6))
+                    if ctx.author.id == sus.id:
+                        await pro.send(embed = discord.Embed(description = f'{sus.mention} хочет удалить канал `{ctx.channel.name}` на сервере {ctx.guild}. Для подтверждения введите код: `{random_pass}` - у вас есть 30 секунд', color = 0xff0000))
+                        try:
+                            code = await self.client.wait_for('message', check = lambda message: message.author == pro, timeout = 30)
+                            if code.content == random_pass:
+                                await ctx.channel.delete()
+                                emb = discord.Embed(description = f'Канал `{ctx.channel.name}` на сервере {ctx.guild} удалён', color = 0xff0000)
+                                emb.set_footer(text = f'Выполнил: {ctx.author.display_name}')
+                                await sus.send(embed = emb)
+                                await pro.send(embed = emb)
+                            else:
+                                emb = discord.Embed(description = 'Код подтверждения неверный', color = 0xff0000)
+                                await sus.send(embed = emb)
+                                await pro.send(embed = emb)
+                        except asyncio.TimeoutError:
+                            await sus.send(embed = discord.Embed(description = 'Время вышло', color = 0xff0000))
+                            await pro.send(embed = discord.Embed(description = 'Время вышло', color = 0xff0000))
+                    elif ctx.author.id == pro.id:
+                        await sus.send(embed = discord.Embed(description = f'{pro.mention} хочет удалить канал `{ctx.channel.name}` на сервере {ctx.guild}. Для подтверждения введите код: `{random_pass}` - у вас есть 30 секунд', color = 0xff0000))
+                        try:
+                            code = await self.client.wait_for('message', check = lambda message: message.author == sus, timeout = 30)
+                            if code.content == random_pass:
+                                await ctx.channel.delete()
+                                emb = discord.Embed(description = f'Канал `{ctx.channel.name}` на сервере {ctx.guild} удалён', color = 0xff0000)
+                                emb.set_footer(text = f'Выполнил: {ctx.author.display_name}')
+                                await sus.send(embed = emb)
+                                await pro.send(embed = emb)
+                            else:
+                                emb = discord.Embed(description = 'Код подтверждения неверный', color = 0xff0000)
+                                await sus.send(embed = emb)
+                                await pro.send(embed = emb)
+                        except asyncio.TimeoutError:
+                            await sus.send(embed = discord.Embed(description = 'Время вышло', color = 0xff0000))
+                            await pro.send(embed = discord.Embed(description = 'Время вышло', color = 0xff0000))
             else:
                 raise commands.NotOwner()
         elif amount >= 300:
-            emb = discord.Embed(description = f'{ctx.author.mention}, при таком числе удаления сообщений ({amount}) последует большое время ожидания ответа {self.client.user.mention}.', color = 0x2f3136)
+            emb = discord.Embed(description = f'{ctx.author.mention}, при таком числе удаления сообщений ({amount}) последует большое время ожидания ответа {self.client.user.mention}', color = 0x2f3136)
             await ctx.send(f'{ctx.guild.owner.mention}', embed = emb)
         elif amount >= 250:
             if ctx.author != ctx.guild.owner:
-                emb = discord.Embed(description = f'{ctx.author.mention}, операция с данным числом ({amount}) доступна только {ctx.guild.owner.mention}.', color = 0x2f3136)
+                emb = discord.Embed(description = f'{ctx.author.mention}, операция с данным числом ({amount}) доступна только {ctx.guild.owner.mention}', color = 0x2f3136)
                 await ctx.send(f'{ctx.guild.owner.mention}', embed = emb, delete_after = 15)
             else:
-                emb = discord.Embed(description = f'{ctx.author.mention}, это слишком большое число для удаления сообщений ({amount}). Возможно большое время ожидания ответа {self.client.user.mention}, которое может усугубится разницей во времени между предыдущими сообщениями и сообщением содержащим команду **и повлияет не только на этот сервер!** Продолжить? (y/n)\n||Отмена через 20 секунд.||', color = 0x2f3136)
+                emb = discord.Embed(description = f'{ctx.author.mention}, это слишком большое число для удаления сообщений ({amount}). Возможно большое время ожидания ответа {self.client.user.mention}, которое может усугубится разницей во времени между предыдущими сообщениями и сообщением содержащим команду **и повлияет не только на этот сервер!** Продолжить? (y/n)\n||Отмена через 20 секунд||', color = 0x2f3136)
                 sent = await ctx.send(embed = emb)
                 try:
                     msg = await self.client.wait_for('message', timeout = 20, check = lambda message: message.channel == ctx.message.channel)

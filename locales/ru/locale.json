@@ -48,5 +48,5 @@
     "play_not_in_voice_channel": "Ты должен быть в канале, чтобы использовать play",
     "play_connected": "Присоединён к каналу {ctx_author_voice_channel_name}",
     "play_already_in_use": "Я уже используюсь в другом канале!",
-    "play_now_playing": "Сейчас играет: {player_title}"
+    "play_now_playing": "Сейчас играет: [{player_title}]({player_url}) ({player_duration})"
 }

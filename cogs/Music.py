@@ -1,45 +1,35 @@
 import asyncio
 
 import discord
+import ffmpeg
 import yt_dlp
+import os
+import shutil
+from pathlib import Path
 from functions import translate, get_locale
 from discord.ext import commands
 
-ytdl_format_options = {
+cwd = Path(__file__).parents[0].parents[0]
+cwd = str(cwd)
+
+ydl_opts = {
     'format': 'bestaudio/best',
-    'outtmpl': '%(extractor)s-%(id)s-%(title)s.%(ext)s',
-    'restrictfilenames': True,
-    'noplaylist': True,
-    'nocheckcertificate': True,
-    'ignoreerrors': False,
-    'logtostderr': False,
-    'quiet': True,
-    'no_warnings': True,
-    'default_search': 'auto',
-    'source_address': '0.0.0.0',
+    'postprocessors': [{
+        'key': 'FFmpegExtractAudio',
+        'preferredcodec': 'mp3',
+        'preferredquality': '192',
+    }],
 }
 
-ffmpeg_options = {
-    'options': '-vn',
-}
+loop = False
 
-ytdl = yt_dlp.YoutubeDL(ytdl_format_options)
-
-class YTDLSource(discord.PCMVolumeTransformer):
-    def __init__(self, source, *, data, volume = 0.5):
-        super().__init__(source, volume)
-        self.data = data
-        self.title = data.get('title')
-        self.url = data.get('url')
-
-    @classmethod
-    async def from_url(cls, url, *, loop = None, stream = False):
-        loop = loop or asyncio.get_event_loop()
-        data = await loop.run_in_executor(None, lambda: ytdl.extract_info(url, download = not stream))
-        if 'entries' in data:
-            data = data['entries'][0]
-        filename = data['url'] if stream else ytdl.prepare_filename(data)
-        return cls(discord.FFmpegPCMAudio(filename, **ffmpeg_options), data = data)
+def remove_restricted_chars(filename):
+    restricted_chars = '<>:"/\\|?*'
+    for char in restricted_chars:
+        filename = filename.replace(char, '')
+    filename = filename.split()
+    filename = ' '.join(filename)
+    return filename.encode('ascii', errors = 'ignore').decode()
 
 class Music(commands.Cog):
     def __init__(self, client):
@@ -51,18 +41,30 @@ class Music(commands.Cog):
 
     @commands.command(aliases = ['p'])
     async def play(self, ctx, *, url):
+        url = url.lstrip('<').rstrip('>')
         locale = get_locale(ctx.author.id)
+        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+            title = ydl.extract_info(url, download = False)['title']
+            duration = ydl.extract_info(url, download = False)['duration_string']
+        for i in os.listdir(cwd):
+            if i.endswith(".mp3"):
+                os.rename(f'{cwd}\{i}', f'{cwd}\{remove_restricted_chars(i)}')
+        for i in os.listdir(cwd):
+            if i.endswith(".mp3"):
+                file = i
         if not ctx.author.voice:
             return await ctx.send(embed = discord.Embed(description = translate(locale, 'play_not_in_voice_channel'), color = 0xff8000))
         if not ctx.guild.voice_client:
-            await ctx.author.voice.channel.connect(self_deaf = True, cls = lambda _, __: YTDLSource)
+            await ctx.author.voice.channel.connect(self_deaf = True)
             await ctx.send(embed = discord.Embed(description = f'{translate(locale, "play_connected")}'.format(ctx_author_voice_channel_name = ctx.author.voice.channel.name), color = 0xff8000))
         if ctx.guild.voice_client:
             if ctx.guild.voice_client.channel != ctx.author.voice.channel:
                 return await ctx.send(embed = discord.Embed(description = translate(locale, 'play_already_in_use'), color = 0xff0000))
-            player = await YTDLSource.from_url(url, loop = self.client.loop, stream = True)
-            ctx.voice_client.play(player, after = lambda _: ctx.voice_client.play(player))
-            await ctx.send(embed = discord.Embed(description = f"{translate(locale, 'play_now_playing')}".format(player_title = player.title), color = 0xff8000))
+            ctx.voice_client.play(discord.FFmpegPCMAudio(file, **{'options': '-vn'}))
+            await ctx.send(embed = discord.Embed(description = f"{translate(locale, 'play_now_playing')}".format(player_title = title, player_url = url, player_duration = duration), color = 0xff8000))
+            while ctx.voice_client.is_playing():
+                await asyncio.sleep(1)
+            os.remove(file)
 
     @commands.command()
     async def resume(self, ctx):
@@ -75,7 +77,7 @@ class Music(commands.Cog):
             if ctx.guild.voice_client.channel != ctx.author.voice.channel:
                 return await ctx.send(embed = discord.Embed(description = 'Ты должен быть в том же канале, что и я!', color = 0xff0000))
             ctx.guild.voice_client.resume()
-            await ctx.send(embed = discord.Embed(description = 'Проигрывание возобновлено.', color = 0xff8000))
+            await ctx.send(embed = discord.Embed(description = 'Проигрывание возобновлено', color = 0xff8000))
 
     @commands.command()
     async def volume(self, ctx, volume: int):
@@ -137,6 +139,9 @@ class Music(commands.Cog):
         if ctx.guild.voice_client:
             if ctx.guild.voice_client.channel == ctx.author.voice.channel:
                 await ctx.send(embed = discord.Embed(description = f'Покинул канал {ctx.author.voice.channel.name}', color = 0xff8000))
+                for file in os.listdir(cwd):
+                    if file.endswith(".mp3"):
+                        os.remove(f'{cwd}\{file}')
                 await ctx.voice_client.disconnect(force = True)
                 await ctx.voice_client.clean_up()
             else:

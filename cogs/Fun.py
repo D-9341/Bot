@@ -2,7 +2,7 @@ import asyncio
 import discord
 import random
 import json
-from functions import translate, get_locale, set_locale
+from functions import translate, get_locale, set_locale, get_plural_form
 from discord.ext import commands
 
 def check_for_red(lst):
@@ -77,8 +77,8 @@ class Fun(commands.Cog):
             with open('leaderboard/leaders.json', 'r') as file:
                 data = json.load(file)
                 data = sorted(data.items(), key = lambda x: x[1], reverse = True)
-                return await ctx.send(embed = discord.Embed(description = f'Топ 5 лидеров по победам:\n\n{"\n".join([f"{i + 1}. {self.client.get_user(int(x[0])).mention if '\u0414\u0438\u043b\u0435\u0440' not in x[0] else x[0]} - {x[1]} побед(а)" for i, x in enumerate(data[:5])])}', color = 0xff8000))
-        items_list = {1: 'Сигарета', 2: 'Ножовка по металлу', 3: 'Пиво', 4: 'Лупа', 5: 'Одноразовый телефон', 6: 'Подозрительные таблетки', 7: 'Инвертер', 8: 'Шприц адреналина', 9: 'Наручники'}
+                return await ctx.send(embed = discord.Embed(description = f'Топ 5 лидеров по победам:\n\n{"\n".join([f"{i + 1}. {self.client.get_user(int(x[0])).mention if '\u0414\u0438\u043b\u0435\u0440' not in x[0] else x[0]} - {x[1]} {get_plural_form(x[1], ['победа', 'победы', 'побед'])}" for i, x in enumerate(data[:5])])}', color = 0xff8000))
+        items_list = {1: 'Сигарета', 2: 'Ножовка по металлу', 3: 'Пиво', 4: 'Лупа', 5: 'Одноразовый телефон', 6: 'Просроченные таблетки', 7: 'Инвертер', 8: 'Шприц адреналина', 9: 'Наручники'}
         damage = 1
         glass = False
         p1_cursed, p2_cursed = False, False
@@ -175,8 +175,8 @@ class Fun(commands.Cog):
                         first = False
                         if turn_order == 0:
                             await channel.send(embed = discord.Embed(description = f'{ctx.author.mention}, выберите действие: 1 - выстрелить в себя, 2 - выстрелить в противника{"" if len(p1_items) == 0 else ", 3 - использовать предмет"}', color = 0xff8000))
-                            to_listen = ['1', '2', '3', 'stop'] if len(p1_items) > 0 else ['1', '2', 'stop']
-                            action = await self.client.wait_for('message', check = lambda message: message.channel == channel and message.author == ctx.author and message.content.lower() in to_listen)
+                            to_wait_for = ['1', '2', '3', 'stop'] if len(p1_items) > 0 else ['1', '2', 'stop']
+                            action = await self.client.wait_for('message', check = lambda message: message.channel == channel and message.author == ctx.author and message.content.lower() in to_wait_for)
                             if action.content == '1':
                                 await channel.send(embed = discord.Embed(description = f'{ctx.author.mention} решил выстрелить в себя...', color = 0xff8000))
                                 await asyncio.sleep(3)
@@ -390,8 +390,8 @@ class Fun(commands.Cog):
                             elif action.content.lower() == 'stop': stop = True; break
                         elif turn_order == 1:
                             await channel.send(embed = discord.Embed(description = f'{player.mention}, выберите действие: 1 - выстрелить в себя, 2 - выстрелить в противника{"" if len(p2_items) == 0 else ", 3 - использовать предмет"}', color = 0xff8000))
-                            to_listen = ['1', '2', '3', 'stop'] if len(p2_items) > 0 else ['1', '2', 'stop']
-                            action = await self.client.wait_for('message', check = lambda message: message.channel == channel and message.author == player and message.content.lower() in to_listen)
+                            to_wait_for = ['1', '2', '3', 'stop'] if len(p2_items) > 0 else ['1', '2', 'stop']
+                            action = await self.client.wait_for('message', check = lambda message: message.channel == channel and message.author == player and message.content.lower() in to_wait_for)
                             if action.content == '1':
                                 await channel.send(embed = discord.Embed(description = f'{player.mention} решил выстрелить в себя...', color = 0xff8000))
                                 await asyncio.sleep(3)
@@ -700,8 +700,8 @@ class Fun(commands.Cog):
                     first = False
                     if turn_order == 0:
                         await channel.send(embed = discord.Embed(description = f'Выберите действие: 1 - выстрелить в себя, 2 - выстрелить в противника{"" if len(p1_items) == 0 else ", 3 - использовать предмет"}', color = 0xff8000))
-                        to_listen = ['1', '2', '3', 'stop'] if len(p1_items) > 0 else ['1', '2', 'stop']
-                        action = await self.client.wait_for('message', check = lambda message: message.channel == channel and message.author == ctx.author and message.content.lower() in to_listen)
+                        to_wait_for = ['1', '2', '3', 'stop'] if len(p1_items) > 0 else ['1', '2', 'stop']
+                        action = await self.client.wait_for('message', check = lambda message: message.channel == channel and message.author == ctx.author and message.content.lower() in to_wait_for)
                         if action.content == '1':
                             await channel.send(embed = discord.Embed(description = 'Вы выбрали выстрелить в себя...', color = 0xff0000))
                             await asyncio.sleep(3)
@@ -1093,8 +1093,8 @@ class Fun(commands.Cog):
                                     p1_hp -= damage
                                     damage = 1
                                     turn_order = 0
-                            elif 'Подозрительные таблетки' in p2_items and p2_hp < 6 and p2_hp > 1:
-                                p2_items.pop(p2_items.index('Подозрительные таблетки'))
+                            elif 'Просроченные таблетки' in p2_items and p2_hp < 6 and p2_hp > 1:
+                                p2_items.pop(p2_items.index('Просроченные таблетки'))
                                 await channel.send(embed = discord.Embed(description = f'Дилер использовал таблетки...', color = 0xff8000))
                                 await asyncio.sleep(3)
                                 normal = random.randint(1, 4)
@@ -1123,8 +1123,8 @@ class Fun(commands.Cog):
                                     await asyncio.sleep(3)
                                     p2_hp += 1
                                     turn_order = 1
-                                elif p2_hp < 6 and p2_hp > 1 and 'Подозрительные таблетки' in p1_items:
-                                    p1_items.pop(p1_items.index('Подозрительные таблетки'))
+                                elif p2_hp < 6 and p2_hp > 1 and 'Просроченные таблетки' in p1_items:
+                                    p1_items.pop(p1_items.index('Просроченные таблетки'))
                                     await channel.send(embed = discord.Embed(description = f'Дилер украл ваши таблетки...', color = 0xff0000))
                                     await asyncio.sleep(3)
                                     normal = random.randint(1, 4)
