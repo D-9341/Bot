@@ -55,9 +55,6 @@ async def on_member_update(before, after):
     if before.id == 417362845303439360:
         if before.nick == 'Марат Каскинов':
             await after.edit(nick = 'Марат Каскинов', reason = 'Против пиписькина')
-    if before.id == 468079847017676801:
-        if after.nick != 'я тут адамант':
-            await after.edit(nick = 'я тут адамант', reason = 'Против адаманта')
 
 @client.event
 async def on_member_join(member):
@@ -179,7 +176,10 @@ async def on_message(message):
 
 @client.event
 async def on_command_error(ctx, error):
-    if isinstance(error, commands.NotOwner):
+    if isinstance(error, commands.DisabledCommand):
+        emb = discord.Embed(description = f'{ctx.author.mention}, команда `{ctx.command.name}` отключена', color = 0xff8000)
+        await ctx.send(embed = emb)
+    elif isinstance(error, commands.NotOwner):
         emb = discord.Embed(description = f'{ctx.author.mention}, это действие может совершить только один из создателей бота', color = 0xff8000)
         emb.set_footer(text = 'Счётчик перезарядки сброшен')
         await ctx.send(embed = emb) 

@@ -29,7 +29,7 @@ class Mod(commands.Cog):
     @commands.cooldown(1, 10, commands.BucketType.user)
     @commands.bot_has_permissions(kick_members = True)
     @commands.has_permissions(kick_members = True)
-    async def kick(self, ctx, member: discord.Member, *, reason: str = None):
+    async def kick(self, ctx, member: discord.Member, *, reason = None):
         locale = get_locale(ctx.author.id)
         bot = discord.utils.get(ctx.guild.members, id = self.client.user.id)
         if member.id not in self.client.owner_ids:
@@ -65,7 +65,7 @@ class Mod(commands.Cog):
     @commands.cooldown(1, 10, commands.BucketType.user)
     @commands.bot_has_permissions(ban_members = True)
     @commands.has_permissions(ban_members = True)
-    async def ban(self, ctx, member: discord.Member, *, reason: str = None):
+    async def ban(self, ctx, member: discord.Member, *, reason = None):
         locale = get_locale(ctx.author.id)
         bot = discord.utils.get(ctx.guild.members, id = self.client.user.id)
         if member.id not in self.client.owner_ids:
@@ -89,13 +89,13 @@ class Mod(commands.Cog):
             else:
                 emb = discord.Embed(color = 0xff8000)
                 emb.set_author(name = ctx.author, icon_url = ctx.author.avatar.url)
-                emb.add_field(name = 'Упрощённо забанен' if '--soft' in reason else 'Забанен', value = f'{member.mention} ({member.display_name})')
-                if '--reason' in reason:
-                    reason = reason.strip()[15:].strip()
-                emb.add_field(name = 'По причине', value = reason)
-                await ctx.send(embed = emb)
-                await member.ban(reason = reason)
-                if '--soft' in reason:
+                is_softban = '--soft' in reason
+                ban_reason = reason.replace('--reason', '').strip() if '--reason' in reason else reason
+                emb.add_field(name='Упрощённо забанен' if is_softban else 'Забанен', value=f'{member.mention} ({member.display_name})')
+                emb.add_field(name='По причине', value=ban_reason)
+                await ctx.send(embed=emb)
+                await member.ban(reason=ban_reason)
+                if is_softban:
                     await member.unban(reason = '--softban')
         else:
             emb = discord.Embed(description = f'{translate(locale, "ban_attempt_to_ban_dev")}'.format(author_mention = ctx.author.mention), color = 0xff0000)

@@ -26,9 +26,9 @@ class Misc(commands.Cog):
             if rand == 42:
                 await ctx.send(embed = discord.Embed(description = f'{ctx.author.display_name} получает случайное число (0-100)\n`100`', color = 0xff8000))
             else:
-                random_number = random.randint(0, 99)
-                padded_number = str(random_number).zfill(3)
-                await ctx.send(embed = discord.Embed(description=f'{ctx.author.display_name} получает случайное число (0-100)\n`{padded_number}`', color = 0xff8000))
+                rand1 = random.randint(0, 9)
+                rand2 = random.randint(0, 9)
+                await ctx.send(embed = discord.Embed(description = f'{ctx.author.display_name} получает случайное число (0-100)\n`0{rand1}{rand2}`', color = 0xff8000))
         if first and not second:
             if first == 'adamant':
                 await ctx.send(embed = discord.Embed(description = f'{ctx.author.display_name} получает случайное число \n`5 6 4 7 0 -9 9 2 π √2 Ω א`', color = 0xff8000))

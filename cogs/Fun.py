@@ -78,7 +78,7 @@ class Fun(commands.Cog):
                 data = json.load(file)
                 data = sorted(data.items(), key = lambda x: x[1], reverse = True)
                 return await ctx.send(embed = discord.Embed(description = f'Топ 5 лидеров по победам:\n\n{"\n".join([f"{i + 1}. {self.client.get_user(int(x[0])).mention if '\u0414\u0438\u043b\u0435\u0440' not in x[0] else x[0]} - {x[1]} {get_plural_form(x[1], ['победа', 'победы', 'побед'])}" for i, x in enumerate(data[:5])])}', color = 0xff8000))
-        items_list = {1: 'Сигарета', 2: 'Ножовка по металлу', 3: 'Пиво', 4: 'Лупа', 5: 'Одноразовый телефон', 6: 'Просроченные таблетки', 7: 'Инвертер', 8: 'Шприц адреналина', 9: 'Наручники'}
+        items_list = {1: 'Сигареты', 2: 'Ножовка по металлу', 3: 'Пиво', 4: 'Лупа', 5: 'Одноразовый телефон', 6: 'Просроченные таблетки', 7: 'Инвертер', 8: 'Шприц адреналина', 9: 'Наручники'}
         damage = 1
         glass = False
         p1_cursed, p2_cursed = False, False
@@ -216,8 +216,8 @@ class Fun(commands.Cog):
                                 await channel.send(embed = discord.Embed(description = f'{ctx.author.mention}, выберите предмет из инвентаря: {", ".join(init)}', color = 0xff8000))
                                 item = await self.client.wait_for('message', check = lambda message: message.channel == channel and message.author == ctx.author and message.content.lower() in ([str(x) for x in range(1, len(p1_items) + 1)]))
                                 used = init[int(item.content) - 1]
-                                if 'Сигарета' in used:
-                                    await channel.send(embed = discord.Embed(description = f'{ctx.author.mention} использовал сигарету', color = 0xff8000))
+                                if 'Сигареты' in used:
+                                    await channel.send(embed = discord.Embed(description = f'{ctx.author.mention} использовал сигареты', color = 0xff8000))
                                     if not p1_cursed: p1_hp += 1 if p1_hp < 6 else 0
                                     p1_items.pop(int(item.content) - 1)
                                     turn_order = 0
@@ -301,8 +301,8 @@ class Fun(commands.Cog):
                                     await channel.send(embed = discord.Embed(description = f'Выберите предмет из инвентаря {player.mention}: {", ".join(init)}', color = 0xff8000))
                                     item = await self.client.wait_for('message', check = lambda message: message.channel == channel and message.author == ctx.author and message.content.lower() in ([str(x) for x in range(1, len(p2_items) + 1)]))
                                     used = init[int(item.content) - 1]
-                                    if 'Сигарета' in used:
-                                        await channel.send(embed = discord.Embed(description = f'{ctx.author.mention} украл сигарету', color = 0x00ff00))
+                                    if 'Сигареты' in used:
+                                        await channel.send(embed = discord.Embed(description = f'{ctx.author.mention} украл сигареты', color = 0x00ff00))
                                         if not p1_cursed: p1_hp += 1 if p1_hp < 6 else 0
                                         p2_items.pop(int(item.content) - 1)
                                         await asyncio.sleep(1)
@@ -431,8 +431,8 @@ class Fun(commands.Cog):
                                 await channel.send(embed = discord.Embed(description = f'{player.mention}, выберите предмет из инвентаря: {", ".join(init)}', color = 0xff8000))
                                 item = await self.client.wait_for('message', check = lambda message: message.channel == channel and message.author == player and message.content.lower() in ([str(x) for x in range(1, len(p2_items) + 1)]))
                                 used = init[int(item.content) - 1]
-                                if 'Сигарета' in used:
-                                    await channel.send(embed = discord.Embed(description = f'{player.mention} использовал сигарету', color = 0xff8000))
+                                if 'Сигареты' in used:
+                                    await channel.send(embed = discord.Embed(description = f'{player.mention} использовал сигареты', color = 0xff8000))
                                     if not p2_cursed: p2_hp += 1 if p2_hp < 6 else 0
                                     p2_items.pop(int(item.content) - 1)
                                     turn_order = 1
@@ -518,8 +518,8 @@ class Fun(commands.Cog):
                                         await channel.send(embed = discord.Embed(description = f'Выберите предмет из инвентаря {ctx.author.mention}: {", ".join(init)}', color = 0xff8000))
                                         item = await self.client.wait_for('message', check = lambda message: message.channel == channel and message.author == player and message.content.lower() in ([str(x) for x in range(1, len(p1_items) + 1)]))
                                         used = init[int(item.content) - 1]
-                                        if 'Сигарета' in used:
-                                            await channel.send(embed = discord.Embed(description = f'{player.mention} украл сигарету {ctx.author.mention}', color = 0x00ff00))
+                                        if 'Сигареты' in used:
+                                            await channel.send(embed = discord.Embed(description = f'{player.mention} украл сигареты {ctx.author.mention}', color = 0x00ff00))
                                             if not p2_cursed: p2_hp += 1 if p2_hp < 6 else 0
                                             p1_items.pop(int(item.content) - 1)
                                             await asyncio.sleep(1)
@@ -745,8 +745,8 @@ class Fun(commands.Cog):
                             await channel.send(embed = discord.Embed(description = f'Выберите предмет из инвентаря: {", ".join(init)}', color = 0xff8000))
                             item = await self.client.wait_for('message', check = lambda message: message.channel == channel and message.author == ctx.author and message.content.lower() in ([str(x) for x in range(1, len(p1_items) + 1)]))
                             used = init[int(item.content) - 1]
-                            if 'Сигарета' in used:
-                                await channel.send(embed = discord.Embed(description = 'Вы использовали сигарету', color = 0x00ff00))
+                            if 'Сигареты' in used:
+                                await channel.send(embed = discord.Embed(description = 'Вы использовали сигареты', color = 0x00ff00))
                                 if not p1_cursed: p1_hp += 1 if p1_hp < 6 else 0
                                 p1_items.pop(int(item.content) - 1)
                                 await asyncio.sleep(1)
@@ -837,8 +837,8 @@ class Fun(commands.Cog):
                                     await channel.send(embed = discord.Embed(description = f'Выберите предмет из инвентаря противника: {", ".join(init)}', color = 0xff8000))
                                     item = await self.client.wait_for('message', check = lambda message: message.channel == channel and message.author == ctx.author and message.content.lower() in ([str(x) for x in range(1, len(p2_items) + 1)]))
                                     used = init[int(item.content) - 1]
-                                    if 'Сигарета' in used:
-                                        await channel.send(embed = discord.Embed(description = 'Вы украли сигарету противника', color = 0x00ff00))
+                                    if 'Сигареты' in used:
+                                        await channel.send(embed = discord.Embed(description = 'Вы украли сигареты противника', color = 0x00ff00))
                                         if not p1_cursed: p1_hp += 1 if p1_hp < 6 else 0
                                         p2_items.pop(int(item.content) - 1)
                                         await asyncio.sleep(1)
@@ -924,7 +924,7 @@ class Fun(commands.Cog):
                                         await asyncio.sleep(1)
                                         turn_order = 0
                         elif action.content.lower() == 'stop': stop = True; break
-                    elif turn_order == 1: # TODO: бот должен иметь более развитый интеллект, зависящий от обстоятельств, а не рандома, который позволит ему чаще использовать предметы и принимать правильные решения. Например, если у него меньше 6 здоровья - он использует сигарету или таблетки для исцеления
+                    elif turn_order == 1: # TODO: бот должен иметь более развитый интеллект, зависящий от обстоятельств, а не рандома, который позволит ему чаще использовать предметы и принимать правильные решения. Например, если у него меньше 6 здоровья - он использует сигареты или таблетки для исцеления
                         glass = False     # Сейчас бот имеет версию ИИ 0.5
                         if p2_items == []:
                             if rounds_order.count(1) > rounds_order.count(0):
@@ -993,9 +993,9 @@ class Fun(commands.Cog):
                                 await asyncio.sleep(3)
                                 p1_cuffed = True
                                 turn_order = 1
-                            elif 'Сигарета' in p2_items and p2_hp < 6:
-                                p2_items.pop(p2_items.index('Сигарета'))
-                                await channel.send(embed = discord.Embed(description = 'Дилер использовал сигарету', color = 0xff8000))
+                            elif 'Сигареты' in p2_items and p2_hp < 6:
+                                p2_items.pop(p2_items.index('Сигареты'))
+                                await channel.send(embed = discord.Embed(description = 'Дилер использовал сигареты', color = 0xff8000))
                                 await asyncio.sleep(3)
                                 if not p2_cursed: p2_hp += 1
                                 turn_order = 1
@@ -1117,9 +1117,9 @@ class Fun(commands.Cog):
                                 turn_order = 1
                             elif 'Шприц адреналина' in p2_items and p1_items != []:
                                 p2_items.pop(p2_items.index('Шприц адреналина'))
-                                if p2_hp < 6 and 'Сигарета' in p1_items:
-                                    p1_items.pop(p1_items.index('Сигарета'))
-                                    await channel.send(embed = discord.Embed(description = 'Дилер украл вашу сигарету', color = 0xff0000))
+                                if p2_hp < 6 and 'Сигареты' in p1_items:
+                                    p1_items.pop(p1_items.index('Сигареты'))
+                                    await channel.send(embed = discord.Embed(description = 'Дилер украл ваши сигареты', color = 0xff0000))
                                     await asyncio.sleep(3)
                                     p2_hp += 1
                                     turn_order = 1

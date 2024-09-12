@@ -1,4 +1,5 @@
 import json
+from typing import Literal
 
 def translate(locale: str, id: str) -> str:
     """
@@ -28,7 +29,7 @@ def get_locale(author_id: str) -> str:
         data = json.load(file)
     return data[str(author_id)]
 
-def set_locale(author_id: str, locale: str) -> None:
+def set_locale(author_id: str, locale: Literal['ru', 'en', 'gnida']) -> None:
     """
     Sets `author` locale to new `locale`
 
@@ -44,8 +45,7 @@ def set_locale(author_id: str, locale: str) -> None:
     data[str(author_id)] = locale
     with open('locales/users.json', 'w') as file:
         json.dump(data, file, indent = 4)
-
-
+    
 def get_plural_form(number: int, words: list[str]) -> str:
     """
     Returns the plural form of a number for a russian language
@@ -55,7 +55,7 @@ def get_plural_form(number: int, words: list[str]) -> str:
     number:
         The number to check
     words:
-        The list of words to return
+        The list of words
 
     Examples
     --------
@@ -67,3 +67,11 @@ def get_plural_form(number: int, words: list[str]) -> str:
     if number % 10 == 1 and number % 100 != 11: return words[0]
     elif number % 10 >= 2 and number % 10 <= 4 and (number % 100 < 10 or number % 100 >= 20): return words[1]
     else: return words[2]
+
+def get_command_help(locale: str, command: str) -> str:
+    """
+    Returns the help message for the command
+    """
+    with open(f'locales/{locale}/help.json', 'r', encoding = 'utf-8') as file:
+        data = json.load(file)
+    return data.get(command, f'{translate(locale, 'command_not_found')}'.format(command = command))
