@@ -6,8 +6,6 @@ import discord
 from functions import translate, get_locale, set_locale, get_plural_form, get_command_help
 from discord.ext import commands
 
-guilds = [693929822543675455, 735874149578440855, 818758712163827723]
-
 uptime = discord.utils.utcnow()
 
 class GrayButton(discord.ui.Button):
@@ -42,9 +40,8 @@ class Cephalon(commands.Cog):
             emb.add_field(name = 'ᅠ', value = '**Используйте** `cy/help [команда]` **для подробностей использования.**\n\n**[Ссылка-приглашение](https://discord.com/api/oauth2/authorize?client_id=694170281270312991&permissions=8&scope=bot%20applications.commands)**', inline = False)
             emb.set_footer(text = 'Cephalon Cy ©️ Sus&Co\n2020 - Present')
             return await ctx.send(embed = emb)
-        else:
-            locale = get_locale(ctx.author.id)
-            return await ctx.send(embed = discord.Embed(description = (get_command_help(locale, command)), color = 0xff8000))
+        locale = get_locale(ctx.author.id)
+        return await ctx.send(embed = discord.Embed(description = (get_command_help(locale, command)), color = 0xff8000))
 
     @commands.command()
     async def uptime(self, ctx):
@@ -58,21 +55,19 @@ class Cephalon(commands.Cog):
     async def guilds(self, ctx):
         if ctx.author.id not in self.client.owner_ids:
             raise commands.NotOwner()
-        else:
-            guilds = self.client.guilds
-            guilds = '\n'.join([guild.name for guild in self.client.guilds])
-            await ctx.send(embed = discord.Embed(description = f'Существую на следующих серверах ({len(self.client.guilds)}):\n{guilds}', color = 0xff8000))
+        client_guilds = self.client.guilds
+        client_guilds = '\n'.join([guild.name for guild in self.client.guilds])
+        await ctx.send(embed = discord.Embed(description = f'Существую на следующих серверах ({len(self.client.guilds)}):\n{client_guilds}', color = 0xff8000))
 
     @commands.command()
     async def reset(self, ctx, command):
         if ctx.author.id not in self.client.owner_ids:
             raise commands.NotOwner()
-        else:
-            command = self.client.get_command(command)
-            if not command.is_on_cooldown(ctx):
-                return await ctx.send(embed = discord.Embed(description = 'Команда не на перезарядке', color = 0xff8000))
-            await ctx.send(embed = discord.Embed(description = f'Счётчик перезарядки для `{command.name}` сброшен. Счётчик перезарядки был равен `{round(command.get_cooldown_retry_after(ctx))}` {get_plural_form(round(command.get_cooldown_retry_after(ctx))), ['секунда', 'секунды', 'секунд']}', color = 0xff8000))
-            await command.reset_cooldown(ctx)
+        command = self.client.get_command(command)
+        if not command.is_on_cooldown(ctx):
+            return await ctx.send(embed = discord.Embed(description = 'Команда не на перезарядке', color = 0xff8000))
+        await ctx.send(embed = discord.Embed(description = f'Счётчик перезарядки для `{command.name}` сброшен. Счётчик перезарядки был равен `{round(command.get_cooldown_retry_after(ctx))}` {get_plural_form(round(command.get_cooldown_retry_after(ctx))), ['секунда', 'секунды', 'секунд']}', color = 0xff8000))
+        await command.reset_cooldown(ctx)
 
     @commands.command() # ru, gnida, en
     async def locale(self, ctx):
@@ -128,15 +123,14 @@ class Cephalon(commands.Cog):
             msg = await ctx.send(embed = discord.Embed(description = translate(locale, 'locale_options'), color = 0xff8000), view = view)
             await self.client.wait_for('message_edit', check = lambda message: message.author.id == ctx.author.id and message.id == msg.id, timeout = 10)
         except asyncio.TimeoutError:
-            await msg.edit(embed = discord.Embed(description = 'Время вышло', color = 0xff8000), view = None) 
+            await msg.edit(embed = discord.Embed(description = 'Время вышло', color = 0xff8000), view = None)
 
     @commands.command()
     async def generate(self, ctx):
         if ctx.author.id not in self.client.owner_ids:
             raise commands.NotOwner()
-        else:
-            token = '-'.join([''.join([secrets.choice('QWERTYUIOPASDFGHJKLZXCVBNM1234567890') for _ in range(5)]) for _ in range(3)])
-            await ctx.send(f'```{token}```')
+        token = '-'.join([''.join([secrets.choice('QWERTYUIOPASDFGHJKLZXCVBNM1234567890') for _ in range(5)]) for _ in range(3)])
+        await ctx.send(f'```{token}```')
 
     @commands.command()
     @commands.cooldown(1, 5, commands.BucketType.user)
@@ -171,9 +165,8 @@ class Cephalon(commands.Cog):
         if arg == 'pro':
             if ctx.author.id not in self.client.owner_ids:
                 raise commands.NotOwner()
-            else:
-                emb = discord.Embed(description = '[Ссылка](https://discord.com/oauth2/authorize?client_id=762015251264569352&permissions=8&scope=bot%20applications.commands) для приглашения Cy PRO на сервера', color = 0xff8000)
-                await ctx.send(embed = emb)
+            emb = discord.Embed(description = '[Ссылка](https://discord.com/oauth2/authorize?client_id=762015251264569352&permissions=8&scope=bot%20applications.commands) для приглашения Cy PRO на сервера', color = 0xff8000)
+            await ctx.send(embed = emb)
 
     @commands.command()
     @commands.cooldown(1, 5, commands.BucketType.user)

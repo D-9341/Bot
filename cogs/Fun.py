@@ -5,28 +5,6 @@ import json
 from functions import translate, get_locale, set_locale, get_plural_form
 from discord.ext import commands
 
-def check_for_red(lst):
-    counter = 0
-    for item in lst:
-        if item == '🔴':
-            counter += 1
-            if counter == 4:
-                return True
-        else:
-            counter = 0
-    return False
-
-def check_for_blue(lst):
-    counter = 0
-    for item in lst:
-        if item == '🔵':
-            counter += 1
-            if counter == 4:
-                return True
-        else:
-            counter = 0
-    return False
-
 class Fun(commands.Cog):
     def __init__(self, client):
         self.client = client
@@ -34,39 +12,6 @@ class Fun(commands.Cog):
     @commands.Cog.listener()
     async def on_ready(self):
         print('Модуль Fun загружен')
-
-    @commands.command(aliases = ['cf', 'c4'])
-    @commands.cooldown(1, 20, commands.BucketType.user)
-    async def connectfour(self, ctx):
-        locale = get_locale(ctx.author.id)
-        board = [['⚪' for _ in range(7)] for _ in range(6)]
-        turn = random.randint(0, 1)
-        await ctx.send(embed = discord.Embed(description = f"{'\n'.join(str(x) for x in board).replace(',', '').replace("'", '')}", color = 0x2f3136))
-        for i in range(42):
-            if i == 42:
-                return await ctx.send(embed = discord.Embed(description = 'Ничья', color = 0x2f3136))
-            for j in range(5, -1, -1):
-                if check_for_red(board[j]) or check_for_blue(board[j]):
-                    return await ctx.send(embed = discord.Embed(description = f'Победил {'человек' if check_for_red(board[j]) else 'бот'}', color = 0x2f3136))
-            if turn == 0:
-                await ctx.send(embed = discord.Embed(description = f'Ваш ход, выберите столбец', color = 0x00ff00))
-                move = await self.client.wait_for('message', check = lambda message: message.author == ctx.author and message.channel == ctx.message.channel and message.content in ['1', '2', '3', '4', '5', '6', '7'])
-                for i in range(5, -1, -1):
-                    if board[i][int(move.content) - 1] == '⚪':
-                        board[i][int(move.content) - 1] = '🔴'
-                        turn = 1
-                        break
-                await ctx.send(embed = discord.Embed(description = f"{'\n'.join(str(x) for x in board).replace(',', '').replace("'", '')}", color = 0x2f3136))
-            elif turn == 1:
-                await ctx.send(embed = discord.Embed(description = f'Ход бота', color = 0xff0000))
-                await asyncio.sleep(3)
-                move = random.randint(1, 7)
-                for i in range(5, -1, -1):
-                    if board[i][move - 1] == '⚪':
-                        board[i][move - 1] = '🔵'
-                        turn = 0
-                        break
-                await ctx.send(embed = discord.Embed(description = f"{'\n'.join(str(x) for x in board).replace(',', '').replace("'", '')}", color = 0x2f3136))
 
     @commands.command()
     @commands.cooldown(1, 20, commands.BucketType.user)
@@ -78,7 +23,11 @@ class Fun(commands.Cog):
                 data = json.load(file)
                 data = sorted(data.items(), key = lambda x: x[1], reverse = True)
                 return await ctx.send(embed = discord.Embed(description = f'Топ 5 лидеров по победам:\n\n{"\n".join([f"{i + 1}. {self.client.get_user(int(x[0])).mention if '\u0414\u0438\u043b\u0435\u0440' not in x[0] else x[0]} - {x[1]} {get_plural_form(x[1], ['победа', 'победы', 'побед'])}" for i, x in enumerate(data[:5])])}', color = 0xff8000))
-        items_list = {1: 'Сигареты', 2: 'Ножовка по металлу', 3: 'Пиво', 4: 'Лупа', 5: 'Одноразовый телефон', 6: 'Просроченные таблетки', 7: 'Инвертер', 8: 'Шприц адреналина', 9: 'Наручники'}
+        items_list = {
+            1: 'Сигареты', 2: 'Ножовка по металлу', 3: 'Пиво', 4: 'Лупа',
+            5: 'Одноразовый телефон', 6: 'Просроченные таблетки', 7: 'Инвертер',
+            8: 'Шприц адреналина', 9: 'Наручники',
+        }
         damage = 1
         glass = False
         p1_cursed, p2_cursed = False, False
@@ -164,7 +113,7 @@ class Fun(commands.Cog):
                         if len(rounds_order) == 0:
                             for _ in range(rounds):
                                 rounds_order.append(random.randint(0, 1))
-                            if rounds_order.count(0) == 0: rounds_order.pop(); rounds_order.append(0) 
+                            if rounds_order.count(0) == 0: rounds_order.pop(); rounds_order.append(0)
                             if rounds_order.count(1) == 0: rounds_order.pop(); rounds_order.append(1)
                         if p1_cuffed: cuffed = ctx.author.mention
                         if p2_cuffed: cuffed = player.mention
@@ -689,7 +638,7 @@ class Fun(commands.Cog):
                     if len(rounds_order) == 0:
                         for _ in range(rounds):
                             rounds_order.append(random.randint(0, 1))
-                        if rounds_order.count(0) == 0: rounds_order.pop(); rounds_order.append(0) 
+                        if rounds_order.count(0) == 0: rounds_order.pop(); rounds_order.append(0)
                         if rounds_order.count(1) == 0: rounds_order.pop(); rounds_order.append(1)
                     if p1_cuffed: cuffed = 'Человек'
                     if p2_cuffed: cuffed = 'Дилер'

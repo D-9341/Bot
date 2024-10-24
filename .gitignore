@@ -2,3 +2,4 @@ __pycache__
 locales/users.json
 leaderboard
 vars.env
+.pylintrc

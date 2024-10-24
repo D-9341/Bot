@@ -54,11 +54,9 @@ class Embeds(commands.Cog):
                 emb.set_footer(text = footer)
             if not any(keyword in msg for keyword in ['&t', '&d', '&img', '&th', '&f', '&c', '&a']):
                 return await ctx.send(msg)
-            else:
-                if message:
-                    return await ctx.send(f'{message}', embed = emb)
-                else:
-                    return await ctx.send(embed = emb)
+            if message:
+                return await ctx.send(f'{message}', embed = emb)
+            return await ctx.send(embed = emb)
 
     @commands.command()
     @commands.has_permissions(manage_messages = True)
@@ -135,12 +133,9 @@ class Embeds(commands.Cog):
                 if '--noembed' in msg:
                     if message.embeds != []:
                         return await message.edit(embed = None)
-                    else:
-                        return await ctx.send(embed = discord.Embed(description = f'{ctx.author.mention}, нечего удалять. Возможно, вы имели ввиду cy/edit {message.id} --delete', color = 0xff8000))
-                else:
-                    return await message.edit(embed = emb)
-            else:
-                return await ctx.send(embed = discord.Embed(description = f'{message.id} не является сообщением от {self.client.user.mention}', color = 0xff8000))
+                    return await ctx.send(embed = discord.Embed(description = f'{ctx.author.mention}, нечего удалять. Возможно, вы имели ввиду cy/edit {message.id} --delete', color = 0xff8000))
+                return await message.edit(embed = emb)
+            return await ctx.send(embed = discord.Embed(description = f'{message.id} не является сообщением от {self.client.user.mention}', color = 0xff8000))
 
     @commands.command(aliases = ['ctx'])
     async def content(self, ctx, arg, channel: discord.TextChannel = None, should_be_edit = None):

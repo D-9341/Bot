@@ -38,10 +38,10 @@ class Music(commands.Cog):
             info = ydl.extract_info(url, download = True)
             title = info['title']
             duration = info['duration_string']
-            id = info['id']
+            video_id = info['id']
         for i in os.listdir(cwd):
             if i.endswith(".mp3"):
-                os.rename(f'{cwd}\{i}', f'{cwd}\{id}.mp3')
+                os.rename(f'{cwd}\{i}', f'{cwd}\{video_id}.mp3')
         for i in os.listdir(cwd):
             if i.endswith(".mp3"):
                 file = i
@@ -75,19 +75,19 @@ class Music(commands.Cog):
     @commands.command()
     async def volume(self, ctx, volume: int):
         raise commands.DisabledCommand()
-        locale = get_locale(ctx.author.id)
-        if 0 <= volume <= 100:
-            if not ctx.author.voice:
-                return await ctx.send(embed = discord.Embed(description = 'Ты должен быть в канале, чтобы использовать volume', color = 0xff8000))
-            if not ctx.guild.voice_client:
-                return await ctx.send(embed = discord.Embed(description = 'Я не нахожусь в канале!', color = 0xff0000))
-            if ctx.guild.voice_client:
-                if ctx.guild.voice_client.channel != ctx.author.voice.channel:
-                    return await ctx.send(embed = discord.Embed(description = 'Ты должен быть в том же канале, что и я!', color = 0xff0000))
-                ctx.voice_client.source.volume = volume / 100
-                await ctx.send(embed = discord.Embed(description = f"Громкость изменена: {volume}%", color = 0xff8000))
-        else:
-            await ctx.send(embed = discord.Embed(description = f'Недопустимое значение: {volume}%', color = 0xff0000))
+        # locale = get_locale(ctx.author.id)
+        # if 0 <= volume <= 100:
+        #     if not ctx.author.voice:
+        #         return await ctx.send(embed = discord.Embed(description = 'Ты должен быть в канале, чтобы использовать volume', color = 0xff8000))
+        #     if not ctx.guild.voice_client:
+        #         return await ctx.send(embed = discord.Embed(description = 'Я не нахожусь в канале!', color = 0xff0000))
+        #     if ctx.guild.voice_client:
+        #         if ctx.guild.voice_client.channel != ctx.author.voice.channel:
+        #             return await ctx.send(embed = discord.Embed(description = 'Ты должен быть в том же канале, что и я!', color = 0xff0000))
+        #         ctx.voice_client.source.volume = volume / 100
+        #         await ctx.send(embed = discord.Embed(description = f"Громкость изменена: {volume}%", color = 0xff8000))
+        # else:
+        #     await ctx.send(embed = discord.Embed(description = f'Недопустимое значение: {volume}%', color = 0xff0000))
 
     @commands.command()
     async def pause(self, ctx):
@@ -124,10 +124,9 @@ class Music(commands.Cog):
             if not ctx.voice_client:
                 await ctx.author.voice.channel.connect(self_deaf = True)
                 return await ctx.send(embed = discord.Embed(description = f'{translate(locale, "join_success")}'.format(ctx_author_voice_channel_name = ctx.author.voice.channel.name), color = 0xff8000))
-            else:
-                if ctx.voice_client.channel == ctx.author.voice.channel:
-                    return await ctx.send(embed = discord.Embed(description = translate(locale, 'join_already_in_author_voice_channel'), color = 0xff8000))
-                await ctx.send(embed = discord.Embed(description = translate(locale, 'join_already_connected'), color = 0xff8000))
+            if ctx.voice_client.channel == ctx.author.voice.channel:
+                return await ctx.send(embed = discord.Embed(description = translate(locale, 'join_already_in_author_voice_channel'), color = 0xff8000))
+            await ctx.send(embed = discord.Embed(description = translate(locale, 'join_already_connected'), color = 0xff8000))
 
     @commands.command()
     async def leave(self, ctx):

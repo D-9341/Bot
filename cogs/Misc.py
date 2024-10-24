@@ -1,4 +1,3 @@
-import os
 import random
 
 import discord
@@ -10,6 +9,12 @@ class Slapper(commands.Converter):
         emb = discord.Embed(description = f'{argument}', color =  0x2f3136, timestamp = discord.utils.utcnow())
         emb.set_author(name = ctx.author.display_name, icon_url = ctx.author.avatar.url)
         return await ctx.send(f'@someone ||{mention.mention}||', embed = emb)
+
+    async def error(self, ctx, error):
+        """
+        it is used as a placeholder
+        """
+        await ctx.send(error)
 
 class Misc(commands.Cog):
     def __init__(self, client):

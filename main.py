@@ -3,8 +3,8 @@ import asyncio
 import os
 import random
 import json
-
 import discord
+
 from dotenv import load_dotenv
 from functions import get_plural_form
 from pathlib import Path
@@ -14,9 +14,9 @@ intents = discord.Intents.all()
 
 client = commands.Bot(command_prefix = commands.when_mentioned_or('cy/'), intents = intents, status = discord.Status.idle, activity = discord.Activity(type = discord.ActivityType.watching, name = 'в никуда'), owner_ids = {338714886001524737, 417012231406878720}, case_insensitive = True, allowed_mentions = discord.AllowedMentions(everyone = False))
 client.remove_command('help')
-cwd = Path(__file__).parents[0]
-cwd = str(cwd)
-load_dotenv(cwd + '\\vars.env')
+CWD = Path(__file__).parents[0]
+CWD = str(CWD)
+load_dotenv(CWD + '\\vars.env')
 
 def rearm(command: commands.Command, message: discord.Message):
     if command._buckets.valid:
@@ -99,11 +99,14 @@ async def on_voice_state_update(member, before, after):
     role = discord.utils.get(member.guild.roles, name = 'Deafened')
     if after.channel.name == 'Создать канал':
         await after.channel.edit(user_limit = 1)
-        if member.bot == True:
-            room = 'чё'
-        else:
-            room = f'Канал {member.display_name}'
-        channel = await member.guild.create_voice_channel(name = room, category = after.channel.category)
+        room = 'чё' if member.bot is True else f'Канал {member.display_name}'
+        bitrate_map = {
+            0: 96000,
+            1: 128000,
+            2: 256000,
+        }
+        bitrate = bitrate_map.get(member.guild.premium_tier, 384000)
+        channel = await member.guild.create_voice_channel(name = room, category = after.channel.category, bitrate = bitrate)
         await member.move_to(channel)
         await channel.set_permissions(member, mute_members = True, move_members = True, manage_channels = True)
         await channel.send(embed = discord.Embed(description = 'Этот канал удалится после того, как все люди выйдут из него. Исключение - перезапуск бота. В таком случае, что делать с каналом решать вам', color = 0xff8000))
@@ -116,17 +119,17 @@ async def on_voice_state_update(member, before, after):
 @client.event
 async def on_message(message):
     await client.process_commands(message)
-    if message.author.bot == False:
-        with open('locales/users.json', 'r') as users_file:
-            data = json.load(users_file)
-        if str(message.author.id) not in data:
-            data[str(message.author.id)] = 'ru'
-            with open('locales/users.json', 'w') as users_file:
-                json.dump(data, users_file, indent = 4)
+    if message.author.bot is False:
+        with open('locales/users.json', 'r', encoding = 'utf-8') as users_file:
+            file = json.load(users_file)
+        if str(message.author.id) not in file:
+            file[str(message.author.id)] = 'ru'
+            with open('locales/users.json', 'w', encoding = 'utf-8') as users_file:
+                json.dump(file, users_file, indent = 4)
     if message.content.startswith(f'<@{client.user.id}>') and len(message.content) == len(f'<@{client.user.id}>'):
         await message.channel.send(f'чё звал {message.author.mention} ||`cy/`||')
     if message.channel.id == 1041417879788208169:
-        if message.author.bot == True and message.author.id != 694170281270312991:
+        if message.author.bot is True and message.author.id != 694170281270312991:
             role = discord.utils.get(message.guild.roles, id = 1078051320088510644)
             sent = await message.channel.send(role.mention)
             await sent.delete()
@@ -135,7 +138,7 @@ async def on_message(message):
             emb.add_field(name = 'ОПОВЕЩЕНЫ', value = 'РАЗРАБОТЧИКИ')
             await channel.send(embed = emb)
     elif message.channel.id == 750372413102883028:
-        if message.author.bot == True and message.author.id != 694170281270312991:
+        if message.author.bot is True and message.author.id != 694170281270312991:
             role = discord.utils.get(message.guild.roles, id = 750368477671325728)
             sent = await message.channel.send(role.mention)
             await sent.delete()
@@ -144,7 +147,7 @@ async def on_message(message):
             emb.add_field(name = 'ОПОВЕЩЕНЫ', value = role.mention)
             await channel.send(embed = emb)
     elif message.channel.id == 750368033578680361:
-        if message.author.bot == True and message.author.id != 694170281270312991:
+        if message.author.bot is True and message.author.id != 694170281270312991:
             role = discord.utils.get(message.guild.roles, id = 750366804689420319)
             sent = await message.channel.send(role.mention)
             await sent.delete()
@@ -153,7 +156,7 @@ async def on_message(message):
             emb.add_field(name = 'ОПОВЕЩЕНЫ', value = role.mention)
             await channel.send(embed = emb)
     elif message.channel.id == 750363498290348123:
-        if message.author.bot == True and message.author.id != 694170281270312991:
+        if message.author.bot is True and message.author.id != 694170281270312991:
             role = discord.utils.get(message.guild.roles, id = 750363797226782802)
             sent = await message.channel.send(role.mention)
             await sent.delete()
@@ -162,7 +165,7 @@ async def on_message(message):
             emb.add_field(name = 'ОПОВЕЩЕНЫ', value = role.mention)
             await channel.send(embed = emb)
     elif message.channel.id == 750373602460827730:
-        if message.author.bot == True and message.author.id != 694170281270312991:
+        if message.author.bot is True and message.author.id != 694170281270312991:
             role = discord.utils.get(message.guild.roles, id = 750373687479238787)
             sent = await message.channel.send(role.mention)
             await sent.delete()
@@ -170,6 +173,10 @@ async def on_message(message):
             emb = discord.Embed(title = r'ОПОВЕЩЕНИЕ\_ОБ_ОБНОВЛЕНИИ', color = 0xff8000, timestamp = discord.utils.utcnow())
             emb.add_field(name = 'ОПОВЕЩЕНЫ', value = role.mention)
             await channel.send(embed = emb)
+    elif message.channel.id == 1298756046604734594:
+        if message.author.bot is True and message.author.id != 694170281270312991:
+            sus = client.get_user(338714886001524737)
+            await message.channel.send(sus.mention)
     elif message.channel.id == 707498623981715557:
         await message.add_reaction('👍')
         await message.add_reaction('👎')
@@ -182,7 +189,7 @@ async def on_command_error(ctx, error):
     elif isinstance(error, commands.NotOwner):
         emb = discord.Embed(description = f'{ctx.author.mention}, это действие может совершить только один из создателей бота', color = 0xff8000)
         emb.set_footer(text = 'Счётчик перезарядки сброшен')
-        await ctx.send(embed = emb) 
+        await ctx.send(embed = emb)
     elif isinstance(error, commands.BotMissingPermissions):
         emb = discord.Embed(description = f'{ctx.author.mention}, у **меня** недостаточно прав на выполнение команды `{ctx.command.name}`, напишите cy/help `{ctx.command.name}` для просмотра необходимых прав\n||Выдача прав администратора решит эту проблему||', color = 0xff0000)
         await ctx.send(embed = emb)
@@ -222,14 +229,14 @@ async def on_command_error(ctx, error):
 
 @client.command()
 async def reload(ctx):
-    for file in os.listdir(cwd+"/cogs"):
+    for file in os.listdir(CWD+"/cogs"):
         if file.endswith(".py"):
             await client.unload_extension(f"cogs.{file[:-3]}")
             await client.load_extension(f"cogs.{file[:-3]}")
     await ctx.send(embed = discord.Embed(description = 'Модули перезагружены', color = 0xff8000))
 
 async def load():
-    for file in os.listdir(cwd+"/cogs"):
+    for file in os.listdir(CWD+"/cogs"):
         if file.endswith(".py"):
             await client.load_extension(f"cogs.{file[:-3]}")
 
