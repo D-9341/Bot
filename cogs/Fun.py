@@ -645,7 +645,7 @@ class Fun(commands.Cog):
                     if p1_cursed: cursed = 'Человек'
                     if p2_cursed: cursed = 'Дилер'
                     if p1_cursed and p2_cursed: cursed = 'Никто'
-                    await channel.send(embed = discord.Embed(description = f'Патронов - {len(rounds_order)}, боевых - {rounds_order.count(1) if first else '?'}, холостых - {rounds_order.count(0) if first else '?'}\nВаше здоровье - {p1_hp}\nЗдоровье врага - {p2_hp}\n{f'Ваши предметы ({len(p1_items)}) - {", ".join(p1_items)}' if len(p1_items) > 0 else f"У вас нет предметов"}\n{f'Предметы противника ({len(p2_items)}) - {", ".join(p2_items)}' if len(p2_items) > 0 else f"У противника нет предметов"}{f"\n__{cuffed} закован в наручники и пропускает ход__" if p1_cuffed or p2_cuffed else ""}{f'\n**{cursed} не может восстанавливать здоровье**' if p1_cursed or p2_cursed else f''}', color = 0x2f3136))
+                    await channel.send(embed = discord.Embed(description = f'Патронов - {len(rounds_order)}, боевых - {rounds_order.count(1) if first else '?'}, холостых - {rounds_order.count(0) if first else '?'}\nВаше здоровье - {p1_hp}\nЗдоровье врага - {p2_hp}\n{f'Ваши предметы ({len(p1_items)}) - {", ".join(p1_items)}' if len(p1_items) > 0 else "У вас нет предметов"}\n{f'Предметы противника ({len(p2_items)}) - {", ".join(p2_items)}' if len(p2_items) > 0 else "У противника нет предметов"}{f"\n__{cuffed} закован в наручники и пропускает ход__" if p1_cuffed or p2_cuffed else ""}{f'\n**{cursed} не может восстанавливать здоровье**' if p1_cursed or p2_cursed else ''}', color = 0x2f3136))
                     first = False
                     if turn_order == 0:
                         await channel.send(embed = discord.Embed(description = f'Выберите действие: 1 - выстрелить в себя, 2 - выстрелить в противника{"" if len(p1_items) == 0 else ", 3 - использовать предмет"}', color = 0xff8000))
@@ -654,39 +654,30 @@ class Fun(commands.Cog):
                         if action.content == '1':
                             await channel.send(embed = discord.Embed(description = 'Вы выбрали выстрелить в себя...', color = 0xff0000))
                             await asyncio.sleep(3)
-                            if rounds_order[0] == 0:
-                                rounds_order.pop(0)
+                            current_round = rounds_order.pop(0)
+                            rounds -= 1
+                            await asyncio.sleep(1)
+                            if current_round == 0:
                                 await channel.send(embed = discord.Embed(description = 'Холостой, противник пропускает ход', color = 0x00ff00))
-                                rounds -= 1
-                                damage = 1
-                                await asyncio.sleep(1)
                                 turn_order = 0
-                            elif rounds_order[0] == 1:
+                            else:
                                 await channel.send(embed = discord.Embed(description = f'Это был боевой.. вы теряете здоровье в размере {damage}', color = 0xff0000))
-                                rounds -= 1
                                 p1_hp -= damage
-                                rounds_order.pop(0)
-                                damage = 1
-                                await asyncio.sleep(1)
                                 turn_order = 1
+                            damage = 1
                         elif action.content == '2':
                             await channel.send(embed = discord.Embed(description = 'Вы выбрали выстрелить в противника', color = 0xff8000))
                             await asyncio.sleep(3)
-                            if rounds_order[0] == 0:
-                                rounds_order.pop(0)
+                            current_round = rounds_order.pop(0)
+                            rounds -= 1
+                            if current_round == 0:
                                 await channel.send(embed = discord.Embed(description = 'Холостой, перенос хода', color = 0xff0000))
-                                rounds -= 1
-                                damage = 1
-                                await asyncio.sleep(1)
-                                turn_order = 1
-                            elif rounds_order[0] == 1:
+                            else:
                                 await channel.send(embed = discord.Embed(description = f'Это был боевой, противник теряет {damage} здоровья', color = 0x00ff00))
-                                rounds -= 1
                                 p2_hp -= damage
-                                rounds_order.pop(0)
-                                damage = 1
-                                await asyncio.sleep(1)
-                                turn_order = 1
+                            damage = 1
+                            await asyncio.sleep(1)
+                            turn_order = 1
                         elif action.content == '3':
                             init = []
                             for i in range(len(p1_items)):

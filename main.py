@@ -52,9 +52,8 @@ async def on_command_completion(ctx):
 
 @client.event
 async def on_member_update(before, after):
-    if before.id == 417362845303439360:
-        if before.nick == 'Марат Каскинов':
-            await after.edit(nick = 'Марат Каскинов', reason = 'Против пиписькина')
+    if before.id == 417362845303439360 and before.nick == 'Марат Каскинов':
+        await after.edit(nick = 'Марат Каскинов', reason = 'Против пиписькина')
 
 @client.event
 async def on_member_join(member):
@@ -229,10 +228,8 @@ async def on_command_error(ctx, error):
 
 @client.command()
 async def reload(ctx):
-    for file in os.listdir(CWD+"/cogs"):
-        if file.endswith(".py"):
-            await client.unload_extension(f"cogs.{file[:-3]}")
-            await client.load_extension(f"cogs.{file[:-3]}")
+    for name in list(client.extensions):
+        await client.reload_extension(name)
     await ctx.send(embed = discord.Embed(description = 'Модули перезагружены', color = 0xff8000))
 
 async def load():
@@ -241,8 +238,7 @@ async def load():
             await client.load_extension(f"cogs.{file[:-3]}")
 
 async def main():
-    t = os.environ['TOKEN']
     await load()
-    await client.start(t)
+    await client.start(os.getenv('TOKEN'))
 
 asyncio.run(main())

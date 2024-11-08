@@ -77,7 +77,7 @@ def get_command_help(locale: str, command: str) -> str:
         user_data = json.load(file)
     return user_data.get(command, f'{translate(locale, 'command_not_found')}'.format(command = command))
 
-def parse_members(args_list: list | str) -> argparse.Namespace | bool:
+def parse_members(args_list: list[str] | str) -> argparse.Namespace | bool:
     if isinstance(args_list, str):
         args_list = args_list.split()
     parser = argparse.ArgumentParser()
