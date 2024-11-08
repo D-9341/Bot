@@ -76,40 +76,40 @@ class Music(commands.Cog):
 
     @commands.command(aliases = ['q'])
     async def queue(self, ctx, argument = 'list', *, action: int | str = 0):
-        # locale = get_locale(ctx.author.id)
+        locale = get_locale(ctx.author.id)
         if argument == 'list':
             queue_display = [f'{index + 1}. {title}' for index, title in enumerate(title_list)]
-            await ctx.send(embed = discord.Embed(description = f'```Сейчас в очереди:\n{"\n".join(queue_display)}```' if title_list else 'Очередь пуста', color = 0xff8000))
+            await ctx.send(embed = discord.Embed(description = f'{translate(locale, "queue_list")}'.format(queue_list = '\n'.join(queue_display)) if title_list else translate(locale, 'queue_empty'), color = 0xff8000))
         if argument == 'clear':
             title_list.clear(); queue.clear()
             ctx.guild.voice_client.stop()
             for file in os.listdir(cwd):
                 if file.endswith(".mp3"):
                     os.remove(f'{cwd}\{file}')
-            await ctx.send(embed = discord.Embed(description = 'Очередь очищена, файлы удалены', color = 0xff8000))
+            await ctx.send(embed = discord.Embed(description = translate(locale, 'queue_clear'), color = 0xff8000))
         if argument in ['next', 'skip']:
             if len(queue) > 1:
                 ctx.guild.voice_client.stop()
                 queue.pop(0)
                 title_list.pop(0)
                 ctx.guild.voice_client.play(discord.FFmpegPCMAudio(queue[0], **{'options': '-vn'}))
-                await ctx.send(embed = discord.Embed(description = f'Включаю следующий трек: `{title_list[0]}`', color = 0xff8000))
+                await ctx.send(embed = discord.Embed(description = f'{translate(locale, "queue_next")}'.format(title = title_list[0]), color = 0xff8000))
             else:
-                await ctx.send(embed = discord.Embed(description = 'Дальше очередь пуста', color = 0xff8000))
+                await ctx.send(embed = discord.Embed(description = translate(locale, 'queue_skip_empty'), color = 0xff8000))
         if argument == 'loop':
             global loop
             if action != 'status':
                 loop = not loop
-            await ctx.send(embed = discord.Embed(description = f'Повторение {"`включено`" if loop else "`выключено`"}', color = 0xff8000))
+            await ctx.send(embed = discord.Embed(description = translate(locale, 'queue_loop_on') if loop else translate(locale, 'queue_loop_off'), color = 0xff8000))
         if argument == 'remove':
             if action == 1:
-                return await ctx.send(embed = discord.Embed(description = 'Вы не можете удалить первый трек', color = 0xff8000))
+                return await ctx.send(embed = discord.Embed(description = translate(locale, 'queue_remove_first'), color = 0xff8000))
             if 2 <= action <= len(queue):
                 queue.pop(action - 1)
                 track = title_list.pop(action - 1)
-                await ctx.send(embed = discord.Embed(description = f'Трек `{track}` удалён из очереди', color = 0xff8000))
+                await ctx.send(embed = discord.Embed(description = f'{translate(locale, "queue_remove_success")}'.format(title = track), color = 0xff8000))
             else:
-                await ctx.send(embed = discord.Embed(description = 'Такого трека нет', color = 0xff8000))
+                await ctx.send(embed = discord.Embed(description = translate(locale, 'queue_remove_no_such_track'), color = 0xff8000))
 
     @commands.command()
     async def resume(self, ctx):

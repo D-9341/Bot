@@ -69,5 +69,15 @@
     "join_already_connected": "Ну ты круто придумал, браток. Я уже в другом войсе",
     "leave_success": "Адьёс, пидорасы. Ливнул из {ctx_author_voice_channel_name}",
     "leave_diff_channel": "Круто ты придумал. Тебе нужно быть со мной в одном канале, чтобы использовать leave",
-    "leave_already_not_connected": "Глаза протри еблан, меня уже нет в войсе"
+    "leave_already_not_connected": "Глаза протри еблан, меня уже нет в войсе",
+    "queue_list": "```В очереди на пердёжь: {queue_list}```",
+    "queue_empty": "Очереди пуста",
+    "queue_clear": "Удалил всё говно",
+    "queue_skip": "Включаю некст: `{title}`",
+    "queue_skip_empty": "Дальше бога нет",
+    "queue_loop_on": "Не повторяю",
+    "queue_loop_off": "Повторяю",
+    "queue_remove_first": "Нельзя удалять первый трек",
+    "queue_remove_no_such_track": "Нет твоего говна в очереди",
+    "queue_remove_success": "Удалил {track} из очереди"
 }

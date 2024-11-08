@@ -69,5 +69,15 @@
     "join_already_connected": "I'm already being used in another channel!",
     "leave_success": "Left channel {ctx_author_voice_channel_name}",
     "leave_diff_channel": "You must be in the same channel as me!",
-    "leave_already_not_connected": "I'm already not in a channel!"
+    "leave_already_not_connected": "I'm already not in a channel!",
+    "queue_list": "```Current queue: {queue_list}```",
+    "queue_empty": "Queue is empty",
+    "queue_clear": "Queue cleared, files deleted",
+    "queue_skip": "Begin playback: `{title}`",
+    "queue_skip_empty": "Further queue is empty",
+    "queue_loop_on": "Queue loop is on",
+    "queue_loop_off": "Queue loop is off",
+    "queue_remove_first": "You cannot remove the first track",
+    "queue_remove_no_such_track": "There is no such track in the queue",
+    "queue_remove_success": "Removed {track} from the queue"
 }

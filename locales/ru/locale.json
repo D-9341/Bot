@@ -69,5 +69,15 @@
     "join_already_connected": "Я уже используюсь в другом канале!",
     "leave_success": "Покинул канал {ctx_author_voice_channel_name}",
     "leave_diff_channel": "Ты должен быть в том же канале, что и я!",
-    "leave_already_not_connected": "Я уже не нахожусь в канале!"
+    "leave_already_not_connected": "Я уже не нахожусь в канале!",
+    "queue_list": "```Сейчас в очереди: {queue_list}```",
+    "queue_empty": "Очередь пуста",
+    "queue_clear": "Очередь очищена, файлы удалены",
+    "queue_skip": "Включаю следующий трек: `{title}`",
+    "queue_skip_empty": "Дальше очередь пуста",
+    "queue_loop_on": "Повторение включено",
+    "queue_loop_off": "Повторение выключено",
+    "queue_remove_first": "Вы не можете удалить первый трек",
+    "queue_remove_no_such_track": "Такого трека нет в очереди",
+    "queue_remove_success": "Трек {title} удален из очереди"
 }
