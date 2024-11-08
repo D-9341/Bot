@@ -47,6 +47,7 @@
     "unmute_success": "Снятие заглушения у {member}",
     "unmute_no_role": "{author_mention}, Я не могу снять заглушение у {member_mention} из-за того, что роль Muted была удалена",
     "play_downloading": "Скачиваю <{url}>...",
+    "play_added_to_queue": "`{title}` добавлено в очередь на позицию {pos}",
     "play_not_in_voice_channel": "Ты должен быть в канале, чтобы использовать play",
     "play_connected": "Присоединён к каналу {ctx_author_voice_channel_name}",
     "play_already_in_use": "Я уже используюсь в другом канале!",

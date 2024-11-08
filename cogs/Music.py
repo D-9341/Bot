@@ -55,7 +55,7 @@ class Music(commands.Cog):
                     break
         queue.append(audio)
         title_list.append(title)
-        await ctx.send(embed = discord.Embed(description = f'`{title}` добавлено в очередь на позицию {len(queue)}', color = 0xff8000))
+        await ctx.send(embed = discord.Embed(description = f'{translate(locale, "play_added_to_queue")}'.format(title = title, pos = len(queue)), color = 0xff8000))
         if not ctx.author.voice:
             return await ctx.send(embed = discord.Embed(description = translate(locale, 'play_not_in_voice_channel'), color = 0xff8000))
         if not ctx.guild.voice_client:

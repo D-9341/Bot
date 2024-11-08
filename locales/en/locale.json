@@ -47,6 +47,7 @@
     "unmute_success": "Unmuting successful for {member}",
     "unmute_no_role": "{author_mention}, I can't unmute {member_mention} because the Muted role has been removed",
     "play_downloading": "Downloading <{url}>...",
+    "play_added_to_queue": "`{title}` added to queue on position {pos}",
     "play_not_in_voice_channel": "You must be in a voice channel to play music",
     "play_connected": "Connected to {ctx_author_voice_channel_name}",
     "play_already_in_use": "Music is already playing in another channel",

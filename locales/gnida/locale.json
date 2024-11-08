@@ -47,6 +47,7 @@
     "unmute_success": "Анмут этого программиста -> {member}",
     "unmute_no_role": "Слушай сюда {author_mention}, не могу я его размутить, ясно? Какой-то гандон удалил роль Muted, найди его по журналу аудита и стукни по башке",
     "play_downloading": "Забиваю память компа <{url}>...",
+    "play_added_to_queue": "Добавил {title} на позицию {pos}",
     "play_not_in_voice_channel": "Чтобы применить play тебе надо в канале быть, еблан",
     "play_connected": "Присосался к {ctx_author_voice_channel_name}",
     "play_already_in_use": "Ты чё слепой нахуй? Я уже используюсь в другом канале!",
