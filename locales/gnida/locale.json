@@ -47,7 +47,11 @@
     "unmute_success": "Анмут этого программиста -> {member}",
     "unmute_no_role": "Слушай сюда {author_mention}, не могу я его размутить, ясно? Какой-то гандон удалил роль Muted, найди его по журналу аудита и стукни по башке",
     "play_downloading": "Забиваю память компа <{url}>...",
-    "play_added_to_queue": "Добавил {title} на позицию {pos}",
+    "play_video_age_restricted": "Выбери другой трек, сынок, этот не для тебя",
+    "play_video_country_restricted": "Выбери другой трек, этот не для России",
+    "play_video_downloading_error": "Чё то я не могу его скачать, ещё раз цинкани",
+    "play_video_unknown_error": "На посмотри сам: `{error}`",
+    "play_added_to_queue": "Добавил `{title}` на позицию {pos}",
     "play_not_in_voice_channel": "Чтобы применить play тебе надо в канале быть, еблан",
     "play_connected": "Присосался к {ctx_author_voice_channel_name}",
     "play_already_in_use": "Ты чё слепой нахуй? Я уже используюсь в другом канале!",
@@ -71,8 +75,8 @@
     "leave_success": "Адьёс, пидорасы. Ливнул из {ctx_author_voice_channel_name}",
     "leave_diff_channel": "Круто ты придумал. Тебе нужно быть со мной в одном канале, чтобы использовать leave",
     "leave_already_not_connected": "Глаза протри еблан, меня уже нет в войсе",
-    "queue_list": "```В очереди на пердёжь: {queue_list}```",
-    "queue_empty": "Очереди пуста",
+    "queue_list": "```В очереди на пердёжь:\n{queue_list}```",
+    "queue_empty": "Очередь пуста",
     "queue_clear": "Удалил всё говно",
     "queue_skip": "Включаю некст: `{title}`",
     "queue_skip_empty": "Дальше бога нет",
@@ -80,5 +84,5 @@
     "queue_loop_off": "Повторяю",
     "queue_remove_first": "Нельзя удалять первый трек",
     "queue_remove_no_such_track": "Нет твоего говна в очереди",
-    "queue_remove_success": "Удалил {track} из очереди"
+    "queue_remove_success": "Удалил {title} из очереди"
 }

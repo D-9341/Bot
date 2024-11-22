@@ -17,7 +17,7 @@ def translate(locale: str, string_id: str) -> str:
         user_data = json.load(file)
     return user_data.get(string_id, "Локаль не найдена")
 
-def get_locale(author_id: str) -> str:
+def get_locale(author_id: str) -> Literal['ru', 'en', 'gnida']:
     """
     Gets the locale from `author_id` provided by discord.py's `author.id`
 

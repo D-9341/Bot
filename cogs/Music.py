@@ -37,22 +37,31 @@ class Music(commands.Cog):
     async def play(self, ctx, *, url):
         locale = get_locale(ctx.author.id)
         url = url.lstrip('<').rstrip('>')
-        if os.path.exists(f'{cwd}\{url[-11:]}.mp3'):
-            audio = os.path.join(cwd, f'{url[-11:]}.mp3')
-            info = await self.client.loop.run_in_executor(None, lambda: yt_dlp.YoutubeDL(ydl_opts).extract_info(url, download = False))
-            title = info['title']
-            duration = info['duration_string']
-        else:
-            await ctx.send(embed = discord.Embed(description = f'{translate(locale, "play_downloading")}'.format(url = url), color = 0xff8000))
-            info = await self.client.loop.run_in_executor(None, lambda: yt_dlp.YoutubeDL(ydl_opts).extract_info(url, download = True))
-            title = info['title']
-            duration = info['duration_string']
-            video_id = info['id']
-            for file in os.listdir(cwd):
-                if file.endswith("].mp3"):
-                    os.rename(os.path.join(cwd, file), os.path.join(cwd, f'{video_id}.mp3'))
-                    audio = os.path.join(cwd, f'{video_id}.mp3')
-                    break
+        try:
+            if os.path.exists(f'{cwd}\{url[-11:]}.mp3'):
+                audio = os.path.join(cwd, f'{url[-11:]}.mp3')
+                info = await self.client.loop.run_in_executor(None, lambda: yt_dlp.YoutubeDL(ydl_opts).extract_info(url, download = False))
+                title = info['title']
+                duration = info['duration_string']
+            else:
+                await ctx.send(embed = discord.Embed(description = f'{translate(locale, "play_downloading")}'.format(url = url), color = 0xff8000))
+                info = await self.client.loop.run_in_executor(None, lambda: yt_dlp.YoutubeDL(ydl_opts).extract_info(url, download = True))
+                title = info['title']
+                duration = info['duration_string']
+                video_id = info['id']
+                for file in os.listdir(cwd):
+                    if file.endswith("].mp3"):
+                        os.rename(os.path.join(cwd, file), os.path.join(cwd, f'{video_id}.mp3'))
+                        audio = os.path.join(cwd, f'{video_id}.mp3')
+                        break
+        except Exception as error:
+            if "Sign in to confirm your age" in str(error):
+                return await ctx.send(embed = discord.Embed(description = translate(locale, 'play_video_age_restricted'), color = 0xff0000))
+            if "This video contains content from" in str(error):
+                return await ctx.send(embed = discord.Embed(description = translate(locale, 'play_video_country_restricted'), color = 0xff0000))
+            if "Remote end closed connection" in str(error) or "The read operation timed out" in str(error):
+                return await ctx.send(embed = discord.Embed(description = translate(locale, 'play_video_downloading_error'), color = 0xff0000))
+            return await ctx.send(embed = discord.Embed(description = f'{translate(locale, "play_video_unknown_error")}'.format(error = error), color = 0xff0000))
         queue.append(audio)
         title_list.append(title)
         await ctx.send(embed = discord.Embed(description = f'{translate(locale, "play_added_to_queue")}'.format(title = title, pos = len(queue)), color = 0xff8000))
@@ -82,10 +91,8 @@ class Music(commands.Cog):
             await ctx.send(embed = discord.Embed(description = f'{translate(locale, "queue_list")}'.format(queue_list = '\n'.join(queue_display)) if title_list else translate(locale, 'queue_empty'), color = 0xff8000))
         if argument == 'clear':
             title_list.clear(); queue.clear()
-            ctx.guild.voice_client.stop()
-            for file in os.listdir(cwd):
-                if file.endswith(".mp3"):
-                    os.remove(f'{cwd}\{file}')
+            if ctx.guild.voice_client:
+                ctx.guild.voice_client.stop()
             await ctx.send(embed = discord.Embed(description = translate(locale, 'queue_clear'), color = 0xff8000))
         if argument in ['next', 'skip']:
             if len(queue) > 1:

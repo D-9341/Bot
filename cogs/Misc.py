@@ -10,12 +10,6 @@ class Slapper(commands.Converter):
         emb.set_author(name = ctx.author.display_name, icon_url = ctx.author.avatar.url)
         return await ctx.send(f'@someone ||{mention.mention}||', embed = emb)
 
-    async def error(self, ctx, error):
-        """
-        it is used as a placeholder
-        """
-        await ctx.send(error)
-
 class Misc(commands.Cog):
     def __init__(self, client):
         self.client = client
@@ -35,6 +29,13 @@ class Misc(commands.Cog):
                 rand2 = random.randint(0, 9)
                 await ctx.send(embed = discord.Embed(description = f'{ctx.author.display_name} получает случайное число (0-100)\n`0{rand1}{rand2}`', color = 0xff8000))
         if first and not second:
+            if '-' in first:
+                [first, second] = first.split('-')
+                first, second = int(first), int(second)
+                if first > second:
+                    return await ctx.send(embed = discord.Embed(description = f'{ctx.author.display_name} получает случайное число ({first}-{first})\n`{first}`', color = 0xff8000))
+                rand = random.randint(first, second)
+                await ctx.send(embed = discord.Embed(description = f'{ctx.author.display_name} получает случайное число ({first}-{second})\n`{rand}`', color = 0xff8000))
             if first == 'adamant':
                 await ctx.send(embed = discord.Embed(description = f'{ctx.author.display_name} получает случайное число \n`5 6 4 7 0 -9 9 2 π √2 Ω א`', color = 0xff8000))
             if 'd' in first:
@@ -45,13 +46,13 @@ class Misc(commands.Cog):
                 if dice_edges > 20:
                     return await ctx.send(embed = discord.Embed(description = 'Вы не можете кинуть дайс с большим количеством граней, чем 20', color = 0xff8000))
                 if dice_amount > 1:
-                    attempts = ''
+                    results = ''
                     result = 0
                     for i in range(1, dice_amount + 1):
                         rand = random.randint(1, dice_edges)
-                        attempts += f'{i}. `{rand}`\n'
+                        results += f'{i}. `{rand}`\n'
                         result += rand
-                    attempts += f'В сумме - ||{result}||'
+                    results += f'В сумме - ||{result}||'
                 else:
                     res = random.randint(1, dice_edges)
                     total = ''
@@ -60,19 +61,15 @@ class Misc(commands.Cog):
                     if res == 20:
                         total = ', критический успех!'
                     return await ctx.send(embed = discord.Embed(description = f'Получено случайное число: `{res}`{total}', color = 0xff8000))
-                await ctx.send(embed = discord.Embed(description = attempts, color = 0xff8000))
+                await ctx.send(embed = discord.Embed(description = results, color = 0xff8000))
             else:
                 first = int(first)
                 rand = random.randint(0, first)
-                if first < 10:
-                    await ctx.send(embed = discord.Embed(description = f'{ctx.author.display_name} получает случайное число (0-{first})\n`0{rand}`', color = 0xff8000))
-                else:
-                    await ctx.send(embed = discord.Embed(description = f'{ctx.author.display_name} получает случайное число (0-{first})\n`{rand}`', color = 0xff8000))
+                await ctx.send(embed = discord.Embed(description = f'{ctx.author.display_name} получает случайное число (0-{first})\n`{rand:>02}`', color=0xff8000))
         if (first and second) or (first == 0 and second):
             first = int(first)
             if first > second:
-                rand = random.randint(first, first)
-                return await ctx.send(embed = discord.Embed(description = f'{ctx.author.display_name} получает случайное число ({first}-{first})\n`{rand}`', color = 0xff8000))
+                return await ctx.send(embed = discord.Embed(description = f'{ctx.author.display_name} получает случайное число ({first}-{first})\n`{first}`', color = 0xff8000))
             rand = random.randint(first, second)
             await ctx.send(embed = discord.Embed(description = f'{ctx.author.display_name} получает случайное число ({first}-{second})\n`{rand}`', color = 0xff8000))
 

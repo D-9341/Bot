@@ -39,10 +39,7 @@ class Embeds(commands.Cog):
         if color is None:
             color = 0x2f3136
         else:
-            if '#' not in color:
-                color = int('0x' + color, 16)
-            else:
-                color = int('0x' + color.lstrip('#'), 16)
+            color = int('0x' + color.lstrip('#'), 16)
         emb = discord.Embed(title = title, description = description, color = color)
         for i in embed_values:
             emb.set_author(name = author.display_name, icon_url = author.avatar.url)
@@ -112,10 +109,7 @@ class Embeds(commands.Cog):
             elif message.embeds != [] and '&c' not in msg:
                 color = message.embeds[0].color
             else:
-                if '#' not in color:
-                    color = int('0x' + color, 16)
-                else:
-                    color = int('0x' + color.lstrip('#'), 16)
+                color = int('0x' + color.lstrip('#'), 16)
             emb = discord.Embed(title = title, description = description, color = color, timestamp = discord.utils.utcnow())
             emb.set_author(name = author.display_name, icon_url = author.avatar.url)
             if image:
@@ -142,70 +136,56 @@ class Embeds(commands.Cog):
         if channel is None:
             channel = ctx.channel
         message = await channel.fetch_message(arg)
+        embed_data = {
+            "color": '',
+            "c": '',
+            "author": '',
+            "content": f'content {message.content}' if message.content else '',
+            "img": '',
+            "image": '',
+            "th": '',
+            "thumb": '',
+            "d": '',
+            "description": '',
+            "t": '',
+            "title": '',
+            "f": '',
+            "footer": ''
+        }
         for emb in message.embeds:
-            if emb.color is not None:
-                color = f' color {emb.color}'
-                c = f' &c {emb.color}'
-            else:
-                color = c = ''
-            if emb.author.name is not None:
-                author = f' author {emb.author.name}'
-            else:
-                author = ''
-            if message.content == '':
-                content = ''
-            else:
-                content = f'content {message.content}'
-            if emb.image.url is not None:
-                img = f' &img {emb.image.url}'
-                image = f' image {emb.image.url}'
-            else:
-                img = image = ''
-            if emb.thumbnail.url is not None:
-                th = f' &th {emb.thumbnail.url}'
-                thumb = f' thumbnail {emb.thumbnail.url}'
-            else:
-                th = thumb = ''
-            if emb.description is not None:
-                d = f' &d {emb.description}'
-                description = f' description {emb.description}'
-            else:
-                d = description = ''
-            if emb.title is not None:
-                t = f'&t {emb.title}'
-                title = f' title {emb.title}'
-            else:
-                t = title = ''
-            if emb.footer.text is not None:
-                f = f' &f {emb.footer.text}'
-                footer = f' footer {emb.footer.text}'
-            else:
-                f = footer = ''
+            if emb.color:
+                embed_data["color"] = f' color {emb.color}'
+                embed_data["c"] = f' &c {emb.color}'
+            if emb.author.name:
+                embed_data["author"] = f' author {emb.author.name}'
+            if emb.image.url:
+                embed_data["img"] = f' &img {emb.image.url}'
+                embed_data["image"] = f' image {emb.image.url}'
+            if emb.thumbnail.url:
+                embed_data["th"] = f' &th {emb.thumbnail.url}'
+                embed_data["thumb"] = f' thumbnail {emb.thumbnail.url}'
+            if emb.description:
+                embed_data["d"] = f' &d {emb.description}'
+                embed_data["description"] = f' description {emb.description}'
+            if emb.title:
+                embed_data["t"] = f'&t {emb.title}'
+                embed_data["title"] = f' title {emb.title}'
+            if emb.footer.text:
+                embed_data["f"] = f' &f {emb.footer.text}'
+                embed_data["footer"] = f' footer {emb.footer.text}'
         if message.author.id in botversions:
-            if message.embeds == []:
-                if '```' in message.content:
-                    if should_be_edit == '--edit':
-                        await ctx.send(f'cy/edit {message.id} {message.content}')
-                    else:
-                        await ctx.send(f'cy/say {message.content}')
-                else:
-                    if should_be_edit == '--edit':
-                        await ctx.send(f'```cy/edit {message.id} {message.content}```')
-                    else:
-                        await ctx.send(f'```cy/say {message.content}```')
+            command = 'edit' if should_be_edit == '--edit' else 'say'
+            if message.embeds:
+                await ctx.send(f'```cy/{command} {message.id} {embed_data["t"]}{embed_data["d"]}{embed_data["f"]}{embed_data["th"]}{embed_data["img"]}{embed_data["c"]}```')
             else:
-                if should_be_edit == '--edit':
-                    await ctx.send(f'```cy/edit {message.id} {t}{d}{f}{th}{img}{c}```')
-                else:
-                    await ctx.send(f'```cy/say {t}{d}{f}{th}{img}{c}```')
+                content_prefix = '' if '```' in message.content else '```'
+                await ctx.send(f'{content_prefix}cy/{command} {message.content}{content_prefix}')
         else:
-            if message.embeds == []:
-                if '```' in message.content:
-                    await ctx.send(f'@{message.author.display_name} {message.content}')
-                else:
-                    await ctx.send(f'```@{message.author.display_name} {message.content}```')
+            content_prefix = '' if '```' in message.content else '```'
+            if message.embeds:
+                await ctx.send(f'{content_prefix}{embed_data["content"]}{embed_data["title"]}{embed_data["description"]}{embed_data["footer"]}{embed_data["color"]}{embed_data["author"]}{embed_data["image"]}{embed_data["thumb"]}{content_prefix}')
             else:
-                await ctx.send(f'```{content}{title}{description}{footer}{color}{author}{image}{thumb}```')
+                await ctx.send(f'{content_prefix}@{message.author.display_name} {message.content}{content_prefix}')
 
 async def setup(client):
     await client.add_cog(Embeds(client))
