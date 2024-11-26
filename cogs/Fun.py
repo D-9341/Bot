@@ -142,8 +142,8 @@ class Fun(commands.Cog):
                             elif action.content == '2':
                                 await channel.send(embed = discord.Embed(description = f'{ctx.author.mention} выбрал выстрелить в {player.mention}', color = 0xff8000))
                                 await asyncio.sleep(3)
-                                round = rounds_order.pop(0)
                                 rounds -= 1
+                                round = rounds_order.pop(0)
                                 if round == 0:
                                     await channel.send(embed = discord.Embed(description = f'Холостой, ход переходит {player.mention}', color = 0xff8000))
                                 elif round == 1:
@@ -160,29 +160,24 @@ class Fun(commands.Cog):
                                     await channel.send(embed = discord.Embed(description = f'{ctx.author.mention} использовал сигареты', color = 0xff8000))
                                     if not p1_cursed: p1_hp += 1 if p1_hp < MAX_HP else 0
                                     p1_items.pop(int(item.content) - 1)
-                                    turn_order = 0
                                 elif 'Ножовка' in used:
                                     if sawed:
                                         await channel.send(embed = discord.Embed(description = f'{ctx.author.mention}, вы уже использовали ножовку', color = 0xff0000))
                                         await asyncio.sleep(1)
-                                        turn_order = 0
                                     else:
                                         await channel.send(embed = discord.Embed(description = f'{ctx.author.mention} использовал ножовку по металлу, следующий выстрел {ctx.author.mention} нанесёт в 2 раза больше урона', color = 0xff8000))
                                         damage *= 2
                                         p1_items.pop(int(item.content) - 1)
-                                        turn_order = 0
                                 elif 'Пиво' in used:
                                     await channel.send(embed = discord.Embed(description = f'{ctx.author.mention} использовал пиво, текущий патрон извлечён из патронника, это был {'холостой' if rounds_order[0] == 0 else 'боевой'}', color = 0xff8000))
                                     rounds -= 1
                                     rounds_order = rounds_order[1:]
                                     p1_items.pop(int(item.content) - 1)
-                                    turn_order = 0
                                 elif 'Лупа' in used:
                                     await channel.send(embed = discord.Embed(description = f'{ctx.author.mention} использовал лупу...', color = 0xff8000))
                                     await asyncio.sleep(3)
                                     await ctx.author.send(embed = discord.Embed(description = f'Сейчас в патроннике: {'холостой' if rounds_order[0] == 0 else 'боевой'}', color = 0xff8000))
                                     p1_items.pop(int(item.content) - 1)
-                                    turn_order = 0
                                 elif 'Одноразовый' in used:
                                     number = ''.join([random.choice('1234567890') for _ in range(6)])
                                     await channel.send(embed = discord.Embed(description = f'{ctx.author.mention} звонит на {number}...', color = 0xff8000))
@@ -192,11 +187,9 @@ class Fun(commands.Cog):
                                         current = random.randint(1, len(rounds_order) - 1)
                                         await ctx.author.send(embed = discord.Embed(description = f'...{current + 1} патрон {'боевой' if rounds_order[current] == 1 else "холостой"}...', color = 0xff8000))
                                         await asyncio.sleep(1)
-                                        turn_order = 0
                                     else:
                                         await ctx.author.send(embed = discord.Embed(description = 'Не повезло...'))
                                         await asyncio.sleep(1)
-                                        turn_order = 0
                                 elif 'таблетки' in used:
                                     await channel.send(embed = discord.Embed(description = f'{ctx.author.mention} использовал таблетки...', color = 0xff0000))
                                     await asyncio.sleep(3)
@@ -204,40 +197,36 @@ class Fun(commands.Cog):
                                     normal = random.randint(1, 4)
                                     if normal <= 2:
                                         await channel.send(embed = discord.Embed(description = f'{ctx.author.mention} восстанавливает здоровье...', color = 0x00ff00))
-                                        if not p1_cursed: p1_hp += MAX_HP - p1_hp if MAX_HP - p1_hp < MAX_HP else 0
+                                        if not p1_cursed: p1_hp += 2 if p1_hp <= MAX_HP - 2 else 1 if p1_hp <= MAX_HP - 1 else 0
                                         await asyncio.sleep(1)
-                                        turn_order = 0
                                     else:
                                         await channel.send(embed = discord.Embed(description = f'...{ctx.author.mention} теряет 1 здоровье...', color = 0xff0000))
                                         p1_hp -= 1
                                         await asyncio.sleep(1)
-                                        turn_order = 0
                                 elif 'Инвертер' in used:
                                     await channel.send(embed = discord.Embed(description = f'{ctx.author.mention} использовал инвертер...', color = 0xff8000))
                                     await asyncio.sleep(3)
                                     p1_items.pop(int(item.content) - 1)
                                     await channel.send(embed = discord.Embed(description = 'Тип патрона в патроннике изменён', color = 0xff8000))
                                     await asyncio.sleep(1)
-                                    if rounds_order[0] == 0: rounds_order[0] = 1; turn_order = 0
-                                    elif rounds_order[0] == 1: rounds_order[0] = 0; turn_order = 0
+                                    if rounds_order[0] == 0: rounds_order[0] = 1
+                                    elif rounds_order[0] == 1: rounds_order[0] = 0
                                 elif 'Наручники' in used:
                                     if not p2_cuffed:
                                         await channel.send(embed = discord.Embed(description = f'{ctx.author.mention} использовал наручники, {player.mention} пропустит следующий ход', color = 0x00ff00))
                                         await asyncio.sleep(3)
                                         p2_cuffed = True
                                         p1_items.pop(int(item.content) - 1)
-                                        turn_order = 0
                                     else:
                                         await channel.send(embed = discord.Embed(description = f'{ctx.author.mention}, вы уже использовали наручники', color = 0xff0000))
                                         await asyncio.sleep(1)
-                                        turn_order = 0
                                 elif 'Шприц' in used:
                                     await channel.send(embed = discord.Embed(description = f'{ctx.author.mention} использовал шприц адреналина, теперь он может выбрать предмет {player.mention}', color = 0xff8000))
                                     await asyncio.sleep(3)
                                     p1_items.pop(int(item.content) - 1)
                                     init = []
                                     for i in range(len(p2_items)):
-                                            init.append(f'{i + 1} - {p2_items[i]}')
+                                        init.append(f'{i + 1} - {p2_items[i]}')
                                     await channel.send(embed = discord.Embed(description = f'Выберите предмет из инвентаря {player.mention}: {", ".join(init)}', color = 0xff8000))
                                     item = await self.client.wait_for('message', check = lambda message: message.channel == channel and message.author == ctx.author and message.content.lower() in ([str(x) for x in range(1, len(p2_items) + 1)]))
                                     used = init[int(item.content) - 1]
@@ -246,34 +235,29 @@ class Fun(commands.Cog):
                                         if not p1_cursed: p1_hp += 1 if p1_hp < MAX_HP else 0
                                         p2_items.pop(int(item.content) - 1)
                                         await asyncio.sleep(1)
-                                        turn_order = 0
                                     elif 'Ножовка' in used:
                                         if sawed:
                                             await channel.send(embed = discord.Embed(description = f'{ctx.author.mention}, вы уже использовали ножовку', color = 0xff0000))
                                             await asyncio.sleep(1)
                                             p1_items.insert(int(item.content), items_list[8])
-                                            turn_order = 0
                                         else:
                                             await channel.send(embed = discord.Embed(description = f'{ctx.author.mention} украл ножовку по металлу, следующий его выстрел нанесёт в 2 раза больше урона', color = 0x00ff00))
                                             sawed = True
                                             damage *= 2
                                             p2_items.pop(int(item.content) - 1)
                                             await asyncio.sleep(1)
-                                            turn_order = 0
                                     elif 'Пиво' in used:
                                         await channel.send(embed = discord.Embed(description = f'{ctx.author.mention} украл пиво, текущий патрон извлечён из патронника, это был {'холостой' if rounds_order[0] == 0 else 'боевой'}', color = 0xff8000))
                                         rounds -= 1
                                         rounds_order = rounds_order[1:]
                                         p2_items.pop(int(item.content) - 1)
                                         await asyncio.sleep(1)
-                                        turn_order = 0
                                     elif 'Лупа' in used:
                                         await channel.send(embed = discord.Embed(description = f'{ctx.author.mention} украл лупу...', color = 0xff8000))
                                         await asyncio.sleep(3)
                                         await ctx.author.send(embed = discord.Embed(description = f'Сейчас в патроннике: {'холостой' if rounds_order[0] == 0 else 'боевой'}', color = 0xff0000 if rounds_order[0] == 1 else 0x00ff00))
                                         p2_items.pop(int(item.content) - 1)
                                         await asyncio.sleep(1)
-                                        turn_order = 0
                                     elif 'Одноразовый' in used:
                                         number = ''.join([random.choice('1234567890') for _ in range(6)])
                                         await channel.send(embed = discord.Embed(description = f'{ctx.author.mention} звонит на {number}...', color = 0xff8000))
@@ -283,11 +267,9 @@ class Fun(commands.Cog):
                                             current = random.randint(1, len(rounds_order) - 1)
                                             await ctx.author.send(embed = discord.Embed(description = f'...{current + 1} патрон {'боевой' if rounds_order[current] == 1 else "холостой"}...', color = 0xff8000))
                                             await asyncio.sleep(1)
-                                            turn_order = 0
                                         else:
                                             await ctx.author.send(embed = discord.Embed(description = 'Не повезло...'))
                                             await asyncio.sleep(1)
-                                            turn_order = 0
                                     elif 'таблетки' in used:
                                         await channel.send(embed = discord.Embed(description = f'{ctx.author.mention} украл таблетки...', color = 0xff0000))
                                         await asyncio.sleep(3)
@@ -297,36 +279,32 @@ class Fun(commands.Cog):
                                             await channel.send(embed = discord.Embed(description = f'{ctx.author.mention} восстанавливает здоровье...', color = 0x00ff00))
                                             if not p1_cursed: p1_hp += 2 if p1_hp <= 4 else 1 if p1_hp <= 5 else 0
                                             await asyncio.sleep(1)
-                                            turn_order = 0
                                         else:
                                             await channel.send(embed = discord.Embed(description = f'...{ctx.author.mention} теряет 1 здоровье...', color = 0xff0000))
                                             p1_hp -= 1
                                             await asyncio.sleep(1)
-                                            turn_order = 0
                                     elif 'Инвертер' in used:
                                         await channel.send(embed = discord.Embed(description = f'{ctx.author.mention} украл инвертер...', color = 0xff8000))
                                         await asyncio.sleep(3)
                                         p2_items.pop(int(item.content) - 1)
                                         await channel.send(embed = discord.Embed(description = 'Тип патрона в патроннике изменён', color = 0xff8000))
                                         await asyncio.sleep(1)
-                                        if rounds_order[0] == 0: rounds_order[0] = 1; turn_order = 0
-                                        elif rounds_order[0] == 1: rounds_order[0] = 0; turn_order = 0
+                                        if rounds_order[0] == 0: rounds_order[0] = 1
+                                        elif rounds_order[0] == 1: rounds_order[0] = 0
                                     elif 'Наручники' in used:
                                         if not p2_cuffed:
                                             await channel.send(embed = discord.Embed(description = f'{ctx.author.mention} украл наручники, {player.mention} пропустит следующий ход', color = 0x00ff00))
                                             await asyncio.sleep(3)
                                             p2_cuffed = True
                                             p2_items.pop(int(item.content) - 1)
-                                            turn_order = 0
                                         else:
                                             await channel.send(embed = discord.Embed(description = f'{ctx.author.mention}, вы уже использовали наручники', color = 0xff0000))
                                             await asyncio.sleep(1)
-                                            turn_order = 0
                                     elif 'Шприц' in used:
                                         await channel.send(embed = discord.Embed(description = f'{ctx.author.mention} попытался украсть ещё один шприц', color = 0xff0000))
                                         await asyncio.sleep(1)
                                         p1_items.insert(int(item.content), items_list[8])
-                                        turn_order = 0
+                                    turn_order = 0
                             elif action.content.lower() == 'stop': stop = True; break
                         elif turn_order == 1:
                             await channel.send(embed = discord.Embed(description = f'{player.mention}, выберите действие: 1 - выстрелить в себя, 2 - выстрелить в противника{"" if len(p2_items) == 0 else ", 3 - использовать предмет"}', color = 0xff8000))
@@ -334,36 +312,27 @@ class Fun(commands.Cog):
                             action = await self.client.wait_for('message', check = lambda message: message.channel == channel and message.author == player and message.content.lower() in to_wait_for)
                             if action.content == '1':
                                 await channel.send(embed = discord.Embed(description = f'{player.mention} решил выстрелить в себя...', color = 0xff8000))
-                                await asyncio.sleep(3)
+                                rounds -= 1
+                                round = rounds_order.pop(0)
                                 if rounds_order[0] == 0:
                                     await channel.send(embed = discord.Embed(description = f'Холостой, {ctx.author.mention} пропускает ход', color = 0xff8000))
-                                    rounds -= 1
-                                    damage = 1
-                                    rounds_order.pop(0)
                                     turn_order = 1
                                 elif rounds_order[0] == 1:
                                     await channel.send(embed = discord.Embed(description = f'Это был боевой.. {player.mention} теряет здоровье в размере {damage}', color = 0xff8000))
-                                    rounds -= 1
-                                    rounds_order.pop(0)
                                     p2_hp -= damage
-                                    damage = 1
                                     turn_order = 0
+                                damage = 1
                             elif action.content == '2':
                                 await channel.send(embed = discord.Embed(description = f'{player.mention} стреляет в {ctx.author.mention}', color = 0xff8000))
-                                await asyncio.sleep(3)
-                                if rounds_order[0] == 0:
+                                rounds -= 1
+                                round = rounds_order.pop(0)
+                                if round == 0:
                                     await channel.send(embed = discord.Embed(description = f'Холостой, ход переходит {ctx.author.mention}', color = 0xff8000))
-                                    rounds -= 1
-                                    damage = 1
-                                    rounds_order.pop(0)
-                                    turn_order = 0
-                                elif rounds_order[0] == 1:
+                                elif round == 1:
                                     await channel.send(embed = discord.Embed(description = f'Это был боевой, {ctx.author.mention} теряет {damage} здоровья', color = 0xff8000))
-                                    rounds -= 1
-                                    rounds_order.pop(0)
                                     p1_hp -= damage
-                                    damage = 1
-                                    turn_order = 0
+                                damage = 1
+                                turn_order = 0
                             elif action.content == '3':
                                 init = []
                                 for i in range(len(p2_items)):
@@ -375,82 +344,58 @@ class Fun(commands.Cog):
                                     await channel.send(embed = discord.Embed(description = f'{player.mention} использовал сигареты', color = 0xff8000))
                                     if not p2_cursed: p2_hp += 1 if p2_hp < MAX_HP else 0
                                     p2_items.pop(int(item.content) - 1)
-                                    turn_order = 1
                                 elif 'Ножовка' in used:
                                     if sawed:
                                         await channel.send(embed = discord.Embed(description = f'{player.mention}, вы уже использовали ножовку', color = 0xff0000))
-                                        await asyncio.sleep(1)
-                                        turn_order = 1
                                     else:
                                         await channel.send(embed = discord.Embed(description = f'{player.mention} использовал ножовку по металлу, следующий его выстрел нанесёт в 2 раза больше урона', color = 0xff8000))
                                         damage *= 2
                                         p2_items.pop(int(item.content) - 1)
-                                        turn_order = 1
                                 elif 'Пиво' in used:
                                     await channel.send(embed = discord.Embed(description = f'{player.mention} использовал пиво, текущий патрон извлечён из патронника, это был {'холостой' if rounds_order[0] == 0 else 'боевой'}', color = 0xff8000))
                                     rounds -= 1
                                     rounds_order = rounds_order[1:]
                                     p2_items.pop(int(item.content) - 1)
-                                    turn_order = 1
                                 elif 'Лупа' in used:
                                     await channel.send(embed = discord.Embed(description = f'{player.mention} использует лупу...', color = 0xff8000))
-                                    await asyncio.sleep(3)
                                     await player.send(embed = discord.Embed(description = f'Сейчас в патроннике: {'холостой' if rounds_order[0] == 0 else 'боевой'}', color = 0xff8000))
                                     p2_items.pop(int(item.content) - 1)
-                                    turn_order = 1
                                 elif 'Одноразовый' in used:
                                     number = ''.join([random.choice('1234567890') for _ in range(6)])
                                     await channel.send(embed = discord.Embed(description = f'{player.mention} звонит на {number}...', color = 0xff8000))
-                                    await asyncio.sleep(3)
                                     p2_items.pop(int(item.content) - 1)
                                     if len(rounds_order) >= 3:
                                         current = random.randint(1, len(rounds_order) - 1)
                                         await player.send(embed = discord.Embed(description = f'...{current + 1} патрон {'боевой' if rounds_order[current] == 1 else "холостой"}...', color = 0xff8000))
-                                        await asyncio.sleep(1)
-                                        turn_order = 1
                                     else:
                                         await player.send(embed = discord.Embed(description = 'Не повезло...'))
-                                        await asyncio.sleep(1)
-                                        turn_order = 1
                                 elif 'таблетки' in used:
                                     await channel.send(embed = discord.Embed(description = f'{player.mention} использовал таблетки...', color = 0xff0000))
-                                    await asyncio.sleep(3)
                                     p2_items.pop(int(item.content) - 1)
                                     normal = random.randint(1, 4)
                                     if normal <= 2:
                                         await channel.send(embed = discord.Embed(description = f'{player.mention} восстанавливает здоровье...', color = 0x00ff00))
-                                        if not p2_cursed: p2_hp += 2 if p2_hp <= 4 else 1 if p2_hp <= 5 else 0
-                                        await asyncio.sleep(1)
-                                        turn_order = 1
+                                        if not p2_cursed: p2_hp += 2 if p2_hp <= MAX_HP - 2 else 1 if p2_hp <= MAX_HP - 1 else 0
                                     else:
                                         await channel.send(embed = discord.Embed(description = f'...{player.mention} теряет 1 здоровье...', color = 0xff0000))
                                         p2_hp -= 1
-                                        await asyncio.sleep(1)
-                                        turn_order = 1
                                 elif 'Инвертер' in used:
                                     await channel.send(embed = discord.Embed(description = f'{player.mention} использовал инвертер...', color = 0xff8000))
-                                    await asyncio.sleep(3)
                                     p2_items.pop(int(item.content) - 1)
                                     await channel.send(embed = discord.Embed(description = 'Тип патрона в патроннике изменён', color = 0xff8000))
-                                    await asyncio.sleep(1)
-                                    if rounds_order[0] == 0: rounds_order[0] = 1; turn_order = 1
-                                    elif rounds_order[0] == 1: rounds_order[0] = 0; turn_order = 1
+                                    if rounds_order[0] == 0: rounds_order[0] = 1
+                                    elif rounds_order[0] == 1: rounds_order[0] = 0
                                 elif 'Наручники' in used:
                                     if not p1_cuffed:
                                         await channel.send(embed = discord.Embed(description = f'{player.mention} использовал наручники, {ctx.author.mention} пропустит следующий ход', color = 0xff8000))
-                                        await asyncio.sleep(3)
                                         p1_cuffed = True
                                         p2_items.pop(int(item.content) - 1)
-                                        turn_order = 1
                                     else:
                                         await channel.send(embed = discord.Embed(description = f'{player.mention}, вы уже использовали наручники', color = 0xff0000))
-                                        await asyncio.sleep(1)
-                                        turn_order = 1
                                 elif 'Шприц' in used:
                                     if len(p1_items) == 0: await channel.send(embed = discord.Embed(description = 'В инвентаре противника нет предметов', color = 0xff0000)); turn_order = 0
                                     else:
                                         await channel.send(embed = discord.Embed(description = f'{player.mention} использовал шприц адреналина, теперь он может выбрать предмет {ctx.author.mention}', color = 0xff8000))
-                                        await asyncio.sleep(3)
                                         p2_items.pop(int(item.content) - 1)
                                         init = []
                                         for i in range(len(p1_items)):
@@ -462,88 +407,61 @@ class Fun(commands.Cog):
                                             await channel.send(embed = discord.Embed(description = f'{player.mention} украл сигареты {ctx.author.mention}', color = 0x00ff00))
                                             if not p2_cursed: p2_hp += 1 if p2_hp < MAX_HP else 0
                                             p1_items.pop(int(item.content) - 1)
-                                            await asyncio.sleep(1)
-                                            turn_order = 1
                                         elif 'Ножовка' in used:
                                             if sawed:
                                                 await channel.send(embed = discord.Embed(description = f'{player.mention}, вы уже использовали ножовку', color = 0xff0000))
-                                                await asyncio.sleep(1)
                                                 p2_items.insert(int(item.content), items_list[8])
-                                                turn_order = 1
                                             else:
                                                 await channel.send(embed = discord.Embed(description = f'{player.mention} украл ножовку по металлу, следующий его выстрел нанесёт в 2 раза больше урона', color = 0x00ff00))
                                                 sawed = True
                                                 damage *= 2
                                                 p1_items.pop(int(item.content) - 1)
-                                                await asyncio.sleep(1)
-                                                turn_order = 1
                                         elif 'Пиво' in used:
                                             await channel.send(embed = discord.Embed(description = f'{player.mention} украл пиво, текущий патрон извлечён из патронника, это был {'холостой' if rounds_order[0] == 0 else 'боевой'}', color = 0xff8000))
                                             rounds -= 1
                                             rounds_order = rounds_order[1:]
                                             p1_items.pop(int(item.content) - 1)
-                                            await asyncio.sleep(1)
-                                            turn_order = 1
                                         elif 'Лупа' in used:
                                             await channel.send(embed = discord.Embed(description = f'{player.mention} украл лупу...', color = 0xff8000))
-                                            await asyncio.sleep(3)
                                             await player.send(embed = discord.Embed(description = f'Сейчас в патроннике: {'холостой' if rounds_order[0] == 0 else 'боевой'}', color = 0xff0000 if rounds_order[0] == 1 else 0x00ff00))
                                             p1_items.pop(int(item.content) - 1)
-                                            await asyncio.sleep(1)
-                                            turn_order = 1
                                         elif 'Одноразовый' in used:
                                             number = ''.join([random.choice('1234567890') for _ in range(6)])
                                             await channel.send(embed = discord.Embed(description = f'{player.mention} звонит на {number}...', color = 0xff8000))
-                                            await asyncio.sleep(3)
                                             p1_items.pop(int(item.content) - 1)
                                             if len(rounds_order) >= 3:
                                                 current = random.randint(1, len(rounds_order) - 1)
                                                 await player.send(embed = discord.Embed(description = f'...{current + 1} патрон {'боевой' if rounds_order[current] == 1 else "холостой"}...', color = 0xff8000))
-                                                await asyncio.sleep(1)
-                                                turn_order = 1
                                             else:
                                                 await player.send(embed = discord.Embed(description = 'Не повезло...'))
-                                                await asyncio.sleep(1)
-                                                turn_order = 1
                                         elif 'таблетки' in used:
                                             await channel.send(embed = discord.Embed(description = f'{player.mention} украл таблетки...', color = 0xff0000))
-                                            await asyncio.sleep(3)
                                             p1_items.pop(int(item.content) - 1)
                                             normal = random.randint(1, 4)
                                             if normal <= 2:
                                                 await channel.send(embed = discord.Embed(description = f'{player.mention} восстанавливает здоровье...', color = 0x00ff00))
-                                                if not p2_cursed: p2_hp += 2 if p2_hp <= 4 else 1 if p2_hp <= 5 else 0
-                                                await asyncio.sleep(1)
-                                                turn_order = 1
+                                                if not p2_cursed: p2_hp += 2 if p2_hp <= MAX_HP - 2 else 1 if p2_hp <= MAX_HP - 1 else 0
                                             else:
                                                 await channel.send(embed = discord.Embed(description = f'...{player.mention} теряет 1 здоровье...', color = 0xff0000))
                                                 p2_hp -= 1
-                                                await asyncio.sleep(1)
-                                                turn_order = 1
                                         elif 'Инвертер' in used:
                                             await channel.send(embed = discord.Embed(description = f'{player.mention} украл инвертер...', color = 0xff8000))
-                                            await asyncio.sleep(3)
                                             p1_items.pop(int(item.content) - 1)
                                             await channel.send(embed = discord.Embed(description = 'Тип патрона в патроннике изменён', color = 0xff8000))
-                                            await asyncio.sleep(1)
-                                            if rounds_order[0] == 0: rounds_order[0] = 1; turn_order = 1
-                                            elif rounds_order[0] == 1: rounds_order[0] = 0; turn_order = 1
+                                            if rounds_order[0] == 0: rounds_order[0] = 1
+                                            elif rounds_order[0] == 1: rounds_order[0] = 0
                                         elif 'Наручники' in used:
                                             if not p1_cuffed:
                                                 await channel.send(embed = discord.Embed(description = f'{player.mention} украл наручники, {ctx.author.mention} пропустит следующий ход', color = 0xff8000))
-                                                await asyncio.sleep(3)
                                                 p1_cuffed = True
                                                 p1_items.pop(int(item.content) - 1)
-                                                turn_order = 1
                                             else:
                                                 await channel.send(embed = discord.Embed(description = f'{player.mention}, вы уже использовали наручники', color = 0xff0000))
-                                                await asyncio.sleep(1)
-                                                turn_order = 1
                                         elif 'Шприц' in used:
                                             await channel.send(embed = discord.Embed(description = f'{player.mention} попытался украсть ещё один шприц', color = 0xff0000))
                                             p2_items.insert(int(item.content), items_list[8])
-                                            await asyncio.sleep(1)
-                                            turn_order = 1
+                                await asyncio.sleep(1)
+                                turn_order = 1
                             elif action.content.lower() == 'stop': stop = True; break
             elif answer.content == 'n':
                 await ctx.send(embed = discord.Embed(description = 'Ну ок', color = 0x2f3136))
