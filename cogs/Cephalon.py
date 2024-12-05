@@ -1,10 +1,15 @@
 import asyncio
 import secrets
 import sys
+import json
+from pathlib import Path
 
 import discord
 from functions import translate, get_locale, set_locale, get_plural_form, get_command_help
 from discord.ext import commands
+
+CWD = Path(__file__).parents[0].parents[0]
+CWD = str(CWD)
 
 uptime = discord.utils.utcnow()
 
@@ -171,18 +176,17 @@ class Cephalon(commands.Cog):
     @commands.command()
     @commands.cooldown(1, 5, commands.BucketType.user)
     async def ping(self, ctx):
-        emb = discord.Embed(description = '`Получаю..`', color = 0xff8000)
-        emb1 = discord.Embed(description = f'Pong!  `{round(self.client.latency * 1000)} ms`', color = 0xff8000)
-        message = await ctx.send(embed = emb)
+        message = await ctx.send(embed = discord.Embed(description = '`Получаю..`', color = 0xff8000))
         await asyncio.sleep(self.client.latency)
-        await message.edit(embed = emb1)
+        await message.edit(embed = discord.Embed(description = f'Pong! `{round(self.client.latency * 1000)} ms`', color = 0xff8000))
 
     @commands.command()
-    async def botver(self, ctx):
-        emb = discord.Embed(color = 0x2f3136)
-        emb.add_field(name = '0.13.0.2.21680', value = '- Была добавлена категория Fun (4 новых команды)\n- Для большинства команд была добавлена слэш (/) версия\nОт себя хочется отметить, что в категории Fun появилась НЕВЕРОЯТНАЯ команда - dotersbrain\n\nВсё ёпта, такой вот патч вышел. Следующий ждите через год (~~Завтра~~)')
-        emb.set_footer(text = 'Написано разработчиком Проказник#2785')
-        await ctx.send(embed = emb)
+    async def botver(self, ctx, version: str = '0.14.6.0'):
+        with open(CWD + '\\versions.json', 'r', encoding = 'utf-8') as f:
+            versions = json.load(f)
+        data = versions[str(version)]
+        embed = discord.Embed(title = version, description = data, color = 0x2f3136)
+        await ctx.send(embed = embed)
 
 async def setup(client):
     await client.add_cog(Cephalon(client))

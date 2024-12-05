@@ -74,10 +74,10 @@ def get_command_help(locale: str, command: str) -> str:
     Returns the help message for the command
     """
     with open(f'locales/{locale}/help.json', 'r', encoding = 'utf-8') as file:
-        user_data = json.load(file)
-    return user_data.get(command, f'{translate(locale, 'command_not_found')}'.format(command = command))
+        command_data = json.load(file)
+    return command_data.get(command, f'{translate(locale, 'command_not_found')}'.format(command = command))
 
-def parse_members(args_list: list[str] | str) -> argparse.Namespace | bool:
+def parse_members(args_list: list[str] | str) -> argparse.Namespace:
     if isinstance(args_list, str):
         args_list = args_list.split()
     parser = argparse.ArgumentParser()

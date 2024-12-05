@@ -2,7 +2,7 @@ import asyncio
 import discord
 import random
 import json
-from functions import translate, get_locale, set_locale, get_plural_form
+from functions import get_plural_form
 from discord.ext import commands
 
 class Fun(commands.Cog):
@@ -17,7 +17,6 @@ class Fun(commands.Cog):
     @commands.cooldown(1, 20, commands.BucketType.user)
     @commands.bot_has_permissions(manage_channels = True)
     async def roulette(self, ctx, player: discord.User | str = None):
-        # TODO: оптимизировать код посредством удаления повторяющихся строк при выстреле
         bot = discord.utils.get(ctx.guild.members, id = self.client.user.id)
         if player == 'leaderboard':
             with open('leaderboard/leaders.json', 'r') as file:
@@ -46,7 +45,7 @@ class Fun(commands.Cog):
                 channel = await ctx.guild.create_text_channel(f'Сессия игры в рулетку {ctx.author.display_name} vs {player.display_name}')
                 await ctx.send(embed = discord.Embed(description = f'Давайте перейдём в другой канал: {channel.mention}', color = 0x2f3136))
                 await channel.send(embed = discord.Embed(description = f'{ctx.author.mention} vs {player.mention}', color = 0xffffff))
-                await channel.send(embed = discord.Embed(description = 'В магазин вставляется случайное количество патронов от 2 до 8.\nПатрон может быть боевым или холостым.\nПеред каждым раундом вы получаете случайные предметы в размере двух штук, максимум 8 предметов.\n__Для ускорения игры, начиная с 5 раунда игроки будут получать по 4 предмета__.\nИспользование предмета считается дополнительным действием и не влияет на порядок ходов.\nВы __не можете__ отменить использование предмета.\nКоличество как боевых, так и холостых патронов абсолютно случайно, но не равно нулю.\nИгра заканчивается в тот момент, когда здоровье одного из игроков будет равно нулю.\nМаксимальное количество раундов - 10.\nПри выстреле в себя холостым противник пропустит ход.\nПорядок ходов будет решён подбрасыванием монетки', color = 0x2f3136))
+                await channel.send(embed = discord.Embed(description = 'В магазин вставляется случайное количество патронов от 2 до 8.\nПатрон может быть боевым или холостым.\nПеред каждым раундом вы получаете случайные предметы в размере двух штук, максимум 8 предметов.\n__Для ускорения игры, начиная с 5 раунда игроки будут получать по 4 предмета__.\nИспользование предмета считается дополнительным действием и не влияет на порядок ходов.\nВы __не можете__ отменить использование предмета.\nКоличество как боевых, так и холостых патронов абсолютно случайно, но не равно нулю.\nИгра заканчивается в тот момент, когда здоровье одного из игроков будет равно нулю.\nМаксимальное количество раундов - 10.\nПри выстреле в себя холостым противник пропустит ход.\nПорядок ходов и количество здоровья будут решены подбрасыванием монетки', color = 0x2f3136))
                 await asyncio.sleep(15)
                 turn_order = random.randint(0, 1)
                 for i in range(11):
@@ -115,7 +114,7 @@ class Fun(commands.Cog):
                         if p1_cursed: cursed = ctx.author.mention
                         if p2_cursed: cursed = player.mention
                         if p1_cursed and p2_cursed: cursed = 'Никто'
-                        await channel.send(embed = discord.Embed(description = f'Патронов - {len(rounds_order) if first else '?'}, боевых - {rounds_order.count(1) if first else '?'}, холостых - {rounds_order.count(0) if first else '?'}\nЗдоровье {ctx.author.mention} - {p1_hp}\nЗдоровье {player.mention} - {p2_hp}\n{f'Предметы {ctx.author.mention} ({len(p1_items)}) - {", ".join(p1_items)}' if len(p1_items) > 0 else f"У {ctx.author.mention} нет предметов"}\n{f'Предметы {player.mention} ({len(p2_items)}) - {", ".join(p2_items)}' if len(p2_items) > 0 else f"У {player.mention} нет предметов"}{f"\n__{cuffed} закован в наручники и пропускает ход__" if p1_cuffed or p2_cuffed else ""}{f'**\n{cursed} не может восстанавливать здоровье**' if p1_cursed or p2_cursed else f''}', color = 0x2f3136))
+                        await channel.send(embed = discord.Embed(description = f'Патронов - {len(rounds_order) if first else '?'}, боевых - {rounds_order.count(1) if first else '?'}, холостых - {rounds_order.count(0) if first else '?'}\nЗдоровье {ctx.author.mention} - {p1_hp}\nЗдоровье {player.mention} - {p2_hp}\n{f'Предметы {ctx.author.mention} ({len(p1_items)}) - {", ".join(p1_items)}' if len(p1_items) > 0 else f"У {ctx.author.mention} нет предметов"}\n{f'Предметы {player.mention} ({len(p2_items)}) - {", ".join(p2_items)}' if len(p2_items) > 0 else f"У {player.mention} нет предметов"}{f"\n__{cuffed} закован в наручники и пропускает ход__" if p1_cuffed or p2_cuffed else ""}{f'**\n{cursed} не может восстанавливать здоровье**' if p1_cursed or p2_cursed else ''}', color = 0x2f3136))
                         first = False
                         if turn_order == 0:
                             await channel.send(embed = discord.Embed(description = f'{ctx.author.mention}, выберите действие: 1 - выстрелить в себя, 2 - выстрелить в противника{"" if len(p1_items) == 0 else ", 3 - использовать предмет"}', color = 0xff8000))
@@ -204,7 +203,7 @@ class Fun(commands.Cog):
                                     else:
                                         await channel.send(embed = discord.Embed(description = f'{ctx.author.mention}, вы уже использовали наручники', color = 0xff0000))
                                 elif 'Шприц' in used:
-                                    if len(p2_items) == 0: await ctx.send(embed = discord.Embed(description = f'В инвентаре противника нет предметов', color = 0xff0000)); turn_order = 0
+                                    if len(p2_items) == 0: await ctx.send(embed = discord.Embed(description = 'В инвентаре противника нет предметов', color = 0xff0000)); turn_order = 0
                                     await channel.send(embed = discord.Embed(description = f'{ctx.author.mention} использовал шприц адреналина, теперь он может выбрать предмет {player.mention}', color = 0xff8000))
                                     p1_items.pop(int(item.content) - 1)
                                     init = [f'{i + 1} - {item}' for i, item in enumerate(p2_items)]
@@ -299,9 +298,7 @@ class Fun(commands.Cog):
                                 damage = 1
                                 turn_order = 0
                             elif action.content == '3':
-                                init = []
-                                for i in range(len(p2_items)):
-                                    init.append(f'{i + 1} - {p2_items[i]}')
+                                init = [f'{i + 1} - {x}' for i, x in enumerate(p2_items)]
                                 await channel.send(embed = discord.Embed(description = f'{player.mention}, выберите предмет из инвентаря: {", ".join(init)}', color = 0xff8000))
                                 item = await self.client.wait_for('message', check = lambda message: message.channel == channel and message.author == player and message.content.lower() in ([str(x) for x in range(1, len(p2_items) + 1)]))
                                 used = init[int(item.content) - 1]
@@ -362,9 +359,7 @@ class Fun(commands.Cog):
                                     else:
                                         await channel.send(embed = discord.Embed(description = f'{player.mention} использовал шприц адреналина, теперь он может выбрать предмет {ctx.author.mention}', color = 0xff8000))
                                         p2_items.pop(int(item.content) - 1)
-                                        init = []
-                                        for i in range(len(p1_items)):
-                                            init.append(f'{i + 1} - {p1_items[i]}')
+                                        init = [f'{i + 1}. {x}' for i, x in enumerate(p1_items)]
                                         await channel.send(embed = discord.Embed(description = f'Выберите предмет из инвентаря {ctx.author.mention}: {", ".join(init)}', color = 0xff8000))
                                         item = await self.client.wait_for('message', check = lambda message: message.channel == channel and message.author == player and message.content.lower() in ([str(x) for x in range(1, len(p1_items) + 1)]))
                                         used = init[int(item.content) - 1]
@@ -435,7 +430,7 @@ class Fun(commands.Cog):
             channel = await ctx.guild.create_text_channel(f'Сессия игры в рулетку {ctx.author.display_name} vs {self.client.user.name}')
             await ctx.send(embed = discord.Embed(description = f'Давайте перейдём в другой канал: {channel.mention}', color = 0x2f3136))
             await channel.send(embed = discord.Embed(description = 'Игра против ИИ', color = 0xff8000))
-            await channel.send(embed = discord.Embed(description = 'В магазин вставляется случайное количество патронов от 2 до 8.\nПатрон может быть боевым или холостым.\nПеред каждым раундом вы получаете случайные предметы в размере двух штук, максимум 8 предметов.\n__Для ускорения игры, начиная с 5 раунда игроки будут получать по 4 предмета__.\nИспользование предмета считается дополнительным действием и не влияет на порядок ходов.\nВы __не можете__ отменить использование предмета.\nКоличество как боевых, так и холостых патронов абсолютно случайно, но не равно нулю.\nИгра заканчивается в тот момент, когда здоровье одного из игроков будет равно нулю.\nМаксимальное количество раундов - 10.\nПри выстреле в себя холостым противник пропустит ход.\nТак как вы играете с ботом, первым в раунде всегда ходит человек', color = 0x2f3136))
+            await channel.send(embed = discord.Embed(description = 'В магазин вставляется случайное количество патронов от 2 до 8.\nПатрон может быть боевым или холостым.\nПеред каждым раундом вы получаете случайные предметы в размере двух штук, максимум 8 предметов.\n__Для ускорения игры, начиная с 5 раунда игроки будут получать по 4 предмета__.\nИспользование предмета считается дополнительным действием и не влияет на порядок ходов.\nВы __не можете__ отменить использование предмета.\nКоличество как боевых, так и холостых патронов абсолютно случайно, но не равно нулю.\nИгра заканчивается в тот момент, когда здоровье одного из игроков будет равно нулю.\nМаксимальное количество раундов - 10.\nПри выстреле в себя холостым противник пропустит ход.\nТак как вы играете с ботом, первым в раунде всегда ходит человек, а начальное количество здоровья равно 6', color = 0x2f3136))
             await asyncio.sleep(15)
             for i in range(11):
                 if i == 10: await channel.send(embed = discord.Embed(description = 'Игра окончена ничьёй, канал удалится через 10 секунд', color = 0xff8000)); await asyncio.sleep(10); return await channel.delete()
@@ -546,9 +541,7 @@ class Fun(commands.Cog):
                             await asyncio.sleep(1)
                             turn_order = 1
                         elif action.content == '3':
-                            init = []
-                            for i in range(len(p1_items)):
-                                init.append(f'{i + 1} - {p1_items[i]}')
+                            init = [f'{i + 1} - {x}' for i, x in enumerate(p1_items)]
                             await channel.send(embed = discord.Embed(description = f'Выберите предмет из инвентаря: {", ".join(init)}', color = 0xff8000))
                             item = await self.client.wait_for('message', check = lambda message: message.channel == channel and message.author == ctx.author and message.content.lower() in ([str(x) for x in range(1, len(p1_items) + 1)]))
                             used = init[int(item.content) - 1]
@@ -585,7 +578,7 @@ class Fun(commands.Cog):
                                 else:
                                     await channel.send(embed = discord.Embed(description = 'Не повезло...'))
                             elif 'таблетки' in used:
-                                await channel.send(embed = discord.Embed(description = f'Вы использовали таблетки...', color = 0xff0000))
+                                await channel.send(embed = discord.Embed(description = 'Вы использовали таблетки...', color = 0xff0000))
                                 await asyncio.sleep(3)
                                 p1_items.pop(int(item.content) - 1)
                                 normal = random.randint(1, 4)
@@ -609,16 +602,14 @@ class Fun(commands.Cog):
                                     p2_cuffed = True
                                     p1_items.pop(int(item.content) - 1)
                                 else:
-                                    await channel.send(embed = discord.Embed(description = f'Вы уже использовали наручники', color = 0xff0000))
+                                    await channel.send(embed = discord.Embed(description = 'Вы уже использовали наручники', color = 0xff0000))
                             elif 'Шприц' in used:
                                 if len(p1_items) == 0: await channel.send(embed = discord.Embed(description = 'В инвентаре противника нет предметов', color = 0xff0000)); turn_order = 0
                                 else:
                                     await channel.send(embed = discord.Embed(description = 'Вы использовали шприц адреналина, теперь вы можете выбрать один предмет противника', color = 0x00ff00))
                                     await asyncio.sleep(3)
                                     p1_items.pop(int(item.content) - 1)
-                                    init = []
-                                    for i in range(len(p2_items)):
-                                        init.append(f'{i + 1} - {p2_items[i]}')
+                                    init = [f'{i + 1} - {x}' for i, x in enumerate(p2_items)]
                                     await channel.send(embed = discord.Embed(description = f'Выберите предмет из инвентаря противника: {", ".join(init)}', color = 0xff8000))
                                     item = await self.client.wait_for('message', check = lambda message: message.channel == channel and message.author == ctx.author and message.content.lower() in ([str(x) for x in range(1, len(p2_items) + 1)]))
                                     used = init[int(item.content) - 1]
@@ -656,7 +647,7 @@ class Fun(commands.Cog):
                                         else:
                                             await channel.send(embed = discord.Embed(description = 'Не повезло...'))
                                     elif 'таблетки' in used:
-                                        await channel.send(embed = discord.Embed(description = f'Вы украли таблетки...', color = 0xff0000))
+                                        await channel.send(embed = discord.Embed(description = 'Вы украли таблетки...', color = 0xff0000))
                                         await asyncio.sleep(3)
                                         p2_items.pop(int(item.content) - 1)
                                         normal = random.randint(1, 4)
@@ -680,7 +671,7 @@ class Fun(commands.Cog):
                                             p2_cuffed = True
                                             p2_items.pop(int(item.content) - 1)
                                         else:
-                                            await channel.send(embed = discord.Embed(description = f'Вы уже использовали наручники', color = 0xff0000))
+                                            await channel.send(embed = discord.Embed(description = 'Вы уже использовали наручники', color = 0xff0000))
                                     elif 'Шприц' in used:
                                         await channel.send(embed = discord.Embed(description = 'Вы не можете украсть ещё один шприц', color = 0xff0000))
                                         p1_items.insert(int(item.content), items_list[8])
@@ -689,7 +680,7 @@ class Fun(commands.Cog):
                         elif action.content.lower() == 'stop': stop = True; break
                     elif turn_order == 1: # TODO: бот должен иметь более развитый интеллект, зависящий от обстоятельств, а не рандома, который позволит ему чаще использовать предметы и принимать правильные решения. Например, если у него меньше 6 здоровья - он использует сигареты или таблетки для исцеления
                         glass = False     # Сейчас бот имеет версию ИИ 0.5
-                        if p2_items == []:
+                        if not p2_items:
                             if rounds_order.count(1) > rounds_order.count(0):
                                 action = 3
                             elif rounds_order.count(1) < rounds_order.count(0):
@@ -835,9 +826,9 @@ class Fun(commands.Cog):
                                     p1_hp -= damage
                                     damage = 1
                                     turn_order = 0
-                            elif 'Просроченные таблетки' in p2_items and p2_hp < 6 and p2_hp > 1:
+                            elif 'Просроченные таблетки' in p2_items and 1 < p2_hp < 6:
                                 p2_items.pop(p2_items.index('Просроченные таблетки'))
-                                await channel.send(embed = discord.Embed(description = f'Дилер использовал таблетки...', color = 0xff8000))
+                                await channel.send(embed = discord.Embed(description = 'Дилер использовал таблетки...', color = 0xff8000))
                                 await asyncio.sleep(3)
                                 normal = random.randint(1, 4)
                                 if normal <= 2:
@@ -853,16 +844,16 @@ class Fun(commands.Cog):
                                 await asyncio.sleep(3)
                                 damage += 1
                                 action = 3
-                            elif 'Шприц адреналина' in p2_items and p1_items != []:
+                            elif 'Шприц адреналина' in p2_items and p1_items:
                                 p2_items.pop(p2_items.index('Шприц адреналина'))
                                 if p2_hp < 6 and 'Сигареты' in p1_items:
                                     p1_items.pop(p1_items.index('Сигареты'))
                                     await channel.send(embed = discord.Embed(description = 'Дилер украл ваши сигареты', color = 0xff0000))
                                     await asyncio.sleep(3)
                                     p2_hp += 1
-                                elif p2_hp < 6 and p2_hp > 1 and 'Просроченные таблетки' in p1_items:
+                                elif 1 < p2_hp < 6 and 'Просроченные таблетки' in p1_items:
                                     p1_items.pop(p1_items.index('Просроченные таблетки'))
-                                    await channel.send(embed = discord.Embed(description = f'Дилер украл ваши таблетки...', color = 0xff0000))
+                                    await channel.send(embed = discord.Embed(description = 'Дилер украл ваши таблетки...', color = 0xff0000))
                                     await asyncio.sleep(3)
                                     normal = random.randint(1, 4)
                                     if normal <= 2:
@@ -992,40 +983,20 @@ class Fun(commands.Cog):
     @commands.cooldown(1, 15, commands.BucketType.user)
     @commands.bot_has_permissions(manage_messages = True)
     async def dotersbrain(self, ctx):
-        sent1 = await ctx.send(f'{ctx.author.mention}, через 5 секунд появится одно из слов (чё, а, да, нет, ок), на которое вам нужно будет правильно ответить. На размышление 4 секунды.')
-        await asyncio.sleep(5)
         words = ['чё', 'а', 'да', 'нет', 'ок']
-        rand = random.choice(words)
-        sent = await ctx.send(rand)
+        answers = {'чё': 'хуй через плечо', 'а': 'хуй на', 'да': 'пизда', 'нет': 'пидора ответ', 'ок': 'хуй намок'}
+        await ctx.send(f'{ctx.author.mention}, через 5 секунд появится одно из слов ({", ".join(words)}), на которое вам нужно будет правильно ответить. На размышление 5 секунд')
+        await asyncio.sleep(5)
+        sent = await ctx.send(random.choice(words))
         try:
-            msg = await self.client.wait_for('message', timeout = 4, check = lambda message: message.author == ctx.author and message.channel == ctx.message.channel)
-            if msg.content.lower() == 'хуй через плечо' and sent.content == 'чё':
-                await ctx.send(content = 'Поздравляю, у вас 3 стадия рака!')
-                await sent1.delete()
-                await sent.delete()
-            elif sent.content == 'а' and msg.content.lower() == 'хуй на':
-                await ctx.send(content = 'Поздравляю, у вас 3 стадия рака!')
-                await sent1.delete()
-                await sent.delete()
-            elif sent.content == 'да' and msg.content.lower() == 'пизда':
-                await ctx.send(content = 'Поздравляю, у вас 3 стадия рака!')
-                await sent1.delete()
-                await sent.delete()
-            elif sent.content == 'нет' and msg.content.lower() == 'пидора ответ':
-                await ctx.send(content = 'Поздравляю, у вас 3 стадия рака!')
-                await sent1.delete()
-                await sent.delete()
-            elif sent.content == 'ок' and msg.content.lower() == 'хуй намок':
-                await ctx.send(content = 'Поздравляю, у вас 3 стадия рака!')
-                await sent1.delete()
-                await sent.delete()
+            msg = await self.client.wait_for('message', timeout = 5, check = lambda message: message.author == ctx.author and message.channel == ctx.message.channel)
+            if msg.content.lower() == answers[sent.content]:
+                await ctx.send('Поздравляю, у вас 3 стадия рака!')
             else:
                 await ctx.send('Вы совершенно здоровый человек! ||попробуйте cy/help dotersbrain||')
-                await sent1.delete()
-                await sent.delete()
         except asyncio.TimeoutError:
             await ctx.send(f'{ctx.author.mention}, слишком медленно.')
-            await sent.delete()
+        await sent.delete()
 
     @commands.command()
     @commands.cooldown(1, 5, commands.BucketType.user)
@@ -1035,16 +1006,6 @@ class Fun(commands.Cog):
             await ctx.send(embed = discord.Embed(description = f'Ого! Твой аганим длиной аж {rand} см!', color = 0xff8000))
         else:
             await ctx.send(embed = discord.Embed(description = f'Длина твоего аганима {rand} см, лошара', color = 0xff8000))
-
-    @commands.command()
-    @commands.cooldown(1, 15, commands.BucketType.user)
-    async def sanya(self, ctx):
-        await ctx.send(embed = discord.Embed().set_image(url = 'https://cdn.discordapp.com/attachments/685176670344183836/1076601210485866546/76923ec8de0a6ca5.png'))
-
-    @commands.command()
-    @commands.cooldown(1, 15, commands.BucketType.user)
-    async def ball(self, ctx):
-        await ctx.send(embed = discord.Embed().set_image(url ="https://cdn.discordapp.com/attachments/1064581563603488911/1070381595137163427/rn_image_picker_lib_temp_63aafe99-1b5a-4811-9ad4-5be217ced37f.jpg"))
 
 async def setup(client):
     await client.add_cog(Fun(client))

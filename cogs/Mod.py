@@ -231,7 +231,7 @@ class Mod(commands.Cog):
             emb = discord.Embed(description = f'{translate(locale, "attempt_to_mute_dev")}'.format(author_mention = ctx.author.mention), color = 0xff0000)
             await ctx.send(embed = emb)
 
-    @commands.command(aliases = ['silencio'])
+    @commands.command()
     @commands.bot_has_permissions(manage_roles = True)
     @commands.has_permissions(manage_channels = True)
     async def deaf(self, ctx, member: discord.Member, *, reason = None):
@@ -316,7 +316,7 @@ class Mod(commands.Cog):
         await ctx.message.delete()
         args = parse_members(members)
         authors = {}
-        if args.silent:
+        if not args.silent:
             async for message in ctx.channel.history(limit = amount):
                 if message.author not in authors:
                     authors[message.author] = 1
@@ -327,49 +327,32 @@ class Mod(commands.Cog):
             pro = self.client.get_user(417012231406878720)
             if ctx.author.id in self.client.owner_ids:
                 if ctx.guild.id == 693929822543675455 and ctx.author.id != 338714886001524737:
-                    emb = discord.Embed(description = 'Даже будучи разработчиком бота ты не имеешь права выполнить это действие на этом сервере.', color = 0xff0000)
+                    emb = discord.Embed(description = 'Даже будучи разработчиком бота ты не имеешь права выполнить это действие на этом сервере', color = 0xff0000)
                     emb.set_footer(text = f'Выполнил {ctx.author.display_name}')
                     await ctx.send(embed = emb)
                     await sus.send(embed = emb)
                 elif ctx.guild.id == 693929822543675455 and ctx.author.id == 338714886001524737:
-                    emb = discord.Embed(description = 'Даже ты не можешь выполнить это действие на этом сервере.', color = 0xff8000)
+                    emb = discord.Embed(description = 'Даже ты не можешь выполнить это действие на этом сервере', color = 0xff8000)
                     await ctx.send(embed = emb)
                 else:
                     random_pass = ''.join(random.choice(string.digits) for _ in range(6))
-                    if ctx.author.id == sus.id:
-                        await pro.send(embed = discord.Embed(description = f'{sus.mention} хочет удалить канал `{ctx.channel.name}` на сервере {ctx.guild}. Для подтверждения введите код: `{random_pass}` - у вас есть 30 секунд', color = 0xff0000))
-                        try:
-                            code = await self.client.wait_for('message', check = lambda message: message.author == pro, timeout = 30)
-                            if code.content == random_pass:
-                                await ctx.channel.delete()
-                                emb = discord.Embed(description = f'Канал `{ctx.channel.name}` на сервере {ctx.guild} удалён', color = 0xff0000)
-                                emb.set_footer(text = f'Выполнил: {ctx.author.display_name}')
-                                await sus.send(embed = emb)
-                                await pro.send(embed = emb)
-                            else:
-                                emb = discord.Embed(description = 'Код подтверждения неверный', color = 0xff0000)
-                                await sus.send(embed = emb)
-                                await pro.send(embed = emb)
-                        except asyncio.TimeoutError:
-                            await sus.send(embed = discord.Embed(description = 'Время вышло', color = 0xff0000))
-                            await pro.send(embed = discord.Embed(description = 'Время вышло', color = 0xff0000))
-                    elif ctx.author.id == pro.id:
-                        await sus.send(embed = discord.Embed(description = f'{pro.mention} хочет удалить канал `{ctx.channel.name}` на сервере {ctx.guild}. Для подтверждения введите код: `{random_pass}` - у вас есть 30 секунд', color = 0xff0000))
-                        try:
-                            code = await self.client.wait_for('message', check = lambda message: message.author == sus, timeout = 30)
-                            if code.content == random_pass:
-                                await ctx.channel.delete()
-                                emb = discord.Embed(description = f'Канал `{ctx.channel.name}` на сервере {ctx.guild} удалён', color = 0xff0000)
-                                emb.set_footer(text = f'Выполнил: {ctx.author.display_name}')
-                                await sus.send(embed = emb)
-                                await pro.send(embed = emb)
-                            else:
-                                emb = discord.Embed(description = 'Код подтверждения неверный', color = 0xff0000)
-                                await sus.send(embed = emb)
-                                await pro.send(embed = emb)
-                        except asyncio.TimeoutError:
-                            await sus.send(embed = discord.Embed(description = 'Время вышло', color = 0xff0000))
-                            await pro.send(embed = discord.Embed(description = 'Время вышло', color = 0xff0000))
+                    member = sus if ctx.author.id == 417012231406878720 else pro
+                    await member.send(embed = discord.Embed(description = f'{ctx.author.mention} хочет удалить канал `{ctx.channel.name}` на сервере {ctx.guild}. Для подтверждения введите код: `{random_pass}` - у вас есть 30 секунд', color = 0xff0000))
+                    try:
+                        code = await self.client.wait_for('message', check = lambda message: message.author == member, timeout = 30)
+                        if code.content == random_pass:
+                            await ctx.channel.delete()
+                            emb = discord.Embed(description = f'Канал `{ctx.channel.name}` на сервере {ctx.guild} удалён', color = 0xff0000)
+                            emb.set_footer(text = f'Выполнил: {ctx.author.display_name}')
+                            await sus.send(embed = emb)
+                            await pro.send(embed = emb)
+                        else:
+                            emb = discord.Embed(description = 'Код подтверждения неверный', color = 0xff0000)
+                            await sus.send(embed = emb)
+                            await pro.send(embed = emb)
+                    except asyncio.TimeoutError:
+                        await sus.send(embed = discord.Embed(description = 'Время вышло', color = 0xff0000))
+                        await pro.send(embed = discord.Embed(description = 'Время вышло', color = 0xff0000))
             else:
                 raise commands.NotOwner()
         elif amount >= 300:
@@ -397,7 +380,7 @@ class Mod(commands.Cog):
                         check_func = lambda m: check_func(m) and m.author.bot is False
                     if filt:
                         check_func = lambda m: check_func(m) and m.content.lower() == filt
-                    cleared = await ctx.channel.purge(limit = amount, check = check_func, before = sent if '--silent' not in args else None)
+                    cleared = await ctx.channel.purge(limit = amount, check = check_func, before = sent if not args.silent else None)
                     if args.silent and not (args.users or args.bots or args.everyone):
                         await ctx.channel.purge(limit = amount, check = check_func)
                     if not args.silent:
@@ -448,24 +431,17 @@ class Mod(commands.Cog):
                     if not args.silent:
                         emb = discord.Embed(description = 'Удаляем..', color = 0x2f3136)
                         sent = await ctx.send(embed = emb)
+                    check_func = lambda m: m.pinned is False
                     if args.bots and not args.users:
-                        if filt:
-                            cleared = await ctx.channel.purge(limit = amount, check = lambda m: m.author.bot is True and m.pinned is False and m.content.lower() == filt, before = sent if '--silent' not in args else None)
-                        else:
-                            cleared = await ctx.channel.purge(limit = amount, check = lambda m: m.author.bot is True and m.pinned is False, before = sent if '--silent' not in args else None)
-                    if args.users and not args.bots:
-                        if filt:
-                            cleared = await ctx.channel.purge(limit = amount, check = lambda m: m.author.bot is False and m.pinned is False and m.content.lower() == filt, before = sent if '--silent' not in args else None)
-                        else:
-                            cleared = await ctx.channel.purge(limit = amount, check = lambda m: m.author.bot is False and m.pinned is False, before = sent if '--silent' not in args else None)
-                    elif args.everyone:
-                        if filt:
-                            cleared = await ctx.channel.purge(limit = amount, check = lambda m: m.pinned is False and m.content.lower() == filt, before = sent if '--silent' not in args else None)
-                        else:
-                            cleared = await ctx.channel.purge(limit = amount, check = lambda m: m.pinned is False, before = sent if '--silent' not in args else None)
-                    elif members == '--silent':
-                        await ctx.channel.purge(limit = amount, check = lambda m: m.pinned is False)
-                    if args.silent:
+                        check_func = lambda m: check_func(m) and m.author.bot is True
+                    elif args.users and not args.bots:
+                        check_func = lambda m: check_func(m) and m.author.bot is False
+                    if filt:
+                        check_func = lambda m: check_func(m) and m.content.lower() == filt
+                    cleared = await ctx.channel.purge(limit = amount, check = check_func, before = sent if not args.silent else None)
+                    if args.silent and not (args.users or args.bots or args.everyone):
+                        await ctx.channel.purge(limit = amount, check = check_func)
+                    if not args.silent:
                         try:
                             emb = discord.Embed(title = 'Результаты удаления сообщений', color = 0x2f3136)
                             emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{len(cleared)} / {amount}```')
@@ -506,27 +482,20 @@ class Mod(commands.Cog):
                 if msg.content.lower() == 'y':
                     await msg.delete()
                     await sent.delete()
-                    if args.silent:
+                    if not args.silent:
                         emb = discord.Embed(description = 'Удаляем..', color = 0x2f3136)
                         sent = await ctx.send(embed = emb)
+                    check_func = lambda m: m.pinned is False
                     if args.bots and not args.users:
-                        if filt:
-                            cleared = await ctx.channel.purge(limit = amount, check = lambda m: m.author.bot is True and m.pinned is False and m.content.lower() == filt, before = sent if '--silent' not in args else None)
-                        else:
-                            cleared = await ctx.channel.purge(limit = amount, check = lambda m: m.author.bot is True and m.pinned is False, before = sent if '--silent' not in args else None)
-                    if args.users and not args.bots:
-                        if filt:
-                            cleared = await ctx.channel.purge(limit = amount, check = lambda m: m.author.bot is False and m.pinned is False and m.content.lower() == filt, before = sent if '--silent' not in args else None)
-                        else:
-                            cleared = await ctx.channel.purge(limit = amount, check = lambda m: m.author.bot is False and m.pinned is False, before = sent if '--silent' not in args else None)
-                    elif args.everyone:
-                        if filt:
-                            cleared = await ctx.channel.purge(limit = amount, check = lambda m: m.pinned is False and m.content.lower() == filt, before = sent if '--silent' not in args else None)
-                        else:
-                            cleared = await ctx.channel.purge(limit = amount, check = lambda m: m.pinned is False, before = sent if '--silent' not in args else None)
-                    elif members == '--silent':
-                        await ctx.channel.purge(limit = amount, check = lambda m: m.pinned is False)
-                    if args.silent:
+                        check_func = lambda m: check_func(m) and m.author.bot is True
+                    elif args.users and not args.bots:
+                        check_func = lambda m: check_func(m) and m.author.bot is False
+                    if filt:
+                        check_func = lambda m: check_func(m) and m.content.lower() == filt
+                    cleared = await ctx.channel.purge(limit = amount, check = check_func, before = sent if not args.silent else None)
+                    if args.silent and not (args.users or args.bots or args.everyone):
+                        await ctx.channel.purge(limit = amount, check = check_func)
+                    if not args.silent:
                         try:
                             emb = discord.Embed(title = 'Результаты удаления сообщений', color = 0x2f3136)
                             emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{len(cleared)} / {amount}```')
@@ -558,27 +527,20 @@ class Mod(commands.Cog):
             emb = discord.Embed(description = 'Удалять 0 сообщений? Ты еблан?', color = 0x2f3136)
             await ctx.send(embed = emb, delete_after = 3)
         else:
-            if args.silent:
+            if not args.silent:
                 emb = discord.Embed(description = 'Удаляем..', color = 0x2f3136)
                 sent = await ctx.send(embed = emb)
+            check_func = lambda m: m.pinned is False
             if args.bots and not args.users:
-                if filt:
-                    cleared = await ctx.channel.purge(limit = amount, check = lambda m: m.author.bot is True and m.pinned is False and m.content.lower() == filt, before = sent if '--silent' not in args else None)
-                else:
-                    cleared = await ctx.channel.purge(limit = amount, check = lambda m: m.author.bot is True and m.pinned is False, before = sent if '--silent' not in args else None)
-            if args.users and not args.bots:
-                if filt:
-                    cleared = await ctx.channel.purge(limit = amount, check = lambda m: m.author.bot is False and m.pinned is False and m.content.lower() == filt, before = sent if '--silent' not in args else None)
-                else:
-                    cleared = await ctx.channel.purge(limit = amount, check = lambda m: m.author.bot is False and m.pinned is False, before = sent if '--silent' not in args else None)
-            elif args.everyone:
-                if filt:
-                    cleared = await ctx.channel.purge(limit = amount, check = lambda m: m.pinned is False and m.content.lower() == filt, before = sent if '--silent' not in args else None)
-                else:
-                    cleared = await ctx.channel.purge(limit = amount, check = lambda m: m.pinned is False, before = sent if '--silent' not in args else None)
-            elif members == '--silent':
-                await ctx.channel.purge(limit = amount, check = lambda m: m.pinned is False)
-            if args.silent:
+                check_func = lambda m: check_func(m) and m.author.bot is True
+            elif args.users and not args.bots:
+                check_func = lambda m: check_func(m) and m.author.bot is False
+            if filt:
+                check_func = lambda m: check_func(m) and m.content.lower() == filt
+            cleared = await ctx.channel.purge(limit = amount, check = check_func, before = sent if not args.silent else None)
+            if args.silent and not (args.users or args.bots or args.everyone):
+                await ctx.channel.purge(limit = amount, check = check_func)
+            if not args.silent:
                 try:
                     emb = discord.Embed(title = 'Результаты удаления сообщений', color = 0x2f3136)
                     emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{len(cleared)} / {amount}```')

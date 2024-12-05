@@ -176,7 +176,7 @@ class Embeds(commands.Cog):
         if message.author.id in botversions:
             command = 'edit' if should_be_edit == '--edit' else 'say'
             if message.embeds:
-                await ctx.send(f'```cy/{command} {message.id} {embed_data["t"]}{embed_data["d"]}{embed_data["f"]}{embed_data["th"]}{embed_data["img"]}{embed_data["c"]}```')
+                await ctx.send(f'```cy/{command} {message.id if command == "edit" else ""} {embed_data["t"]}{embed_data["d"]}{embed_data["f"]}{embed_data["th"]}{embed_data["img"]}{embed_data["c"]}```')
             else:
                 content_prefix = '' if '```' in message.content else '```'
                 await ctx.send(f'{content_prefix}cy/{command} {message.content}{content_prefix}')

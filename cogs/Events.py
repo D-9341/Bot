@@ -4,7 +4,7 @@ import json
 from functions import get_plural_form
 from discord.ext import commands
 
-def rearm(command: commands.Command, message: discord.Message):
+def rearm(command, message):
     if command._buckets.valid:
         bucket = command._buckets.get_bucket(message)
         bucket._tokens = min(bucket.rate, bucket._tokens + 1)
@@ -15,7 +15,6 @@ class Events(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        await self.client.tree.sync()
         print('Модуль Events загружен')
 
     @commands.Cog.listener()
@@ -99,7 +98,6 @@ class Events(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message):
-        await self.client.process_commands(message)
         if message.author.bot is False:
             with open('locales/users.json', 'r', encoding = 'utf-8') as users_file:
                 file = json.load(users_file)
@@ -163,13 +161,15 @@ class Events(commands.Cog):
             await message.add_reaction('👎')
 
     @commands.Cog.listener()
-    async def on_command_error(ctx, error):
+    async def on_command_error(self, ctx, error):
+        # if isinstance(error, commands.CommandNotFound):
+        #     emb = discord.Embed(description = f'{ctx.author.mention}, команда `{ctx.command.name}` не найдена{f', так как модуль `{ctx.command.cog.qualified_name}`, ответственный за неё, отключён' if ctx.command.cog.qualified_name else ''}', color = 0xff8000)
+        #     await ctx.send(embed = emb)
         if isinstance(error, commands.DisabledCommand):
             emb = discord.Embed(description = f'{ctx.author.mention}, команда `{ctx.command.name}` отключена', color = 0xff8000)
             await ctx.send(embed = emb)
         elif isinstance(error, commands.NotOwner):
             emb = discord.Embed(description = f'{ctx.author.mention}, это действие может совершить только один из создателей бота', color = 0xff8000)
-            emb.set_footer(text = 'Счётчик перезарядки сброшен')
             await ctx.send(embed = emb)
         elif isinstance(error, commands.BotMissingPermissions):
             emb = discord.Embed(description = f'{ctx.author.mention}, у **меня** недостаточно прав на выполнение команды `{ctx.command.name}`, напишите cy/help `{ctx.command.name}` для просмотра необходимых прав\n||Выдача прав администратора решит эту проблему||', color = 0xff0000)
@@ -208,5 +208,5 @@ class Events(commands.Cog):
             emb.set_footer(text = 'Счётчик перезарядки сброшен')
             await ctx.send(embed = emb)
 
-def setup(client):
-    client.add_cog(Events(client))
+async def setup(client):
+    await client.add_cog(Events(client))
