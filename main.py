@@ -6,9 +6,9 @@ import discord
 from dotenv import load_dotenv
 from pathlib import Path
 from discord.ext import commands
-from functions import get_plural_form
 
 intents = discord.Intents.all()
+uptime = discord.utils.utcnow()
 
 client = commands.Bot(command_prefix = commands.when_mentioned_or('cy/'), intents = intents, status = discord.Status.idle, activity = discord.Activity(type = discord.ActivityType.watching, name = 'в никуда'), owner_ids = {338714886001524737, 417012231406878720}, case_insensitive = True, allowed_mentions = discord.AllowedMentions(everyone = False))
 client.remove_command('help')
@@ -21,10 +21,23 @@ async def on_ready():
     await client.tree.sync()
 
 @client.command()
-async def disable(ctx, extension: str):
+async def disable(ctx, cmd: str):
     if ctx.author.id not in client.owner_ids:
         raise commands.NotOwner()
-    ext = extension.title()
+    client.get_command(cmd).enabled = False
+    await ctx.send(embed = discord.Embed(description = f'Команда `{cmd}` выключена', color = 0xff8000))
+
+@client.command()
+async def enable(ctx, cmd: str):
+    if ctx.author.id not in client.owner_ids:
+        raise commands.NotOwner()
+    client.get_command(cmd).enabled = True
+    await ctx.send(embed = discord.Embed(description = f'Команда `{cmd}` включена', color = 0xff8000))
+
+@client.command()
+async def unload(ctx, extension: str):
+    if ctx.author.id not in client.owner_ids:
+        raise commands.NotOwner()
     ext = f'cogs.{ext}'
     if ext == 'cogs.Events': return await ctx.send(embed = discord.Embed(description = 'Модуль `Events` не может быть выгружен', color = 0xff0000))
     if ext not in client.extensions:
@@ -36,10 +49,9 @@ async def disable(ctx, extension: str):
     await ctx.send(embed = discord.Embed(description = f'Модуль `{extension}` выгружен', color = 0xff8000))
 
 @client.command()
-async def enable(ctx, extension: str):
+async def load(ctx, extension: str):
     if ctx.author.id not in client.owner_ids:
         raise commands.NotOwner()
-    ext = extension.title()
     ext = f'cogs.{ext}'
     if ext in client.extensions:
         return await ctx.send(embed = discord.Embed(description = f'Модуль `{extension}` уже загружен', color = 0xff0000))
@@ -50,7 +62,7 @@ async def enable(ctx, extension: str):
     except commands.ExtensionAlreadyLoaded:
         return await ctx.send(embed = discord.Embed(description = f'Модуль `{extension}` уже загружен', color = 0xff0000))
     except commands.ExtensionFailed as error:
-        return await ctx.send(embed = discord.Embed(description = f'Модуль `{extension}` не может быть загружен: {error}', color = 0xff0000))
+        return await ctx.send(embed = discord.Embed(description = f'Модуль `{extension}` не может быть загружен: `{error}`', color = 0xff0000))
     await ctx.send(embed = discord.Embed(description = f'Модуль `{extension}` загружен', color = 0xff8000))
 
 @client.command()
@@ -62,11 +74,11 @@ async def reload(ctx):
         try:
             await client.reload_extension(name)
         except commands.ExtensionFailed as error:
-            excepted_modules[name] = error
+            excepted_modules[f'`{name[5:]}`'] = str(error).replace('cogs.', '')
     if len(excepted_modules) == len(client.extensions):
         return await ctx.send(embed = discord.Embed(description = 'Все модули выдали ошибку', color = 0xff0000))
-    if excepted_modules != {}:
-        return await ctx.send(embed = discord.Embed(description = f'{'Модуль' if len(excepted_modules) == 1 else 'Модули'} `{', '.join(excepted_modules.keys())}` не {'может быть перезагружен' if len(excepted_modules) == 1 else 'могут быть перезагружены'}, {f'пингани {client.get_user(338714886001524737).mention}' if ctx.author.id != 338714886001524737 else 'однако остальные были перезагружены'}:\n{''.join([f'`{name}`: `{error}`\n' for name, error in excepted_modules.items()])}', color = 0xff0000))
+    if excepted_modules:
+        return await ctx.send(embed = discord.Embed(description = f'{'Модуль' if len(excepted_modules) == 1 else 'Модули'} {', '.join(excepted_modules.keys())} не {'может быть перезагружен' if len(excepted_modules) == 1 else 'могут быть перезагружены'}, {f'пингани {client.get_user(338714886001524737).mention}' if ctx.author.id != 338714886001524737 else 'необходимо исправить'}:\n{''.join([f'`{name}`: `{error}`\n' for name, error in excepted_modules.items()])}', color = 0xff0000))
     await ctx.send(embed = discord.Embed(description = 'Модули перезагружены', color = 0xff8000))
 
 async def init():
@@ -78,4 +90,5 @@ async def main():
     await init()
     await client.start(os.getenv('TOKEN'))
 
-asyncio.run(main())
+if __name__ == "__main__":
+    asyncio.run(main())
