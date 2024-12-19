@@ -21,49 +21,54 @@ async def on_ready():
     await client.tree.sync()
 
 @client.command()
-async def disable(ctx, cmd: str):
+async def disable(ctx, *, target: str):
     if ctx.author.id not in client.owner_ids:
         raise commands.NotOwner()
-    client.get_command(cmd).enabled = False
-    await ctx.send(embed = discord.Embed(description = f'Команда `{cmd}` выключена', color = 0xff8000))
+    if target.lower() in client.all_commands:
+        command = client.get_command(target)
+        if command.enabled:
+            command.enabled = False
+            return await ctx.send(embed = discord.Embed(description = f'Команда `{target}` отключена', color = 0xff8000))
+        else:
+            return await ctx.send(embed = discord.Embed(description = f'Команда `{target}` уже отключена', color = 0xff0000))
+    elif f'cogs.{target.title()}' in client.extensions:
+        extension = f'cogs.{target.title()}'
+        if extension == 'cogs.Events':
+            return await ctx.send(embed = discord.Embed(description = 'Модуль `Events` не может быть выгружен', color = 0xff0000))
+        if extension not in client.extensions:
+            return await ctx.send(embed = discord.Embed(description = f'Модуль `{target}` уже выгружен или не найден', color = 0xff0000))
+        try:
+            await client.unload_extension(extension)
+        except commands.ExtensionNotFound:
+            return await ctx.send(embed = discord.Embed(description = f'Модуль `{target}` не найден', color = 0xff0000))
+        else:
+            await ctx.send(embed = discord.Embed(description = f'Модуль `{target}` выгружен', color = 0xff8000))
+    else:
+        return await ctx.send(embed = discord.Embed(description = f'Объект `{target}` не найден или уже отключён', color = 0xff0000))
 
 @client.command()
-async def enable(ctx, cmd: str):
+async def enable(ctx, *, target: str):
     if ctx.author.id not in client.owner_ids:
         raise commands.NotOwner()
-    client.get_command(cmd).enabled = True
-    await ctx.send(embed = discord.Embed(description = f'Команда `{cmd}` включена', color = 0xff8000))
-
-@client.command()
-async def unload(ctx, extension: str):
-    if ctx.author.id not in client.owner_ids:
-        raise commands.NotOwner()
-    ext = f'cogs.{ext}'
-    if ext == 'cogs.Events': return await ctx.send(embed = discord.Embed(description = 'Модуль `Events` не может быть выгружен', color = 0xff0000))
-    if ext not in client.extensions:
-        return await ctx.send(embed = discord.Embed(description = f'Модуль `{extension}` уже выгружен или не найден', color = 0xff0000))
-    try:
-        await client.unload_extension(ext)
-    except commands.ExtensionNotFound:
-        return await ctx.send(embed = discord.Embed(description = f'Модуль `{extension}` не найден', color = 0xff0000))
-    await ctx.send(embed = discord.Embed(description = f'Модуль `{extension}` выгружен', color = 0xff8000))
-
-@client.command()
-async def load(ctx, extension: str):
-    if ctx.author.id not in client.owner_ids:
-        raise commands.NotOwner()
-    ext = f'cogs.{ext}'
-    if ext in client.extensions:
-        return await ctx.send(embed = discord.Embed(description = f'Модуль `{extension}` уже загружен', color = 0xff0000))
-    try:
-        await client.load_extension(ext)
-    except commands.ExtensionNotFound:
-        return await ctx.send(embed = discord.Embed(description = f'Модуль `{extension}` не найден', color = 0xff0000))
-    except commands.ExtensionAlreadyLoaded:
-        return await ctx.send(embed = discord.Embed(description = f'Модуль `{extension}` уже загружен', color = 0xff0000))
-    except commands.ExtensionFailed as error:
-        return await ctx.send(embed = discord.Embed(description = f'Модуль `{extension}` не может быть загружен: `{error}`', color = 0xff0000))
-    await ctx.send(embed = discord.Embed(description = f'Модуль `{extension}` загружен', color = 0xff8000))
+    if target.lower() in client.all_commands:
+        command = client.get_command(target)
+        if not command.enabled:
+            command.enabled = True
+            await ctx.send(embed = discord.Embed(description = f'Команда `{target}` включена', color = 0xff8000))
+        else:
+            await ctx.send(embed = discord.Embed(description = f'Команда `{target}` уже включена', color = 0xff0000))
+    else:
+        extension = f'cogs.{target.title()}'
+        try:
+            await client.load_extension(extension)
+        except commands.ExtensionNotFound:
+            await ctx.send(embed = discord.Embed(description = f'Объект `{target}` не найден', color = 0xff0000))
+        except commands.ExtensionAlreadyLoaded:
+            await ctx.send(embed = discord.Embed(description = f'Модуль `{target}` уже загружен', color = 0xff0000))
+        except commands.ExtensionFailed as error:
+            await ctx.send(embed = discord.Embed(description = f'Модуль `{target}` не может быть загружен: `{error}`', color = 0xff0000))
+        else:
+            await ctx.send(embed = discord.Embed(description = f'Модуль `{target}` загружен', color = 0xff8000))
 
 @client.command()
 async def reload(ctx):

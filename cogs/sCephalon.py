@@ -1,21 +1,20 @@
 import asyncio
 import os
 import sys
+import json
 
 import discord
-from functions import translate, get_locale, set_locale
+from functions import translate, get_locale, set_locale, get_command_help
 from typing import Literal
+from main import uptime
+from pathlib import Path
 from discord import app_commands
 from discord.ext import commands
 
+CWD = Path(__file__).parents[0].parents[0]
+CWD = str(CWD)
+
 guilds = [693929822543675455, 735874149578440855, 818758712163827723]
-
-uptime = discord.utils.utcnow()
-
-def reset_cooldown(command: commands.Command, message: discord.Message) -> None:
-    if command._buckets.valid:
-        bucket = command._buckets.get_bucket(message)
-        bucket._tokens = min(bucket.rate, bucket._tokens + 1)
 
 class View(discord.ui.View):
     def __init__(self, timeout):
@@ -51,59 +50,13 @@ class sCephalon(commands.Cog):
             emb.add_field(name = 'Fun', value = '`aghanim`, `dotersbrain`', inline = False)
             emb.add_field(name = 'Mod', value = '`ban`, `dm`, `deaf`, `give`, `kick`, `mute`, `take`, `timeout`, `undeaf`, `unmute`', inline = False)
             emb.add_field(name = 'Misc', value = '`about`, `avatar`, `coinflip`, `guild`, `roll`, `roleinfo`, `rolemembers`', inline = False)
-            #emb.add_field(name = 'Music', value = '`join`, `leave`, `play`, `pause`, `resume`, `volume`', inline = False)
             emb.add_field(name = 'ᅠ', value = 'Указанные разрешения необходимы для исполнителя команды если не указано другого.', inline = False)
             emb.add_field(name = 'ᅠ', value = 'Не используйте `[] <> /` при написании команды.', inline = False)
             emb.add_field(name = 'ᅠ', value = '**Используйте** `/help [команда]` **для подробностей использования.**\n\n**[Ссылка-приглашение](https://discord.com/api/oauth2/authorize?client_id=694170281270312991&permissions=8&scope=bot%20applications.commands)**', inline = False)
             emb.set_footer(text = 'Cephalon Cy ©️ Sus&Co\n2020 - Present')
-            await interaction.response.send_message(embed = emb)
-        #elif command == 'play':
-        #    await interaction.response.send_message('```python\n/play <ссылка на видео YouTube>\nСсылка должна быть только с YouTube\n\n<> - обязательно```')
-        #elif command == 'volume':
-        #    await interaction.response.send_message('```python\n/volume <громкость>\nГромкость должна быть в пределе от 0 до 100\n\n<> - обязательно```')
-        elif command == 'dotersbrain':
-            await interaction.response.send_message('```python\n/dotersbrain\n\nСлова и ответы к ним: чё - хуй через плечо, а - хуй на, да - пизда, нет - пидора ответ, ок - хуй намок```')
-        elif command == 'timeout':
-            await interaction.response.send_message('```python\n/timeout <@пинг/имя/ID> [причина]\n\n[] - опционально, <> - обязательно, / - или\nНеобходимы разрешения - управлять каналами```')
-        elif command == 'deaf':
-            await interaction.response.send_message('```python\n/deaf <@пинг/имя/ID> [причина]\nВ отличии от команды mute, бот будет заглушать людей в голосовом канале с ролью **Deafened**\n\n[] - опционально, <> - обязательно, / - или\nНеобходимы разрешения - управлять каналами```')
-        elif command == 'undeaf':
-            await interaction.response.send_message('```python\n/undeaf <@пинг/имя/ID> [причина]\n\n[] - опционально, <> - обязательно, / - или\nНеобходимы разрешения - управлять каналами```')
-        elif command == 'roll':
-            await interaction.response.send_message('```python\n/roll [от] [до]\nесли не указано [до], [от] станет [до].\n/roll 80 (0-80)\n/roll 26 90 (26-90)\n/roll (0-100)\n\n[] - опционально```')
-        elif command == 'about':
-            await interaction.response.send_message('```python\n/about [@пинг/имя/ID]\n\n[] - опционально, / - или```')
-        elif command == 'avatar':
-            await interaction.response.send_message('```python\n/avatar [@пинг/имя/ID]\n\n[] - опционально, / - или```')
-        elif command == 'ban':
-            await interaction.response.send_message('```python\n/ban <@пинг/имя/ID> [причина/--soft --reason]\n/ban 185476724627210241 --soft --reason лошара\n/ban @сасиска чмо\n/ban "Sgt White" --soft\n\nПри использовании --soft обязательно указывать --reason после него, однако можно не использовать --reason\n[] - опционально, <> - обязательно, / - или\nНеобходимы разрешения - банить участников```')
-        elif command == 'content':
-            await interaction.response.send_message('```python\ncy/content <ID> [канал, в котором находится сообщение] [--edit]\n\nЭта команда выведет полный контент сообщения, т.о. можно быстро скопировать запрошенное сообщение с сохранением всего форматирования\nЕсли применено к сообщению с эмбедом, вернётся контент некоторых полей, включая описание, заголовок, футер, ссылки на картинки и цвет\nВ случае с сообщениями бота возвращает контент в формате cy/say *то, что надо написать для повторения запрошенного сообщения*\nПолностью работает с эмбедами от лица бота, однако эмбеды из других источников будут неполными\nАргумент --edit вернёт сообщение в формате cy/edit *id сообщения* *то, что нужно написать для повторения запрошенного сообщения*\n\n[] - опционально, <> - обязательно```')
-        elif command == 'dm':
-            await interaction.response.send_message('```python\n/dm <@пинг/имя/ID> <текст>\n\n<> - обязательно, / - или\nНеобходимы разрешения - просматривать лог аудита```')
-        elif command == 'say':
-            await interaction.response.send_message('```python\n/say [обычный текст] [&t title текст] [&d description текст] [&th ссылка на картинку справа] [&img ссылка на картинку снизу] [&f footer текст] [&c цвет в HEX коде] [&msg сообщение над эмбедом]\n/say &t Заголовок &d Описание\n/say [текст]\n\nУчтите, что если вы захотите упомянуть роль с использованием какого либо аргумента текст не будет показан из-за способа упоминания ролей в Discord\nВсе аргументы являются необязательными, но если отправить пустую команду - ответ будет этим сообщением\n\n[] - опционально, но необходимо хоть что-то```')
-        elif command == 'edit':
-            await interaction.response.send_message('```python\n/edit <ID> [обычный текст] [&t title текст] [&d description текст] [&f footer текст] [&c цвет в HEX коде] [&th ссылка на картинку справа] [&img ссылка на картинку снизу]\n/edit <ID> [текст]\n/edit <ID> --clean\n/edit <ID> --noembed\n/edit <ID> --delete\n\n--clean удалит контент над эмбедом\n--noembed удалит эмбед\n--delete удалит сообщение\n\nИспользование --clean и --noembed одновременно невозможно.\nЕсли у сообщения есть эмбед и в команде нет агрументов, автоматически будет заменён &msg\nЗаголовок, описание и цвет будут взяты со старого эмбеда, если таковой имеется и эти аргументы не были указаны.\nДля очистки какого-либо поля укажите аргумент и оставьте его пустым:\n/edit <ID> &d\nЭто опустошит описание.\n\n[] - опционально, <> - обязательно\nНеобходимы разрешения - управлять сообщениями```')
-        elif command == 'give':
-            await interaction.response.send_message('```python\n/give <@пинг/имя/ID> <@роль/имя роли/ID роли>\n\n<> - обязательно, / - или\nНеобходимы разрешения - управлять каналами```')
-        elif command == 'kick':
-            await interaction.response.send_message('```python\n/kick <@пинг/имя/ID> [причина]\n\n[] - опционально, <> - обязательно, / - или\nНеобходимы разрешения - выгонять участников```')
-        elif command == 'mute':
-            await interaction.response.send_message('```python\n/mute <@пинг/имя/ID> [причина]\n\n[] - опционально, <> - обязательно, / - или\nНеобходимы разрешения - просматривать лог аудита```')
-        elif command == 'roleinfo':
-            await interaction.response.send_message('```python\n/roleinfo <@роль/имя роли/ID роли>\n\n<> - обязательно, / - или```')
-        elif command == 'take':
-            await interaction.response.send_message('```python\n/take <@пинг/имя/ID> <@роль/имя роли/ID роли>\n\n<> - обязательно, / - или\nНеобходимы разрешения - управлять каналами```')
-        elif command == 'someone':
-            await interaction.response.send_message('```python\n/someone <текст>\n\n<> - обязательно```')
-        elif command == 'unmute':
-            await interaction.response.send_message('```python\n/unmute <@пинг/имя/ID> [причина]\n\n[] - опционально, <> - обязательно, / - или\nНеобходимы разрешения - управлять каналами```')
-        elif command == 'help':
-            await interaction.response.send_message('```python\n/help [команда]\n\n[] - опционально```')
-        else:
-            emb = discord.Embed(description = f'Команда `{command}` не обнаружена или выполняется лишь её написанием.', color = 0xff8000)
-            await interaction.response.send_message(embed = emb)
+            return await interaction.response.send_message(embed = emb)
+        locale = get_locale(interaction.author.id)
+        return await interaction.response.send_message(embed = discord.Embed(description = (get_command_help(locale, command)), color = 0xff8000))
 
     @app_commands.command(description = 'Время бота в сети')
     async def uptime(self, interaction: discord.Interaction):
@@ -200,55 +153,10 @@ class sCephalon(commands.Cog):
     @app_commands.command(description = 'Узнайте, что было в предыдущих версиях бота')
     @app_commands.describe(version = 'Укажите конкретную версию')
     async def botver(self, interaction: discord.Interaction, version: Literal['0.12.9.10519', '0.12.9.10988', '0.12.9.11410', '0.12.10.1.11661', '0.12.10.2.12528', '0.12.11.2.13771', '0.12.12.0.0', '0.12.12.10.0', '0.12.12.10.16367', '0.12.12.30.0', '0.13.0.2.21680 - последняя']):
-        if version == '0.12.9.10519':
-            emb = discord.Embed(color = 0x2f3136)
-            emb.add_field(name = '0.12.9.10519', value = 'Небольшие исправления, в целом никак не связанные с работой бота.')
-            await interaction.response.send_message(embed = emb)
-        if version == '0.12.9.10988':
-            emb = discord.Embed(color = 0x2f3136)
-            emb.add_field(name = '0.12.9.10988', value = 'Добавлены Slash-Команды! Теперь вы можете просто написать `/`, чтобы вам вывелся список всех команд. Для их работы нужна новая [ссылка-приглашение](https://discord.com/api/oauth2/authorize?client_id=694170281270312991&permissions=8&scope=bot%20applications.commands). Slash-Команды применены ко всем командам за исключением тех, что находятся в категории Fun, Embeds и некоторые в Cephalon или имеют конвертеры (mute, remind, someone) ***Всё ещё БЕТА!***', inline = False)
-            await interaction.response.send_message(embed = emb)
-        if version == '0.12.9.11410':
-            emb = discord.Embed(color = 0x2f3136)
-            emb.add_field(name = '0.12.9.11410', value = 'Некоторые исправления и добавление скрытых фич.')
-            await interaction.response.send_message(embed = emb)
-        if version == '0.12.10.1.11661':
-            emb = discord.Embed(color = 0x2f3136)
-            emb.add_field(name = '0.12.10.1.11661', value = 'Slash-Команды теперь применены ко всем командам, кроме тех, что используют конвертеры. Также, исправлены недоработки старых Slash-Команд и созданы новые (при написании некоторых команд будет ответ **Ошибка взаимодействия**, даже если команда была выполнена правильно).\n\n**Say**\n\nУбран аргумент `c&`, добавлен аргумент `f&` - текст в самом низу эмбеда.\n\n**Иное**\n\nТеперь команды пользователя не будут удаляться - это решение связано с рядом причин.')
-            await interaction.response.send_message(embed = emb)
-        if version == '0.12.10.2.11856':
-            emb = discord.Embed(color = 0x2f3136)
-            emb.add_field(name = '0.12.10.2.11856', value = 'Добавлена команда locale для изменения локали. Пока доступны только `ru` (по умолчанию) и `gnida`.\nSay/Edit\nУбран аргумент --everyone и запрещено упоминание @everyone каким-либо способом.')
-            await interaction.response.send_message(embed = emb)
-        if version == '0.12.10.2.12528':
-            emb = discord.Embed(color = 0x2f3136)
-            emb.add_field(name = '0.12.10.2.12528', value = 'Отдельные куски кода были рассортированы по разным файлам.')
-            await interaction.response.send_message(embed = emb)
-        if version == '0.12.11.2.13771':
-            emb = discord.Embed(color = 0x2f3136)
-            emb.add_field(name = '0.12.11.2.13771', value = 'Deaf/Undeaf:\nЗаглушает участника в голосовом канале, когда в его ролях есть Deafened\nHelp:\nТеперь указывает список команд, применимый для способа вызова Help. Таким образом, Slash-help будет показывать команды только без конвертеров, а обычная Help все команды.\nТакже, многочисленные исправления')
-            await interaction.response.send_message(embed = emb)
-        if version == '0.12.12.0.0':
-            emb = discord.Embed(color = 0x2f3136)
-            emb.add_field(name = '0.12.12.0.0', value = 'Переход на новую библиотеку, способствующий дальнейшему поддержанию бота в живых. Изменения:\nУбрана команда vote из меню Slash-команд, так как новая либра не даёт мне способов ставить реакции под сообщением, что отправил бот\nНовая команда - timeout\nПозволяет `отправить подумать над своим поведением` пользователя.')
-            await interaction.response.send_message(embed = emb)
-        if version == '0.12.12.10.0':
-            emb = discord.Embed(color = 0x2f3136)
-            emb.add_field(name = '0.12.12.10.0', value = 'Некоторое количество исправлений, возвращение команды vote через /\nИзменена логика команды mute - теперь нельзя установить время, на которое человек заглушается')
-            await interaction.response.send_message(embed = emb)
-        if version == '0.12.12.10.16367':
-            emb = discord.Embed(color = 0x2f3136)
-            emb.add_field(name = '0.12.12.10.16367', value = 'Изменение команд Embeds\n\nИзменено написание команд **say**, **edit** и переписана help под их изменение')
-            await interaction.response.send_message(embed = emb)
-        if version == '0.12.12.30.0':
-            emb = discord.Embed(color = 0x2f3136)
-            emb.add_field(name = '0.12.12.30.0', value = '**Библиотека**\nСовершён переезд на discord.py, позволяющий облегчить существование бота\n**someone**\nИсправлена ошибка, не позволяющяя писать более одного слова, в то время как остальные просто игнорировались\n**edit, say**\nБыли починены и улучшены, возвращён аргумент &c\n**Категория Fun**\nУдалена.\n**Locale**\nТеперь изменения локали применяются ко всем командам.\n\n***Slash-команды неактивны.***')
-            await interaction.response.send_message(embed = emb)
-        if version == '0.13.0.2.21680 - последняя':
-            emb = discord.Embed(color = 0x2f3136)
-            emb.add_field(name = '0.13.0.2.21680', value = '- Была добавлена категория Fun (4 новых команды)\n- Для большинства команд была добавлена слэш (/) версия\nОт себя хочется отметить, что в категории Fun появилась НЕВЕРОЯТНАЯ команда - dotersbrain\n\nВсё ёпта, такой вот патч вышел. Следующий ждите через год (~~Завтра~~)')
-            emb.set_footer(text = 'Написано разработчиком Проказник#2785')
-            await interaction.response.send_message(embed = emb)
+        with open(CWD + '\\versions.json', 'r', encoding = 'utf-8') as f:
+            versions = json.load(f)
+        version_data = versions[str(version)]
+        await interaction.response.send_message(embed = discord.Embed(description = version_data, color = 0xff8000))
 
 async def setup(client):
     await client.add_cog(sCephalon(client))

@@ -46,7 +46,7 @@ class sMisc(commands.Cog):
     @app_commands.command(description = 'Подбрасывает монетку')
     async def coinflip(self, interaction: discord.Interaction):
         coin = random.choice(['ОРЁЛ', 'РЕШКА'])
-        await interaction.response.send_message(embed = discord.Embed(description = f'{interaction.author.mention} подбрасывает монетку: {coin}', color = 0xff8000))
+        await interaction.response.send_message(embed = discord.Embed(description = f'{interaction.user.mention} подбрасывает монетку: {coin}', color = 0xff8000))
 
     @app_commands.command(description = 'Показывает участников с определённой ролью')
     @app_commands.describe(role = 'Роль')
@@ -78,34 +78,24 @@ class sMisc(commands.Cog):
     @app_commands.command(description = 'Информация о роли')
     @app_commands.describe(role = 'Роль')
     async def roleinfo(self, interaction: discord.Interaction, role: discord.Role):
-        if role.mentionable == False:
-            role.mentionable = 'Нет'
-        elif role.mentionable == True:
-            role.mentionable = 'Да'
-        if role.managed == False:
-            role.managed = 'Нет'
-        elif role.managed == True:
-            role.managed = 'Да'
-        if role.hoist == False:
-            role.hoist = 'Нет'
-        elif role.hoist == True:
-            role.hoist = 'Да'
+        is_mentionable = 'Да' if role.mentionable else 'Нет'
+        is_managed = 'Да' if role.managed else 'Нет'
+        is_hoisted = 'Да' if role.hoist else 'Нет'
         emb = discord.Embed(title = role.name, color = 0x2f3136)
         emb.add_field(name = 'ID', value = role.id)
         emb.add_field(name = 'Цвет', value = role.color)
-        emb.add_field(name = 'Упоминается?', value = role.mentionable)
-        emb.add_field(name = 'Управляется интеграцией?', value = role.managed)
+        emb.add_field(name = 'Упоминается?', value = is_mentionable)
+        emb.add_field(name = 'Управляется интеграцией?', value = is_managed)
         emb.add_field(name = 'Позиция в списке', value = role.position)
         d = role.created_at.strftime('%d.%m.%Y %H:%M:%S GMT')
         emb.add_field(name = 'Создана', value = f'{d}', inline = False)
-        emb.add_field(name = 'Показывает участников отдельно?', value = role.hoist)
+        emb.add_field(name = 'Показывает участников отдельно?', value = is_hoisted)
         await interaction.response.send_message(embed = emb)
 
     @app_commands.command(description = 'Аватар пользователя')
     @app_commands.describe(member = 'Пользователь. Оставьте пустым, чтобы показать ваш аватар')
     async def avatar(self, interaction: discord.Interaction, member: discord.User = None):
-        if member == None:
-            member = interaction.user
+        member = member if member else interaction.user
         emb = discord.Embed(color = 0x2f3136)
         if not member.avatar.is_animated():
             emb.set_image(url = member.avatar.with_format('png'))
@@ -117,12 +107,8 @@ class sMisc(commands.Cog):
     @app_commands.command(description = 'Информация о пользователе')
     @app_commands.describe(member = 'Пользователь. Оставьте пустым, чтобы показать вашу информацию')
     async def about(self, interaction: discord.Interaction, member: discord.Member = None):
-        if member == None:
-            member = interaction.user
-        if member.bot == False:
-            bot = 'Нет'
-        elif member.bot == True:
-            bot = 'Да'
+        member = member if member else interaction.user
+        bot = 'Да' if member.bot else 'Нет'
         emb = discord.Embed(color = 0x2f3136, timestamp = discord.utils.utcnow())
         emb.set_author(name = member.display_name)
         emb.add_field(name = 'ID', value = member.id)
@@ -145,8 +131,8 @@ class sMisc(commands.Cog):
         emb.add_field(name = 'Статус', value = status)
         roles = ', '.join([role.name for role in member.roles[1:]])
         emb.add_field(name = 'Бот?', value = bot)
-        limit = len(member.roles)
-        if limit > 1:
+        amount = len(member.roles)
+        if amount > 1:
             emb.add_field(name = f'Роли ({len(member.roles)-1})', value = roles, inline = False)
             emb.add_field(name = 'Высшая Роль', value = member.top_role.mention, inline = False)
         emb.set_thumbnail(url = member.avatar.url)

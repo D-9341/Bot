@@ -96,10 +96,10 @@ class Mod(commands.Cog):
                 emb.set_author(name = ctx.author, icon_url = ctx.author.avatar.url)
                 is_softban = '--soft' in reason
                 ban_reason = reason.replace('--reason', '').strip() if '--reason' in reason else reason
-                emb.add_field(name='Упрощённо забанен' if is_softban else 'Забанен', value=f'{member.mention} ({member.display_name})')
-                emb.add_field(name='По причине', value=ban_reason)
-                await ctx.send(embed=emb)
-                await member.ban(reason=ban_reason)
+                emb.add_field(name = 'Упрощённо забанен' if is_softban else 'Забанен', value = f'{member.mention} ({member.display_name})')
+                emb.add_field(name = 'По причине', value = ban_reason)
+                await ctx.send(embed = emb)
+                await member.ban(reason = ban_reason)
                 if is_softban:
                     await member.unban(reason = '--softban')
         else:

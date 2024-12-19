@@ -105,6 +105,8 @@ class Cephalon(commands.Cog):
 
     @commands.command()
     async def uptime(self, ctx):
+        if ctx.author.id in self.client.owner_ids:
+            return await ctx.send(embed = discord.Embed(description = f'Используй `cy/status`', color = 0xff8000))
         now = discord.utils.utcnow()
         up_time = now - uptime
         hours, remainder = divmod(up_time.seconds, 3600)
@@ -239,8 +241,7 @@ class Cephalon(commands.Cog):
         with open(CWD + '\\versions.json', 'r', encoding = 'utf-8') as f:
             versions = json.load(f)
         version_data = versions[str(version)]
-        embed = discord.Embed(title = version, description = version_data, color = 0x2f3136)
-        await ctx.send(embed = embed)
+        await ctx.send(embed = discord.Embed(title = version, description = version_data, color = 0x2f3136))
 
 async def setup(client):
     await client.add_cog(Cephalon(client))
