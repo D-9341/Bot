@@ -14,7 +14,7 @@ class CancelButton(discord.ui.Button):
 
 class Mod(commands.Cog):
     def __init__(self, client):
-        self.client = client
+        self.client: commands.Bot = client
 
     @commands.Cog.listener()
     async def on_ready(self):
@@ -23,7 +23,7 @@ class Mod(commands.Cog):
     @commands.command()
     @commands.has_permissions(view_audit_log = True)
     @commands.cooldown(1, 5, commands.BucketType.user)
-    async def dm(self, ctx, member: discord.Member, * , text):
+    async def dm(self, ctx: commands.Context, member: discord.Member, * , text):
         locale = get_locale(ctx.author.id)
         emb = discord.Embed(description = f'{text}', color = 0x2f3136)
         emb.set_author(name = ctx.author.display_name, icon_url = ctx.author.avatar.url)
@@ -34,7 +34,7 @@ class Mod(commands.Cog):
     @commands.cooldown(1, 10, commands.BucketType.user)
     @commands.bot_has_permissions(kick_members = True)
     @commands.has_permissions(kick_members = True)
-    async def kick(self, ctx, member: discord.Member, *, reason = None):
+    async def kick(self, ctx: commands.Context, member: discord.Member, *, reason = None):
         locale = get_locale(ctx.author.id)
         bot = discord.utils.get(ctx.guild.members, id = self.client.user.id)
         if member.id not in self.client.owner_ids:
@@ -70,7 +70,7 @@ class Mod(commands.Cog):
     @commands.cooldown(1, 10, commands.BucketType.user)
     @commands.bot_has_permissions(ban_members = True)
     @commands.has_permissions(ban_members = True)
-    async def ban(self, ctx, member: discord.Member, *, reason = None):
+    async def ban(self, ctx: commands.Context, member: discord.Member, *, reason = None):
         locale = get_locale(ctx.author.id)
         bot = discord.utils.get(ctx.guild.members, id = self.client.user.id)
         if member.id not in self.client.owner_ids:
@@ -109,7 +109,7 @@ class Mod(commands.Cog):
     @commands.command()
     @commands.bot_has_permissions(manage_roles = True)
     @commands.has_permissions(manage_channels = True)
-    async def give(self, ctx, member: discord.Member, role: discord.Role):
+    async def give(self, ctx: commands.Context, member: discord.Member, role: discord.Role):
         locale = get_locale(ctx.author.id)
         bot = ctx.guild.get_member(self.client.user.id)
         if role.name in {'Muted', 'Deafened'}:
@@ -145,7 +145,7 @@ class Mod(commands.Cog):
     @commands.command()
     @commands.bot_has_permissions(manage_roles = True)
     @commands.has_permissions(manage_channels = True)
-    async def take(self, ctx, member: discord.Member, role: discord.Role):
+    async def take(self, ctx: commands.Context, member: discord.Member, role: discord.Role):
         locale = get_locale(ctx.author.id)
         bot = ctx.guild.get_member(self.client.user.id)
         if role.name in {'Muted', 'Deafened'}:
@@ -178,7 +178,7 @@ class Mod(commands.Cog):
     @commands.command()
     @commands.bot_has_permissions(manage_roles = True)
     @commands.has_permissions(view_audit_log = True)
-    async def mute(self, ctx, member: discord.Member, *, reason = None):
+    async def mute(self, ctx: commands.Context, member: discord.Member, *, reason = None):
         locale = get_locale(ctx.author.id)
         if reason is None:
             reason = translate(locale, 'reason')
@@ -211,7 +211,7 @@ class Mod(commands.Cog):
     @commands.command()
     @commands.bot_has_permissions(moderate_members = True)
     @commands.has_permissions(manage_channels = True)
-    async def timeout(self, ctx, member: discord.Member, *, reason = None):
+    async def timeout(self, ctx: commands.Context, member: discord.Member, *, reason = None):
         locale = get_locale(ctx.author.id)
         if reason is None:
             reason = translate(locale, 'reason')
@@ -238,7 +238,7 @@ class Mod(commands.Cog):
     @commands.command()
     @commands.bot_has_permissions(manage_roles = True)
     @commands.has_permissions(manage_channels = True)
-    async def deaf(self, ctx, member: discord.Member, *, reason = None):
+    async def deaf(self, ctx: commands.Context, member: discord.Member, *, reason = None):
         locale = get_locale(ctx.author.id)
         role = discord.utils.get(ctx.guild.roles, name = 'Deafened')
         if reason is None:
@@ -271,7 +271,7 @@ class Mod(commands.Cog):
     @commands.command()
     @commands.bot_has_permissions(manage_roles = True)
     @commands.has_permissions(manage_channels = True)
-    async def undeaf(self, ctx, member: discord.Member, *, reason = None):
+    async def undeaf(self, ctx: commands.Context, member: discord.Member, *, reason = None):
         locale = get_locale(ctx.author.id)
         role = discord.utils.get(ctx.guild.roles, name = 'Deafened')
         if reason is None:
@@ -293,7 +293,7 @@ class Mod(commands.Cog):
     @commands.command()
     @commands.bot_has_permissions(manage_roles = True)
     @commands.has_permissions(manage_channels = True)
-    async def unmute(self, ctx, member: discord.Member, *, reason = None):
+    async def unmute(self, ctx: commands.Context, member: discord.Member, *, reason = None):
         locale = get_locale(ctx.author.id)
         role = discord.utils.get(ctx.guild.roles, name = 'Muted')
         if reason is None:
@@ -316,7 +316,7 @@ class Mod(commands.Cog):
     @commands.cooldown(1, 60, commands.BucketType.user)
     @commands.bot_has_permissions(manage_messages = True)
     @commands.has_permissions(administrator = True)
-    async def clear(self, ctx, amount: int, members = '--everyone', *, filt = None):
+    async def clear(self, ctx: commands.Context, amount: int, members = '--everyone', *, filt = None):
         await ctx.message.delete()
         args = parse_members(members)
         authors = {}

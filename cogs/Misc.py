@@ -4,7 +4,7 @@ import discord
 from discord.ext import commands
 
 class Slapper(commands.Converter):
-    async def convert(self, ctx, argument):
+    async def convert(self, ctx: commands.Context, argument):
         mention = random.choice(ctx.channel.members)
         emb = discord.Embed(description = f'{argument}', color =  0x2f3136, timestamp = discord.utils.utcnow())
         emb.set_author(name = ctx.author.display_name, icon_url = ctx.author.avatar.url)
@@ -12,14 +12,14 @@ class Slapper(commands.Converter):
 
 class Misc(commands.Cog):
     def __init__(self, client):
-        self.client = client
+        self.client: commands.Bot = client
 
     @commands.Cog.listener()
     async def on_ready(self):
         print('Модуль Misc загружен')
 
     @commands.command()
-    async def roll(self, ctx, first: str | int = None, second: int = None):
+    async def roll(self, ctx: commands.Context, first: str | int = None, second: int = None):
         if not first and not second:
             rand = random.randint(0, 100)
             if rand == 42:
@@ -74,18 +74,18 @@ class Misc(commands.Cog):
             await ctx.send(embed = discord.Embed(description = f'{ctx.author.display_name} получает случайное число ({first}-{second})\n`{rand}`', color = 0xff8000))
 
     @commands.command(aliases = ['c', 'coin'])
-    async def coinflip(self, ctx):
+    async def coinflip(self, ctx: commands.Context):
         coin = random.choice(['ОРЁЛ', 'РЕШКА'])
         await ctx.send(embed = discord.Embed(description = f'{ctx.author.mention} подбрасывает монетку: {coin}', color = 0xff8000))
 
     @commands.command()
     @commands.cooldown(1, 15, commands.BucketType.user)
-    async def someone(self, ctx, *, text: Slapper):
+    async def someone(self, ctx: commands.Context, *, text: Slapper):
         await ctx.send(embed = text)
 
     @commands.command()
     @commands.cooldown(1, 5, commands.BucketType.user)
-    async def rolemembers(self, ctx, role: discord.Role):
+    async def rolemembers(self, ctx: commands.Context, role: discord.Role):
         emb = discord.Embed(color = 0xff8000)
         if len(role.members) != 0:
             emb.add_field(name = f'Участники с ролью {role} ({len(role.members)})', value = ', '.join([member.mention for member in role.members]))
@@ -95,7 +95,7 @@ class Misc(commands.Cog):
 
     @commands.command(aliases = ['guild'])
     @commands.cooldown(1, 5, commands.BucketType.user)
-    async def serverinfo(self, ctx):
+    async def serverinfo(self, ctx: commands.Context):
         guild = ctx.guild
         emb = discord.Embed(color = 0x2f3136, timestamp = discord.utils.utcnow())
         emb.set_author(name = guild, icon_url = guild.icon.url if guild.icon else 'https://media.discordapp.net/attachments/601132963316498482/858743277963182090/image0.jpg?ex=6751d280&is=67508100&hm=601f6f56b2d4abdab57c50e153da6b8677f010c20d9bcee15181cfc2fcd98b28&=&format=webp')
@@ -113,7 +113,7 @@ class Misc(commands.Cog):
 
     @commands.command()
     @commands.cooldown(1, 5, commands.BucketType.user)
-    async def roleinfo(self, ctx, role: discord.Role):
+    async def roleinfo(self, ctx: commands.Context, role: discord.Role):
         is_mentionable = 'Да' if role.mentionable else 'Нет'
         is_managed = 'Да' if role.managed else 'Нет'
         is_hoisted = 'Да' if role.hoist else 'Нет'
@@ -130,7 +130,7 @@ class Misc(commands.Cog):
 
     @commands.command()
     @commands.cooldown(1, 5, commands.BucketType.user)
-    async def avatar(self, ctx, member: discord.User = None):
+    async def avatar(self, ctx: commands.Context, member: discord.User = None):
         member = member if member else ctx.author
         emb = discord.Embed(color = 0x2f3136)
         if not member.avatar.is_animated():
@@ -142,7 +142,7 @@ class Misc(commands.Cog):
 
     @commands.command(aliases = ['me'])
     @commands.cooldown(1, 5, commands.BucketType.user)
-    async def about(self, ctx, member: discord.Member = None):
+    async def about(self, ctx: commands.Context, member: discord.Member = None):
         target = member if member else ctx.author
         is_bot = 'Да' if target.bot else 'Нет'
         embed = discord.Embed(color = 0x2f3136, timestamp = discord.utils.utcnow())

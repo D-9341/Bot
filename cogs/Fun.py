@@ -7,7 +7,7 @@ from discord.ext import commands
 
 class Fun(commands.Cog):
     def __init__(self, client):
-        self.client = client
+        self.client: commands.Bot = client
 
     @commands.Cog.listener()
     async def on_ready(self):
@@ -16,7 +16,7 @@ class Fun(commands.Cog):
     @commands.command()
     @commands.cooldown(1, 20, commands.BucketType.user)
     @commands.bot_has_permissions(manage_channels = True)
-    async def roulette(self, ctx, player: discord.User | str = None):
+    async def roulette(self, ctx: commands.Context, player: discord.User | str = None):
         bot = discord.utils.get(ctx.guild.members, id = self.client.user.id)
         if player == 'leaderboard':
             with open('leaderboard/leaders.json', 'r') as file:
@@ -982,7 +982,7 @@ class Fun(commands.Cog):
     @commands.command()
     @commands.cooldown(1, 15, commands.BucketType.user)
     @commands.bot_has_permissions(manage_messages = True)
-    async def dotersbrain(self, ctx):
+    async def dotersbrain(self, ctx: commands.Context):
         words = ['чё', 'а', 'да', 'нет', 'ок']
         answers = {'чё': 'хуй через плечо', 'а': 'хуй на', 'да': 'пизда', 'нет': 'пидора ответ', 'ок': 'хуй намок'}
         await ctx.send(f'{ctx.author.mention}, через 5 секунд появится одно из слов ({", ".join(words)}), на которое вам нужно будет правильно ответить. На размышление 5 секунд')
@@ -1000,7 +1000,7 @@ class Fun(commands.Cog):
 
     @commands.command()
     @commands.cooldown(1, 5, commands.BucketType.user)
-    async def aghanim(self, ctx):
+    async def aghanim(self, ctx: commands.Context):
         rand = random.randint(1, 40)
         if rand >= 15:
             await ctx.send(embed = discord.Embed(description = f'Ого! Твой аганим длиной аж {rand} см!', color = 0xff8000))

@@ -20,7 +20,7 @@ class View(discord.ui.View):
     def __init__(self, timeout):
         super().__init__(timeout = 5)
 
-    async def on_timeout(self, interaction):
+    async def on_timeout(self, interaction: discord.Interaction):
         await interaction.response.edit_message('Время вышло.', view = None)
 
 class GrayButton(discord.ui.Button):
@@ -33,7 +33,7 @@ class RedButton(discord.ui.Button):
 
 class sCephalon(commands.Cog):
     def __init__(self, client):
-        self.client = client
+        self.client: commands.Bot = client
 
     @commands.Cog.listener()
     async def on_ready(self):
@@ -55,7 +55,7 @@ class sCephalon(commands.Cog):
             emb.add_field(name = 'ᅠ', value = '**Используйте** `/help [команда]` **для подробностей использования.**\n\n**[Ссылка-приглашение](https://discord.com/api/oauth2/authorize?client_id=694170281270312991&permissions=8&scope=bot%20applications.commands)**', inline = False)
             emb.set_footer(text = 'Cephalon Cy ©️ Sus&Co\n2020 - Present')
             return await interaction.response.send_message(embed = emb)
-        locale = get_locale(interaction.author.id)
+        locale = get_locale(interaction.user.id)
         return await interaction.response.send_message(embed = discord.Embed(description = (get_command_help(locale, command)), color = 0xff8000))
 
     @app_commands.command(description = 'Время бота в сети')
@@ -144,15 +144,13 @@ class sCephalon(commands.Cog):
 
     @app_commands.command(description = 'Показывает задержку клиента бота')
     async def ping(self, interaction: discord.Interaction):
-        emb = discord.Embed(description = '`Получаю..`', color = 0xff8000)
-        emb1 = discord.Embed(description = f'Pong!  `{round(self.client.latency * 1000)} ms`', color = 0xff8000)
-        await interaction.response.send_message(embed = emb)
+        await interaction.response.send_message(embed = discord.Embed(description = '`Получаю..`', color = 0xff8000))
         await asyncio.sleep(self.client.latency)
-        await interaction.edit_original_response(embed = emb1)
+        await interaction.edit_original_response(embed = discord.Embed(description = f'Pong!  `{round(self.client.latency * 1000)} ms`', color = 0xff8000))
 
     @app_commands.command(description = 'Узнайте, что было в предыдущих версиях бота')
     @app_commands.describe(version = 'Укажите конкретную версию')
-    async def botver(self, interaction: discord.Interaction, version: Literal['0.12.9.10519', '0.12.9.10988', '0.12.9.11410', '0.12.10.1.11661', '0.12.10.2.12528', '0.12.11.2.13771', '0.12.12.0.0', '0.12.12.10.0', '0.12.12.10.16367', '0.12.12.30.0', '0.13.0.2.21680 - последняя']):
+    async def botver(self, interaction: discord.Interaction, version: Literal['0.12.9.10519', '0.12.9.10988', '0.12.9.11410', '0.12.10.1.11661', '0.12.10.2.12528', '0.12.11.2.13771', '0.12.12.0.0', '0.12.12.10.0', '0.12.12.10.16367', '0.12.12.30.0', '0.13.0.2.21680', '0.14.6.0 - последняя']):
         with open(CWD + '\\versions.json', 'r', encoding = 'utf-8') as f:
             versions = json.load(f)
         version_data = versions[str(version)]

@@ -26,7 +26,7 @@ ydl_opts = {
 
 class Music(commands.Cog):
     def __init__(self, client):
-        self.client = client
+        self.client: commands.Bot = client
 
     @commands.Cog.listener()
     async def on_ready(self):
@@ -34,7 +34,7 @@ class Music(commands.Cog):
 
     @commands.command(aliases = ['p'])
     @commands.cooldown(1, 5, commands.BucketType.user)
-    async def play(self, ctx, *, url):
+    async def play(self, ctx: commands.Context, *, url):
         locale = get_locale(ctx.author.id)
         url = url.lstrip('<').rstrip('>')
         try:
@@ -84,7 +84,7 @@ class Music(commands.Cog):
                     title_list.pop(0)
 
     @commands.command(aliases = ['q'])
-    async def queue(self, ctx, argument = 'list', *, action: int | str = 0):
+    async def queue(self, ctx: commands.Context, argument = 'list', *, action: int | str = 0):
         locale = get_locale(ctx.author.id)
         if argument == 'list':
             queue_display = [f'{index + 1}. {title}' for index, title in enumerate(title_list)]
@@ -119,7 +119,7 @@ class Music(commands.Cog):
                 await ctx.send(embed = discord.Embed(description = translate(locale, 'queue_remove_no_such_track'), color = 0xff8000))
 
     @commands.command()
-    async def resume(self, ctx):
+    async def resume(self, ctx: commands.Context):
         locale = get_locale(ctx.author.id)
         if not ctx.author.voice:
             return await ctx.send(embed = discord.Embed(description = translate(locale, 'resume_not_in_voice_channel'), color = 0xff8000))
@@ -132,7 +132,7 @@ class Music(commands.Cog):
             await ctx.send(embed = discord.Embed(description = translate(locale, 'resume_success'), color = 0xff8000))
 
     @commands.command(enabled = False)
-    async def volume(self, ctx, volume: int):
+    async def volume(self, ctx: commands.Context, volume: int):
         locale = get_locale(ctx.author.id)
         if 0 <= volume <= 100:
             if not ctx.author.voice:
@@ -148,7 +148,7 @@ class Music(commands.Cog):
             await ctx.send(embed = discord.Embed(description = f'Недопустимое значение: {volume}%', color = 0xff0000))
 
     @commands.command()
-    async def pause(self, ctx):
+    async def pause(self, ctx: commands.Context):
         locale = get_locale(ctx.author.id)
         if not ctx.author.voice:
             return await ctx.send(embed = discord.Embed(description = translate(locale, 'pause_not_in_voice_channel'), color = 0xff8000))
@@ -161,7 +161,7 @@ class Music(commands.Cog):
             await ctx.send(embed = discord.Embed(description = translate(locale, 'pause_success'), color = 0xff8000))
 
     @commands.command(aliases = ['s', 'ass'])
-    async def stop(self, ctx):
+    async def stop(self, ctx: commands.Context):
         locale = get_locale(ctx.author.id)
         if not ctx.author.voice:
             return await ctx.send(embed = discord.Embed(description = translate(locale, 'stop_not_in_voice_channel'), color = 0xff8000))
@@ -176,7 +176,7 @@ class Music(commands.Cog):
             await ctx.send(embed = discord.Embed(description = translate(locale, 'stop_success'), color = 0xff8000))
 
     @commands.command()
-    async def join(self, ctx):
+    async def join(self, ctx: commands.Context):
         locale = get_locale(ctx.author.id)
         if not ctx.author.voice:
             await ctx.send(embed = discord.Embed(description = translate(locale, 'join_not_in_voice_channel'), color = 0xff8000))
@@ -189,7 +189,7 @@ class Music(commands.Cog):
             await ctx.send(embed = discord.Embed(description = translate(locale, 'join_already_connected'), color = 0xff8000))
 
     @commands.command()
-    async def leave(self, ctx):
+    async def leave(self, ctx: commands.Context):
         locale = get_locale(ctx.author.id)
         if ctx.guild.voice_client:
             if ctx.guild.voice_client.channel == ctx.author.voice.channel:

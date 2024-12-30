@@ -23,14 +23,14 @@ class RedButton(discord.ui.Button):
 
 class Cephalon(commands.Cog):
     def __init__(self, client):
-        self.client = client
+        self.client: commands.Bot = client
 
     @commands.Cog.listener()
     async def on_ready(self):
         print('Модуль Cephalon загружен')
 
     @commands.command()
-    async def help(self, ctx, command = None):
+    async def help(self, ctx: commands.Context, command = None):
         owner_commands = ['guilds', 'reset', 'status', 'generate', 'invite', 'disable', 'enable', 'reload', 'list', 'load', 'unload']
         if command is None:
             emb = discord.Embed(description = 'Все доступные команды', color = 0xff8000)
@@ -48,7 +48,7 @@ class Cephalon(commands.Cog):
             return await ctx.send(embed = emb)
         if ctx.author.id in self.client.owner_ids and command in owner_commands:
             if command == 'list':
-                return await ctx.send(embed = discord.Embed(description = f'```{', '.join(owner_commands[:-1])}```', color = 0xff8000))
+                return await ctx.send(embed = discord.Embed(description = f'```{', '.join(owner_commands)}```', color = 0xff8000))
             if command == 'guilds':
                 return await ctx.send(embed = discord.Embed(description = '```py\ncy/guilds\n\nПоказывает список серверов, на которых находится бот```', color = 0xff8000))
             if command == 'reset':
@@ -60,20 +60,16 @@ class Cephalon(commands.Cog):
             if command == 'invite':
                 return await ctx.send(embed = discord.Embed(description = '```py\ncy/invite [beta/pro]\n\nПоказывает ссылку для приглашения бота. beta - бета-версия, pro - про-версия```', color = 0xff8000))
             if command == 'disable':
-                return await ctx.send(embed = discord.Embed(description = '```py\ncy/disable <команда>\n\nВыключает команду```', color = 0xff8000))
+                return await ctx.send(embed = discord.Embed(description = '```py\ncy/disable <команда>\n\nВыключает команду/модуль```', color = 0xff8000))
             if command == 'enable':
-                return await ctx.send(embed = discord.Embed(description = '```py\ncy/enable <команда>\n\nВключает команду```', color = 0xff8000))
-            if command == 'unload':
-                return await ctx.send(embed = discord.Embed(description = '```py\ncy/unload <модуль>\n\nВыгружает модуль```', color = 0xff8000))
-            if command == 'load':
-                return await ctx.send(embed = discord.Embed(description = '```py\ncy/load <модуль>\n\nЗагружает модуль```', color = 0xff8000))
+                return await ctx.send(embed = discord.Embed(description = '```py\ncy/enable <команда>\n\nВключает команду/модуль```', color = 0xff8000))
             if command == 'reload':
                 return await ctx.send(embed = discord.Embed(description = '```py\ncy/reload\n\nИнструмент для перезагрузки всех модулей.\nОшибкой считается только то, что наследуется от commands.ExtensionFailed, в т.ч. и ошибки синтаксиса.\nТ.о., если какая-либо команда имеет незначительные ошибки синтаксиса, модуль всё равно будет перезагружен```|| эх вот бы проказник написал юнит-тесты для модулей ||', color = 0xff8000))
         locale = get_locale(ctx.author.id)
         return await ctx.send(embed = discord.Embed(description = (get_command_help(locale, command)), color = 0xff8000))
 
     @commands.command()
-    async def status(self, ctx, target = 'list'):
+    async def status(self, ctx: commands.Context, target = 'list'):
         if ctx.author.id not in self.client.owner_ids:
             raise commands.NotOwner()
         cogs = ['Cephalon', 'Embeds', 'Fun', 'Mod', 'Misc', 'Music', 'sCephalon', 'sEmbeds', 'sFun', 'sMod', 'sMisc']
@@ -94,7 +90,9 @@ class Cephalon(commands.Cog):
             return await ctx.send(embed = emb)
         else:
             if target not in cogs:
-                return await ctx.send(embed = discord.Embed(description = 'Введён неверный модуль', color = 0xff8000))
+                if target not in self.client.all_commands:
+                    return await ctx.send(embed = discord.Embed(description = f'Объект {target} не найден', color = 0xff8000))
+                return await ctx.send(embed = discord.Embed(description = f'{'`🟢`' if self.client.get_command(target).enabled else '`🔴`'} `{target}`', color = 0xff8000))
             if not all(command.enabled for command in self.client.get_cog(target).get_commands()) and target in self.client.cogs:
                 cmds = '\n'.join([f'{'`🟢`' if command.enabled else '`🔴`'} `{command.name}`' for command in self.client.get_cog(target).get_commands()])
                 return await ctx.send(embed = discord.Embed(description = f'Состояние модуля `{target}`:\n {cmds}', color = 0xff8000))
@@ -104,7 +102,7 @@ class Cephalon(commands.Cog):
                 return await ctx.send(embed = discord.Embed(description = 'Модуль активен', color = 0xff8000))
 
     @commands.command()
-    async def uptime(self, ctx):
+    async def uptime(self, ctx: commands.Context):
         if ctx.author.id in self.client.owner_ids:
             return await ctx.send(embed = discord.Embed(description = f'Используй `cy/status`', color = 0xff8000))
         now = discord.utils.utcnow()
@@ -114,7 +112,7 @@ class Cephalon(commands.Cog):
         await ctx.send(embed = discord.Embed(description = f'Я в сети уже `{hours} ч, {minutes} м, {seconds} с`', color = 0xff8000))
 
     @commands.command()
-    async def guilds(self, ctx):
+    async def guilds(self, ctx: commands.Context):
         if ctx.author.id not in self.client.owner_ids:
             raise commands.NotOwner()
         client_guilds = self.client.guilds
@@ -122,7 +120,7 @@ class Cephalon(commands.Cog):
         await ctx.send(embed = discord.Embed(description = f'Существую на следующих серверах ({len(self.client.guilds)}):\n{client_guilds}', color = 0xff8000))
 
     @commands.command()
-    async def reset(self, ctx, command):
+    async def reset(self, ctx: commands.Context, command):
         if ctx.author.id not in self.client.owner_ids:
             raise commands.NotOwner()
         command = self.client.get_command(command)
@@ -132,7 +130,7 @@ class Cephalon(commands.Cog):
         await command.reset_cooldown(ctx)
 
     @commands.command() # ru, gnida, en
-    async def locale(self, ctx):
+    async def locale(self, ctx: commands.Context):
         locale = get_locale(ctx.author.id)
         rbutton = GrayButton('RU')
         gbutton = RedButton('GNIDA')
@@ -188,7 +186,7 @@ class Cephalon(commands.Cog):
             await msg.edit(embed = discord.Embed(description = 'Время вышло', color = 0xff8000), view = None)
 
     @commands.command()
-    async def generate(self, ctx):
+    async def generate(self, ctx: commands.Context):
         if ctx.author.id not in self.client.owner_ids:
             raise commands.NotOwner()
         token = '-'.join([''.join([secrets.choice('QWERTYUIOPASDFGHJKLZXCVBNM1234567890') for _ in range(5)]) for _ in range(3)])
@@ -196,7 +194,7 @@ class Cephalon(commands.Cog):
 
     @commands.command()
     @commands.cooldown(1, 5, commands.BucketType.user)
-    async def info(self, ctx):
+    async def info(self, ctx: commands.Context):
         emb = discord.Embed(title = 'Пару строк кода сюда, новые фишки туда', description = 'Создатели бота постоянно совершенствуют своё детище, поддерживая его в актуальном состоянии', color = 0xff8000)
         emb.set_author(name = self.client.user.name, url = 'https://warframe.fandom.com/wiki/Cephalon_Cy', icon_url = self.client.user.avatar.url)
         emb.add_field(name = 'Версия', value = '0.13.0.2.21680')
@@ -209,7 +207,7 @@ class Cephalon(commands.Cog):
 
     @commands.command()
     @commands.cooldown(1, 15, commands.BucketType.user)
-    async def devs(self, ctx):
+    async def devs(self, ctx: commands.Context):
         emb = discord.Embed(description = 'Разработчики бота, в частности члены команды Sus&Co', color = 0xff8000)
         emb.add_field(name = 'сасиска', value = 'Первичный разработчик бота, по совместительству основатель Sus&Co. Делает основную работу', inline = False)
         emb.add_field(name = 'Проказник', value = 'Причастен к созданию локали gnida, помогает с идеями для основного бота. Хоть и считается разработчиком, не имеет доступа к коду', inline = False)
@@ -217,7 +215,7 @@ class Cephalon(commands.Cog):
 
     @commands.command()
     @commands.cooldown(1, 5, commands.BucketType.user)
-    async def invite(self, ctx, arg = None):
+    async def invite(self, ctx: commands.Context, arg = None):
         if arg is None:
             await ctx.send(embed = discord.Embed(description = '[Ссылка](https://discord.com/oauth2/authorize?client_id=694170281270312991&permissions=8&scope=bot%20applications.commands) для приглашения Cy на сервера', color = 0xff8000))
         if arg == 'beta':
@@ -231,13 +229,13 @@ class Cephalon(commands.Cog):
 
     @commands.command()
     @commands.cooldown(1, 5, commands.BucketType.user)
-    async def ping(self, ctx):
+    async def ping(self, ctx: commands.Context):
         message = await ctx.send(embed = discord.Embed(description = '`Получаю..`', color = 0xff8000))
         await asyncio.sleep(self.client.latency)
         await message.edit(embed = discord.Embed(description = f'Pong! `{round(self.client.latency * 1000)} ms`', color = 0xff8000))
 
     @commands.command()
-    async def botver(self, ctx, version: str = '0.14.6.0'):
+    async def botver(self, ctx: commands.Context, version: str = '0.14.6.0'):
         with open(CWD + '\\versions.json', 'r', encoding = 'utf-8') as f:
             versions = json.load(f)
         version_data = versions[str(version)]

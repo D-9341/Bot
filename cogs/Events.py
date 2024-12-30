@@ -11,14 +11,14 @@ def rearm(command, message):
 
 class Events(commands.Cog):
     def __init__(self, client):
-        self.client = client
+        self.client: commands.Bot = client
 
     @commands.Cog.listener()
     async def on_ready(self):
         print('Модуль Events загружен')
 
     @commands.Cog.listener()
-    async def on_guild_role_update(self, before, after):
+    async def on_guild_role_update(self, before: discord.Role, after: discord.Role):
         if before.name == 'Muted':
             role = before.guild.get_role(after.id)
             await role.edit(name = 'Muted', color = 0x000001, reason = 'Нельзя изменять эту роль')
@@ -27,7 +27,7 @@ class Events(commands.Cog):
             await role.edit(name = 'Deafened', color = 0x000001, reason = 'Нельзя изменять эту роль')
 
     @commands.Cog.listener()
-    async def on_command_completion(self, ctx):
+    async def on_command_completion(self, ctx: commands.Context):
         channel = self.client.get_channel(714175791033876490)
         emb = discord.Embed(title = 'ВЫПОЛНЕНИЕ_КОМАНДЫ', color = 0xff8000)
         emb.add_field(name = 'НАЗВАНИЕ', value = f'```{ctx.command.name}```')
@@ -37,7 +37,7 @@ class Events(commands.Cog):
         await channel.send(embed = emb)
 
     @commands.Cog.listener()
-    async def on_member_join(self, member):
+    async def on_member_join(self, member: discord.Member):
         user = 'БОТ' if member.bot else 'УЧАСТНИК'
         channel = self.client.get_channel(714175791033876490)
         emb = discord.Embed(title = rf'{user}\_ЗАШЁЛ\_НА_СЕРВЕР', color = 0xff8000, timestamp = discord.utils.utcnow())
@@ -48,7 +48,7 @@ class Events(commands.Cog):
         await channel.send(embed = emb)
 
     @commands.Cog.listener()
-    async def on_member_remove(self, member):
+    async def on_member_remove(self, member: discord.Member):
         user = 'БОТ' if member.bot else 'УЧАСТНИК'
         channel = self.client.get_channel(714175791033876490)
         emb = discord.Embed(title = rf'{user}\_ВЫШЕЛ\_С_СЕРВЕРА', color = 0xff8000, timestamp = discord.utils.utcnow())
@@ -59,7 +59,7 @@ class Events(commands.Cog):
         await channel.send(embed = emb)
 
     @commands.Cog.listener()
-    async def on_guild_remove(self, guild):
+    async def on_guild_remove(self, guild: discord.Guild):
         channel = self.client.get_channel(714175791033876490)
         emb = discord.Embed(title = r'ВЫХОД\_С_СЕРВЕРА', color = 0xff8000, timestamp = discord.utils.utcnow())
         emb.add_field(name = 'СЕРВЕР', value = guild.name)
@@ -67,7 +67,7 @@ class Events(commands.Cog):
         await channel.send(embed = emb)
 
     @commands.Cog.listener()
-    async def on_guild_join(self, guild):
+    async def on_guild_join(self, guild: discord.Guild):
         channel = self.client.get_channel(714175791033876490)
         emb = discord.Embed(title = r'ДОБАВЛЕНИЕ\_НА_СЕРВЕР', color = 0xff8000, timestamp = discord.utils.utcnow())
         emb.add_field(name = 'СЕРВЕР', value = guild.name)
@@ -75,7 +75,7 @@ class Events(commands.Cog):
         await channel.send(embed = emb)
 
     @commands.Cog.listener()
-    async def on_voice_state_update(self, member, before, after):
+    async def on_voice_state_update(self, member: discord.Member, before: discord.VoiceState, after: discord.VoiceState):
         role = discord.utils.get(member.guild.roles, name = 'Deafened')
         if after.channel.name == 'Создать канал':
             await after.channel.edit(user_limit = 1)
@@ -97,7 +97,10 @@ class Events(commands.Cog):
             await member.edit(mute = True, reason = 'Заглушён командой deaf')
 
     @commands.Cog.listener()
-    async def on_message(self, message):
+    async def on_message(self, message: discord.Message):
+        if message.author.id == 417012231406878720:
+            if 'во лох' in message.content.lower():
+                return await message.channel.send('сам лох')
         if message.author.bot is False:
             with open('locales/users.json', 'r', encoding = 'utf-8') as users_file:
                 file = json.load(users_file)
@@ -161,7 +164,7 @@ class Events(commands.Cog):
             await message.add_reaction('👎')
 
     @commands.Cog.listener()
-    async def on_command_error(self, ctx, error):
+    async def on_command_error(self, ctx: commands.Context, error):
         # if isinstance(error, commands.CommandNotFound):
         #     emb = discord.Embed(description = f'{ctx.author.mention}, команда `{ctx.command.name}` не найдена{f', так как модуль `{ctx.command.cog.qualified_name}`, ответственный за неё, отключён' if ctx.command.cog.qualified_name else ''}', color = 0xff8000)
         #     await ctx.send(embed = emb)

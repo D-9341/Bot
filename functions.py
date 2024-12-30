@@ -4,14 +4,19 @@ from typing import Literal
 
 def translate(locale: str, string_id: str) -> str:
     """
-    Translates the string from a JSON file by `locale` and `id`
+    Translates a string_id to a locale string from the locale file
 
     Parameters
-    -----------
-    locale:
-        The locale to pass into function
-    id:
-        The id of the string to be retrieved
+    ----------
+    locale: str
+        The locale to translate to
+    string_id: str
+        The ID of the string to translate
+
+    Returns
+    -------
+    str
+        The translated string
     """
     with open(f'locales/{locale}/locale.json', 'r', encoding = 'utf-8') as file:
         user_data = json.load(file)
@@ -19,12 +24,17 @@ def translate(locale: str, string_id: str) -> str:
 
 def get_locale(author_id: str) -> Literal['ru', 'en', 'gnida']:
     """
-    Gets the locale from `author_id` provided by discord.py's `author.id`
+    Gets the locale for an author
 
     Parameters
-    -----------
-    author_id:
-        The `id` that locale should be searched for
+    ----------
+    author_id: str
+        The ID of the author to get the locale for
+
+    Returns
+    -------
+    Literal['ru', 'en', 'gnida']
+        The locale of the author
     """
     with open('locales/users.json', 'r', encoding = 'utf-8') as file:
         user_data = json.load(file)
@@ -32,14 +42,14 @@ def get_locale(author_id: str) -> Literal['ru', 'en', 'gnida']:
 
 def set_locale(author_id: str, locale: Literal['ru', 'en', 'gnida']) -> None:
     """
-    Sets `author` locale to new `locale`
+    Sets the locale for an author
 
     Parameters
-    -----------
-    author_id:
-        The `id` that locale should be searched for
-    locale:
-        The new locale to be set
+    ----------
+    author_id: str
+        The ID of the author to set the locale for
+    locale: Literal['ru', 'en', 'gnida']
+        The locale to set for the author
     """
     with open('locales/users.json', 'r', encoding = 'utf-8') as file:
         user_data = json.load(file)
@@ -78,6 +88,23 @@ def get_command_help(locale: str, command: str) -> str:
     return command_data.get(command, f'{translate(locale, 'command_not_found')}'.format(command = command))
 
 def parse_members(args_list: list[str] | str) -> argparse.Namespace:
+    """
+    Parses a list of arguments or a string of arguments into a Namespace object.
+
+    Parameters
+    ----------
+    args_list: list[str] | str
+        A list of arguments or a string containing the arguments.
+
+    Returns
+    -------
+    argparse.Namespace
+        A Namespace object with parsed arguments as attributes.
+
+    Notes
+    -----
+    - If both `--users` and `--bots` are specified, `--everyone` will be set to True.
+    """
     if isinstance(args_list, str):
         args_list = args_list.split()
     parser = argparse.ArgumentParser()

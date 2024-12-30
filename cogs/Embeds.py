@@ -5,14 +5,14 @@ botversions = [764882153812787250, 694170281270312991, 762015251264569352]
 
 class Embeds(commands.Cog):
     def __init__(self, client):
-        self.client = client
+        self.client: commands.Bot = client
 
     @commands.Cog.listener()
     async def on_ready(self):
         print('Модуль Embeds загружен')
 
     @commands.command()
-    async def say(self, ctx, *, msg):
+    async def say(self, ctx: commands.Context, *, msg):
         title = description = ''
         image = thumbnail = message = footer = color = author = None
         embed_values = msg.split('&')
@@ -57,7 +57,7 @@ class Embeds(commands.Cog):
 
     @commands.command()
     @commands.has_permissions(manage_messages = True)
-    async def edit(self, ctx, arg, *, msg = None):
+    async def edit(self, ctx: commands.Context, arg, *, msg = None):
         message = await ctx.channel.fetch_message(arg)
         if not any(keyword in msg for keyword in ['&t', '&d', '&img', '&th', '&f', '&c', '&a']):
             if message.author == self.client.user:
@@ -129,10 +129,10 @@ class Embeds(commands.Cog):
                         return await message.edit(embed = None)
                     return await ctx.send(embed = discord.Embed(description = f'{ctx.author.mention}, нечего удалять. Возможно, вы имели ввиду cy/edit {message.id} --delete', color = 0xff8000))
                 return await message.edit(embed = emb)
-            return await ctx.send(embed = discord.Embed(description = f'{message.id} не является сообщением от {self.client.user.mention}', color = 0xff8000))
+            return await ctx.send(embed = discord.Embed(description = f'{message.jump_url} не является сообщением от {self.client.user.mention}', color = 0xff8000))
 
     @commands.command(aliases = ['ctx'])
-    async def content(self, ctx, arg, channel: discord.TextChannel = None, should_be_edit = None):
+    async def content(self, ctx: commands.Context, arg, channel: discord.TextChannel = None, should_be_edit = None):
         if channel is None:
             channel = ctx.channel
         message = await channel.fetch_message(arg)
