@@ -166,7 +166,7 @@ class Events(commands.Cog):
     @commands.Cog.listener()
     async def on_command_error(self, ctx: commands.Context, error):
         # if isinstance(error, commands.CommandNotFound):
-        #     emb = discord.Embed(description = f'{ctx.author.mention}, команда `{ctx.command.name}` не найдена{f', так как модуль `{ctx.command.cog.qualified_name}`, ответственный за неё, отключён' if ctx.command.cog.qualified_name else ''}', color = 0xff8000)
+        #     emb = discord.Embed(description = f'{ctx.author.mention}, команда `{ctx.command.name}` не найдена{f', так как модуль `{ctx.command.cog.qualified_name}`, ответственный за неё, отключён' if ctx.command.cog else ''}', color = 0xff8000)
         #     await ctx.send(embed = emb)
         if isinstance(error, commands.DisabledCommand):
             emb = discord.Embed(description = f'{ctx.author.mention}, команда `{ctx.command.name}` отключена', color = 0xff8000)

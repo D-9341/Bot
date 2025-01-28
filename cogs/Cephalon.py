@@ -91,7 +91,7 @@ class Cephalon(commands.Cog):
         else:
             if target not in cogs:
                 if target not in self.client.all_commands:
-                    return await ctx.send(embed = discord.Embed(description = f'Объект {target} не найден', color = 0xff8000))
+                    return await ctx.send(embed = discord.Embed(description = f'Объект `{target}` не найден', color = 0xff8000))
                 return await ctx.send(embed = discord.Embed(description = f'{'`🟢`' if self.client.get_command(target).enabled else '`🔴`'} `{target}`', color = 0xff8000))
             if not all(command.enabled for command in self.client.get_cog(target).get_commands()) and target in self.client.cogs:
                 cmds = '\n'.join([f'{'`🟢`' if command.enabled else '`🔴`'} `{command.name}`' for command in self.client.get_cog(target).get_commands()])
@@ -104,7 +104,7 @@ class Cephalon(commands.Cog):
     @commands.command()
     async def uptime(self, ctx: commands.Context):
         if ctx.author.id in self.client.owner_ids:
-            return await ctx.send(embed = discord.Embed(description = f'Используй `cy/status`', color = 0xff8000))
+            return await self.status(ctx)
         now = discord.utils.utcnow()
         up_time = now - uptime
         hours, remainder = divmod(up_time.seconds, 3600)
@@ -149,22 +149,22 @@ class Cephalon(commands.Cog):
             view.add_item(ebutton)
         view.add_item(tbutton)
         view.add_item(ibutton)
-        async def rbutton_callback(interaction):
+        async def rbutton_callback(interaction: discord.Interaction):
             set_locale(str(ctx.author.id), 'ru')
             return await interaction.response.edit_message(embed = discord.Embed(description = 'Ваша локаль была установлена на `ru`', color = 0xff8000), view = None)
-        async def gbutton_callback(interaction):
+        async def gbutton_callback(interaction: discord.Interaction):
             await interaction.response.edit_message(embed = discord.Embed(description = 'Ты бля уверен?', color = 0xff8000), view = confirm)
-        async def ybutton_callback(interaction):
+        async def ybutton_callback(interaction: discord.Interaction):
             set_locale(str(ctx.author.id), 'gnida')
             return await interaction.response.edit_message(embed = discord.Embed(description = 'Твоя ёбаная локаль была установлена на `gnida`!', color = 0xff8000), view = None)
-        async def nbutton_callback(interaction):
+        async def nbutton_callback(interaction: discord.Interaction):
             return await interaction.response.edit_message(embed = discord.Embed(description = 'Ну ок', color = 0xff8000), view = None)
-        async def ebutton_callback(interaction):
+        async def ebutton_callback(interaction: discord.Interaction):
             set_locale(str(ctx.author.id), 'en')
             return await interaction.response.edit_message(embed = discord.Embed(description = 'Your locale has been set to `en`', color = 0xff8000), view = None)
-        async def test_callback(interaction):
+        async def test_callback(interaction: discord.Interaction):
             return await interaction.response.edit_message(embed = discord.Embed(description = translate(locale, 'locale_test'), color = 0xff8000), view = None)
-        async def info_callback(interaction):
+        async def info_callback(interaction: discord.Interaction):
             return await interaction.response.edit_message(content = None, embed = discord.Embed(description = translate(locale, 'locale_info'), color = 0xb00b69), view = None)
         rbutton.callback = rbutton_callback
         gbutton.callback = gbutton_callback
