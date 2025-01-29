@@ -12,6 +12,14 @@ class CancelButton(discord.ui.Button):
     def __init__(self):
         super().__init__(label = 'Отменить', style = discord.ButtonStyle.red, custom_id = 'cancel')
 
+class ConfirmButton(discord.ui.Button):
+    def __init__(self, style = discord.ButtonStyle.green):
+        super().__init__(label = 'Да', style = style, custom_id = 'confirm')
+
+class DenyButton(discord.ui.Button):
+    def __init__(self, style = discord.ButtonStyle.red):
+        super().__init__(label = 'Нет', style = style, custom_id = 'deny')
+
 class Mod(commands.Cog):
     def __init__(self, client):
         self.client: commands.Bot = client
@@ -367,69 +375,65 @@ class Mod(commands.Cog):
                 emb = discord.Embed(description = f'{ctx.author.mention}, операция с данным числом ({amount}) доступна только {ctx.guild.owner.mention}', color = 0x2f3136)
                 await ctx.send(f'{ctx.guild.owner.mention}', embed = emb)
             else:
-                emb = discord.Embed(description = f'{ctx.author.mention}, это слишком большое число для удаления сообщений ({amount}). Возможно большое время ожидания ответа {self.client.user.mention}, которое может усугубится разницей во времени между предыдущими сообщениями и сообщением содержащим команду **и повлияет не только на этот сервер!** Продолжить? (y/n)\n||Отмена через 20 секунд||', color = 0x2f3136)
-                sent = await ctx.send(embed = emb)
+                view = discord.ui.View()
+                view.add_item(ConfirmButton(style = discord.ButtonStyle.red))
+                view.add_item(DenyButton(style = discord.ButtonStyle.green))
+                emb = discord.Embed(description = f'{ctx.author.mention}, это слишком большое число для удаления сообщений ({amount}). Возможно большое время ожидания ответа {self.client.user.mention}, которое может усугубится разницей во времени между предыдущими сообщениями и сообщением содержащим команду **и повлияет не только на этот сервер!** Продолжить?\n||Отмена через 20 секунд||', color = 0x2f3136)
+                sent = await ctx.send(embed = emb, view = view)
                 try:
-                    msg = await self.client.wait_for('message', timeout = 20, check = lambda message: message.channel == ctx.message.channel)
-                    if msg.content.lower() == 'y' and msg.author.id == ctx.guild.owner.id:
+                    msg = await self.client.wait_for('interaction', timeout = 20, check = lambda interaction: interaction.channel == ctx.message.channel and interaction.user == ctx.guild.owner and interaction.data['custom_id'] in ['confirm', 'deny'])
+                    if msg.data['custom_id'] == 'confirm':
                         await msg.delete()
                         await sent.delete()
-                    if not args.silent:
-                        emb = discord.Embed(description = 'Удаляем..', color = 0x2f3136)
-                        sent = await ctx.send(embed = emb)
-                    check_func = lambda m: m.pinned is False
-                    if args.bots and not args.users:
-                        check_func = lambda m: check_func(m) and m.author.bot is True
-                    elif args.users and not args.bots:
-                        check_func = lambda m: check_func(m) and m.author.bot is False
-                    if filt:
-                        check_func = lambda m: check_func(m) and m.content.lower() == filt
-                    cleared = await ctx.channel.purge(limit = amount, check = check_func, before = sent if not args.silent else None)
-                    if not args.silent:
-                        view = discord.ui.View()
-                        view.add_item(CancelButton())
-                        try:
-                            emb = discord.Embed(title = 'Результаты удаления сообщений', color = 0x2f3136)
-                            emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{len(cleared)} / {amount}```')
-                            if filt:
-                                emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({args})```', inline = True)
-                            emb.add_field(name = 'Найдены сообщения от:', value = ''.join([f"```ARM\n{author.display_name} : {amount}```" for author, amount in authors.items()]), inline = False)
-                            emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены нажмите на кнопку "Отменить"')
-                            await sent.edit(embed = emb, view = view)
-                            await self.client.wait_for('interaction', timeout = 10, check = lambda interaction: interaction.channel == ctx.message.channel and interaction.user == ctx.author and interaction.data['custom_id'] == 'cancel')
-                            emb.set_footer(text = None)
-                            await sent.edit(embed = emb, view = None)
-                        except asyncio.TimeoutError:
-                            await sent.delete()
-                    elif msg.content.lower() == 'n' and msg.author.id == ctx.guild.owner.id:
+                        if not args.silent:
+                            emb = discord.Embed(description = 'Удаляем..', color = 0x2f3136)
+                            sent = await ctx.send(embed = emb)
+                        check_func = lambda m: m.pinned is False
+                        if args.bots and not args.users:
+                            check_func = lambda m: check_func(m) and m.author.bot is True
+                        elif args.users and not args.bots:
+                            check_func = lambda m: check_func(m) and m.author.bot is False
+                        if filt:
+                            check_func = lambda m: check_func(m) and m.content.lower() == filt
+                        cleared = await ctx.channel.purge(limit = amount, check = check_func, before = sent if not args.silent else None)
+                        if not args.silent:
+                            view = discord.ui.View()
+                            view.add_item(CancelButton())
+                            try:
+                                emb = discord.Embed(title = 'Результаты удаления сообщений', color = 0x2f3136)
+                                emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{len(cleared)} / {amount}```')
+                                if filt:
+                                    emb.add_field(name = 'Применён фильтр:', value = f'```{filt} ({args})```', inline = True)
+                                emb.add_field(name = 'Найдены сообщения от:', value = ''.join([f"```ARM\n{author.display_name} : {amount}```" for author, amount in authors.items()]), inline = False)
+                                emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены нажмите на кнопку "Отменить"')
+                                await sent.edit(embed = emb, view = view)
+                                await self.client.wait_for('interaction', timeout = 10, check = lambda interaction: interaction.channel == ctx.message.channel and interaction.user == ctx.guild.owner and interaction.data['custom_id'] == 'cancel')
+                                emb.set_footer(text = None)
+                                await sent.edit(embed = emb, view = None)
+                            except asyncio.TimeoutError:
+                                await sent.delete()
+                    elif msg.data['custom_id'] == 'deny':
                         await msg.delete()
                         await sent.delete()
-                        emb = discord.Embed(description = f'{ctx.guild.owner.mention} отменил запрос.', color = 0x2f3136)
-                        await ctx.send(embed = emb)
-                    elif msg.content.lower() == 'n' or msg.content.lower() == 'y' and msg.author.id != ctx.guild.owner.id:
-                        await msg.delete()
-                        await sent.delete()
-                        emb = discord.Embed(description = f'{ctx.author.mention}, ты не являешься владельцем сервера.', color = 0x2f3136)
-                        await ctx.send(embed = emb)
-                    else:
-                        await msg.delete()
-                        await sent.delete()
-                        emb = discord.Embed(description = f'Недопустимый ответ - {msg.content}', color = 0x2f3136)
+                        emb = discord.Embed(description = f'{ctx.guild.owner.mention} отменил запрос', color = 0x2f3136)
                         await ctx.send(embed = emb)
                 except asyncio.TimeoutError:
                     await sent.delete()
-                    emb = discord.Embed(description = f'{ctx.author.mention}, Время вышло.', color = 0x2f3136)
+                    emb = discord.Embed(description = f'{ctx.author.mention}, время вышло', color = 0x2f3136)
                     await ctx.send(f'{ctx.guild.owner.mention}', embed = emb)
         elif amount >= 100:
+            view = discord.ui.View()
+            view.add_item(ConfirmButton())
+            view.add_item(DenyButton())
             if ctx.author != ctx.guild.owner:
                 emb = discord.Embed(description = f'{ctx.author.mention}, создан запрос на удаление {amount} сообщений. Мне нужен ответ создателя сервера на это действие. Продолжаем? (y/n)\n||Запрос будет отменён через 1 минуту.||', color = 0x2f3136)
-                sent = await ctx.send(f'{ctx.guild.owner.mention}', embed = emb)
+                sent = await ctx.send(f'{ctx.guild.owner.mention}', embed = emb, view = view)
             else:
                 emb = discord.Embed(description = f'{ctx.author.mention}, создан запрос на удаление {amount} сообщений. Продолжить? (y/n)\n||Запрос будет отменён через 10 секунд.||', color = 0x2f3136)
-                sent = await ctx.send(embed = emb)
+                sent = await ctx.send(embed = emb, view = view)
             try:
-                msg = await self.client.wait_for('message', timeout = 60 if ctx.author != ctx.guild.owner else 10, check = lambda message: message.channel == ctx.message.channel)
-                if msg.content.lower() == 'y' and msg.author.id == ctx.guild.owner.id:
+                msg = await self.client.wait_for('interaction', timeout = 60 if ctx.author != ctx.guild.owner else 10, check = lambda interaction: interaction.channel == ctx.message.channel and interaction.user == ctx.guild.owner and interaction.data['custom_id'] in ['confirm', 'deny'])
+                if msg.data['custom_id'] == 'confirm':
                     await msg.delete()
                     await sent.delete()
                     if not args.silent:
@@ -459,31 +463,24 @@ class Mod(commands.Cog):
                             await sent.edit(embed = emb, view = None)
                         except asyncio.TimeoutError:
                             await sent.delete()
-                elif msg.content.lower() == 'n' and (msg.author.id == ctx.guild.owner.id or msg.author.id in self.client.owner_ids):
+                elif msg.data['custom_id'] == 'deny':
                     await msg.delete()
                     await sent.delete()
                     emb = discord.Embed(description = f'{ctx.guild.owner.mention} отменил запрос', color = 0x2f3136)
-                    await ctx.send(embed = emb)
-                elif msg.content.lower() == 'n' or msg.content.lower() == 'y' and msg.author.id != ctx.guild.owner.id:
-                    await msg.delete()
-                    await sent.delete()
-                    emb = discord.Embed(description = f'{ctx.author.mention}, ты не являешься владельцем сервера', color = 0x2f3136)
-                    await ctx.send(embed = emb)
-                else:
-                    await msg.delete()
-                    await sent.delete()
-                    emb = discord.Embed(description = f'Недопустимый ответ - {msg.content}', color = 0x2f3136)
                     await ctx.send(embed = emb)
             except asyncio.TimeoutError:
                     await sent.delete()
                     emb = discord.Embed(description = f'{ctx.author.mention}, Время вышло.', color = 0x2f3136)
                     await ctx.send(f'{ctx.guild.owner.mention}', embed = emb)
         elif amount >= 10:
+            view = discord.ui.View()
+            view.add_item(ConfirmButton())
+            view.add_item(DenyButton())
             emb = discord.Embed(description = f'{ctx.author.mention}, создан запрос на удаление {amount} сообщений. Продолжить? (y/n)\n||Запрос будет отменён через 10 секунд||', color = 0x2f3136)
-            sent = await ctx.send(embed = emb)
+            sent = await ctx.send(embed = emb, view = view)
             try:
-                msg = await self.client.wait_for('message', timeout = 10, check = lambda message: message.author == ctx.author and message.channel == ctx.message.channel)
-                if msg.content.lower() == 'y':
+                msg = await self.client.wait_for('interaction', timeout = 10, check = lambda interaction: interaction.user == ctx.author and interaction.channel == ctx.message.channel and interaction.data['custom_id'] in ['confirm', 'deny'])
+                if msg.data['custom_id'] == 'confirm':
                     await msg.delete()
                     await sent.delete()
                     if not args.silent:
@@ -513,19 +510,14 @@ class Mod(commands.Cog):
                             await sent.edit(embed = emb, view = None)
                         except asyncio.TimeoutError:
                             await sent.delete()
-                elif msg.content.lower() == 'n':
+                elif msg.data['custom_id'] == 'deny':
                     await msg.delete()
                     await sent.delete()
-                    emb = discord.Embed(description = 'Отменено.', color = 0x2f3136)
-                    await ctx.send(embed = emb)
-                else:
-                    await msg.delete()
-                    await sent.delete()
-                    emb = discord.Embed(description = f'Недопустимый ответ - {msg.content}', color = 0x2f3136)
+                    emb = discord.Embed(description = 'Отменено', color = 0x2f3136)
                     await ctx.send(embed = emb)
             except asyncio.TimeoutError:
                 await sent.delete()
-                emb = discord.Embed(description = f'{ctx.author.mention}, Время вышло.', color = 0x2f3136)
+                emb = discord.Embed(description = f'{ctx.author.mention}, время вышло', color = 0x2f3136)
                 await ctx.send(embed = emb)
         elif amount == 0:
             emb = discord.Embed(description = 'Удалять 0 сообщений? Ты еблан?', color = 0x2f3136)

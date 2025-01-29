@@ -3,13 +3,6 @@ import random
 import discord
 from discord.ext import commands
 
-class Slapper(commands.Converter):
-    async def convert(self, ctx: commands.Context, argument):
-        mention = random.choice(ctx.channel.members)
-        emb = discord.Embed(description = f'{argument}', color =  0x2f3136, timestamp = discord.utils.utcnow())
-        emb.set_author(name = ctx.author.display_name, icon_url = ctx.author.avatar.url)
-        return await ctx.send(f'@someone ||{mention.mention}||', embed = emb)
-
 class Misc(commands.Cog):
     def __init__(self, client):
         self.client: commands.Bot = client
@@ -80,8 +73,11 @@ class Misc(commands.Cog):
 
     @commands.command()
     @commands.cooldown(1, 15, commands.BucketType.user)
-    async def someone(self, ctx: commands.Context, *, text: Slapper):
-        await ctx.send(embed = text)
+    async def someone(self, ctx: commands.Context, *, text):
+        member = random.choice(ctx.channel.members)
+        emb = discord.Embed(description = f'{text}', color =  0x2f3136, timestamp = discord.utils.utcnow())
+        emb.set_author(name = ctx.author.display_name, icon_url = ctx.author.avatar.url)
+        return await ctx.send(f'@someone ||{member.mention}||', embed = emb)
 
     @commands.command()
     @commands.cooldown(1, 5, commands.BucketType.user)
@@ -145,34 +141,33 @@ class Misc(commands.Cog):
     async def about(self, ctx: commands.Context, member: discord.Member = None):
         target = member if member else ctx.author
         is_bot = 'Да' if target.bot else 'Нет'
-        embed = discord.Embed(color = 0x2f3136, timestamp = discord.utils.utcnow())
-        embed.set_author(name = target.display_name)
-        embed.add_field(name = 'ID', value = target.id)
+        emb = discord.Embed(color = 0x2f3136, timestamp = discord.utils.utcnow())
+        emb.set_author(name = target.display_name, icon_url = target.avatar.url)
+        emb.add_field(name = 'ID', value = target.id)
+        created_at = target.created_at.strftime('%d.%m.%Y %H:%M:%S GMT')
+        emb.add_field(name = 'Создан', value = created_at, inline = False)
         if ctx.guild:
-            created_at = target.created_at.strftime('%d.%m.%Y %H:%M:%S GMT')
             joined_at = target.joined_at.strftime('%d.%m.%Y %H:%M:%S GMT')
-            embed.add_field(name = 'Создан', value = created_at, inline = False)
-            embed.add_field(name = 'Вошёл', value = joined_at, inline = False)
-        embed.add_field(name = 'Упоминание', value = target.mention)
-        embed.add_field(name = 'Глобальное имя', value = target.name)
+            emb.add_field(name = 'Вошёл', value = joined_at, inline = False)
+        emb.add_field(name = 'Упоминание', value = target.mention)
+        emb.add_field(name = 'Глобальное имя', value = target.name)
         if target.nick:
-            embed.add_field(name = 'Никнейм', value = target.nick)
+            emb.add_field(name = 'Никнейм', value = target.nick)
         status_map = {
             discord.Status.online: 'В сети',
             discord.Status.dnd: 'Не беспокоить',
             discord.Status.idle: 'Не активен',
-            discord.Status.offline: 'Не в сети',
+            discord.Status.offline: 'Не в сети'
         }
-        status = status_map.get(target.status, 'Неизвестно')
-        embed.add_field(name = 'Статус', value = status)
+        emb.add_field(name = 'Статус', value = status_map.get(target.status, 'Неизвестно'))
+        emb.add_field(name = 'Бот?', value = is_bot)
         if ctx.guild:
             roles = ', '.join([role.name for role in target.roles[1:]])
-        embed.add_field(name = 'Бот?', value = is_bot)
-        if len(target.roles) > 1 and ctx.guild:
-            embed.add_field(name = f'Роли ({len(target.roles)-1})', value = roles, inline = False)
-            embed.add_field(name = 'Высшая роль', value = target.top_role.mention, inline = False)
-        embed.set_thumbnail(url = target.avatar.url)
-        await ctx.send(embed = embed)
+            if len(roles) > 1:
+                emb.add_field(name = f'Роли ({len(target.roles)-1})', value = roles, inline = False)
+                emb.add_field(name = 'Высшая роль', value = target.top_role.name)
+        emb.set_thumbnail(url = target.avatar.url)
+        await ctx.send(embed = emb)
 
 async def setup(client):
     await client.add_cog(Misc(client))

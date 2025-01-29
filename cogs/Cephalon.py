@@ -197,7 +197,7 @@ class Cephalon(commands.Cog):
     async def info(self, ctx: commands.Context):
         emb = discord.Embed(title = 'Пару строк кода сюда, новые фишки туда', description = 'Создатели бота постоянно совершенствуют своё детище, поддерживая его в актуальном состоянии', color = 0xff8000)
         emb.set_author(name = self.client.user.name, url = 'https://warframe.fandom.com/wiki/Cephalon_Cy', icon_url = self.client.user.avatar.url)
-        emb.add_field(name = 'Версия', value = '0.13.0.2.21680')
+        emb.add_field(name = 'Версия', value = '0.14.6.0')
         emb.add_field(name = 'Написан на', value = f'discord.py v{discord.__version__}\nPython v{sys.version[:7]}')
         emb.add_field(name = 'Разработчики 🇷🇺', value = '[сасиска](https://discord.com/users/338714886001524737)\n[Prokaznik](https://discord.com/users/417012231406878720)')
         emb.add_field(name = 'Обслуживаю', value = f'{len(self.client.users)} человек')
