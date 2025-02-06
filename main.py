@@ -1,4 +1,3 @@
-# coding=utf-8
 import asyncio
 import os
 import discord
@@ -15,6 +14,12 @@ client.remove_command('help')
 CWD = Path(__file__).parents[0]
 CWD = str(CWD)
 load_dotenv(CWD + '\\vars.env')
+
+def bot_owner_or_has_permissions(**perms):
+    origin = commands.has_permissions(**perms).predicate
+    async def extended_check(ctx: commands.Context):
+        return ctx.author.id in client.owner_ids or await origin(ctx)
+    return commands.check(extended_check)
 
 @client.event
 async def on_ready():
