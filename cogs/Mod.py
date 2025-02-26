@@ -15,11 +15,11 @@ class CancelButton(discord.ui.Button):
 
 class ConfirmButton(discord.ui.Button):
     def __init__(self, style = discord.ButtonStyle.green):
-        super().__init__(label = 'Да', style = style, custom_id = 'confirm')
+        super().__init__(label = 'Да', style = style, custom_id = 'yes')
 
 class DenyButton(discord.ui.Button):
     def __init__(self, style = discord.ButtonStyle.red):
-        super().__init__(label = 'Нет', style = style, custom_id = 'deny')
+        super().__init__(label = 'Нет', style = style, custom_id = 'no')
 
 class Mod(commands.Cog):
     def __init__(self, client):
@@ -30,8 +30,8 @@ class Mod(commands.Cog):
         print('Модуль Mod загружен')
 
     @commands.command()
-    @commands.has_permissions(view_audit_log = True)
     @commands.cooldown(1, 5, commands.BucketType.user)
+    @commands.check(bot_owner_or_has_permissions(view_audit_log = True))
     async def dm(self, ctx: commands.Context, member: discord.Member, * , text):
         locale = get_locale(ctx.author.id)
         emb = discord.Embed(description = f'{text}', color = 0x2f3136)
