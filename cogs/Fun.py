@@ -2,7 +2,7 @@ import asyncio
 import discord
 import random
 import json
-from functions import get_plural_form
+from functions import get_plural_form, get_locale, translate
 from discord.ext import commands
 
 class Fun(commands.Cog):
@@ -18,15 +18,16 @@ class Fun(commands.Cog):
     @commands.bot_has_permissions(manage_channels = True)
     async def roulette(self, ctx: commands.Context, player: discord.User | str = None):
         bot = discord.utils.get(ctx.guild.members, id = self.client.user.id)
+        locale = get_locale(ctx.author.id)
         if player == 'leaderboard':
             with open('leaderboard/leaders.json', 'r') as file:
                 data = json.load(file)
                 data = sorted(data.items(), key = lambda x: x[1], reverse = True)
                 return await ctx.send(embed = discord.Embed(description = f'Топ 5 лидеров по победам:\n\n{"\n".join([f"{i + 1}. {self.client.get_user(int(x[0])).mention if '\u0414\u0438\u043b\u0435\u0440' not in x[0] else x[0]} - {x[1]} {get_plural_form(x[1], ['победа', 'победы', 'побед'])}" for i, x in enumerate(data[:5])])}', color = 0xff8000))
         items_list = {
-            1: 'Сигареты', 2: 'Ножовка по металлу', 3: 'Пиво', 4: 'Лупа',
-            5: 'Одноразовый телефон', 6: 'Просроченные таблетки', 7: 'Инвертер',
-            8: 'Шприц адреналина', 9: 'Наручники',
+            1: f'{translate(locale, "item_1")}', 2: f'{translate(locale, "item_2")}', 3: f'{translate(locale, "item_3")}',
+            4: f'{translate(locale, "item_4")}', 5: f'{translate(locale, "item_5")}', 6: f'{translate(locale, "item_6")}',
+            7: f'{translate(locale, "item_7")}', 8: f'{translate(locale, "item_8")}', 9: f'{translate(locale, "item_9")}',
         }
         damage = 1
         glass = False
@@ -35,61 +36,61 @@ class Fun(commands.Cog):
         rounds_order = []
         p1_items, p2_items = [], []
         stop = False
-        if player == ctx.author: return await ctx.send(embed = discord.Embed(description = 'Вы не можете играть с собой', color = 0xff0000))
+        if player == ctx.author: return await ctx.send(embed = discord.Embed(description = translate(locale, "roulette_play_self"), color = 0xff0000))
         if player and player != bot:
-            await ctx.send(player.mention, embed = discord.Embed(description = 'Вы были приглашены поиграть в русскую рулетку! Для принятия напишите `y`, у вас есть 30 секунд ||для отказа напишите `n`||', color = 0xff8000))
+            await ctx.send(player.mention, embed = discord.Embed(description = translate(locale, "roulette_play_invite"), color = 0xff8000))
             answer = await self.client.wait_for('message', timeout = 30, check = lambda message: message.channel == ctx.message.channel and message.author == player)
             if answer.content == 'y':
                 MAX_HP = random.randint(4, 6)
                 p1_hp, p2_hp = MAX_HP, MAX_HP
-                channel = await ctx.guild.create_text_channel(f'Сессия игры в рулетку {ctx.author.display_name} vs {player.display_name}')
-                await ctx.send(embed = discord.Embed(description = f'Давайте перейдём в другой канал: {channel.mention}', color = 0x2f3136))
-                await channel.send(embed = discord.Embed(description = f'{ctx.author.mention} vs {player.mention}', color = 0xffffff))
-                await channel.send(embed = discord.Embed(description = 'В магазин вставляется случайное количество патронов от 2 до 8.\nПатрон может быть боевым или холостым.\nПеред каждым раундом вы получаете случайные предметы в размере двух штук, максимум 8 предметов.\n__Для ускорения игры, начиная с 5 раунда игроки будут получать по 4 предмета__.\nИспользование предмета считается дополнительным действием и не влияет на порядок ходов.\nВы __не можете__ отменить использование предмета.\nКоличество как боевых, так и холостых патронов абсолютно случайно, но не равно нулю.\nИгра заканчивается в тот момент, когда здоровье одного из игроков будет равно нулю.\nМаксимальное количество раундов - 10.\nПри выстреле в себя холостым противник пропустит ход.\nПорядок ходов и количество здоровья будут решены подбрасыванием монетки', color = 0x2f3136))
+                channel = await ctx.guild.create_text_channel(f'{translate(locale, "roulette_session_start")}'.format(ctx_author = ctx.author.mention, player = player.mention))
+                await ctx.send(embed = discord.Embed(description = f'{translate(locale, "roulette_go_to_other_channel")}'.format(channel_mention = channel.mention), color = 0x2f3136))
+                await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_players")}'.format(ctx_author = ctx.author.mention, player = player.mention), color = 0xffffff))
+                await channel.send(embed = discord.Embed(description = translate(locale, "roulette_rules_vs_user"), color = 0x2f3136))
                 await asyncio.sleep(15)
                 turn_order = random.randint(0, 1)
                 for i in range(11):
-                    if i == 10: await channel.send(embed = discord.Embed(description = 'Игра окончена ничьёй, канал удалится через 10 секунд', color = 0xff8000)); await asyncio.sleep(10); return await channel.delete()
+                    if i == 10: await channel.send(embed = discord.Embed(description = translate(locale, "roulette_stalemate"), color = 0xff8000)); await asyncio.sleep(10); return await channel.delete()
                     first = True
                     p1_cuffed = False
                     p2_cuffed = False
-                    if stop: await channel.send(embed = discord.Embed(description = 'Игра была остановлена игроком, канал удалится через 10 секунд', color = 0xff8000)); await asyncio.sleep(10); return await channel.delete()
+                    if stop: await channel.send(embed = discord.Embed(description = translate(locale, "roulette_game_stopped"), color = 0xff8000)); await asyncio.sleep(10); return await channel.delete()
                     rounds_order = []
                     winner = player if p1_hp <= 0 else ctx.author
                     if p1_hp <= 0 or p2_hp <= 0:
-                        await channel.send(embed = discord.Embed(description = f'Игра окончена. Победил {winner.mention}, канал удалится через 10 секунд', color = 0xff8000))
+                        await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_winner")}'.format(winner = winner.mention), color = 0xff8000))
                         with open('leaderboard/leaders.json', 'r') as file:
                             data = json.load(file)
                         data[str(winner.id)] = data.get(str(winner.id), 0) + 1
                         with open('leaderboard/leaders.json', 'w') as users_file:
                             json.dump(data, users_file, indent = 4)
                         await asyncio.sleep(10); return await channel.delete()
-                    await channel.send(embed = discord.Embed(description = f'Раунд номер {i + 1}{"" if i + 1 != 5 else ", теперь вам будет выдаваться по 4 предмета"}', color = 0xffffff))
+                    await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_round_number")}{"" if i + 1 != 5 else f"{translate(locale, "roulette_round_number_gt_4")}"}'.format(i = i + 1,), color = 0xffffff))
                     if i + 1 <= 4:
                         for _ in range(2):
                             if len(p1_items) < 8:
                                 p1_items.append(items_list[random.randint(1, 9)])
                             else:
-                                await channel.send(embed = discord.Embed(description = f'{ctx.author.mention} предметы не были добавлены, так как у вас их 8. Используйте предметы чаще', color=0xff0000))
+                                await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_use_more_often")}'.format(player = ctx.author.mention), color=0xff0000))
                                 break
                         for _ in range(2):
                             if len(p2_items) < 8:
                                 p2_items.append(items_list[random.randint(1, 9)])
                             else:
-                                await channel.send(embed = discord.Embed(description = f'{player.mention} предметы не были добавлены, так как у вас их 8. Используйте предметы чаще', color=0xff0000))
+                                await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_use_more_often")}'.format(player = player.mention), color=0xff0000))
                                 break
                     else:
                         for _ in range(4):
                             if len(p1_items) < 8:
                                 p1_items.append(items_list[random.randint(1, 9)])
                             else:
-                                await channel.send(embed = discord.Embed(description = f'{ctx.author.mention} предметы не были добавлены, так как у вас их 8. Используйте предметы чаще', color=0xff0000))
+                                await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_use_more_often")}'.format(player = ctx.author.mention), color=0xff0000))
                                 break
                         for _ in range(4):
                             if len(p2_items) < 8:
                                 p2_items.append(items_list[random.randint(1, 9)])
                             else:
-                                await channel.send(embed = discord.Embed(description = f'{player.mention} предметы не были добавлены, так как у вас их 8. Используйте предметы чаще', color=0xff0000))
+                                await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_use_more_often")}'.format(player = player.mention), color=0xff0000))
                                 break
                     rounds = random.randint(2, 8)
                     while rounds > 0:
