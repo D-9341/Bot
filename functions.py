@@ -112,7 +112,7 @@ def parse_members(args_list: list[str] | str) -> argparse.Namespace:
     parser.add_argument('-u', '--users', action = 'store_true', help = 'Include user members')
     parser.add_argument('-b', '--bots', action = 'store_true', help = 'Include bot members')
     parser.add_argument('-s', '--silent', action = 'store_true', help = 'Silent mode for results')
-    args = parser.parse_args(args_list)
+    args, _ = parser.parse_known_args(args_list)
     if args.users and args.bots:
         args.everyone = True
     return args
