@@ -85,13 +85,13 @@
     "queue_remove_first": "You cannot remove the first track",
     "queue_remove_no_such_track": "There is no such track in the queue",
     "queue_remove_success": "Removed {title} from the queue",
-    "item_1": "Cigarettes",
-    "item_2": "Handsaw",
-    "item_3": "Beer",
-    "item_4": "Magnifying glass",
-    "item_5": "Burner phone",
-    "item_6": "Expired medcine",
-    "item_7": "Inverter",
-    "item_8": "Adrenaline syringe",
-    "item_9": "Handcuffs"
+    "cigarettes": "Cigarettes",
+    "handsaw": "Handsaw",
+    "beer": "Beer",
+    "magnifying_glass": "Magnifying glass",
+    "burner_phone": "Burner phone",
+    "expired_medicine": "Expired medcine",
+    "inverter": "Inverter",
+    "adrenaline_syringe": "Adrenaline syringe",
+    "handcuffs": "Handcuffs"
 }
