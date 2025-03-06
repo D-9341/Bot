@@ -104,7 +104,7 @@ async def pull(ctx):
         await asyncio.sleep(3)
         await ctx.send(embed = discord.Embed(description = 'Перезагрузка...', color = 0xff8000))
         await asyncio.sleep(1)
-        await reload()
+        await reload(ctx)
 
 async def init():
     for file in os.listdir(CWD + "/cogs"):

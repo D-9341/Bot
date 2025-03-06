@@ -31,7 +31,7 @@ class Cephalon(commands.Cog):
 
     @commands.command()
     async def help(self, ctx: commands.Context, command = None):
-        owner_commands = ['guilds', 'reset', 'status', 'generate', 'invite', 'disable', 'enable', 'reload', 'list', 'load', 'unload']
+        owner_commands = ['guilds', 'reset', 'status', 'generate', 'invite', 'disable', 'enable', 'reload', 'list', 'pull']
         if command is None:
             emb = discord.Embed(description = 'Все доступные команды', color = 0xff8000)
             emb.set_author(name = self.client.user.name, url = 'https://discord.com/api/oauth2/authorize?client_id=694170281270312991&permissions=8&scope=bot%20applications.commands')
@@ -65,6 +65,8 @@ class Cephalon(commands.Cog):
                 return await ctx.send(embed = discord.Embed(description = '```py\ncy/enable <команда>\n\nВключает команду/модуль```', color = 0xff8000))
             if command == 'reload':
                 return await ctx.send(embed = discord.Embed(description = '```py\ncy/reload\n\nИнструмент для перезагрузки всех модулей.\nОшибкой считается только то, что наследуется от commands.ExtensionFailed, в т.ч. и ошибки синтаксиса.\nТ.о., если какая-либо команда имеет незначительные ошибки синтаксиса, модуль всё равно будет перезагружен```|| эх вот бы проказник написал юнит-тесты для модулей ||', color = 0xff8000))
+            if command == 'pull':
+                return await ctx.send(embed = discord.Embed(description = '```py\ncy/pull\n\nПолучает обновления из репозитория и перезагружает модули```', color = 0xff8000))
         locale = get_locale(ctx.author.id)
         return await ctx.send(embed = discord.Embed(description = (get_command_help(locale, command)), color = 0xff8000))
 
