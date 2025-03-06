@@ -125,6 +125,7 @@ class Fun(commands.Cog):
                             game_view.add_item(discord.ui.Button(label = translate(locale, "roulette_stop_game"), style = discord.ButtonStyle.red, custom_id = 'stop'))
                             await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_player_choose_action")}'.format(player = ctx.author.mention), color = 0xff8000), view = game_view)
                             action = await self.client.wait_for('interaction', check = lambda interaction: interaction.channel == channel and interaction.user == ctx.author)
+                            await action.response.defer(ephemeral = True)
                             if action.data['custom_id'] == '1':
                                 await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_player_shoot_self")}'.format(player = ctx.author.mention), color = 0xff8000))
                                 await asyncio.sleep(3)
@@ -286,6 +287,7 @@ class Fun(commands.Cog):
                             game_view.add_item(discord.ui.Button(label = translate(locale, "roulette_stop_game"), style = discord.ButtonStyle.red, custom_id = 'stop'))
                             await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_player_choose_action")}'.format(player = player.mention), color = 0xff8000), view = game_view)
                             action = await self.client.wait_for('interaction', check = lambda interaction: interaction.channel == channel and interaction.user == player)
+                            await action.response.defer(ephemeral = True)
                             if action.data['custom_id'] == '1':
                                 await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_player_shoot_self")}'.format(player = player.mention), color = 0xff8000))
                                 rounds -= 1
@@ -310,8 +312,8 @@ class Fun(commands.Cog):
                                 damage = 1
                                 turn_order = 0
                             elif action.data['custom_id'] == '3':
-                                init = [f'{i + 1} - {x}' for i, x in enumerate(p2_items)]
-                                await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_player_choose_item")}', color = 0xff8000))
+                                init = [str(x) for x in p2_items]
+                                await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_player_choose_item")}'.format(player = player.mention), color = 0xff8000))
                                 item = await self.client.wait_for('interaction', check = lambda interaction: interaction.channel == channel and interaction.user == player)
                                 used = init[int(item.data['custom_id']) - 1][4:]
                                 if used == translate(locale, 'cigarettes'):
@@ -351,7 +353,7 @@ class Fun(commands.Cog):
                                         await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_player_expired_medicine_success")}'.format(player = player.mention), color = 0x00ff00))
                                         if not p2_cursed: p2_hp += 2 if p2_hp <= MAX_HP - 2 else 1 if p2_hp <= MAX_HP - 1 else 0
                                     else:
-                                        await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_player_expired_medicine_fail")}', color = 0xff0000))
+                                        await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_player_expired_medicine_fail")}'.format(player = player.mention), color = 0xff0000))
                                         p2_hp -= 1
                                 elif used == translate(locale, 'inverter'):
                                     await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_player_inverter")}'.format(player = player.mention), color = 0xff8000))
@@ -365,7 +367,7 @@ class Fun(commands.Cog):
                                         p1_cuffed = True
                                         p2_items.pop(int(item.data['custom_id']) - 1)
                                     else:
-                                        await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_player_handcuffs_used")}', color = 0xff0000))
+                                        await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_player_handcuffs_used")}'.format(player = player.mention), color = 0xff0000))
                                 elif used == translate(locale, 'adrenaline_syringe'):
                                     if len(p1_items) == 0: await channel.send(embed = discord.Embed(description = translate(locale, "roulette_syringe_no_items"), color = 0xff0000)); turn_order = 1
                                     else:
@@ -385,7 +387,7 @@ class Fun(commands.Cog):
                                                 await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_player_handsaw_used")}'.format(player = player.mention), color = 0xff0000))
                                                 p2_items.insert(int(item.content), items_list[8])
                                             else:
-                                                await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_player_handsaw")}', color = 0x00ff00))
+                                                await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_player_handsaw")}'.format(player = player.mention), color = 0x00ff00))
                                                 sawed = True
                                                 damage += 1
                                                 p1_items.pop(int(item.data['custom_id']) - 1)
@@ -550,7 +552,7 @@ class Fun(commands.Cog):
                             if current_round == 0:
                                 await channel.send(embed = discord.Embed(description = translate(locale, "roulette_shoot_opponent_blank"), color = 0xff0000))
                             else:
-                                await channel.send(embed = discord.Embed(description = translate(locale, "roulette_shoot_opponent_live"), color = 0x00ff00))
+                                await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_shoot_opponent_live")}'.format(damage = damage), color = 0x00ff00))
                                 p2_hp -= damage
                             damage = 1
                             await asyncio.sleep(1)
@@ -628,11 +630,11 @@ class Fun(commands.Cog):
                                     await channel.send(embed = discord.Embed(description = translate(locale, "roulette_syringe_use"), color = 0x00ff00))
                                     await asyncio.sleep(3)
                                     p1_items.pop(int(item.data['custom_id']) - 1)
-                                    init = [f'{i + 1} - {x}' for i, x in enumerate(p2_items) if x != translate(locale, 'adrenaline_syringe')]
+                                    init = [str(x) for x in p2_items if x != translate(locale, 'adrenaline_syringe')]
                                     syringe_items_view = discord.ui.View()
                                     for i in range(len(init)):
                                         syringe_items_view.add_item(discord.ui.Button(label = init[i], style = discord.ButtonStyle.gray, custom_id = str(i + 1)))
-                                    await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_choose_opponent_item")}', color = 0xff8000), view = syringe_items_view)
+                                    await channel.send(embed = discord.Embed(description = translate(locale, "roulette_choose_opponent_item"), color = 0xff8000), view = syringe_items_view)
                                     item = await self.client.wait_for('interaction', check = lambda interaction: interaction.channel == channel and interaction.user == ctx.author)
                                     await item.response.defer(ephemeral = True)
                                     used = init[int(item.data['custom_id']) - 1][4:]
