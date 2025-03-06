@@ -43,7 +43,7 @@ class Fun(commands.Cog):
             if answer.content == 'y':
                 MAX_HP = random.randint(4, 6)
                 p1_hp, p2_hp = MAX_HP, MAX_HP
-                channel = await ctx.guild.create_text_channel(f'{translate(locale, "roulette_session_start")}'.format(ctx_author = ctx.author, player = player))
+                channel = await ctx.guild.create_text_channel(f'{translate(locale, "roulette_session_start")}'.format(ctx_author = ctx.author.display_name, player = player.display_name))
                 await ctx.send(embed = discord.Embed(description = f'{translate(locale, "roulette_go_to_other_channel")}'.format(channel_mention = channel.mention), color = 0x2f3136))
                 await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_players")}'.format(ctx_author = ctx.author.mention, player = player.mention), color = 0xffffff))
                 await channel.send(embed = discord.Embed(description = translate(locale, "roulette_rules_vs_user"), color = 0x2f3136))
@@ -123,6 +123,7 @@ class Fun(commands.Cog):
                             game_view.add_item(discord.ui.Button(label = translate(locale, "roulette_shoot_opponent"), style = discord.ButtonStyle.gray, custom_id = '2'))
                             if len(p1_items) > 0: game_view.add_item(discord.ui.Button(label = translate(locale, "roulette_use_item"), style = discord.ButtonStyle.gray, custom_id = '3'))
                             game_view.add_item(discord.ui.Button(label = translate(locale, "roulette_stop_game"), style = discord.ButtonStyle.red, custom_id = 'stop'))
+                            await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_player_choose_action")}'.format(player = ctx.author.mention), color = 0xff8000), view = game_view)
                             action = await self.client.wait_for('interaction', check = lambda interaction: interaction.channel == channel and interaction.user == ctx.author)
                             if action.data['custom_id'] == '1':
                                 await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_player_shoot_self")}'.format(player = ctx.author.mention), color = 0xff8000))
@@ -150,274 +151,285 @@ class Fun(commands.Cog):
                                 turn_order = 1
                                 damage = 1
                             elif action.data['custom_id'] == '3':
-                                init = [f'{i + 1} - {item}' for i, item in enumerate(p1_items)]
-                                await channel.send(embed = discord.Embed(description = f'{ctx.author.mention}, выберите предмет из инвентаря: {", ".join(init)}', color = 0xff8000))
+                                init = [str(item) for item in p1_items]
+                                items_view = discord.ui.View()
+                                for i in range(len(init)):
+                                    items_view.add_item(discord.ui.Button(label = init[i], style = discord.ButtonStyle.gray, custom_id = str(i + 1)))
+                                await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_player_use_item")}'.format(player = ctx.author.mention), color = 0xff8000))
                                 item = await self.client.wait_for('interaction', check = lambda interaction: interaction.channel == channel and interaction.user == ctx.author)
                                 used = init[int(item.data['custom_id']) - 1][4:]
                                 if used == translate(locale, 'cigarettes'):
-                                    await channel.send(embed = discord.Embed(description = f'{ctx.author.mention} использовал сигареты', color = 0xff8000))
+                                    await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_player_cigarettes")}'.format(player = ctx.author.mention), color = 0xff8000))
                                     if not p1_cursed: p1_hp += 1 if p1_hp < MAX_HP else 0
                                     p1_items.pop(int(item.data['custom_id']) - 1)
                                 elif used == translate(locale, 'handsaw'):
                                     if sawed:
-                                        await channel.send(embed = discord.Embed(description = f'{ctx.author.mention}, вы уже использовали ножовку', color = 0xff0000))
+                                        await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_player_handsaw_used")}'.format(player = ctx.author.mention), color = 0xff0000))
                                     else:
-                                        await channel.send(embed = discord.Embed(description = f'{ctx.author.mention} использовал ножовку по металлу, следующий выстрел {ctx.author.mention} нанесёт в 2 раза больше урона', color = 0xff8000))
+                                        await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_player_handsaw")}'.format(player = ctx.author.mention), color = 0xff8000))
                                         damage += 1
                                         p1_items.pop(int(item.data['custom_id']) - 1)
                                 elif used == translate(locale, 'beer'):
-                                    await channel.send(embed = discord.Embed(description = f'{ctx.author.mention} использовал пиво, текущий патрон извлечён из патронника, это был {'холостой' if rounds_order[0] == 0 else 'боевой'}', color = 0xff8000))
+                                    await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_player_beer")}'.format(player = ctx.author.mention, shell = translate(locale, 'live_shell' if rounds_order[0] == 1 else 'blank_shell')), color = 0xff8000))
                                     rounds -= 1
                                     round = rounds_order.pop(0)
                                     p1_items.pop(int(item.data['custom_id']) - 1)
                                 elif used == translate(locale, 'magnifying_glass'):
-                                    await channel.send(embed = discord.Embed(description = f'{ctx.author.mention} использовал лупу...', color = 0xff8000))
-                                    await ctx.author.send(embed = discord.Embed(description = f'Сейчас в патроннике: {'холостой' if rounds_order[0] == 0 else 'боевой'}', color = 0xff8000))
+                                    await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_player_magnifying_glass")}'.format(player = ctx.author.mention), color = 0xff8000))
+                                    await ctx.author.send(embed = discord.Embed(description = f'{translate(locale, "roulette_magnifying_glass_result")}'.format(shell = translate(locale, 'live_shell' if rounds_order[0] == 1 else 'blank_shell')), color = 0xff8000))
                                     p1_items.pop(int(item.data['custom_id']) - 1)
                                 elif used == translate(locale, 'burner_phone'):
                                     number = ''.join([random.choice('1234567890') for _ in range(6)])
-                                    await channel.send(embed = discord.Embed(description = f'{ctx.author.mention} звонит на {number}...', color = 0xff8000))
+                                    await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_player_burner_phone")}'.format(player = ctx.author.mention, number = number), color = 0xff8000))
                                     p1_items.pop(int(item.data['custom_id']) - 1)
                                     if len(rounds_order) >= 3:
                                         current = random.randint(1, len(rounds_order) - 1)
-                                        await ctx.author.send(embed = discord.Embed(description = f'...{current + 1} патрон {'боевой' if rounds_order[current] == 1 else "холостой"}...', color = 0xff8000))
+                                        await ctx.author.send(embed = discord.Embed(description = f'{translate(locale, "roulette_burner_phone_result")}'.format(current = current + 1, shell = translate(locale, 'live_shell' if rounds_order[current] == 1 else 'blank_shell')), color = 0xff8000))
                                     else:
-                                        await ctx.author.send(embed = discord.Embed(description = 'Не повезло...'))
+                                        await ctx.author.send(embed = discord.Embed(description = translate(locale, "roulette_burner_phone_no_result"), color = 0xff0000))
                                 elif used == translate(locale, 'expired_medicine'):
-                                    await channel.send(embed = discord.Embed(description = f'{ctx.author.mention} использовал таблетки...', color = 0xff0000))
+                                    await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_player_expired_medicine")}'.format(player = ctx.author.mention), color = 0xff0000))
                                     p1_items.pop(int(item.data['custom_id']) - 1)
                                     normal = random.randint(1, 4)
                                     if normal <= 2:
-                                        await channel.send(embed = discord.Embed(description = f'{ctx.author.mention} восстанавливает здоровье...', color = 0x00ff00))
+                                        await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_player_expired_medicine_success")}'.format(player = ctx.author.mention), color = 0x00ff00))
                                         if not p1_cursed: p1_hp += 2 if p1_hp <= MAX_HP - 2 else 1 if p1_hp <= MAX_HP - 1 else 0
                                     else:
-                                        await channel.send(embed = discord.Embed(description = f'...{ctx.author.mention} теряет 1 здоровье...', color = 0xff0000))
+                                        await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_player_expired_medicine_fail")}'.format(player = ctx.author.mention), color = 0xff0000))
                                         p1_hp -= 1
                                 elif used == translate(locale, 'inverter'):
-                                    await channel.send(embed = discord.Embed(description = f'{ctx.author.mention} использовал инвертер...', color = 0xff8000))
+                                    await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_player_inverter")}'.format(player = ctx.author.mention), color = 0xff8000))
                                     p1_items.pop(int(item.data['custom_id']) - 1)
                                     await channel.send(embed = discord.Embed(description = translate(locale, 'roulette_inverter_result'), color = 0xff8000))
                                     if rounds_order[0] == 0: rounds_order[0] = 1
                                     elif rounds_order[0] == 1: rounds_order[0] = 0
                                 elif used == translate(locale, 'handcuffs'):
                                     if not p2_cuffed:
-                                        await channel.send(embed = discord.Embed(description = f'{ctx.author.mention} использовал наручники, {player.mention} пропустит следующий ход', color = 0x00ff00))
+                                        await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_player_handcuffs")}'.format(player1 = ctx.author.mention, player2 = player.mention), color = 0x00ff00))
                                         p2_cuffed = True
                                         p1_items.pop(int(item.data['custom_id']) - 1)
                                     else:
-                                        await channel.send(embed = discord.Embed(description = f'{ctx.author.mention}, вы уже использовали наручники', color = 0xff0000))
+                                        await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_player_handcuffs_used")}'.format(player = ctx.author.mention), color = 0xff0000))
                                 elif used == translate(locale, 'adrenaline_syringe'):
-                                    if len(p2_items) == 0: await ctx.send(embed = discord.Embed(description = 'В инвентаре противника нет предметов', color = 0xff0000)); turn_order = 0
-                                    await channel.send(embed = discord.Embed(description = f'{ctx.author.mention} использовал шприц адреналина, теперь он может выбрать предмет {player.mention}', color = 0xff8000))
+                                    if len(p2_items) == 0: await ctx.send(embed = discord.Embed(description = translate(locale, 'roulette_syringe_no_items'), color = 0xff0000)); turn_order = 0
+                                    await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_player_syringe")}'.format(player1 = ctx.author.mention, player2 = player.mention), color = 0xff8000))
                                     p1_items.pop(int(item.data['custom_id']) - 1)
-                                    init = [f'{i + 1} - {item}' for i, item in enumerate(p2_items)]
-                                    await channel.send(embed = discord.Embed(description = f'Выберите предмет из инвентаря {player.mention}: {", ".join(init)}', color = 0xff8000))
-                                    item = await self.client.wait_for('message', check = lambda message: message.channel == channel and message.author == ctx.author and message.content.lower() in ([str(x) for x in range(1, len(p2_items) + 1)]))
-                                    used = init[int(item.data['custom_id']) - 1 - 1][4:]
+                                    init = [str(x) for x in p2_items if x != translate(locale, 'adrenaline_syringe')]
+                                    syringe_items_view = discord.ui.View()
+                                    for i in range(len(init)):
+                                        syringe_items_view.add_item(discord.ui.Button(label = init[i], custom_id = str(i + 1), style = discord.ButtonStyle.gray))
+                                    await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_player_choose_opponent_item")}'.format(player = player.mention), color = 0xff8000), view = syringe_items_view)
+                                    item = await self.client.wait_for('interaction', check = lambda interaction: interaction.channel == channel and interaction.user == ctx.author)
+                                    used = init[int(item.data['custom_id']) - 1][4:]
                                     if used == translate(locale, 'cigarettes'):
-                                        await channel.send(embed = discord.Embed(description = f'{ctx.author.mention} украл сигареты', color = 0x00ff00))
+                                        await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_player_stole_cigarretes")}'.format(player = ctx.author.mention), color = 0x00ff00))
                                         if not p1_cursed: p1_hp += 1 if p1_hp < MAX_HP else 0
                                         p2_items.pop(int(item.data['custom_id']) - 1)
                                     elif used == translate(locale, 'handsaw'):
                                         if sawed:
-                                            await channel.send(embed = discord.Embed(description = f'{ctx.author.mention}, вы уже использовали ножовку', color = 0xff0000))
+                                            await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_player_handcuffs_used")}', color = 0xff0000))
                                             p1_items.insert(int(item.content), items_list[8])
                                         else:
-                                            await channel.send(embed = discord.Embed(description = f'{ctx.author.mention} украл ножовку по металлу, следующий его выстрел нанесёт в 2 раза больше урона', color = 0x00ff00))
+                                            await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_player_stole_handsaw")}'.format(player = ctx.author.mention), color = 0x00ff00))
                                             sawed = True
                                             damage += 1
                                             p2_items.pop(int(item.data['custom_id']) - 1)
                                     elif used == translate(locale, 'beer'):
-                                        await channel.send(embed = discord.Embed(description = f'{ctx.author.mention} украл пиво, текущий патрон извлечён из патронника, это был {'холостой' if rounds_order[0] == 0 else 'боевой'}', color = 0xff8000))
+                                        await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_player_stole_beer")}'.format(player = ctx.author.mention, shell = translate(locale, 'live_shell' if rounds_order[0] == 1 else 'blank_shell')), color = 0xff8000))
                                         rounds -= 1
                                         round = rounds_order.pop(0)
                                         p2_items.pop(int(item.data['custom_id']) - 1)
                                     elif used == translate(locale, 'magnifying_glass'):
-                                        await channel.send(embed = discord.Embed(description = f'{ctx.author.mention} украл лупу...', color = 0xff8000))
-                                        await ctx.author.send(embed = discord.Embed(description = f'Сейчас в патроннике: {'холостой' if rounds_order[0] == 0 else 'боевой'}', color = 0xff0000 if rounds_order[0] == 1 else 0x00ff00))
+                                        await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_player_stole_magnifying_glass")}'.format(player = ctx.author.mention), color = 0xff8000))
+                                        await ctx.author.send(embed = discord.Embed(description = f'{translate(locale, "roulette_magnifying_glass_result")}'.format(shell = translate(locale, 'live_shell' if rounds_order[0] == 1 else 'blank_shell')), color = 0xff0000 if rounds_order[0] == 1 else 0x00ff00))
                                         p2_items.pop(int(item.data['custom_id']) - 1)
                                     elif used == translate(locale, 'burner_phone'):
                                         number = ''.join([random.choice('1234567890') for _ in range(6)])
-                                        await channel.send(embed = discord.Embed(description = f'{ctx.author.mention} звонит на {number}...', color = 0xff8000))
+                                        await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_player_burner_phone")}'.format(player = ctx.author.mention, number = number), color = 0xff8000))
                                         p2_items.pop(int(item.data['custom_id']) - 1)
                                         if len(rounds_order) >= 3:
                                             current = random.randint(1, len(rounds_order) - 1)
-                                            await ctx.author.send(embed = discord.Embed(description = f'...{current + 1} патрон {'боевой' if rounds_order[current] == 1 else "холостой"}...', color = 0xff8000))
+                                            await ctx.author.send(embed = discord.Embed(description = f'{translate(locale, "roulette_player_burner_phone_result")}'.format(player = ctx.author.mention, shell = translate(locale, 'live_shell' if rounds_order[current] == 1 else 'blank_shell')), color = 0xff8000))
                                         else:
-                                            await ctx.author.send(embed = discord.Embed(description = 'Не повезло...'))
+                                            await ctx.author.send(embed = discord.Embed(description = translate(locale, "roulette_player_burner_phone_no_result"), color = 0xff8000))
                                     elif used == translate(locale, 'expired_medicine'):
-                                        await channel.send(embed = discord.Embed(description = f'{ctx.author.mention} украл таблетки...', color = 0xff0000))
+                                        await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_player_stole_expired_medicine")}'.format(player = ctx.author.mention), color = 0xff0000))
                                         p2_items.pop(int(item.data['custom_id']) - 1)
                                         normal = random.randint(1, 4)
                                         if normal <= 2:
-                                            await channel.send(embed = discord.Embed(description = f'{ctx.author.mention} восстанавливает здоровье...', color = 0x00ff00))
+                                            await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_player_stole_expired_medicine_success")}'.format(player = ctx.author.mention), color = 0x00ff00))
                                             if not p1_cursed: p1_hp += 2 if p1_hp <= 4 else 1 if p1_hp <= 5 else 0
                                         else:
-                                            await channel.send(embed = discord.Embed(description = f'...{ctx.author.mention} теряет 1 здоровье...', color = 0xff0000))
+                                            await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_player_stole_expired_medicine_fail")}'.format(player = ctx.author.mention), color = 0xff0000))
                                             p1_hp -= 1
                                     elif used == translate(locale, 'inverter'):
-                                        await channel.send(embed = discord.Embed(description = f'{ctx.author.mention} украл инвертер...', color = 0xff8000))
+                                        await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_player_stole_inverter")}'.format(player = ctx.author.mention), color = 0xff8000))
                                         p2_items.pop(int(item.data['custom_id']) - 1)
                                         await channel.send(embed = discord.Embed(description = translate(locale, 'roulette_inverter_result'), color = 0xff8000))
                                         if rounds_order[0] == 0: rounds_order[0] = 1
                                         elif rounds_order[0] == 1: rounds_order[0] = 0
                                     elif used == translate(locale, 'handcuffs'):
                                         if not p2_cuffed:
-                                            await channel.send(embed = discord.Embed(description = f'{ctx.author.mention} украл наручники, {player.mention} пропустит следующий ход', color = 0x00ff00))
+                                            await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_player_stole_handcuffs")}'.format(player1 = ctx.author.mention, player2 = player.mention), color = 0x00ff00))
                                             p2_cuffed = True
                                             p2_items.pop(int(item.data['custom_id']) - 1)
                                         else:
-                                            await channel.send(embed = discord.Embed(description = f'{ctx.author.mention}, вы уже использовали наручники', color = 0xff0000))
+                                            await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_player_handcuffs_used")}', color = 0xff0000))
                                     turn_order = 0
                                     await asyncio.sleep(2)
                             elif action.data['custom_id'] == 'stop': stop = True; break
                         elif turn_order == 1:
-                            await channel.send(embed = discord.Embed(description = f'{player.mention}, выберите действие: 1 - выстрелить в себя, 2 - выстрелить в противника{"" if len(p2_items) == 0 else ", 3 - использовать предмет"}', color = 0xff8000))
-                            to_wait_for = ['1', '2', '3', 'stop'] if len(p2_items) > 0 else ['1', '2', 'stop']
-                            action = await self.client.wait_for('message', check = lambda message: message.channel == channel and message.author == player and message.content.lower() in to_wait_for)
+                            game_view = discord.ui.View()
+                            game_view.add_item(discord.ui.Button(label = translate(locale, "roulette_shoot_self"), style = discord.ButtonStyle.gray, custom_id = '1'))
+                            game_view.add_item(discord.ui.Button(label = translate(locale, "roulette_shoot_opponent"), style = discord.ButtonStyle.gray, custom_id = '2'))
+                            if len(p1_items) > 0: game_view.add_item(discord.ui.Button(label = translate(locale, "roulette_use_item"), style = discord.ButtonStyle.gray, custom_id = '3'))
+                            game_view.add_item(discord.ui.Button(label = translate(locale, "roulette_stop_game"), style = discord.ButtonStyle.red, custom_id = 'stop'))
+                            await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_player_choose_action")}'.format(player = player.mention), color = 0xff8000), view = game_view)
+                            action = await self.client.wait_for('interaction', check = lambda interaction: interaction.channel == channel and interaction.user == player)
                             if action.data['custom_id'] == '1':
                                 await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_player_shoot_self")}'.format(player = player.mention), color = 0xff8000))
                                 rounds -= 1
                                 round = rounds_order.pop(0)
                                 if rounds_order[0] == 0:
-                                    await channel.send(embed = discord.Embed(description = f'Холостой, {ctx.author.mention} пропускает ход', color = 0xff8000))
+                                    await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_player_shoot_self_blank")}'.format(player = ctx.author.mention), color = 0xff8000))
                                     turn_order = 1
                                 elif rounds_order[0] == 1:
-                                    await channel.send(embed = discord.Embed(description = f'Это был боевой.. {player.mention} теряет здоровье в размере {damage}', color = 0xff8000))
+                                    await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_player_shoot_self_live")}'.format(player = player.mention, damage = damage), color = 0xff8000))
                                     p2_hp -= damage
                                     turn_order = 0
                                 damage = 1
                             elif action.data['custom_id'] == '2':
-                                await channel.send(embed = discord.Embed(description = f'{player.mention} стреляет в {ctx.author.mention}', color = 0xff8000))
+                                await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_player_shoot_opponent")}'.format(player1 = player.mention, player2 = ctx.author.mention), color = 0xff8000))
                                 rounds -= 1
                                 round = rounds_order.pop(0)
                                 if round == 0:
-                                    await channel.send(embed = discord.Embed(description = f'Холостой, ход переходит {ctx.author.mention}', color = 0xff8000))
+                                    await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_player_shoot_opponent_blank")}'.format(player = ctx.author.mention), color = 0xff8000))
                                 elif round == 1:
-                                    await channel.send(embed = discord.Embed(description = f'Это был боевой, {ctx.author.mention} теряет {damage} здоровья', color = 0xff8000))
+                                    await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_player_shoot_opponent_live")}'.format(player = ctx.author.mention, damage = damage), color = 0xff8000))
                                     p1_hp -= damage
                                 damage = 1
                                 turn_order = 0
                             elif action.data['custom_id'] == '3':
                                 init = [f'{i + 1} - {x}' for i, x in enumerate(p2_items)]
-                                await channel.send(embed = discord.Embed(description = f'{player.mention}, выберите предмет из инвентаря: {", ".join(init)}', color = 0xff8000))
-                                item = await self.client.wait_for('message', check = lambda message: message.channel == channel and message.author == player and message.content.lower() in ([str(x) for x in range(1, len(p2_items) + 1)]))
-                                used = init[int(item.data['custom_id']) - 1 - 1][4:][4:]
+                                await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_player_choose_item")}', color = 0xff8000))
+                                item = await self.client.wait_for('interaction', check = lambda interaction: interaction.channel == channel and interaction.user == player)
+                                used = init[int(item.data['custom_id']) - 1][4:]
                                 if used == translate(locale, 'cigarettes'):
-                                    await channel.send(embed = discord.Embed(description = f'{player.mention} использовал сигареты', color = 0xff8000))
+                                    await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_player_cigarettes")}'.format(player = player.mention), color = 0xff8000))
                                     if not p2_cursed: p2_hp += 1 if p2_hp < MAX_HP else 0
                                     p2_items.pop(int(item.data['custom_id']) - 1)
                                 elif used == translate(locale, 'handsaw'):
                                     if sawed:
-                                        await channel.send(embed = discord.Embed(description = f'{player.mention}, вы уже использовали ножовку', color = 0xff0000))
+                                        await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_player_handsaw_used")}'.format(player = player.mention), color = 0xff0000))
                                     else:
-                                        await channel.send(embed = discord.Embed(description = f'{player.mention} использовал ножовку по металлу, следующий его выстрел нанесёт в 2 раза больше урона', color = 0xff8000))
+                                        await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_player_handsaw")}'.format(player = player.mention), color = 0xff8000))
                                         damage += 1
                                         p2_items.pop(int(item.data['custom_id']) - 1)
                                 elif used == translate(locale, 'beer'):
-                                    await channel.send(embed = discord.Embed(description = f'{player.mention} использовал пиво, текущий патрон извлечён из патронника, это был {'холостой' if rounds_order[0] == 0 else 'боевой'}', color = 0xff8000))
+                                    await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_player_beer")}'.format(player = player.mention, shell = translate(locale, 'live_shell' if rounds_order[0] == 1 else 'blank_shell')), color = 0xff8000))
                                     rounds -= 1
                                     round = rounds_order.pop(0)
                                     p2_items.pop(int(item.data['custom_id']) - 1)
                                 elif used == translate(locale, 'magnifying_glass'):
-                                    await channel.send(embed = discord.Embed(description = f'{player.mention} использует лупу...', color = 0xff8000))
-                                    await player.send(embed = discord.Embed(description = f'Сейчас в патроннике: {'холостой' if rounds_order[0] == 0 else 'боевой'}', color = 0xff8000))
+                                    await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_player_magnifying_glass")}'.format(player = player.mention), color = 0xff8000))
+                                    await player.send(embed = discord.Embed(description = f'{translate(locale, "roulette_magnifying_glass_result")}'.format(shell = translate(locale, 'live_shell' if rounds_order[0] == 1 else 'blank_shell')), color = 0xff8000))
                                     p2_items.pop(int(item.data['custom_id']) - 1)
                                 elif used == translate(locale, 'burner_phone'):
                                     number = ''.join([random.choice('1234567890') for _ in range(6)])
-                                    await channel.send(embed = discord.Embed(description = f'{player.mention} звонит на {number}...', color = 0xff8000))
+                                    await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_player_burner_phone")}'.format(player = player.mention, number = number), color = 0xff8000))
                                     p2_items.pop(int(item.data['custom_id']) - 1)
                                     if len(rounds_order) >= 3:
                                         current = random.randint(1, len(rounds_order) - 1)
-                                        await player.send(embed = discord.Embed(description = f'...{current + 1} патрон {'боевой' if rounds_order[current] == 1 else "холостой"}...', color = 0xff8000))
+                                        await player.send(embed = discord.Embed(description = f'{translate(locale, "roulette_burner_phone_result")}'.format(current = current + 1, shell = translate(locale, 'live_shell' if rounds_order[current] == 1 else 'blank_shell')), color = 0xff8000))
                                     else:
-                                        await player.send(embed = discord.Embed(description = 'Не повезло...'))
+                                        await player.send(embed = discord.Embed(description = translate(locale, "roulette_burner_phone_no_result"), color = 0xff0000))
                                 elif used == translate(locale, 'expired_medicine'):
-                                    await channel.send(embed = discord.Embed(description = f'{player.mention} использовал таблетки...', color = 0xff0000))
+                                    await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_player_expired_medicine")}'.format(player = player.mention), color = 0xff0000))
                                     p2_items.pop(int(item.data['custom_id']) - 1)
                                     normal = random.randint(1, 4)
                                     if normal <= 2:
-                                        await channel.send(embed = discord.Embed(description = f'{player.mention} восстанавливает здоровье...', color = 0x00ff00))
+                                        await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_player_expired_medicine_success")}'.format(player = player.mention), color = 0x00ff00))
                                         if not p2_cursed: p2_hp += 2 if p2_hp <= MAX_HP - 2 else 1 if p2_hp <= MAX_HP - 1 else 0
                                     else:
-                                        await channel.send(embed = discord.Embed(description = f'...{player.mention} теряет 1 здоровье...', color = 0xff0000))
+                                        await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_player_expired_medicine_fail")}', color = 0xff0000))
                                         p2_hp -= 1
                                 elif used == translate(locale, 'inverter'):
-                                    await channel.send(embed = discord.Embed(description = f'{player.mention} использовал инвертер...', color = 0xff8000))
+                                    await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_player_inverter")}'.format(player = player.mention), color = 0xff8000))
                                     p2_items.pop(int(item.data['custom_id']) - 1)
                                     await channel.send(embed = discord.Embed(description = translate(locale, 'roulette_inverter_result'), color = 0xff8000))
                                     if rounds_order[0] == 0: rounds_order[0] = 1
                                     elif rounds_order[0] == 1: rounds_order[0] = 0
                                 elif used == translate(locale, 'handcuffs'):
                                     if not p1_cuffed:
-                                        await channel.send(embed = discord.Embed(description = f'{player.mention} использовал наручники, {ctx.author.mention} пропустит следующий ход', color = 0xff8000))
+                                        await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_player_handcuffs")}'.format(player1 = player.mention, player2 = ctx.author.mention), color = 0xff8000))
                                         p1_cuffed = True
                                         p2_items.pop(int(item.data['custom_id']) - 1)
                                     else:
-                                        await channel.send(embed = discord.Embed(description = f'{player.mention}, вы уже использовали наручники', color = 0xff0000))
+                                        await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_player_handcuffs_used")}', color = 0xff0000))
                                 elif used == translate(locale, 'adrenaline_syringe'):
-                                    if len(p1_items) == 0: await channel.send(embed = discord.Embed(description = 'В инвентаре противника нет предметов', color = 0xff0000)); turn_order = 1
+                                    if len(p1_items) == 0: await channel.send(embed = discord.Embed(description = translate(locale, "roulette_syringe_no_items"), color = 0xff0000)); turn_order = 1
                                     else:
-                                        await channel.send(embed = discord.Embed(description = f'{player.mention} использовал шприц адреналина, теперь он может выбрать предмет {ctx.author.mention}', color = 0xff8000))
+                                        await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_player_syringe")}'.format(player1 = player.mention, player2 = ctx.author.mention), color = 0xff8000))
                                         p2_items.pop(int(item.data['custom_id']) - 1)
-                                        init = [f'{i + 1}. {x}' for i, x in enumerate(p1_items)]
-                                        await channel.send(embed = discord.Embed(description = f'Выберите предмет из инвентаря {ctx.author.mention}: {", ".join(init)}', color = 0xff8000))
+                                        init = [str(x) for x in p1_items if x != translate(locale, 'adrenaline_syringe')]
+                                        syringe_items_view = discord.ui.View()
+                                        await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_player_choose_opponent_item")}'.format(player = ctx.author.mention), color = 0xff8000), view = syringe_items_view)
                                         item = await self.client.wait_for('message', check = lambda message: message.channel == channel and message.author == player and message.content.lower() in ([str(x) for x in range(1, len(p1_items) + 1)]))
-                                        used = init[int(item.data['custom_id']) - 1 - 1][4:][4:]
+                                        used = init[int(item.data['custom_id']) - 1][4:]
                                         if used == translate(locale, 'cigarettes'):
-                                            await channel.send(embed = discord.Embed(description = f'{player.mention} украл сигареты {ctx.author.mention}', color = 0x00ff00))
+                                            await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_player_stole_cigarettes")}'.format(player = player.mention), color = 0x00ff00))
                                             if not p2_cursed: p2_hp += 1 if p2_hp < MAX_HP else 0
                                             p1_items.pop(int(item.data['custom_id']) - 1)
                                         elif used == translate(locale, 'handsaw'):
                                             if sawed:
-                                                await channel.send(embed = discord.Embed(description = f'{player.mention}, вы уже использовали ножовку', color = 0xff0000))
+                                                await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_player_handsaw_used")}'.format(player = player.mention), color = 0xff0000))
                                                 p2_items.insert(int(item.content), items_list[8])
                                             else:
-                                                await channel.send(embed = discord.Embed(description = f'{player.mention} украл ножовку по металлу, следующий его выстрел нанесёт в 2 раза больше урона', color = 0x00ff00))
+                                                await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_player_handsaw")}', color = 0x00ff00))
                                                 sawed = True
                                                 damage += 1
                                                 p1_items.pop(int(item.data['custom_id']) - 1)
                                         elif used == translate(locale, 'beer'):
-                                            await channel.send(embed = discord.Embed(description = f'{player.mention} украл пиво, текущий патрон извлечён из патронника, это был {'холостой' if rounds_order[0] == 0 else 'боевой'}', color = 0xff8000))
+                                            await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_player_stole_beer")}'.format(player = player.mention, shell = translate(locale, 'live_shell' if rounds_order[0] == 1 else 'blank_shell')), color = 0xff8000))
                                             rounds -= 1
                                             round = rounds_order.pop(0)
                                             p1_items.pop(int(item.data['custom_id']) - 1)
                                         elif used == translate(locale, 'magnifying_glass'):
-                                            await channel.send(embed = discord.Embed(description = f'{player.mention} украл лупу...', color = 0xff8000))
-                                            await player.send(embed = discord.Embed(description = f'Сейчас в патроннике: {'холостой' if rounds_order[0] == 0 else 'боевой'}', color = 0xff0000 if rounds_order[0] == 1 else 0x00ff00))
+                                            await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_player_stole_magnifying_glass")}'.format(player = player.mention), color = 0xff8000))
+                                            await player.send(embed = discord.Embed(description = f'{translate(locale, "roulette_magnifying_glass_result")}'.format(shell = translate(locale, 'live_shell' if rounds_order[0] == 1 else 'blank_shell')), color = 0xff0000 if rounds_order[0] == 1 else 0x00ff00))
                                             p1_items.pop(int(item.data['custom_id']) - 1)
                                         elif used == translate(locale, 'burner_phone'):
                                             number = ''.join([random.choice('1234567890') for _ in range(6)])
-                                            await channel.send(embed = discord.Embed(description = f'{player.mention} звонит на {number}...', color = 0xff8000))
+                                            await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_player_burner_phone")}'.format(player = player.mention, number = number), color = 0xff8000))
                                             p1_items.pop(int(item.data['custom_id']) - 1)
                                             if len(rounds_order) >= 3:
                                                 current = random.randint(1, len(rounds_order) - 1)
-                                                await player.send(embed = discord.Embed(description = f'...{current + 1} патрон {'боевой' if rounds_order[current] == 1 else "холостой"}...', color = 0xff8000))
+                                                await player.send(embed = discord.Embed(description = f'{translate(locale, "roulette_burner_phone_result")}'.format(current = current + 1, shell = translate(locale, 'live_shell' if rounds_order[current] == 1 else 'blank_shell')), color = 0xff8000))
                                             else:
-                                                await player.send(embed = discord.Embed(description = 'Не повезло...'))
+                                                await player.send(embed = discord.Embed(description = translate(locale, "roulette_burner_phone_no_result"), color = 0xff0000))
                                         elif used == translate(locale, 'expired_medicine'):
-                                            await channel.send(embed = discord.Embed(description = f'{player.mention} украл таблетки...', color = 0xff0000))
+                                            await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_player_stole_expired_medicine")}'.format(player = player.mention), color = 0xff0000))
                                             p1_items.pop(int(item.data['custom_id']) - 1)
                                             normal = random.randint(1, 4)
                                             if normal <= 2:
-                                                await channel.send(embed = discord.Embed(description = f'{player.mention} восстанавливает здоровье...', color = 0x00ff00))
+                                                await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_player_expired_medicine_success")}'.format(player = player.mention), color = 0x00ff00))
                                                 if not p2_cursed: p2_hp += 2 if p2_hp <= MAX_HP - 2 else 1 if p2_hp <= MAX_HP - 1 else 0
                                             else:
-                                                await channel.send(embed = discord.Embed(description = f'...{player.mention} теряет 1 здоровье...', color = 0xff0000))
+                                                await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_player_expired_medicine_fail")}'.format(player = player.mention), color = 0xff0000))
                                                 p2_hp -= 1
                                         elif used == translate(locale, 'inverter'):
-                                            await channel.send(embed = discord.Embed(description = f'{player.mention} украл инвертер...', color = 0xff8000))
+                                            await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_player_inverter")}'.format(player = player.mention), color = 0xff8000))
                                             p1_items.pop(int(item.data['custom_id']) - 1)
                                             await channel.send(embed = discord.Embed(description = translate(locale, 'roulette_inverter_result'), color = 0xff8000))
                                             if rounds_order[0] == 0: rounds_order[0] = 1
                                             elif rounds_order[0] == 1: rounds_order[0] = 0
                                         elif used == translate(locale, 'handcuffs'):
                                             if not p1_cuffed:
-                                                await channel.send(embed = discord.Embed(description = f'{player.mention} украл наручники, {ctx.author.mention} пропустит следующий ход', color = 0xff8000))
+                                                await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_player_handcuffs")}'.format(player1 = player.mention, player2 = ctx.author.mention), color = 0xff8000))
                                                 p1_cuffed = True
                                                 p1_items.pop(int(item.data['custom_id']) - 1)
                                             else:
-                                                await channel.send(embed = discord.Embed(description = f'{player.mention}, вы уже использовали наручники', color = 0xff0000))
+                                                await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_player_handcuffs_used")}'.format(player = player.mention), color = 0xff0000))
                                 await asyncio.sleep(1)
                                 turn_order = 1
                             elif action.data['custom_id'] == 'stop': stop = True; break
@@ -425,7 +437,7 @@ class Fun(commands.Cog):
                 await ctx.send(embed = discord.Embed(description = translate(locale, "roulette_play_cancel"), color = 0x2f3136))
         elif player is None or player == bot:
             p1_hp, p2_hp = 6, 6
-            channel = await ctx.guild.create_text_channel(f'{translate(locale, 'roulette_session_start')}'.format(ctx_author = ctx.author, player = player if player else translate(locale, 'roulette_dealer')))
+            channel = await ctx.guild.create_text_channel(f'{translate(locale, 'roulette_session_start')}'.format(ctx_author = ctx.author.display_name, player = player.display_name if player else translate(locale, 'roulette_dealer')))
             await ctx.send(embed = discord.Embed(description = f'{translate(locale, 'roulette_go_to_other_channel')}'.format(channel_mention = channel.mention), color = 0x2f3136))
             await channel.send(embed = discord.Embed(description = translate(locale, "roulette_vs_bot"), color = 0xff8000))
             await channel.send(embed = discord.Embed(description = translate(locale, "roulette_rules_vs_bot"), color = 0x2f3136))
@@ -538,13 +550,13 @@ class Fun(commands.Cog):
                             if current_round == 0:
                                 await channel.send(embed = discord.Embed(description = translate(locale, "roulette_shoot_opponent_blank"), color = 0xff0000))
                             else:
-                                await channel.send(embed = discord.Embed(description = f'', color = 0x00ff00))
+                                await channel.send(embed = discord.Embed(description = translate(locale, "roulette_shoot_opponent_live"), color = 0x00ff00))
                                 p2_hp -= damage
                             damage = 1
                             await asyncio.sleep(1)
                             turn_order = 1
                         elif action.data['custom_id'] == '3':
-                            init = [f'{i + 1} - {x}' for i, x in enumerate(p1_items)]
+                            init = [str(x) for x in p1_items]
                             items_view = discord.ui.View()
                             for i in range(len(init)):
                                 items_view.add_item(discord.ui.Button(label = init[i], style = discord.ButtonStyle.gray, custom_id = str(i + 1)))
@@ -553,7 +565,7 @@ class Fun(commands.Cog):
                             await item.response.defer(ephemeral = True)
                             used = init[int(item.data['custom_id']) - 1][4:]
                             if used == translate(locale, 'cigarettes'):
-                                await item.followup.send(embed = discord.Embed(description = translate(locale, "roulette_cigarettes"), color = 0x00ff00))
+                                await channel.send(embed = discord.Embed(description = translate(locale, "roulette_cigarettes"), color = 0x00ff00))
                                 if not p1_cursed: p1_hp += 1 if p1_hp < 6 else 0
                                 p1_items.pop(int(item.data['custom_id']) - 1)
                             elif used == translate(locale, 'handsaw'):
@@ -619,7 +631,7 @@ class Fun(commands.Cog):
                                     init = [f'{i + 1} - {x}' for i, x in enumerate(p2_items) if x != translate(locale, 'adrenaline_syringe')]
                                     syringe_items_view = discord.ui.View()
                                     for i in range(len(init)):
-                                        syringe_items_view.add_item(discord.ui.Button(label = init[i], style = discord.ButtonStyle.gray, custom_id = str(i)))
+                                        syringe_items_view.add_item(discord.ui.Button(label = init[i], style = discord.ButtonStyle.gray, custom_id = str(i + 1)))
                                     await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_choose_opponent_item")}', color = 0xff8000), view = syringe_items_view)
                                     item = await self.client.wait_for('interaction', check = lambda interaction: interaction.channel == channel and interaction.user == ctx.author)
                                     await item.response.defer(ephemeral = True)
