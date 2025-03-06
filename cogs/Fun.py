@@ -158,7 +158,7 @@ class Fun(commands.Cog):
                                     items_view.add_item(discord.ui.Button(label = init[i], style = discord.ButtonStyle.gray, custom_id = str(i + 1)))
                                 await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_player_use_item")}'.format(player = ctx.author.mention), color = 0xff8000))
                                 item = await self.client.wait_for('interaction', check = lambda interaction: interaction.channel == channel and interaction.user == ctx.author)
-                                used = init[int(item.data['custom_id']) - 1][4:]
+                                used = init[int(item.data['custom_id']) - 1]
                                 if used == translate(locale, 'cigarettes'):
                                     await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_player_cigarettes")}'.format(player = ctx.author.mention), color = 0xff8000))
                                     if not p1_cursed: p1_hp += 1 if p1_hp < MAX_HP else 0
@@ -221,7 +221,7 @@ class Fun(commands.Cog):
                                         syringe_items_view.add_item(discord.ui.Button(label = init[i], custom_id = str(i + 1), style = discord.ButtonStyle.gray))
                                     await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_player_choose_opponent_item")}'.format(player = player.mention), color = 0xff8000), view = syringe_items_view)
                                     item = await self.client.wait_for('interaction', check = lambda interaction: interaction.channel == channel and interaction.user == ctx.author)
-                                    used = init[int(item.data['custom_id']) - 1][4:]
+                                    used = init[int(item.data['custom_id']) - 1]
                                     if used == translate(locale, 'cigarettes'):
                                         await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_player_stole_cigarretes")}'.format(player = ctx.author.mention), color = 0x00ff00))
                                         if not p1_cursed: p1_hp += 1 if p1_hp < MAX_HP else 0
@@ -315,7 +315,7 @@ class Fun(commands.Cog):
                                 init = [str(x) for x in p2_items]
                                 await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_player_choose_item")}'.format(player = player.mention), color = 0xff8000))
                                 item = await self.client.wait_for('interaction', check = lambda interaction: interaction.channel == channel and interaction.user == player)
-                                used = init[int(item.data['custom_id']) - 1][4:]
+                                used = init[int(item.data['custom_id']) - 1]
                                 if used == translate(locale, 'cigarettes'):
                                     await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_player_cigarettes")}'.format(player = player.mention), color = 0xff8000))
                                     if not p2_cursed: p2_hp += 1 if p2_hp < MAX_HP else 0
@@ -377,7 +377,7 @@ class Fun(commands.Cog):
                                         syringe_items_view = discord.ui.View()
                                         await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_player_choose_opponent_item")}'.format(player = ctx.author.mention), color = 0xff8000), view = syringe_items_view)
                                         item = await self.client.wait_for('message', check = lambda message: message.channel == channel and message.author == player and message.content.lower() in ([str(x) for x in range(1, len(p1_items) + 1)]))
-                                        used = init[int(item.data['custom_id']) - 1][4:]
+                                        used = init[int(item.data['custom_id']) - 1]
                                         if used == translate(locale, 'cigarettes'):
                                             await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_player_stole_cigarettes")}'.format(player = player.mention), color = 0x00ff00))
                                             if not p2_cursed: p2_hp += 1 if p2_hp < MAX_HP else 0
@@ -565,7 +565,7 @@ class Fun(commands.Cog):
                             await action.followup.send(embed = discord.Embed(description = f'{translate(locale, "roulette_chose_item")}', color = 0xff8000), view = items_view)
                             item = await self.client.wait_for('interaction', check = lambda interaction: interaction.user == ctx.author)
                             await item.response.defer(ephemeral = True)
-                            used = init[int(item.data['custom_id']) - 1][4:]
+                            used = init[int(item.data['custom_id']) - 1]
                             if used == translate(locale, 'cigarettes'):
                                 await channel.send(embed = discord.Embed(description = translate(locale, "roulette_cigarettes"), color = 0x00ff00))
                                 if not p1_cursed: p1_hp += 1 if p1_hp < 6 else 0
@@ -637,7 +637,7 @@ class Fun(commands.Cog):
                                     await channel.send(embed = discord.Embed(description = translate(locale, "roulette_choose_opponent_item"), color = 0xff8000), view = syringe_items_view)
                                     item = await self.client.wait_for('interaction', check = lambda interaction: interaction.channel == channel and interaction.user == ctx.author)
                                     await item.response.defer(ephemeral = True)
-                                    used = init[int(item.data['custom_id']) - 1][4:]
+                                    used = init[int(item.data['custom_id']) - 1]
                                     if used == translate(locale, 'cigarettes'):
                                         await channel.send(embed = discord.Embed(description = translate(locale, 'roulette_cigarettes_stolen'), color = 0x00ff00))
                                         if not p1_cursed: p1_hp += 1 if p1_hp < 6 else 0
