@@ -134,7 +134,7 @@ class Fun(commands.Cog):
                                     await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_player_shoot_self_blank")}'.format(player = player.mention), color = 0xff8000))
                                     turn_order = 0
                                 elif round == 1:
-                                    await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_player_shoot_self_live")}'.format(player = ctx.author.mention), color = 0xff8000))
+                                    await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_player_shoot_self_live")}'.format(player = ctx.author.mention, damage = damage), color = 0xff8000))
                                     p1_hp -= damage
                                     turn_order = 1
                                 damage = 1
