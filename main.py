@@ -91,6 +91,21 @@ async def reload(ctx):
         return await ctx.send(embed = discord.Embed(description = f'{'Модуль' if len(excepted_modules) == 1 else 'Модули'} {', '.join(excepted_modules.keys())} не {'может быть перезагружен' if len(excepted_modules) == 1 else 'могут быть перезагружены'}, {f'пингани {client.get_user(338714886001524737).mention}' if ctx.author.id != 338714886001524737 else 'необходимо исправить'}:\n{''.join([f'`{name}`: `{error}`\n' for name, error in excepted_modules.items()])}', color = 0xff0000))
     await ctx.send(embed = discord.Embed(description = 'Модули перезагружены', color = 0xff8000))
 
+@client.command()
+async def pull(ctx):
+    if ctx.author.id not in client.owner_ids:
+        raise commands.NotOwner()
+    process = await asyncio.create_subprocess_shell('git pull', stdout = asyncio.subprocess.PIPE, stderr = asyncio.subprocess.PIPE)
+    stdout, stderr = await process.communicate()
+    if process.returncode != 0:
+        await ctx.send(embed = discord.Embed(description = f'Не удалось получить обновления: `{stderr.decode("utf-8")}`', color = 0xff0000))
+    else:
+        await ctx.send(embed = discord.Embed(description = f'Обновления получены:\n`{stdout.decode("utf-8").strip()}`', color = 0xff8000))
+        await asyncio.sleep(3)
+        await ctx.send(embed = discord.Embed(description = 'Перезагрузка...', color = 0xff8000))
+        await asyncio.sleep(1)
+        await reload()
+
 async def init():
     for file in os.listdir(CWD + "/cogs"):
         if file.endswith(".py"):

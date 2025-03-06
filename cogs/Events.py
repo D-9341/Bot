@@ -110,6 +110,10 @@ class Events(commands.Cog):
                     json.dump(file, users_file, indent = 4)
         if message.content.startswith(f'<@{self.client.user.id}>') and len(message.content) == len(f'<@{self.client.user.id}>'):
             await message.channel.send(f'чё звал {message.author.mention} ||`cy/`||')
+        if message.channel.id == 1345125935636283504 and not message.author.bot:
+            role = discord.utils.get(message.guild.roles, id = 1314332101512007741)
+            sent = await message.channel.send(role.mention)
+            await sent.delete()
         if message.channel.id == 1041417879788208169:
             if message.author.bot is True and message.author.id != 694170281270312991:
                 role = discord.utils.get(message.guild.roles, id = 1078051320088510644)
@@ -119,7 +123,7 @@ class Events(commands.Cog):
                 emb = discord.Embed(title = r'ОПОВЕЩЕНИЕ\_ОБ_ОБНОВЛЕНИИ', color = 0xff8000, timestamp = discord.utils.utcnow())
                 emb.add_field(name = 'ОПОВЕЩЕНЫ', value = 'РАЗРАБОТЧИКИ')
                 await channel.send(embed = emb)
-        elif message.channel.id == 750372413102883028:
+        if message.channel.id == 750372413102883028:
             if message.author.bot is True and message.author.id != 694170281270312991:
                 role = discord.utils.get(message.guild.roles, id = 750368477671325728)
                 sent = await message.channel.send(role.mention)
@@ -128,7 +132,7 @@ class Events(commands.Cog):
                 emb = discord.Embed(title = r'ОПОВЕЩЕНИЕ\_ОБ_ОБНОВЛЕНИИ', color = 0xff8000, timestamp = discord.utils.utcnow())
                 emb.add_field(name = 'ОПОВЕЩЕНЫ', value = role.mention)
                 await channel.send(embed = emb)
-        elif message.channel.id == 750368033578680361:
+        if message.channel.id == 750368033578680361:
             if message.author.bot is True and message.author.id != 694170281270312991:
                 role = discord.utils.get(message.guild.roles, id = 750366804689420319)
                 sent = await message.channel.send(role.mention)
@@ -137,7 +141,7 @@ class Events(commands.Cog):
                 emb = discord.Embed(title = r'ОПОВЕЩЕНИЕ\_ОБ_ОБНОВЛЕНИИ', color = 0xff8000, timestamp = discord.utils.utcnow())
                 emb.add_field(name = 'ОПОВЕЩЕНЫ', value = role.mention)
                 await channel.send(embed = emb)
-        elif message.channel.id == 750363498290348123:
+        if message.channel.id == 750363498290348123:
             if message.author.bot is True and message.author.id != 694170281270312991:
                 role = discord.utils.get(message.guild.roles, id = 750363797226782802)
                 sent = await message.channel.send(role.mention)
@@ -146,7 +150,7 @@ class Events(commands.Cog):
                 emb = discord.Embed(title = r'ОПОВЕЩЕНИЕ\_ОБ_ОБНОВЛЕНИИ', color = 0xff8000, timestamp = discord.utils.utcnow())
                 emb.add_field(name = 'ОПОВЕЩЕНЫ', value = role.mention)
                 await channel.send(embed = emb)
-        elif message.channel.id == 750373602460827730:
+        if message.channel.id == 750373602460827730:
             if message.author.bot is True and message.author.id != 694170281270312991:
                 role = discord.utils.get(message.guild.roles, id = 750373687479238787)
                 sent = await message.channel.send(role.mention)
@@ -155,11 +159,11 @@ class Events(commands.Cog):
                 emb = discord.Embed(title = r'ОПОВЕЩЕНИЕ\_ОБ_ОБНОВЛЕНИИ', color = 0xff8000, timestamp = discord.utils.utcnow())
                 emb.add_field(name = 'ОПОВЕЩЕНЫ', value = role.mention)
                 await channel.send(embed = emb)
-        elif message.channel.id == 1298756046604734594:
+        if message.channel.id == 1298756046604734594:
             if message.author.bot is True and message.author.id != 694170281270312991:
                 sus = self.client.get_user(338714886001524737)
                 await message.channel.send(sus.mention)
-        elif message.channel.id == 707498623981715557:
+        if message.channel.id == 707498623981715557:
             await message.add_reaction('👍')
             await message.add_reaction('👎')
 
