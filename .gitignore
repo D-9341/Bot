@@ -3,3 +3,7 @@ locales/users.json
 leaderboard
 vars.env
 .pylintrc
+RPG.py
+characters.json
+items.json
+voice_channels.json

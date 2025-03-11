@@ -101,9 +101,9 @@ async def pull(ctx):
         await ctx.send(embed = discord.Embed(description = f'Не удалось получить обновления: `{stderr.decode("utf-8")}`', color = 0xff0000))
     else:
         await ctx.send(embed = discord.Embed(description = f'Обновления получены:\n`{stdout.decode("utf-8").strip()}`', color = 0xff8000))
-        await asyncio.sleep(3)
+        await asyncio.sleep(client.latency)
         await ctx.send(embed = discord.Embed(description = 'Перезагрузка...', color = 0xff8000))
-        await asyncio.sleep(1)
+        await asyncio.sleep(client.latency)
         await reload(ctx)
 
 async def init():

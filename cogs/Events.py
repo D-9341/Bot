@@ -78,20 +78,29 @@ class Events(commands.Cog):
     async def on_voice_state_update(self, member: discord.Member, before: discord.VoiceState, after: discord.VoiceState):
         role = discord.utils.get(member.guild.roles, name = 'Deafened')
         if after.channel.name == 'Создать канал':
+            with open('voice_channels.json', 'r', encoding = 'utf-8') as f:
+                voice_channels = json.load(f)
             await after.channel.edit(user_limit = 1)
-            room = 'чё' if member.bot is True else f'Канал {member.display_name}'
             bitrate_map = {
                 0: 96000,
                 1: 128000,
                 2: 256000,
             }
             bitrate = bitrate_map.get(member.guild.premium_tier, 384000)
+            if not voice_channels.get(str(member.id)):
+                room = 'чё' if member.bot is True else f'Канал {member.display_name}'
+            else:
+                room = voice_channels.get(str(member.id))['name']
             channel = await member.guild.create_voice_channel(name = room, category = after.channel.category, bitrate = bitrate)
             await member.move_to(channel)
             await channel.set_permissions(member, mute_members = True, move_members = True, manage_channels = True)
-            await channel.send(embed = discord.Embed(description = 'Этот канал удалится после того, как все люди выйдут из него. Исключение - перезапуск бота. В таком случае, что делать с каналом решать вам', color = 0xff8000))
             def check(a, b, c): return len(channel.members) == 0
             await self.client.wait_for('voice_state_update', check = check)
+            voice_channels[str(member.id)] = {
+                'name': channel.name,
+            }
+            with open('voice_channels.json', 'w', encoding = 'utf-8') as f:
+                json.dump(voice_channels, f, indent = 4)
             await channel.delete()
         if role in member.roles:
             await member.edit(mute = True, reason = 'Заглушён командой deaf')
