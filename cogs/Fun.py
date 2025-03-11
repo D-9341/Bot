@@ -155,7 +155,7 @@ class Fun(commands.Cog):
                                 init = [str(item) for item in p1_items]
                                 items_view = discord.ui.View()
                                 for i in range(len(init)):
-                                    items_view.add_item(discord.ui.Button(label = init[i], style = discord.ButtonStyle.gray, custom_id = str(i + 1)))
+                                    items_view.add_item(discord.ui.Button(label = init[i], style = discord.ButtonStyle.gray, custom_id = str(i)))
                                 await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_player_choose_item")}'.format(player = ctx.author.mention), color = 0xff8000), view = items_view)
                                 item = await self.client.wait_for('interaction', check = lambda interaction: interaction.channel == channel and interaction.user == ctx.author)
                                 await item.response.defer(ephemeral = True)
@@ -219,7 +219,7 @@ class Fun(commands.Cog):
                                     init = [str(x) for x in p2_items if x != translate(locale, 'adrenaline_syringe')]
                                     syringe_items_view = discord.ui.View()
                                     for i in range(len(init)):
-                                        syringe_items_view.add_item(discord.ui.Button(label = init[i], custom_id = str(i + 1), style = discord.ButtonStyle.gray))
+                                        syringe_items_view.add_item(discord.ui.Button(label = init[i], custom_id = str(i), style = discord.ButtonStyle.gray))
                                     await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_player_choose_opponent_item")}'.format(player = player.mention), color = 0xff8000), view = syringe_items_view)
                                     item = await self.client.wait_for('interaction', check = lambda interaction: interaction.channel == channel and interaction.user == ctx.author)
                                     await item.response.defer(ephemeral = True)
@@ -317,7 +317,7 @@ class Fun(commands.Cog):
                                 init = [str(item) for item in p2_items]
                                 items_view = discord.ui.View()
                                 for i in range(len(init)):
-                                    items_view.add_item(discord.ui.Button(label = init[i], style = discord.ButtonStyle.gray, custom_id = str(i + 1)))
+                                    items_view.add_item(discord.ui.Button(label = init[i], style = discord.ButtonStyle.gray, custom_id = str(i)))
                                 await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_player_choose_item")}'.format(player = player.mention), color = 0xff8000), view = items_view)
                                 item = await self.client.wait_for('interaction', check = lambda interaction: interaction.channel == channel and interaction.user == player)
                                 await item.response.defer(ephemeral = True)
@@ -382,7 +382,7 @@ class Fun(commands.Cog):
                                         init = [str(x) for x in p1_items if x != translate(locale, 'adrenaline_syringe')]
                                         syringe_items_view = discord.ui.View()
                                         for i in range(len(init)):
-                                            syringe_items_view.add_item(discord.ui.Button(label = init[i], custom_id = str(i + 1), style = discord.ButtonStyle.gray))
+                                            syringe_items_view.add_item(discord.ui.Button(label = init[i], custom_id = str(i), style = discord.ButtonStyle.gray))
                                         await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_player_choose_opponent_item")}'.format(player = ctx.author.mention), color = 0xff8000), view = syringe_items_view)
                                         item = await self.client.wait_for('interaction', check = lambda interaction: interaction.channel == channel and interaction.user == player)
                                         await item.response.defer(ephemeral = True)
@@ -570,7 +570,7 @@ class Fun(commands.Cog):
                             init = [str(x) for x in p1_items]
                             items_view = discord.ui.View()
                             for i in range(len(init)):
-                                items_view.add_item(discord.ui.Button(label = init[i], style = discord.ButtonStyle.gray, custom_id = str(i + 1)))
+                                items_view.add_item(discord.ui.Button(label = init[i], style = discord.ButtonStyle.gray, custom_id = str(i)))
                             await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_chose_item")}'.format(items = ", ".join(init)), color = 0xff8000), view = items_view)
                             item = await self.client.wait_for('interaction', check = lambda interaction: interaction.user == ctx.author)
                             await item.response.defer(ephemeral = True)
@@ -642,7 +642,7 @@ class Fun(commands.Cog):
                                     init = [str(x) for x in p2_items if x != translate(locale, 'adrenaline_syringe')]
                                     syringe_items_view = discord.ui.View()
                                     for i in range(len(init)):
-                                        syringe_items_view.add_item(discord.ui.Button(label = init[i], style = discord.ButtonStyle.gray, custom_id = str(i + 1)))
+                                        syringe_items_view.add_item(discord.ui.Button(label = init[i], style = discord.ButtonStyle.gray, custom_id = str(i)))
                                     await channel.send(embed = discord.Embed(description = translate(locale, "roulette_choose_opponent_item"), color = 0xff8000), view = syringe_items_view)
                                     item = await self.client.wait_for('interaction', check = lambda interaction: interaction.channel == channel and interaction.user == ctx.author)
                                     await item.response.defer(ephemeral = True)
