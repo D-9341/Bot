@@ -48,7 +48,7 @@ class Mod(commands.Cog):
         bot = discord.utils.get(ctx.guild.members, id = self.client.user.id)
         if member.id not in self.client.owner_ids:
             if reason is None:
-                reason = translate(locale, 'reason')
+                reason = f'{translate(locale, 'reason')}'.format(sentence = 'кик с этого сервера')
             if member == ctx.author:
                 emb = discord.Embed(description = translate(locale, 'kick_member_is_author'), color = discord.Color.blurple())
                 return await ctx.send(embed = emb)
@@ -84,7 +84,7 @@ class Mod(commands.Cog):
         bot = discord.utils.get(ctx.guild.members, id = self.client.user.id)
         if member.id not in self.client.owner_ids:
             if reason is None:
-                reason = translate(locale, 'reason')
+                reason = f'{translate(locale, 'reason')}'.format(sentence = 'бан на этом сервере')
             if member == ctx.author:
                 emb = discord.Embed(description = f'{translate(locale, "ban_member_is_author")}', color = discord.Color.blurple())
                 return await ctx.send(embed = emb)
@@ -190,7 +190,7 @@ class Mod(commands.Cog):
     async def mute(self, ctx: commands.Context, member: discord.Member, *, reason = None):
         locale = get_locale(ctx.author.id)
         if reason is None:
-            reason = translate(locale, 'reason')
+            reason = f'{translate(locale, 'reason')}'.format(sentence = 'забор у тебя права писать в чат')
         role = discord.utils.get(ctx.guild.roles, name = 'Muted')
         if role in member.roles:
             emb = discord.Embed(description = translate(locale, "mute_member_has_role"), color = 0x2f3136)
@@ -208,7 +208,7 @@ class Mod(commands.Cog):
             else:
                 if not role:
                     role = await ctx.guild.create_role(name = 'Muted', color = 0x000001, reason = 'Создано автоматически командой mute')
-                await member.add_roles(role)
+                await member.add_roles(role, reason = reason)
                 emb = discord.Embed(color = 0xff8000, timestamp = discord.utils.utcnow())
                 emb.add_field(name = 'Заглушён', value = f'{member.mention}')
                 emb.add_field(name = 'Причина', value = reason)
@@ -223,7 +223,7 @@ class Mod(commands.Cog):
     async def timeout(self, ctx: commands.Context, member: discord.Member, *, reason = None):
         locale = get_locale(ctx.author.id)
         if reason is None:
-            reason = translate(locale, 'reason')
+            reason = f'{translate(locale, 'reason')}'.format(sentence = 'забор у тебя права писать в чат и говорить в голосовом канале')
         if member.id not in self.client.owner_ids:
             if member == ctx.author:
                 emb = discord.Embed(description = translate(locale, "attempt_to_mute_self"), color = discord.Color.blurple())
@@ -251,7 +251,7 @@ class Mod(commands.Cog):
         locale = get_locale(ctx.author.id)
         role = discord.utils.get(ctx.guild.roles, name = 'Deafened')
         if reason is None:
-            reason = translate(locale, 'reason')
+            reason = f'{translate(locale, 'reason')}'.format(sentence = 'забор у тебя права говорить в голосовом канале')
         if role in member.roles:
                 emb = discord.Embed(description = translate(locale, "deaf_member_has_role"), color = 0x2f3136)
                 return await ctx.send(embed = emb)
@@ -268,7 +268,7 @@ class Mod(commands.Cog):
             else:
                 if not role:
                     role = await ctx.guild.create_role(name = 'Deafened', color = 0x000001, reason = 'Создано автоматически командой deaf')
-                await member.add_roles(role)
+                await member.add_roles(role, reason = reason)
                 emb = discord.Embed(color = 0x2f3136, timestamp = discord.utils.utcnow())
                 emb.add_field(name = 'Заглушён', value = member.mention)
                 emb.add_field(name = 'Причина', value = reason)
@@ -284,10 +284,10 @@ class Mod(commands.Cog):
         locale = get_locale(ctx.author.id)
         role = discord.utils.get(ctx.guild.roles, name = 'Deafened')
         if reason is None:
-            reason = translate(locale, 'reason')
+            reason = f'{translate(locale, 'reason')}'.format(sentence = 'помилование и восстановление права говорить в голосовом канале')
         if role:
             if role in member.roles:
-                await member.remove_roles(role)
+                await member.remove_roles(role, reason = reason)
                 emb = discord.Embed(title = f'{translate(locale, "undeaf_success")}'.format(member = member), color = 0xff8000, timestamp = discord.utils.utcnow())
                 emb.add_field(name = 'Снял заглушение', value = ctx.author.mention)
                 emb.add_field(name = 'Причина', value = reason)
@@ -306,10 +306,10 @@ class Mod(commands.Cog):
         locale = get_locale(ctx.author.id)
         role = discord.utils.get(ctx.guild.roles, name = 'Muted')
         if reason is None:
-            reason = translate(locale, 'reason')
+            reason = f'{translate(locale, 'reason')}'.format(sentence = 'помилование и восстановление права писать в чат')
         if role is not None:
             if role in member.roles:
-                await member.remove_roles(role)
+                await member.remove_roles(role, reason = reason)
                 emb = discord.Embed(title = f'{translate(locale, "unmute_success")}'.format(member = member), color = 0xff8000, timestamp = discord.utils.utcnow())
                 emb.add_field(name = 'Снял заглушение', value = ctx.author.mention)
                 emb.add_field(name = 'По причине', value = reason)

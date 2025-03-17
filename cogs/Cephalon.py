@@ -122,14 +122,17 @@ class Cephalon(commands.Cog):
         await ctx.send(embed = discord.Embed(description = f'Существую на следующих серверах ({len(self.client.guilds)}):\n{client_guilds}', color = 0xff8000))
 
     @commands.command()
-    async def reset(self, ctx: commands.Context, command):
+    async def reset(self, ctx: commands.Context, command: str):
         if ctx.author.id not in self.client.owner_ids:
             raise commands.NotOwner()
-        command = self.client.get_command(command)
-        if not command.is_on_cooldown(ctx):
+        cmd = self.client.get_command(command)
+        if not cmd:
+            return await ctx.send(embed = discord.Embed(description = 'Команда не найдена', color = 0xff8000))
+        if not cmd.is_on_cooldown(ctx):
             return await ctx.send(embed = discord.Embed(description = 'Команда не на перезарядке', color = 0xff8000))
-        await ctx.send(embed = discord.Embed(description = f'Счётчик перезарядки для `{command.name}` сброшен. Счётчик перезарядки был равен `{round(command.get_cooldown_retry_after(ctx))}` {get_plural_form(round(command.get_cooldown_retry_after(ctx))), ['секунда', 'секунды', 'секунд']}', color = 0xff8000))
-        await command.reset_cooldown(ctx)
+        retry_after = round(cmd.get_cooldown_retry_after(ctx))
+        await ctx.send(embed = discord.Embed(description = f'Счётчик перезарядки для `{cmd.name}` сброшен на `{retry_after}` {get_plural_form(retry_after, ["секунде", "секундах", "секунде"])}', color = 0xff8000))
+        cmd.reset_cooldown(ctx)
 
     @commands.command() # ru, gnida, en
     async def locale(self, ctx: commands.Context):

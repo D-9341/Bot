@@ -94,17 +94,17 @@ class Misc(commands.Cog):
     async def serverinfo(self, ctx: commands.Context):
         guild = ctx.guild
         emb = discord.Embed(color = 0x2f3136, timestamp = discord.utils.utcnow())
-        emb.set_author(name = guild, icon_url = guild.icon.url if guild.icon else 'https://media.discordapp.net/attachments/601132963316498482/858743277963182090/image0.jpg?ex=6751d280&is=67508100&hm=601f6f56b2d4abdab57c50e153da6b8677f010c20d9bcee15181cfc2fcd98b28&=&format=webp')
+        emb.set_author(name = guild, icon_url = guild.icon.url if guild.icon else None)
         emb.add_field(name = 'ID сервера', value = guild.id)
         emb.add_field(name = 'Владелец', value = guild.owner.mention)
         emb.add_field(name = 'Участников', value = f'{guild.member_count}\n**Из них ботов:** {len(list(filter(lambda m: m.bot, guild.members)))}\n**Из них людей:** {len(list(filter(lambda m: not m.bot, guild.members)))}')
         emb.add_field(name = 'Каналов', value = f'Текстовых {len(guild.text_channels)} | Голосовых {len(guild.voice_channels)}')
-        roles = ', '.join([role.name for role in guild.roles[1:]])
+        roles = ', '.join([role.name for role in guild.roles[1:]][::-1])
         if len(roles) > 1:
             emb.add_field(name = f'Роли ({len(guild.roles)-1})', value = roles, inline = False)
         d = guild.created_at.strftime('%d.%m.%Y %H:%M:%S GMT')
         emb.add_field(name = 'Дата создания сервера', value = f'{d}', inline = False)
-        emb.set_thumbnail(url = guild.icon.url if guild.icon else 'https://media.discordapp.net/attachments/601132963316498482/858743277963182090/image0.jpg?ex=6751d280&is=67508100&hm=601f6f56b2d4abdab57c50e153da6b8677f010c20d9bcee15181cfc2fcd98b28&=&format=webp')
+        emb.set_thumbnail(url = guild.icon.url if guild.icon else None)
         await ctx.send(embed = emb)
 
     @commands.command()
