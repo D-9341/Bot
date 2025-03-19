@@ -15,6 +15,46 @@ class Fun(commands.Cog):
 
     @commands.command()
     @commands.cooldown(1, 20, commands.BucketType.user)
+    async def settings(self, ctx: commands.Context):
+        #locale = get_locale(ctx.author.id)
+        with open('roulette_settings', encoding = 'utf-8', mode = 'r') as file:
+            data = json.load(file)
+        if not data[str(ctx.author.id)]:
+            data[str(ctx.author.id)] = {'hp': 6, 'curse': True,
+            # TODO:
+            # 'min_shells': 2,
+            # 'max_shells': 8,
+            # 'items': {
+            #     'cigarettes': True,
+            #     'handsaw': True,
+            #     'beer': True,
+            #     'magnifying_glass': True,
+            #     'burner_phone': True,
+            #     'expired_medicine': True,
+            #     'inverter': True,
+            #     'adrenaline_syringe': True,
+            #     'handcuffs': True
+            #     }
+            }
+        await ctx.send(embed = discord.Embed(description = 'Настройка Русской Рулетки', color = 0xff8000))
+        hp_view = discord.ui.View()
+        hp_view.add_item(discord.ui.Button(label = '4', style = discord.ButtonStyle.red, custom_id = '4'))
+        hp_view.add_item(discord.ui.Button(label = '5', style = discord.ButtonStyle.gray, custom_id = '5'))
+        hp_view.add_item(discord.ui.Button(label = '6', style = discord.ButtonStyle.green, custom_id = '6'))
+        await ctx.send(embed = discord.Embed(description = 'Выберите количество здоровья', color = 0xff8000), view = hp_view)
+        hp = await self.client.wait_for('interaction', lambda interaction: interaction.channel == ctx.channel and interaction.user == ctx.author)
+        curse_view = discord.ui.View()
+        curse_view.add_item(discord.ui.Button(label = 'ДА', style = discord.ButtonStyle.red, custom_id = 'cursed'))
+        curse_view.add_item(discord.ui.Button(label = 'НЕТ', style = discord.ButtonStyle.green, custom_id = 'blessed'))
+        await ctx.send(embed = discord.Embed(description = 'Нужно ли запрещать игрокам исцеление при здоровье <= 2?'), view = curse_view)
+        cursed = await self.client.wait_for('interaction', lambda interaction: interaction.channel == ctx.channel and interaction.user == ctx.author)
+        data[str(ctx.author.id)] = {'hp': int(hp.data['custom_id']), 'curse': True if cursed.data['custom_id'] == 'cursed' else False}
+        with open('roulette_settings', encoding = 'utf-8', mode = 'w') as file:
+            json.dump(data, file, indent = 4)
+        await ctx.send(embed = discord.Embed(description = 'Настройки сохранены', color = 0xff8000))
+
+    @commands.command()
+    @commands.cooldown(1, 20, commands.BucketType.user)
     @commands.bot_has_permissions(manage_channels = True)
     async def roulette(self, ctx: commands.Context, player: discord.User | str = None):
         bot = discord.utils.get(ctx.guild.members, id = self.client.user.id)
@@ -54,7 +94,7 @@ class Fun(commands.Cog):
                 await ctx.send(embed = discord.Embed(description = f'{translate(locale, "roulette_go_to_other_channel")}'.format(channel_mention = channel.mention), color = 0x2f3136))
                 await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_players")}'.format(ctx_author = ctx.author.mention, player = player.mention), color = 0xffffff))
                 await channel.send(embed = discord.Embed(description = translate(locale, "roulette_rules_vs_user"), color = 0x2f3136))
-                await asyncio.sleep(15)
+                await asyncio.sleep(5)
                 turn_order = random.randint(0, 1)
                 for i in range(11):
                     if i == 10: await channel.send(embed = discord.Embed(description = translate(locale, "roulette_stalemate"), color = 0xff8000)); await asyncio.sleep(10); return await channel.delete()
@@ -126,8 +166,8 @@ class Fun(commands.Cog):
                         first = False
                         if turn_order == 0:
                             game_view = discord.ui.View()
-                            game_view.add_item(discord.ui.Button(label = translate(locale, "roulette_shoot_self"), style = discord.ButtonStyle.gray, custom_id = '1'))
-                            game_view.add_item(discord.ui.Button(label = translate(locale, "roulette_shoot_opponent"), style = discord.ButtonStyle.gray, custom_id = '2'))
+                            game_view.add_item(discord.ui.Button(label = translate(locale, "roulette_shoot_self"), style = discord.ButtonStyle.gray if not sawed else discord.ButtonStyle.red, custom_id = '1'))
+                            game_view.add_item(discord.ui.Button(label = translate(locale, "roulette_shoot_opponent"), style = discord.ButtonStyle.gray if not sawed else discord.ButtonStyle.green, custom_id = '2'))
                             if len(p1_items) > 0: game_view.add_item(discord.ui.Button(label = translate(locale, "roulette_use_item"), style = discord.ButtonStyle.gray, custom_id = '3'))
                             game_view.add_item(discord.ui.Button(label = translate(locale, "roulette_stop_game"), style = discord.ButtonStyle.red, custom_id = 'stop'))
                             await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_player_choose_action")}'.format(player = ctx.author.mention), color = 0xff8000), view = game_view)
@@ -459,7 +499,7 @@ class Fun(commands.Cog):
             await ctx.send(embed = discord.Embed(description = f'{translate(locale, 'roulette_go_to_other_channel')}'.format(channel_mention = channel.mention), color = 0x2f3136))
             await channel.send(embed = discord.Embed(description = translate(locale, "roulette_vs_bot"), color = 0xff8000))
             await channel.send(embed = discord.Embed(description = translate(locale, "roulette_rules_vs_bot"), color = 0x2f3136))
-            await asyncio.sleep(15)
+            await asyncio.sleep(5)
             for i in range(11):
                 if i == 10: await channel.send(embed = discord.Embed(description = translate(locale, "roulette_stalemate"), color = 0xff8000)); await asyncio.sleep(10); return await channel.delete()
                 first = True
@@ -539,8 +579,8 @@ class Fun(commands.Cog):
                     first = False
                     if turn_order == 0:
                         game_view = discord.ui.View()
-                        game_view.add_item(discord.ui.Button(label = translate(locale, "roulette_shoot_self"), style = discord.ButtonStyle.gray, custom_id = '1'))
-                        game_view.add_item(discord.ui.Button(label = translate(locale, "roulette_shoot_opponent"), style = discord.ButtonStyle.gray, custom_id = '2'))
+                        game_view.add_item(discord.ui.Button(label = translate(locale, "roulette_shoot_self"), style = discord.ButtonStyle.gray if not sawed else discord.ButtonStyle.red, custom_id = '1'))
+                        game_view.add_item(discord.ui.Button(label = translate(locale, "roulette_shoot_opponent"), style = discord.ButtonStyle.gray if not sawed else discord.ButtonStyle.green, custom_id = '2'))
                         if len(p1_items) > 0: game_view.add_item(discord.ui.Button(label = translate(locale, "roulette_use_item"), style = discord.ButtonStyle.gray, custom_id = '3'))
                         game_view.add_item(discord.ui.Button(label = translate(locale, "roulette_stop_game"), style = discord.ButtonStyle.red, custom_id = 'stop'))
                         await channel.send(embed = discord.Embed(description = translate(locale, "roulette_choose_action"), color = 0xff8000), view = game_view)
@@ -868,7 +908,7 @@ class Fun(commands.Cog):
                                     p1_hp -= damage
                                     damage = 1
                                     turn_order = 0
-                            elif translate(locale, 'expired_medicine') in p2_items and 1 < p2_hp < 6:
+                            elif translate(locale, 'expired_medicine') in p2_items and 3 < p2_hp < 6:
                                 p2_items.pop(p2_items.index(translate(locale, 'expired_medicine')))
                                 await channel.send(embed = discord.Embed(description = translate(locale, 'roulette_dealer_used_expired_medicine'), color = 0xff8000))
                                 await asyncio.sleep(3)
