@@ -126,7 +126,7 @@ class Events(commands.Cog):
                 port = 5432
             )
             cur = conn.cursor()
-            cur.execute("INSERT INTO users (user_id, locale) VALUES (%s, ru) ON CONFLICT (user_id) DO NOTHING", (message.author.id))
+            cur.execute(f"INSERT INTO users (user_id, locale) VALUES ({message.author.id}, ru) ON CONFLICT (user_id) DO NOTHING")
             conn.commit()
             conn.close()
         if message.content.startswith(f'<@{self.client.user.id}>') and len(message.content) == len(f'<@{self.client.user.id}>'):

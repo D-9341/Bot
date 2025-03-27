@@ -32,11 +32,11 @@ def translate(locale: str, string_id: str) -> str:
     )
     cur = conn.cursor()
     if locale == 'ru':
-        cur.execute("SELECT value FROM ru WHERE string_id = %s", (string_id))
+        cur.execute(f"SELECT value FROM ru WHERE string_id = {string_id}")
     elif locale == 'en':
-        cur.execute("SELECT value FROM en WHERE string_id = %s", (string_id))
+        cur.execute(f"SELECT value FROM en WHERE string_id = {string_id}")
     elif locale == 'gnida':
-        cur.execute("SELECT value FROM gnida WHERE string_id = %s", (string_id))
+        cur.execute(f"SELECT value FROM gnida WHERE string_id = {string_id}")
     result = cur.fetchone()
     conn.close()
     if '_help' in string_id:
@@ -65,7 +65,7 @@ def get_locale(user_id: int) -> Literal['ru', 'en', 'gnida']:
         port = 5432
     )
     cur = conn.cursor()
-    cur.execute("SELECT locale FROM users WHERE user_id = %s", (user_id))
+    cur.execute(f"SELECT locale FROM users WHERE user_id = {user_id}")
     result = cur.fetchone()
     conn.close()
     return result[0] if result else "ru"
@@ -89,7 +89,7 @@ def set_locale(user_id: int, locale: Literal['ru', 'en', 'gnida']) -> None:
         port = 5432
     )
     cur = conn.cursor()
-    cur.execute("INSERT INTO users (user_id, locale) VALUES (%s, %s) ON CONFLICT (user_id) DO NOTHING", (user_id, locale))
+    cur.execute(f"INSERT INTO users (user_id, locale) VALUES ({user_id}, {locale}) ON CONFLICT (user_id) DO NOTHING")
     conn.commit()
     conn.close()
 
