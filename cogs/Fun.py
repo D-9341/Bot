@@ -30,22 +30,21 @@ class Fun(commands.Cog):
                 return await ctx.send(embed = emb)
             else:
                 return await ctx.send(embed = discord.Embed(description = 'Вы ещё не редактировали настройки', color = 0xff0000))
-        await ctx.send(embed = discord.Embed(description = 'Настройка Русской Рулетки', color = 0xff8000))
         presets_view = discord.ui.View()
         presets_view.add_item(discord.ui.Button(label = 'Стандарт', style = discord.ButtonStyle.green, custom_id = 'default'))
         presets_view.add_item(discord.ui.Button(label = 'Классика', style = discord.ButtonStyle.gray, custom_id = 'classic'))
         presets_view.add_item(discord.ui.Button(label = 'Сложно', style = discord.ButtonStyle.red, custom_id = 'hard'))
         presets_view.add_item(discord.ui.Button(label = 'Очень сложно', style = discord.ButtonStyle.red, custom_id = 'very_hard'))
         presets_view.add_item(discord.ui.Button(label = 'Возмездие', style = discord.ButtonStyle.red, custom_id = 'revengeance'))
-        presets_view.add_item(discord.ui.Button(label = 'Свои настройки', style = discord.ButtonStyle.gray, custom_id = 'custom'))
-        emb = discord.Embed(title = 'Выберите пресет', description = 'Данные настройки будут установлены как для одиночной игры, так и для игры против людей', color = 0xff8000)
+        presets_view.add_item(discord.ui.Button(label = 'Свои настройки', style = discord.ButtonStyle.blurple, custom_id = 'custom'))
+        emb = discord.Embed(title = 'Настройка Русской Рулетки', description = 'Выберите пресет: эти настройки будут установлены как для одиночной игры, так и для игры против людей', color = 0xff8000)
         emb.add_field(name = 'Стандарт', value = '6 здоровья, минимум 2 патрона, максимум 8 патронов, нет исцеления при здоровье <= 2, все предметы включены в игру', inline = False)
         emb.add_field(name = 'Классика', value = '6 здоровья, минимум 2 патрона, максимум 8 патронов, исцеление при здоровье <= 2, включено в игру: сигареты, ножовка по металлу, пиво, лупа, наручники', inline = False)
         emb.add_field(name = 'Сложно', value = '5 здоровья, минимум 4 патрона, максимум 8 патронов, нет исцеления при здоровье <= 2, включено в игру: сигареты, ножовка по металлу, пиво, лупа, наручники', inline = False)
         emb.add_field(name = 'Очень сложно', value = '4 здоровья, минимум 6 патронов, максимум 10 патронов, нет исцеления при здоровье <= 2, включено в игру: ножовка по металлу, одноразовый телефон, наручники, просроченные таблетки', inline = False)
         emb.add_field(name = 'Возмездие', value = '4 здоровья, минимум 8 патронов, максимум 10 патронов, **~~нет исцеления при здоровье <= 2~~ вам это не потребуется**, предметы отключены', inline = False)
         emb.add_field(name = 'Свои настройки', value = 'Вы можете ввести свои значения вручную', inline = False)
-        await ctx.send(embed = emb, view = presets_view)
+        sent = await ctx.send(embed = emb, view = presets_view)
         preset = await self.client.wait_for('interaction', check = lambda interaction: interaction.channel == ctx.channel and interaction.user == ctx.author)
         await preset.response.defer()
         if preset.data['custom_id'] == 'custom':
@@ -57,7 +56,7 @@ class Fun(commands.Cog):
             hp = await self.client.wait_for('interaction', check = lambda interaction: interaction.channel == ctx.channel and interaction.user == ctx.author)
             await hp.response.defer()
             curse_view = discord.ui.View()
-            curse_view.add_item(discord.ui.Button(label = 'Да', style = discord.ButtonStyle.red, custom_id = 'cursed'))
+            curse_view.add_item(discord.ui.Button(label = 'Да', style = discord.ButtonStyle.red if hp.data['custom_id'] == '4' else discord.ButtonStyle.gray, custom_id = 'cursed'))
             curse_view.add_item(discord.ui.Button(label = 'Нет', style = discord.ButtonStyle.gray, custom_id = 'blessed'))
             await ctx.send(embed = discord.Embed(description = 'Нужно ли запрещать игрокам исцеление при здоровье <= 2?', color = 0xff8000), view = curse_view)
             cursed = await self.client.wait_for('interaction', check = lambda interaction: interaction.channel == ctx.channel and interaction.user == ctx.author)
@@ -84,7 +83,7 @@ class Fun(commands.Cog):
             items_view.add_item(discord.ui.Button(label = translate(locale, 'expired_medicine'), style = discord.ButtonStyle.green if data[str(ctx.author.id)]['items']['expired_medicine'] else discord.ButtonStyle.red, custom_id = 'expired_medicine'))
             items_view.add_item(discord.ui.Button(label = translate(locale, 'inverter'), style = discord.ButtonStyle.green if data[str(ctx.author.id)]['items']['inverter'] else discord.ButtonStyle.red, custom_id = 'inverter'))
             items_view.add_item(discord.ui.Button(label = translate(locale, 'adrenaline_syringe'), style = discord.ButtonStyle.green if data[str(ctx.author.id)]['items']['adrenaline_syringe'] else discord.ButtonStyle.red, custom_id = 'adrenaline_syringe'))
-            items_view.add_item(discord.ui.Button(label = 'Завершить', style = discord.ButtonStyle.gray, custom_id = 'done'))
+            items_view.add_item(discord.ui.Button(label = 'Завершить', style = discord.ButtonStyle.blurple, custom_id = 'done'))
             sent = await ctx.send(embed = discord.Embed(description = 'Выберите предметы, которые вы хотите включить или выключить', color = 0xff8000), view = items_view)
             while True:
                 item = await self.client.wait_for('interaction', check = lambda interaction: interaction.channel == ctx.channel and interaction.user == ctx.author)
@@ -195,7 +194,7 @@ class Fun(commands.Cog):
             }
         with open('roulette_settings.json', encoding = 'utf-8', mode = 'w') as file:
             json.dump(data, file, indent = 4)
-        await ctx.send(embed = discord.Embed(description = 'Настройки сохранены', color = 0xff8000))
+        await sent.edit(embed = discord.Embed(description = 'Настройки сохранены', color = 0xff8000), view = None)
 
     @commands.command()
     @commands.cooldown(1, 20, commands.BucketType.user)
@@ -269,12 +268,12 @@ class Fun(commands.Cog):
                         if len(p1_items) < 8:
                             p1_items.append(random.choice(items_pool)) if items_pool else ...
                         else:
-                            await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_use_more_often")}'.format(player = ctx.author.mention), color=0xff0000))
+                            await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_use_more_often")}'.format(player = ctx.author.mention), color = 0xff0000))
                             break
                         if len(p2_items) < 8:
                             p2_items.append(random.choice(items_pool)) if items_pool else ...
                         else:
-                            await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_use_more_often")}'.format(player = player.mention), color=0xff0000))
+                            await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_use_more_often")}'.format(player = player.mention), color = 0xff0000))
                             break
                     rounds = random.randint(settings[(str(ctx.author.id))]['min_shells'], settings[(str(ctx.author.id))]['max_shells'])
                     while rounds > 0:

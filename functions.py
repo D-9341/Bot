@@ -1,6 +1,11 @@
-import json
 import argparse
+import psycopg2
+import os
+from pathlib import Path
+from dotenv import load_dotenv
 from typing import Literal
+
+load_dotenv(f'{Path(__file__).parents[0]}\\vars.env')
 
 def translate(locale: str, string_id: str) -> str:
     """
@@ -18,17 +23,33 @@ def translate(locale: str, string_id: str) -> str:
     str
         The translated string
     """
-    with open(f'locales/{locale}/locale.json', 'r', encoding = 'utf-8') as file:
-        user_data = json.load(file)
-    return user_data.get(string_id, "Локаль не найдена")
+    conn = psycopg2.connect(
+        host = "localhost",
+        database = "locales",
+        user = "postgres",
+        password = os.getenv('DB_PASS'),
+        port = 5432
+    )
+    cur = conn.cursor()
+    if locale == 'ru':
+        cur.execute("SELECT value FROM ru WHERE string_id = %s", (string_id))
+    elif locale == 'en':
+        cur.execute("SELECT value FROM en WHERE string_id = %s", (string_id))
+    elif locale == 'gnida':
+        cur.execute("SELECT value FROM gnida WHERE string_id = %s", (string_id))
+    result = cur.fetchone()
+    conn.close()
+    if '_help' in string_id:
+        return result[0] if result else f'{translate(locale, 'command_not_found')}'.format(command = string_id[:-5])
+    return result[0] if result else "Локаль не найдена"
 
-def get_locale(author_id: str) -> Literal['ru', 'en', 'gnida']:
+def get_locale(user_id: int) -> Literal['ru', 'en', 'gnida']:
     """
     Gets the locale for an author
 
     Parameters
     ----------
-    author_id: str
+    user_id: int
         The ID of the author to get the locale for
 
     Returns
@@ -36,26 +57,41 @@ def get_locale(author_id: str) -> Literal['ru', 'en', 'gnida']:
     Literal['ru', 'en', 'gnida']
         The locale of the author
     """
-    with open('locales/users.json', 'r', encoding = 'utf-8') as file:
-        user_data = json.load(file)
-    return user_data[str(author_id)]
+    conn = psycopg2.connect(
+        host = "localhost",
+        database = "locales",
+        user = "postgres",
+        password = os.getenv('DB_PASS'),
+        port = 5432
+    )
+    cur = conn.cursor()
+    cur.execute("SELECT locale FROM users WHERE user_id = %s", (user_id))
+    result = cur.fetchone()
+    conn.close()
+    return result[0] if result else "ru"
 
-def set_locale(author_id: str, locale: Literal['ru', 'en', 'gnida']) -> None:
+def set_locale(user_id: int, locale: Literal['ru', 'en', 'gnida']) -> None:
     """
     Sets the locale for an author
 
     Parameters
     ----------
-    author_id: str
+    user_id: int
         The ID of the author to set the locale for
     locale: Literal['ru', 'en', 'gnida']
         The locale to set for the author
     """
-    with open('locales/users.json', 'r', encoding = 'utf-8') as file:
-        user_data = json.load(file)
-    user_data[str(author_id)] = locale
-    with open('locales/users.json', 'w', encoding = 'utf-8') as file:
-        json.dump(user_data, file, indent = 4)
+    conn = psycopg2.connect(
+        host = "localhost",
+        database = "locales",
+        user = "postgres",
+        password = os.getenv('DB_PASS'),
+        port = 5432
+    )
+    cur = conn.cursor()
+    cur.execute("INSERT INTO users (user_id, locale) VALUES (%s, %s) ON CONFLICT (user_id) DO NOTHING", (user_id, locale))
+    conn.commit()
+    conn.close()
 
 def get_plural_form(number: int, words: list[str]) -> str:
     """
@@ -78,14 +114,6 @@ def get_plural_form(number: int, words: list[str]) -> str:
     if number % 10 == 1 and number % 100 != 11: return words[0]
     if number % 10 >= 2 and number % 10 <= 4 and (number % 100 < 10 or number % 100 >= 20): return words[1]
     return words[2]
-
-def get_command_help(locale: str, command: str) -> str:
-    """
-    Returns the help message for the command
-    """
-    with open(f'locales/{locale}/help.json', 'r', encoding = 'utf-8') as file:
-        command_data = json.load(file)
-    return command_data.get(command, f'{translate(locale, 'command_not_found')}'.format(command = command))
 
 def parse_members(args_list: list[str] | str) -> argparse.Namespace:
     """

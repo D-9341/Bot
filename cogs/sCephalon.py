@@ -1,10 +1,9 @@
 import asyncio
-import os
 import sys
 import json
 
 import discord
-from functions import translate, get_locale, set_locale, get_command_help
+from functions import translate, get_locale, set_locale
 from typing import Literal
 from main import uptime
 from pathlib import Path
@@ -21,7 +20,7 @@ class View(discord.ui.View):
         super().__init__(timeout = 5)
 
     async def on_timeout(self, interaction: discord.Interaction):
-        await interaction.response.edit_message('Время вышло.', view = None)
+        await interaction.response.edit_message('Время вышло', view = None)
 
 class GrayButton(discord.ui.Button):
     def __init__(self, label):
@@ -56,7 +55,7 @@ class sCephalon(commands.Cog):
             emb.set_footer(text = 'Cephalon Cy ©️ Sus&Co\n2020 - Present')
             return await interaction.response.send_message(embed = emb)
         locale = get_locale(interaction.user.id)
-        return await interaction.response.send_message(embed = discord.Embed(description = (get_command_help(locale, command)), color = 0xff8000))
+        return await interaction.response.send_message(embed = discord.Embed(description = (translate(locale, f'{command}_help')), color = 0xff8000))
 
     @app_commands.command(description = 'Время бота в сети')
     async def uptime(self, interaction: discord.Interaction):
@@ -88,7 +87,7 @@ class sCephalon(commands.Cog):
         view.add_item(ibutton)
         async def rbutton_callback(interaction):
             set_locale(str(interaction.user.id), 'ru')
-            await interaction.response.edit_message(embed = discord.Embed(description = 'Ваша локаль была установлена на `ru`.', color = 0xff8000), view = None)
+            await interaction.response.edit_message(embed = discord.Embed(description = 'Ваша локаль была установлена на `ru`', color = 0xff8000), view = None)
         async def gbutton_callback(interaction):
             await interaction.response.edit_message(embed = discord.Embed(description = 'Ты бля уверен?', color = 0xff8000), view = confirm)
         async def ybutton_callback(interaction):
@@ -98,7 +97,7 @@ class sCephalon(commands.Cog):
             await interaction.response.edit_message(embed = discord.Embed(description = 'Ну ок', color = 0xff8000), view = None)
         async def ebutton_callback(interaction):
             set_locale(str(interaction.user.id), 'en')
-            await interaction.response.edit_message(embed = discord.Embed(description = 'Your locale has been set to `en`.', color = 0xff8000), view = None)
+            await interaction.response.edit_message(embed = discord.Embed(description = 'Your locale has been set to `en`', color = 0xff8000), view = None)
         async def test_callback(interaction):
             await interaction.response.edit_message(embed = discord.Embed(description = translate(locale, 'locale_test'), color = 0xff8000), view = None)
         async def info_callback(interaction):
@@ -120,7 +119,7 @@ class sCephalon(commands.Cog):
 
     @app_commands.command(description = 'Информация о боте')
     async def info(self, interaction: discord.Interaction):
-        emb = discord.Embed(title = 'Пару строк кода сюда, новые фишки туда', description = 'Создатели бота постоянно совершенствуют своё детище, поддерживая его в актуальном состоянии.', color = 0xff8000)
+        emb = discord.Embed(title = 'Пару строк кода сюда, новые фишки туда', description = 'Создатели бота постоянно совершенствуют своё детище, поддерживая его в актуальном состоянии', color = 0xff8000)
         emb.set_author(name = self.client.user.name, url = 'https://warframe.fandom.com/wiki/Cephalon_Cy', icon_url = self.client.user.avatar.url)
         emb.add_field(name = 'Версия', value = '0.14.6.0')
         emb.add_field(name = 'Написан на', value = f'discord.py v{discord.__version__}\nPython v{sys.version[:7]}')
@@ -139,7 +138,7 @@ class sCephalon(commands.Cog):
 
     @app_commands.command(description = 'Пригласите бота на сервер!')
     async def invite(self, interaction: discord.Interaction):
-        emb = discord.Embed(description = '[Ссылка](https://discord.com/oauth2/authorize?client_id=694170281270312991&permissions=8&scope=bot%20applications.commands) для приглашения Cy на сервера.', color = 0xff8000)
+        emb = discord.Embed(description = '[Ссылка](https://discord.com/oauth2/authorize?client_id=694170281270312991&permissions=8&scope=bot%20applications.commands) для приглашения Cy на сервера', color = 0xff8000)
         await interaction.response.send_message(embed = emb)
 
     @app_commands.command(description = 'Показывает задержку клиента бота')

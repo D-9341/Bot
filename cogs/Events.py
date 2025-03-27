@@ -1,8 +1,15 @@
 import discord
 import random
 import json
+import os
+import psycopg2
+
+from dotenv import load_dotenv
+from pathlib import Path
 from functions import get_plural_form
 from discord.ext import commands
+
+load_dotenv(f'{Path(__file__).parents[0]}\\vars.env')
 
 def rearm(command, message):
     if command._buckets.valid:
@@ -111,12 +118,17 @@ class Events(commands.Cog):
             if 'во лох' in message.content.lower():
                 return await message.channel.send('сам лох')
         if message.author.bot is False:
-            with open('locales/users.json', 'r', encoding = 'utf-8') as users_file:
-                file = json.load(users_file)
-            if str(message.author.id) not in file:
-                file[str(message.author.id)] = 'ru'
-                with open('locales/users.json', 'w', encoding = 'utf-8') as users_file:
-                    json.dump(file, users_file, indent = 4)
+            conn = psycopg2.connect(
+                host = "localhost",
+                database = "locales",
+                user = "postgres",
+                password = os.getenv('DB_PASS'),
+                port = 5432
+            )
+            cur = conn.cursor()
+            cur.execute("INSERT INTO users (user_id, locale) VALUES (%s, ru) ON CONFLICT (user_id) DO NOTHING", (message.author.id))
+            conn.commit()
+            conn.close()
         if message.content.startswith(f'<@{self.client.user.id}>') and len(message.content) == len(f'<@{self.client.user.id}>'):
             await message.channel.send(f'чё звал {message.author.mention} ||`cy/`||')
         if message.channel.id == 1345125935636283504 and not message.author.bot:
