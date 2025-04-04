@@ -1,15 +1,10 @@
 import discord
 import random
-import json
-import os
 import psycopg2
 
-from dotenv import load_dotenv
-from pathlib import Path
 from functions import get_plural_form
 from discord.ext import commands
-
-load_dotenv(f'{Path(__file__).parents[0]}\\vars.env')
+from main import PASSWORD
 
 def rearm(command, message):
     if command._buckets.valid:
@@ -85,8 +80,10 @@ class Events(commands.Cog):
     async def on_voice_state_update(self, member: discord.Member, before: discord.VoiceState, after: discord.VoiceState):
         role = discord.utils.get(member.guild.roles, name = 'Deafened')
         if after.channel.name == 'Создать канал':
-            with open('voice_channels.json', 'r', encoding = 'utf-8') as f:
-                voice_channels = json.load(f)
+            conn = psycopg2.connect(host = "localhost", database = "voice_channels", user = "postgres", password = PASSWORD, port = 5432)
+            cur = conn.cursor()
+            cur.execute(f"SELECT name FROM channels WHERE user_id = {member.id}")
+            voice_channel = cur.fetchone()
             await after.channel.edit(user_limit = 1)
             bitrate_map = {
                 0: 96000,
@@ -94,20 +91,18 @@ class Events(commands.Cog):
                 2: 256000,
             }
             bitrate = bitrate_map.get(member.guild.premium_tier, 384000)
-            if not voice_channels.get(str(member.id)):
+            if not voice_channel:
                 room = 'чё' if member.bot is True else f'Канал {member.display_name}'
             else:
-                room = voice_channels.get(str(member.id))['name']
+                room = voice_channel[0]
             channel = await member.guild.create_voice_channel(name = room, category = after.channel.category, bitrate = bitrate)
             await member.move_to(channel)
             await channel.set_permissions(member, mute_members = True, move_members = True, manage_channels = True)
             def check(a, b, c): return len(channel.members) == 0
             await self.client.wait_for('voice_state_update', check = check)
-            voice_channels[str(member.id)] = {
-                'name': channel.name,
-            }
-            with open('voice_channels.json', 'w', encoding = 'utf-8') as f:
-                json.dump(voice_channels, f, indent = 4)
+            cur.execute("INSERT INTO channels (user_id, name) VALUES (%s, %s) ON CONFLICT (user_id) DO UPDATE SET name = %s", (member.id, channel.name, channel.name))
+            conn.commit()
+            conn.close()
             await channel.delete()
         if role in member.roles:
             await member.edit(mute = True, reason = 'Заглушён командой deaf')
@@ -122,19 +117,19 @@ class Events(commands.Cog):
                 host = "localhost",
                 database = "locales",
                 user = "postgres",
-                password = os.getenv('DB_PASS'),
+                password = PASSWORD,
                 port = 5432
             )
             cur = conn.cursor()
-            cur.execute(f"INSERT INTO users (user_id, locale) VALUES ({message.author.id}, ru) ON CONFLICT (user_id) DO NOTHING")
+            cur.execute("INSERT INTO users (user_id, locale) VALUES (%s, %s) ON CONFLICT (user_id) DO NOTHING", (message.author.id, 'ru'))
             conn.commit()
             conn.close()
         if message.content.startswith(f'<@{self.client.user.id}>') and len(message.content) == len(f'<@{self.client.user.id}>'):
             await message.channel.send(f'чё звал {message.author.mention} ||`cy/`||')
-        if message.channel.id == 1345125935636283504 and not message.author.bot:
-            role = discord.utils.get(message.guild.roles, id = 1314332101512007741)
-            sent = await message.channel.send(role.mention)
-            await sent.delete()
+        # if message.channel.id == 1345125935636283504 and not message.author.bot:
+        #     role = discord.utils.get(message.guild.roles, id = 1314332101512007741)
+        #     sent = await message.channel.send(role.mention)
+        #     await sent.delete()
         if message.channel.id == 1041417879788208169:
             if message.author.bot is True and message.author.id != 694170281270312991:
                 role = discord.utils.get(message.guild.roles, id = 1078051320088510644)

@@ -1,6 +1,7 @@
 import asyncio
-import os
 import discord
+import os
+import psycopg2
 
 from dotenv import load_dotenv
 from pathlib import Path
@@ -14,6 +15,7 @@ client.remove_command('help')
 CWD = Path(__file__).parents[0]
 CWD = str(CWD)
 load_dotenv(CWD + '\\vars.env')
+PASSWORD = os.getenv('DB_PASS')
 
 def bot_owner_or_has_permissions(**perms):
     origin = commands.has_permissions(**perms).predicate
@@ -105,6 +107,17 @@ async def pull(ctx):
         await ctx.send(embed = discord.Embed(description = 'Перезагрузка...', color = 0xff8000))
         await asyncio.sleep(client.latency)
         await reload(ctx)
+
+@client.command()
+async def access_db(ctx, db, *, query: str = None):
+    if ctx.author.id not in client.owner_ids:
+        raise commands.NotOwner()
+    conn = psycopg2.connect(host = "localhost", database = db, user = "postgres", password = PASSWORD, port = 5432)
+    cur = conn.cursor()
+    cur.execute(query)
+    result = cur.fetchall()
+    conn.close()
+    await ctx.send(f'```{result}```')
 
 async def init():
     for file in os.listdir(CWD + "/cogs"):

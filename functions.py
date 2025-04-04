@@ -1,11 +1,7 @@
 import argparse
 import psycopg2
-import os
-from pathlib import Path
-from dotenv import load_dotenv
 from typing import Literal
-
-load_dotenv(f'{Path(__file__).parents[0]}\\vars.env')
+from main import PASSWORD
 
 def translate(locale: str, string_id: str) -> str:
     """
@@ -27,16 +23,16 @@ def translate(locale: str, string_id: str) -> str:
         host = "localhost",
         database = "locales",
         user = "postgres",
-        password = os.getenv('DB_PASS'),
+        password = PASSWORD,
         port = 5432
     )
     cur = conn.cursor()
     if locale == 'ru':
-        cur.execute(f"SELECT value FROM ru WHERE string_id = {string_id}")
+        cur.execute("SELECT value FROM ru WHERE string_id = %s", (string_id,))
     elif locale == 'en':
-        cur.execute(f"SELECT value FROM en WHERE string_id = {string_id}")
+        cur.execute("SELECT value FROM en WHERE string_id = %s", (string_id,))
     elif locale == 'gnida':
-        cur.execute(f"SELECT value FROM gnida WHERE string_id = {string_id}")
+        cur.execute("SELECT value FROM gnida WHERE string_id = %s", (string_id,))
     result = cur.fetchone()
     conn.close()
     if '_help' in string_id:
@@ -61,7 +57,7 @@ def get_locale(user_id: int) -> Literal['ru', 'en', 'gnida']:
         host = "localhost",
         database = "locales",
         user = "postgres",
-        password = os.getenv('DB_PASS'),
+        password = PASSWORD,
         port = 5432
     )
     cur = conn.cursor()
@@ -85,11 +81,11 @@ def set_locale(user_id: int, locale: Literal['ru', 'en', 'gnida']) -> None:
         host = "localhost",
         database = "locales",
         user = "postgres",
-        password = os.getenv('DB_PASS'),
+        password = PASSWORD,
         port = 5432
     )
     cur = conn.cursor()
-    cur.execute(f"INSERT INTO users (user_id, locale) VALUES ({user_id}, {locale}) ON CONFLICT (user_id) DO NOTHING")
+    cur.execute("INSERT INTO users (user_id, locale) VALUES (%s, %s) ON CONFLICT (user_id) DO UPDATE SET locale = %s", (user_id, locale, locale))
     conn.commit()
     conn.close()
 

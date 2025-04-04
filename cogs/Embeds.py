@@ -12,7 +12,7 @@ class Embeds(commands.Cog):
         print('Модуль Embeds загружен')
 
     @commands.command()
-    async def say(self, ctx: commands.Context, *, msg):
+    async def say(self, ctx: commands.Context, *, msg: str):
         title = description = ''
         image = thumbnail = message = footer = color = author = None
         embed_values = msg.split('&')
@@ -57,7 +57,7 @@ class Embeds(commands.Cog):
 
     @commands.command()
     @commands.has_permissions(manage_messages = True)
-    async def edit(self, ctx: commands.Context, arg, *, msg = None):
+    async def edit(self, ctx: commands.Context, arg, *, msg: str = None):
         message = await ctx.channel.fetch_message(arg)
         if not any(keyword in msg for keyword in ['&t', '&d', '&img', '&th', '&f', '&c', '&a']):
             if message.author == self.client.user:
@@ -132,10 +132,10 @@ class Embeds(commands.Cog):
             return await ctx.send(embed = discord.Embed(description = f'{message.jump_url} не является сообщением от {self.client.user.mention}', color = 0xff8000))
 
     @commands.command(aliases = ['ctx'])
-    async def content(self, ctx: commands.Context, arg, channel: discord.TextChannel = None, should_be_edit = None):
+    async def content(self, ctx: commands.Context, msg: int, channel: discord.TextChannel = None, should_be_edit = None):
         if channel is None:
             channel = ctx.channel
-        message = await channel.fetch_message(arg)
+        message = await channel.fetch_message(msg)
         embed_data = {
             "color": '',
             "c": '',

@@ -1,6 +1,7 @@
 import random
 
 import discord
+from datetime import timedelta
 from discord.ext import commands
 
 class Misc(commands.Cog):
@@ -102,7 +103,7 @@ class Misc(commands.Cog):
         roles = ', '.join([role.name for role in guild.roles[1:]][::-1])
         if len(roles) > 1:
             emb.add_field(name = f'Роли ({len(guild.roles)-1})', value = roles, inline = False)
-        d = guild.created_at.strftime('%d.%m.%Y %H:%M:%S GMT')
+        d = (guild.created_at + timedelta(hours = 3)).strftime('%d.%m.%Y %H:%M:%S GMT +3')
         emb.add_field(name = 'Дата создания сервера', value = f'{d}', inline = False)
         emb.set_thumbnail(url = guild.icon.url if guild.icon else None)
         await ctx.send(embed = emb)
@@ -119,7 +120,7 @@ class Misc(commands.Cog):
         emb.add_field(name = 'Упоминается?', value = is_mentionable)
         emb.add_field(name = 'Управляется интеграцией?', value = is_managed)
         emb.add_field(name = 'Позиция в списке', value = role.position)
-        d = role.created_at.strftime('%d.%m.%Y %H:%M:%S GMT')
+        d = (role.created_at + timedelta(hours = 3)).strftime('%d.%m.%Y %H:%M:%S GMT +3')
         emb.add_field(name = 'Создана', value = f'{d}', inline = False)
         emb.add_field(name = 'Показывает участников отдельно?', value = is_hoisted)
         await ctx.send(embed = emb)
@@ -142,12 +143,12 @@ class Misc(commands.Cog):
         target = member if member else ctx.author
         is_bot = 'Да' if target.bot else 'Нет'
         emb = discord.Embed(color = 0x2f3136, timestamp = discord.utils.utcnow())
-        emb.set_author(name = target.display_name, icon_url = target.avatar.url)
+        emb.set_author(name = target.display_name if target.id != 694170281270312991 else 'Это я!', icon_url = target.avatar.url)
         emb.add_field(name = 'ID', value = target.id)
-        created_at = target.created_at.strftime('%d.%m.%Y %H:%M:%S GMT')
+        created_at = (target.created_at + timedelta(hours = 3)).strftime('%d.%m.%Y %H:%M:%S GMT +3')
         emb.add_field(name = 'Создан', value = created_at, inline = False)
         if ctx.guild:
-            joined_at = target.joined_at.strftime('%d.%m.%Y %H:%M:%S GMT')
+            joined_at = (target.joined_at + timedelta(hours = 3)).strftime('%d.%m.%Y %H:%M:%S GMT +3')
             emb.add_field(name = 'Вошёл', value = joined_at, inline = False)
         emb.add_field(name = 'Упоминание', value = target.mention)
         emb.add_field(name = 'Глобальное имя', value = target.name)

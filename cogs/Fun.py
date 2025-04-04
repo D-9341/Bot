@@ -2,6 +2,9 @@ import asyncio
 import discord
 import random
 import json
+import psycopg2
+
+from main import PASSWORD
 from functions import get_plural_form, get_locale, translate
 from discord.ext import commands
 
@@ -17,16 +20,19 @@ class Fun(commands.Cog):
     @commands.cooldown(1, 5, commands.BucketType.user)
     async def settings(self, ctx: commands.Context, action: str = 'edit'):
         locale = get_locale(ctx.author.id)
-        with open('roulette_settings.json', 'r', encoding = 'utf-8') as file:
-            data = json.load(file)
+        conn = psycopg2.connect(host = "localhost", database = "roulette_settings", user = "postgres", password = PASSWORD, port = 5432)
+        cur = conn.cursor()
+        cur.execute("SELECT * FROM user_settings WHERE user_id = %s", (ctx.author.id,))
+        data = cur.fetchone()
         if action == 'check':
-            if str(ctx.author.id) in data:
-                emb = discord.Embed(title = 'Ваши настройки', description = f'**Здоровье**: {data[str(ctx.author.id)]['hp']} \
-                                    \n**Минимальное количество патронов**: {data[str(ctx.author.id)]['min_shells']} \
-                                    \n**Максимальное количество патронов**: {data[str(ctx.author.id)]['max_shells']}\
-                                    \n**Исцеление при здоровье <= 2**: {'Да' if not data[str(ctx.author.id)]['curse'] else 'Нет'} \
-                                    \n**Включённые предметы**:\n{'\n'.join([translate(locale, item) for item, value in data[str(ctx.author.id)]['items'].items() if value])}'
-                                    , color = 0xff8000)
+            conn.close()
+            if data:
+                emb = discord.Embed(title = 'Ваши настройки', description = f'**Здоровье**: {data[1]} \
+                                \n**Минимальное количество патронов**: {data[3]} \
+                                \n**Максимальное количество патронов**: {data[4]} \
+                                \n**Исцеление при здоровье <= 2**: {"Да" if not data[2] else "Нет"} \
+                                \n**Включённые предметы**:\n{", ".join([translate(locale, item) for item, value in data[-1].items() if value])}',
+                    color = 0xff8000)
                 return await ctx.send(embed = emb)
             else:
                 return await ctx.send(embed = discord.Embed(description = 'Вы ещё не редактировали настройки', color = 0xff0000))
@@ -74,15 +80,15 @@ class Fun(commands.Cog):
             max_shells = await self.client.wait_for('interaction', check = lambda interaction: interaction.channel == ctx.channel and interaction.user == ctx.author)
             await max_shells.response.defer()
             items_view = discord.ui.View()
-            items_view.add_item(discord.ui.Button(label = translate(locale, 'cigarettes'), style = discord.ButtonStyle.green if data[str(ctx.author.id)]['items']['cigarettes'] else discord.ButtonStyle.red, custom_id = 'cigarettes'))
-            items_view.add_item(discord.ui.Button(label = translate(locale, 'handsaw'), style = discord.ButtonStyle.green if data[str(ctx.author.id)]['items']['handsaw'] else discord.ButtonStyle.red, custom_id = 'handsaw'))
-            items_view.add_item(discord.ui.Button(label = translate(locale, 'beer'), style = discord.ButtonStyle.green if data[str(ctx.author.id)]['items']['beer'] else discord.ButtonStyle.red, custom_id = 'beer'))
-            items_view.add_item(discord.ui.Button(label = translate(locale, 'magnifying_glass'), style = discord.ButtonStyle.green if data[str(ctx.author.id)]['items']['magnifying_glass'] else discord.ButtonStyle.red, custom_id = 'magnifying_glass'))
-            items_view.add_item(discord.ui.Button(label = translate(locale, 'handcuffs'), style = discord.ButtonStyle.green if data[str(ctx.author.id)]['items']['handcuffs'] else discord.ButtonStyle.red, custom_id = 'handcuffs'))
-            items_view.add_item(discord.ui.Button(label = translate(locale, 'burner_phone'), style = discord.ButtonStyle.green if data[str(ctx.author.id)]['items']['burner_phone'] else discord.ButtonStyle.red, custom_id = 'burner_phone'))
-            items_view.add_item(discord.ui.Button(label = translate(locale, 'expired_medicine'), style = discord.ButtonStyle.green if data[str(ctx.author.id)]['items']['expired_medicine'] else discord.ButtonStyle.red, custom_id = 'expired_medicine'))
-            items_view.add_item(discord.ui.Button(label = translate(locale, 'inverter'), style = discord.ButtonStyle.green if data[str(ctx.author.id)]['items']['inverter'] else discord.ButtonStyle.red, custom_id = 'inverter'))
-            items_view.add_item(discord.ui.Button(label = translate(locale, 'adrenaline_syringe'), style = discord.ButtonStyle.green if data[str(ctx.author.id)]['items']['adrenaline_syringe'] else discord.ButtonStyle.red, custom_id = 'adrenaline_syringe'))
+            items_view.add_item(discord.ui.Button(label = translate(locale, 'cigarettes'), style = discord.ButtonStyle.green if data[-1]['cigarettes'] else discord.ButtonStyle.red, custom_id = 'cigarettes'))
+            items_view.add_item(discord.ui.Button(label = translate(locale, 'handsaw'), style = discord.ButtonStyle.green if data[-1]['handsaw'] else discord.ButtonStyle.red, custom_id = 'handsaw'))
+            items_view.add_item(discord.ui.Button(label = translate(locale, 'beer'), style = discord.ButtonStyle.green if data[-1]['beer'] else discord.ButtonStyle.red, custom_id = 'beer'))
+            items_view.add_item(discord.ui.Button(label = translate(locale, 'magnifying_glass'), style = discord.ButtonStyle.green if data[-1]['magnifying_glass'] else discord.ButtonStyle.red, custom_id = 'magnifying_glass'))
+            items_view.add_item(discord.ui.Button(label = translate(locale, 'handcuffs'), style = discord.ButtonStyle.green if data[-1]['handcuffs'] else discord.ButtonStyle.red, custom_id = 'handcuffs'))
+            items_view.add_item(discord.ui.Button(label = translate(locale, 'burner_phone'), style = discord.ButtonStyle.green if data[-1]['burner_phone'] else discord.ButtonStyle.red, custom_id = 'burner_phone'))
+            items_view.add_item(discord.ui.Button(label = translate(locale, 'expired_medicine'), style = discord.ButtonStyle.green if data[-1]['expired_medicine'] else discord.ButtonStyle.red, custom_id = 'expired_medicine'))
+            items_view.add_item(discord.ui.Button(label = translate(locale, 'inverter'), style = discord.ButtonStyle.green if data[-1]['inverter'] else discord.ButtonStyle.red, custom_id = 'inverter'))
+            items_view.add_item(discord.ui.Button(label = translate(locale, 'adrenaline_syringe'), style = discord.ButtonStyle.green if data[-1]['adrenaline_syringe'] else discord.ButtonStyle.red, custom_id = 'adrenaline_syringe'))
             items_view.add_item(discord.ui.Button(label = 'Завершить', style = discord.ButtonStyle.blurple, custom_id = 'done'))
             sent = await ctx.send(embed = discord.Embed(description = 'Выберите предметы, которые вы хотите включить или выключить', color = 0xff8000), view = items_view)
             while True:
@@ -90,110 +96,80 @@ class Fun(commands.Cog):
                 await item.response.defer()
                 if item.data['custom_id'] == 'done':
                     break
-                data[str(ctx.author.id)]['items'][item.data['custom_id']] = not data[str(ctx.author.id)]['items'][item.data['custom_id']]
+                data[-1][item.data['custom_id']] = not data[-1][item.data['custom_id']]
                 for button in items_view.children:
                     if button.custom_id == item.data['custom_id']:
-                        button.style = discord.ButtonStyle.green if data[str(ctx.author.id)]['items'][button.custom_id] else discord.ButtonStyle.red
+                        button.style = discord.ButtonStyle.green if data[-1][button.custom_id] else discord.ButtonStyle.red
                 await sent.edit(embed = discord.Embed(description = 'Выберите предметы, которые вы хотите включить или выключить', color = 0xff8000), view = items_view)
-            data[str(ctx.author.id)] = {
-                'hp': int(hp.data['custom_id']),
-                'curse': True if cursed.data['custom_id'] == 'cursed' else False,
-                'min_shells': int(min_shells.data['custom_id']),
-                'max_shells': int(max_shells.data['custom_id']), 
-                'items': data[str(ctx.author.id)]['items']
-                }
+            cur.execute("""
+                UPDATE user_settings
+                SET hp = %s,
+                    curse = %s,
+                    min_shells = %s,
+                    max_shells = %s,
+                    items = %s
+                WHERE user_id = %s
+            """, (
+                int(hp.data['custom_id']),
+                cursed.data['custom_id'] == 'cursed',
+                int(min_shells.data['custom_id']),
+                int(max_shells.data['custom_id']),
+                json.dumps(data[-1]),
+                ctx.author.id
+            ))
+            conn.commit()
         elif preset.data['custom_id'] == 'default':
-            data[str(ctx.author.id)] = {
-                'hp': 6,
-                'curse': True,
-                'min_shells': 2,
-                'max_shells': 8,
-                'items': {
-                    'cigarettes': True,
-                    'handsaw': True,
-                    'beer': True,
-                    'magnifying_glass': True,
-                    'handcuffs': True,
-                    'burner_phone': True,
-                    'expired_medicine': True,
-                    'inverter': True,
-                    'adrenaline_syringe': True
-                }
-            }
+            cur.execute("""
+                UPDATE user_settings
+                SET hp = %s,
+                    curse = %s,
+                    min_shells = %s,
+                    max_shells = %s,
+                    items = %s
+                WHERE user_id = %s
+            """, (6, True, 2, 8, '{"cigarettes": true, "handsaw": true, "beer": true, "magnifying_glass": true, "handcuffs": true, "burner_phone": true, "expired_medicine": true, "inverter": true, "adrenaline_syringe": true}', ctx.author.id))
         elif preset.data['custom_id'] == 'classic':
-            data[str(ctx.author.id)] = {
-                'hp': 6,
-                'curse': False,
-                'min_shells': 2,
-                'max_shells': 8,
-                'items': {
-                    'cigarettes': True,
-                    'handsaw': True,
-                    'beer': True,
-                    'magnifying_glass': True,
-                    'handcuffs': True,
-                    'burner_phone': False,
-                    'expired_medicine': False,
-                    'inverter': False,
-                    'adrenaline_syringe': False
-                }
-            }
+            cur.execute("""
+                UPDATE user_settings
+                SET hp = %s,
+                    curse = %s,
+                    min_shells = %s,
+                    max_shells = %s,
+                    items = %s
+                WHERE user_id = %s
+            """, (6, False, 2, 8, '{"cigarettes": true, "handsaw": true, "beer": true, "magnifying_glass": true, "handcuffs": true, "burner_phone": false, "expired_medicine": false, "inverter": false, "adrenaline_syringe": false}', ctx.author.id))
         elif preset.data['custom_id'] == 'hard':
-            data[str(ctx.author.id)] = {
-                'hp': 5,
-                'curse': True,
-                'min_shells': 4,
-                'max_shells': 8,
-                'items': {
-                    'cigarettes': True,
-                    'handsaw': True,
-                    'beer': True,
-                    'magnifying_glass': True,
-                    'handcuffs': True,
-                    'burner_phone': False,
-                    'expired_medicine': False,
-                    'inverter': False,
-                    'adrenaline_syringe': False
-                }
-            }
+            cur.execute("""
+                UPDATE user_settings
+                SET hp = %s,
+                    curse = %s,
+                    min_shells = %s,
+                    max_shells = %s,
+                    items = %s
+                WHERE user_id = %s
+            """, (5, True, 4, 8, '{"cigarettes": true, "handsaw": true, "beer": true, "magnifying_glass": true, "handcuffs": true, "burner_phone": false, "expired_medicine": false, "inverter": false, "adrenaline_syringe": false}', ctx.author.id))
         elif preset.data['custom_id'] == 'very_hard':
-            data[str(ctx.author.id)] = {
-                'hp': 4,
-                'curse': True,
-                'min_shells': 6,
-                'max_shells': 10,
-                'items': {
-                    'cigarettes': False,
-                    'handsaw': True,
-                    'beer': False,
-                    'magnifying_glass': False,
-                    'handcuffs': True,
-                    'burner_phone': True,
-                    'expired_medicine': True,
-                    'inverter': False,
-                    'adrenaline_syringe': False
-                }
-            }
+            cur.execute("""
+                UPDATE user_settings
+                SET hp = %s,
+                    curse = %s,
+                    min_shells = %s,
+                    max_shells = %s,
+                    items = %s
+                WHERE user_id = %s
+            """, (5, True, 6, 10, '{"cigarettes": false, "handsaw": true, "beer": false, "magnifying_glass": false, "handcuffs": true, "burner_phone": true, "expired_medicine": true, "inverter": false, "adrenaline_syringe": false}', ctx.author.id))
         elif preset.data['custom_id'] == 'revengeance':
-            data[str(ctx.author.id)] = {
-                'hp': 4,
-                'curse': True,
-                'min_shells': 8,
-                'max_shells': 10,
-                'items': {
-                    'cigarettes': False,
-                    'handsaw': False,
-                    'beer': False,
-                    'magnifying_glass': False,
-                    'handcuffs': False,
-                    'burner_phone': False,
-                    'expired_medicine': False,
-                    'inverter': False,
-                    'adrenaline_syringe': False
-                }
-            }
-        with open('roulette_settings.json', encoding = 'utf-8', mode = 'w') as file:
-            json.dump(data, file, indent = 4)
+            cur.execute("""
+                UPDATE user_settings
+                SET hp = %s,
+                    curse = %s,
+                    min_shells = %s,
+                    max_shells = %s,
+                    items = %s
+                WHERE user_id = %s
+            """, (4, True, 8, 10, '{"cigarettes": false, "handsaw": false, "beer": false, "magnifying_glass": false, "handcuffs": false, "burner_phone": false, "expired_medicine": false, "inverter": false, "adrenaline_syringe": false}', ctx.author.id))
+        conn.commit()
+        conn.close()
         await sent.edit(embed = discord.Embed(description = 'Настройки сохранены', color = 0xff8000), view = None)
 
     @commands.command()
@@ -201,23 +177,28 @@ class Fun(commands.Cog):
     @commands.bot_has_permissions(manage_channels = True)
     async def roulette(self, ctx: commands.Context, player: discord.User | str = None):
         bot = discord.utils.get(ctx.guild.members, id = self.client.user.id)
-        with open('roulette_settings.json', encoding = 'utf-8', mode = 'r') as file:
-            settings = json.load(file)
-        if str(ctx.author.id) not in settings:
+        conn = psycopg2.connect(host = "localhost", database = "roulette_settings", user = "postgres", password = PASSWORD, port = 5432)
+        cur = conn.cursor()
+        cur.execute("SELECT * FROM user_settings WHERE user_id = %s", (ctx.author.id,))
+        settings = cur.fetchone()
+        if settings is None:
             return await ctx.send(embed = discord.Embed(description = '||Перед глазами вдруг всплыла надпись: `cy/settings`||', color = 0xff0000))
         locale = get_locale(ctx.author.id)
         if player == 'leaderboard':
-            with open('leaderboard/leaders.json', 'r') as file:
-                data = json.load(file)
-                data = sorted(data.items(), key = lambda x: x[1], reverse = True)
-                return await ctx.send(embed = discord.Embed(description = f'Топ 5 лидеров по победам:\n\n{"\n".join([f"{i + 1}. {self.client.get_user(int(x[0])).mention if '\u0414\u0438\u043b\u0435\u0440' not in x[0] else x[0]} - {x[1]} {get_plural_form(x[1], ['победа', 'победы', 'побед'])}" for i, x in enumerate(data[:5])])}', color = 0xff8000))
+                conn = psycopg2.connect(host = "localhost", database = "leaderboard", user = "postgres", password = PASSWORD, port = 5432)
+                cur = conn.cursor()
+                cur.execute("SELECT * FROM leaders")
+                data = cur.fetchall()
+                conn.close()
+                data = sorted(data, key = lambda x: x[1], reverse = True)
+                return await ctx.send(embed = discord.Embed(description = f'Топ 5 лидеров по победам:\n\n{"\n".join([f"{i + 1}. {self.client.get_user(int(x[0])).mention} - {x[1]} {get_plural_form(x[1], ['победа', 'победы', 'побед'])}" for i, x in enumerate(data[:5])])}', color = 0xff8000))
         items_list = [
             translate(locale, "cigarettes"), translate(locale, "handsaw"), translate(locale, "beer"),
             translate(locale, "magnifying_glass"), translate(locale, "burner_phone"), translate(locale, "expired_medicine"),
             translate(locale, "inverter"), translate(locale, "adrenaline_syringe"), translate(locale, "handcuffs"),
         ]
         items_pool = []
-        for k, v in settings[str(ctx.author.id)]['items'].items():
+        for k, v in settings[-1].items():
             if v:
                 items_pool.append(translate(locale, k))
         damage = 1
@@ -239,7 +220,7 @@ class Fun(commands.Cog):
                 return await sent.edit(content = None, embed = discord.Embed(description = translate(locale, "roulette_invite_timeout"), color = 0xff0000), view = None)
             await answer.response.defer()
             if answer.data['custom_id'] == 'y':
-                MAX_HP = settings[str(ctx.author.id)]['hp']
+                MAX_HP = settings[1]
                 p1_hp, p2_hp = MAX_HP, MAX_HP
                 channel = await ctx.guild.create_text_channel(f'{translate(locale, "roulette_session_start")}'.format(ctx_author = ctx.author.display_name, player = player.display_name))
                 await ctx.send(embed = discord.Embed(description = f'{translate(locale, "roulette_go_to_other_channel")}'.format(channel_mention = channel.mention), color = 0x2f3136))
@@ -257,11 +238,11 @@ class Fun(commands.Cog):
                     winner = player if p1_hp <= 0 else ctx.author
                     if p1_hp <= 0 or p2_hp <= 0:
                         await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_winner")}'.format(winner = winner.mention), color = 0xff8000))
-                        with open('leaderboard/leaders.json', 'r') as file:
-                            data = json.load(file)
-                        data[str(winner.id)] = data.get(str(winner.id), 0) + 1
-                        with open('leaderboard/leaders.json', 'w') as users_file:
-                            json.dump(data, users_file, indent = 4)
+                        conn = psycopg2.connect(host = "localhost", database = "leaderboard", user = "postgres", password = PASSWORD, port = 5432)
+                        cur = conn.cursor()
+                        cur.execute("INSERT INTO leaders (user_id, victories) VALUES (%s, %s) ON CONFLICT (user_id) DO UPDATE SET victories = leaders.victories + %s", (ctx.author.id, 1, 1))
+                        conn.commit()
+                        conn.close()
                         await asyncio.sleep(10); return await channel.delete()
                     await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_round_number")}{"" if i + 1 != 5 else f"{translate(locale, "roulette_round_number_is_5")}"}'.format(i = i + 1,), color = 0xffffff))
                     for _ in range(2 if i + 1 == 5 else 4):
@@ -275,10 +256,10 @@ class Fun(commands.Cog):
                         else:
                             await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_use_more_often")}'.format(player = player.mention), color = 0xff0000))
                             break
-                    rounds = random.randint(settings[(str(ctx.author.id))]['min_shells'], settings[(str(ctx.author.id))]['max_shells'])
+                    rounds = random.randint(settings[3], settings[4])
                     while rounds > 0:
-                        if p1_hp <= 2 and settings[(str(ctx.author.id))]['curse']: p1_cursed = True
-                        if p2_hp <= 2 and settings[(str(ctx.author.id))]['curse']: p2_cursed = True
+                        if p1_hp <= 2 and settings[2]: p1_cursed = True
+                        if p2_hp <= 2 and settings[2]: p2_cursed = True
                         if p1_cuffed and turn_order == 0:
                             turn_order = 1
                             p1_cuffed = False
@@ -635,7 +616,7 @@ class Fun(commands.Cog):
             elif answer.data['custom_id'] == 'n':
                 await ctx.send(embed = discord.Embed(description = translate(locale, "roulette_play_cancel"), color = 0x2f3136))
         elif player is None or player == bot:
-            p1_hp, p2_hp = settings[str(ctx.author.id)]['hp'], settings[str(ctx.author.id)]['hp']
+            p1_hp, p2_hp = settings[1], settings[1]
             channel = await ctx.guild.create_text_channel(f'{translate(locale, 'roulette_session_start')}'.format(ctx_author = ctx.author.display_name, player = player.display_name if player else translate(locale, 'roulette_dealer')))
             await ctx.send(embed = discord.Embed(description = f'{translate(locale, 'roulette_go_to_other_channel')}'.format(channel_mention = channel.mention), color = 0x2f3136))
             await channel.send(embed = discord.Embed(description = translate(locale, "roulette_vs_bot"), color = 0xff8000))
@@ -652,20 +633,11 @@ class Fun(commands.Cog):
                 winner = translate(locale, "roulette_dealer") if p1_hp <= 0 else ctx.author.mention
                 if p1_hp <= 0 or p2_hp <= 0:
                     await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_winner")}'.format(winner = winner), color = 0x00ff00 if winner == ctx.author.mention else 0xff0000))
-                    with open('leaderboard/leaders.json', 'r') as file:
-                        data = json.load(file)
-                    if winner != translate(locale, "roulette_dealer"):
-                        if str(ctx.author.id) not in data:
-                            data[str(ctx.author.id)] = 1
-                        else:
-                            data[str(ctx.author.id)] += 1
-                    else:
-                        if '\u0414\u0438\u043b\u0435\u0440' not in data:
-                            data['\u0414\u0438\u043b\u0435\u0440'] = 1
-                        else:
-                            data['\u0414\u0438\u043b\u0435\u0440'] += 1
-                    with open('leaderboard/leaders.json', 'w') as users_file:
-                        json.dump(data, users_file, indent = 4)
+                    conn = psycopg2.connect(host = "localhost", database = "leaderboard", user = "postgres", password = PASSWORD, port = 5432)
+                    cur = conn.cursor()
+                    cur.execute("INSERT INTO leaders (user_id, victories) VALUES (%s, 1) ON CONFLICT (user_id) DO UPDATE SET victories = leaders.victories + 1 WHERE leaders.user_id = %s", (ctx.author.id if winner == ctx.author.mention else self.client.user.id, ctx.author.id if winner == ctx.author.mention else self.client.user.id))
+                    conn.commit()
+                    conn.close()
                     await asyncio.sleep(10); return await channel.delete()
                 await channel.send(embed = discord.Embed(description = f'{translate(locale, "roulette_round_number")}'.format(i = i + 1) if i + 1 != 5 else f'{translate(locale, "roulette_round_number_is_5")}'.format(i = i + 1), color = 0xffffff))
                 if i + 1 < 5:
@@ -693,10 +665,10 @@ class Fun(commands.Cog):
                     while h > 0 and len(p2_items) < 8:
                         p2_items.append(random.choice(items_pool)) if items_pool else ...
                         h -= 1
-                rounds = random.randint(settings[str(ctx.author.id)]['min_shells'], settings[str(ctx.author.id)]['max_shells'])
+                rounds = random.randint(settings[3], settings[4])
                 while rounds > 0:
-                    if p1_hp <= 2 and settings[str(ctx.author.id)]['curse']: p1_cursed = True
-                    if p2_hp <= 2 and settings[str(ctx.author.id)]['curse']: p2_cursed = True
+                    if p1_hp <= 2 and settings[2]: p1_cursed = True
+                    if p2_hp <= 2 and settings[2]: p2_cursed = True
                     if p1_cuffed and turn_order == 0:
                         turn_order = 1
                         p1_cuffed = False
