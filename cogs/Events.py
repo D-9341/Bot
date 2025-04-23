@@ -4,7 +4,10 @@ import psycopg2
 
 from functions import get_plural_form
 from discord.ext import commands
+from datetime import timedelta
 from main import PASSWORD
+
+LOGS = open('logs/logs.txt', 'a', encoding = 'utf-8')
 
 def rearm(command, message):
     if command._buckets.valid:
@@ -102,6 +105,8 @@ class Events(commands.Cog):
             await self.client.wait_for('voice_state_update', check = check)
             cur.execute("INSERT INTO channels (user_id, name) VALUES (%s, %s) ON CONFLICT (user_id) DO UPDATE SET name = %s", (member.id, channel.name, channel.name))
             conn.commit()
+            LOGS.write(f'[DB] {(discord.utils.utcnow() + timedelta(hours = 3)).strftime('%d.%m.%Y %H:%M:%S GMT +3')} Запись в БД voice_channels: {member.id} ({member.display_name}): {channel.name}\n')
+            LOGS.flush()
             conn.close()
             await channel.delete()
         if role in member.roles:

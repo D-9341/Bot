@@ -35,10 +35,13 @@ class Misc(commands.Cog):
             if 'd' in first:
                 [dice_amount, dice_edges] = first.split('d')
                 dice_amount, dice_edges = int(dice_amount), int(dice_edges)
-                if dice_amount > 20:
-                    return await ctx.send(embed = discord.Embed(description = 'Нельзя бросить больше 20 дайсов', color = 0xff0000))
-                if dice_edges > 20:
-                    return await ctx.send(embed = discord.Embed(description = 'Вы не можете кинуть дайс с большим количеством граней, чем 20', color = 0xff8000))
+                if dice_amount == 1 and dice_edges == 2:
+                    return await self.coinflip(ctx)
+                if ctx.author.id not in self.client.owner_ids:
+                    if dice_amount > 20:
+                        return await ctx.send(embed = discord.Embed(description = 'Нельзя бросить больше 20 дайсов', color = 0xff0000))
+                    if dice_edges > 20:
+                        return await ctx.send(embed = discord.Embed(description = 'Вы не можете кинуть дайс с большим количеством граней, чем 20', color = 0xff8000))
                 if dice_amount > 1:
                     results = ''
                     result = 0

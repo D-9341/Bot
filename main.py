@@ -6,6 +6,7 @@ import psycopg2
 from dotenv import load_dotenv
 from pathlib import Path
 from discord.ext import commands
+from cogs.Logging import LOGS
 
 intents = discord.Intents.all()
 uptime = discord.utils.utcnow()
@@ -90,6 +91,8 @@ async def reload(ctx):
     if len(excepted_modules) == len(client.extensions):
         return await ctx.send(embed = discord.Embed(description = 'Все модули выдали ошибку', color = 0xff0000))
     if excepted_modules:
+        LOGS.write(f'[ERR] При перезагрузке модулей возникли ошибки:\n{"".join([f'`{name}`: `{error}`\n' for name, error in excepted_modules.items()])}\n')
+        LOGS.flush()
         return await ctx.send(embed = discord.Embed(description = f'{'Модуль' if len(excepted_modules) == 1 else 'Модули'} {', '.join(excepted_modules.keys())} не {'может быть перезагружен' if len(excepted_modules) == 1 else 'могут быть перезагружены'}, {f'пингани {client.get_user(338714886001524737).mention}' if ctx.author.id != 338714886001524737 else 'необходимо исправить'}:\n{''.join([f'`{name}`: `{error}`\n' for name, error in excepted_modules.items()])}', color = 0xff0000))
     await ctx.send(embed = discord.Embed(description = 'Модули перезагружены', color = 0xff8000))
 
@@ -121,7 +124,7 @@ async def access_db(ctx, db, *, query: str = None):
 
 async def init():
     for file in os.listdir(CWD + "/cogs"):
-        if file.endswith(".py"):
+        if file.endswith(".py") and not file.startswith("_"):
             await client.load_extension(f"cogs.{file[:-3]}")
 
 async def main():
