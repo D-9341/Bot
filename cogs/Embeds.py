@@ -16,6 +16,13 @@ class Embeds(commands.Cog):
         title = description = ''
         image = thumbnail = message = footer = color = author = None
         embed_values = msg.split('&')
+        for i in range(len(embed_values)):
+            try:
+                if '<@' in embed_values[i] and '>' in embed_values[i + 1]:
+                    embed_values[i] = f'{embed_values[i]}&{embed_values[i + 1]}'
+                    del embed_values[i + 1]
+            except IndexError:
+                ...
         for i in embed_values:
             if i.strip().lower().startswith('th'):
                 thumbnail = i.strip()[2:].strip()
@@ -74,7 +81,7 @@ class Embeds(commands.Cog):
                 else:
                     return await message.edit(content = msg)
             else:
-                return await ctx.send(embed = discord.Embed(description = f'{message.id} не является сообщением от {self.client.user.mention}', color = 0xff0000))
+                return await ctx.send(embed = discord.Embed(description = f'{message.jump_url} не является сообщением от {self.client.user.mention}', color = 0xff0000))
         else:
             if message.embeds != []:
                 old_embed = message.embeds[0]
@@ -86,6 +93,13 @@ class Embeds(commands.Cog):
                 color = None
             image = thumbnail = footer = author = None
             embed_values = msg.split('&')
+            for i in range(len(embed_values)):
+                try:
+                    if '<@' in embed_values[i] and '>' in embed_values[i + 1]:
+                        embed_values[i] = f'{embed_values[i]}&{embed_values[i + 1]}'
+                        del embed_values[i + 1]
+                except IndexError:
+                    ...
             for i in embed_values:
                 if i.strip().lower().startswith('th'):
                     thumbnail = i.strip()[2:].strip()

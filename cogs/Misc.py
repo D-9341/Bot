@@ -13,6 +13,7 @@ class Misc(commands.Cog):
         print('Модуль Misc загружен')
 
     @commands.command()
+    @commands.cooldown(1, 5, commands.BucketType.user)
     async def roll(self, ctx: commands.Context, first: str | int = None, second: int = None):
         if not first and not second:
             rand = random.randint(0, 100)
@@ -71,6 +72,7 @@ class Misc(commands.Cog):
             await ctx.send(embed = discord.Embed(description = f'{ctx.author.display_name} получает случайное число ({first}-{second})\n`{rand}`', color = 0xff8000))
 
     @commands.command(aliases = ['c', 'coin'])
+    @commands.cooldown(1, 5, commands.BucketType.user)
     async def coinflip(self, ctx: commands.Context):
         coin = random.choice(['ОРЁЛ', 'РЕШКА'])
         await ctx.send(embed = discord.Embed(description = f'{ctx.author.mention} подбрасывает монетку: {coin}', color = 0xff8000))

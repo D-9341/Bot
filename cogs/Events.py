@@ -98,7 +98,7 @@ class Events(commands.Cog):
                 room = 'чё' if member.bot is True else f'Канал {member.display_name}'
             else:
                 room = voice_channel[0]
-            channel = await member.guild.create_voice_channel(name = room, category = after.channel.category, bitrate = bitrate)
+            channel = await member.guild.create_voice_channel(name = room, category = after.channel.category, bitrate = bitrate, rtc_region = 'rotterdam')
             await member.move_to(channel)
             await channel.set_permissions(member, mute_members = True, move_members = True, manage_channels = True)
             def check(a, b, c): return len(channel.members) == 0
@@ -131,10 +131,10 @@ class Events(commands.Cog):
             conn.close()
         if message.content.startswith(f'<@{self.client.user.id}>') and len(message.content) == len(f'<@{self.client.user.id}>'):
             await message.channel.send(f'чё звал {message.author.mention} ||`cy/`||')
-        # if message.channel.id == 1345125935636283504 and not message.author.bot:
-        #     role = discord.utils.get(message.guild.roles, id = 1314332101512007741)
-        #     sent = await message.channel.send(role.mention)
-        #     await sent.delete()
+        if message.channel.id == 1345125935636283504 and not message.author.bot:
+            role = discord.utils.get(message.guild.roles, id = 1314332101512007741)
+            sent = await message.channel.send(role.mention)
+            await sent.delete()
         if message.channel.id == 1041417879788208169:
             if message.author.bot is True and message.author.id != 694170281270312991:
                 role = discord.utils.get(message.guild.roles, id = 1078051320088510644)
