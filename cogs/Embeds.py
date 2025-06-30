@@ -13,33 +13,45 @@ class Embeds(commands.Cog):
 
     @commands.command()
     async def say(self, ctx: commands.Context, *, msg: str):
+        view = discord.ui.View()
         title = description = ''
-        image = thumbnail = message = footer = color = author = None
+        image = thumbnail = message = footer = color = author = label = url = None
         embed_values = msg.split('&')
-        for i in range(len(embed_values)):
+        for part in range(len(embed_values)):
             try:
-                if '<@' in embed_values[i] and '>' in embed_values[i + 1]:
-                    embed_values[i] = f'{embed_values[i]}&{embed_values[i + 1]}'
-                    del embed_values[i + 1]
+                if '<@' in embed_values[part] and '>' in embed_values[part + 1]:
+                    embed_values[part] = f'{embed_values[part]}&{embed_values[part + 1]}'
+                    del embed_values[part + 1]
             except IndexError:
-                ...
-        for i in embed_values:
-            if i.strip().lower().startswith('th'):
-                thumbnail = i.strip()[2:].strip()
-            elif i.strip().lower().startswith('d'):
-                description = i.strip()[1:].strip()
-            elif i.strip().lower().startswith('c'):
-                color = i.strip()[1:].strip()
-            elif i.strip().lower().startswith('img'):
-                image = i.strip()[3:].strip()
-            elif i.strip().lower().startswith('t'):
-                title = i.strip()[1:].strip()
-            elif i.strip().lower().startswith('msg'):
-                message = i.strip()[3:].strip()
-            elif i.strip().lower().startswith('f'):
-                footer = i.strip()[1:].strip()
-            elif i.strip().lower().startswith('a'):
-                author = i.strip()[1:].strip()
+                pass
+        for value in embed_values:
+            if value.strip().lower().startswith('th'):
+                thumbnail = value.strip()[2:].strip()
+            elif value.strip().lower().startswith('b'):
+                values = value.strip()[1:].strip().split('|')
+                for value in values:
+                    if value.strip().lower().startswith('label'):
+                        label = value.strip()[5:].strip()
+                    elif value.strip().lower().startswith('url'):
+                        url = value.strip()[3:].strip().lstrip('<').rstrip('>')
+                if url:
+                    view.add_item(discord.ui.Button(label = label, url = url, style = discord.ButtonStyle.gray))
+                else:
+                    view.add_item(discord.ui.Button(label = label, disabled = True, style = discord.ButtonStyle.gray))
+            elif value.strip().lower().startswith('d'):
+                description = value.strip()[1:].strip()
+            elif value.strip().lower().startswith('c'):
+                color = value.strip()[1:].strip()
+            elif value.strip().lower().startswith('img'):
+                image = value.strip()[3:].strip()
+            elif value.strip().lower().startswith('t'):
+                title = value.strip()[1:].strip()
+            elif value.strip().lower().startswith('msg'):
+                message = value.strip()[3:].strip()
+            elif value.strip().lower().startswith('f'):
+                footer = value.strip()[1:].strip()
+            elif value.strip().lower().startswith('a'):
+                author = value.strip()[1:].strip()
                 author = await commands.MemberConverter().convert(ctx, author)
         if author is None:
             author = ctx.author
@@ -48,25 +60,25 @@ class Embeds(commands.Cog):
         else:
             color = int('0x' + color.lstrip('#'), 16)
         emb = discord.Embed(title = title, description = description, color = color)
-        for i in embed_values:
-            emb.set_author(name = author.display_name, icon_url = author.avatar.url)
-            if image:
-                emb.set_image(url = image)
-            if thumbnail:
-                emb.set_thumbnail(url = thumbnail)
-            if footer:
-                emb.set_footer(text = footer)
-            if not any(keyword in msg for keyword in ['&t', '&d', '&img', '&th', '&f', '&c', '&a']):
-                return await ctx.send(msg)
-            if message:
-                return await ctx.send(f'{message}', embed = emb)
-            return await ctx.send(embed = emb)
+        emb.set_author(name = author.display_name, icon_url = author.avatar.url)
+        if image:
+            emb.set_image(url = image)
+        if thumbnail:
+            emb.set_thumbnail(url = thumbnail)
+        if footer:
+            emb.set_footer(text = footer)
+        if not any(keyword in msg for keyword in ['&t', '&d', '&img', '&th', '&f', '&c', '&a', '&b']):
+            return await ctx.send(msg, view = view)
+        if message:
+            return await ctx.send(f'{message}', embed = emb, view = view)
+        return await ctx.send(embed = emb, view = view)
 
     @commands.command()
     @commands.has_permissions(manage_messages = True)
     async def edit(self, ctx: commands.Context, arg, *, msg: str = None):
         message = await ctx.channel.fetch_message(arg)
-        if not any(keyword in msg for keyword in ['&t', '&d', '&img', '&th', '&f', '&c', '&a']):
+        view = discord.ui.View()
+        if not any(keyword in msg for keyword in ['&t', '&d', '&img', '&th', '&f', '&c', '&a', '&b']):
             if message.author == self.client.user:
                 if '--delete' in msg:
                     await message.delete()
@@ -91,30 +103,42 @@ class Embeds(commands.Cog):
             else:
                 title = description = ''
                 color = None
-            image = thumbnail = footer = author = None
+            image = thumbnail = footer = author = label = url = None
             embed_values = msg.split('&')
-            for i in range(len(embed_values)):
+            for part in range(len(embed_values)):
                 try:
-                    if '<@' in embed_values[i] and '>' in embed_values[i + 1]:
-                        embed_values[i] = f'{embed_values[i]}&{embed_values[i + 1]}'
-                        del embed_values[i + 1]
+                    if '<@' in embed_values[part] and '>' in embed_values[part + 1]:
+                        embed_values[part] = f'{embed_values[part]}&{embed_values[part + 1]}'
+                        del embed_values[part + 1]
                 except IndexError:
-                    ...
-            for i in embed_values:
-                if i.strip().lower().startswith('th'):
-                    thumbnail = i.strip()[2:].strip()
-                elif i.strip().lower().startswith('d'):
-                    description = i.strip()[1:].strip()
-                elif i.strip().lower().startswith('c'):
-                    color = i.strip()[1:].strip()
-                elif i.strip().lower().startswith('img'):
-                    image = i.strip()[3:].strip()
-                elif i.strip().lower().startswith('t'):
-                    title = i.strip()[1:].strip()
-                elif i.strip().lower().startswith('f'):
-                    footer = i.strip()[1:].strip()
-                elif i.strip().lower().startswith('a'):
-                    author = i.strip()[1:].strip()
+                    pass
+            for value in embed_values:
+                if value.strip().lower().startswith('th'):
+                    thumbnail = value.strip()[2:].strip()
+                elif value.strip().lower().startswith('b'):
+                    message.components = []
+                    values = value.strip()[1:].strip().split('|')
+                    for value in values:
+                        if value.strip().lower().startswith('label'):
+                            label = value.strip()[5:].strip()
+                        elif value.strip().lower().startswith('url'):
+                            url = value.strip()[3:].strip().lstrip('<').rstrip('>')
+                    if url:
+                        view.add_item(discord.ui.Button(label = label, url = url, style = discord.ButtonStyle.gray))
+                    else:
+                        view.add_item(discord.ui.Button(label = label, disabled = True, style = discord.ButtonStyle.gray))
+                elif value.strip().lower().startswith('d'):
+                    description = value.strip()[1:].strip()
+                elif value.strip().lower().startswith('c'):
+                    color = value.strip()[1:].strip()
+                elif value.strip().lower().startswith('img'):
+                    image = value.strip()[3:].strip()
+                elif value.strip().lower().startswith('t'):
+                    title = value.strip()[1:].strip()
+                elif value.strip().lower().startswith('f'):
+                    footer = value.strip()[1:].strip()
+                elif value.strip().lower().startswith('a'):
+                    author = value.strip()[1:].strip()
                     author = await commands.MemberConverter().convert(ctx, author)
             if author is None:
                 author = ctx.author
@@ -137,17 +161,17 @@ class Embeds(commands.Cog):
                     await message.delete()
                     return await ctx.send('Сообщение удалено')
                 if '--clean' in msg:
-                    return await message.edit(content = None, embed = emb)
+                    return await message.edit(content = None, embed = emb, view = view)
                 if '--noembed' in msg:
                     if message.embeds != []:
-                        return await message.edit(embed = None)
+                        return await message.edit(embed = None, view = view)
                     return await ctx.send(embed = discord.Embed(description = f'{ctx.author.mention}, нечего удалять. Возможно, вы имели ввиду cy/edit {message.id} --delete', color = 0xff8000))
-                return await message.edit(embed = emb)
+                return await message.edit(embed = emb, view = view)
             return await ctx.send(embed = discord.Embed(description = f'{message.jump_url} не является сообщением от {self.client.user.mention}', color = 0xff8000))
 
     @commands.command(aliases = ['ctx'])
-    async def content(self, ctx: commands.Context, msg: int, channel: discord.TextChannel = None, should_be_edit = None):
-        if channel is None:
+    async def content(self, ctx: commands.Context, msg: int, channel: discord.TextChannel | str = None, option = None):
+        if channel is None or channel == 'current':
             channel = ctx.channel
         message = await channel.fetch_message(msg)
         embed_data = {
@@ -165,7 +189,8 @@ class Embeds(commands.Cog):
             "t": '',
             "title": '',
             "f": '',
-            "footer": ''
+            "footer": '',
+            "b": ''
         }
         for emb in message.embeds:
             if emb.color:
@@ -173,6 +198,7 @@ class Embeds(commands.Cog):
                 embed_data["c"] = f' &c {emb.color}'
             if emb.author.name:
                 embed_data["author"] = f' author {emb.author.name}'
+                embed_data["a"] = f' &a {emb.author.name}'
             if emb.image.url:
                 embed_data["img"] = f' &img {emb.image.url}'
                 embed_data["image"] = f' image {emb.image.url}'
@@ -183,15 +209,18 @@ class Embeds(commands.Cog):
                 embed_data["d"] = f' &d {emb.description}'
                 embed_data["description"] = f' description {emb.description}'
             if emb.title:
-                embed_data["t"] = f'&t {emb.title}'
+                embed_data["t"] = f' &t {emb.title}'
                 embed_data["title"] = f' title {emb.title}'
             if emb.footer.text:
                 embed_data["f"] = f' &f {emb.footer.text}'
                 embed_data["footer"] = f' footer {emb.footer.text}'
+        for button in message.components:
+            if button.children[0]:
+                embed_data["b"] = f' &b label {button.children[0].label}{f' | url {button.children[0].url}' if button.children[0].url else ""}'
         if message.author.id in botversions:
-            command = 'edit' if should_be_edit == '--edit' else 'say'
+            command = 'edit' if option == '--edit' else 'say'
             if message.embeds:
-                await ctx.send(f'```cy/{command} {message.id if command == "edit" else ""} {embed_data["t"]}{embed_data["d"]}{embed_data["f"]}{embed_data["th"]}{embed_data["img"]}{embed_data["c"]}{embed_data["a"]}```')
+                await ctx.send(f'```cy/{command}{f' {message.id}' if command == "edit" else ""}{embed_data["t"]}{embed_data["d"]}{embed_data["f"]}{embed_data["th"]}{embed_data["img"]}{embed_data["c"]}{embed_data["a"]}{embed_data["b"]}```')
             else:
                 content_prefix = '' if '```' in message.content else '```'
                 await ctx.send(f'{content_prefix}cy/{command} {message.content}{content_prefix}')

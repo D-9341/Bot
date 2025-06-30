@@ -118,71 +118,70 @@ class Mod(commands.Cog):
     @commands.command()
     @commands.bot_has_permissions(manage_roles = True)
     @commands.check(bot_owner_or_has_permissions(manage_roles = True))
-    async def give(self, ctx: commands.Context, member: discord.Member, role: discord.Role):
+    async def give(self, ctx: commands.Context, member: discord.Member, roles: commands.Greedy[discord.Role]):
         locale = get_locale(ctx.author.id)
         bot = ctx.guild.get_member(self.client.user.id)
-        if role.name in {'Muted', 'Deafened'}:
-            if member.id in self.client.owner_ids:
-                return await ctx.send(embed = discord.Embed(description = translate(locale, "give_attempt_to_mute_dev"), color = 0xff0000))
-            if member == ctx.author:
-                return await ctx.send(embed = discord.Embed(description = translate(locale, "attempt_to_mute_self"), color = 0xff0000))
+        added_roles = []
+        for role in roles:
+            if role.name in {'Muted', 'Deafened'}:
+                if member.id in self.client.owner_ids:
+                    await ctx.send(embed = discord.Embed(description = translate(locale, "give_attempt_to_mute_dev"), color = 0xff0000))
+                if member == ctx.author:
+                    await ctx.send(embed = discord.Embed(description = translate(locale, "attempt_to_mute_self"), color = 0xff0000))
+                await member.add_roles(role)
+                await ctx.send(embed = discord.Embed(description = translate(locale, "give_mute").format(author_mention = ctx.author.mention, member_mention = member.mention), color = 0x2f3136))
+            if role > ctx.author.top_role:
+                await ctx.send(embed = discord.Embed(description = f'{translate(locale, "give_role_gt_author_top")}'.format(role_mention = role.mention), color = 0xff8000))
+            if role == ctx.author.top_role:
+                await ctx.send(embed = discord.Embed(description = f'{translate(locale, "give_role_eq_author_top")}'.format(role_mention = role.mention), color = 0xff8000))
+            if role > bot.top_role:
+                await ctx.send(embed = discord.Embed(description = f'{translate(locale, "give_role_gt_bot_top")}'.format(role_mention = role.mention), color = 0xff0000))
+            if role == bot.top_role:
+                await ctx.send(embed = discord.Embed(description = f'{translate(locale, "give_role_eq_bot_top")}'.format(role_mention = role.mention), color = 0xff0000))
+            if role.is_default():
+                await ctx.send(embed = discord.Embed(description = translate(locale, "give_everyone"), color = 0xff8000))
+            else:
+                added_roles.append(role)
+        for role in added_roles:
             await member.add_roles(role)
-            return await ctx.send(embed=discord.Embed(description=translate(locale, "give_mute").format(author_mention=ctx.author.mention, member_mention=member.mention), color=0x2f3136))
-        if role > ctx.author.top_role:
-            emb = discord.Embed(description = f'{translate(locale, "give_role_gt_author_top")}'.format(role_mention = role.mention), color = 0xff8000)
-            await ctx.send(embed = emb)
-        elif role == ctx.author.top_role:
-            emb = discord.Embed(description = f'{translate(locale, "give_role_eq_author_top")}'.format(role_mention = role.mention), color = 0xff8000)
-            await ctx.send(embed = emb)
-        elif role > bot.top_role:
-            emb = discord.Embed(description = f'{translate(locale, "give_role_gt_bot_top")}'.format(role_mention = role.mention), color = 0xff0000)
-            await ctx.send(embed = emb)
-        elif role == bot.top_role:
-            emb = discord.Embed(description = f'{translate(locale, "give_role_eq_bot_top")}'.format(role_mention = role.mention), color = 0xff0000)
-            await ctx.send(embed = emb)
-        elif role.is_default():
-            emb = discord.Embed(description = translate(locale, "give_everyone"), color = 0xff8000)
-            await ctx.send(embed = emb)
+        if not added_roles:
+            await ctx.send(embed = discord.Embed(description = 'Никакие роли не были выданы', color = 0xff8000))
         else:
-            await member.add_roles(role)
-            emb = discord.Embed(color = 0xff8000, timestamp = discord.utils.utcnow())
-            emb.add_field(name = 'ВЫДАНА_РОЛЬ', value = f'{role.mention} | {role.name} | {role.id}')
-            emb.add_field(name = 'ВЫДАНА:', value = member.mention, inline = False)
-            emb.set_author(name = ctx.author.display_name, icon_url = ctx.author.avatar.url)
-            await ctx.send(embed = emb)
+            await ctx.send(embed = discord.Embed(description = f'{', '.join(role.mention for role in added_roles)} {'была выдана' if len(added_roles) == 1 else 'были выданы'} {member.mention}', color = 0xff8000))
 
     @commands.command()
     @commands.bot_has_permissions(manage_roles = True)
     @commands.check(bot_owner_or_has_permissions(manage_roles = True))
-    async def take(self, ctx: commands.Context, member: discord.Member, role: discord.Role):
+    async def take(self, ctx: commands.Context, member: discord.Member, roles: commands.Greedy[discord.Role]):
         locale = get_locale(ctx.author.id)
         bot = ctx.guild.get_member(self.client.user.id)
-        if role.name in {'Muted', 'Deafened'}:
+        removed_roles = []
+        for role in roles:
+            if role.name in {'Muted', 'Deafened'}:
+                if member.id in self.client.owner_ids:
+                    await ctx.send(embed = discord.Embed(description = translate(locale, "take_attempt_to_mute_dev"), color = 0xff0000))
+                if member == ctx.author:
+                    await ctx.send(embed = discord.Embed(description = translate(locale, "attempt_to_mute_self"), color = 0xff0000))
+                await member.add_roles(role)
+                await ctx.send(embed = discord.Embed(description = translate(locale, "take_mute").format(author_mention = ctx.author.mention, member_mention = member.mention), color = 0x2f3136))
+            if role > ctx.author.top_role:
+                await ctx.send(embed = discord.Embed(description = f'{translate(locale, "take_role_gt_author_top")}'.format(role_mention = role.mention), color = 0xff8000))
+            if role == ctx.author.top_role:
+                await ctx.send(embed = discord.Embed(description = f'{translate(locale, "take_role_eq_author_top")}'.format(role_mention = role.mention), color = 0xff8000))
+            if role > bot.top_role:
+                await ctx.send(embed = discord.Embed(description = f'{translate(locale, "take_role_gt_bot_top")}'.format(role_mention = role.mention), color = 0xff0000))
+            if role == bot.top_role:
+                await ctx.send(embed = discord.Embed(description = f'{translate(locale, "take_role_eq_bot_top")}'.format(role_mention = role.mention), color = 0xff0000))
+            if role.is_default():
+                await ctx.send(embed = discord.Embed(description = translate(locale, "take_everyone"), color = 0xff8000))
+            else:
+                removed_roles.append(role)
+        for role in removed_roles:
             await member.remove_roles(role)
-            emb = discord.Embed(description = f'{translate(locale, "take_mute")}'.format(author_mention = ctx.author.mention, member_mention = member.mention), color = 0xff8000)
-            return await ctx.send(embed = emb)
-        if role > ctx.author.top_role:
-            emb = discord.Embed(description = f'{translate(locale, "take_role_gt_author_top")}'.format(role_mention = role.mention), color = 0x2f3136)
-            await ctx.send(embed = emb)
-        elif role == ctx.author.top_role:
-            emb = discord.Embed(description = f'{translate(locale, "take_role_eq_author_top")}'.format(role_mention = role.mention), color = 0x2f3136)
-            await ctx.send(embed = emb)
-        elif role > bot.top_role:
-            emb = discord.Embed(description = f'{translate(locale, "take_role_gt_bot_top")}'.format(role_mention = role.mention), color = 0xff0000)
-            await ctx.send(embed = emb)
-        elif role == bot.top_role:
-            emb = discord.Embed(description = f'{translate(locale, "take_role_eq_bot_top")}'.format(role_mention = role.mention), color = 0xff0000)
-            await ctx.send(embed = emb)
-        elif role.is_default():
-            emb = discord.Embed(description = translate(locale, "take_everyone"), color = 0xffffff)
-            await ctx.send(embed = emb)
+        if not removed_roles:
+            await ctx.send(embed = discord.Embed(description = 'Никакие роли не были забраны', color = 0xff8000))
         else:
-            await member.remove_roles(role)
-            emb = discord.Embed(color = 0xff8000, timestamp = discord.utils.utcnow())
-            emb.add_field(name = 'ЗАБРАНА_РОЛЬ', value = f'{role.mention} | {role.name} | {role.id}')
-            emb.add_field(name = 'ЗАБРАНА_У:', value = member.mention, inline = False)
-            emb.set_author(name = ctx.author.display_name, icon_url = ctx.author.avatar.url)
-            await ctx.send(embed = emb)
+            await ctx.send(embed = discord.Embed(description = f'{", ".join(role.mention for role in removed_roles)} {"была забрана" if len(removed_roles) == 1 else "были забраны"} у {member.mention}', color = 0xff8000))
 
     @commands.command()
     @commands.bot_has_permissions(manage_roles = True)
@@ -510,7 +509,7 @@ class Mod(commands.Cog):
                         emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены нажмите на кнопку "Отменить"')
                         view = discord.ui.View()
                         view.add_item(CancelButton())
-                        sent = await ctx.send(embed = emb, view = view)
+                        await sent.edit(embed = emb, view = view)
                         try:
                             interaction = await self.client.wait_for('interaction', timeout = 10, check = lambda i: i.user == ctx.author and i.channel == ctx.channel and i.data['custom_id'] == 'cancel')
                             await interaction.response.defer()

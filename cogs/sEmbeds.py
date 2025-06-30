@@ -59,6 +59,7 @@ class sEmbeds(commands.Cog):
     @app_commands.command(description = 'Вы можете отредактировать сообщения бота')
     @app_commands.describe(arg = 'ID сообщения, которое нужно отредактировать', msg = 'Что вы хотите изменить. Пропишите /help edit для подробностей использования')
     @app_commands.checks.has_permissions(manage_messages = True)
+    @app_commands.allowed_contexts(guilds = True, dms = False)
     async def edit(self, interaction: discord.Interaction, arg: str, *, msg: str = None):
         message = await interaction.channel.fetch_message(int(arg))
         if not any(keyword in msg for keyword in ['&t', '&d', '&img', '&th', '&f', '&c', '&a']):

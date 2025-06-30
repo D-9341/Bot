@@ -50,6 +50,7 @@ class sMisc(commands.Cog):
 
     @app_commands.command(description = 'Показывает участников с определённой ролью')
     @app_commands.describe(role = 'Роль')
+    @app_commands.allowed_contexts(guilds = True, dms = False)
     async def rolemembers(self, interaction: discord.Interaction, role: discord.Role):
         emb = discord.Embed(color = 0xff8000)
         if len(role.members) != 0:
@@ -59,6 +60,7 @@ class sMisc(commands.Cog):
         await interaction.response.send_message(embed = emb)
 
     @app_commands.command(description = 'Информация о сервере')
+    @app_commands.allowed_contexts(guilds = True, dms = False)
     async def guild(self, interaction: discord.Interaction):
         guild = interaction.guild
         emb = discord.Embed(color = 0x2f3136, timestamp = discord.utils.utcnow())
@@ -77,6 +79,7 @@ class sMisc(commands.Cog):
 
     @app_commands.command(description = 'Информация о роли')
     @app_commands.describe(role = 'Роль')
+    @app_commands.allowed_contexts(guilds = True, dms = False)
     async def roleinfo(self, interaction: discord.Interaction, role: discord.Role):
         is_mentionable = 'Да' if role.mentionable else 'Нет'
         is_managed = 'Да' if role.managed else 'Нет'
@@ -106,6 +109,7 @@ class sMisc(commands.Cog):
 
     @app_commands.command(description = 'Информация о пользователе')
     @app_commands.describe(member = 'Пользователь. Оставьте пустым, чтобы показать вашу информацию')
+    @app_commands.allowed_contexts(guilds = True, dms = False)
     async def about(self, interaction: discord.Interaction, member: discord.Member = None):
         member = member if member else interaction.user
         bot = 'Да' if member.bot else 'Нет'

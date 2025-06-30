@@ -2,6 +2,7 @@ import asyncio
 import discord
 import os
 import psycopg2
+import json
 
 from dotenv import load_dotenv
 from pathlib import Path
@@ -17,6 +18,8 @@ CWD = Path(__file__).parents[0]
 CWD = str(CWD)
 load_dotenv(CWD + '\\vars.env')
 PASSWORD = os.getenv('DB_PASS')
+owner_commands = ['guilds', 'reset', 'status', 'generate', 'invite', 'disable', 'enable', 'reload', 'list', 'pull', 'tts', 'update']
+cogs = ['Cephalon', 'Embeds', 'Events', 'Fun', 'Mod', 'Misc', 'Music', 'sCephalon', 'sEmbeds', 'sFun', 'sMod', 'sMisc']
 
 def bot_owner_or_has_permissions(**perms):
     origin = commands.has_permissions(**perms).predicate
@@ -34,6 +37,8 @@ async def disable(ctx, *, target: str):
         raise commands.NotOwner()
     if target.lower() in client.all_commands:
         command = client.get_command(target)
+        if target in ['disable', 'enable']:
+            return await ctx.send(embed = discord.Embed(description = f'{target} нельзя отключить', color = 0xff0000))
         if command.enabled:
             command.enabled = False
             return await ctx.send(embed = discord.Embed(description = f'Команда `{target}` отключена', color = 0xff8000))
@@ -83,6 +88,7 @@ async def reload(ctx):
     if ctx.author.id not in client.owner_ids:
         raise commands.NotOwner()
     excepted_modules = {}
+    timedout = False
     for name in list(client.extensions):
         try:
             await client.reload_extension(name)
@@ -94,7 +100,16 @@ async def reload(ctx):
         LOGS.write(f'[ERR] При перезагрузке модулей возникли ошибки:\n{"".join([f'`{name}`: `{error}`\n' for name, error in excepted_modules.items()])}\n')
         LOGS.flush()
         return await ctx.send(embed = discord.Embed(description = f'{'Модуль' if len(excepted_modules) == 1 else 'Модули'} {', '.join(excepted_modules.keys())} не {'может быть перезагружен' if len(excepted_modules) == 1 else 'могут быть перезагружены'}, {f'пингани {client.get_user(338714886001524737).mention}' if ctx.author.id != 338714886001524737 else 'необходимо исправить'}:\n{''.join([f'`{name}`: `{error}`\n' for name, error in excepted_modules.items()])}', color = 0xff0000))
-    await ctx.send(embed = discord.Embed(description = 'Модули перезагружены', color = 0xff8000))
+    try:
+        await asyncio.wait_for(client.tree.sync(), timeout = 5)
+    except asyncio.TimeoutError:
+        timedout = True
+        LOGS.write(f'[ERR] При синхронизации команд возникла ошибка: превышен лимит времени (5 секунд)\n')
+        LOGS.flush()
+    except Exception as error:
+        LOGS.write(f'[ERR] При синхронизации команд возникла ошибка: {error}\n')
+        LOGS.flush()
+    await ctx.send(embed = discord.Embed(description = f'Модули перезагружены{', команды синхронизированы' if not timedout else ''}', color = 0xff8000 if not timedout else 0xff0000))
 
 @client.command()
 async def pull(ctx):
@@ -121,6 +136,30 @@ async def access_db(ctx, db, *, query: str = None):
     result = cur.fetchall()
     conn.close()
     await ctx.send(f'```{result}```')
+
+@client.command()
+async def update(ctx, locale):
+    if ctx.author.id not in client.owner_ids:
+        raise commands.NotOwner()
+    conn = psycopg2.connect(host = "localhost", database = "locales", user = "postgres", password = PASSWORD, port = 5432)
+    cur = conn.cursor()
+    message = await ctx.send(embed = discord.Embed(description = 'Обновление...', color = 0xff8000))
+    match locale:
+        case 'ru':
+            for key, value in json.load(open(rf'{CWD}\locales\ru\locale.json', encoding = 'utf-8')).items():
+                cur.execute("DELETE FROM ru WHERE string_id = %s", (key,))
+                cur.execute("INSERT INTO ru (string_id, value) VALUES (%s, %s)", (key, value))
+        case 'en':
+            for key, value in json.load(open(rf'{CWD}\locales\en\locale.json', encoding = 'utf-8')).items():
+                cur.execute("DELETE FROM en WHERE string_id = %s", (key,))
+                cur.execute("INSERT INTO en (string_id, value) VALUES (%s, %s)", (key, value))
+        case 'gnida':
+            for key, value in json.load(open(rf'{CWD}\locales\gnida\locale.json', encoding = 'utf-8')).items():
+                cur.execute("DELETE FROM gnida WHERE string_id = %s", (key,))
+                cur.execute("INSERT INTO gnida (string_id, value) VALUES (%s, %s)", (key, value))
+    conn.commit()
+    await asyncio.sleep(client.latency)
+    await message.edit(embed = discord.Embed(description = 'Обновление завершено', color = 0xff8000))
 
 async def init():
     for file in os.listdir(CWD + "/cogs"):

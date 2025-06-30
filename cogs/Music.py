@@ -1,8 +1,8 @@
 import asyncio
-
 import discord
 import yt_dlp
 import os
+from gtts import gTTS
 from pathlib import Path
 from functions import translate, get_locale
 from discord.ext import commands
@@ -32,9 +32,27 @@ class Music(commands.Cog):
     async def on_ready(self):
         print('Модуль Music загружен')
 
+    @commands.command()
+    async def tts(self, ctx: commands.Context, *, text: str):
+        if ctx.author.id not in self.client.owner_ids:
+            raise commands.NotOwner()
+        if not text:
+            return await ctx.send(embed = discord.Embed(description = 'Вы должны указать текст для произнесения', color = 0xff0000))
+        if not ctx.voice_client:
+            return await ctx.send(embed = discord.Embed(description = 'Я не подключён к голосовому каналу', color = 0xff0000))
+        speech = gTTS(text = text, lang = 'ru', slow = True)
+        speech.save('temp/speech.mp3')
+        source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio('temp/speech.mp3'))
+        ctx.voice_client.play(source)
+        message = await ctx.send(embed = discord.Embed(description = 'Говорю...', color = 0xff8000))
+        while ctx.voice_client.is_playing():
+            await asyncio.sleep(1)
+        os.remove('temp/speech.mp3')
+        await message.edit(embed = discord.Embed(description = f'Текст `{text}` произнесён', color = 0xff8000))
+
     @commands.command(aliases = ['p'])
     @commands.cooldown(1, 5, commands.BucketType.user)
-    async def play(self, ctx: commands.Context, *, url):
+    async def play(self, ctx: commands.Context, *, url: str):
         locale = get_locale(ctx.author.id)
         url = url.lstrip('<').rstrip('>')
         try:
@@ -66,7 +84,7 @@ class Music(commands.Cog):
         title_list.append(title)
         await ctx.send(embed = discord.Embed(description = f'{translate(locale, "play_added_to_queue")}'.format(title = title, pos = len(queue)), color = 0xff8000))
         if not ctx.author.voice:
-            return await ctx.send(embed = discord.Embed(description = translate(locale, 'play_not_in_voice_channel'), color = 0xff8000))
+            return await ctx.send(embed = discord.Embed(description = f'{translate(locale, 'not_in_voice_channel')}'.format(command = 'play'), color = 0xff8000))
         if not ctx.guild.voice_client:
             await ctx.author.voice.channel.connect(self_deaf = True)
             await ctx.send(embed = discord.Embed(description = f'{translate(locale, "play_connected")}'.format(ctx_author_voice_channel_name = ctx.author.voice.channel.name), color = 0xff8000))
@@ -122,12 +140,12 @@ class Music(commands.Cog):
     async def resume(self, ctx: commands.Context):
         locale = get_locale(ctx.author.id)
         if not ctx.author.voice:
-            return await ctx.send(embed = discord.Embed(description = translate(locale, 'resume_not_in_voice_channel'), color = 0xff8000))
+            return await ctx.send(embed = discord.Embed(description = f'{translate(locale, 'not_in_voice_channel')}'.format(command = 'resume'), color = 0xff8000))
         if not ctx.guild.voice_client:
-            return await ctx.send(embed = discord.Embed(description = translate(locale, 'resume_not_connected'), color = 0xff0000))
+            return await ctx.send(embed = discord.Embed(description = f'{translate(locale, 'not_connected')}'.format(command = 'resume'), color = 0xff0000))
         if ctx.guild.voice_client:
             if ctx.guild.voice_client.channel != ctx.author.voice.channel:
-                return await ctx.send(embed = discord.Embed(description = translate(locale, 'resume_diff_channel'), color = 0xff0000))
+                return await ctx.send(embed = discord.Embed(description = translate(locale, 'diff_channel'), color = 0xff0000))
             ctx.guild.voice_client.resume()
             await ctx.send(embed = discord.Embed(description = translate(locale, 'resume_success'), color = 0xff8000))
 
@@ -151,12 +169,12 @@ class Music(commands.Cog):
     async def pause(self, ctx: commands.Context):
         locale = get_locale(ctx.author.id)
         if not ctx.author.voice:
-            return await ctx.send(embed = discord.Embed(description = translate(locale, 'pause_not_in_voice_channel'), color = 0xff8000))
+            return await ctx.send(embed = discord.Embed(description = f'{translate(locale, 'not_in_voice_channel')}'.format(command = 'pause'), color = 0xff8000))
         if not ctx.guild.voice_client:
-            return await ctx.send(embed = discord.Embed(description = translate(locale, 'pause_not_connected'), color = 0xff0000))
+            return await ctx.send(embed = discord.Embed(description = f'{translate(locale, 'not_connected')}'.format(command = 'pause'), color = 0xff0000))
         if ctx.guild.voice_client:
             if ctx.guild.voice_client.channel != ctx.author.voice.channel:
-                return await ctx.send(embed = discord.Embed(description = translate(locale, 'pause_diff_channel'), color = 0xff0000))
+                return await ctx.send(embed = discord.Embed(description = translate(locale, 'diff_channel'), color = 0xff0000))
             ctx.guild.voice_client.pause()
             await ctx.send(embed = discord.Embed(description = translate(locale, 'pause_success'), color = 0xff8000))
 
@@ -164,12 +182,12 @@ class Music(commands.Cog):
     async def stop(self, ctx: commands.Context):
         locale = get_locale(ctx.author.id)
         if not ctx.author.voice:
-            return await ctx.send(embed = discord.Embed(description = translate(locale, 'stop_not_in_voice_channel'), color = 0xff8000))
+            return await ctx.send(embed = discord.Embed(description = f'{translate(locale, 'not_in_voice_channel')}'.format(command = 'stop'), color = 0xff8000))
         if not ctx.guild.voice_client:
-            return await ctx.send(embed = discord.Embed(description = translate(locale, 'stop_not_connected'), color = 0xff0000))
+            return await ctx.send(embed = discord.Embed(description = f'{translate(locale, 'not_connected')}'.format(command = 'stop'), color = 0xff0000))
         if ctx.guild.voice_client:
             if ctx.guild.voice_client.channel != ctx.author.voice.channel:
-                return await ctx.send(embed = discord.Embed(description = translate(locale, 'stop_diff_channel'), color = 0xff0000))
+                return await ctx.send(embed = discord.Embed(description = translate(locale, 'diff_channel'), color = 0xff0000))
             ctx.guild.voice_client.stop()
             queue.pop(0)
             title_list.pop(0)
@@ -179,7 +197,7 @@ class Music(commands.Cog):
     async def join(self, ctx: commands.Context):
         locale = get_locale(ctx.author.id)
         if not ctx.author.voice:
-            await ctx.send(embed = discord.Embed(description = translate(locale, 'join_not_in_voice_channel'), color = 0xff8000))
+            await ctx.send(embed = discord.Embed(description = f'{translate(locale, 'not_in_voice_channel')}'.format(command = 'join'), color = 0xff8000))
         else:
             if not ctx.voice_client:
                 await ctx.author.voice.channel.connect(self_deaf = True)
@@ -201,9 +219,9 @@ class Music(commands.Cog):
                 await ctx.voice_client.disconnect(force = True)
                 await ctx.voice_client.clean_up()
             else:
-                await ctx.send(embed = discord.Embed(description = translate(locale, 'leave_diff_channel'), color = 0xff0000))
+                await ctx.send(embed = discord.Embed(description = translate(locale, 'diff_channel'), color = 0xff0000))
         else:
-            emb = discord.Embed(description = translate(locale, 'leave_already_not_connected'), colour = 0xff0000)
+            emb = discord.Embed(description = f'{translate(locale, 'not_connected')}'.format(command = 'leave'), colour = 0xff0000)
             await ctx.send(embed = emb)
 
 async def setup(client):

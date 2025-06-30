@@ -16,6 +16,7 @@ class sMod(commands.Cog):
     @app_commands.command(description = 'Пишет участнику в лс сообщение')
     @app_commands.describe(member = 'Участник', text = 'Текст сообщения')
     @app_commands.checks.has_permissions(view_audit_log = True)
+    @app_commands.allowed_contexts(guilds = True, dms = False)
     async def dm(self, interaction: discord.Interaction, member: discord.Member, * , text: str):
         locale = get_locale(interaction.user.id)
         emb = discord.Embed(description = f'{text}', color = 0x2f3136)
@@ -26,6 +27,7 @@ class sMod(commands.Cog):
     @app_commands.command(description = 'Выгоняет участника')
     @app_commands.describe(member = 'Участник', reason = 'Причина')
     @app_commands.checks.has_permissions(kick_members = True)
+    @app_commands.allowed_contexts(guilds = True, dms = False)
     async def kick(self, interaction: discord.Interaction, member: discord.Member, *, reason: str = None):
         locale = get_locale(interaction.user.id)
         bot = discord.utils.get(interaction.guild.members, id = self.client.user.id)
@@ -61,6 +63,7 @@ class sMod(commands.Cog):
     @app_commands.command(description = 'Блокирует участника')
     @app_commands.describe(member = 'Участник', reason = 'Причина')
     @app_commands.checks.has_permissions(ban_members = True)
+    @app_commands.allowed_contexts(guilds = True, dms = False)
     async def ban(self, interaction: discord.Interaction, member: discord.Member, *, reason: str = None):
         locale = get_locale(interaction.user.id)
         bot = discord.utils.get(interaction.guild.members, id = self.client.user.id)
@@ -100,6 +103,7 @@ class sMod(commands.Cog):
     @app_commands.command(description = 'Выдаёт участнику роль')
     @app_commands.describe(member = 'Участник', role = 'Роль')
     @app_commands.checks.has_permissions(manage_channels = True)
+    @app_commands.allowed_contexts(guilds = True, dms = False)
     async def give(self, interaction: discord.Interaction, member: discord.Member, role: discord.Role):
         locale = get_locale(interaction.user.id)
         bot = interaction.guild.get_member(self.client.user.id)
@@ -142,6 +146,7 @@ class sMod(commands.Cog):
     @app_commands.command(description = 'Забирает роль у участника')
     @app_commands.describe(member = 'Участник', role = 'Роль')
     @app_commands.checks.has_permissions(manage_channels = True)
+    @app_commands.allowed_contexts(guilds = True, dms = False)
     async def take(self, interaction: discord.Interaction, member: discord.Member, role: discord.Role):
         locale = get_locale(interaction.user.id)
         bot = interaction.guild.get_member(self.client.user.id)
@@ -175,6 +180,7 @@ class sMod(commands.Cog):
     @app_commands.command(description = 'Заглушение участника')
     @app_commands.describe(member = 'Участник', reason = 'Причина')
     @app_commands.checks.has_permissions(view_audit_log = True)
+    @app_commands.allowed_contexts(guilds = True, dms = False)
     async def mute(self, interaction: discord.Interaction, member: discord.Member, *, reason: str = None):
         locale = get_locale(interaction.user.id)
         if reason is None:
@@ -208,6 +214,7 @@ class sMod(commands.Cog):
     @app_commands.command(description = 'Отправляет подумать участника о своём поведении')
     @app_commands.describe(member = 'Участник', reason = 'Причина')
     @app_commands.checks.has_permissions(manage_channels = True)
+    @app_commands.allowed_contexts(guilds = True, dms = False)
     async def timeout(self, interaction: discord.Interaction, member: discord.Member, *, reason: str = None):
         locale = get_locale(interaction.user.id)
         if reason is None:
@@ -235,6 +242,7 @@ class sMod(commands.Cog):
     @app_commands.command(description = 'Отключает человеку микрофон в голосовых каналах')
     @app_commands.describe(member = 'Участник', reason = 'Причина')
     @app_commands.checks.has_permissions(manage_channels = True)
+    @app_commands.allowed_contexts(guilds = True, dms = False)
     async def deaf(self, interaction: discord.Interaction, member: discord.Member, *, reason: str = None):
         locale = get_locale(interaction.user.id)
         role = discord.utils.get(interaction.guild.roles, name = 'Deafened')
@@ -268,6 +276,7 @@ class sMod(commands.Cog):
     @app_commands.command(description = 'Отменяет отключение микрофона')
     @app_commands.describe(member = 'Участник', reason = 'Причина')
     @app_commands.checks.has_permissions(manage_channels = True)
+    @app_commands.allowed_contexts(guilds = True, dms = False)
     async def undeaf(self, interaction: discord.Interaction, member: discord.Member, *, reason: str = None):
         locale = get_locale(interaction.user.id)
         role = discord.utils.get(interaction.guild.roles, name = 'Deafened')
@@ -290,6 +299,7 @@ class sMod(commands.Cog):
     @app_commands.command(description = 'Разглушает участника')
     @app_commands.describe(member = 'Участник', reason = 'Причина')
     @app_commands.checks.has_permissions(manage_channels = True)
+    @app_commands.allowed_contexts(guilds = True, dms = False)
     async def unmute(self, interaction: discord.Interaction, member: discord.Member, *, reason: str = None):
         locale = get_locale(interaction.user.id)
         role = discord.utils.get(interaction.guild.roles, name = 'Muted')

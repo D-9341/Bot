@@ -7,7 +7,7 @@ from datetime import timedelta
 
 import discord
 from functions import translate, get_locale, set_locale, get_plural_form
-from main import uptime
+from main import uptime, owner_commands, cogs
 from discord.ext import commands
 
 CWD = Path(__file__).parents[0].parents[0]
@@ -31,7 +31,6 @@ class Cephalon(commands.Cog):
 
     @commands.command()
     async def help(self, ctx: commands.Context, command = None):
-        owner_commands = ['guilds', 'reset', 'status', 'generate', 'invite', 'disable', 'enable', 'reload', 'list', 'pull']
         if command is None:
             emb = discord.Embed(description = 'Все доступные команды', color = 0xff8000)
             emb.set_author(name = self.client.user.name, url = 'https://discord.com/api/oauth2/authorize?client_id=694170281270312991&permissions=8&scope=bot%20applications.commands')
@@ -64,16 +63,20 @@ class Cephalon(commands.Cog):
             if command == 'enable':
                 return await ctx.send(embed = discord.Embed(description = '```py\ncy/enable <команда>\n\nВключает команду/модуль```', color = 0xff8000))
             if command == 'reload':
-                return await ctx.send(embed = discord.Embed(description = '```py\ncy/reload\n\nИнструмент для перезагрузки всех модулей.\nОшибкой считается только то, что наследуется от commands.ExtensionFailed, в т.ч. и ошибки синтаксиса.\nТ.о., если какая-либо команда имеет незначительные ошибки синтаксиса, модуль всё равно будет перезагружен```|| эх вот бы проказник написал юнит-тесты для модулей ||', color = 0xff8000))
+                return await ctx.send(embed = discord.Embed(description = '```py\ncy/reload\n\nИнструмент для перезагрузки всех модулей\nОшибкой считается только то, что наследуется от commands.ExtensionFailed, в т.ч. и ошибки синтаксиса.\nТ.о., если какая-либо команда имеет незначительные ошибки синтаксиса, модуль всё равно будет перезагружен```|| эх вот бы проказник написал юнит-тесты для модулей ||', color = 0xff8000))
             if command == 'pull':
                 return await ctx.send(embed = discord.Embed(description = '```py\ncy/pull\n\nПолучает обновления из репозитория и перезагружает модули```', color = 0xff8000))
+            if command == 'tts':
+                return await ctx.send(embed = discord.Embed(description = '```py\ncy/tts <текст>\n\nПроизношение текста с помощью АПИ гугла```', color = 0xff8000))
+            if command == 'update':
+                return await ctx.send(embed = discord.Embed(description = '```py\ncy/update <локаль>\n\nУдаляет каждую энтри и заново добавляет обновлённую версию для указанной локали```', color = 0xff8000))
         locale = get_locale(ctx.author.id)
         return await ctx.send(embed = discord.Embed(description = (translate(locale, f'{command}_help')), color = 0xff8000))
 
     @commands.command()
     async def boss(self, ctx: commands.Context):
         authors = {}
-        async for message in ctx.channel.history(limit = 100):
+        async for message in ctx.channel.history(limit = 100, before = ctx.message, after = await ctx.fetch_message(1378807027459035317)):
             if message.author.id not in [694170281270312991]:
                 if message.author not in authors:
                     authors[message.author] = 1
@@ -85,7 +88,6 @@ class Cephalon(commands.Cog):
     async def status(self, ctx: commands.Context, target = 'list'):
         if ctx.author.id not in self.client.owner_ids:
             raise commands.NotOwner()
-        cogs = ['Cephalon', 'Embeds', 'Fun', 'Mod', 'Misc', 'Music', 'sCephalon', 'sEmbeds', 'sFun', 'sMod', 'sMisc']
         if target == 'list':
             now = discord.utils.utcnow()
             up_time = now - uptime
@@ -246,6 +248,8 @@ class Cephalon(commands.Cog):
     @commands.command()
     @commands.cooldown(1, 5, commands.BucketType.user)
     async def ping(self, ctx: commands.Context):
+        if ctx.author.id in self.client.owner_ids:
+            return await self.status(ctx)
         message = await ctx.send(embed = discord.Embed(description = '`Получаю..`', color = 0xff8000))
         await asyncio.sleep(self.client.latency)
         await message.edit(embed = discord.Embed(description = f'Pong! `{round(self.client.latency * 1000)} ms`', color = 0xff8000))

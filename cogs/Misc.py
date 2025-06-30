@@ -12,6 +12,19 @@ class Misc(commands.Cog):
     async def on_ready(self):
         print('Модуль Misc загружен')
 
+    @commands.command(aliases = ['svo'])
+    @commands.cooldown(1, 5, commands.BucketType.user)
+    async def sigame(self, ctx: commands.Context):
+        channel = ctx.channel.voice_states
+        members = {}
+        result = ''
+        for member in channel:
+            member = self.client.get_user(member)
+            if member.id != 338714886001524737:
+                members[member] = random.randint(0, 100)
+                result += f'{member.mention} - `{members[member]}`\n'
+        await ctx.send(embed = discord.Embed(description = f'{result}\n\nПобедил {max(members, key = members.get).mention}', color = 0xff8000))
+
     @commands.command()
     @commands.cooldown(1, 5, commands.BucketType.user)
     async def roll(self, ctx: commands.Context, first: str | int = None, second: int = None):
@@ -43,6 +56,11 @@ class Misc(commands.Cog):
                         return await ctx.send(embed = discord.Embed(description = 'Нельзя бросить больше 20 дайсов', color = 0xff0000))
                     if dice_edges > 20:
                         return await ctx.send(embed = discord.Embed(description = 'Вы не можете кинуть дайс с большим количеством граней, чем 20', color = 0xff8000))
+                else:
+                    if dice_amount > 100:
+                        return await ctx.send(embed = discord.Embed(description = 'Нельзя бросить больше 100 дайсов', color = 0xff0000))
+                    if dice_edges > 100:
+                        return await ctx.send(embed = discord.Embed(description = 'Вы не можете кинуть дайс с большим количеством граней, чем 100', color = 0xff8000))
                 if dice_amount > 1:
                     results = ''
                     result = 0
@@ -79,6 +97,7 @@ class Misc(commands.Cog):
 
     @commands.command()
     @commands.cooldown(1, 15, commands.BucketType.user)
+    @commands.guild_only()
     async def someone(self, ctx: commands.Context, *, text):
         member = random.choice(ctx.channel.members)
         emb = discord.Embed(description = f'{text}', color =  0x2f3136, timestamp = discord.utils.utcnow())
@@ -87,6 +106,7 @@ class Misc(commands.Cog):
 
     @commands.command()
     @commands.cooldown(1, 5, commands.BucketType.user)
+    @commands.guild_only()
     async def rolemembers(self, ctx: commands.Context, role: discord.Role):
         emb = discord.Embed(color = 0xff8000)
         if len(role.members) != 0:
@@ -97,24 +117,25 @@ class Misc(commands.Cog):
 
     @commands.command(aliases = ['guild'])
     @commands.cooldown(1, 5, commands.BucketType.user)
+    @commands.guild_only()
     async def serverinfo(self, ctx: commands.Context):
         guild = ctx.guild
         emb = discord.Embed(color = 0x2f3136, timestamp = discord.utils.utcnow())
         emb.set_author(name = guild, icon_url = guild.icon.url if guild.icon else None)
         emb.add_field(name = 'ID сервера', value = guild.id)
         emb.add_field(name = 'Владелец', value = guild.owner.mention)
-        emb.add_field(name = 'Участников', value = f'{guild.member_count}\n**Из них ботов:** {len(list(filter(lambda m: m.bot, guild.members)))}\n**Из них людей:** {len(list(filter(lambda m: not m.bot, guild.members)))}')
+        emb.add_field(name = 'Участников', value = f'{guild.member_count}\n**Из них ботов:** {sum(member.bot for member in guild.members)}\n**Из них людей:** {sum(not member.bot for member in guild.members)}')
         emb.add_field(name = 'Каналов', value = f'Текстовых {len(guild.text_channels)} | Голосовых {len(guild.voice_channels)}')
         roles = ', '.join([role.name for role in guild.roles[1:]][::-1])
         if len(roles) > 1:
             emb.add_field(name = f'Роли ({len(guild.roles)-1})', value = roles, inline = False)
-        d = (guild.created_at + timedelta(hours = 3)).strftime('%d.%m.%Y %H:%M:%S GMT +3')
-        emb.add_field(name = 'Дата создания сервера', value = f'{d}', inline = False)
+        emb.add_field(name = 'Дата создания сервера', value = f'<t:{int(guild.created_at.timestamp())}:F>', inline = False)
         emb.set_thumbnail(url = guild.icon.url if guild.icon else None)
         await ctx.send(embed = emb)
 
     @commands.command()
     @commands.cooldown(1, 5, commands.BucketType.user)
+    @commands.guild_only()
     async def roleinfo(self, ctx: commands.Context, role: discord.Role):
         is_mentionable = 'Да' if role.mentionable else 'Нет'
         is_managed = 'Да' if role.managed else 'Нет'
@@ -125,8 +146,7 @@ class Misc(commands.Cog):
         emb.add_field(name = 'Упоминается?', value = is_mentionable)
         emb.add_field(name = 'Управляется интеграцией?', value = is_managed)
         emb.add_field(name = 'Позиция в списке', value = role.position)
-        d = (role.created_at + timedelta(hours = 3)).strftime('%d.%m.%Y %H:%M:%S GMT +3')
-        emb.add_field(name = 'Создана', value = f'{d}', inline = False)
+        emb.add_field(name = 'Создана', value = f'<t:{int(role.created_at.timestamp())}:F>', inline = False)
         emb.add_field(name = 'Показывает участников отдельно?', value = is_hoisted)
         await ctx.send(embed = emb)
 
@@ -150,24 +170,21 @@ class Misc(commands.Cog):
         emb = discord.Embed(color = 0x2f3136, timestamp = discord.utils.utcnow())
         emb.set_author(name = target.display_name if target.id != 694170281270312991 else 'Это я!', icon_url = target.avatar.url)
         emb.add_field(name = 'ID', value = target.id)
-        created_at = (target.created_at + timedelta(hours = 3)).strftime('%d.%m.%Y %H:%M:%S GMT +3')
-        emb.add_field(name = 'Создан', value = created_at, inline = False)
-        if ctx.guild:
-            joined_at = (target.joined_at + timedelta(hours = 3)).strftime('%d.%m.%Y %H:%M:%S GMT +3')
-            emb.add_field(name = 'Вошёл', value = joined_at, inline = False)
         emb.add_field(name = 'Упоминание', value = target.mention)
-        emb.add_field(name = 'Глобальное имя', value = target.name)
-        if target.nick:
-            emb.add_field(name = 'Никнейм', value = target.nick)
-        status_map = {
-            discord.Status.online: 'В сети',
-            discord.Status.dnd: 'Не беспокоить',
-            discord.Status.idle: 'Не активен',
-            discord.Status.offline: 'Не в сети'
-        }
-        emb.add_field(name = 'Статус', value = status_map.get(target.status, 'Неизвестно'))
-        emb.add_field(name = 'Бот?', value = is_bot)
+        emb.add_field(name = 'Создан', value = f'<t:{int(target.created_at.timestamp())}:F>', inline = False)
         if ctx.guild:
+            emb.add_field(name = 'Вошёл', value = f'<t:{int(target.joined_at.timestamp())}:F>', inline = False)
+            emb.add_field(name = 'Глобальное имя', value = target.name)
+            if target.nick:
+                emb.add_field(name = 'Никнейм', value = target.nick)
+            status_map = {
+                discord.Status.online: 'В сети',
+                discord.Status.dnd: 'Не беспокоить',
+                discord.Status.idle: 'Не активен',
+                discord.Status.offline: 'Не в сети'
+            }
+            emb.add_field(name = 'Статус', value = status_map.get(target.status, 'Неизвестно'))
+            emb.add_field(name = 'Бот?', value = is_bot)
             roles = ', '.join([role.name for role in target.roles[1:]])
             if len(roles) > 1:
                 emb.add_field(name = f'Роли ({len(target.roles)-1})', value = roles, inline = False)

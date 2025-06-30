@@ -98,14 +98,14 @@ class Events(commands.Cog):
                 room = 'чё' if member.bot is True else f'Канал {member.display_name}'
             else:
                 room = voice_channel[0]
-            channel = await member.guild.create_voice_channel(name = room, category = after.channel.category, bitrate = bitrate, rtc_region = 'rotterdam')
+            channel = await member.guild.create_voice_channel(name = room, category = after.channel.category, bitrate = bitrate)
             await member.move_to(channel)
             await channel.set_permissions(member, mute_members = True, move_members = True, manage_channels = True)
             def check(a, b, c): return len(channel.members) == 0
             await self.client.wait_for('voice_state_update', check = check)
             cur.execute("INSERT INTO channels (user_id, name) VALUES (%s, %s) ON CONFLICT (user_id) DO UPDATE SET name = %s", (member.id, channel.name, channel.name))
             conn.commit()
-            LOGS.write(f'[DB] {(discord.utils.utcnow() + timedelta(hours = 3)).strftime('%d.%m.%Y %H:%M:%S GMT +3')} Запись в БД voice_channels: {member.id} ({member.display_name}): {channel.name}\n')
+            LOGS.write(f'[DB] {(discord.utils.utcnow() + timedelta(hours = 3)).strftime('%d.%m.%Y %H:%M:%S')} Запись в БД voice_channels: {member.id} ({member.display_name}): {channel.name}\n')
             LOGS.flush()
             conn.close()
             await channel.delete()
@@ -131,10 +131,10 @@ class Events(commands.Cog):
             conn.close()
         if message.content.startswith(f'<@{self.client.user.id}>') and len(message.content) == len(f'<@{self.client.user.id}>'):
             await message.channel.send(f'чё звал {message.author.mention} ||`cy/`||')
-        if message.channel.id == 1345125935636283504 and not message.author.bot:
-            role = discord.utils.get(message.guild.roles, id = 1314332101512007741)
-            sent = await message.channel.send(role.mention)
-            await sent.delete()
+        # if message.channel.id == 1345125935636283504 and not message.author.bot:
+        #     role = discord.utils.get(message.guild.roles, id = 1314332101512007741)
+        #     sent = await message.channel.send(role.mention)
+        #     await sent.delete()
         if message.channel.id == 1041417879788208169:
             if message.author.bot is True and message.author.id != 694170281270312991:
                 role = discord.utils.get(message.guild.roles, id = 1078051320088510644)
@@ -196,6 +196,9 @@ class Events(commands.Cog):
         if isinstance(error, commands.DisabledCommand):
             emb = discord.Embed(description = f'{ctx.author.mention}, команда `{ctx.command.name}` отключена', color = 0xff8000)
             await ctx.send(embed = emb)
+        elif isinstance(error, commands.NoPrivateMessage):
+            emb = discord.Embed(description = f'{ctx.author.mention}, команда `{ctx.command.name}` недоступна в ЛС', color = 0xff8000)
+            await ctx.send(embed = emb)
         elif isinstance(error, commands.NotOwner):
             emb = discord.Embed(description = f'{ctx.author.mention}, это действие может совершить только один из создателей бота', color = 0xff8000)
             await ctx.send(embed = emb)
@@ -216,9 +219,9 @@ class Events(commands.Cog):
             if ctx.command.name == 'clear':
                 await ctx.send('```apache\ncy/clear <количество> [диапазон] [фильтр]\ncy/clear 10\ncy/clear 50 --everyone хыха\ncy/clear 30 --bots\ncy/clear 15 --users\ncy/clear 5 --silent\ncy/clear 200 "--silent --everyone"\n\n--everyone удалит сообщения от всех\n--bots удалит сообщения только от ботов\n--users удалит сообщения только от людей\n--silent не покажет результаты удаления сообщений. Учтите, что если нужно будет подтверждение удаления - оно будет показано\nПри указании фильтра необходимо писать именно то, что написано в сообщении - команда чувствительна к регистру\n\nПри указании диапазона не будет удалено столько сообщений, сколько было указано, будет удалено столько, сколько будет найдено в пределах заданного количества сообщений\nДопустим cy/clear 10 --bots\nЕсли сообщения от ботов и людей чередуются, будет удалено лишь то кол-во сообщений от ботов, что было найдено в указанном пределе 10. Это сделано намеренно, но может быть изменено в будущем\n\nСообщения старше 2 недель будут удалены не сразу - лимит discord API\nПри удалении более 100 сообщений нужно подтверждение владельца сервера.\nТолько владелец сервера может удалять от 250 сообщений за раз.\nНе более 300 за раз!\n\n[] - опционально, <> - обязательно, / - или\nНеобходимы разрешения - права администратора\nБоту необходимы разрешения - управлять сообщениями```')
             elif ctx.command.name == 'say':
-                await ctx.send('```apache\ncy/say [обычный текст] [&t title текст] [&d description текст] [&th ссылка на картинку справа] [&img ссылка на картинку снизу] [&f footer текст] [&c цвет в HEX коде] [&msg сообщение над эмбедом]\ncy/say &t Заголовок &d Описание\ncy/say [текст]\nУчтите, что если вы захотите упомянуть роль с использованием какого либо аргумента текст не будет показан из-за способа упоминания ролей в Discord\nВсе аргументы являются необязательными, но если отправить пустую команду - ответ будет этим сообщением\n\n[] - опционально```')
+                await ctx.send('```apache\ncy/say [обычный текст] [&t title текст] [&d description текст] [&th ссылка на картинку справа] [&img ссылка на картинку снизу] [&f footer текст] [&c цвет в HEX коде] [&msg сообщение над эмбедом] [&b label текст | url ссылка]\ncy/say &t Заголовок &d Описание\ncy/say [текст]\ncy/say &b label FunClub P-sune | url https://discord.gg/rDR4SSt\nВсе аргументы являются необязательными, но если отправить пустую команду - ответом будет это сообщение\n\n[] - опционально```')
             elif ctx.command.name == 'edit':
-                await ctx.send('```apache\ncy/edit <ID> [обычный текст] [&t title текст] [&d description текст] [&f footer текст] [&c цвет в HEX коде] [&th ссылка на картинку справа] [&img ссылка на картинку снизу]\ncy/edit <ID> [текст]\ncy/edit <ID> --clean\ncy/edit <ID> --noembed\ncy/edit <ID> --delete\n\n--clean удалит контент над эмбедом\n--noembed удалит эмбед\n--delete удалит сообщение\n\nИспользование --clean и --noembed одновременно невозможно\nЕсли у сообщения есть эмбед и в команде нет агрументов, автоматически будет заменён &msg\nЗаголовок, описание и цвет будут взяты со старого эмбеда, если таковой имеется и эти аргументы не были указаны\nДля очистки какого-либо поля укажите аргумент и оставьте его пустым:\ncy/edit <ID> &d\nЭто опустошит описание\n\n[] - опционально, <> - обязательно\nНеобходимы разрешения - управлять сообщениями```')
+                await ctx.send('```apache\ncy/edit <ID> [обычный текст] [&t title текст] [&d description текст] [&f footer текст] [&c цвет в HEX коде] [&th ссылка на картинку справа] [&img ссылка на картинку снизу] [&b label текст | url ссылка]\ncy/edit <ID> [текст]\ncy/edit <ID> --clean\ncy/edit <ID> --noembed\ncy/edit <ID> --delete\n\n--clean удалит контент над эмбедом\n--noembed удалит эмбед\n--delete удалит сообщение\n\nИспользование --clean и --noembed одновременно невозможно\nЕсли у сообщения есть эмбед и в команде нет агрументов, автоматически будет заменён &msg\nЗаголовок, описание и цвет будут взяты со старого эмбеда, если таковой имеется и эти аргументы не были указаны\nДля очистки какого-либо поля укажите аргумент и оставьте его пустым:\ncy/edit <ID> &d\nЭто опустошит описание\n\n[] - опционально, <> - обязательно\nНеобходимы разрешения - управлять сообщениями```')
             elif ctx.command.name == 'ban':
                 await ctx.send('```apache\ncy/ban <@пинг/имя/ID> [причина/--soft --reason]\ncy/ban 185476724627210241 --soft --reason лошара\ncy/ban @сасиска чмо\ncy/ban @крипочек --soft\n\nПри использовании --soft обязательно указывать --reason __после__ него, однако можно не использовать --reason\ncy/ban adamant --soft --reason упырь\n\n[] - опционально, <> - обязательно, / - или\nНеобходимы разрешения - банить участников```')
             else:
