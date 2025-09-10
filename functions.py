@@ -111,32 +111,43 @@ def get_plural_form(number: int, words: list[str]) -> str:
     if number % 10 >= 2 and number % 10 <= 4 and (number % 100 < 10 or number % 100 >= 20): return words[1]
     return words[2]
 
-def parse_members(args_list: list[str] | str) -> argparse.Namespace:
+def parse_flags(flags_list: str) -> argparse.Namespace:
     """
-    Parses a list of arguments or a string of arguments into a Namespace object.
+    Parses a string of command-line-like flags into an argparse.Namespace object.
 
     Parameters
     ----------
-    args_list: list[str] | str
-        A list of arguments or a string containing the arguments.
+    flags_list: str
+        A string containing command-line-like flags that specify options for processing.
 
     Returns
     -------
     argparse.Namespace
-        A Namespace object with parsed arguments as attributes.
+        A Namespace object where each flag is an attribute with corresponding values.
 
     Notes
     -----
-    - If both `--users` and `--bots` are specified, `--everyone` will be set to True.
+    - The function supports flags for including all members, users, or bot members.
+    - If `--users` and `--bots` are both present, the `--everyone` flag is automatically set to True.
+    - If neither `--users`, `--bots`, nor `--everyone` is explicitly set, `--everyone` defaults to True.
+    - Additional flags include options for silent mode, exact string matching, substring containment, and content types like embeds, attachments, and stickers.
     """
-    if isinstance(args_list, str):
-        args_list = args_list.split()
+
+    import shlex
+    flags_list = shlex.split(flags_list)
     parser = argparse.ArgumentParser()
-    parser.add_argument('-e', '--everyone', action = 'store_true', help = 'Include all members')
-    parser.add_argument('-u', '--users', action = 'store_true', help = 'Include user members')
-    parser.add_argument('-b', '--bots', action = 'store_true', help = 'Include bot members')
-    parser.add_argument('-s', '--silent', action = 'store_true', help = 'Silent mode for results')
-    args, _ = parser.parse_known_args(args_list)
-    if args.users and args.bots:
-        args.everyone = True
-    return args
+    parser.add_argument('-e', '--everyone', type = bool, action = 'store_true', help = 'Include all members')
+    parser.add_argument('-u', '--users', type = bool, action = 'store_true', help = 'Include user members')
+    parser.add_argument('-b', '--bots', type = bool, action = 'store_true', help = 'Include bot members')
+    parser.add_argument('-s', '--silent', type = bool, action = 'store_true', help = 'Silent mode for results')
+    parser.add_argument('-x', '--exact', type = str, default = False, help = 'Exact string')
+    parser.add_argument('-c', '--contains', type = str, default = False, help = 'Contains substring')
+    parser.add_argument('-E', '--embeds', type = bool, action = 'store_true', help = 'Has embeds')
+    parser.add_argument('-A', '--attachments', type = bool, action = 'store_true', help = 'Has attachments')
+    parser.add_argument('-S', '--stickers', type = bool, action = 'store_true', help = 'Has stickers')
+    flags, _ = parser.parse_known_args(flags_list)
+    if flags.users and flags.bots:
+        flags.everyone = True
+    if not any([flags.bots, flags.users, flags.everyone]):
+        flags.everyone = True
+    return flags

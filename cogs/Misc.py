@@ -1,8 +1,8 @@
 import random
 
 import discord
-from datetime import timedelta
 from discord.ext import commands
+from cogs.Constants import colors
 
 class Misc(commands.Cog):
     def __init__(self, client):
@@ -23,7 +23,7 @@ class Misc(commands.Cog):
             if member.id != 338714886001524737:
                 members[member] = random.randint(0, 100)
                 result += f'{member.mention} - `{members[member]}`\n'
-        await ctx.send(embed = discord.Embed(description = f'{result}\n\nПобедил {max(members, key = members.get).mention}', color = 0xff8000))
+        await ctx.send(embed = discord.Embed(description = f'{result}\n\nПобедил {max(members, key = members.get).mention}', color = colors.JDH))
 
     @commands.command()
     @commands.cooldown(1, 5, commands.BucketType.user)
@@ -31,21 +31,21 @@ class Misc(commands.Cog):
         if not first and not second:
             rand = random.randint(0, 100)
             if rand == 42:
-                await ctx.send(embed = discord.Embed(description = f'{ctx.author.display_name} получает случайное число (0-100)\n`100`', color = 0xff8000))
+                await ctx.send(embed = discord.Embed(description = f'{ctx.author.display_name} получает случайное число (0-100)\n`100`', color = colors.JDH))
             else:
                 rand1 = random.randint(0, 9)
                 rand2 = random.randint(0, 9)
-                await ctx.send(embed = discord.Embed(description = f'{ctx.author.display_name} получает случайное число (0-100)\n`0{rand1}{rand2}`', color = 0xff8000))
+                await ctx.send(embed = discord.Embed(description = f'{ctx.author.display_name} получает случайное число (0-100)\n`0{rand1}{rand2}`', color = colors.JDH))
         if first and not second:
             if '-' in first:
                 [first, second] = first.split('-')
                 first, second = int(first), int(second)
                 if first > second:
-                    return await ctx.send(embed = discord.Embed(description = f'{ctx.author.display_name} получает случайное число ({first}-{first})\n`{first}`', color = 0xff8000))
+                    return await ctx.send(embed = discord.Embed(description = f'{ctx.author.display_name} получает случайное число ({first}-{first})\n`{first}`', color = colors.JDH))
                 rand = random.randint(first, second)
-                await ctx.send(embed = discord.Embed(description = f'{ctx.author.display_name} получает случайное число ({first}-{second})\n`{rand}`', color = 0xff8000))
+                await ctx.send(embed = discord.Embed(description = f'{ctx.author.display_name} получает случайное число ({first}-{second})\n`{rand}`', color = colors.JDH))
             if first == 'adamant':
-                await ctx.send(embed = discord.Embed(description = f'{ctx.author.display_name} получает случайное число \n`5 6 4 7 0 -9 9 2 π √2 Ω א`', color = 0xff8000))
+                await ctx.send(embed = discord.Embed(description = f'{ctx.author.display_name} получает случайное число \n`5 6 4 7 0 -9 9 2 π √2 Ω א`', color = colors.JDH))
             if 'd' in first:
                 [dice_amount, dice_edges] = first.split('d')
                 dice_amount, dice_edges = int(dice_amount), int(dice_edges)
@@ -53,14 +53,14 @@ class Misc(commands.Cog):
                     return await self.coinflip(ctx)
                 if ctx.author.id not in self.client.owner_ids:
                     if dice_amount > 20:
-                        return await ctx.send(embed = discord.Embed(description = 'Нельзя бросить больше 20 дайсов', color = 0xff0000))
+                        return await ctx.send(embed = discord.Embed(description = 'Нельзя бросить больше 20 дайсов', color = colors.ERROR))
                     if dice_edges > 20:
-                        return await ctx.send(embed = discord.Embed(description = 'Вы не можете кинуть дайс с большим количеством граней, чем 20', color = 0xff8000))
+                        return await ctx.send(embed = discord.Embed(description = 'Вы не можете кинуть дайс с большим количеством граней, чем 20', color = colors.JDH))
                 else:
                     if dice_amount > 100:
-                        return await ctx.send(embed = discord.Embed(description = 'Нельзя бросить больше 100 дайсов', color = 0xff0000))
+                        return await ctx.send(embed = discord.Embed(description = 'Нельзя бросить больше 100 дайсов', color = colors.ERROR))
                     if dice_edges > 100:
-                        return await ctx.send(embed = discord.Embed(description = 'Вы не можете кинуть дайс с большим количеством граней, чем 100', color = 0xff8000))
+                        return await ctx.send(embed = discord.Embed(description = 'Вы не можете кинуть дайс с большим количеством граней, чем 100', color = colors.JDH))
                 if dice_amount > 1:
                     results = ''
                     result = 0
@@ -76,31 +76,31 @@ class Misc(commands.Cog):
                         total = ', критический провал'
                     if res == 20:
                         total = ', критический успех!'
-                    return await ctx.send(embed = discord.Embed(description = f'Получено случайное число: `{res}`{total}', color = 0xff8000))
-                await ctx.send(embed = discord.Embed(description = results, color = 0xff8000))
+                    return await ctx.send(embed = discord.Embed(description = f'Получено случайное число: `{res}`{total}', color = colors.JDH))
+                await ctx.send(embed = discord.Embed(description = results, color = colors.JDH))
             else:
                 first = int(first)
                 rand = random.randint(0, first)
-                await ctx.send(embed = discord.Embed(description = f'{ctx.author.display_name} получает случайное число (0-{first})\n`{rand:>02}`', color=0xff8000))
+                await ctx.send(embed = discord.Embed(description = f'{ctx.author.display_name} получает случайное число (0-{first})\n`{rand:>02}`', color=colors.JDH))
         if (first and second) or (first == 0 and second):
             first = int(first)
             if first > second:
-                return await ctx.send(embed = discord.Embed(description = f'{ctx.author.display_name} получает случайное число ({first}-{first})\n`{first}`', color = 0xff8000))
+                return await ctx.send(embed = discord.Embed(description = f'{ctx.author.display_name} получает случайное число ({first}-{first})\n`{first}`', color = colors.JDH))
             rand = random.randint(first, second)
-            await ctx.send(embed = discord.Embed(description = f'{ctx.author.display_name} получает случайное число ({first}-{second})\n`{rand}`', color = 0xff8000))
+            await ctx.send(embed = discord.Embed(description = f'{ctx.author.display_name} получает случайное число ({first}-{second})\n`{rand}`', color = colors.JDH))
 
     @commands.command(aliases = ['c', 'coin'])
     @commands.cooldown(1, 5, commands.BucketType.user)
     async def coinflip(self, ctx: commands.Context):
         coin = random.choice(['ОРЁЛ', 'РЕШКА'])
-        await ctx.send(embed = discord.Embed(description = f'{ctx.author.mention} подбрасывает монетку: {coin}', color = 0xff8000))
+        await ctx.send(embed = discord.Embed(description = f'{ctx.author.mention} подбрасывает монетку: {coin}', color = colors.JDH))
 
     @commands.command()
     @commands.cooldown(1, 15, commands.BucketType.user)
     @commands.guild_only()
     async def someone(self, ctx: commands.Context, *, text):
         member = random.choice(ctx.channel.members)
-        emb = discord.Embed(description = f'{text}', color =  0x2f3136, timestamp = discord.utils.utcnow())
+        emb = discord.Embed(description = f'{text}', color =  colors.DEFAULT, timestamp = discord.utils.utcnow())
         emb.set_author(name = ctx.author.display_name, icon_url = ctx.author.avatar.url)
         return await ctx.send(f'@someone ||{member.mention}||', embed = emb)
 
@@ -108,7 +108,7 @@ class Misc(commands.Cog):
     @commands.cooldown(1, 5, commands.BucketType.user)
     @commands.guild_only()
     async def rolemembers(self, ctx: commands.Context, role: discord.Role):
-        emb = discord.Embed(color = 0xff8000)
+        emb = discord.Embed(color = colors.JDH)
         if len(role.members) != 0:
             emb.add_field(name = f'Участники с ролью {role} ({len(role.members)})', value = ', '.join([member.mention for member in role.members]))
         else:
@@ -120,7 +120,7 @@ class Misc(commands.Cog):
     @commands.guild_only()
     async def serverinfo(self, ctx: commands.Context):
         guild = ctx.guild
-        emb = discord.Embed(color = 0x2f3136, timestamp = discord.utils.utcnow())
+        emb = discord.Embed(color = colors.DEFAULT, timestamp = discord.utils.utcnow())
         emb.set_author(name = guild, icon_url = guild.icon.url if guild.icon else None)
         emb.add_field(name = 'ID сервера', value = guild.id)
         emb.add_field(name = 'Владелец', value = guild.owner.mention)
@@ -140,7 +140,7 @@ class Misc(commands.Cog):
         is_mentionable = 'Да' if role.mentionable else 'Нет'
         is_managed = 'Да' if role.managed else 'Нет'
         is_hoisted = 'Да' if role.hoist else 'Нет'
-        emb = discord.Embed(title = role.name, color = 0x2f3136)
+        emb = discord.Embed(title = role.name, color = colors.DEFAULT)
         emb.add_field(name = 'ID', value = role.id)
         emb.add_field(name = 'Цвет', value = role.color)
         emb.add_field(name = 'Упоминается?', value = is_mentionable)
@@ -154,7 +154,7 @@ class Misc(commands.Cog):
     @commands.cooldown(1, 5, commands.BucketType.user)
     async def avatar(self, ctx: commands.Context, member: discord.User = None):
         member = member if member else ctx.author
-        emb = discord.Embed(color = 0x2f3136)
+        emb = discord.Embed(color = colors.DEFAULT)
         if not member.avatar.is_animated():
             emb.set_image(url = member.avatar.with_format('png'))
         else:
@@ -167,7 +167,7 @@ class Misc(commands.Cog):
     async def about(self, ctx: commands.Context, member: discord.Member = None):
         target = member if member else ctx.author
         is_bot = 'Да' if target.bot else 'Нет'
-        emb = discord.Embed(color = 0x2f3136, timestamp = discord.utils.utcnow())
+        emb = discord.Embed(color = colors.DEFAULT, timestamp = discord.utils.utcnow())
         emb.set_author(name = target.display_name if target.id != 694170281270312991 else 'Это я!', icon_url = target.avatar.url)
         emb.add_field(name = 'ID', value = target.id)
         emb.add_field(name = 'Упоминание', value = target.mention)

@@ -3,6 +3,7 @@ import discord
 import random
 from discord import app_commands
 from discord.ext import commands
+from cogs.Constants import colors
 
 class sFun(commands.Cog):
 
@@ -48,9 +49,9 @@ class sFun(commands.Cog):
     async def aghanim(self, interaction: discord.Interaction):
         rand = random.randint(1, 40)
         if rand >= 15:
-            await interaction.response.send_message(embed = discord.Embed(description = f'Ого! Твой аганим длиной аж {rand} см!', color = 0xff8000))
+            await interaction.response.send_message(embed = discord.Embed(description = f'Ого! Твой аганим длиной аж {rand} см!', color = colors.JDH))
         else:
-            await interaction.response.send_message(embed = discord.Embed(description = f'Длина твоего аганима {rand} см, лошара', color = 0xff8000))
+            await interaction.response.send_message(embed = discord.Embed(description = f'Длина твоего аганима {rand} см, лошара', color = colors.JDH))
     
     @app_commands.command(description = 'Саня')
     async def sanya(self, interaction: discord.Interaction):

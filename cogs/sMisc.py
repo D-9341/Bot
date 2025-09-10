@@ -1,9 +1,9 @@
-import os
 import random
 
 import discord
 from discord import app_commands
 from discord.ext import commands
+from cogs.Constants import colors
 
 class sMisc(commands.Cog):
     def __init__(self, client):
@@ -19,40 +19,40 @@ class sMisc(commands.Cog):
         if not first and not second:
             rand = random.randint(0, 100)
             if rand == 69:
-                await interaction.response.send_message(embed = discord.Embed(description = f'`{interaction.user} получает случайное число (0-100)\n100`', color = 0xff8000))
+                await interaction.response.send_message(embed = discord.Embed(description = f'`{interaction.user} получает случайное число (0-100)\n100`', color = colors.JDH))
             else:
                 rand1 = random.randint(0, 9)
                 rand2 = random.randint(0, 9)
-                await interaction.response.send_message(embed = discord.Embed(description = f'`{interaction.user} получает случайное число (0-100)\n0{rand1}{rand2}`', color = 0xff8000))
+                await interaction.response.send_message(embed = discord.Embed(description = f'`{interaction.user} получает случайное число (0-100)\n0{rand1}{rand2}`', color = colors.JDH))
         if first and not second:
             rand = random.randint(0, first)
             if first < 10:
-                await interaction.response.send_message(embed = discord.Embed(description = f'`{interaction.user} получает случайное число (0-{first})\n0{rand}`', color = 0xff8000))
+                await interaction.response.send_message(embed = discord.Embed(description = f'`{interaction.user} получает случайное число (0-{first})\n0{rand}`', color = colors.JDH))
             else:
-                await interaction.response.send_message(embed = discord.Embed(description = f'`{interaction.user} получает случайное число (0-{first})\n{rand}`', color = 0xff8000))
+                await interaction.response.send_message(embed = discord.Embed(description = f'`{interaction.user} получает случайное число (0-{first})\n{rand}`', color = colors.JDH))
         if not first and second:
             rand = random.randint(0, second)
             if second < 10:
-                await interaction.response.send_message(embed = discord.Embed(description = f'`{interaction.user} получает случайное число (0-{second})\n0{rand}`', color = 0xff8000))
+                await interaction.response.send_message(embed = discord.Embed(description = f'`{interaction.user} получает случайное число (0-{second})\n0{rand}`', color = colors.JDH))
             else:
-                await interaction.response.send_message(embed = discord.Embed(description = f'`{interaction.user} получает случайное число (0-{second})\n{rand}`', color = 0xff8000))
+                await interaction.response.send_message(embed = discord.Embed(description = f'`{interaction.user} получает случайное число (0-{second})\n{rand}`', color = colors.JDH))
         if first and second:
             if first > second:
                 rand = random.randint(first, first)
-                await interaction.response.send_message(embed = discord.Embed(description = f'`{interaction.user} получает случайное число ({first}-{first})\n{rand}`', color = 0xff8000))
+                await interaction.response.send_message(embed = discord.Embed(description = f'`{interaction.user} получает случайное число ({first}-{first})\n{rand}`', color = colors.JDH))
             rand = random.randint(first, second)
-            await interaction.response.send_message(embed = discord.Embed(description = f'`{interaction.user} получает случайное число ({first}-{second})\n{rand}`', color = 0xff8000))
+            await interaction.response.send_message(embed = discord.Embed(description = f'`{interaction.user} получает случайное число ({first}-{second})\n{rand}`', color = colors.JDH))
 
     @app_commands.command(description = 'Подбрасывает монетку')
     async def coinflip(self, interaction: discord.Interaction):
         coin = random.choice(['ОРЁЛ', 'РЕШКА'])
-        await interaction.response.send_message(embed = discord.Embed(description = f'{interaction.user.mention} подбрасывает монетку: {coin}', color = 0xff8000))
+        await interaction.response.send_message(embed = discord.Embed(description = f'{interaction.user.mention} подбрасывает монетку: {coin}', color = colors.JDH))
 
     @app_commands.command(description = 'Показывает участников с определённой ролью')
     @app_commands.describe(role = 'Роль')
     @app_commands.allowed_contexts(guilds = True, dms = False)
     async def rolemembers(self, interaction: discord.Interaction, role: discord.Role):
-        emb = discord.Embed(color = 0xff8000)
+        emb = discord.Embed(color = colors.JDH)
         if len(role.members) != 0:
             emb.add_field(name = f'Участники с ролью {role} ({len(role.members)})', value = ', '.join([member.mention for member in role.members]))
         else:
@@ -63,7 +63,7 @@ class sMisc(commands.Cog):
     @app_commands.allowed_contexts(guilds = True, dms = False)
     async def guild(self, interaction: discord.Interaction):
         guild = interaction.guild
-        emb = discord.Embed(color = 0x2f3136, timestamp = discord.utils.utcnow())
+        emb = discord.Embed(color = colors.DEFAULT, timestamp = discord.utils.utcnow())
         emb.set_author(name = guild, icon_url = guild.icon.url if guild.icon else 'https://cdn.discordapp.com/attachments/685176670344183836/1076601210485866546/76923ec8de0a6ca5.png')
         emb.add_field(name = 'ID сервера', value = guild.id)
         emb.add_field(name = 'Владелец', value = guild.owner.mention)
@@ -84,7 +84,7 @@ class sMisc(commands.Cog):
         is_mentionable = 'Да' if role.mentionable else 'Нет'
         is_managed = 'Да' if role.managed else 'Нет'
         is_hoisted = 'Да' if role.hoist else 'Нет'
-        emb = discord.Embed(title = role.name, color = 0x2f3136)
+        emb = discord.Embed(title = role.name, color = colors.DEFAULT)
         emb.add_field(name = 'ID', value = role.id)
         emb.add_field(name = 'Цвет', value = role.color)
         emb.add_field(name = 'Упоминается?', value = is_mentionable)
@@ -99,7 +99,7 @@ class sMisc(commands.Cog):
     @app_commands.describe(member = 'Пользователь. Оставьте пустым, чтобы показать ваш аватар')
     async def avatar(self, interaction: discord.Interaction, member: discord.User = None):
         member = member if member else interaction.user
-        emb = discord.Embed(color = 0x2f3136)
+        emb = discord.Embed(color = colors.DEFAULT)
         if not member.avatar.is_animated():
             emb.set_image(url = member.avatar.with_format('png'))
         else:
@@ -113,7 +113,7 @@ class sMisc(commands.Cog):
     async def about(self, interaction: discord.Interaction, member: discord.Member = None):
         member = member if member else interaction.user
         bot = 'Да' if member.bot else 'Нет'
-        emb = discord.Embed(color = 0x2f3136, timestamp = discord.utils.utcnow())
+        emb = discord.Embed(color = colors.DEFAULT, timestamp = discord.utils.utcnow())
         emb.set_author(name = member.display_name)
         emb.add_field(name = 'ID', value = member.id)
         d = member.created_at.strftime('%d.%m.%Y %H:%M:%S UTC')

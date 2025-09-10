@@ -1,6 +1,7 @@
 import discord
 from discord import app_commands
 from discord.ext import commands
+from cogs.Constants import colors
 
 botversions = [764882153812787250, 694170281270312991, 762015251264569352]
 
@@ -36,7 +37,7 @@ class sEmbeds(commands.Cog):
             elif i.strip().lower().startswith('f'):
                 footer = i.strip()[1:].strip()
         if color == None:
-            color = 0x2f3136
+            color = colors.DEFAULT
         else:
             color = int('0x' + color.lstrip('#'), 16)
         emb = discord.Embed(title = title, description = description, color = color)
@@ -108,7 +109,7 @@ class sEmbeds(commands.Cog):
             if author is None:
                 author = interaction.user
             if message.embeds == [] or color is None:
-                color = 0x2f3136
+                color = colors.DEFAULT
             elif message.embeds != [] and '&c' not in msg:
                 color = message.embeds[0].color
             else:

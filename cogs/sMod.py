@@ -4,6 +4,7 @@ import discord
 from functions import translate, get_locale
 from discord import app_commands
 from discord.ext import commands
+from cogs.Constants import colors
 
 class sMod(commands.Cog):
     def __init__(self, client):
@@ -19,7 +20,7 @@ class sMod(commands.Cog):
     @app_commands.allowed_contexts(guilds = True, dms = False)
     async def dm(self, interaction: discord.Interaction, member: discord.Member, * , text: str):
         locale = get_locale(interaction.user.id)
-        emb = discord.Embed(description = f'{text}', color = 0x2f3136)
+        emb = discord.Embed(description = f'{text}', color = colors.DEFAULT)
         emb.set_author(name = interaction.user, icon_url = interaction.user.avatar.url)
         await member.send(embed = emb)
         await interaction.response.send_message(embed = discord.Embed(description = translate(locale, 'dm')))
@@ -38,26 +39,26 @@ class sMod(commands.Cog):
                 emb = discord.Embed(description = translate(locale, 'kick_member_is_author') , color = discord.Color.blurple())
                 return await interaction.send(embed = emb)
             if interaction.user.top_role == member.top_role:
-                emb = discord.Embed(description = f'{translate(locale, "kick_member_top_eq_author")}'.format(author_mention = interaction.user.mention, member_mention = member.mention), color = 0xff8000)
+                emb = discord.Embed(description = f'{translate(locale, "kick_member_top_eq_author")}'.format(author_mention = interaction.user.mention, member_mention = member.mention), color = colors.JDH)
                 await interaction.send(embed = emb)
             elif member.top_role > interaction.user.top_role:
-                emb = discord.Embed(description = f'{translate(locale, "kick_member_top_gt_author")}'.format(author_mention = interaction.user.mention, member_mention = member.mention), color = 0xff8000)
+                emb = discord.Embed(description = f'{translate(locale, "kick_member_top_gt_author")}'.format(author_mention = interaction.user.mention, member_mention = member.mention), color = colors.JDH)
                 await interaction.send(embed = emb)
             elif member.top_role == bot.top_role:
-                emb = discord.Embed(description = f'{translate(locale, "kick_member_top_eq_bot")}'.format(author_mention = interaction.user.mention, member_mention = member.mention), color = 0xff0000)
+                emb = discord.Embed(description = f'{translate(locale, "kick_member_top_eq_bot")}'.format(author_mention = interaction.user.mention, member_mention = member.mention), color = colors.ERROR)
                 await interaction.send(embed = emb)
             elif member.top_role > bot.top_role:
-                emb = discord.Embed(description = f'{translate(locale, "kick_member_top_gt_bot")}'.format(author_mention = interaction.user.mention, member_mention = member.mention), color = 0xff0000)
+                emb = discord.Embed(description = f'{translate(locale, "kick_member_top_gt_bot")}'.format(author_mention = interaction.user.mention, member_mention = member.mention), color = colors.ERROR)
                 await interaction.send(embed = emb)
             else:
-                emb = discord.Embed(color = 0xff8000)
+                emb = discord.Embed(color = colors.JDH)
                 emb.set_author(name = interaction.user.display_name, icon_url = interaction.user.avatar.url)
                 emb.add_field(name = 'Был кикнут', value = member.mention)
                 emb.add_field(name = 'По причине', value = reason)
                 await interaction.send(embed = emb)
                 await member.kick(reason = reason)
         else:
-            emb = discord.Embed(description = f'{translate(locale, "kick_attempt_to_kick_dev")}'.format(author_mention = interaction.user.mention), color = 0xff0000)
+            emb = discord.Embed(description = f'{translate(locale, "kick_attempt_to_kick_dev")}'.format(author_mention = interaction.user.mention), color = colors.ERROR)
             await interaction.send(embed = emb)
 
     @app_commands.command(description = 'Блокирует участника')
@@ -74,19 +75,19 @@ class sMod(commands.Cog):
                 emb = discord.Embed(description = f'{translate(locale, "ban_member_is_author")}', color = discord.Color.blurple())
                 return await interaction.send(embed = emb)
             if interaction.user.top_role == member.top_role:
-                emb = discord.Embed(description = f'{translate(locale, "ban_member_top_eq_author")}'.format(author_mention = interaction.user.mention, member_mention = member.mention), color = 0xff8000)
+                emb = discord.Embed(description = f'{translate(locale, "ban_member_top_eq_author")}'.format(author_mention = interaction.user.mention, member_mention = member.mention), color = colors.JDH)
                 await interaction.send(embed = emb)
             elif member.top_role > interaction.user.top_role:
-                emb = discord.Embed(description = f'{translate(locale, "ban_member_top_gt_author")}'.format(author_mention = interaction.user.mention, member_mention = member.mention), color = 0xff8000)
+                emb = discord.Embed(description = f'{translate(locale, "ban_member_top_gt_author")}'.format(author_mention = interaction.user.mention, member_mention = member.mention), color = colors.JDH)
                 await interaction.send(embed = emb)
             elif member.top_role == bot.top_role:
-                emb = discord.Embed(description = f'{translate(locale, "ban_member_top_eq_bot")}'.format(author_mention = interaction.user.mention, member_mention = member.mention), color = 0xff0000)
+                emb = discord.Embed(description = f'{translate(locale, "ban_member_top_eq_bot")}'.format(author_mention = interaction.user.mention, member_mention = member.mention), color = colors.ERROR)
                 await interaction.send(embed = emb)
             elif member.top_role > bot.top_role:
-                emb = discord.Embed(description = f'{translate(locale, "ban_member_top_gt_bot")}'.format(author_mention = interaction.user.mention, member_mention = member.mention), color = 0xff0000)
+                emb = discord.Embed(description = f'{translate(locale, "ban_member_top_gt_bot")}'.format(author_mention = interaction.user.mention, member_mention = member.mention), color = colors.ERROR)
                 await interaction.send(embed = emb)
             else:
-                emb = discord.Embed(color = 0xff8000)
+                emb = discord.Embed(color = colors.JDH)
                 emb.set_author(name = interaction.user, icon_url = interaction.user.avatar.url)
                 emb.add_field(name = 'Упрощённо забанен' if '--soft' in reason else 'Забанен', value = f'{member.mention} ({member.display_name})')
                 if '--reason' in reason:
@@ -97,7 +98,7 @@ class sMod(commands.Cog):
                 if '--soft' in reason:
                     await member.unban(reason = '--softban')
         else:
-            emb = discord.Embed(description = f'{translate(locale, "ban_attempt_to_ban_dev")}'.format(author_mention = interaction.user.mention), color = 0xff0000)
+            emb = discord.Embed(description = f'{translate(locale, "ban_attempt_to_ban_dev")}'.format(author_mention = interaction.user.mention), color = colors.ERROR)
             await interaction.send(embed = emb)
 
     @app_commands.command(description = 'Выдаёт участнику роль')
@@ -110,34 +111,34 @@ class sMod(commands.Cog):
         if role.name == 'Muted' or role.name == 'Deafened':
             if member.id not in self.client.owner_ids:
                 if member == interaction.user:
-                    emb = discord.Embed(description = f'{translate(locale, "attempt_to_mute_self")}', color = 0xff0000)
+                    emb = discord.Embed(description = f'{translate(locale, "attempt_to_mute_self")}', color = colors.ERROR)
                     return await interaction.send(embed = emb)
                 else:
                     await member.add_roles(role)
-                    emb = discord.Embed(description = f'{translate(locale, "give_mute")}'.format(author_mention = interaction.user.mention, member_mention = member.mention), color = 0x2f3136)
+                    emb = discord.Embed(description = f'{translate(locale, "give_mute")}'.format(author_mention = interaction.user.mention, member_mention = member.mention), color = colors.DEFAULT)
                     return await interaction.send(embed = emb)
             else:
-                emb = discord.Embed(description = translate(locale, "give_attempt_to_mute_dev"), color = 0xff0000)
+                emb = discord.Embed(description = translate(locale, "give_attempt_to_mute_dev"), color = colors.ERROR)
                 return await interaction.send(embed = emb)
         else:
             if role > interaction.user.top_role:
-                emb = discord.Embed(description = f'{translate(locale, "give_role_gt_author_top")}'.format(role_mention = role.mention), color = 0xff8000)
+                emb = discord.Embed(description = f'{translate(locale, "give_role_gt_author_top")}'.format(role_mention = role.mention), color = colors.JDH)
                 await interaction.send(embed = emb)
             elif role == interaction.user.top_role:
-                emb = discord.Embed(description = f'{translate(locale, "give_role_eq_author_top")}'.format(role_mention = role.mention), color = 0xff8000)
+                emb = discord.Embed(description = f'{translate(locale, "give_role_eq_author_top")}'.format(role_mention = role.mention), color = colors.JDH)
                 await interaction.send(embed = emb)
             elif role > bot.top_role:
-                emb = discord.Embed(description = f'{translate(locale, "give_role_gt_bot_top")}'.format(role_mention = role.mention), color = 0xff0000)
+                emb = discord.Embed(description = f'{translate(locale, "give_role_gt_bot_top")}'.format(role_mention = role.mention), color = colors.ERROR)
                 await interaction.send(embed = emb)
             elif role == bot.top_role:
-                emb = discord.Embed(description = f'{translate(locale, "give_role_eq_bot_top")}'.format(role_mention = role.mention), color = 0xff0000)
+                emb = discord.Embed(description = f'{translate(locale, "give_role_eq_bot_top")}'.format(role_mention = role.mention), color = colors.ERROR)
                 await interaction.send(embed = emb)
             elif role.is_default():
-                emb = discord.Embed(description = translate(locale, "give_everyone"), color = 0xff8000)
+                emb = discord.Embed(description = translate(locale, "give_everyone"), color = colors.JDH)
                 await interaction.send(embed = emb)
             else:
                 await member.add_roles(role)
-                emb = discord.Embed(color = 0xff8000, timestamp = discord.utils.utcnow())
+                emb = discord.Embed(color = colors.JDH, timestamp = discord.utils.utcnow())
                 emb.add_field(name = 'ВЫДАНА_РОЛЬ', value = f'{role.mention} | {role.name} | {role.id}')
                 emb.add_field(name = 'ВЫДАНА:', value = member.mention, inline = False)
                 emb.set_author(name = interaction.user.display_name, icon_url = interaction.user.avatar.url)
@@ -152,26 +153,26 @@ class sMod(commands.Cog):
         bot = interaction.guild.get_member(self.client.user.id)
         if role.name == 'Muted' or role.name == 'Deafened':
             await member.remove_roles(role)
-            emb = discord.Embed(description = f'{translate(locale, "take_mute")}'.format(author_mention = interaction.user.mention, member_mention = member.mention), color = 0xff8000)
+            emb = discord.Embed(description = f'{translate(locale, "take_mute")}'.format(author_mention = interaction.user.mention, member_mention = member.mention), color = colors.JDH)
             return await interaction.send(embed = emb)
         if role > interaction.user.top_role:
-            emb = discord.Embed(description = f'{translate(locale, "take_role_gt_author_top")}'.format(role_mention = role.mention), color = 0x2f3136)
+            emb = discord.Embed(description = f'{translate(locale, "take_role_gt_author_top")}'.format(role_mention = role.mention), color = colors.DEFAULT)
             await interaction.send(embed = emb)
         elif role == interaction.user.top_role:
-            emb = discord.Embed(description = f'{translate(locale, "take_role_eq_author_top")}'.format(role_mention = role.mention), color = 0x2f3136)
+            emb = discord.Embed(description = f'{translate(locale, "take_role_eq_author_top")}'.format(role_mention = role.mention), color = colors.DEFAULT)
             await interaction.send(embed = emb)
         elif role > bot.top_role:
-            emb = discord.Embed(description = f'{translate(locale, "take_role_gt_bot_top")}'.format(role_mention = role.mention), color = 0xff0000)
+            emb = discord.Embed(description = f'{translate(locale, "take_role_gt_bot_top")}'.format(role_mention = role.mention), color = colors.ERROR)
             await interaction.send(embed = emb)
         elif role == bot.top_role:
-            emb = discord.Embed(description = f'{translate(locale, "take_role_eq_bot_top")}'.format(role_mention = role.mention), color = 0xff0000)
+            emb = discord.Embed(description = f'{translate(locale, "take_role_eq_bot_top")}'.format(role_mention = role.mention), color = colors.ERROR)
             await interaction.send(embed = emb)
         elif role.is_default():
             emb = discord.Embed(description = translate(locale, "take_everyone"), color = 0xffffff)
             await interaction.send(embed = emb)
         else:
             await member.remove_roles(role)
-            emb = discord.Embed(color = 0xff8000, timestamp = discord.utils.utcnow())
+            emb = discord.Embed(color = colors.JDH, timestamp = discord.utils.utcnow())
             emb.add_field(name = 'ЗАБРАНА_РОЛЬ', value = f'{role.mention} | {role.name} | {role.id}')
             emb.add_field(name = 'ЗАБРАНА_У:', value = member.mention, inline = False)
             emb.set_author(name = interaction.user.display_name, icon_url = interaction.user.avatar.url)
@@ -187,28 +188,28 @@ class sMod(commands.Cog):
             reason = translate(locale, 'reason')
         role = discord.utils.get(interaction.guild.roles, name = 'Muted')
         if role in member.roles:
-            emb = discord.Embed(description = translate(locale, "mute_member_has_role"), color = 0x2f3136)
+            emb = discord.Embed(description = translate(locale, "mute_member_has_role"), color = colors.DEFAULT)
             return await interaction.send(embed = emb)
         if member == interaction.user:
             emb = discord.Embed(description = translate(locale, "attempt_to_mute_self"), color = discord.Color.blurple())
             return await interaction.send(embed = emb)
         if member.id not in self.client.owner_ids:
             if interaction.user.top_role == member.top_role:
-                emb = discord.Embed(description = f'{translate(locale, "mute_member_top_eq_author_top")}'.format(author_mention = interaction.user.mention, member_mention = member.mention), color = 0xff8000)
+                emb = discord.Embed(description = f'{translate(locale, "mute_member_top_eq_author_top")}'.format(author_mention = interaction.user.mention, member_mention = member.mention), color = colors.JDH)
                 await interaction.send(embed = emb)
             elif interaction.user.top_role < member.top_role:
-                emb = discord.Embed(description = f'{translate(locale, "mute_member_top_gt_author_top")}'.format(author_mention = interaction.user.mention, member_mention = member.mention), color = 0xff8000)
+                emb = discord.Embed(description = f'{translate(locale, "mute_member_top_gt_author_top")}'.format(author_mention = interaction.user.mention, member_mention = member.mention), color = colors.JDH)
                 await interaction.send(embed = emb)
             else:
                 if not role:
                     role = await interaction.guild.create_role(name = 'Muted', color = 0x000001, reason = 'Создано автоматически командой mute')
                 await member.add_roles(role)
-                emb = discord.Embed(color = 0xff8000, timestamp = discord.utils.utcnow())
+                emb = discord.Embed(color = colors.JDH, timestamp = discord.utils.utcnow())
                 emb.add_field(name = 'Заглушён', value = f'{member.mention}')
                 emb.add_field(name = 'Причина', value = reason)
                 await interaction.send(embed = emb)
         else:
-            emb = discord.Embed(description = f'{translate(locale, "attempt_to_mute_dev")}'.format(author_mention = interaction.user.mention), color = 0xff0000)
+            emb = discord.Embed(description = f'{translate(locale, "attempt_to_mute_dev")}'.format(author_mention = interaction.user.mention), color = colors.ERROR)
             await interaction.send(embed = emb)
 
     @app_commands.command(description = 'Отправляет подумать участника о своём поведении')
@@ -224,19 +225,19 @@ class sMod(commands.Cog):
                 emb = discord.Embed(description = translate(locale, "attempt_to_mute_self"), color = discord.Color.blurple())
                 await interaction.send(embed = emb)
             if interaction.user.top_role == member.top_role:
-                emb = discord.Embed(description = f'{translate(locale, "timeout_member_top_eq_author_top")}'.format(author_mention = interaction.user.mention, member_mention = member.mention), color = 0xff8000)
+                emb = discord.Embed(description = f'{translate(locale, "timeout_member_top_eq_author_top")}'.format(author_mention = interaction.user.mention, member_mention = member.mention), color = colors.JDH)
                 await interaction.send(embed = emb)
             elif interaction.user.top_role < member.top_role:
-                emb = discord.Embed(description = f'{translate(locale, "timeout_member_top_gt_author_top")}', color = 0xff8000)
+                emb = discord.Embed(description = f'{translate(locale, "timeout_member_top_gt_author_top")}', color = colors.JDH)
                 await interaction.send(embed = emb)
             else:
                 await member.timeout(datetime.timedelta(hours = 1), reason = reason)
-                emb = discord.Embed(title = f'Тайм-аут участника {member.display_name}', color = 0xff8000, timestamp = discord.utils.utcnow())
+                emb = discord.Embed(title = f'Тайм-аут участника {member.display_name}', color = colors.JDH, timestamp = discord.utils.utcnow())
                 emb.add_field(name = 'Причина', value = reason)
                 emb.add_field(name = 'Время тайм-аута', value = '1 час')
                 await interaction.send(embed = emb)
         else:
-            emb = discord.Embed(description = f'{translate(locale, "attempt_to_mute_dev")}'.format(author_mention = interaction.user.mention), color = 0xff0000)
+            emb = discord.Embed(description = f'{translate(locale, "attempt_to_mute_dev")}'.format(author_mention = interaction.user.mention), color = colors.ERROR)
             await interaction.send(embed = emb)
 
     @app_commands.command(description = 'Отключает человеку микрофон в голосовых каналах')
@@ -249,28 +250,28 @@ class sMod(commands.Cog):
         if reason is None:
             reason = translate(locale, 'reason')
         if role in member.roles:
-                emb = discord.Embed(description = translate(locale, "deaf_member_has_role"), color = 0x2f3136)
+                emb = discord.Embed(description = translate(locale, "deaf_member_has_role"), color = colors.DEFAULT)
                 return await interaction.send(embed = emb)
         if member.id not in self.client.owner_ids:
             if member == interaction.user:
                 emb = discord.Embed(description = translate(locale, "attempt_to_mute_self"), color = discord.Color.blurple())
                 await interaction.send(embed = emb)
             if interaction.user.top_role == member.top_role:
-                emb = discord.Embed(description = f'{translate(locale, "deaf_member_top_eq_author_top")}'.format(author_mention = interaction.user.mention, member_mention = member.mention), color = 0xff8000)
+                emb = discord.Embed(description = f'{translate(locale, "deaf_member_top_eq_author_top")}'.format(author_mention = interaction.user.mention, member_mention = member.mention), color = colors.JDH)
                 await interaction.send(embed = emb)
             elif interaction.user.top_role < member.top_role:
-                emb = discord.Embed(description = f'{translate(locale, "deaf_member_top_gt_author_top")}'.format(author_mention = interaction.user.mention, member_mention = member.mention), color = 0xff8000)
+                emb = discord.Embed(description = f'{translate(locale, "deaf_member_top_gt_author_top")}'.format(author_mention = interaction.user.mention, member_mention = member.mention), color = colors.JDH)
                 await interaction.send(embed = emb)
             else:
                 if not role:
                     role = await interaction.guild.create_role(name = 'Deafened', color = 0x000001, reason = 'Создано автоматически командой deaf')
                 await member.add_roles(role)
-                emb = discord.Embed(color = 0x2f3136, timestamp = discord.utils.utcnow())
+                emb = discord.Embed(color = colors.DEFAULT, timestamp = discord.utils.utcnow())
                 emb.add_field(name = 'Заглушён', value = member.mention)
                 emb.add_field(name = 'Причина', value = reason)
                 await interaction.send(embed = emb)
         else:
-            emb = discord.Embed(description = translate(locale, 'attempt_to_mute_dev'), color = 0xff0000)
+            emb = discord.Embed(description = translate(locale, 'attempt_to_mute_dev'), color = colors.ERROR)
             await interaction.send(embed = emb)
     
     @app_commands.command(description = 'Отменяет отключение микрофона')
@@ -285,15 +286,15 @@ class sMod(commands.Cog):
         if role:
             if role in member.roles:
                 await member.remove_roles(role)
-                emb = discord.Embed(title = f'{translate(locale, "undeaf_success")}'.format(member = member), color = 0xff8000, timestamp = discord.utils.utcnow())
+                emb = discord.Embed(title = f'{translate(locale, "undeaf_success")}'.format(member = member), color = colors.JDH, timestamp = discord.utils.utcnow())
                 emb.add_field(name = 'Снял заглушение', value = interaction.user.mention)
                 emb.add_field(name = 'Причина', value = reason)
                 await interaction.send(embed = emb)
             else:
-                emb = discord.Embed(description = translate(locale, 'undeaf_member_has_no_role'), color = 0xff8000)
+                emb = discord.Embed(description = translate(locale, 'undeaf_member_has_no_role'), color = colors.JDH)
                 await interaction.send(embed = emb)
         else:
-            emb = discord.Embed(description = f'{translate(locale, "undeaf_no_role")}'.format(author_mention = interaction.user.mention, member_mention = member.mention), color = 0xff8000, timestamp = discord.utils.utcnow())
+            emb = discord.Embed(description = f'{translate(locale, "undeaf_no_role")}'.format(author_mention = interaction.user.mention, member_mention = member.mention), color = colors.JDH, timestamp = discord.utils.utcnow())
             await interaction.send(embed = emb)
 
     @app_commands.command(description = 'Разглушает участника')
@@ -308,15 +309,15 @@ class sMod(commands.Cog):
         if role is not None:
             if role in member.roles:
                 await member.remove_roles(role)
-                emb = discord.Embed(title = f'{translate(locale, "unmute_success")}'.format(member = member), color = 0xff8000, timestamp = discord.utils.utcnow())
+                emb = discord.Embed(title = f'{translate(locale, "unmute_success")}'.format(member = member), color = colors.JDH, timestamp = discord.utils.utcnow())
                 emb.add_field(name = 'Снял заглушение', value = interaction.user.mention)
                 emb.add_field(name = 'По причине', value = reason)
                 await interaction.send(embed = emb)
             else:
-                emb = discord.Embed(description = translate(locale, 'unmute_member_has_no_role'), color = 0xff8000)
+                emb = discord.Embed(description = translate(locale, 'unmute_member_has_no_role'), color = colors.JDH)
                 await interaction.send(embed = emb)
         else:
-            emb = discord.Embed(description = f'{translate(locale, "unmute_no_role")}'.format(author_mention = interaction.user.mention), color = 0xff8000, timestamp = discord.utils.utcnow())
+            emb = discord.Embed(description = f'{translate(locale, "unmute_no_role")}'.format(author_mention = interaction.user.mention), color = colors.JDH, timestamp = discord.utils.utcnow())
             await interaction.send(embed = emb) 
 
 async def setup(client):

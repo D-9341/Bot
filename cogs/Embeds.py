@@ -1,5 +1,6 @@
 import discord
 from discord.ext import commands
+from cogs.Constants import colors
 
 botversions = [764882153812787250, 694170281270312991, 762015251264569352]
 
@@ -56,9 +57,15 @@ class Embeds(commands.Cog):
         if author is None:
             author = ctx.author
         if color is None:
-            color = 0x2f3136
+            color = colors.DEFAULT
         else:
-            color = int('0x' + color.lstrip('#'), 16)
+            if hasattr(colors, color):
+                color = getattr(colors, color)
+            else:
+                try:
+                    color = int('0x' + color.lstrip('#'), 16)
+                except ValueError:
+                    color = colors.DEFAULT
         emb = discord.Embed(title = title, description = description, color = color)
         emb.set_author(name = author.display_name, icon_url = author.avatar.url)
         if image:
@@ -89,11 +96,11 @@ class Embeds(commands.Cog):
                     if message.embeds != []:
                         await message.edit(embed = None)
                     else:
-                        return await ctx.send(embed = discord.Embed(description = f'{ctx.author.mention}, нечего удалять. Возможно, вы имели ввиду cy/edit {message.id} --delete', color = 0xff8000))
+                        return await ctx.send(embed = discord.Embed(description = f'{ctx.author.mention}, нечего удалять. Возможно, вы имели ввиду cy/edit {message.id} --delete', color = colors.JDH))
                 else:
                     return await message.edit(content = msg)
             else:
-                return await ctx.send(embed = discord.Embed(description = f'{message.jump_url} не является сообщением от {self.client.user.mention}', color = 0xff0000))
+                return await ctx.send(embed = discord.Embed(description = f'{message.jump_url} не является сообщением от {self.client.user.mention}', color = colors.ERROR))
         else:
             if message.embeds != []:
                 old_embed = message.embeds[0]
@@ -143,11 +150,17 @@ class Embeds(commands.Cog):
             if author is None:
                 author = ctx.author
             if message.embeds == [] or color is None:
-                color = 0x2f3136
+                color = colors.DEFAULT
             elif message.embeds != [] and '&c' not in msg:
                 color = message.embeds[0].color
             else:
-                color = int('0x' + color.lstrip('#'), 16)
+                if hasattr(colors, color):
+                    color = getattr(colors, color)
+                else:
+                    try:
+                        color = int('0x' + color.lstrip('#'), 16)
+                    except ValueError:
+                        color = colors.DEFAULT
             emb = discord.Embed(title = title, description = description, color = color, timestamp = discord.utils.utcnow())
             emb.set_author(name = author.display_name, icon_url = author.avatar.url)
             if image:
@@ -165,9 +178,9 @@ class Embeds(commands.Cog):
                 if '--noembed' in msg:
                     if message.embeds != []:
                         return await message.edit(embed = None, view = view)
-                    return await ctx.send(embed = discord.Embed(description = f'{ctx.author.mention}, нечего удалять. Возможно, вы имели ввиду cy/edit {message.id} --delete', color = 0xff8000))
+                    return await ctx.send(embed = discord.Embed(description = f'{ctx.author.mention}, нечего удалять. Возможно, вы имели ввиду cy/edit {message.id} --delete', color = colors.JDH))
                 return await message.edit(embed = emb, view = view)
-            return await ctx.send(embed = discord.Embed(description = f'{message.jump_url} не является сообщением от {self.client.user.mention}', color = 0xff8000))
+            return await ctx.send(embed = discord.Embed(description = f'{message.jump_url} не является сообщением от {self.client.user.mention}', color = colors.JDH))
 
     @commands.command(aliases = ['ctx'])
     async def content(self, ctx: commands.Context, msg: int, channel: discord.TextChannel | str = None, option = None):

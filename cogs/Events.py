@@ -6,8 +6,8 @@ from functions import get_plural_form
 from discord.ext import commands
 from datetime import timedelta
 from main import PASSWORD
-
-LOGS = open('logs/logs.txt', 'a', encoding = 'utf-8')
+from cogs.Logging import LOGS
+from cogs.Constants import colors
 
 def rearm(command, message):
     if command._buckets.valid:
@@ -26,15 +26,15 @@ class Events(commands.Cog):
     async def on_guild_role_update(self, before: discord.Role, after: discord.Role):
         if before.name == 'Muted':
             role = before.guild.get_role(after.id)
-            await role.edit(name = 'Muted', color = 0x000001, reason = 'Нельзя изменять эту роль')
+            await role.edit(name = 'Muted', color = colors.BLACK, reason = 'Нельзя изменять эту роль')
         if before.name == 'Deafened':
             role = before.guild.get_role(after.id)
-            await role.edit(name = 'Deafened', color = 0x000001, reason = 'Нельзя изменять эту роль')
+            await role.edit(name = 'Deafened', color = colors.BLACK, reason = 'Нельзя изменять эту роль')
 
     @commands.Cog.listener()
     async def on_command_completion(self, ctx: commands.Context):
         channel = self.client.get_channel(714175791033876490)
-        emb = discord.Embed(title = 'ВЫПОЛНЕНИЕ_КОМАНДЫ', color = 0xff8000)
+        emb = discord.Embed(title = 'ВЫПОЛНЕНИЕ_КОМАНДЫ', color = colors.JDH)
         emb.add_field(name = 'НАЗВАНИЕ', value = f'```{ctx.command.name}```')
         emb.add_field(name = 'ИСПОЛНИТЕЛЬ', value = f'{ctx.author.mention} ({ctx.author})')
         emb.add_field(name = 'СЕРВЕР', value = ctx.guild.name if ctx.guild else "ЛС", inline = False)
@@ -45,7 +45,7 @@ class Events(commands.Cog):
     async def on_member_join(self, member: discord.Member):
         user = 'БОТ' if member.bot else 'УЧАСТНИК'
         channel = self.client.get_channel(714175791033876490)
-        emb = discord.Embed(title = rf'{user}\_ЗАШЁЛ\_НА_СЕРВЕР', color = 0xff8000, timestamp = discord.utils.utcnow())
+        emb = discord.Embed(title = rf'{user}\_ЗАШЁЛ\_НА_СЕРВЕР', color = colors.JDH, timestamp = discord.utils.utcnow())
         emb.add_field(name = f'{user}', value = member)
         emb.add_field(name = 'УПОМИНАНИЕ', value = member.mention)
         emb.add_field(name = 'СЕРВЕР', value = member.guild.name)
@@ -56,7 +56,7 @@ class Events(commands.Cog):
     async def on_member_remove(self, member: discord.Member):
         user = 'БОТ' if member.bot else 'УЧАСТНИК'
         channel = self.client.get_channel(714175791033876490)
-        emb = discord.Embed(title = rf'{user}\_ВЫШЕЛ\_С_СЕРВЕРА', color = 0xff8000, timestamp = discord.utils.utcnow())
+        emb = discord.Embed(title = rf'{user}\_ВЫШЕЛ\_С_СЕРВЕРА', color = colors.JDH, timestamp = discord.utils.utcnow())
         emb.add_field(name = f'{user}', value = member)
         emb.add_field(name = 'УПОМИНАНИЕ', value = member.mention)
         emb.add_field(name = 'СЕРВЕР', value = member.guild.name)
@@ -66,7 +66,7 @@ class Events(commands.Cog):
     @commands.Cog.listener()
     async def on_guild_remove(self, guild: discord.Guild):
         channel = self.client.get_channel(714175791033876490)
-        emb = discord.Embed(title = r'ВЫХОД\_С_СЕРВЕРА', color = 0xff8000, timestamp = discord.utils.utcnow())
+        emb = discord.Embed(title = r'ВЫХОД\_С_СЕРВЕРА', color = colors.JDH, timestamp = discord.utils.utcnow())
         emb.add_field(name = 'СЕРВЕР', value = guild.name)
         emb.set_footer(text = f'ID: {guild.id}')
         await channel.send(embed = emb)
@@ -74,7 +74,7 @@ class Events(commands.Cog):
     @commands.Cog.listener()
     async def on_guild_join(self, guild: discord.Guild):
         channel = self.client.get_channel(714175791033876490)
-        emb = discord.Embed(title = r'ДОБАВЛЕНИЕ\_НА_СЕРВЕР', color = 0xff8000, timestamp = discord.utils.utcnow())
+        emb = discord.Embed(title = r'ДОБАВЛЕНИЕ\_НА_СЕРВЕР', color = colors.JDH, timestamp = discord.utils.utcnow())
         emb.add_field(name = 'СЕРВЕР', value = guild.name)
         emb.set_footer(text = f'ID: {guild.id}')
         await channel.send(embed = emb)
@@ -129,7 +129,7 @@ class Events(commands.Cog):
             cur.execute("INSERT INTO users (user_id, locale) VALUES (%s, %s) ON CONFLICT (user_id) DO NOTHING", (message.author.id, 'ru'))
             conn.commit()
             conn.close()
-        if message.content.startswith(f'<@{self.client.user.id}>') and len(message.content) == len(f'<@{self.client.user.id}>'):
+        if message.content.startswith(f'<@{self.client.user.id}>') and len(message.content) == len(f'<@{self.client.user.id}>') and message.author.id not in self.client.owner_ids:
             await message.channel.send(f'чё звал {message.author.mention} ||`cy/`||')
         # if message.channel.id == 1345125935636283504 and not message.author.bot:
         #     role = discord.utils.get(message.guild.roles, id = 1314332101512007741)
@@ -141,7 +141,7 @@ class Events(commands.Cog):
                 sent = await message.channel.send(role.mention)
                 await sent.delete()
                 channel = self.client.get_channel(714175791033876490)
-                emb = discord.Embed(title = r'ОПОВЕЩЕНИЕ\_ОБ_ОБНОВЛЕНИИ', color = 0xff8000, timestamp = discord.utils.utcnow())
+                emb = discord.Embed(title = r'ОПОВЕЩЕНИЕ\_ОБ_ОБНОВЛЕНИИ', color = colors.JDH, timestamp = discord.utils.utcnow())
                 emb.add_field(name = 'ОПОВЕЩЕНЫ', value = 'РАЗРАБОТЧИКИ')
                 await channel.send(embed = emb)
         if message.channel.id == 750372413102883028:
@@ -150,7 +150,7 @@ class Events(commands.Cog):
                 sent = await message.channel.send(role.mention)
                 await sent.delete()
                 channel = self.client.get_channel(714175791033876490)
-                emb = discord.Embed(title = r'ОПОВЕЩЕНИЕ\_ОБ_ОБНОВЛЕНИИ', color = 0xff8000, timestamp = discord.utils.utcnow())
+                emb = discord.Embed(title = r'ОПОВЕЩЕНИЕ\_ОБ_ОБНОВЛЕНИИ', color = colors.JDH, timestamp = discord.utils.utcnow())
                 emb.add_field(name = 'ОПОВЕЩЕНЫ', value = role.mention)
                 await channel.send(embed = emb)
         if message.channel.id == 750368033578680361:
@@ -159,7 +159,7 @@ class Events(commands.Cog):
                 sent = await message.channel.send(role.mention)
                 await sent.delete()
                 channel = self.client.get_channel(714175791033876490)
-                emb = discord.Embed(title = r'ОПОВЕЩЕНИЕ\_ОБ_ОБНОВЛЕНИИ', color = 0xff8000, timestamp = discord.utils.utcnow())
+                emb = discord.Embed(title = r'ОПОВЕЩЕНИЕ\_ОБ_ОБНОВЛЕНИИ', color = colors.JDH, timestamp = discord.utils.utcnow())
                 emb.add_field(name = 'ОПОВЕЩЕНЫ', value = role.mention)
                 await channel.send(embed = emb)
         if message.channel.id == 750363498290348123:
@@ -168,7 +168,7 @@ class Events(commands.Cog):
                 sent = await message.channel.send(role.mention)
                 await sent.delete()
                 channel = self.client.get_channel(714175791033876490)
-                emb = discord.Embed(title = r'ОПОВЕЩЕНИЕ\_ОБ_ОБНОВЛЕНИИ', color = 0xff8000, timestamp = discord.utils.utcnow())
+                emb = discord.Embed(title = r'ОПОВЕЩЕНИЕ\_ОБ_ОБНОВЛЕНИИ', color = colors.JDH, timestamp = discord.utils.utcnow())
                 emb.add_field(name = 'ОПОВЕЩЕНЫ', value = role.mention)
                 await channel.send(embed = emb)
         if message.channel.id == 750373602460827730:
@@ -177,13 +177,9 @@ class Events(commands.Cog):
                 sent = await message.channel.send(role.mention)
                 await sent.delete()
                 channel = self.client.get_channel(714175791033876490)
-                emb = discord.Embed(title = r'ОПОВЕЩЕНИЕ\_ОБ_ОБНОВЛЕНИИ', color = 0xff8000, timestamp = discord.utils.utcnow())
+                emb = discord.Embed(title = r'ОПОВЕЩЕНИЕ\_ОБ_ОБНОВЛЕНИИ', color = colors.JDH, timestamp = discord.utils.utcnow())
                 emb.add_field(name = 'ОПОВЕЩЕНЫ', value = role.mention)
                 await channel.send(embed = emb)
-        if message.channel.id == 1298756046604734594:
-            if message.author.bot is True and message.author.id != 694170281270312991:
-                sus = self.client.get_user(338714886001524737)
-                await message.channel.send(sus.mention)
         if message.channel.id == 707498623981715557:
             await message.add_reaction('👍')
             await message.add_reaction('👎')
@@ -191,28 +187,28 @@ class Events(commands.Cog):
     @commands.Cog.listener()
     async def on_command_error(self, ctx: commands.Context, error):
         # if isinstance(error, commands.CommandNotFound):
-        #     emb = discord.Embed(description = f'{ctx.author.mention}, команда `{ctx.command.name}` не найдена{f', так как модуль `{ctx.command.cog.qualified_name}`, ответственный за неё, отключён' if ctx.command.cog else ''}', color = 0xff8000)
+        #     emb = discord.Embed(description = f'{ctx.author.mention}, команда `{ctx.command.name}` не найдена{f', так как модуль `{ctx.command.cog.qualified_name}`, ответственный за неё, отключён' if ctx.command.cog else ''}', color = colors.JDH)
         #     await ctx.send(embed = emb)
         if isinstance(error, commands.DisabledCommand):
-            emb = discord.Embed(description = f'{ctx.author.mention}, команда `{ctx.command.name}` отключена', color = 0xff8000)
+            emb = discord.Embed(description = f'{ctx.author.mention}, команда `{ctx.command.name}` отключена', color = colors.JDH)
             await ctx.send(embed = emb)
         elif isinstance(error, commands.NoPrivateMessage):
-            emb = discord.Embed(description = f'{ctx.author.mention}, команда `{ctx.command.name}` недоступна в ЛС', color = 0xff8000)
+            emb = discord.Embed(description = f'{ctx.author.mention}, команда `{ctx.command.name}` недоступна в ЛС', color = colors.JDH)
             await ctx.send(embed = emb)
         elif isinstance(error, commands.NotOwner):
-            emb = discord.Embed(description = f'{ctx.author.mention}, это действие может совершить только один из создателей бота', color = 0xff8000)
+            emb = discord.Embed(description = f'{ctx.author.mention}, это действие может совершить только один из создателей бота', color = colors.JDH)
             await ctx.send(embed = emb)
         elif isinstance(error, commands.BotMissingPermissions):
-            emb = discord.Embed(description = f'{ctx.author.mention}, у **меня** недостаточно прав на выполнение команды `{ctx.command.name}`, напишите cy/help `{ctx.command.name}` для просмотра необходимых прав\n||Выдача прав администратора решит эту проблему||', color = 0xff0000)
+            emb = discord.Embed(description = f'{ctx.author.mention}, у **меня** недостаточно прав на выполнение команды `{ctx.command.name}`, напишите cy/help `{ctx.command.name}` для просмотра необходимых прав\n||Выдача прав администратора решит эту проблему||', color = colors.ERROR)
             await ctx.send(embed = emb)
         elif isinstance(error, commands.MissingPermissions):
-            emb = discord.Embed(description = f'{ctx.author.mention}, у вас недостаточно прав на выполнение команды `{ctx.command.name}`. Напишите cy/help `{ctx.command.name}` для просмотра необходимых прав', color = 0xff8000)
+            emb = discord.Embed(description = f'{ctx.author.mention}, у вас недостаточно прав на выполнение команды `{ctx.command.name}`. Напишите cy/help `{ctx.command.name}` для просмотра необходимых прав', color = colors.JDH)
             await ctx.send(embed = emb)
         elif isinstance(error, commands.CommandOnCooldown):
             s = error.retry_after
             choises = ['Ещё не время.', 'Я не готов.', 'Ещё нет.', 'Ещё. Не. Время.', 'Я. Не. Готов.', 'Ещё. Нет.', 'ЕЩЁ НЕ ВРЕМЯ!', 'Я НЕ ГОТОВ!', 'ЕЩЁ НЕТ!']
             rand = random.choice(choises)
-            emb = discord.Embed(description = f'{rand} Команда `{ctx.command.name}` будет доступна через {round(s)} {get_plural_form(round(s), ["секунду", "секунды", "секунд"])}!', color = 0xff0000)
+            emb = discord.Embed(description = f'{rand} Команда `{ctx.command.name}` будет доступна через {round(s)} {get_plural_form(round(s), ["секунду", "секунды", "секунд"])}!', color = colors.ERROR)
             await ctx.send(embed = emb)
         elif isinstance(error, commands.MissingRequiredArgument):
             rearm(ctx.command, ctx.message)
@@ -225,17 +221,17 @@ class Events(commands.Cog):
             elif ctx.command.name == 'ban':
                 await ctx.send('```apache\ncy/ban <@пинг/имя/ID> [причина/--soft --reason]\ncy/ban 185476724627210241 --soft --reason лошара\ncy/ban @сасиска чмо\ncy/ban @крипочек --soft\n\nПри использовании --soft обязательно указывать --reason __после__ него, однако можно не использовать --reason\ncy/ban adamant --soft --reason упырь\n\n[] - опционально, <> - обязательно, / - или\nНеобходимы разрешения - банить участников```')
             else:
-                emb = discord.Embed(description = f'{ctx.author.mention}, предоставлено недостаточно аргументов для `{ctx.command.name}`. Попробуйте cy/help `{ctx.command.name}`', color = 0xff8000)
+                emb = discord.Embed(description = f'{ctx.author.mention}, предоставлено недостаточно аргументов для `{ctx.command.name}`. Попробуйте cy/help `{ctx.command.name}`', color = colors.JDH)
                 emb.set_footer(text = 'Счётчик перезарядки сброшен')
                 await ctx.send(embed = emb)
         elif isinstance(error, commands.MemberNotFound):
             rearm(ctx.command, ctx.message)
-            emb = discord.Embed(description = f'{ctx.author.mention}, участник не найден', color = 0xff8000)
+            emb = discord.Embed(description = f'{ctx.author.mention}, участник не найден', color = colors.JDH)
             emb.set_footer(text = 'Счётчик перезарядки сброшен')
             await ctx.send(embed = emb)
         elif isinstance(error, commands.BadArgument):
             rearm(ctx.command, ctx.message)
-            emb = discord.Embed(description = f'{ctx.author.mention}, предоставлен неверный аргумент для `{ctx.command.name}`. Попробуйте cy/help `{ctx.command.name}`', color = 0xff8000)
+            emb = discord.Embed(description = f'{ctx.author.mention}, предоставлен неверный аргумент для `{ctx.command.name}`. Попробуйте cy/help `{ctx.command.name}`', color = colors.JDH)
             emb.set_footer(text = 'Счётчик перезарядки сброшен')
             await ctx.send(embed = emb)
 
