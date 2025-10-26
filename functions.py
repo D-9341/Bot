@@ -1,6 +1,6 @@
 import argparse
 import psycopg2
-from typing import Literal
+from psycopg2 import sql
 from main import PASSWORD
 
 def translate(locale: str, string_id: str) -> str:
@@ -27,19 +27,14 @@ def translate(locale: str, string_id: str) -> str:
         port = 5432
     )
     cur = conn.cursor()
-    if locale == 'ru':
-        cur.execute("SELECT value FROM ru WHERE string_id = %s", (string_id,))
-    elif locale == 'en':
-        cur.execute("SELECT value FROM en WHERE string_id = %s", (string_id,))
-    elif locale == 'gnida':
-        cur.execute("SELECT value FROM gnida WHERE string_id = %s", (string_id,))
+    cur.execute(sql.SQL("SELECT value FROM {} WHERE string_id = %s").format(sql.Identifier(locale)), (string_id,))
     result = cur.fetchone()
     conn.close()
     if '_help' in string_id:
         return result[0] if result else f'{translate(locale, 'command_not_found')}'.format(command = string_id[:-5])
     return result[0] if result else "Локаль не найдена"
 
-def get_locale(user_id: int) -> Literal['ru', 'en', 'gnida']:
+def get_locale(user_id: int) -> str:
     """
     Gets the locale for an author
 
@@ -50,7 +45,7 @@ def get_locale(user_id: int) -> Literal['ru', 'en', 'gnida']:
 
     Returns
     -------
-    Literal['ru', 'en', 'gnida']
+    str
         The locale of the author
     """
     conn = psycopg2.connect(
@@ -61,12 +56,12 @@ def get_locale(user_id: int) -> Literal['ru', 'en', 'gnida']:
         port = 5432
     )
     cur = conn.cursor()
-    cur.execute(f"SELECT locale FROM users WHERE user_id = {user_id}")
+    cur.execute("SELECT locale FROM users WHERE user_id = %s", (user_id,))
     result = cur.fetchone()
     conn.close()
     return result[0] if result else "ru"
 
-def set_locale(user_id: int, locale: Literal['ru', 'en', 'gnida']) -> None:
+def set_locale(user_id: int, locale: str) -> None:
     """
     Sets the locale for an author
 
@@ -74,7 +69,7 @@ def set_locale(user_id: int, locale: Literal['ru', 'en', 'gnida']) -> None:
     ----------
     user_id: int
         The ID of the author to set the locale for
-    locale: Literal['ru', 'en', 'gnida']
+    locale: str
         The locale to set for the author
     """
     conn = psycopg2.connect(

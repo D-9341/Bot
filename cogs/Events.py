@@ -1,13 +1,14 @@
-import discord
 import random
-import psycopg2
-
-from functions import get_plural_form
-from discord.ext import commands
 from datetime import timedelta
-from main import PASSWORD
-from cogs.Logging import LOGS
+
+import discord
+import psycopg2
+from discord.ext import commands
+
 from cogs.Constants import colors
+from cogs.Logging import LOGS
+from functions import get_plural_form
+from main import PASSWORD
 
 def rearm(command, message):
     if command._buckets.valid:

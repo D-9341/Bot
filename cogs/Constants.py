@@ -17,10 +17,26 @@ class colors:
     JDH = 0xFF8000
     LO = 0x0080FF
 
-class locales_paths:
-    RU = './locales/ru/locale.json'
-    GNIDA = './locales/gnida/locale.json'
-    EN = './locales/en/locale.json'
+class LocalesManager:
+    PATHS = {
+        'ru': './locales/ru.json',
+        'en': './locales/en.json', 
+        'gnida': './locales/gnida.json',
+        'gnida_lite': './locales/gnida_lite.json'
+    }
+
+    @classmethod
+    def get_path(cls, locale: str) -> str:
+        """Вернуть путь к локали, при отсутствии возвращает ru"""
+        return cls.PATHS.get(locale, cls.PATHS['ru'])
+
+    @classmethod
+    def get_all_locales(cls) -> list[str]:
+        """Вернуть список всех доступных локалей"""
+        return list(cls.PATHS.keys())
+
+class botversions:
+    botversions = [764882153812787250, 694170281270312991, 762015251264569352]
 
 async def setup(client):
     await client.add_cog(Constants(client))

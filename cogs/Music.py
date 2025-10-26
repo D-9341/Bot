@@ -1,12 +1,15 @@
 import asyncio
+import os
+from pathlib import Path
+
 import discord
 import yt_dlp
-import os
-from gtts import gTTS
-from pathlib import Path
-from functions import translate, get_locale
 from discord.ext import commands
+from gtts import gTTS
+
 from cogs.Constants import colors
+from functions import get_locale, translate
+
 yt_dlp.utils.bug_reports_message = lambda: ''
 
 cwd = Path(__file__).parents[0].parents[0]
@@ -102,40 +105,51 @@ class Music(commands.Cog):
                     queue.pop(0)
                     title_list.pop(0)
 
-    @commands.command(aliases = ['q'])
-    async def queue(self, ctx: commands.Context, argument = 'list', *, action: int | str = 0):
+    @commands.group(aliases = ['q'], invoke_without_command = True)
+    async def queue(self, ctx: commands.Context):
         locale = get_locale(ctx.author.id)
-        if argument == 'list':
-            queue_display = [f'{index + 1}. {title}' for index, title in enumerate(title_list)]
-            await ctx.send(embed = discord.Embed(description = f'{translate(locale, "queue_list")}'.format(queue_list = '\n'.join(queue_display)) if title_list else translate(locale, 'queue_empty'), color = colors.JDH))
-        if argument == 'clear':
-            title_list.clear(); queue.clear()
-            if ctx.guild.voice_client:
-                ctx.guild.voice_client.stop()
-            await ctx.send(embed = discord.Embed(description = translate(locale, 'queue_clear'), color = colors.JDH))
-        if argument in ['next', 'skip']:
-            if len(queue) > 1:
-                ctx.guild.voice_client.stop()
-                queue.pop(0)
-                title_list.pop(0)
-                ctx.guild.voice_client.play(discord.FFmpegPCMAudio(queue[0], **{'options': '-vn'}))
-                await ctx.send(embed = discord.Embed(description = f'{translate(locale, "queue_next")}'.format(title = title_list[0]), color = colors.JDH))
-            else:
-                await ctx.send(embed = discord.Embed(description = translate(locale, 'queue_skip_empty'), color = colors.JDH))
-        if argument == 'loop':
-            global loop
-            if action != 'status':
-                loop = not loop
-            await ctx.send(embed = discord.Embed(description = translate(locale, 'queue_loop_on') if loop else translate(locale, 'queue_loop_off'), color = colors.JDH))
-        if argument == 'remove':
-            if action == 1:
-                return await ctx.send(embed = discord.Embed(description = translate(locale, 'queue_remove_first'), color = colors.JDH))
-            if 2 <= action <= len(queue):
-                queue.pop(action - 1)
-                track = title_list.pop(action - 1)
-                await ctx.send(embed = discord.Embed(description = f'{translate(locale, "queue_remove_success")}'.format(title = track), color = colors.JDH))
-            else:
-                await ctx.send(embed = discord.Embed(description = translate(locale, 'queue_remove_no_such_track'), color = colors.JDH))
+        queue_display = [f'{index + 1}. {title}' for index, title in enumerate(title_list)]
+        await ctx.send(embed = discord.Embed(description = f'{translate(locale, "queue_list")}'.format(queue_list='\n'.join(queue_display)) if title_list else translate(locale, 'queue_empty'), color = colors.JDH))
+
+    @queue.command(name = 'clear')
+    async def queue_clear(self, ctx: commands.Context):
+        locale = get_locale(ctx.author.id)
+        title_list.clear(); queue.clear()
+        if ctx.guild.voice_client:
+            ctx.guild.voice_client.stop()
+        await ctx.send(embed = discord.Embed(description = translate(locale, 'queue_clear'), color = colors.JDH))
+
+    @queue.command(aliases = ['next', 'skip'])
+    async def queue_skip(self, ctx: commands.Context):
+        locale = get_locale(ctx.author.id)
+        if len(queue) > 1:
+            ctx.guild.voice_client.stop()
+            queue.pop(0)
+            title_list.pop(0)
+            ctx.guild.voice_client.play(discord.FFmpegPCMAudio(queue[0], **{'options': '-vn'}))
+            await ctx.send(embed = discord.Embed(description = f'{translate(locale, "queue_skip")}'.format(title = title_list[0]), color = colors.JDH))
+        else:
+            await ctx.send(embed = discord.Embed(description = translate(locale, 'queue_skip_empty'), color = colors.JDH))
+
+    @queue.command(name = 'loop')
+    async def queue_loop(self, ctx: commands.Context, action: str = 'toggle'):
+        locale = get_locale(ctx.author.id)
+        global loop
+        if action != 'status':
+            loop = not loop
+        await ctx.send(embed = discord.Embed(description = translate(locale, 'queue_loop_on') if loop else translate(locale, 'queue_loop_off'), color = colors.JDH))
+
+    @queue.command(name = 'remove')
+    async def queue_remove(self, ctx: commands.Context, index: int):
+        locale = get_locale(ctx.author.id)
+        if index == 1:
+            return await ctx.send(embed=discord.Embed(description = translate(locale, 'queue_remove_first'), color = colors.ERROR))
+        if 2 <= index <= len(queue):
+            queue.pop(index - 1)
+            track = title_list.pop(index - 1)
+            await ctx.send(embed = discord.Embed(description = f'{translate(locale, "queue_remove_success")}'.format(title = track), color = colors.JDH))
+        else:
+            await ctx.send(embed = discord.Embed(description = translate(locale, 'queue_remove_no_such_track'), color = colors.ERROR))
 
     @commands.command()
     async def resume(self, ctx: commands.Context):

@@ -1,8 +1,7 @@
 import discord
 from discord.ext import commands
-from cogs.Constants import colors
 
-botversions = [764882153812787250, 694170281270312991, 762015251264569352]
+from cogs.Constants import botversions, colors
 
 class Embeds(commands.Cog):
     def __init__(self, client):
@@ -227,10 +226,10 @@ class Embeds(commands.Cog):
             if emb.footer.text:
                 embed_data["f"] = f' &f {emb.footer.text}'
                 embed_data["footer"] = f' footer {emb.footer.text}'
-        for button in message.components:
-            if button.children[0]:
-                embed_data["b"] = f' &b label {button.children[0].label}{f' | url {button.children[0].url}' if button.children[0].url else ""}'
-        if message.author.id in botversions:
+        for component in message.components:
+            for button in component.children:
+                embed_data["b"] += f' &b label {button.label}{f' | url {button.url}' if button.url else ""}'
+        if message.author.id in botversions.botversions:
             command = 'edit' if option == '--edit' else 'say'
             if message.embeds:
                 await ctx.send(f'```cy/{command}{f' {message.id}' if command == "edit" else ""}{embed_data["t"]}{embed_data["d"]}{embed_data["f"]}{embed_data["th"]}{embed_data["img"]}{embed_data["c"]}{embed_data["a"]}{embed_data["b"]}```')

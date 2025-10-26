@@ -1,13 +1,14 @@
 import asyncio
 import datetime
-import string
 import random
+import string
 
 import discord
 from discord.ext import commands
-from functions import translate, get_locale, parse_flags, get_plural_form
-from main import bot_owner_or_has_permissions
+
 from cogs.Constants import colors
+from functions import get_locale, get_plural_form, parse_flags, translate
+from main import bot_owner_or_has_permissions
 
 class CancelButton(discord.ui.Button):
     def __init__(self):
@@ -135,9 +136,9 @@ class Mod(commands.Cog):
             if role == ctx.author.top_role:
                 await ctx.send(embed = discord.Embed(description = f'{translate(locale, "give_role_eq_author_top")}'.format(role_mention = role.mention), color = colors.JDH))
             if role > bot.top_role:
-                await ctx.send(embed = discord.Embed(description = f'{translate(locale, "give_role_gt_bot_top")}'.format(role_mention = role.mention), color = colors.ERROR))
+                await ctx.send(embed = discord.Embed(description = f'{translate(locale, "role_gt_bot_top")}'.format(role_mention = role.mention), color = colors.ERROR))
             if role == bot.top_role:
-                await ctx.send(embed = discord.Embed(description = f'{translate(locale, "give_role_eq_bot_top")}'.format(role_mention = role.mention), color = colors.ERROR))
+                await ctx.send(embed = discord.Embed(description = f'{translate(locale, "role_eq_bot_top")}'.format(role_mention = role.mention), color = colors.ERROR))
             if role.is_default():
                 await ctx.send(embed = discord.Embed(description = translate(locale, "give_everyone"), color = colors.JDH))
             else:
@@ -158,20 +159,16 @@ class Mod(commands.Cog):
         removed_roles = []
         for role in roles:
             if role.name in {'Muted', 'Deafened'}:
-                if member.id in self.client.owner_ids:
-                    await ctx.send(embed = discord.Embed(description = translate(locale, "take_attempt_to_mute_dev"), color = colors.ERROR))
-                if member == ctx.author:
-                    await ctx.send(embed = discord.Embed(description = translate(locale, "attempt_to_mute_self"), color = colors.ERROR))
-                await member.add_roles(role)
-                await ctx.send(embed = discord.Embed(description = translate(locale, "take_mute").format(author_mention = ctx.author.mention, member_mention = member.mention), color = colors.DEFAULT))
+                await member.remove_roles(role)
+                await ctx.send(embed = discord.Embed(description = translate(locale, "take_unmute").format(author_mention = ctx.author.mention, member_mention = member.mention), color = colors.DEFAULT))
             if role > ctx.author.top_role:
                 await ctx.send(embed = discord.Embed(description = f'{translate(locale, "take_role_gt_author_top")}'.format(role_mention = role.mention), color = colors.JDH))
             if role == ctx.author.top_role:
                 await ctx.send(embed = discord.Embed(description = f'{translate(locale, "take_role_eq_author_top")}'.format(role_mention = role.mention), color = colors.JDH))
             if role > bot.top_role:
-                await ctx.send(embed = discord.Embed(description = f'{translate(locale, "take_role_gt_bot_top")}'.format(role_mention = role.mention), color = colors.ERROR))
+                await ctx.send(embed = discord.Embed(description = f'{translate(locale, "role_gt_bot_top")}'.format(role_mention = role.mention), color = colors.ERROR))
             if role == bot.top_role:
-                await ctx.send(embed = discord.Embed(description = f'{translate(locale, "take_role_eq_bot_top")}'.format(role_mention = role.mention), color = colors.ERROR))
+                await ctx.send(embed = discord.Embed(description = f'{translate(locale, "role_eq_bot_top")}'.format(role_mention = role.mention), color = colors.ERROR))
             if role.is_default():
                 await ctx.send(embed = discord.Embed(description = translate(locale, "take_everyone"), color = colors.JDH))
             else:
@@ -334,8 +331,8 @@ class Mod(commands.Cog):
         flags = parse_flags(flags)
         check_func = lambda message: not message.pinned and (
             (
-                flags.everyone or 
-                (flags.bots and message.author.bot) or 
+                flags.everyone or
+                (flags.bots and message.author.bot) or
                 (flags.users and not message.author.bot)
             ) and
             (

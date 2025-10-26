@@ -2,6 +2,7 @@ import random
 
 import discord
 from discord.ext import commands
+
 from cogs.Constants import colors
 
 class Misc(commands.Cog):

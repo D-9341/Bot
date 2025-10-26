@@ -1,15 +1,16 @@
 import asyncio
+import json
 import secrets
 import sys
-import json
-from pathlib import Path
 from datetime import timedelta
+from pathlib import Path
 
 import discord
-from functions import translate, get_locale, set_locale, get_plural_form
-from main import uptime, owner_commands, cogs
 from discord.ext import commands
-from cogs.Constants import colors
+
+from cogs.Constants import LocalesManager, colors
+from functions import get_locale, get_plural_form, set_locale, translate
+from main import cogs, owner_commands, uptime
 
 CWD = Path(__file__).parents[0].parents[0]
 CWD = str(CWD)
@@ -31,19 +32,21 @@ class Cephalon(commands.Cog):
         print('Модуль Cephalon загружен')
 
     @commands.command()
-    async def help(self, ctx: commands.Context, command = None, locale = None):
+    async def help(self, ctx: commands.Context, command: str = None, locale: str = None):
+        if locale is not None and locale not in LocalesManager.get_all_locales():
+            return await ctx.send(embed = discord.Embed(description = 'Заданная локаль не существует', color = colors.ERROR))
         if command is None:
             emb = discord.Embed(description = 'Все доступные команды', color = colors.JDH)
             emb.set_author(name = self.client.user.name, url = 'https://discord.com/api/oauth2/authorize?client_id=694170281270312991&permissions=8&scope=bot%20applications.commands')
             emb.add_field(name = 'Cephalon', value = '`botver`, `devs`, `help`, `info`, `invite`, `locale`, `ping`, `uptime`', inline = False)
             emb.add_field(name = 'Embeds', value = '`content`, `edit`, `say`', inline = False)
-            emb.add_field(name = 'Fun', value = '`aghanim`, `dotersbrain`, `roulette`', inline = False)
+            emb.add_field(name = 'Fun', value = '`aghanim`, `dotersbrain`, `roulette`, `settings`', inline = False)
             emb.add_field(name = 'Mod', value = '`ban`, `clear`, `dm`, `deaf`, `give`, `kick`, `mute`, `take`, `timeout`, `undeaf`, `unmute`', inline = False)
             emb.add_field(name = 'Misc', value = '`about`, `avatar`, `coinflip`, `roll`, `roleinfo`, `rolemembers`, `serverinfo`, `someone`', inline = False)
             # emb.add_field(name = 'Music', value = '`join`, `leave`, `play`, `pause`, `resume`, `stop`') # , `volume`
             emb.add_field(name = 'ᅠ', value = 'Указанные разрешения необходимы для исполнителя команды если не указано другого', inline = False)
             emb.add_field(name = 'ᅠ', value = 'Не используйте `[] <> /` при написании команды', inline = False)
-            emb.add_field(name = 'ᅠ', value = '**Используйте** `cy/help [команда]` **для подробностей использования.**\n\n**[Ссылка-приглашение](https://discord.com/api/oauth2/authorize?client_id=694170281270312991&permissions=8&scope=bot%20applications.commands)**', inline = False)
+            emb.add_field(name = 'ᅠ', value = '**Используйте** `cy/help [команда]` **для подробностей использования.**\n\n**[Ссылка-приглашение](https://discord.com/api/oauth2/authorize?client_id=694170281270312991&permissions=8&scope=bot%20applications.commands) | [Веб-документация](https://d-9341.github.io/)**', inline = False)
             emb.set_footer(text = 'Cephalon Cy ©️ Sus&Co\n2020 - Present')
             return await ctx.send(embed = emb)
         if ctx.author.id in self.client.owner_ids and command in owner_commands:
@@ -130,58 +133,169 @@ class Cephalon(commands.Cog):
     @commands.command()
     async def locale(self, ctx: commands.Context):
         locale = get_locale(ctx.author.id)
-        rbutton = GrayButton('RU')
-        gbutton = RedButton('GNIDA')
-        ebutton = GrayButton('EN')
-        tbutton = GrayButton('TEST' if locale == 'en' else 'ТЕСТ')
-        ibutton = GrayButton('INFO' if locale == 'en' else 'ИНФО')
-        ybutton = RedButton('YES' if locale == 'en' else 'ДА')
-        nbutton = GrayButton('NO' if locale == 'en' else 'НЕТ')
-        confirm = discord.ui.View(timeout = 5)
-        confirm.add_item(ybutton)
-        confirm.add_item(nbutton)
-        view = discord.ui.View(timeout = 5)
-        view.add_item(rbutton)
-        view.add_item(gbutton)
-        if ctx.author.id in self.client.owner_ids:
-            view.add_item(ebutton)
-        view.add_item(tbutton)
-        view.add_item(ibutton)
-        async def rbutton_callback(interaction: discord.Interaction):
-            set_locale(ctx.author.id, 'ru')
-            return await interaction.response.edit_message(embed = discord.Embed(description = 'Ваша локаль была установлена на `ru`', color = colors.JDH), view = None)
-        async def gbutton_callback(interaction: discord.Interaction):
-            await interaction.response.edit_message(embed = discord.Embed(description = 'Ты бля уверен?', color = colors.JDH), view = confirm)
-        async def ybutton_callback(interaction: discord.Interaction):
-            set_locale(ctx.author.id, 'gnida')
-            return await interaction.response.edit_message(embed = discord.Embed(description = 'Твоя ёбаная локаль была установлена на `gnida`!', color = colors.JDH), view = None)
-        async def nbutton_callback(interaction: discord.Interaction):
-            return await interaction.response.edit_message(embed = discord.Embed(description = 'Ну ок', color = colors.JDH), view = None)
-        async def ebutton_callback(interaction: discord.Interaction):
-            set_locale(ctx.author.id, 'en')
-            return await interaction.response.edit_message(embed = discord.Embed(description = 'Your locale has been set to `en`', color = colors.JDH), view = None)
+        available_locales = LocalesManager.get_all_locales()
+        LOCALES_CONFIG = {}
+        for loc in available_locales:
+            config = {
+                'button_label': loc.upper(),
+                'confirm_message': translate(loc, 'locale_test'),
+                'style': discord.ButtonStyle.gray
+            }
+            if loc == 'gnida':
+                config.update({
+                    'style': discord.ButtonStyle.red,
+                    'confirmation_required': True,
+                    'confirmation_message': 'Ты бля уверен?' if locale != 'en' else 'Are you fucking sure?'
+                })
+            elif loc == 'gnida_lite':
+                config.update({
+                    'confirmation_required': True,
+                    'confirmation_message': 'Ты реально уверен?' if locale != 'en' else 'Are you really sure?'
+                })
+            elif loc == 'en':
+                config.update({
+                    'owner_only': True
+                })
+                
+            LOCALES_CONFIG[loc] = config
+        SPECIAL_BUTTONS = {
+            'test': {
+                'label': lambda loc: 'TEST' if loc == 'en' else 'ТЕСТ',
+                'style': discord.ButtonStyle.gray
+            },
+            'info': {
+                'label': lambda loc: 'INFO' if loc == 'en' else 'ИНФО', 
+                'style': discord.ButtonStyle.gray
+            }
+        }
+        locale_buttons = {}
+        view = discord.ui.View(timeout=30)
+        for locale_code, config in LOCALES_CONFIG.items():
+            if config.get('owner_only', False) and ctx.author.id not in self.client.owner_ids:
+                continue
+                
+            button = discord.ui.Button(
+                label=config['button_label'],
+                style=config['style'],
+                disabled=(locale == locale_code)
+            )
+            view.add_item(button)
+            locale_buttons[locale_code] = (button, config)
+
+        special_buttons = {}
+        for button_id, config in SPECIAL_BUTTONS.items():
+            button = discord.ui.Button(
+                label=config['label'](locale),
+                style=config['style']
+            )
+            view.add_item(button)
+            special_buttons[button_id] = button
+
         async def test_callback(interaction: discord.Interaction):
-            return await interaction.response.edit_message(embed = discord.Embed(description = translate(locale, 'locale_test'), color = colors.JDH), view = None)
+            if interaction.user.id != ctx.author.id:
+                await interaction.response.send_message("Эта кнопка не для тебя!", ephemeral=True)
+                return
+                
+            current_locale = get_locale(ctx.author.id)
+            await interaction.response.edit_message(
+                embed=discord.Embed(description=translate(current_locale, 'locale_test'), color=colors.JDH),
+                view=None
+            )
+
         async def info_callback(interaction: discord.Interaction):
-            return await interaction.response.edit_message(content = None, embed = discord.Embed(description = translate(locale, 'locale_info'), color = colors.LO), view = None)
-        rbutton.callback = rbutton_callback
-        gbutton.callback = gbutton_callback
-        ebutton.callback = ebutton_callback
-        tbutton.callback = test_callback
-        ibutton.callback = info_callback
-        ybutton.callback = ybutton_callback
-        nbutton.callback = nbutton_callback
-        if locale == 'ru':
-            rbutton.disabled = True
-        if locale == 'gnida':
-            gbutton.disabled = True
-        if locale == 'en':
-            ebutton.disabled = True
+            if interaction.user.id != ctx.author.id:
+                await interaction.response.send_message("Эта кнопка не для тебя!", ephemeral=True)
+                return
+                
+            current_locale = get_locale(ctx.author.id)
+            await interaction.response.edit_message(
+                content=None,
+                embed=discord.Embed(description=translate(current_locale, 'locale_info'), color=colors.LO),
+                view=None
+            )
+
+        async def create_locale_callback(locale_code, config):
+            confirm_view = discord.ui.View(timeout=30)
+            
+            yes_label = translate(locale, 'roulette_yes') if locale != 'en' else 'YES'
+            no_label = translate(locale, 'roulette_no') if locale != 'en' else 'NO'
+            
+            yes_button = discord.ui.Button(label=yes_label, style=discord.ButtonStyle.red)
+            no_button = discord.ui.Button(label=no_label, style=discord.ButtonStyle.gray)
+            
+            confirm_view.add_item(yes_button)
+            confirm_view.add_item(no_button)
+            
+            async def yes_callback(interaction: discord.Interaction):
+                if interaction.user.id != ctx.author.id:
+                    await interaction.response.send_message("Эта кнопка не для тебя!", ephemeral=True)
+                    return
+                    
+                set_locale(ctx.author.id, locale_code)
+                await interaction.response.edit_message(
+                    embed=discord.Embed(description=config['confirm_message'], color=colors.JDH),
+                    view=None
+                )
+
+            async def no_callback(interaction: discord.Interaction):
+                if interaction.user.id != ctx.author.id:
+                    await interaction.response.send_message("Эта кнопка не для тебя!", ephemeral=True)
+                    return
+                    
+                current_locale = get_locale(ctx.author.id)
+                no_message = translate(current_locale, 'roulette_play_cancel')
+                await interaction.response.edit_message(
+                    embed=discord.Embed(description=no_message, color=colors.JDH),
+                    view=None
+                )
+
+            yes_button.callback = yes_callback
+            no_button.callback = no_callback
+
+            async def locale_callback(interaction: discord.Interaction):
+                if interaction.user.id != ctx.author.id:
+                    await interaction.response.send_message("Эта кнопка не для тебя!", ephemeral=True)
+                    return
+                    
+                if config.get('confirmation_required', False):
+                    await interaction.response.edit_message(
+                        embed=discord.Embed(description=config['confirmation_message'], color=colors.JDH),
+                        view=confirm_view
+                    )
+                else:
+                    set_locale(ctx.author.id, locale_code)
+                    await interaction.response.edit_message(
+                        embed=discord.Embed(description=config['confirm_message'], color=colors.JDH),
+                        view=None
+                    )
+            
+            return locale_callback
+
+        for locale_code, (button, config) in locale_buttons.items():
+            callback_func = await create_locale_callback(locale_code, config)
+            button.callback = callback_func
+        
+        special_buttons['test'].callback = test_callback
+        special_buttons['info'].callback = info_callback
+
         try:
-            msg = await ctx.send(embed = discord.Embed(description = translate(locale, 'locale_options'), color = colors.JDH), view = view)
-            await self.client.wait_for('message_edit', check = lambda message: message.author.id == ctx.author.id and message.id == msg.id, timeout = 10)
+            msg = await ctx.send(
+                embed=discord.Embed(description=translate(locale, 'locale_options'), color=colors.JDH),
+                view=view
+            )
+
+            def check(interaction):
+                return interaction.message.id == msg.id
+
+            await self.client.wait_for('interaction', check=check, timeout=30)
+
         except asyncio.TimeoutError:
-            await msg.edit(embed = discord.Embed(description = 'Время вышло', color = colors.JDH), view = None)
+            current_locale = get_locale(ctx.author.id)
+            timeout_msg = translate(current_locale, 'roulette_invite_timeout')
+            try:
+                await msg.edit(embed=discord.Embed(description=timeout_msg, color=colors.JDH), view=None)
+            except:
+                pass
 
     @commands.command()
     async def generate(self, ctx: commands.Context):

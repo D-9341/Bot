@@ -1,15 +1,18 @@
+import asyncio
+import json
+import warnings
+from datetime import timedelta
+
 import discord
 import psycopg2
-import json
-import asyncio
-import warnings
-
 from discord.ext import commands
-from cogs.Logging import LOGS
-from cogs.Constants import colors, locales_paths
-from main import PASSWORD, CWD, owner_commands
-from functions import get_plural_form
+from psycopg2 import sql
 from tabulate import tabulate
+
+from cogs.Constants import LocalesManager, colors
+from cogs.Logging import LOGS
+from functions import get_plural_form
+from main import PASSWORD, owner_commands
 
 class Kernel(commands.Cog):
     def __init__(self, client):
@@ -78,6 +81,7 @@ class Kernel(commands.Cog):
         excepted_modules = {}
         warned_modules = {}
         timedout = False
+        locale_differences = await self._locale_check()
         for name in list(self.client.extensions):
             with warnings.catch_warnings(record = True) as warnings_list:
                 warnings.simplefilter('always')
@@ -89,25 +93,95 @@ class Kernel(commands.Cog):
                     warned_modules[f'`{name[5:]}`'] = str(warning.message).replace('cogs.', '')
         if len(excepted_modules) == len(self.client.extensions):
             return await ctx.send(embed = discord.Embed(description = 'Все модули выдали ошибку', color = colors.ERROR))
+        if locale_differences:
+            LOGS.write(f'[LOCALE_WARN] {(discord.utils.utcnow() + timedelta(hours = 3)).strftime('%d.%m.%Y %H:%M:%S')} {locale_differences}\n')
+            LOGS.flush()
+            await ctx.send(embed = discord.Embed(description = f'{locale_differences}\nВыполните `cy/update` для обновления', color = colors.JDH))
         if warned_modules:
-            LOGS.write(f'[WARN] Предупреждения при перезагрузке:\n')
+            LOGS.write(f'[WARN] {(discord.utils.utcnow() + timedelta(hours = 3)).strftime('%d.%m.%Y %H:%M:%S')} Предупреждения при перезагрузке:\n')
             LOGS.write(''.join([f'{name}: {msg}\n' for name, msg in warned_modules.items()]))
             LOGS.flush()
             await ctx.send(embed = discord.Embed(description = f'Предупреждения при перезагрузке:\n{"".join([f'{name}: {msg}\n' for name, msg in warned_modules.items()])}', color = colors.JDH))
         if excepted_modules:
-            LOGS.write(f'[ERR] При перезагрузке модулей возникли ошибки:\n{"".join([f'`{name}`: `{error}`\n' for name, error in excepted_modules.items()])}')
+            LOGS.write(f'[ERR] {(discord.utils.utcnow() + timedelta(hours = 3)).strftime('%d.%m.%Y %H:%M:%S')} При перезагрузке модулей возникли ошибки:\n{"".join([f'`{name}`: `{error}`\n' for name, error in excepted_modules.items()])}')
             LOGS.flush()
             return await ctx.send(embed = discord.Embed(description = f'{'Модуль' if len(excepted_modules) == 1 else 'Модули'} {', '.join(excepted_modules.keys())} не {'может быть перезагружен' if len(excepted_modules) == 1 else 'могут быть перезагружены'}, {f'пингани {self.client.get_user(338714886001524737).mention}' if ctx.author.id != 338714886001524737 else 'необходимо исправить'}:\n{''.join([f'`{name}`: `{error}`\n' for name, error in excepted_modules.items()])}', color = colors.ERROR))
         try:
             await asyncio.wait_for(self.client.tree.sync(), timeout = 3)
         except asyncio.TimeoutError:
             timedout = True
-            LOGS.write(f'[ERR] При синхронизации команд возникла ошибка: превышен лимит времени (3 секунды)\n')
+            LOGS.write(f'[ERR] {(discord.utils.utcnow() + timedelta(hours = 3)).strftime('%d.%m.%Y %H:%M:%S')} При синхронизации команд возникла ошибка: превышен лимит времени (3 секунды)\n')
             LOGS.flush()
         except Exception as error:
-            LOGS.write(f'[ERR] При синхронизации команд возникла ошибка: {error}\n')
+            LOGS.write(f'[ERR] {(discord.utils.utcnow() + timedelta(hours = 3)).strftime('%d.%m.%Y %H:%M:%S')} При синхронизации команд возникла ошибка: {error}\n')
             LOGS.flush()
         await ctx.send(embed = discord.Embed(description = f'Модули перезагружены{', команды синхронизированы' if not timedout else ''}', color = colors.JDH if not timedout else colors.ERROR))
+
+    async def _locale_check(self) -> str:
+        try:
+            all_issues = []
+            for locale in LocalesManager.get_all_locales():
+                locale_issues = []
+                try:
+                    with open(LocalesManager.get_path(locale), 'r', encoding = 'utf-8') as f:
+                        json_data = json.load(f)
+                except FileNotFoundError:
+                    locale_issues.append(f"Файл локали {locale} не найден")
+                    continue
+                except json.JSONDecodeError:
+                    locale_issues.append(f"Ошибка парсинга JSON для {locale}")
+                    continue
+                try:
+                    conn = psycopg2.connect(
+                        host = "localhost",
+                        database = "locales",
+                        user = "postgres",
+                        password = PASSWORD,
+                        port = 5432
+                    )
+                    cur = conn.cursor()
+                    cur.execute(f"SELECT string_id, value FROM {locale}")
+                    db_data = {row[0]: row[1] for row in cur.fetchall()}
+                    conn.close()
+                except psycopg2.Error as e:
+                    locale_issues.append(f"Ошибка БД для {locale}: {e}")
+                    continue
+                issues = []
+                missing_in_db = set(json_data.keys()) - set(db_data.keys())
+                if missing_in_db:
+                    issues.append(f"В БД отсутствуют ключи ({len(missing_in_db)}): {', '.join(sorted(missing_in_db)[:2])}{'...' if len(missing_in_db) > 2 else ''}")
+                missing_in_json = set(db_data.keys()) - set(json_data.keys())
+                if missing_in_json:
+                    issues.append(f"В JSON отсутствуют ключи ({len(missing_in_json)}): {', '.join(sorted(missing_in_json)[:2])}{'...' if len(missing_in_json) > 2 else ''}")
+                common_keys = set(json_data.keys()) & set(db_data.keys())
+                value_mismatches = []
+                for key in common_keys:
+                    json_value = json_data[key]
+                    db_value = db_data[key]
+                    if json_value != db_value:
+                        json_preview = str(json_value)[:15] + ("..." if len(str(json_value)) > 15 else "")
+                        db_preview = str(db_value)[:15] + ("..." if len(str(db_value)) > 15 else "")
+                        value_mismatches.append(f"`{key}`:\nJSON = `{json_preview}`\nБД = `{db_preview}`")
+                        if len(value_mismatches) >= 2:
+                            value_mismatches.append("...")
+                            break
+                if value_mismatches:
+                    issues.append(f"Расхождения в значениях ({len(value_mismatches)}):")
+                    issues.extend(value_mismatches)
+                if issues:
+                    locale_issues.append(f"**{locale}:**")
+                    locale_issues.extend(issues)
+                all_issues.extend(locale_issues)
+            if all_issues:
+                full_report = "\n".join(all_issues)
+                if len(full_report) > 1500:
+                    truncated = "\n".join(all_issues[:8]) + f"\n... и ещё {len(all_issues) - 8} проблем"
+                    return f"Обнаружены проблемы с локализацией:\n{truncated}"
+                else:
+                    return f"Обнаружены проблемы с локализацией:\n{full_report}"
+            return ""
+        except Exception as e:
+            return f"Ошибка при проверке локализации: {e}"
 
     @commands.command(hidden = True)
     async def pull(self, ctx: commands.Context):
@@ -199,23 +273,44 @@ class Kernel(commands.Cog):
             if conn:
                 conn.rollback()
         finally:
-            await message.delete()
             if conn:
                 cur.close()
                 conn.close()
 
     @commands.command(hidden = True)
-    async def update(self, ctx: commands.Context, locale):
+    async def create_locale(self, ctx: commands.Context, name: str):
+        if ctx.author.id not in self.client.owner_ids:
+            raise commands.NotOwner()
+        if not (name.isalnum() or '_' in name) or not name.islower():
+            return await ctx.send(embed = discord.Embed(description = 'Имя локали должно содержать только латинские буквы в нижнем регистре', color = colors.ERROR))
+        try:
+            with psycopg2.connect(host = "localhost", database = "locales", user = "postgres", password = PASSWORD, port = 5432) as conn:
+                with conn.cursor() as cur:
+                    cur.execute(sql.SQL("CREATE TABLE IF NOT EXISTS {} (string_id TEXT PRIMARY KEY, value TEXT)").format(sql.Identifier(name)), (name, ))
+                    conn.commit()
+            await ctx.send(embed = discord.Embed(description = f'Локаль `{name}` создана или уже существует', color = colors.JDH))
+        except psycopg2.Error as e:
+            await ctx.send(embed = discord.Embed(description = f'Ошибка базы данных: {e}', color = colors.ERROR))
+
+    @commands.command(hidden = True)
+    async def update(self, ctx: commands.Context, locale: str = 'all'):
         if ctx.author.id not in self.client.owner_ids:
             raise commands.NotOwner()
         conn = psycopg2.connect(host = "localhost", database = "locales", user = "postgres", password = PASSWORD, port = 5432)
         cur = conn.cursor()
         message = await ctx.send(embed = discord.Embed(description = 'Обновление...', color = colors.JDH))
         table_name = locale
+        if locale == 'all':
+            locales = LocalesManager.get_all_locales()
+            for loc in locales:
+                table_name = loc
+                await self.update(ctx, loc)
+            await message.delete()
+            return await ctx.send(embed = discord.Embed(description = 'Обновление локалей завершено', color = colors.JDH))
         try:
-            file_path = rf'{CWD}\locales\{locale}\locale.json'
+            file_path = f"locales/{locale}.json"
             with open(file_path, 'r', encoding='utf-8') as f:
-                file_data = json.load(f)
+                file_data: dict = json.load(f)
             file_keys = set(file_data.keys())
             cur.execute(f"SELECT string_id FROM {table_name}")
             db_keys = {row[0] for row in cur.fetchall()}
@@ -223,11 +318,11 @@ class Kernel(commands.Cog):
             keys_to_add = file_keys - db_keys
             keys_to_update = file_keys & db_keys
             if keys_to_delete:
-                cur.execute(f"DELETE FROM {table_name} WHERE string_id IN %s", (tuple(keys_to_delete),))
-            for key, value in file_data.items():
-                cur.execute(f"INSERT INTO {table_name} (string_id, value) VALUES (%s, %s) ON CONFLICT (string_id) DO UPDATE SET value = EXCLUDED.value""", (key, value))
+                cur.execute(sql.SQL("DELETE FROM {} WHERE string_id = ANY(%s)").format(sql.Identifier(table_name)), (list(keys_to_delete), ))
+            for key, value in file_data.items(): 
+                cur.execute(sql.SQL("INSERT INTO {} (string_id, value) VALUES (%s, %s) ON CONFLICT (string_id) DO UPDATE SET value = EXCLUDED.value").format(sql.Identifier(table_name)), (key, value))
             conn.commit()
-            result_msg = f'Обновление завершено\nДобавлено: {len(keys_to_add)}\nОбновлено: {len(keys_to_update)}\nУдалено: {len(keys_to_delete)}'
+            result_msg = f'Обновление завершено ({table_name})\nДобавлено: {len(keys_to_add)}\nОбновлено: {len(keys_to_update)}\nУдалено: {len(keys_to_delete)}'
         except Exception as e:
             conn.rollback()
             result_msg = f'Ошибка обновления: {str(e)}'
@@ -244,14 +339,16 @@ class Kernel(commands.Cog):
         with psycopg2.connect(host = "localhost", database = "locales", user = "postgres", password = PASSWORD, port = 5432) as conn:
             with conn.cursor() as cur:
                 keys = {}
-                locales = ['ru', 'en', 'gnida']
+                locales = LocalesManager.get_all_locales()
                 for loc in locales:
                     try:
                         cur.execute(f"SELECT string_id FROM {loc}")
                         keys[loc] = {row[0] for row in cur.fetchall()}
                     except psycopg2.Error:
                         keys[loc] = set()
-                ru_unique_keys = keys['ru'] - (keys['en'] | keys['gnida'])
+                all_locales = set(keys.keys())
+                all_locales.remove('ru')
+                ru_unique_keys = keys['ru'] - set().union(*[keys[loc] for loc in all_locales])
                 has_ru_unique = bool(ru_unique_keys)
                 report = ["=== Уникальные ключи ==="]
                 for loc in locales:
@@ -289,26 +386,28 @@ class Kernel(commands.Cog):
         view = discord.ui.View()
         view.add_item(discord.ui.Button(label = "Добавить", style = discord.ButtonStyle.green, custom_id = "add_keys"))
         view.add_item(discord.ui.Button(label = "Пропустить", style = discord.ButtonStyle.red, custom_id = "skip_keys"))
-        emb = discord.Embed(title = "Добавить отсутствующие ключи из ru?", description = "Нажмите на кнопку, чтобы автоматически добавить ru-ключи в другие локали\n ⚠️ **Важно:**\n- Ключи будут вставлены в те же позиции, что и в ru\n- Значения нужно будет заполнить ВРУЧНУЮ\n- Перед тем, как применить, ru будет обновлена автоматически", color = colors.JDH)
+        emb = discord.Embed(title = "Добавить отсутствующие ключи из ru?", description = "Нажмите на кнопку, чтобы автоматически добавить ru-ключи в другие локали\n**Важно:**\n- Ключи будут вставлены в те же позиции, что и в ru\n- Значения нужно будет заполнить ВРУЧНУЮ\n- Перед тем, как применить, ru будет обновлена автоматически", color = colors.JDH)
         sent = await ctx.send(embed = emb, view = view)
         confirmation = await self.client.wait_for('interaction', check = lambda interaction: interaction.channel == ctx.channel and interaction.user == ctx.author)
         await self.update(ctx, 'ru')
         await sent.edit(embed = emb, view = None)
         if confirmation.data['custom_id'] == 'skip_keys':
             return
-        ru_path = locales_paths.RU
+        ru_path = LocalesManager.get_path('ru')
         with open(ru_path, 'r', encoding='utf-8') as f:
             ru_data = json.load(f, object_pairs_hook = OrderedDict)
         results = []
-        for loc in ['en', 'gnida']:
+        locales = LocalesManager.get_all_locales()
+        locales.remove('ru')
+        for loc in locales:
             to_add = sorted(keys['ru'] - keys[loc])
             if not to_add:
-                results.append(f"✅ {loc}: Нет ключей для добавления")
+                results.append(f"{loc}: Нет ключей для добавления")
                 continue
             try:
-                path = locales_paths.GNIDA if loc == 'gnida' else locales_paths.EN
-                with open(path, 'r+', encoding='utf-8') as f:
-                    loc_data = json.load(f, object_pairs_hook = OrderedDict)
+                path = LocalesManager.get_path(loc)
+                with open(path, 'r+', encoding = 'utf-8') as f:
+                    loc_data: dict = json.load(f, object_pairs_hook = OrderedDict)
                     new_data = OrderedDict()
                     added_count = 0
                     for key in ru_data:
@@ -323,12 +422,250 @@ class Kernel(commands.Cog):
                     f.seek(0)
                     json.dump(new_data, f, indent = 4, ensure_ascii = False)
                     f.truncate()
-                results.append(f"✅ {loc}: Добавлено {added_count} {get_plural_form(added_count, ['ключ', 'ключя', 'ключей'])}")
+                results.append(f"{loc}: Добавлено {added_count} {get_plural_form(added_count, ['ключ', 'ключа', 'ключей'])}")
             except Exception as e:
-                results.append(f"❌ {loc}: Ошибка ({str(e)})")
+                results.append(f"{loc}: Ошибка ({str(e)})")
         result_embed = discord.Embed(title = "Результат обновления локалей", description = "\n".join(results) if results else "Нет изменений", color = colors.SUCCESS)
-        result_embed.add_field(name = "Инструкция", value = "1. Проверьте JSON файлы локалей\n2. **Заполните ВРУЧНУЮ значения** для новых ключей (пустые строки)\n3. Новые ключи вставлены в позиции, соответствующие ru-локали", inline = False)
+        result_embed.add_field(name = "Инструкция", value = "1. Проверьте JSON файлы локалей\n2. **Заполните ВРУЧНУЮ значения** для новых ключей (пустые строки)\n3. Обновите локали использовав cy/update <локаль/all>", inline = False)
         await ctx.send(embed = result_embed)
+
+    @commands.command(hidden = True)
+    async def scan(self, ctx: commands.Context, target_path: str):
+        if ctx.author.id not in self.client.owner_ids:
+            raise commands.NotOwner()
+        
+        import re
+        import os
+        from collections import OrderedDict
+        
+        try:
+            # Проверяем, существует ли путь
+            if not os.path.exists(target_path):
+                return await ctx.send(embed=discord.Embed(
+                    description=f'Путь `{target_path}` не существует',
+                    color=colors.ERROR
+                ))
+            
+            # Определяем список файлов для сканирования
+            files_to_scan = []
+            
+            if os.path.isfile(target_path):
+                # Если передан файл
+                if target_path.endswith('.py'):
+                    files_to_scan = [target_path]
+                else:
+                    return await ctx.send(embed=discord.Embed(
+                        description='Поддерживаются только Python файлы (.py)',
+                        color=colors.ERROR
+                    ))
+                    
+            elif os.path.isdir(target_path):
+                for root, dirs, files in os.walk(target_path):
+                    for file in files:
+                        if file.endswith('.py') and not file.startswith('s'):
+                            files_to_scan.append(os.path.join(root, file))
+                
+                if not files_to_scan:
+                    return await ctx.send(embed=discord.Embed(
+                        description=f'В папке `{target_path}` не найдено Python файлов',
+                        color=colors.ERROR
+                    ))
+            all_found_keys = set()
+            file_results = {}
+            
+            await ctx.send(embed=discord.Embed(
+                description=f'Сканирование {len(files_to_scan)} файлов...',
+                color=colors.JDH
+            ))
+            
+            for file_path in files_to_scan:
+                try:
+                    with open(file_path, 'r', encoding='utf-8') as f:
+                        content = f.read()
+                    pattern = r"translate\s*\(\s*[^,)]+\s*,\s*['\"]([^'\"]+)['\"]\s*"
+                    matches = re.findall(pattern, content)
+                    
+                    if matches:
+                        file_keys = set(matches)
+                        all_found_keys.update(file_keys)
+                        file_results[file_path] = {
+                            'keys': file_keys,
+                            'count': len(file_keys)
+                        }
+                        
+                except Exception as e:
+                    await ctx.send(embed=discord.Embed(
+                        description=f'Ошибка при чтении файла `{file_path}`: {str(e)}',
+                        color=colors.ERROR
+                    ))
+            
+            if not all_found_keys:
+                return await ctx.send(embed=discord.Embed(
+                    description=f'В {"файле" if len(files_to_scan) == 1 else "указанной папке"} не найдено ключей перевода',
+                    color=colors.ERROR
+                ))
+            found_keys = sorted(all_found_keys)
+            if len(files_to_scan) > 1:
+                stats_parts = [f"**Статистика сканирования:**", f"Файлов обработано: {len(files_to_scan)}", f"Файлов с ключами: {len(file_results)}", ""]
+                sorted_files = sorted(file_results.items(), key=lambda x: x[1]['count'], reverse=True)
+                for file_path, data in sorted_files[:10]:
+                    relative_path = os.path.relpath(file_path, target_path) if os.path.isdir(target_path) else os.path.basename(file_path)
+                    stats_parts.append(f"`{relative_path}`: {data['count']} {get_plural_form(data['count'], ['ключ', 'ключа', 'ключей'])}")
+                if len(sorted_files) > 10:
+                    stats_parts.append(f"... и ещё {len(sorted_files) - 10} файлов")
+                stats_embed = discord.Embed(
+                    title="Результаты сканирования",
+                    description="\n".join(stats_parts),
+                    color=colors.JDH
+                )
+                await ctx.send(embed=stats_embed)
+            locales_dir = "locales"
+            locale_files = [f for f in os.listdir(locales_dir) if f.endswith('.json')]
+            missing_keys_report = {}
+            existing_keys_report = {}
+            for locale_file in locale_files:
+                locale_name = locale_file.replace('.json', '')
+                locale_path = os.path.join(locales_dir, locale_file)
+                try:
+                    with open(locale_path, 'r', encoding='utf-8') as f:
+                        locale_data = json.load(f)
+                    missing_keys = [key for key in found_keys if key not in locale_data]
+                    existing_keys = [key for key in found_keys if key in locale_data]
+                    missing_keys_report[locale_name] = missing_keys
+                    existing_keys_report[locale_name] = existing_keys
+                except Exception as e:
+                    await ctx.send(embed=discord.Embed(
+                        description=f'Ошибка при чтении локали {locale_name}: {str(e)}',
+                        color=colors.ERROR
+                    ))
+            report_parts = []
+            report_parts.append(f"**Всего найдено уникальных ключей:** {len(found_keys)}")
+            report_parts.append("")
+            for locale in sorted(missing_keys_report.keys()):
+                missing_count = len(missing_keys_report[locale])
+                existing_count = len(existing_keys_report[locale])
+                completion_percent = (existing_count / len(found_keys)) * 100 if found_keys else 0
+                report_parts.append(f"**{locale}:**")
+                report_parts.append(f"Есть: {existing_count} | Отсутствует: {missing_count} | Заполнено: {completion_percent:.1f}%")
+                if missing_count > 0:
+                    report_parts.append("Отсутствующие ключи:")
+                    report_parts.extend([f"  - {key}" for key in missing_keys_report[locale][:5]])
+                    if missing_count > 5:
+                        report_parts.append(f"  ... и ещё {missing_count - 5}")
+                report_parts.append("")
+            full_report = "\n".join(report_parts)
+
+            if len(full_report) > 2000:
+                chunks = [full_report[i:i+1900] for i in range(0, len(full_report), 1900)]
+                for i, chunk in enumerate(chunks, 1):
+                    embed = discord.Embed(
+                        title=f"Отчет по ключам перевода ({i}/{len(chunks)})",
+                        description=f"```\n{chunk}\n```",
+                        color=colors.JDH
+                    )
+                    await ctx.send(embed=embed)
+            else:
+                embed = discord.Embed(
+                    title="Отчет по ключам перевода",
+                    description=f"```\n{full_report}\n```",
+                    color=colors.JDH
+                )
+                await ctx.send(embed=embed)
+            
+            total_missing = sum(len(keys) for keys in missing_keys_report.values())
+            if total_missing == 0:
+                return await ctx.send(embed=discord.Embed(
+                    description="✅ Все ключи присутствуют во всех локалях!",
+                    color=colors.SUCCESS
+                ))
+            
+            view = discord.ui.View()
+            view.add_item(discord.ui.Button(label="Добавить в локали", style=discord.ButtonStyle.green, custom_id="add_to_locales"))
+            view.add_item(discord.ui.Button(label="Пропустить", style=discord.ButtonStyle.red, custom_id="skip_addition"))
+            
+            emb = discord.Embed(
+                title="Добавить отсутствующие ключи в локали?",
+                description=f"Найдено {total_missing} отсутствующих ключей в различных локалях.\nХотите автоматически добавить их?",
+                color=colors.JDH
+            )
+            emb.add_field(
+                name="Важно", 
+                value="Ключи будут добавлены с пустыми значениями. Не забудьте заполнить их вручную!",
+                inline=False
+            )
+            
+            message = await ctx.send(embed=emb, view=view)
+            
+            try:
+                confirmation = await self.client.wait_for(
+                    'interaction', 
+                    check=lambda interaction: interaction.user.id == ctx.author.id and interaction.channel == ctx.channel,
+                    timeout=30.0
+                )
+                
+                if confirmation.data["custom_id"] == "add_to_locales":
+                    await message.edit(embed=discord.Embed(description="Добавление ключей в локали...", color=colors.JDH), view=None)
+                    await self._add_missing_keys_to_locales(ctx, missing_keys_report, found_keys)
+                else:
+                    await message.edit(embed=discord.Embed(description="Добавление ключей отменено", color=colors.ERROR), view=None)
+                    
+            except asyncio.TimeoutError:
+                await message.edit(embed=discord.Embed(description="Время подтверждения истекло", color=colors.ERROR), view=None)
+                
+        except Exception as e:
+            await ctx.send(embed=discord.Embed(
+                description=f'Ошибка при сканировании: {str(e)}',
+                color=colors.ERROR
+            ))
+
+    async def _add_missing_keys_to_locales(self, ctx: commands.Context, missing_keys_report: dict, all_found_keys: list):
+        """Добавляет отсутствующие ключи в файлы локалей"""
+        from collections import OrderedDict
+        import os
+        
+        results = []
+        
+        for locale_name, missing_keys in missing_keys_report.items():
+            if not missing_keys:
+                results.append(f"**{locale_name}:** нет отсутствующих ключей")
+                continue
+                
+            locale_path = f"locales/{locale_name}.json"
+            
+            try:
+                # Читаем текущую локаль
+                with open(locale_path, 'r', encoding='utf-8') as f:
+                    locale_data = json.load(f, object_pairs_hook=OrderedDict)
+                
+                # Добавляем отсутствующие ключи с пустыми значениями
+                added_count = 0
+                for key in all_found_keys:
+                    if key not in locale_data:
+                        locale_data[key] = ""
+                        added_count += 1
+                
+                # Сохраняем обратно с сохранением порядка
+                with open(locale_path, 'w', encoding='utf-8') as f:
+                    json.dump(locale_data, f, indent=4, ensure_ascii=False)
+                
+                results.append(f"**{locale_name}:** добавлено {added_count} ключей")
+                
+            except Exception as e:
+                results.append(f"**{locale_name}:** ошибка - {str(e)}")
+        
+        # Отправляем результат
+        result_embed = discord.Embed(
+            title="Результат добавления ключей",
+            description="\n".join(results),
+            color=colors.SUCCESS
+        )
+        result_embed.add_field(
+            name="Инструкция",
+            value="1. Проверьте JSON файлы локалей\n2. **Заполните ВРУЧНУЮ значения** для новых ключей (пустые строки)\n3. Обновите базу данных используя `cy/update <локаль>`",
+            inline=False
+        )
+        
+        await ctx.send(embed=result_embed)
 
 async def setup(client):
     await client.add_cog(Kernel(client))
