@@ -3,36 +3,59 @@ import psycopg2
 from psycopg2 import sql
 from main import PASSWORD
 
-def translate(locale: str, string_id: str) -> str:
+def connect_db(db: str = 'locales') -> psycopg2.extensions.connection:
     """
-    Translates a string_id to a locale string from the locale file
+    Connects to a PostgreSQL database
+
+    Parameters
+    ----------
+    db: str, optional
+        The name of the database to connect to, defaults to 'locales'
+
+    Returns
+    -------
+    psycopg2.extensions.connection
+        A connection to the PostgreSQL database
+    """
+    return psycopg2.connect(host = "localhost", database = db, user = "postgres", password = PASSWORD, port = 5432)
+
+def translate(locale: str, string_id: str, /, **format_kwargs) -> str:
+    """
+    Translates a string_id in a given locale, using format_kwargs if provided
 
     Parameters
     ----------
     locale: str
-        The locale to translate to
+        The locale to translate in
     string_id: str
-        The ID of the string to translate
+        The string_id to translate
+    **format_kwargs
+        Keyword arguments to pass to the translated string's format method
 
     Returns
     -------
     str
         The translated string
     """
-    conn = psycopg2.connect(
-        host = "localhost",
-        database = "locales",
-        user = "postgres",
-        password = PASSWORD,
-        port = 5432
-    )
+    conn = connect_db()
     cur = conn.cursor()
     cur.execute(sql.SQL("SELECT value FROM {} WHERE string_id = %s").format(sql.Identifier(locale)), (string_id,))
     result = cur.fetchone()
     conn.close()
     if '_help' in string_id:
-        return result[0] if result else f'{translate(locale, 'command_not_found')}'.format(command = string_id[:-5])
-    return result[0] if result else "Локаль не найдена"
+        if result:
+            translated_string = result[0]
+        else:
+            command_name = string_id[:-5]
+            translated_string = translate(locale, 'command_not_found', command = command_name)
+        return translated_string
+    if result:
+        translated_string = result[0]
+        if format_kwargs:
+            return translated_string.format(**format_kwargs)
+        else:
+            return translated_string
+    return f"Локаль `{string_id}` не найдена"
 
 def get_locale(user_id: int) -> str:
     """
@@ -48,13 +71,7 @@ def get_locale(user_id: int) -> str:
     str
         The locale of the author
     """
-    conn = psycopg2.connect(
-        host = "localhost",
-        database = "locales",
-        user = "postgres",
-        password = PASSWORD,
-        port = 5432
-    )
+    conn = connect_db()
     cur = conn.cursor()
     cur.execute("SELECT locale FROM users WHERE user_id = %s", (user_id,))
     result = cur.fetchone()
@@ -72,13 +89,7 @@ def set_locale(user_id: int, locale: str) -> None:
     locale: str
         The locale to set for the author
     """
-    conn = psycopg2.connect(
-        host = "localhost",
-        database = "locales",
-        user = "postgres",
-        password = PASSWORD,
-        port = 5432
-    )
+    conn = connect_db()
     cur = conn.cursor()
     cur.execute("INSERT INTO users (user_id, locale) VALUES (%s, %s) ON CONFLICT (user_id) DO UPDATE SET locale = %s", (user_id, locale, locale))
     conn.commit()
@@ -131,15 +142,15 @@ def parse_flags(flags_list: str) -> argparse.Namespace:
     import shlex
     flags_list = shlex.split(flags_list)
     parser = argparse.ArgumentParser()
-    parser.add_argument('-e', '--everyone', type = bool, action = 'store_true', help = 'Include all members')
-    parser.add_argument('-u', '--users', type = bool, action = 'store_true', help = 'Include user members')
-    parser.add_argument('-b', '--bots', type = bool, action = 'store_true', help = 'Include bot members')
-    parser.add_argument('-s', '--silent', type = bool, action = 'store_true', help = 'Silent mode for results')
+    parser.add_argument('-e', '--everyone', action = 'store_true', help = 'Include all members')
+    parser.add_argument('-u', '--users', action = 'store_true', help = 'Include user members')
+    parser.add_argument('-b', '--bots', action = 'store_true', help = 'Include bot members')
+    parser.add_argument('-s', '--silent', action = 'store_true', help = 'Silent mode for results')
     parser.add_argument('-x', '--exact', type = str, default = False, help = 'Exact string')
     parser.add_argument('-c', '--contains', type = str, default = False, help = 'Contains substring')
-    parser.add_argument('-E', '--embeds', type = bool, action = 'store_true', help = 'Has embeds')
-    parser.add_argument('-A', '--attachments', type = bool, action = 'store_true', help = 'Has attachments')
-    parser.add_argument('-S', '--stickers', type = bool, action = 'store_true', help = 'Has stickers')
+    parser.add_argument('-E', '--embeds', action = 'store_true', help = 'Has embeds')
+    parser.add_argument('-A', '--attachments', action = 'store_true', help = 'Has attachments')
+    parser.add_argument('-S', '--stickers', action = 'store_true', help = 'Has stickers')
     flags, _ = parser.parse_known_args(flags_list)
     if flags.users and flags.bots:
         flags.everyone = True

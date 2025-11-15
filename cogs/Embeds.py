@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 
 from cogs.Constants import botversions, colors
+from main import bot_owner_or_has_permissions
 
 class Embeds(commands.Cog):
     def __init__(self, client):
@@ -80,7 +81,7 @@ class Embeds(commands.Cog):
         return await ctx.send(embed = emb, view = view)
 
     @commands.command()
-    @commands.has_permissions(manage_messages = True)
+    @commands.check(bot_owner_or_has_permissions(manage_messages = True))
     async def edit(self, ctx: commands.Context, arg, *, msg: str = None):
         message = await ctx.channel.fetch_message(arg)
         view = discord.ui.View()

@@ -143,7 +143,7 @@ class Music(commands.Cog):
     async def queue_remove(self, ctx: commands.Context, index: int):
         locale = get_locale(ctx.author.id)
         if index == 1:
-            return await ctx.send(embed=discord.Embed(description = translate(locale, 'queue_remove_first'), color = colors.ERROR))
+            return await self.queue_skip(ctx)
         if 2 <= index <= len(queue):
             queue.pop(index - 1)
             track = title_list.pop(index - 1)

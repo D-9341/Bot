@@ -206,10 +206,10 @@ class Events(commands.Cog):
             emb = discord.Embed(description = f'{ctx.author.mention}, у вас недостаточно прав на выполнение команды `{ctx.command.name}`. Напишите cy/help `{ctx.command.name}` для просмотра необходимых прав', color = colors.JDH)
             await ctx.send(embed = emb)
         elif isinstance(error, commands.CommandOnCooldown):
-            s = error.retry_after
+            seconds = round(error.retry_after)
             choises = ['Ещё не время.', 'Я не готов.', 'Ещё нет.', 'Ещё. Не. Время.', 'Я. Не. Готов.', 'Ещё. Нет.', 'ЕЩЁ НЕ ВРЕМЯ!', 'Я НЕ ГОТОВ!', 'ЕЩЁ НЕТ!']
             rand = random.choice(choises)
-            emb = discord.Embed(description = f'{rand} Команда `{ctx.command.name}` будет доступна через {round(s)} {get_plural_form(round(s), ["секунду", "секунды", "секунд"])}!', color = colors.ERROR)
+            emb = discord.Embed(description = f'{rand} Команда `{ctx.command.name}` будет доступна через {seconds} {get_plural_form(seconds, ["секунду", "секунды", "секунд"])}!', color = colors.ERROR)
             await ctx.send(embed = emb)
         elif isinstance(error, commands.MissingRequiredArgument):
             rearm(ctx.command, ctx.message)

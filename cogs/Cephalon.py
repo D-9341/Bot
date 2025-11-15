@@ -4,6 +4,7 @@ import secrets
 import sys
 from datetime import timedelta
 from pathlib import Path
+from typing import cast
 
 import discord
 from discord.ext import commands
@@ -40,7 +41,7 @@ class Cephalon(commands.Cog):
             emb.set_author(name = self.client.user.name, url = 'https://discord.com/api/oauth2/authorize?client_id=694170281270312991&permissions=8&scope=bot%20applications.commands')
             emb.add_field(name = 'Cephalon', value = '`botver`, `devs`, `help`, `info`, `invite`, `locale`, `ping`, `uptime`', inline = False)
             emb.add_field(name = 'Embeds', value = '`content`, `edit`, `say`', inline = False)
-            emb.add_field(name = 'Fun', value = '`aghanim`, `dotersbrain`, `roulette`, `settings`', inline = False)
+            emb.add_field(name = 'Fun', value = '`aghanim`, `dotersbrain`, `leaderboard`, `roulette`, `settings`', inline = False)
             emb.add_field(name = 'Mod', value = '`ban`, `clear`, `dm`, `deaf`, `give`, `kick`, `mute`, `take`, `timeout`, `undeaf`, `unmute`', inline = False)
             emb.add_field(name = 'Misc', value = '`about`, `avatar`, `coinflip`, `roll`, `roleinfo`, `rolemembers`, `serverinfo`, `someone`', inline = False)
             # emb.add_field(name = 'Music', value = '`join`, `leave`, `play`, `pause`, `resume`, `stop`') # , `volume`
@@ -65,7 +66,7 @@ class Cephalon(commands.Cog):
             if command == 'tts':
                 return await ctx.send(embed = discord.Embed(description = '```py\ncy/tts <текст>\n\nПроизношение текста с помощью АПИ гугла```', color = colors.JDH))
         locale = get_locale(ctx.author.id) if not locale else locale
-        return await ctx.send(embed = discord.Embed(description = (translate(locale, f'{command}_help')), color = colors.JDH))
+        return await ctx.send(embed = discord.Embed(description = translate(locale, f'{command}_help'), color = colors.JDH))
 
     @commands.command()
     async def status(self, ctx: commands.Context, target = 'list'):
@@ -156,7 +157,6 @@ class Cephalon(commands.Cog):
                 config.update({
                     'owner_only': True
                 })
-                
             LOCALES_CONFIG[loc] = config
         SPECIAL_BUTTONS = {
             'test': {
@@ -169,131 +169,88 @@ class Cephalon(commands.Cog):
             }
         }
         locale_buttons = {}
-        view = discord.ui.View(timeout=30)
+        view = discord.ui.View(timeout = 30)
         for locale_code, config in LOCALES_CONFIG.items():
+            config = cast(dict, config)
             if config.get('owner_only', False) and ctx.author.id not in self.client.owner_ids:
                 continue
-                
-            button = discord.ui.Button(
-                label=config['button_label'],
-                style=config['style'],
-                disabled=(locale == locale_code)
-            )
+            button = discord.ui.Button(label = config['button_label'], style = config['style'], disabled = (locale == locale_code))
             view.add_item(button)
             locale_buttons[locale_code] = (button, config)
 
         special_buttons = {}
         for button_id, config in SPECIAL_BUTTONS.items():
-            button = discord.ui.Button(
-                label=config['label'](locale),
-                style=config['style']
-            )
+            button = discord.ui.Button(label = config['label'](locale), style = config['style'])
             view.add_item(button)
             special_buttons[button_id] = button
 
         async def test_callback(interaction: discord.Interaction):
             if interaction.user.id != ctx.author.id:
-                await interaction.response.send_message("Эта кнопка не для тебя!", ephemeral=True)
-                return
-                
+                return await interaction.response.send_message("Эта кнопка не для тебя!", ephemeral = True)
             current_locale = get_locale(ctx.author.id)
-            await interaction.response.edit_message(
-                embed=discord.Embed(description=translate(current_locale, 'locale_test'), color=colors.JDH),
-                view=None
-            )
+            await interaction.response.edit_message(embed = discord.Embed(description = translate(current_locale, 'locale_test'), color = colors.JDH), view = None)
 
         async def info_callback(interaction: discord.Interaction):
             if interaction.user.id != ctx.author.id:
-                await interaction.response.send_message("Эта кнопка не для тебя!", ephemeral=True)
-                return
-                
+                return await interaction.response.send_message("Эта кнопка не для тебя!", ephemeral = True)
             current_locale = get_locale(ctx.author.id)
-            await interaction.response.edit_message(
-                content=None,
-                embed=discord.Embed(description=translate(current_locale, 'locale_info'), color=colors.LO),
-                view=None
-            )
+            await interaction.response.edit_message(content = None, embed = discord.Embed(description = translate(current_locale, 'locale_info'), color = colors.LO), view = None)
 
         async def create_locale_callback(locale_code, config):
-            confirm_view = discord.ui.View(timeout=30)
-            
-            yes_label = translate(locale, 'roulette_yes') if locale != 'en' else 'YES'
-            no_label = translate(locale, 'roulette_no') if locale != 'en' else 'NO'
-            
+            confirm_view = discord.ui.View(timeout = 30)
+            yes_label = translate(locale, 'roulette_yes')
+            no_label = translate(locale, 'roulette_no')
             yes_button = discord.ui.Button(label=yes_label, style=discord.ButtonStyle.red)
             no_button = discord.ui.Button(label=no_label, style=discord.ButtonStyle.gray)
-            
             confirm_view.add_item(yes_button)
             confirm_view.add_item(no_button)
             
             async def yes_callback(interaction: discord.Interaction):
                 if interaction.user.id != ctx.author.id:
-                    await interaction.response.send_message("Эта кнопка не для тебя!", ephemeral=True)
-                    return
-                    
+                    return await interaction.response.send_message("Эта кнопка не для тебя!", ephemeral = True)
                 set_locale(ctx.author.id, locale_code)
-                await interaction.response.edit_message(
-                    embed=discord.Embed(description=config['confirm_message'], color=colors.JDH),
-                    view=None
-                )
+                await interaction.response.edit_message(embed = discord.Embed(description = config['confirm_message'], color = colors.JDH), view = None)
 
             async def no_callback(interaction: discord.Interaction):
                 if interaction.user.id != ctx.author.id:
-                    await interaction.response.send_message("Эта кнопка не для тебя!", ephemeral=True)
-                    return
-                    
+                    return await interaction.response.send_message("Эта кнопка не для тебя!", ephemeral=True)
                 current_locale = get_locale(ctx.author.id)
                 no_message = translate(current_locale, 'roulette_play_cancel')
-                await interaction.response.edit_message(
-                    embed=discord.Embed(description=no_message, color=colors.JDH),
-                    view=None
-                )
+                await interaction.response.edit_message(embed = discord.Embed(description = no_message, color = colors.JDH), view = None)
 
             yes_button.callback = yes_callback
             no_button.callback = no_callback
 
             async def locale_callback(interaction: discord.Interaction):
                 if interaction.user.id != ctx.author.id:
-                    await interaction.response.send_message("Эта кнопка не для тебя!", ephemeral=True)
-                    return
+                    return await interaction.response.send_message("Эта кнопка не для тебя!", ephemeral = True)
                     
                 if config.get('confirmation_required', False):
-                    await interaction.response.edit_message(
-                        embed=discord.Embed(description=config['confirmation_message'], color=colors.JDH),
-                        view=confirm_view
-                    )
+                    await interaction.response.edit_message(embed = discord.Embed(description = config['confirmation_message'], color = colors.JDH), view = confirm_view)
                 else:
                     set_locale(ctx.author.id, locale_code)
-                    await interaction.response.edit_message(
-                        embed=discord.Embed(description=config['confirm_message'], color=colors.JDH),
-                        view=None
-                    )
-            
+                    await interaction.response.edit_message(embed = discord.Embed(description = config['confirm_message'], color = colors.JDH), view = None)
             return locale_callback
 
         for locale_code, (button, config) in locale_buttons.items():
+            button = cast(discord.ui.Button, button)
             callback_func = await create_locale_callback(locale_code, config)
             button.callback = callback_func
-        
+
+        special_buttons['test'] = cast(discord.ui.Button, special_buttons['test'])
+        special_buttons['info'] = cast(discord.ui.Button, special_buttons['info'])
         special_buttons['test'].callback = test_callback
         special_buttons['info'].callback = info_callback
 
         try:
-            msg = await ctx.send(
-                embed=discord.Embed(description=translate(locale, 'locale_options'), color=colors.JDH),
-                view=view
-            )
-
-            def check(interaction):
-                return interaction.message.id == msg.id
-
-            await self.client.wait_for('interaction', check=check, timeout=30)
+            msg = await ctx.send(embed = discord.Embed(description = translate(locale, 'locale_options'), color = colors.JDH), view = view)
+            await self.client.wait_for('interaction', check = lambda i: i.user.id == ctx.author.id, timeout = 30)
 
         except asyncio.TimeoutError:
             current_locale = get_locale(ctx.author.id)
             timeout_msg = translate(current_locale, 'roulette_invite_timeout')
             try:
-                await msg.edit(embed=discord.Embed(description=timeout_msg, color=colors.JDH), view=None)
+                await msg.edit(embed = discord.Embed(description = timeout_msg, color = colors.JDH), view = None)
             except:
                 pass
 
@@ -309,7 +266,7 @@ class Cephalon(commands.Cog):
     async def info(self, ctx: commands.Context):
         emb = discord.Embed(title = 'Пару строк кода сюда, новые фишки туда', description = 'Создатели бота постоянно совершенствуют своё детище, поддерживая его в актуальном состоянии', color = colors.JDH)
         emb.set_author(name = self.client.user.name, url = 'https://warframe.fandom.com/wiki/Cephalon_Cy', icon_url = self.client.user.avatar.url)
-        emb.add_field(name = 'Версия', value = '0.14.6.0')
+        emb.add_field(name = 'Версия', value = '1.0')
         emb.add_field(name = 'Написан на', value = f'discord.py v{discord.__version__}\nPython v{sys.version[:7]}')
         emb.add_field(name = 'Разработчики 🇷🇺', value = '[сасиска](https://discord.com/users/338714886001524737)\n[Prokaznik](https://discord.com/users/417012231406878720)')
         emb.add_field(name = 'Обслуживаю', value = f'{len(self.client.users)} человек')
@@ -349,7 +306,7 @@ class Cephalon(commands.Cog):
         await message.edit(embed = discord.Embed(description = f'Pong! `{round(self.client.latency * 1000)} ms`', color = colors.JDH))
 
     @commands.command()
-    async def botver(self, ctx: commands.Context, version: str = '0.14.6.0'):
+    async def botver(self, ctx: commands.Context, version: str = '1.0'):
         with open(CWD + '\\versions.json', 'r', encoding = 'utf-8') as f:
             versions = json.load(f)
         version_data = versions[str(version)]

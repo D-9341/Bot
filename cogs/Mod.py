@@ -10,6 +10,27 @@ from cogs.Constants import colors
 from functions import get_locale, get_plural_form, parse_flags, translate
 from main import bot_owner_or_has_permissions
 
+async def clear_results(ctx: commands.Context, sent: discord.Message, cleared: list, authors: dict, flags, amount: int, view: discord.ui.View, client: commands.Bot):
+    try:
+        emb = discord.Embed(title = 'Результаты удаления сообщений', color = colors.DEFAULT)
+        emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{len(cleared)} / {amount}```')
+        if flags.exact or flags.contains:
+            if flags.exact:
+                filter_desc = f'Точный текст: {flags.exact}'
+            elif flags.contains:
+                filter_desc = f'Содержит: {flags.contains}'
+            else:
+                filter_desc = 'Без текстовых фильтров'
+            emb.add_field(name = 'Применён фильтр:', value = f'```({filter_desc})```', inline = True)
+        emb.add_field(name = 'Найдены сообщения от:', value = ''.join([f"```ARM\n{author.display_name}: {amount}```" for author, amount in authors.items()]), inline = False)
+        emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены нажмите на кнопку "Отменить"')
+        await sent.edit(embed = emb, view = view)
+        await client.wait_for('interaction', timeout = 10, check = lambda i: i.channel == ctx.message.channel and i.user == ctx.author and i.data['custom_id'] == 'cancel')
+        emb.set_footer(text = None)
+        await sent.edit(embed = emb, view = None)
+    except asyncio.TimeoutError:
+        await sent.delete()
+
 class CancelButton(discord.ui.Button):
     def __init__(self):
         super().__init__(label = 'Отменить', style = discord.ButtonStyle.red, custom_id = 'cancel')
@@ -49,21 +70,21 @@ class Mod(commands.Cog):
         bot = discord.utils.get(ctx.guild.members, id = self.client.user.id)
         if member.id not in self.client.owner_ids:
             if reason is None:
-                reason = f'{translate(locale, 'reason')}'.format(sentence = 'кик с этого сервера')
+                reason = translate(locale, 'reason', sentence = 'кик с этого сервера')
             if member == ctx.author:
                 emb = discord.Embed(description = translate(locale, 'kick_member_is_author'), color = discord.Color.blurple())
                 return await ctx.send(embed = emb)
             if ctx.author.top_role == member.top_role:
-                emb = discord.Embed(description = f'{translate(locale, "member_top_eq_author")}'.format(author_mention = ctx.author.mention, member_mention = member.mention), color = colors.JDH)
+                emb = discord.Embed(description = translate(locale, "member_top_eq_author", author_mention = ctx.author.mention, member_mention = member.mention), color = colors.JDH)
                 await ctx.send(embed = emb)
             elif member.top_role > ctx.author.top_role:
-                emb = discord.Embed(description = f'{translate(locale, "member_top_gt_author")}'.format(author_mention = ctx.author.mention, member_mention = member.mention), color = colors.JDH)
+                emb = discord.Embed(description = translate(locale, "member_top_gt_author", author_mention = ctx.author.mention, member_mention = member.mention), color = colors.JDH)
                 await ctx.send(embed = emb)
             elif member.top_role == bot.top_role:
-                emb = discord.Embed(description = f'{translate(locale, "member_top_eq_bot")}'.format(author_mention = ctx.author.mention, member_mention = member.mention), color = colors.ERROR)
+                emb = discord.Embed(description = translate(locale, "member_top_eq_bot", member_mention = member.mention), color = colors.ERROR)
                 await ctx.send(embed = emb)
             elif member.top_role > bot.top_role:
-                emb = discord.Embed(description = f'{translate(locale, "member_top_gt_bot")}'.format(author_mention = ctx.author.mention, member_mention = member.mention), color = colors.ERROR)
+                emb = discord.Embed(description = translate(locale, "member_top_gt_bot", member_mention = member.mention), color = colors.ERROR)
                 await ctx.send(embed = emb)
             else:
                 emb = discord.Embed(color = colors.JDH)
@@ -73,7 +94,7 @@ class Mod(commands.Cog):
                 await ctx.send(embed = emb)
                 await member.kick(reason = reason)
         else:
-            emb = discord.Embed(description = f'{translate(locale, "kick_attempt_to_kick_dev")}'.format(author_mention = ctx.author.mention), color = colors.ERROR)
+            emb = discord.Embed(description = translate(locale, "kick_attempt_to_kick_dev", author_mention = ctx.author.mention), color = colors.ERROR)
             await ctx.send(embed = emb)
 
     @commands.command()
@@ -85,21 +106,21 @@ class Mod(commands.Cog):
         bot = discord.utils.get(ctx.guild.members, id = self.client.user.id)
         if member.id not in self.client.owner_ids:
             if reason is None:
-                reason = f'{translate(locale, 'reason')}'.format(sentence = 'бан на этом сервере')
+                reason = translate(locale, 'reason', sentence = 'бан на этом сервере')
             if member == ctx.author:
-                emb = discord.Embed(description = f'{translate(locale, "ban_member_is_author")}', color = discord.Color.blurple())
+                emb = discord.Embed(description = translate(locale, "ban_member_is_author"), color = discord.Color.blurple())
                 return await ctx.send(embed = emb)
             if ctx.author.top_role == member.top_role:
-                emb = discord.Embed(description = f'{translate(locale, "member_top_eq_author")}'.format(author_mention = ctx.author.mention, member_mention = member.mention), color = colors.JDH)
+                emb = discord.Embed(description = translate(locale, "member_top_eq_author", author_mention = ctx.author.mention, member_mention = member.mention), color = colors.JDH)
                 await ctx.send(embed = emb)
             elif member.top_role > ctx.author.top_role:
-                emb = discord.Embed(description = f'{translate(locale, "member_top_gt_author")}'.format(author_mention = ctx.author.mention, member_mention = member.mention), color = colors.JDH)
+                emb = discord.Embed(description = translate(locale, "member_top_gt_author", author_mention = ctx.author.mention, member_mention = member.mention), color = colors.JDH)
                 await ctx.send(embed = emb)
             elif member.top_role == bot.top_role:
-                emb = discord.Embed(description = f'{translate(locale, "member_top_eq_bot")}'.format(author_mention = ctx.author.mention, member_mention = member.mention), color = colors.ERROR)
+                emb = discord.Embed(description = translate(locale, "member_top_eq_bot", member_mention = member.mention), color = colors.ERROR)
                 await ctx.send(embed = emb)
             elif member.top_role > bot.top_role:
-                emb = discord.Embed(description = f'{translate(locale, "member_top_gt_bot")}'.format(author_mention = ctx.author.mention, member_mention = member.mention), color = colors.ERROR)
+                emb = discord.Embed(description = translate(locale, "member_top_gt_bot", member_mention = member.mention), color = colors.ERROR)
                 await ctx.send(embed = emb)
             else:
                 emb = discord.Embed(color = colors.JDH)
@@ -113,7 +134,7 @@ class Mod(commands.Cog):
                 if is_softban:
                     await member.unban(reason = '--softban')
         else:
-            emb = discord.Embed(description = f'{translate(locale, "ban_attempt_to_ban_dev")}'.format(author_mention = ctx.author.mention), color = colors.ERROR)
+            emb = discord.Embed(description = translate(locale, "ban_attempt_to_ban_dev", author_mention = ctx.author.mention), color = colors.ERROR)
             await ctx.send(embed = emb)
 
     @commands.command()
@@ -130,16 +151,16 @@ class Mod(commands.Cog):
                 if member == ctx.author:
                     await ctx.send(embed = discord.Embed(description = translate(locale, "attempt_to_mute_self"), color = colors.ERROR))
                 await member.add_roles(role)
-                await ctx.send(embed = discord.Embed(description = translate(locale, "give_mute").format(author_mention = ctx.author.mention, member_mention = member.mention), color = colors.DEFAULT))
-            if role > ctx.author.top_role:
-                await ctx.send(embed = discord.Embed(description = f'{translate(locale, "give_role_gt_author_top")}'.format(role_mention = role.mention), color = colors.JDH))
-            if role == ctx.author.top_role:
-                await ctx.send(embed = discord.Embed(description = f'{translate(locale, "give_role_eq_author_top")}'.format(role_mention = role.mention), color = colors.JDH))
-            if role > bot.top_role:
-                await ctx.send(embed = discord.Embed(description = f'{translate(locale, "role_gt_bot_top")}'.format(role_mention = role.mention), color = colors.ERROR))
-            if role == bot.top_role:
-                await ctx.send(embed = discord.Embed(description = f'{translate(locale, "role_eq_bot_top")}'.format(role_mention = role.mention), color = colors.ERROR))
-            if role.is_default():
+                await ctx.send(embed = discord.Embed(description = translate(locale, "give_mute", author_mention = ctx.author.mention, member_mention = member.mention), color = colors.DEFAULT))
+            elif role > ctx.author.top_role:
+                await ctx.send(embed = discord.Embed(description = translate(locale, "give_role_gt_author_top", role_mention = role.mention), color = colors.JDH))
+            elif role == ctx.author.top_role:
+                await ctx.send(embed = discord.Embed(description = translate(locale, "give_role_eq_author_top", role_mention = role.mention), color = colors.JDH))
+            elif role > bot.top_role:
+                await ctx.send(embed = discord.Embed(description = translate(locale, "role_gt_bot_top", role_mention = role.mention), color = colors.ERROR))
+            elif role == bot.top_role:
+                await ctx.send(embed = discord.Embed(description = translate(locale, "role_eq_bot_top", role_mention = role.mention), color = colors.ERROR))
+            elif role.is_default():
                 await ctx.send(embed = discord.Embed(description = translate(locale, "give_everyone"), color = colors.JDH))
             else:
                 added_roles.append(role)
@@ -161,15 +182,15 @@ class Mod(commands.Cog):
             if role.name in {'Muted', 'Deafened'}:
                 await member.remove_roles(role)
                 await ctx.send(embed = discord.Embed(description = translate(locale, "take_unmute").format(author_mention = ctx.author.mention, member_mention = member.mention), color = colors.DEFAULT))
-            if role > ctx.author.top_role:
-                await ctx.send(embed = discord.Embed(description = f'{translate(locale, "take_role_gt_author_top")}'.format(role_mention = role.mention), color = colors.JDH))
-            if role == ctx.author.top_role:
-                await ctx.send(embed = discord.Embed(description = f'{translate(locale, "take_role_eq_author_top")}'.format(role_mention = role.mention), color = colors.JDH))
-            if role > bot.top_role:
-                await ctx.send(embed = discord.Embed(description = f'{translate(locale, "role_gt_bot_top")}'.format(role_mention = role.mention), color = colors.ERROR))
-            if role == bot.top_role:
-                await ctx.send(embed = discord.Embed(description = f'{translate(locale, "role_eq_bot_top")}'.format(role_mention = role.mention), color = colors.ERROR))
-            if role.is_default():
+            elif role > ctx.author.top_role:
+                await ctx.send(embed = discord.Embed(description = translate(locale, "take_role_gt_author_top", role_mention = role.mention), color = colors.JDH))
+            elif role == ctx.author.top_role:
+                await ctx.send(embed = discord.Embed(description = translate(locale, "take_role_eq_author_top", role_mention = role.mention), color = colors.JDH))
+            elif role > bot.top_role:
+                await ctx.send(embed = discord.Embed(description = translate(locale, "role_gt_bot_top", role_mention = role.mention), color = colors.ERROR))
+            elif role == bot.top_role:
+                await ctx.send(embed = discord.Embed(description = translate(locale, "role_eq_bot_top", role_mention = role.mention), color = colors.ERROR))
+            elif role.is_default():
                 await ctx.send(embed = discord.Embed(description = translate(locale, "take_everyone"), color = colors.JDH))
             else:
                 removed_roles.append(role)
@@ -186,7 +207,7 @@ class Mod(commands.Cog):
     async def mute(self, ctx: commands.Context, member: discord.Member, *, reason = None):
         locale = get_locale(ctx.author.id)
         if reason is None:
-            reason = f'{translate(locale, 'reason')}'.format(sentence = 'забор у тебя права писать в чат')
+            reason = translate(locale, 'reason', sentence = 'забор у тебя права писать в чат')
         role = discord.utils.get(ctx.guild.roles, name = 'Muted')
         if role in member.roles:
             emb = discord.Embed(description = translate(locale, "mute_member_has_role"), color = colors.DEFAULT)
@@ -196,10 +217,10 @@ class Mod(commands.Cog):
             return await ctx.send(embed = emb)
         if member.id not in self.client.owner_ids:
             if ctx.author.top_role == member.top_role:
-                emb = discord.Embed(description = f'{translate(locale, "member_top_eq_author")}'.format(author_mention = ctx.author.mention, member_mention = member.mention), color = colors.JDH)
+                emb = discord.Embed(description = translate(locale, "member_top_eq_author", author_mention = ctx.author.mention, member_mention = member.mention), color = colors.JDH)
                 await ctx.send(embed = emb)
             elif ctx.author.top_role < member.top_role:
-                emb = discord.Embed(description = f'{translate(locale, "member_top_gt_author")}'.format(author_mention = ctx.author.mention, member_mention = member.mention), color = colors.JDH)
+                emb = discord.Embed(description = translate(locale, "member_top_gt_author", author_mention = ctx.author.mention, member_mention = member.mention), color = colors.JDH)
                 await ctx.send(embed = emb)
             else:
                 if not role:
@@ -210,7 +231,7 @@ class Mod(commands.Cog):
                 emb.add_field(name = 'Причина', value = reason)
                 await ctx.send(embed = emb)
         else:
-            emb = discord.Embed(description = f'{translate(locale, "attempt_to_mute_dev")}'.format(author_mention = ctx.author.mention), color = colors.ERROR)
+            emb = discord.Embed(description = translate(locale, "attempt_to_mute_dev", author_mention = ctx.author.mention), color = colors.ERROR)
             await ctx.send(embed = emb)
 
     @commands.command()
@@ -219,16 +240,16 @@ class Mod(commands.Cog):
     async def timeout(self, ctx: commands.Context, member: discord.Member, *, reason = None):
         locale = get_locale(ctx.author.id)
         if reason is None:
-            reason = f'{translate(locale, 'reason')}'.format(sentence = 'забор у тебя права писать в чат и говорить в голосовом канале')
+            reason = translate(locale, 'reason', sentence = 'забор у тебя права писать в чат и говорить в голосовом канале')
         if member.id not in self.client.owner_ids:
             if member == ctx.author:
                 emb = discord.Embed(description = translate(locale, "attempt_to_mute_self"), color = discord.Color.blurple())
                 await ctx.send(embed = emb)
             if ctx.author.top_role == member.top_role:
-                emb = discord.Embed(description = f'{translate(locale, "member_top_eq_author")}'.format(author_mention = ctx.author.mention, member_mention = member.mention), color = colors.JDH)
+                emb = discord.Embed(description = translate(locale, "member_top_eq_author", author_mention = ctx.author.mention, member_mention = member.mention), color = colors.JDH)
                 await ctx.send(embed = emb)
             elif ctx.author.top_role < member.top_role:
-                emb = discord.Embed(description = f'{translate(locale, "member_top_gt_author")}'.format(author_mention = ctx.author.mention, member_mention = member.mention), color = colors.JDH)
+                emb = discord.Embed(description = translate(locale, "member_top_gt_author", author_mention = ctx.author.mention, member_mention = member.mention), color = colors.JDH)
                 await ctx.send(embed = emb)
             else:
                 await member.timeout(datetime.timedelta(hours = 1), reason = reason)
@@ -237,7 +258,7 @@ class Mod(commands.Cog):
                 emb.add_field(name = 'Время тайм-аута', value = '1 час')
                 await ctx.send(embed = emb)
         else:
-            emb = discord.Embed(description = f'{translate(locale, "attempt_to_mute_dev")}'.format(author_mention = ctx.author.mention), color = colors.ERROR)
+            emb = discord.Embed(description = translate(locale, "attempt_to_mute_dev", author_mention = ctx.author.mention), color = colors.ERROR)
             await ctx.send(embed = emb)
 
     @commands.command()
@@ -411,25 +432,7 @@ class Mod(commands.Cog):
                         if not flags.silent:
                             view = discord.ui.View()
                             view.add_item(CancelButton())
-                            try:
-                                emb = discord.Embed(title = 'Результаты удаления сообщений', color = colors.DEFAULT)
-                                emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{len(cleared)} / {amount}```')
-                                if flags.exact or flags.contains:
-                                    if flags.exact:
-                                        filter_desc = f'Точный текст: {flags.exact}'
-                                    elif flags.contains:
-                                        filter_desc = f'Содержит: {flags.contains}'
-                                    else:
-                                        filter_desc = 'Без текстовых фильтров'
-                                    emb.add_field(name = 'Применён фильтр:', value = f'```({filter_desc})```', inline = True)
-                                emb.add_field(name = 'Найдены сообщения от:', value = ''.join([f"```ARM\n{author.display_name}: {amount}```" for author, amount in authors.items()]), inline = False)
-                                emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены нажмите на кнопку "Отменить"')
-                                await sent.edit(embed = emb, view = view)
-                                await self.client.wait_for('interaction', timeout = 10, check = lambda i: i.channel == ctx.message.channel and i.user == ctx.author and i.data['custom_id'] == 'cancel')
-                                emb.set_footer(text = None)
-                                await sent.edit(embed = emb, view = None)
-                            except asyncio.TimeoutError:
-                                await sent.delete()
+                            await clear_results(ctx, sent, cleared, authors, flags, amount, view, self.client)
                     elif interaction.data['custom_id'] == 'no' and (interaction.user.id == ctx.guild.owner.id or interaction.user.id in self.client.owner_ids):
                         await interaction.response.defer()
                         await sent.delete()
@@ -462,25 +465,7 @@ class Mod(commands.Cog):
                     if not flags.silent:
                         view = discord.ui.View()
                         view.add_item(CancelButton())
-                        try:
-                            emb = discord.Embed(title = 'Результаты удаления сообщений', color = colors.DEFAULT)
-                            emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{len(cleared)} / {amount}```')
-                            if flags.exact or flags.contains:
-                                if flags.exact:
-                                    filter_desc = f'Точный текст: {flags.exact}'
-                                elif flags.contains:
-                                    filter_desc = f'Содержит: {flags.contains}'
-                                else:
-                                    filter_desc = 'Без текстовых фильтров'
-                                emb.add_field(name = 'Применён фильтр:', value = f'```({filter_desc})```', inline = True)
-                            emb.add_field(name = 'Найдены сообщения от:', value = ''.join([f"```ARM\n{author.display_name}: {amount}```" for author, amount in authors.items()]), inline = False)
-                            emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены нажмите на кнопку "Отменить"')
-                            await sent.edit(embed = emb, view = view)
-                            await self.client.wait_for('interaction', timeout = 10, check = lambda i: i.channel == ctx.message.channel and i.user == ctx.author and i.data['custom_id'] == 'cancel')
-                            emb.set_footer(text = None)
-                            await sent.edit(embed = emb, view = None)
-                        except asyncio.TimeoutError:
-                            await sent.delete()
+                        await clear_results(ctx, sent, cleared, authors, flags, amount, view, self.client)
                 elif interaction.data['custom_id'] == 'no' and (interaction.user.id == ctx.guild.owner.id or interaction.user.id in self.client.owner_ids):
                     await interaction.response.defer()
                     await sent.delete()
@@ -511,28 +496,7 @@ class Mod(commands.Cog):
                         sent = await ctx.send(embed = emb)
                     cleared = await ctx.channel.purge(limit = amount, check = check_func, before = sent if not flags.silent else None)
                     if not flags.silent:
-                        emb = discord.Embed(title = 'Результаты удаления сообщений', color = colors.DEFAULT)
-                        emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{len(cleared)} / {amount}```')
-                        if flags.exact or flags.contains:
-                            if flags.exact:
-                                filter_desc = f'Точный текст: {flags.exact}'
-                            elif flags.contains:
-                                filter_desc = f'Содержит: {flags.contains}'
-                            else:
-                                filter_desc = 'Без текстовых фильтров'
-                            emb.add_field(name = 'Применён фильтр:', value = f'```({filter_desc})```', inline = True)
-                        emb.add_field(name = 'Найдены сообщения от:', value = ''.join([f"```ARM\n{author.display_name}: {amount}```" for author, amount in authors.items()]), inline = False)
-                        emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены нажмите на кнопку "Отменить"')
-                        view = discord.ui.View()
-                        view.add_item(CancelButton())
-                        await sent.edit(embed = emb, view = view)
-                        try:
-                            interaction = await self.client.wait_for('interaction', timeout = 10, check = lambda i: i.user == ctx.author and i.channel == ctx.channel and i.data['custom_id'] == 'cancel')
-                            await interaction.response.defer()
-                            emb.set_footer(text = None)
-                            await sent.edit(embed = emb, view = None)
-                        except asyncio.TimeoutError:
-                            await sent.delete()
+                        await clear_results(ctx, sent, cleared, authors, flags, amount, view, self.client)
                 elif interaction.data['custom_id'] == 'no':
                     await interaction.response.defer()
                     await sent.delete()
@@ -553,26 +517,7 @@ class Mod(commands.Cog):
             if not flags.silent:
                 view = discord.ui.View()
                 view.add_item(CancelButton())
-                try:
-                    emb = discord.Embed(title = 'Результаты удаления сообщений', color = colors.DEFAULT)
-                    emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{len(cleared)} / {amount}```')
-                    if flags.exact or flags.contains:
-                        print(flags.exact, flags.contains)
-                        if flags.exact:
-                            filter_desc = f'Точный текст: {flags.exact}'
-                        elif flags.contains:
-                            filter_desc = f'Содержит: {flags.contains}'
-                        else:
-                            filter_desc = 'Без текстовых фильтров'
-                        emb.add_field(name = 'Применён фильтр:', value = f'```({filter_desc})```', inline = True)
-                    emb.add_field(name = 'Найдены сообщения от:', value = ''.join([f"```ARM\n{author.display_name}: {amount}```" for author, amount in authors.items()]), inline = False)
-                    emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены нажмите на кнопку "Отменить"')
-                    await sent.edit(embed = emb, view = view)
-                    await self.client.wait_for('interaction', timeout = 10, check = lambda i: i.channel == ctx.message.channel and i.user == ctx.author and i.data['custom_id'] == 'cancel')
-                    emb.set_footer(text = None)
-                    await sent.edit(embed = emb, view = None)
-                except asyncio.TimeoutError:
-                    await sent.delete()
+                await clear_results(ctx, sent, cleared, authors, flags, amount, view, self.client)
 
 async def setup(client):
     await client.add_cog(Mod(client))
