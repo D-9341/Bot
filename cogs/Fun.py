@@ -10,6 +10,7 @@ from discord.ext import commands
 from cogs.Constants import colors
 from cogs.Logging import LOGS
 from functions import get_locale, get_plural_form, translate, connect_db
+from AI_difficulties import *
 
 class RouletteSettings:
     def get_user_settings(self, user_id: int) -> tuple:
@@ -95,7 +96,7 @@ class SettingsPresets:
             'curse': True,
             'min_shells': 6,
             'max_shells': 10,
-            'difficulty': 2,
+            'difficulty': 3,
             'items': {
                 'cigarettes': False, 'handsaw': True, 'beer': False,
                 'magnifying_glass': False, 'handcuffs': True, 'burner_phone': True,
@@ -108,7 +109,7 @@ class SettingsPresets:
             'curse': True,
             'min_shells': 8,
             'max_shells': 10,
-            'difficulty': 3,
+            'difficulty': 4,
             'items': {
                 'cigarettes': False, 'handsaw': False, 'beer': False,
                 'magnifying_glass': False, 'handcuffs': False, 'burner_phone': False,
@@ -1011,7 +1012,7 @@ class RouletteGame:
         else:
             await self.channel.send(embed = discord.Embed(description = translate(self.game_state.locale, 'roulette_bot_thinking', player = bot.mention), color = colors.JDH))
         await asyncio.sleep(2)
-        action = await self._get_bot_action(bot, self.game_state.difficulty)
+        action = await self._get_bot_action(bot) # , self.game_state.difficulty
         if action == "shoot_self":
             await self._handle_shoot_self(bot)
         elif action == "shoot_opponent":
@@ -1019,8 +1020,8 @@ class RouletteGame:
         elif action == "use_item":
             await self._handle_bot_use_item(bot)
 
-    async def _get_bot_action(self, bot: discord.User, difficulty: int) -> str:
-        """Эквивалентно уровню сложности 'Пассивный'"""
+    async def _get_bot_action(self, bot: discord.User) -> str:
+        """Эквивалентно уровню сложности 'Пассивный' за исключением возможности использовать предметы"""
         acc = self.game_state.items_accumulator
         if self.game_state.items[bot]:
             use_item_chance = 0.3
@@ -1116,6 +1117,8 @@ class Fun(commands.Cog):
                     pass
         if len(agreed) < 2:
             return await ctx.send(embed = discord.Embed(description = translate(locale, "roulette_min_players"), color = colors.ERROR))
+        if len(agreed) > 4:
+            return await ctx.send(embed = discord.Embed(description = translate(locale, "roulette_max_players"), color = colors.ERROR))
         random.shuffle(agreed)
         game = RouletteGame(ctx.bot, ctx, settings, agreed, locale)
         await game.start_game()

@@ -11,7 +11,7 @@ from tabulate import tabulate
 
 from cogs.Constants import LocalesManager, colors
 from cogs.Logging import LOGS
-from functions import get_plural_form
+from functions import get_plural_form, get_locale, connect_db, translate
 from main import PASSWORD, owner_commands
 
 class Kernel(commands.Cog):
@@ -330,6 +330,53 @@ class Kernel(commands.Cog):
             cur.close()
             conn.close()
         await message.edit(embed = discord.Embed(description = result_msg, color = colors.JDH))
+
+    @commands.command(hidden = True)
+    async def full_info(self, ctx: commands.Context, user: discord.User = None):
+        if ctx.author.id not in self.client.owner_ids:
+            raise commands.NotOwner()
+        if not user:
+            user = ctx.author
+        current_locale = get_locale(user.id)
+
+        lconn = connect_db('leaderboard')
+        lcursor = lconn.cursor()
+        lcursor.execute("SELECT victories FROM leaders WHERE user_id = %s", (user.id,))
+        place = lcursor.fetchone() or (0,)
+
+        rconn = connect_db('roulette_settings')
+        rcursor = rconn.cursor()
+        rcursor.execute("SELECT * FROM user_settings WHERE user_id = %s", (user.id,))
+        settings = rcursor.fetchone()
+
+        vconn = connect_db('voice_channels')
+        vcursor = vconn.cursor()
+        vcursor.execute("SELECT name FROM channels WHERE user_id = %s", (user.id,))
+        voice_name = vcursor.fetchone()
+
+        embed = discord.Embed(title = f'Информация о пользователе {user.display_name} в базе данных', color = colors.JDH)
+        embed.add_field(name = 'Локаль', value = f'`{current_locale}`', inline = True)
+        embed.add_field(name = 'Количество побед в рулетке', value = f'`{place[0]}`' if place else '`0`', inline = True)
+        if voice_name:
+            embed.add_field(name = 'Название голосового канала', value = f'`{voice_name[0]}`', inline = True)
+        if settings:
+            embed.add_field(name = 'Настройки рулетки', value = 'ᅠ', inline = False)
+            difficulties = {0: translate(current_locale, 'settings_passive'),
+                            1: translate(current_locale, 'settings_normal'),
+                            2: translate(current_locale, 'settings_hard'),
+                            3: translate(current_locale, 'settings_very_hard'),
+                            4: translate(current_locale, 'settings_revengeance')}
+            difficulty = difficulties.get(settings[-2], translate(current_locale, 'settings_passive'))
+            enabled_items = [translate(current_locale, item) for item, value in settings[-1].items() if value]
+            health, healing_disabled, min_ammo, max_ammo = settings[1], settings[2], settings[3], settings[4]
+            embed.add_field(name = 'Здоровье', value = f'`{health} HP`', inline = True)        
+            embed.add_field(name = 'Патроны', value = f'`{min_ammo}-{max_ammo}`', inline = True)
+            embed.add_field(name = 'Исцеление при здоровье <= 2', value = f'`{translate(current_locale, 'settings_curse_yes')}`' if not healing_disabled else f'`{translate(current_locale, 'settings_curse_no')}`', inline = True)
+            embed.add_field(name = 'Сложность ИИ бота', value = difficulty, inline = True)
+            embed.add_field(name = 'Предметы', value = str(len(enabled_items)), inline = True)
+            if enabled_items:
+                embed.add_field(name = 'Список предметов', value = '\n'.join(f'• {item}' for item in enabled_items), inline = False)
+        await ctx.send(embed = embed)
 
     @commands.command(hidden = True)
     async def diff_locales(self, ctx: commands.Context):

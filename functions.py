@@ -50,7 +50,7 @@ def translate(locale: str, string_id: str, /, **format_kwargs) -> str:
             translated_string = translate(locale, 'command_not_found', command = command_name)
         return translated_string
     if result:
-        translated_string = result[0]
+        translated_string: str = result[0]
         if format_kwargs:
             return translated_string.format(**format_kwargs)
         else:

@@ -10,7 +10,7 @@ from cogs.Logging import LOGS
 from functions import get_plural_form
 from main import PASSWORD
 
-def rearm(command, message):
+def rearm(command: commands.Command, message: discord.Message):
     if command._buckets.valid:
         bucket = command._buckets.get_bucket(message)
         bucket._tokens = min(bucket.rate, bucket._tokens + 1)
@@ -187,30 +187,21 @@ class Events(commands.Cog):
 
     @commands.Cog.listener()
     async def on_command_error(self, ctx: commands.Context, error):
-        # if isinstance(error, commands.CommandNotFound):
-        #     emb = discord.Embed(description = f'{ctx.author.mention}, команда `{ctx.command.name}` не найдена{f', так как модуль `{ctx.command.cog.qualified_name}`, ответственный за неё, отключён' if ctx.command.cog else ''}', color = colors.JDH)
-        #     await ctx.send(embed = emb)
         if isinstance(error, commands.DisabledCommand):
-            emb = discord.Embed(description = f'{ctx.author.mention}, команда `{ctx.command.name}` отключена', color = colors.JDH)
-            await ctx.send(embed = emb)
+            await ctx.send(embed = discord.Embed(description = f'{ctx.author.mention}, команда `{ctx.command.name}` отключена', color = colors.JDH))
         elif isinstance(error, commands.NoPrivateMessage):
-            emb = discord.Embed(description = f'{ctx.author.mention}, команда `{ctx.command.name}` недоступна в ЛС', color = colors.JDH)
-            await ctx.send(embed = emb)
+            await ctx.send(embed = discord.Embed(description = f'{ctx.author.mention}, команда `{ctx.command.name}` недоступна в ЛС', color = colors.JDH))
         elif isinstance(error, commands.NotOwner):
-            emb = discord.Embed(description = f'{ctx.author.mention}, это действие может совершить только один из создателей бота', color = colors.JDH)
-            await ctx.send(embed = emb)
+            await ctx.send(embed = discord.Embed(description = f'{ctx.author.mention}, это действие может совершить только один из создателей бота', color = colors.JDH))
         elif isinstance(error, commands.BotMissingPermissions):
-            emb = discord.Embed(description = f'{ctx.author.mention}, у **меня** недостаточно прав на выполнение команды `{ctx.command.name}`, напишите cy/help `{ctx.command.name}` для просмотра необходимых прав\n||Выдача прав администратора решит эту проблему||', color = colors.ERROR)
-            await ctx.send(embed = emb)
+            await ctx.send(embed = discord.Embed(description = f'{ctx.author.mention}, у **меня** недостаточно прав на выполнение команды `{ctx.command.name}`, напишите cy/help `{ctx.command.name}` для просмотра необходимых прав\n||Выдача прав администратора решит эту проблему||', color = colors.ERROR))
         elif isinstance(error, commands.MissingPermissions):
-            emb = discord.Embed(description = f'{ctx.author.mention}, у вас недостаточно прав на выполнение команды `{ctx.command.name}`. Напишите cy/help `{ctx.command.name}` для просмотра необходимых прав', color = colors.JDH)
-            await ctx.send(embed = emb)
+            await ctx.send(embed = discord.Embed(description = f'{ctx.author.mention}, у вас недостаточно прав на выполнение команды `{ctx.command.name}`. Напишите cy/help `{ctx.command.name}` для просмотра необходимых прав', color = colors.JDH))
         elif isinstance(error, commands.CommandOnCooldown):
             seconds = round(error.retry_after)
             choises = ['Ещё не время.', 'Я не готов.', 'Ещё нет.', 'Ещё. Не. Время.', 'Я. Не. Готов.', 'Ещё. Нет.', 'ЕЩЁ НЕ ВРЕМЯ!', 'Я НЕ ГОТОВ!', 'ЕЩЁ НЕТ!']
             rand = random.choice(choises)
-            emb = discord.Embed(description = f'{rand} Команда `{ctx.command.name}` будет доступна через {seconds} {get_plural_form(seconds, ["секунду", "секунды", "секунд"])}!', color = colors.ERROR)
-            await ctx.send(embed = emb)
+            await ctx.send(embed = discord.Embed(description = f'{rand} Команда `{ctx.command.name}` будет доступна через {seconds} {get_plural_form(seconds, ["секунду", "секунды", "секунд"])}!', color = colors.ERROR))
         elif isinstance(error, commands.MissingRequiredArgument):
             rearm(ctx.command, ctx.message)
             if ctx.command.name == 'clear':

@@ -2,6 +2,7 @@ import asyncio
 import datetime
 import random
 import string
+from typing import TypeVar
 
 import discord
 from discord.ext import commands
@@ -10,7 +11,9 @@ from cogs.Constants import colors
 from functions import get_locale, get_plural_form, parse_flags, translate
 from main import bot_owner_or_has_permissions
 
-async def clear_results(ctx: commands.Context, sent: discord.Message, cleared: list, authors: dict, flags, amount: int, view: discord.ui.View, client: commands.Bot):
+T = TypeVar('T')
+
+async def clear_results(ctx: commands.Context, sent: discord.Message, cleared: list, authors: dict, flags: T, amount: int, view: discord.ui.View, client: commands.Bot):
     try:
         emb = discord.Embed(title = 'Результаты удаления сообщений', color = colors.DEFAULT)
         emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{len(cleared)} / {amount}```')

@@ -94,7 +94,7 @@ class Misc(commands.Cog):
     @commands.cooldown(1, 5, commands.BucketType.user)
     async def coinflip(self, ctx: commands.Context):
         coin = random.choice(['ОРЁЛ', 'РЕШКА'])
-        await ctx.send(embed = discord.Embed(description = f'{ctx.author.mention} подбрасывает монетку: {coin}', color = colors.JDH))
+        await ctx.send(embed = discord.Embed(description = f'{ctx.author.display_name} подбрасывает монетку: {coin}', color = colors.JDH))
 
     @commands.command()
     @commands.cooldown(1, 15, commands.BucketType.user)

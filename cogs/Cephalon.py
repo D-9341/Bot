@@ -3,7 +3,6 @@ import json
 import secrets
 import sys
 from datetime import timedelta
-from pathlib import Path
 from typing import cast
 
 import discord
@@ -11,10 +10,7 @@ from discord.ext import commands
 
 from cogs.Constants import LocalesManager, colors
 from functions import get_locale, get_plural_form, set_locale, translate
-from main import cogs, owner_commands, uptime
-
-CWD = Path(__file__).parents[0].parents[0]
-CWD = str(CWD)
+from main import cogs, owner_commands, uptime, CWD
 
 class GrayButton(discord.ui.Button):
     def __init__(self, label):
@@ -307,7 +303,7 @@ class Cephalon(commands.Cog):
 
     @commands.command()
     async def botver(self, ctx: commands.Context, version: str = '1.0'):
-        with open(CWD + '\\versions.json', 'r', encoding = 'utf-8') as f:
+        with open(CWD / 'versions.json', 'r', encoding = 'utf-8') as f:
             versions = json.load(f)
         version_data = versions[str(version)]
         await ctx.send(embed = discord.Embed(title = version, description = version_data, color = colors.DEFAULT))

@@ -241,6 +241,7 @@
     "roulette_players_items": "Items:",
     "roulette_jammer_no_targets": "No one can be jammed",
     "roulette_min_players": "Not enough players, game cancelled",
+    "roulette_max_players": "Too many players, game cancelled",
     "roulette_rounds": "Total shells",
     "roulette_select_opponent": "Select opponent",
     "roulette_select_target": "{player}, select target",
