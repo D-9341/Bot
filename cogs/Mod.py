@@ -2,7 +2,8 @@ import asyncio
 import datetime
 import random
 import string
-from typing import TypeVar
+import argparse
+from typing import cast
 
 import discord
 from discord.ext import commands
@@ -11,9 +12,7 @@ from cogs.Constants import colors
 from functions import get_locale, get_plural_form, parse_flags, translate
 from main import bot_owner_or_has_permissions
 
-T = TypeVar('T')
-
-async def clear_results(ctx: commands.Context, sent: discord.Message, cleared: list, authors: dict, flags: T, amount: int, view: discord.ui.View, client: commands.Bot):
+async def clear_results(ctx: commands.Context, sent: discord.Message, cleared: list, authors: dict, flags: argparse.Namespace, amount: int, view: discord.ui.View, client: commands.Bot): # pylint: disable=too-many-arguments
     try:
         emb = discord.Embed(title = 'Результаты удаления сообщений', color = colors.DEFAULT)
         emb.add_field(name = 'Удалено сообщений', value = f'```ARM\n{len(cleared)} / {amount}```')
@@ -25,7 +24,7 @@ async def clear_results(ctx: commands.Context, sent: discord.Message, cleared: l
             else:
                 filter_desc = 'Без текстовых фильтров'
             emb.add_field(name = 'Применён фильтр:', value = f'```({filter_desc})```', inline = True)
-        emb.add_field(name = 'Найдены сообщения от:', value = ''.join([f"```ARM\n{author.display_name}: {amount}```" for author, amount in authors.items()]), inline = False)
+        emb.add_field(name = 'Найдены сообщения от:', value = ''.join([f"```ARM\n{cast(discord.User, author).display_name}: {cast(int, amount)}```" for author, amount in authors.items()]), inline = False)
         emb.set_footer(text = 'Это сообщение удалится через 10 секунд. Для отмены нажмите на кнопку "Отменить"')
         await sent.edit(embed = emb, view = view)
         await client.wait_for('interaction', timeout = 10, check = lambda i: i.channel == ctx.message.channel and i.user == ctx.author and i.data['custom_id'] == 'cancel')
@@ -33,18 +32,6 @@ async def clear_results(ctx: commands.Context, sent: discord.Message, cleared: l
         await sent.edit(embed = emb, view = None)
     except asyncio.TimeoutError:
         await sent.delete()
-
-class CancelButton(discord.ui.Button):
-    def __init__(self):
-        super().__init__(label = 'Отменить', style = discord.ButtonStyle.red, custom_id = 'cancel')
-
-class ConfirmButton(discord.ui.Button):
-    def __init__(self, style = discord.ButtonStyle.green):
-        super().__init__(label = 'Да', style = style, custom_id = 'yes')
-
-class DenyButton(discord.ui.Button):
-    def __init__(self, style = discord.ButtonStyle.red):
-        super().__init__(label = 'Нет', style = style, custom_id = 'no')
 
 class Mod(commands.Cog):
     def __init__(self, client):
@@ -151,8 +138,10 @@ class Mod(commands.Cog):
             if role.name in {'Muted', 'Deafened'}:
                 if member.id in self.client.owner_ids:
                     await ctx.send(embed = discord.Embed(description = translate(locale, "give_attempt_to_mute_dev"), color = colors.ERROR))
+                    continue
                 if member == ctx.author:
                     await ctx.send(embed = discord.Embed(description = translate(locale, "attempt_to_mute_self"), color = colors.ERROR))
+                    continue
                 await member.add_roles(role)
                 await ctx.send(embed = discord.Embed(description = translate(locale, "give_mute", author_mention = ctx.author.mention, member_mention = member.mention), color = colors.DEFAULT))
             elif role > ctx.author.top_role:
@@ -184,7 +173,7 @@ class Mod(commands.Cog):
         for role in roles:
             if role.name in {'Muted', 'Deafened'}:
                 await member.remove_roles(role)
-                await ctx.send(embed = discord.Embed(description = translate(locale, "take_unmute").format(author_mention = ctx.author.mention, member_mention = member.mention), color = colors.DEFAULT))
+                await ctx.send(embed = discord.Embed(description = translate(locale, "take_unmute", author_mention = ctx.author.mention, member_mention = member.mention), color = colors.DEFAULT))
             elif role > ctx.author.top_role:
                 await ctx.send(embed = discord.Embed(description = translate(locale, "take_role_gt_author_top", role_mention = role.mention), color = colors.JDH))
             elif role == ctx.author.top_role:
@@ -271,7 +260,7 @@ class Mod(commands.Cog):
         locale = get_locale(ctx.author.id)
         role = discord.utils.get(ctx.guild.roles, name = 'Deafened')
         if reason is None:
-            reason = f'{translate(locale, 'reason')}'.format(sentence = 'забор у тебя права говорить в голосовом канале')
+            reason = translate(locale, 'reason', sentence = 'забор у тебя права говорить в голосовых каналах')
         if role in member.roles:
                 emb = discord.Embed(description = translate(locale, "deaf_member_has_role"), color = colors.DEFAULT)
                 return await ctx.send(embed = emb)
@@ -280,10 +269,10 @@ class Mod(commands.Cog):
                 emb = discord.Embed(description = translate(locale, "attempt_to_mute_self"), color = discord.Color.blurple())
                 await ctx.send(embed = emb)
             if ctx.author.top_role == member.top_role:
-                emb = discord.Embed(description = f'{translate(locale, "member_top_eq_author")}'.format(author_mention = ctx.author.mention, member_mention = member.mention), color = colors.JDH)
+                emb = discord.Embed(description = translate(locale, "member_top_eq_author", author_mention = ctx.author.mention, member_mention = member.mention), color = colors.JDH)
                 await ctx.send(embed = emb)
             elif ctx.author.top_role < member.top_role:
-                emb = discord.Embed(description = f'{translate(locale, "member_top_gt_author")}'.format(author_mention = ctx.author.mention, member_mention = member.mention), color = colors.JDH)
+                emb = discord.Embed(description = translate(locale, "member_top_gt_author", author_mention = ctx.author.mention, member_mention = member.mention), color = colors.JDH)
                 await ctx.send(embed = emb)
             else:
                 if not role:
@@ -304,19 +293,19 @@ class Mod(commands.Cog):
         locale = get_locale(ctx.author.id)
         role = discord.utils.get(ctx.guild.roles, name = 'Deafened')
         if reason is None:
-            reason = f'{translate(locale, 'reason')}'.format(sentence = 'помилование и восстановление права говорить в голосовом канале')
+            reason = translate(locale, 'reason', sentence = 'помилование и восстановление права говорить в голосовых каналах')
         if role:
             if role in member.roles:
                 await member.remove_roles(role, reason = reason)
-                emb = discord.Embed(title = f'{translate(locale, "undeaf_success")}'.format(member = member), color = colors.JDH, timestamp = discord.utils.utcnow())
-                emb.add_field(name = 'Снял заглушение', value = ctx.author.mention)
+                emb = discord.Embed(title = translate(locale, "undeaf_success", member = member), color = colors.JDH, timestamp = discord.utils.utcnow())
+                emb.add_field(name = 'Снял оглушение', value = ctx.author.mention)
                 emb.add_field(name = 'Причина', value = reason)
                 await ctx.send(embed = emb)
             else:
                 emb = discord.Embed(description = translate(locale, 'undeaf_member_has_no_role'), color = colors.JDH)
                 await ctx.send(embed = emb)
         else:
-            emb = discord.Embed(description = f'{translate(locale, "undeaf_no_role")}'.format(author_mention = ctx.author.mention, member_mention = member.mention), color = colors.JDH, timestamp = discord.utils.utcnow())
+            emb = discord.Embed(description = translate(locale, "undeaf_no_role", author_mention = ctx.author.mention, member_mention = member.mention), color = colors.JDH, timestamp = discord.utils.utcnow())
             await ctx.send(embed = emb)
 
     @commands.command()
@@ -326,11 +315,11 @@ class Mod(commands.Cog):
         locale = get_locale(ctx.author.id)
         role = discord.utils.get(ctx.guild.roles, name = 'Muted')
         if reason is None:
-            reason = f'{translate(locale, 'reason')}'.format(sentence = 'помилование и восстановление права писать в чат')
+            reason = translate(locale, 'reason', sentence = 'помилование и восстановление права писать в чат')
         if role is not None:
             if role in member.roles:
                 await member.remove_roles(role, reason = reason)
-                emb = discord.Embed(title = f'{translate(locale, "unmute_success")}'.format(member = member), color = colors.JDH, timestamp = discord.utils.utcnow())
+                emb = discord.Embed(title = translate(locale, "unmute_success", member = member), color = colors.JDH, timestamp = discord.utils.utcnow())
                 emb.add_field(name = 'Снял заглушение', value = ctx.author.mention)
                 emb.add_field(name = 'По причине', value = reason)
                 await ctx.send(embed = emb)
@@ -338,7 +327,7 @@ class Mod(commands.Cog):
                 emb = discord.Embed(description = translate(locale, 'unmute_member_has_no_role'), color = colors.JDH)
                 await ctx.send(embed = emb)
         else:
-            emb = discord.Embed(description = f'{translate(locale, "unmute_no_role")}'.format(author_mention = ctx.author.mention), color = colors.JDH, timestamp = discord.utils.utcnow())
+            emb = discord.Embed(description = translate(locale, "unmute_no_role", author_mention = ctx.author.mention), color = colors.JDH, timestamp = discord.utils.utcnow())
             await ctx.send(embed = emb)
 
     @commands.command()
@@ -353,7 +342,7 @@ class Mod(commands.Cog):
             cleared = await ctx.channel.purge(limit = amount, check = lambda m: m.author.id == self.client.user.id)
             return await ctx.send(embed = discord.Embed(description = f'Удалено {len(cleared)} {get_plural_form(len(cleared), ["сообщение", "сообщения", "сообщений"])} бота', color = colors.JDH))
         flags = parse_flags(flags)
-        check_func = lambda message: not message.pinned and (
+        check_func = lambda message: not message.pinned and ( # pylint: disable=unnecessary-lambda-assignment
             (
                 flags.everyone or
                 (flags.bots and message.author.bot) or
@@ -420,8 +409,8 @@ class Mod(commands.Cog):
             else:
                 emb = discord.Embed(description = f'{ctx.author.mention}, это слишком большое число для удаления сообщений (`{amount}`). Возможно большое время ожидания ответа {self.client.user.mention}, которое может усугубится разницей во времени между предыдущими сообщениями и сообщением содержащим команду **и повлияет не только на этот сервер!** Продолжить? (y/n)\n||Отмена через 20 секунд||', color = colors.DEFAULT)
                 view = discord.ui.View()
-                view.add_item(ConfirmButton(discord.ButtonStyle.red))
-                view.add_item(DenyButton(discord.ButtonStyle.green))
+                view.add_item(discord.ui.Button(label = 'Да', style = discord.ButtonStyle.red, custom_id = 'yes'))
+                view.add_item(discord.ui.Button(label = 'Нет', style = discord.ButtonStyle.green, custom_id = 'no'))
                 sent = await ctx.send(embed = emb, view = view)
                 try:
                     interaction = await self.client.wait_for('interaction', timeout = 20, check = lambda i: i.channel == ctx.message.channel)
@@ -434,7 +423,7 @@ class Mod(commands.Cog):
                         cleared = await ctx.channel.purge(limit = amount, check = check_func, before = sent if not flags.silent else None)
                         if not flags.silent:
                             view = discord.ui.View()
-                            view.add_item(CancelButton())
+                            view.add_item(discord.ui.Button(label = 'Отменить', style = discord.ButtonStyle.red, custom_id = 'cancel'))
                             await clear_results(ctx, sent, cleared, authors, flags, amount, view, self.client)
                     elif interaction.data['custom_id'] == 'no' and (interaction.user.id == ctx.guild.owner.id or interaction.user.id in self.client.owner_ids):
                         await interaction.response.defer()
@@ -453,8 +442,8 @@ class Mod(commands.Cog):
         elif amount >= 100:
             emb = discord.Embed(description = f'{ctx.author.mention}, для удаления `{amount}` сообщений нужно подтверждение. {'Мне нужен ответ создателя сервера на это действие. ' if ctx.author != ctx.guild.owner else ''}Продолжить?\n||Запрос будет отменён через {'1 минуту' if ctx.author != ctx.guild.owner else '10 секунд'}||', color = colors.DEFAULT)
             view = discord.ui.View()
-            view.add_item(ConfirmButton())
-            view.add_item(DenyButton())
+            view.add_item(discord.ui.Button(label = 'Да', style = discord.ButtonStyle.green, custom_id = 'yes'))
+            view.add_item(discord.ui.Button(label = 'Нет', style = discord.ButtonStyle.red, custom_id = 'no'))
             sent = await ctx.send(f'{ctx.guild.owner.mention}' if ctx.author != ctx.guild.owner else None, embed = emb, view = view)
             try:
                 interaction = await self.client.wait_for('interaction', timeout = 60 if ctx.author != ctx.guild.owner else 10, check = lambda i: i.channel == ctx.message.channel)
@@ -467,7 +456,7 @@ class Mod(commands.Cog):
                     cleared = await ctx.channel.purge(limit = amount, check = check_func, before = sent if not flags.silent else None)
                     if not flags.silent:
                         view = discord.ui.View()
-                        view.add_item(CancelButton())
+                        view.add_item(discord.ui.Button(label = 'Отменить', style = discord.ButtonStyle.red, custom_id = 'cancel'))
                         await clear_results(ctx, sent, cleared, authors, flags, amount, view, self.client)
                 elif interaction.data['custom_id'] == 'no' and (interaction.user.id == ctx.guild.owner.id or interaction.user.id in self.client.owner_ids):
                     await interaction.response.defer()
@@ -486,8 +475,8 @@ class Mod(commands.Cog):
         elif amount >= 10:
             emb = discord.Embed(description = f'{ctx.author.mention}, для удаления `{amount}` сообщений нужно подтверждение. Продолжить?', color = colors.DEFAULT)
             view = discord.ui.View()
-            view.add_item(ConfirmButton())
-            view.add_item(DenyButton())
+            view.add_item(discord.ui.Button(label = 'Да', style = discord.ButtonStyle.green, custom_id = 'yes'))
+            view.add_item(discord.ui.Button(label = 'Нет', style = discord.ButtonStyle.red, custom_id = 'no'))
             sent = await ctx.send(embed = emb, view = view)
             try:
                 interaction = await self.client.wait_for('interaction', timeout = 10, check = lambda i: i.user == ctx.author and i.channel == ctx.channel)
@@ -499,6 +488,8 @@ class Mod(commands.Cog):
                         sent = await ctx.send(embed = emb)
                     cleared = await ctx.channel.purge(limit = amount, check = check_func, before = sent if not flags.silent else None)
                     if not flags.silent:
+                        view = discord.ui.View()
+                        view.add_item(discord.ui.Button(label = 'Отменить', style = discord.ButtonStyle.red, custom_id = 'cancel'))
                         await clear_results(ctx, sent, cleared, authors, flags, amount, view, self.client)
                 elif interaction.data['custom_id'] == 'no':
                     await interaction.response.defer()
@@ -519,7 +510,7 @@ class Mod(commands.Cog):
             cleared = await ctx.channel.purge(limit = amount, check = check_func, before = sent if not flags.silent else None)
             if not flags.silent:
                 view = discord.ui.View()
-                view.add_item(CancelButton())
+                view.add_item(discord.ui.Button(label = 'Отменить', style = discord.ButtonStyle.red, custom_id = 'cancel'))
                 await clear_results(ctx, sent, cleared, authors, flags, amount, view, self.client)
 
 async def setup(client):

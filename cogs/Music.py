@@ -4,7 +4,6 @@ import json
 
 import discord
 from discord.ext import commands
-from gtts import gTTS
 
 from cogs.Constants import colors
 from functions import get_locale, translate
@@ -31,24 +30,6 @@ class Music(commands.Cog):
     @commands.Cog.listener()
     async def on_ready(self):
         print('Модуль Music загружен')
-
-    @commands.command()
-    async def tts(self, ctx: commands.Context, *, text: str):
-        if ctx.author.id not in self.client.owner_ids:
-            raise commands.NotOwner()
-        if not text:
-            return await ctx.send(embed = discord.Embed(description = 'Вы должны указать текст для произнесения', color = colors.ERROR))
-        if not ctx.voice_client:
-            return await ctx.send(embed = discord.Embed(description = 'Я не подключён к голосовому каналу', color = colors.ERROR))
-        speech = gTTS(text = text, lang = 'ru', slow = True)
-        speech.save('temp/speech.mp3')
-        source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio('temp/speech.mp3'))
-        ctx.voice_client.play(source)
-        message = await ctx.send(embed = discord.Embed(description = 'Говорю...', color = colors.JDH))
-        while ctx.voice_client.is_playing():
-            await asyncio.sleep(1)
-        os.remove('temp/speech.mp3')
-        await message.edit(embed = discord.Embed(description = f'Текст `{text}` произнесён', color = colors.JDH))
 
     @commands.command(aliases = ['p'])
     @commands.cooldown(1, 5, commands.BucketType.user)
@@ -160,8 +141,7 @@ class Music(commands.Cog):
         locale = get_locale(ctx.author.id)
         if len(self._queue) > 1:
             ctx.guild.voice_client.stop()
-            self._queue.pop(0)
-            self._title_list.pop(0)
+            self._queue.pop(0); self._title_list.pop(0)
             ctx.guild.voice_client.play(discord.FFmpegPCMAudio(self._queue[0], **{'options': '-vn'}))
             await ctx.send(embed = discord.Embed(description = translate(locale, "queue_skip", title = self._title_list[0]), color = colors.JDH))
         else:
@@ -250,7 +230,7 @@ class Music(commands.Cog):
             await ctx.send(embed = discord.Embed(description = translate(locale, 'not_in_voice_channel', command = ctx.command.name), color = colors.JDH))
         else:
             if not ctx.voice_client:
-                await ctx.author.voice.channel.connect(self_deaf = True)
+                await ctx.author.voice.channel.connect(self_deaf = True, reconnect = False)
                 return await ctx.send(embed = discord.Embed(description = translate(locale, "join_success", ctx_author_voice_channel_name = ctx.author.voice.channel.name), color = colors.JDH))
             if ctx.voice_client.channel == ctx.author.voice.channel:
                 return await ctx.send(embed = discord.Embed(description = translate(locale, 'join_already_in_author_voice_channel'), color = colors.JDH))

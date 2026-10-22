@@ -2,6 +2,7 @@ import random
 
 import discord
 from discord.ext import commands
+from typing import cast
 
 from cogs.Constants import colors
 
@@ -15,28 +16,28 @@ class Misc(commands.Cog):
 
     @commands.command(aliases = ['svo'])
     @commands.cooldown(1, 5, commands.BucketType.user)
-    async def sigame(self, ctx: commands.Context):
+    async def sigame(self, ctx: commands.Context, master: discord.Member = None):
         channel = ctx.channel.voice_states
         members = {}
         result = ''
+        if not master:
+            master = self.client.get_user(338714886001524737)
         for member in channel:
             member = self.client.get_user(member)
-            if member.id != 338714886001524737:
+            if member.id != master.id:
                 members[member] = random.randint(0, 100)
                 result += f'{member.mention} - `{members[member]}`\n'
-        await ctx.send(embed = discord.Embed(description = f'{result}\n\nПобедил {max(members, key = members.get).mention}', color = colors.JDH))
+        await ctx.send(embed = discord.Embed(description = f'{result}\n\nПобедил {cast(discord.User, max(members, key = members.get)).mention}', color = colors.JDH))
 
     @commands.command()
     @commands.cooldown(1, 5, commands.BucketType.user)
     async def roll(self, ctx: commands.Context, first: str | int = None, second: int = None):
         if not first and not second:
             rand = random.randint(0, 100)
-            if rand == 42:
+            if rand == 100:
                 await ctx.send(embed = discord.Embed(description = f'{ctx.author.display_name} получает случайное число (0-100)\n`100`', color = colors.JDH))
             else:
-                rand1 = random.randint(0, 9)
-                rand2 = random.randint(0, 9)
-                await ctx.send(embed = discord.Embed(description = f'{ctx.author.display_name} получает случайное число (0-100)\n`0{rand1}{rand2}`', color = colors.JDH))
+                await ctx.send(embed = discord.Embed(description = f'{ctx.author.display_name} получает случайное число (0-100)\n`0{rand:>02}`', color = colors.JDH))
         if first and not second:
             if '-' in first:
                 [first, second] = first.split('-')
@@ -61,7 +62,7 @@ class Misc(commands.Cog):
                     if dice_amount > 100:
                         return await ctx.send(embed = discord.Embed(description = 'Нельзя бросить больше 100 дайсов', color = colors.ERROR))
                     if dice_edges > 100:
-                        return await ctx.send(embed = discord.Embed(description = 'Вы не можете кинуть дайс с большим количеством граней, чем 100', color = colors.JDH))
+                        return await ctx.send(embed = discord.Embed(description = 'Ты не можешь кинуть дайс с большим количеством граней, чем 100', color = colors.JDH))
                 if dice_amount > 1:
                     results = ''
                     result = 0
@@ -71,13 +72,13 @@ class Misc(commands.Cog):
                         result += rand
                     results += f'В сумме - ||{result}||'
                 else:
-                    res = random.randint(1, dice_edges)
-                    total = ''
-                    if res == 1 and dice_edges == 20:
-                        total = ', критический провал'
-                    if res == 20:
-                        total = ', критический успех!'
-                    return await ctx.send(embed = discord.Embed(description = f'Получено случайное число: `{res}`{total}', color = colors.JDH))
+                    total = random.randint(1, dice_edges)
+                    res = ''
+                    if total == 1 and dice_edges == 20:
+                        res = ', критический провал'
+                    if total == 20:
+                        res = ', критический успех!'
+                    return await ctx.send(embed = discord.Embed(description = f'Получено случайное число: `{total}`{res}', color = colors.JDH))
                 await ctx.send(embed = discord.Embed(description = results, color = colors.JDH))
             else:
                 first = int(first)
@@ -91,19 +92,11 @@ class Misc(commands.Cog):
             await ctx.send(embed = discord.Embed(description = f'{ctx.author.display_name} получает случайное число ({first}-{second})\n`{rand}`', color = colors.JDH))
 
     @commands.command(aliases = ['c', 'coin'])
-    @commands.cooldown(1, 5, commands.BucketType.user)
+    @commands.cooldown(10, 5, commands.BucketType.user)
     async def coinflip(self, ctx: commands.Context):
         coin = random.choice(['ОРЁЛ', 'РЕШКА'])
+        if random.random() <= .1: coin = 'РЕБРО'
         await ctx.send(embed = discord.Embed(description = f'{ctx.author.display_name} подбрасывает монетку: {coin}', color = colors.JDH))
-
-    @commands.command()
-    @commands.cooldown(1, 15, commands.BucketType.user)
-    @commands.guild_only()
-    async def someone(self, ctx: commands.Context, *, text):
-        member = random.choice(ctx.channel.members)
-        emb = discord.Embed(description = f'{text}', color =  colors.DEFAULT, timestamp = discord.utils.utcnow())
-        emb.set_author(name = ctx.author.display_name, icon_url = ctx.author.avatar.url)
-        return await ctx.send(f'@someone ||{member.mention}||', embed = emb)
 
     @commands.command()
     @commands.cooldown(1, 5, commands.BucketType.user)

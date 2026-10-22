@@ -8,11 +8,46 @@ import psycopg2
 from discord.ext import commands
 from psycopg2 import sql
 from tabulate import tabulate
+from contextlib import closing
 
 from cogs.Constants import LocalesManager, colors
 from cogs.Logging import LOGS
-from functions import get_plural_form, get_locale, connect_db, translate
+from functions import get_plural_form, get_locale, connect_db, translate, parse_flags, clear_translate_cache
 from main import PASSWORD, owner_commands
+
+class PaginationView(discord.ui.View):
+    def __init__(self, entries, total_count, filter_text):
+        super().__init__(timeout = 180)
+        self.entries = entries
+        self.total_count = total_count
+        self.filter_text = filter_text
+        self.current_page = 0
+        self.per_page = 30
+        
+    async def update_message(self, interaction: discord.Interaction):
+        start = self.current_page * self.per_page
+        end = start + self.per_page
+        page_entries = self.entries[start:end]
+        
+        description = '\n'.join(f'[{msg_id}]({url})' for msg_id, url in page_entries)
+        
+        embed = discord.Embed(title = f'Найдено {self.total_count} {get_plural_form(self.total_count, "сообщение", "сообщения", "сообщений")}', description = description, color = colors.JDH)
+        embed.set_footer(text = f'Страница {self.current_page + 1}/{-(-self.total_count // self.per_page)} | Фильтры: {self.filter_text}')
+        
+        self.previous_button.disabled = self.current_page == 0
+        self.next_button.disabled = (self.current_page + 1) * self.per_page >= len(self.entries)
+        
+        await interaction.response.edit_message(embed = embed, view = self)
+    
+    @discord.ui.button(label = '◀', style = discord.ButtonStyle.grey, disabled=True)
+    async def previous_button(self, interaction: discord.Interaction, button: discord.ui.Button):
+        self.current_page -= 1
+        await self.update_message(interaction)
+    
+    @discord.ui.button(label = '▶', style = discord.ButtonStyle.grey)
+    async def next_button(self, interaction: discord.Interaction, button: discord.ui.Button):
+        self.current_page += 1
+        await self.update_message(interaction)
 
 class Kernel(commands.Cog):
     def __init__(self, client):
@@ -22,7 +57,7 @@ class Kernel(commands.Cog):
     async def on_ready(self):
         print('Команды Ядра загружены')
 
-    @commands.command(hidden = True)
+    @commands.command(hidden = True, aliases = ['kill'])
     async def disable(self, ctx: commands.Context, *, target: str):
         if ctx.author.id not in self.client.owner_ids:
             raise commands.NotOwner()
@@ -37,8 +72,8 @@ class Kernel(commands.Cog):
                 return await ctx.send(embed = discord.Embed(description = f'Команда `{target}` уже отключена', color = colors.ERROR))
         elif f'cogs.{target.title()}' in self.client.extensions:
             extension = f'cogs.{target.title()}'
-            if extension == 'cogs.Events':
-                return await ctx.send(embed = discord.Embed(description = 'Модуль `Events` не может быть выгружен', color = colors.ERROR))
+            if extension in {'cogs.Events', 'cogs.Kernel', 'cogs.Logging'}:
+                return await ctx.send(embed = discord.Embed(description = f'Модуль `{target}` не может быть выгружен', color = colors.ERROR))
             if extension not in self.client.extensions:
                 return await ctx.send(embed = discord.Embed(description = f'Модуль `{target}` уже выгружен или не найден', color = colors.ERROR))
             try:
@@ -62,7 +97,7 @@ class Kernel(commands.Cog):
             else:
                 await ctx.send(embed = discord.Embed(description = f'Команда `{target}` уже включена', color = colors.ERROR))
         else:
-            extension = f'cogs.{target.title()}' if target != 'AICUS' else 'cogs.AICUS'
+            extension = f'cogs.{target.title()}'
             try:
                 await self.client.load_extension(extension)
             except commands.ExtensionNotFound:
@@ -182,6 +217,82 @@ class Kernel(commands.Cog):
             return ""
         except Exception as e:
             return f"Ошибка при проверке локализации: {e}"
+
+    @commands.command(hidden = True)
+    async def find_messages(self, ctx: commands.Context, amount: int, *, flags: str):
+        if ctx.author.id not in self.client.owner_ids:
+            raise commands.NotOwner()
+
+        flags = parse_flags(flags)
+
+        filters_desc = []
+        if flags.users:
+            filters_desc.append('только люди')
+        if flags.bots:
+            filters_desc.append('только боты')
+        if flags.everyone and not (flags.users or flags.bots):
+            filters_desc.append('все сообщения')
+        if flags.exact:
+            filters_desc.append(f'точное совпадение: "{flags.exact}"')
+        if flags.contains:
+            filters_desc.append(f'содержит: "{flags.contains}"')
+        if flags.embeds:
+            filters_desc.append('есть вложения-эмбеды')
+        if flags.attachments:
+            filters_desc.append('есть файлы')
+        if flags.stickers:
+            filters_desc.append('есть стикеры')
+        if not filters_desc:
+            filters_desc.append('без доп. фильтров')
+
+        filter_text = '; '.join(filters_desc) if filters_desc else 'без фильтров'
+        
+        status_message = await ctx.send(embed = discord.Embed(description = f'Поиск в пределах {amount} {get_plural_form(amount, "сообщения", "сообщений", "сообщений")} ({filter_text})...', color = colors.JDH))
+        await asyncio.sleep(self.client.latency)
+
+        def check_message(message: discord.Message):
+            if not (
+                flags.everyone or
+                (flags.bots and message.author.bot) or
+                (flags.users and not message.author.bot)
+            ):
+                return False
+
+            if flags.exact and message.content != flags.exact:
+                return False
+            if flags.contains and flags.contains.lower() not in message.content.lower():
+                return False
+
+            if flags.embeds and not message.embeds:
+                return False
+            if flags.attachments and not message.attachments:
+                return False
+            if flags.stickers and not message.stickers:
+                return False
+
+            return True
+
+        found_messages = {}
+        async for message in ctx.channel.history(limit = amount):
+            if check_message(message):
+                found_messages[message.id] = message.jump_url
+
+        if not found_messages:
+            return await status_message.edit(embed = discord.Embed(description = 'Не найдено сообщений, соответствующих указанным фильтрам', color = colors.ERROR))
+
+        entries = list(found_messages.items())
+        view = PaginationView(entries, len(found_messages), filter_text)
+
+        start = 0
+        end = min(30, len(entries))
+        page_entries = entries[start:end]
+        description = '\n'.join(f'[{msg_id}]({url})' for msg_id, url in page_entries)
+        
+        embed = discord.Embed(title = f'Найдено {len(found_messages)} {get_plural_form(len(found_messages), "сообщение", "сообщения", "сообщений")}', description = description, color = colors.JDH)
+        embed.set_footer(text = f'Страница 1/{-(-len(found_messages) // 30)} | Фильтры: {filter_text}') if len(found_messages) > 30 else embed.set_footer(text = f'Фильтры: {filter_text}')
+        
+        await status_message.delete()
+        await ctx.send(embed = embed, view = view if len(found_messages) > 30 else None)
 
     @commands.command(hidden = True)
     async def pull(self, ctx: commands.Context):
@@ -330,6 +441,7 @@ class Kernel(commands.Cog):
             cur.close()
             conn.close()
         await message.edit(embed = discord.Embed(description = result_msg, color = colors.JDH))
+        clear_translate_cache()
 
     @commands.command(hidden = True)
     async def full_info(self, ctx: commands.Context, user: discord.User = None):
@@ -339,24 +451,25 @@ class Kernel(commands.Cog):
             user = ctx.author
         current_locale = get_locale(user.id)
 
-        lconn = connect_db('leaderboard')
+        lconn = closing(connect_db('leaderboard'))
         lcursor = lconn.cursor()
         lcursor.execute("SELECT victories FROM leaders WHERE user_id = %s", (user.id,))
         place = lcursor.fetchone() or (0,)
 
-        rconn = connect_db('roulette_settings')
+        rconn = closing(connect_db('roulette_settings'))
         rcursor = rconn.cursor()
         rcursor.execute("SELECT * FROM user_settings WHERE user_id = %s", (user.id,))
         settings = rcursor.fetchone()
 
-        vconn = connect_db('voice_channels')
+        vconn = closing(connect_db('voice_channels'))
         vcursor = vconn.cursor()
         vcursor.execute("SELECT name FROM channels WHERE user_id = %s", (user.id,))
         voice_name = vcursor.fetchone()
 
         embed = discord.Embed(title = f'Информация о пользователе {user.display_name} в базе данных', color = colors.JDH)
         embed.add_field(name = 'Локаль', value = f'`{current_locale}`', inline = True)
-        embed.add_field(name = 'Количество побед в рулетке', value = f'`{place[0]}`' if place else '`0`', inline = True)
+        if place:
+            embed.add_field(name = 'Количество побед в рулетке', value = f'`{place[0]}`', inline = True)
         if voice_name:
             embed.add_field(name = 'Название голосового канала', value = f'`{voice_name[0]}`', inline = True)
         if settings:
@@ -375,7 +488,7 @@ class Kernel(commands.Cog):
             embed.add_field(name = 'Сложность ИИ бота', value = difficulty, inline = True)
             embed.add_field(name = 'Предметы', value = str(len(enabled_items)), inline = True)
             if enabled_items:
-                embed.add_field(name = 'Список предметов', value = '\n'.join(f'• {item}' for item in enabled_items), inline = False)
+                embed.add_field(name = 'Список включённых предметов', value = '\n'.join(f'• {item}' for item in enabled_items), inline = False)
         await ctx.send(embed = embed)
 
     @commands.command(hidden = True)
@@ -383,51 +496,50 @@ class Kernel(commands.Cog):
         from collections import OrderedDict
         if ctx.author.id not in self.client.owner_ids:
             raise commands.NotOwner()
-        with psycopg2.connect(host = "localhost", database = "locales", user = "postgres", password = PASSWORD, port = 5432) as conn:
-            with conn.cursor() as cur:
-                keys = {}
-                locales = LocalesManager.get_all_locales()
-                for loc in locales:
-                    try:
-                        cur.execute(f"SELECT string_id FROM {loc}")
-                        keys[loc] = {row[0] for row in cur.fetchall()}
-                    except psycopg2.Error:
-                        keys[loc] = set()
-                all_locales = set(keys.keys())
-                all_locales.remove('ru')
-                ru_unique_keys = keys['ru'] - set().union(*[keys[loc] for loc in all_locales])
-                has_ru_unique = bool(ru_unique_keys)
-                report = ["=== Уникальные ключи ==="]
-                for loc in locales:
-                    other_locs = [l for l in locales if l != loc]
-                    unique_keys = keys[loc] - keys[other_locs[0]] - keys[other_locs[1]]
-                    if unique_keys:
-                        report.append(f"{loc} ({len(unique_keys)}):")
-                        report.extend(sorted(unique_keys)[:5])
-                        if len(unique_keys) > 5:
-                            report.append(f"... и ещё {len(unique_keys) - 5}")
-                report.append("\n=== Отсутствующие ключи ===")
-                all_keys = set().union(*keys.values())
-                total_keys = len(all_keys)
-                missing_info = {}
-                for loc in locales:
-                    missing_keys = all_keys - keys[loc]
-                    missing_info[loc] = sorted(missing_keys)
-                    missing_percent = (len(missing_keys) / total_keys * 100) if total_keys > 0 else 0
-                    if missing_keys:
-                        report.append(f"Отсутствует в {loc} ({len(missing_keys)} - {missing_percent:.1f}%):")
-                        report.extend(map(str, sorted(missing_keys)[:5]))
-                        if len(missing_keys) > 5:
-                            report.append(f"... и ещё {len(missing_keys) - 5}")
-                common_keys = set.intersection(*[keys[loc] for loc in locales])
-                common_percent = (len(common_keys) / total_keys * 100) if total_keys > 0 else 0
-                report.append(f"\n=== Общие ключи ({len(common_keys)} - {common_percent:.1f}% от всех ключей) ===")
-                report.extend(sorted(common_keys)[:10])
-                if len(common_keys) > 10:
-                    report.append(f"... и ещё {len(common_keys) - 10}")
-                output = "\n".join(report)
-                emb = discord.Embed(description = f"```diff\n{output[:1990]}...\n```" if len(output) > 2000 else f"```diff\n{output}\n```", color = colors.JDH)
-                await ctx.send(embed = emb)
+        with closing(connect_db('locales')) as conn, conn.cursor() as cur:
+            keys = {}
+            locales = LocalesManager.get_all_locales()
+            for loc in locales:
+                try:
+                    cur.execute(f"SELECT string_id FROM {loc}")
+                    keys[loc] = {row[0] for row in cur.fetchall()}
+                except psycopg2.Error:
+                    keys[loc] = set()
+            all_locales = set(keys.keys())
+            all_locales.remove('ru')
+            ru_unique_keys = keys['ru'] - set().union(*[keys[loc] for loc in all_locales])
+            has_ru_unique = bool(ru_unique_keys)
+            report = ["=== Уникальные ключи ==="]
+            for loc in locales:
+                other_locs = [l for l in locales if l != loc]
+                unique_keys = keys[loc] - keys[other_locs[0]] - keys[other_locs[1]]
+                if unique_keys:
+                    report.append(f"{loc} ({len(unique_keys)}):")
+                    report.extend(sorted(unique_keys)[:5])
+                    if len(unique_keys) > 5:
+                        report.append(f"... и ещё {len(unique_keys) - 5}")
+            report.append("\n=== Отсутствующие ключи ===")
+            all_keys = set().union(*keys.values())
+            total_keys = len(all_keys)
+            missing_info = {}
+            for loc in locales:
+                missing_keys = all_keys - keys[loc]
+                missing_info[loc] = sorted(missing_keys)
+                missing_percent = (len(missing_keys) / total_keys * 100) if total_keys > 0 else 0
+                if missing_keys:
+                    report.append(f"Отсутствует в {loc} ({len(missing_keys)} - {missing_percent:.1f}%):")
+                    report.extend(map(str, sorted(missing_keys)[:5]))
+                    if len(missing_keys) > 5:
+                        report.append(f"... и ещё {len(missing_keys) - 5}")
+            common_keys = set.intersection(*[keys[loc] for loc in locales])
+            common_percent = (len(common_keys) / total_keys * 100) if total_keys > 0 else 0
+            report.append(f"\n=== Общие ключи ({len(common_keys)} - {common_percent:.1f}% от всех ключей) ===")
+            report.extend(sorted(common_keys)[:10])
+            if len(common_keys) > 10:
+                report.append(f"... и ещё {len(common_keys) - 10}")
+            output = "\n".join(report)
+            emb = discord.Embed(description = f"```diff\n{output[:1990]}...\n```" if len(output) > 2000 else f"```diff\n{output}\n```", color = colors.JDH)
+            await ctx.send(embed = emb)
         if not has_ru_unique:
             return
         view = discord.ui.View()
@@ -441,7 +553,7 @@ class Kernel(commands.Cog):
         if confirmation.data['custom_id'] == 'skip_keys':
             return
         ru_path = LocalesManager.get_path('ru')
-        with open(ru_path, 'r', encoding='utf-8') as f:
+        with open(ru_path, 'r', encoding = 'utf-8') as f:
             ru_data = json.load(f, object_pairs_hook = OrderedDict)
         results = []
         locales = LocalesManager.get_all_locales()

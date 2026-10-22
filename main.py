@@ -16,7 +16,7 @@ CWD = Path.cwd()
 load_dotenv(CWD / 'vars.env')
 PASSWORD = os.getenv('DB_PASS')
 
-owner_commands = ['guilds', 'reset', 'status', 'generate', 'invite', 'disable', 'enable', 'reload', 'list', 'pull', 'tts', 'update']
+owner_commands = ['guilds', 'reset', 'status', 'generate', 'invite', 'disable', 'enable', 'reload', 'list', 'pull', 'update', 'find_messages', 'access_db', 'create_locale', 'full_info', 'diff_locales']
 cogs = ['Cephalon', 'Embeds', 'Events', 'Fun', 'Kernel', 'Mod', 'Misc', 'Music', 'sCephalon', 'sEmbeds', 'sFun', 'sMod', 'sMisc']
 
 def bot_owner_or_has_permissions(**perms):

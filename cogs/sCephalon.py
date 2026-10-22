@@ -150,11 +150,11 @@ class sCephalon(commands.Cog):
 
     @app_commands.command(description = 'Узнайте, что было в предыдущих версиях бота')
     @app_commands.describe(version = 'Укажите конкретную версию')
-    async def botver(self, interaction: discord.Interaction, version: Literal['0.12.9.10519', '0.12.9.10988', '0.12.9.11410', '0.12.10.1.11661', '0.12.10.2.12528', '0.12.11.2.13771', '0.12.12.0.0', '0.12.12.10.0', '0.12.12.10.16367', '0.12.12.30.0', '0.13.0.2.21680', '0.14.6.0 - последняя']):
-        with open(CWD + '\\versions.json', 'r', encoding = 'utf-8') as f:
+    async def botver(self, interaction: discord.Interaction, version: Literal['0.12.9.10519', '0.12.9.10988', '0.12.9.11410', '0.12.10.1.11661', '0.12.10.2.12528', '0.12.11.2.13771', '0.12.12.0.0', '0.12.12.10.0', '0.12.12.10.16367', '0.12.12.30.0', '0.13.0.2.21680', '0.14.6.0', '1.0']):
+        with open(CWD / 'versions.json', 'r', encoding = 'utf-8') as f:
             versions = json.load(f)
         version_data = versions[str(version)]
-        await interaction.response.send_message(embed = discord.Embed(description = version_data, color = colors.JDH))
+        await interaction.response.send_message(embed = discord.Embed(title = version, description = version_data, color = colors.DEFAULT))
 
 async def setup(client):
     await client.add_cog(sCephalon(client))

@@ -2,7 +2,6 @@ import asyncio
 import json
 import secrets
 import sys
-from datetime import timedelta
 from typing import cast
 
 import discord
@@ -28,7 +27,7 @@ class Cephalon(commands.Cog):
     async def on_ready(self):
         print('Модуль Cephalon загружен')
 
-    @commands.command()
+    @commands.command(aliases = ['?', 'негр'])
     async def help(self, ctx: commands.Context, command: str = None, locale: str = None):
         if locale is not None and locale not in LocalesManager.get_all_locales():
             return await ctx.send(embed = discord.Embed(description = 'Заданная локаль не существует', color = colors.ERROR))
@@ -39,7 +38,7 @@ class Cephalon(commands.Cog):
             emb.add_field(name = 'Embeds', value = '`content`, `edit`, `say`', inline = False)
             emb.add_field(name = 'Fun', value = '`aghanim`, `dotersbrain`, `leaderboard`, `roulette`, `settings`', inline = False)
             emb.add_field(name = 'Mod', value = '`ban`, `clear`, `dm`, `deaf`, `give`, `kick`, `mute`, `take`, `timeout`, `undeaf`, `unmute`', inline = False)
-            emb.add_field(name = 'Misc', value = '`about`, `avatar`, `coinflip`, `roll`, `roleinfo`, `rolemembers`, `serverinfo`, `someone`', inline = False)
+            emb.add_field(name = 'Misc', value = '`about`, `avatar`, `coinflip`, `roll`, `roleinfo`, `rolemembers`, `serverinfo`', inline = False)
             # emb.add_field(name = 'Music', value = '`join`, `leave`, `play`, `pause`, `resume`, `stop`') # , `volume`
             emb.add_field(name = 'ᅠ', value = 'Указанные разрешения необходимы для исполнителя команды если не указано другого', inline = False)
             emb.add_field(name = 'ᅠ', value = 'Не используйте `[] <> /` при написании команды', inline = False)
@@ -71,12 +70,13 @@ class Cephalon(commands.Cog):
         if target == 'list':
             now = discord.utils.utcnow()
             up_time = now - uptime
-            hours, remainder = divmod(up_time.seconds, 3600)
+            days, remainder = divmod(up_time.days, 365)
+            hours, remainder = divmod(remainder, 24)
             minutes, seconds = divmod(remainder, 60)
-            emb = discord.Embed(title = 'Состояние бота', description = '`🟢` - модуль активен\n`🟡` - модуль активен, но какая-то команда отключена\n`🔴` - модуль отключён или выдаёт исключение', color = colors.JDH)
+            emb = discord.Embed(title = 'Состояние бота', description = '`🟢` - модуль активен\n`🟡` - модуль активен с отключёнными командами\n`🔴` - модуль отключён или выдаёт исключение', color = colors.JDH)
             emb.add_field(name = 'Задержка:', value = f'`{'🔴 ' if round(self.client.latency * 1000) >= 180 else '🟡 ' if round(self.client.latency * 1000) >= 150 else ''}{round(self.client.latency * 1000)} ms`')
-            emb.add_field(name = 'Время запуска:', value = f'`{(uptime + timedelta(hours = 3)).strftime("%d.%m.%Y %H:%M:%S")}`')
-            emb.add_field(name = 'Время в сети:', value = f'`{hours} ч, {minutes} м, {seconds} с`')
+            emb.add_field(name = 'Время запуска:', value = f'<t:{int((uptime).timestamp())}:S>')
+            emb.add_field(name = 'Время в сети:', value = f'`{days} д, {hours} ч, {minutes} м, {seconds} с`')
             emb.add_field(name = 'Количество серверов:', value = f'`{len(self.client.guilds)}`')
             emb.add_field(name = 'Количество пользователей:', value = f'`{len(self.client.users)}`')
             emb.add_field(name = 'Количество активных модулей:', value = f'`{len(self.client.cogs)}`')
@@ -92,9 +92,9 @@ class Cephalon(commands.Cog):
                 cmds = '\n'.join([f'{'`🟢`' if command.enabled else '`🔴`'} `{command.name}`' for command in self.client.get_cog(target).get_commands()])
                 return await ctx.send(embed = discord.Embed(description = f'Состояние модуля `{target}`:\n {cmds}', color = colors.JDH))
             if target in cogs and target not in self.client.cogs:
-                return await ctx.send(embed = discord.Embed(description = 'Модуль отключён', color = colors.JDH))
+                return await ctx.send(embed = discord.Embed(description = 'Модуль полностью отключён', color = colors.JDH))
             if target in cogs and target in self.client.cogs:
-                return await ctx.send(embed = discord.Embed(description = 'Модуль активен', color = colors.JDH))
+                return await ctx.send(embed = discord.Embed(description = 'Модуль полностью активен', color = colors.JDH))
 
     @commands.command()
     async def uptime(self, ctx: commands.Context):
